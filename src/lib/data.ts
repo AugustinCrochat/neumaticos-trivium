@@ -752,7 +752,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 556000,
     imageUrl:
-      "https://acdn-us.mitiendanube.com/stores/001/854/324/products/h7351-e792e95cfdfcd1f0e116309381616369-480-0.webp",
+      "/images/products/1010586-4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
