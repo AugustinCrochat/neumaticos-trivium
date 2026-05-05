@@ -182,7 +182,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 1300000,
     imageUrl:
-      "https://acdn-us.mitiendanube.com/stores/001/733/318/products/bfgoodrich-all-terrain-ta-k02-angle-ee9cc9116a2c94fae517061993366604-1024-1024.webp",
+      "/images/products/1011049-2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -201,7 +201,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 650000,
     imageUrl:
-      "https://acdn-us.mitiendanube.com/stores/001/733/318/products/bfgoodrich-all-terrain-ta-k02-angle-ee9cc9116a2c94fae517061993366604-1024-1024.webp",
+      "/images/products/1010421.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -315,7 +315,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 700000,
     imageUrl:
-      "https://acdn-us.mitiendanube.com/stores/005/078/739/products/159314-1200-auto-01ffb1f37f1642118617549439327025-480-0.webp",
+      "/images/products/1010645.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -638,7 +638,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 792000,
     imageUrl:
-      "http://acdn-us.mitiendanube.com/stores/001/679/394/products/art440_211-ca29be79085799e20a16311109231714-640-0.webp",
+      "/images/products/1010933-4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -942,7 +942,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 776000,
     imageUrl:
-      "https://acdn-us.mitiendanube.com/stores/001/854/324/products/h4571-283d7f224530b4459116334414739781-480-0.webp",
+      "/images/products/1011095-4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -961,7 +961,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 388000,
     imageUrl:
-      "https://acdn-us.mitiendanube.com/stores/001/854/324/products/h4571-283d7f224530b4459116334414739781-480-0.webp",
+      "/images/products/1011095-2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -1018,7 +1018,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 396000,
     imageUrl:
-      "https://acdn-us.mitiendanube.com/stores/005/270/629/products/dibujo-kumho-kc53-para-pagina-web-a69917d5016f6fa72717443822017981-480-0.webp",
+      "/images/products/1010891-2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -1170,7 +1170,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 230000,
     imageUrl:
-      "https://dcdn-us.mitiendanube.com/stores/004/094/860/products/260-895aa095462142c2fb17237320084540-1024-1024.png",
+      "/images/products/1010673-2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -1189,7 +1189,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 115000,
     imageUrl:
-      "https://dcdn-us.mitiendanube.com/stores/004/094/860/products/260-895aa095462142c2fb17237320084540-1024-1024.png",
+      "/images/products/1010673.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -1208,7 +1208,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 459000,
     imageUrl:
-      "https://acdn-us.mitiendanube.com/stores/004/807/532/products/ltxtrail2-2da0e33824047697b517188984703858-1024-1024.webp",
+      "/images/products/1011032.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -1398,7 +1398,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 1316000,
     imageUrl:
-      "https://acdn-us.mitiendanube.com/stores/004/807/532/products/ltxtrail-349d4cfc981bebd5e917188984405772-1024-1024.webp",
+      "/images/products/1011001-4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -1531,7 +1531,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 259000,
     imageUrl:
-      "http://acdn-us.mitiendanube.com/stores/001/733/318/products/michelin_pilot_sport_5_3q-fd2e26079edc07b0fe17302099449984-640-0.webp",
+      "/images/products/1010060.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -1645,7 +1645,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 249000,
     imageUrl:
-      "https://acdn-us.mitiendanube.com/stores/004/807/532/products/ltxtrail-349d4cfc981bebd5e917188984405772-1024-1024.webp",
+      "/images/products/1010301.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -1816,7 +1816,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 1560000,
     imageUrl:
-      "https://acdn-us.mitiendanube.com/stores/001/733/318/products/michelin1-059ec635aee51fe37616688076805962-1024-1024.webp",
+      "/images/products/1010553-4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -2177,7 +2177,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 1060000,
     imageUrl:
-      "https://acdn-us.mitiendanube.com/stores/001/733/318/products/pilot-sport-4-unidad-d9ffbd7a8c97c5b5d017307351742059-1024-1024.webp",
+      "/images/products/1010046-4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -2196,7 +2196,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 2676000,
     imageUrl:
-      "https://acdn-us.mitiendanube.com/stores/001/733/318/products/pilot-sport-4-unidad-d9ffbd7a8c97c5b5d017307351742059-1024-1024.webp",
+      "/images/products/1010684-4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -2215,7 +2215,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 2360000,
     imageUrl:
-      "https://acdn-us.mitiendanube.com/stores/001/733/318/products/pilot-sport-4-unidad-d9ffbd7a8c97c5b5d017307351742059-1024-1024.webp",
+      "/images/products/1010191-2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -2234,7 +2234,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 1398000,
     imageUrl:
-      "https://acdn-us.mitiendanube.com/stores/001/733/318/products/pilot-sport-4-unidad-d9ffbd7a8c97c5b5d017307351742059-1024-1024.webp",
+      "/images/products/1010627-2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -2253,7 +2253,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 1318000,
     imageUrl:
-      "https://acdn-us.mitiendanube.com/stores/001/733/318/products/pilot-sport-4-unidad-d9ffbd7a8c97c5b5d017307351742059-1024-1024.webp",
+      "/images/products/1010621-2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -2272,7 +2272,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 2698000,
     imageUrl:
-      "https://acdn-us.mitiendanube.com/stores/001/733/318/products/pilot-sport-4-unidad-d9ffbd7a8c97c5b5d017307351742059-1024-1024.webp",
+      "/images/products/1010218-2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -2291,7 +2291,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 2198000,
     imageUrl:
-      "https://acdn-us.mitiendanube.com/stores/001/733/318/products/pilot-sport-4-unidad-d9ffbd7a8c97c5b5d017307351742059-1024-1024.webp",
+      "/images/products/1010207-2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -2310,7 +2310,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 2500000,
     imageUrl:
-      "https://acdn-us.mitiendanube.com/stores/001/733/318/products/pilot-sport-4-unidad-d9ffbd7a8c97c5b5d017307351742059-1024-1024.webp",
+      "/images/products/1010629-2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -2329,7 +2329,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 2740000,
     imageUrl:
-      "https://acdn-us.mitiendanube.com/stores/001/733/318/products/pilot-sport-4-unidad-d9ffbd7a8c97c5b5d017307351742059-1024-1024.webp",
+      "/images/products/1010220-2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -2614,7 +2614,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 1920000,
     imageUrl:
-      "https://acdn-us.mitiendanube.com/stores/004/807/532/products/suv1-6d176571bbac6303d617188994483433-1024-1024.webp",
+      "/images/products/1010694-4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -2728,7 +2728,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 1400000,
     imageUrl:
-      "http://acdn-us.mitiendanube.com/stores/001/733/318/products/michelin_pilot_sport_5_3q-fd2e26079edc07b0fe17302099449984-640-0.webp",
+      "/images/products/1010994-4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -2747,7 +2747,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 700000,
     imageUrl:
-      "http://acdn-us.mitiendanube.com/stores/001/733/318/products/michelin_pilot_sport_5_3q-fd2e26079edc07b0fe17302099449984-640-0.webp",
+      "/images/products/1010994-2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -2880,7 +2880,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 2060000,
     imageUrl:
-      "https://acdn-us.mitiendanube.com/stores/004/807/532/products/ps4-1-ec7e91fe4d55481f6a17241840117383-1024-1024.webp",
+      "/images/products/1011016-4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -2899,7 +2899,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 1030000,
     imageUrl:
-      "https://acdn-us.mitiendanube.com/stores/004/807/532/products/ps4-1-ec7e91fe4d55481f6a17241840117383-1024-1024.webp",
+      "/images/products/1011016-2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -3298,7 +3298,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 190000,
     imageUrl:
-      "https://acdn-us.mitiendanube.com/stores/001/733/318/products/primacy-4-unidad-5da9a77bd2b9b3acbc17299062065941-1024-1024.webp",
+      "/images/products/1010807.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -3336,7 +3336,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 1392000,
     imageUrl:
-      "https://acdn-us.mitiendanube.com/stores/005/078/739/products/michelin-primacy-suv-750x750-caea88b3c07459efbd17630623335173-1024-1024.webp",
+      "/images/products/1010879-4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -3393,7 +3393,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 998000,
     imageUrl:
-      "https://acdn-us.mitiendanube.com/stores/001/733/318/products/primacy-4-unidad-33eca1891e71d218ff17307340053189-1024-1024.webp",
+      "/images/products/1010985-2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -3412,7 +3412,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 499000,
     imageUrl:
-      "https://acdn-us.mitiendanube.com/stores/001/733/318/products/primacy-4-unidad-33eca1891e71d218ff17307340053189-1024-1024.webp",
+      "/images/products/1010985.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -3450,7 +3450,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 529000,
     imageUrl:
-      "https://acdn-us.mitiendanube.com/stores/001/733/318/products/ltx-force-unidad-d3e1e35e9c8ee34dca17307347092033-1024-1024.webp",
+      "/images/products/1010978.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
