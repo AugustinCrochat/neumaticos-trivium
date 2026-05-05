@@ -1,26 +1,49 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@theme {
+  /* Brand palette — navy */
+  --color-navy-950: #06111f;
+  --color-navy-900: #0a1a30;
+  --color-navy-800: #0f2444;
+  --color-navy-700: #163460;
+  --color-navy-600: #1e4a80;
+  --color-navy-500: #2a65a8;
+  --color-navy-400: #3d80c8;
+  --color-navy-300: #6ba0d8;
+  --color-navy-200: #a8c8ec;
+  --color-navy-100: #dceaf8;
+  --color-navy-50: #f0f6fc;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  /* Brand accent — rojo Trivium #ff1e00 */
+  --color-orange-600: #cc1800;
+  --color-orange-500: #ff1e00;
+  --color-orange-400: #ff4d33;
+  --color-orange-300: #ff8066;
+  --color-orange-100: #ffe5e0;
+  --color-orange-50: #fff5f5;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-slate-50: #f8fafc;
+  --color-slate-100: #f1f5f9;
+  --color-slate-200: #e2e8f0;
+  --color-slate-300: #cbd5e1;
+  --color-slate-400: #94a3b8;
+  --color-slate-500: #64748b;
+  --color-slate-600: #475569;
+  --color-slate-700: #334155;
+  --color-slate-800: #1e293b;
+  --color-slate-900: #0f172a;
+
+  --color-background: #f8fafc;
+  --color-foreground: #0f172a;
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+}
+
+html {
+  scroll-behavior: smooth;
 }

@@ -1,0 +1,48 @@
+export type VehicleType = "auto" | "camioneta";
+
+export type TireSize = {
+  width: number;
+  profile: number;
+  rim: number;
+};
+
+export type TireBrand = {
+  id: string;
+  name: string;
+  origin: string; // "china" | "argentina" | "korea" | etc
+  logoUrl?: string;
+};
+
+export type TireProduct = {
+  id: string;
+  brand: string;
+  brandId: string;
+  model: string;
+  size: TireSize;
+  vehicleType: VehicleType[];
+  price: number;
+  priceOld?: number;
+  imageUrl: string;
+  tags: string[];
+  isEconomic: boolean;
+  isImported: boolean;
+  slug: string;
+};
+
+export type Service = {
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+  features: string[];
+};
+
+export type BlogPost = {
+  id: string;
+  title: string;
+  excerpt: string;
+  imageUrl: string;
+  date: string;
+  slug: string;
+  category: string;
+};
