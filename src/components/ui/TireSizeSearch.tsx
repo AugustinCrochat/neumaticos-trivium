@@ -70,13 +70,35 @@ export function TireSizeSearch({
     setWidth(v);
     setProfile("");
     setRim("");
-    setTimeout(() => profileRef.current?.focus(), 10);
+    setTimeout(() => {
+      if (profileRef.current) {
+        profileRef.current.focus();
+        try {
+          if ('showPicker' in HTMLSelectElement.prototype) {
+            profileRef.current.showPicker();
+          }
+        } catch (e) {
+          // Ignore if showPicker throws (e.g., missing user activation context)
+        }
+      }
+    }, 10);
   }
 
   function onProfileChange(v: string) {
     setProfile(v);
     setRim("");
-    setTimeout(() => rimRef.current?.focus(), 10);
+    setTimeout(() => {
+      if (rimRef.current) {
+        rimRef.current.focus();
+        try {
+          if ('showPicker' in HTMLSelectElement.prototype) {
+            rimRef.current.showPicker();
+          }
+        } catch (e) {
+          // Ignore if showPicker throws
+        }
+      }
+    }, 10);
   }
 
   const isValid = !!(width && profile && rim);
