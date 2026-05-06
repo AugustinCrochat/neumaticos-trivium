@@ -18,7 +18,7 @@ const VALUE_ITEMS = [
     ),
     title: "Marcas de Importación Directa",
     description:
-      "Trabajamos con las mejores marcas chinas: Linglong, Grenlander, Triangle, Kapsen y más. Todas con garantía y certificación.",
+      "Trabajamos con las mejores marcas de importación directa. Todas con garantía y certificación.",
     highlight: "+8 marcas importadas",
   },
   {

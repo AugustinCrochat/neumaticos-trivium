@@ -14,7 +14,7 @@ const geist = Geist({
 export const metadata: Metadata = {
   title: "Neumáticos Trivium — El outlet del neumático",
   description:
-    "Neumáticos de importación directa a precios outlet. Linglong, Grenlander, Triangle y más. Sucursales en Don Torcuato y Córdoba.",
+    "Neumáticos de importación directa a precios outlet.",
   keywords: ["neumáticos", "cubiertas", "outlet", "importación", "china", "baratos", "Argentina"],
 };
 
