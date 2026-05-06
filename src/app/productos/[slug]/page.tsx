@@ -70,11 +70,6 @@ export default async function ProductPage({ params }: Props) {
               −{discount(product.price, product.priceOld)}%
             </span>
           )}
-          {product.isImported && (
-            <span className="absolute top-4 right-4 bg-navy-800 text-white text-sm font-semibold px-3 py-1 rounded-full">
-              Importado
-            </span>
-          )}
           {hasImage ? (
             <div className="relative w-full h-full">
               <Image

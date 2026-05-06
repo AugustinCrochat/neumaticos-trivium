@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import { PRODUCTS, BRANDS } from "@/lib/data";
 import { ProductCard } from "@/components/ui/ProductCard";
+import { TireSizeSearch } from "@/components/ui/TireSizeSearch";
 import type { VehicleType } from "@/lib/types";
 
 const PRICE_RANGES = [
@@ -35,24 +36,24 @@ export function CatalogSection() {
     <section id="catalogo" className="py-16 bg-slate-50">
       <div className="max-w-7xl mx-auto px-4">
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
-          <div>
-            <h2 className="text-3xl font-black text-navy-900 mb-1">
-              Catálogo de Neumáticos
-            </h2>
-            <p className="text-slate-500">
-              {filtered.length} producto{filtered.length !== 1 ? "s" : ""} encontrados
-            </p>
+        <div className="mb-8">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-2 mb-5">
+            <div>
+              <h2 className="text-3xl font-black text-navy-900 mb-1">
+                Catálogo de Neumáticos
+              </h2>
+              <p className="text-slate-500">
+                {filtered.length} producto{filtered.length !== 1 ? "s" : ""} encontrados
+              </p>
+            </div>
           </div>
-          <a
-            href="#hero"
-            className="inline-flex items-center gap-2 text-navy-600 hover:text-navy-800 text-sm font-semibold transition-colors"
-          >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-            Buscar por medida
-          </a>
+          {/* Buscador por medida */}
+          <div className="bg-white rounded-xl border border-slate-200 px-4 py-4">
+            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">
+              Buscar por medida exacta
+            </p>
+            <TireSizeSearch compact />
+          </div>
         </div>
 
         <div className="flex flex-col lg:flex-row gap-6">

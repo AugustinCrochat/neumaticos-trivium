@@ -57,18 +57,13 @@ export function ProductCard({ product }: { product: TireProduct }) {
         </div>
 
         {/* Tags */}
-        <div className="absolute top-3 left-3 flex flex-col gap-1">
-          {product.priceOld && (
+        {product.priceOld && (
+          <div className="absolute top-3 left-3">
             <span className="bg-orange-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
               −{discount(product.price, product.priceOld)}%
             </span>
-          )}
-          {product.isImported && (
-            <span className="bg-navy-800 text-white text-xs font-semibold px-2 py-0.5 rounded-full">
-              Importado
-            </span>
-          )}
-        </div>
+          </div>
+        )}
       </Link>
 
       {/* Content */}

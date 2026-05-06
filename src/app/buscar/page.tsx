@@ -74,7 +74,7 @@ export default async function BuscarPage({ searchParams }: Props) {
 
           {/* Search form inline */}
           <div className="mt-6">
-            <SearchBar initialMedida={medida} />
+            <SearchBar initialMedida={medida} compact />
           </div>
         </div>
       </div>

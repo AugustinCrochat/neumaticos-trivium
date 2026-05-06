@@ -18,7 +18,7 @@ export const BRANCHES: Branch[] = [
     address: "Av. Ángel Torcuato de Alvear 2659",
     city: "Don Torcuato, Tigre",
     phone: "+54 11 0000-0001",
-    whatsapp: "5491100000001",
+    whatsapp: "5491171279909",
     hours: "Lun–Vie 8:30–18:30 | Sáb 9–14",
     mapUrl: "https://maps.google.com/?q=Av.+Angel+Torcuato+de+Alvear+2659+Don+Torcuato+Tigre",
   },
