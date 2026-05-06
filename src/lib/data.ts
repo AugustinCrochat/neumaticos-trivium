@@ -87,7 +87,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 427200,
     imageUrl:
-      "/images/products/1011131-4.webp",
+      "/images/products/1011131-4-205-45zr17-88w-zmax-zealion-zmax-zealion-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -106,7 +106,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 439200,
     imageUrl:
-      "/images/products/1011135-4.webp",
+      "/images/products/1011135-4-225-45zr17-94w-zmax-zealion-zmax-zealion-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -125,7 +125,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 576000,
     imageUrl:
-      "/images/products/1010897-2.webp",
+      "/images/products/1010897-2-215-75-r16c-agilis-3-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -144,7 +144,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 288000,
     imageUrl:
-      "/images/products/1010897.webp",
+      "/images/products/1010897-215-75-r16c-agilis-3-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -163,7 +163,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 198000,
     imageUrl:
-      "/images/products/1010913.webp",
+      "/images/products/1010913-205-65-r16c-agilis3-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -182,7 +182,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 1300000,
     imageUrl:
-      "/images/products/1011049-2.webp",
+      "/images/products/1011049-2-315-70r17-lrcrbl-113-110t-bfg-all-terrain-t-a-ko2-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -201,7 +201,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 650000,
     imageUrl:
-      "/images/products/1010421.webp",
+      "/images/products/1010421-lt315-70-r17-lre-rbl-121-118-s-bfg-all-terrain-ko2-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -220,7 +220,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 2200000,
     imageUrl:
-      "/images/products/1010425-4.webp",
+      "/images/products/1010425-4-lt265-60-r18lt-lrd-114-110s-bfg-all-terrain-ko3-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -239,7 +239,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 780000,
     imageUrl:
-      "/images/products/1010859.webp",
+      "/images/products/1010859-lt285-70r17-lrc-116-113-bfg-all-terrain-ko3-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -258,7 +258,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 3400000,
     imageUrl:
-      "/images/products/1011087-4.webp",
+      "/images/products/1011087-4-lt285-70r17-lre-rwl-126-123q-bfg-hd-terrain-t-a-k-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -277,7 +277,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 2400000,
     imageUrl:
-      "/images/products/1010636-4.webp",
+      "/images/products/1010636-4-31x1050-r15lt-lrc-109-q-bfg-mud-terrain-km3-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -296,7 +296,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 2800000,
     imageUrl:
-      "/images/products/1010645-4.webp",
+      "/images/products/1010645-4-33x1250-r17lt-lre-120-q-bfg-mud-terrain-km3-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -315,7 +315,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 700000,
     imageUrl:
-      "/images/products/1010645.webp",
+      "/images/products/1010645-33x1250-r17lt-lre-120-q-bfg-mud-terrain-km3-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -334,7 +334,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 3800000,
     imageUrl:
-      "/images/products/1010438-4.webp",
+      "/images/products/1010438-4-lt305-55-r20-lre-121-118-q-bfg-mud-terrain-km3-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -353,7 +353,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 1800000,
     imageUrl:
-      "/images/products/1010575-4.webp",
+      "/images/products/1010575-4-p235-60r14-rwl-96-s-bfg-radial-t-a-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -372,7 +372,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 1560000,
     imageUrl:
-      "/images/products/1010926-4.webp",
+      "/images/products/1010926-4-265-65-r17-112t-bridgestone-dueler-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -391,7 +391,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 780000,
     imageUrl:
-      "/images/products/1010926-2.webp",
+      "/images/products/1010926-2-265-65-r17-112t-bridgestone-dueler-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -410,7 +410,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 1440000,
     imageUrl:
-      "/images/products/1010925-4.webp",
+      "/images/products/1010925-4-265-70-r16-112t-bridgestone-dueler-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -429,7 +429,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 720000,
     imageUrl:
-      "/images/products/1010925-2.webp",
+      "/images/products/1010925-2-265-70-r16-112t-bridgestone-dueler-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -448,7 +448,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 890000,
     imageUrl:
-      "/images/products/1010937-2.webp",
+      "/images/products/1010937-2-225-40-r18-88y-potenza-re050a-bridgestone-potenza-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -467,7 +467,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 980000,
     imageUrl:
-      "/images/products/1010950-2.webp",
+      "/images/products/1010950-2-245-35-r18-88y-potenza-re050a-bridgestone-potenza-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -486,7 +486,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 496000,
     imageUrl:
-      "/images/products/1010675-2.webp",
+      "/images/products/1010675-2-175-55-r15-77t-ecocontact3-continental-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -505,7 +505,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 792000,
     imageUrl:
-      "/images/products/1011064-4.webp",
+      "/images/products/1011064-4-185-65-r15-88h-continental-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -524,7 +524,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 198000,
     imageUrl:
-      "/images/products/1011064.webp",
+      "/images/products/1011064-185-65-r15-88h-continental-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -543,7 +543,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 556000,
     imageUrl:
-      "/images/products/1010889-2.webp",
+      "/images/products/1010889-2-185r14-vanco-continental-continental-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -562,7 +562,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 720000,
     imageUrl:
-      "/images/products/1010932-2.webp",
+      "/images/products/1010932-2-235-75-r15-109t-continental-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -581,7 +581,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 1152000,
     imageUrl:
-      "/images/products/1010810-4.webp",
+      "/images/products/1010810-4-205-65-r16-energy-xm2-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -600,7 +600,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 90000,
     imageUrl:
-      "/images/products/1010610.webp",
+      "/images/products/1010610-185-r15-103-102n-ar410-avantia-fate-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -619,7 +619,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 89000,
     imageUrl:
-      "/images/products/1010594.webp",
+      "/images/products/1010594-185-60-r14-84t-fate-advance-fate-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -638,7 +638,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 792000,
     imageUrl:
-      "/images/products/1010933-4.webp",
+      "/images/products/1010933-4-205-70-r15-ar440-fate-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -657,7 +657,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 556000,
     imageUrl:
-      "/images/products/1010909-4.webp",
+      "/images/products/1010909-4-215-55-r16-93h-fate-ar-550-fate-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -676,7 +676,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 278000,
     imageUrl:
-      "/images/products/1010909-2.webp",
+      "/images/products/1010909-2-215-55-r16-93h-fate-ar-550-fate-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -695,7 +695,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 278000,
     imageUrl:
-      "/images/products/1010938-2.webp",
+      "/images/products/1010938-2-195-r14-106-108-radial-913-firemax-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -714,7 +714,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 139000,
     imageUrl:
-      "/images/products/1010938.webp",
+      "/images/products/1010938-195-r14-106-108-radial-913-firemax-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -733,7 +733,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 89000,
     imageUrl:
-      "/images/products/1010595.webp",
+      "/images/products/1010595-175-65-r15-84t-goodyear-gps3-goodyear-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -752,7 +752,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 556000,
     imageUrl:
-      "/images/products/1010586-4.webp",
+      "/images/products/1010586-4-185-65-r14-86t-h735-hankook-hankook-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -771,7 +771,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 129000,
     imageUrl:
-      "/images/products/1010592.webp",
+      "/images/products/1010592-195-70-r15-ra08-hankook-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -790,7 +790,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 129000,
     imageUrl:
-      "/images/products/1010591.webp",
+      "/images/products/1010591-195-80-r14-ra08-hankook-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -809,7 +809,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 250000,
     imageUrl:
-      "/images/products/1010589-2.webp",
+      "/images/products/1010589-2-215-55-r17-optimo-k415-2017-hankook-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -828,7 +828,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 918000,
     imageUrl:
-      "/images/products/1010584-2.webp",
+      "/images/products/1010584-2-235-55-r18-k127-evo3-suv-hankook-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -847,7 +847,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 1396000,
     imageUrl:
-      "/images/products/1011117-4.webp",
+      "/images/products/1011117-4-235-60-r17-102v-hankook-ra33-4t-hankook-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -866,7 +866,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 518000,
     imageUrl:
-      "/images/products/1010583-2.webp",
+      "/images/products/1010583-2-235-65-r17-104h-dinapro-hp-hankook-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -885,7 +885,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 258000,
     imageUrl:
-      "/images/products/1010590-2.webp",
+      "/images/products/1010590-2-500-r12-8pr-city-mdstar-z30-hankook-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -904,7 +904,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 115000,
     imageUrl:
-      "/images/products/1011094.webp",
+      "/images/products/1011094-195-55-r15-85v-ventus-vr-hankook-h457-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -923,7 +923,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 129000,
     imageUrl:
-      "/images/products/1011093.webp",
+      "/images/products/1011093-205-55-r16-94v-hankook-hankook-h457-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -942,7 +942,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 776000,
     imageUrl:
-      "/images/products/1011095-4.webp",
+      "/images/products/1011095-4-225-45-r17-94v-hankook-ventus-hankook-h457-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -961,7 +961,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 388000,
     imageUrl:
-      "/images/products/1011095-2.webp",
+      "/images/products/1011095-2-225-45-r17-94v-hankook-ventus-hankook-h457-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -980,7 +980,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 436000,
     imageUrl:
-      "/images/products/1011098-4.webp",
+      "/images/products/1011098-4-185-60-r14-82t-hankook-hankook-h735-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -999,7 +999,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 1196000,
     imageUrl:
-      "/images/products/1011100-4.webp",
+      "/images/products/1011100-4-265-65-r17-112t-dynapro-at-hankook-rf11-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -1018,7 +1018,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 396000,
     imageUrl:
-      "/images/products/1010891-2.webp",
+      "/images/products/1010891-2-55-r13-91-89p-kc55-khumo-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -1037,7 +1037,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 596000,
     imageUrl:
-      "/images/products/1010285-2.webp",
+      "/images/products/1010285-2-225-70-r17-extraload-108-t-latitude-cross-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -1056,7 +1056,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 2356000,
     imageUrl:
-      "/images/products/1010311-4.webp",
+      "/images/products/1010311-4-245-60-r18-105-h-latitude-sport-3-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -1075,7 +1075,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 589000,
     imageUrl:
-      "/images/products/1010311.webp",
+      "/images/products/1010311-245-60-r18-105-h-latitude-sport-3-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -1094,7 +1094,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 976000,
     imageUrl:
-      "/images/products/1010334-2.webp",
+      "/images/products/1010334-2-255-55-r19-111-w-latitude-tour-hp-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -1113,7 +1113,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 380000,
     imageUrl:
-      "/images/products/1010851-4.webp",
+      "/images/products/1010851-4-155-65r13-73t-ling-long-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -1132,7 +1132,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 230000,
     imageUrl:
-      "/images/products/1010852-2.webp",
+      "/images/products/1010852-2-175-60r15-81h-ling-long-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -1151,7 +1151,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 99000,
     imageUrl:
-      "/images/products/1010672.webp",
+      "/images/products/1010672-215-45-r16-90v-max-xl-ling-long-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -1170,7 +1170,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 230000,
     imageUrl:
-      "/images/products/1010673-2.webp",
+      "/images/products/1010673-2-500-r12-greenmax-r655-83-81n-ling-long-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -1189,7 +1189,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 115000,
     imageUrl:
-      "/images/products/1010673.webp",
+      "/images/products/1010673-500-r12-greenmax-r655-83-81n-ling-long-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -1208,7 +1208,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 459000,
     imageUrl:
-      "/images/products/1011032.webp",
+      "/images/products/1011032-265-60r18-dt-110t-ltx-force-ltx-force-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -1227,7 +1227,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 554000,
     imageUrl:
-      "/images/products/1010244-2.webp",
+      "/images/products/1010244-2-195-60-r16c-99-97-h-michelin-agilis-51-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -1246,7 +1246,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 277000,
     imageUrl:
-      "/images/products/1010244.webp",
+      "/images/products/1010244-195-60-r16c-99-97-h-michelin-agilis-51-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -1265,7 +1265,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 318000,
     imageUrl:
-      "/images/products/1010018-2.webp",
+      "/images/products/1010018-2-175-65-r15-84-h-michelin-energy-xm2-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -1284,7 +1284,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 1184000,
     imageUrl:
-      "/images/products/1010248-4.webp",
+      "/images/products/1010248-4-205-60-r16-92-h-michelin-ltx-force-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -1303,7 +1303,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 592000,
     imageUrl:
-      "/images/products/1010248-2.webp",
+      "/images/products/1010248-2-205-60-r16-92-h-michelin-ltx-force-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -1322,7 +1322,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 296000,
     imageUrl:
-      "/images/products/1010248.webp",
+      "/images/products/1010248-205-60-r16-92-h-michelin-ltx-force-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -1341,7 +1341,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 1580000,
     imageUrl:
-      "/images/products/1010270-4.webp",
+      "/images/products/1010270-4-235-70-r16-106-t-michelin-ltx-force-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -1360,7 +1360,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 395000,
     imageUrl:
-      "/images/products/1010270.webp",
+      "/images/products/1010270-235-70-r16-106-t-michelin-ltx-force-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -1379,7 +1379,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 1996000,
     imageUrl:
-      "/images/products/1010986-4.webp",
+      "/images/products/1010986-4-255-55-r19-111h-michelin-ltx-force-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -1398,7 +1398,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 1316000,
     imageUrl:
-      "/images/products/1011001-4.webp",
+      "/images/products/1011001-4-265-65-r17-112h-ltx-trail-michelin-ltx-trail-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -1417,7 +1417,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 329000,
     imageUrl:
-      "/images/products/1011001.webp",
+      "/images/products/1011001-265-65-r17-112h-ltx-trail-michelin-ltx-trail-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -1436,7 +1436,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 1876000,
     imageUrl:
-      "/images/products/1011053-4.webp",
+      "/images/products/1011053-4-185-hr14-flanc-blanc-90h-mxv-michelin-mxv-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -1455,7 +1455,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 1796000,
     imageUrl:
-      "/images/products/1010654-4.webp",
+      "/images/products/1010654-4-185-hr14-90-h-michelin-mxv-p-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -1474,7 +1474,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 1596000,
     imageUrl:
-      "/images/products/1010045-4.webp",
+      "/images/products/1010045-4-205-55-r16-zp-91-v-michelin-primacy-3-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -1493,7 +1493,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 938000,
     imageUrl:
-      "/images/products/1011068-2.webp",
+      "/images/products/1011068-2-225-55-r18-98v-primacy-4-michelin-primacy-4-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -1512,7 +1512,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 469000,
     imageUrl:
-      "/images/products/1011068.webp",
+      "/images/products/1011068-225-55-r18-98v-primacy-4-michelin-primacy-4-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -1531,7 +1531,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 259000,
     imageUrl:
-      "/images/products/1010060.webp",
+      "/images/products/1010060-205-45-r17-extraload-88-v-michelin-primacy-4-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -1550,7 +1550,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 1792000,
     imageUrl:
-      "/images/products/1010984-4.webp",
+      "/images/products/1010984-4-225-55-r18-extraload-102v-michelin-primacy-4-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -1569,7 +1569,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 1196000,
     imageUrl:
-      "/images/products/1010317-4.webp",
+      "/images/products/1010317-4-265-60-r18-110-h-michelin-primacy-suv-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -1588,7 +1588,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 299000,
     imageUrl:
-      "/images/products/1010317.webp",
+      "/images/products/1010317-265-60-r18-110-h-michelin-primacy-suv-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -1607,7 +1607,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 2476000,
     imageUrl:
-      "/images/products/1010551-4.webp",
+      "/images/products/1010551-4-220-55-vr390-93-w-michelin-trx-b-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -1626,7 +1626,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 1460000,
     imageUrl:
-      "/images/products/1010547-4.webp",
+      "/images/products/1010547-4-155-r15-tl-x-82-t-michelin-x-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -1645,7 +1645,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 249000,
     imageUrl:
-      "/images/products/1010301.webp",
+      "/images/products/1010301-265-65-r17-rbl-112-t-michelin-x-lt-a-s-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -1664,7 +1664,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 2024000,
     imageUrl:
-      "/images/products/1010782-4.webp",
+      "/images/products/1010782-4-165-vr15-n0-michelin-xas-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -1683,7 +1683,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 2072000,
     imageUrl:
-      "/images/products/1010549-4.webp",
+      "/images/products/1010549-4-185-70-vr15-89v-xwx-michelin-xwx-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -1702,7 +1702,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 2224000,
     imageUrl:
-      "/images/products/1010781-4.webp",
+      "/images/products/1010781-4-205-70-vr14-tl-89w-xwx-michelin-xwx-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -1721,7 +1721,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 2240000,
     imageUrl:
-      "/images/products/1010550-4.webp",
+      "/images/products/1010550-4-205-70-vr15-90-w-michelin-xwx-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -1740,7 +1740,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 1420000,
     imageUrl:
-      "/images/products/1010546-4.webp",
+      "/images/products/1010546-4-145-sr15-xzx-78-s-michelin-xzx-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -1759,7 +1759,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 1880000,
     imageUrl:
-      "/images/products/1011055-4.webp",
+      "/images/products/1011055-4-165-sr15-flanc-blanc-86s-xzx-michelin-xzx-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -1778,7 +1778,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 1528000,
     imageUrl:
-      "/images/products/1010548-4.webp",
+      "/images/products/1010548-4-165-sr15-xzx-86-s-michelin-xzx-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -1797,7 +1797,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 1160000,
     imageUrl:
-      "/images/products/1010545-4.webp",
+      "/images/products/1010545-4-135-r15-zx-72-s-michelin-zx-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -1816,7 +1816,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 1560000,
     imageUrl:
-      "/images/products/1010553-4.webp",
+      "/images/products/1010553-4-640-sr13700-x-13-87-s-michelin-zx-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -1835,7 +1835,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 306000,
     imageUrl:
-      "/images/products/1011082-2.webp",
+      "/images/products/1011082-2-185-65-r15-n-priz-sh91-88h-xl-nexen-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -1854,7 +1854,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 153000,
     imageUrl:
-      "/images/products/1011082.webp",
+      "/images/products/1011082-185-65-r15-n-priz-sh91-88h-xl-nexen-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -1873,7 +1873,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 145000,
     imageUrl:
-      "/images/products/1011074.webp",
+      "/images/products/1011074-195-55-r16-n-priz-gx-91v-nexen-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -1892,7 +1892,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 119000,
     imageUrl:
-      "/images/products/1011081.webp",
+      "/images/products/1011081-195-65-r15-n-fera-su4-91h-xl-nexen-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -1911,7 +1911,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 540000,
     imageUrl:
-      "/images/products/1011077-4.webp",
+      "/images/products/1011077-4-205-55-r16-n-fera-su4-91w-nexen-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -1930,7 +1930,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 135000,
     imageUrl:
-      "/images/products/1011077.webp",
+      "/images/products/1011077-205-55-r16-n-fera-su4-91w-nexen-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -1949,7 +1949,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 149000,
     imageUrl:
-      "/images/products/1011104.webp",
+      "/images/products/1011104-215-60-r17-96h-nexen-cp672-nexen-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -1968,7 +1968,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 1124000,
     imageUrl:
-      "/images/products/1011091-4.webp",
+      "/images/products/1011091-4-235-55-r17-nexen-n-fera-nexen-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -1987,7 +1987,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 562000,
     imageUrl:
-      "/images/products/1011091-2.webp",
+      "/images/products/1011091-2-235-55-r17-nexen-n-fera-nexen-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -2006,7 +2006,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 364000,
     imageUrl:
-      "/images/products/1011102-2.webp",
+      "/images/products/1011102-2-205-60-r15-91v-nexen-nfera-nexen-nfera-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -2025,7 +2025,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 240000,
     imageUrl:
-      "/images/products/1011084.webp",
+      "/images/products/1011084-235-60-r18-nexen-n-fera-107v-nexen-ru5-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -2044,7 +2044,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 796000,
     imageUrl:
-      "/images/products/1011103-4.webp",
+      "/images/products/1011103-4-205-50-r17-nexen-n-fera-93w-nexen-su4-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -2063,7 +2063,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 199000,
     imageUrl:
-      "/images/products/1011103.webp",
+      "/images/products/1011103-205-50-r17-nexen-n-fera-93w-nexen-su4-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -2082,7 +2082,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 2378000,
     imageUrl:
-      "/images/products/1010839-2.webp",
+      "/images/products/1010839-2-235-50-r20-xl-jlr-psport-4-suv-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -2101,7 +2101,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 350000,
     imageUrl:
-      "/images/products/1010651-2.webp",
+      "/images/products/1010651-2-235-65-r17-extra-load-108-h-pilot-alpin-5-suv-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -2120,7 +2120,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 1700000,
     imageUrl:
-      "/images/products/1010942-4.webp",
+      "/images/products/1010942-4-225-40-zr18-xl-pilot-sort-cup2-cnt-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -2139,7 +2139,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 610000,
     imageUrl:
-      "/images/products/1010033-2.webp",
+      "/images/products/1010033-2-195-45-r16-extraload-84-v-pilot-sport-3-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -2158,7 +2158,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 1000000,
     imageUrl:
-      "/images/products/1010622-4.webp",
+      "/images/products/1010622-4-205-40-zr18-extra-load-86-y-pilot-sport-4-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -2177,7 +2177,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 1060000,
     imageUrl:
-      "/images/products/1010046-4.webp",
+      "/images/products/1010046-4-205-55-zr16-extraload-94y-pilot-sport-4-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -2196,7 +2196,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 2676000,
     imageUrl:
-      "/images/products/1010684-4.webp",
+      "/images/products/1010684-4-235-45-zr19-extra-load-mo-pilot-sport-4-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -2215,7 +2215,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 2360000,
     imageUrl:
-      "/images/products/1010191-2.webp",
+      "/images/products/1010191-2-245-40-zr20-xl-zp-99-y-pilot-sport-4-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -2234,7 +2234,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 1398000,
     imageUrl:
-      "/images/products/1010627-2.webp",
+      "/images/products/1010627-2-255-40-r18-extra-load-zp99y-pilot-sport-4-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -2253,7 +2253,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 1318000,
     imageUrl:
-      "/images/products/1010621-2.webp",
+      "/images/products/1010621-2-255-40-zr17-98-y-pilot-sport-4-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -2272,7 +2272,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 2698000,
     imageUrl:
-      "/images/products/1010218-2.webp",
+      "/images/products/1010218-2-275-35-zr21-extraload-n0-103y-pilot-sport-4-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -2291,7 +2291,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 2198000,
     imageUrl:
-      "/images/products/1010207-2.webp",
+      "/images/products/1010207-2-275-40zr20-xl-acoustic-n0-106y-pilot-sport-4-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -2310,7 +2310,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 2500000,
     imageUrl:
-      "/images/products/1010629-2.webp",
+      "/images/products/1010629-2-315-30-zr21-extra-load-n0-105y-pilot-sport-4-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -2329,7 +2329,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 2740000,
     imageUrl:
-      "/images/products/1010220-2.webp",
+      "/images/products/1010220-2-325-30-zr21-extraload-n0-108y-pilot-sport-4-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -2348,7 +2348,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 1376000,
     imageUrl:
-      "/images/products/1010150-2.webp",
+      "/images/products/1010150-2-225-35-zr19-extraload-88y-pilot-sport-4-s-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -2367,7 +2367,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 490000,
     imageUrl:
-      "/images/products/1010962.webp",
+      "/images/products/1010962-225-40-zr18-xl-pilot-sport-4-s-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -2386,7 +2386,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 1380000,
     imageUrl:
-      "/images/products/1010152-2.webp",
+      "/images/products/1010152-2-225-40-zr19-extraload-93y-pilot-sport-4-s-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -2405,7 +2405,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 2200000,
     imageUrl:
-      "/images/products/1010199-2.webp",
+      "/images/products/1010199-2-265-30-zr20-extraload-94y-pilot-sport-4-s-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -2424,7 +2424,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 2440000,
     imageUrl:
-      "/images/products/1010201-2.webp",
+      "/images/products/1010201-2-275-30-zr20-xl-mo-97y-pilot-sport-4-s-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -2443,7 +2443,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 2500000,
     imageUrl:
-      "/images/products/1010208-2.webp",
+      "/images/products/1010208-2-285-30-zr20-extraload-99y-pilot-sport-4-s-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -2462,7 +2462,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 2260000,
     imageUrl:
-      "/images/products/1010181-2.webp",
+      "/images/products/1010181-2-295-30-zr19-extraload-100y-pilot-sport-4-s-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -2481,7 +2481,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 5400000,
     imageUrl:
-      "/images/products/1010904-4.webp",
+      "/images/products/1010904-4-295-35-zr21-xl-pilot-sport-4-s-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -2500,7 +2500,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 2700000,
     imageUrl:
-      "/images/products/1010904-2.webp",
+      "/images/products/1010904-2-295-35-zr21-xl-pilot-sport-4-s-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -2519,7 +2519,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 2180000,
     imageUrl:
-      "/images/products/1010184-2.webp",
+      "/images/products/1010184-2-305-30-zr19-extraload-102y-pilot-sport-4-s-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -2538,7 +2538,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 5000000,
     imageUrl:
-      "/images/products/1011073-4.webp",
+      "/images/products/1011073-4-235-50-r21-101-w-pilot-sport-4-suv-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -2557,7 +2557,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 1740000,
     imageUrl:
-      "/images/products/1010698-2.webp",
+      "/images/products/1010698-2-255-45-r19-pilot-sport-4-suv-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -2576,7 +2576,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 3000000,
     imageUrl:
-      "/images/products/1010704-4.webp",
+      "/images/products/1010704-4-255-50-r20-pilot-sport-4-suv-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -2595,7 +2595,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 750000,
     imageUrl:
-      "/images/products/1010704.webp",
+      "/images/products/1010704-255-50-r20-pilot-sport-4-suv-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -2614,7 +2614,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 1920000,
     imageUrl:
-      "/images/products/1010694-4.webp",
+      "/images/products/1010694-4-255-60-r18-extra-load-pilot-sport-4-suv-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -2633,7 +2633,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 4360000,
     imageUrl:
-      "/images/products/1010705-4.webp",
+      "/images/products/1010705-4-265-45-r20-extra-load-pilot-sport-4-suv-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -2652,7 +2652,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 3560000,
     imageUrl:
-      "/images/products/1010701-4.webp",
+      "/images/products/1010701-4-265-50-r19-extra-load-pilot-sport-4-suv-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -2671,7 +2671,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 4240000,
     imageUrl:
-      "/images/products/1010706-4.webp",
+      "/images/products/1010706-4-275-40-r20-extra-load-pilot-sport-4-suv-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -2690,7 +2690,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 2780000,
     imageUrl:
-      "/images/products/1010752-2.webp",
+      "/images/products/1010752-2-295-40-r20-extra-load-pilot-sport-4-suv-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -2709,7 +2709,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 1290000,
     imageUrl:
-      "/images/products/1010970.webp",
+      "/images/products/1010970-315-40-r21-xl-mo1-psport4-suv-pilot-sport-4-suv-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -2728,7 +2728,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 1400000,
     imageUrl:
-      "/images/products/1010994-4.webp",
+      "/images/products/1010994-4-205-45zr17-xl-88y-psport-5-pilot-sport-5-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -2747,7 +2747,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 700000,
     imageUrl:
-      "/images/products/1010994-2.webp",
+      "/images/products/1010994-2-205-45zr17-xl-88y-psport-5-pilot-sport-5-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -2766,7 +2766,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 1500000,
     imageUrl:
-      "/images/products/1010997-4.webp",
+      "/images/products/1010997-4-215-45zr17-xl-91y-psport-5-pilot-sport-5-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -2785,7 +2785,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 750000,
     imageUrl:
-      "/images/products/1010997-2.webp",
+      "/images/products/1010997-2-215-45zr17-xl-91y-psport-5-pilot-sport-5-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -2804,7 +2804,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 1780000,
     imageUrl:
-      "/images/products/1011015-4.webp",
+      "/images/products/1011015-4-225-40zr18-xl-92y-psport-5-pilot-sport-5-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -2823,7 +2823,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 890000,
     imageUrl:
-      "/images/products/1011015-2.webp",
+      "/images/products/1011015-2-225-40zr18-xl-92y-psport-5-pilot-sport-5-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -2842,7 +2842,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 445000,
     imageUrl:
-      "/images/products/1011015.webp",
+      "/images/products/1011015-225-40zr18-xl-92y-psport-5-pilot-sport-5-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -2861,7 +2861,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 1480000,
     imageUrl:
-      "/images/products/1010956-4.webp",
+      "/images/products/1010956-4-225-45-zr17-extraload-94y-pilot-sport-5-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -2880,7 +2880,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 2060000,
     imageUrl:
-      "/images/products/1011016-4.webp",
+      "/images/products/1011016-4-225-45zr18-xl-95y-psport-5-pilot-sport-5-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -2899,7 +2899,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 1030000,
     imageUrl:
-      "/images/products/1011016-2.webp",
+      "/images/products/1011016-2-225-45zr18-xl-95y-psport-5-pilot-sport-5-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -2918,7 +2918,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 1340000,
     imageUrl:
-      "/images/products/1011034-2.webp",
+      "/images/products/1011034-2-235-45zr19-xl-99y-psport-5-pilot-sport-5-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -2937,7 +2937,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 670000,
     imageUrl:
-      "/images/products/1011034.webp",
+      "/images/products/1011034-235-45zr19-xl-99y-psport-5-pilot-sport-5-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -2956,7 +2956,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 2700000,
     imageUrl:
-      "/images/products/1010770-2.webp",
+      "/images/products/1010770-2-265-35-zr20-n2-pilot-sport-cup-2-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -2975,7 +2975,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 1996000,
     imageUrl:
-      "/images/products/1010941-4.webp",
+      "/images/products/1010941-4-225-45-zr17-xl-pilot-sport-cup2-cnt-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -2994,7 +2994,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 2380000,
     imageUrl:
-      "/images/products/1010960-2.webp",
+      "/images/products/1010960-2-235-35-zr20-xl-pilot-sport-cup2-cnt-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -3013,7 +3013,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 2580000,
     imageUrl:
-      "/images/products/1010961-2.webp",
+      "/images/products/1010961-2-295-35-zr20-xl-pilot-sport-cup2-cnt-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -3032,7 +3032,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 1290000,
     imageUrl:
-      "/images/products/1010961.webp",
+      "/images/products/1010961-295-35-zr20-xl-pilot-sport-cup2-cnt-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -3051,7 +3051,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 1840000,
     imageUrl:
-      "/images/products/1010156-2.webp",
+      "/images/products/1010156-2-235-35-zr19-extraload-n2-91y-pilot-sport-ps2-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -3070,7 +3070,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 2000000,
     imageUrl:
-      "/images/products/1010958-2.webp",
+      "/images/products/1010958-2-285-30-zr18-xl-n3-pilot-sport-ps2-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -3089,7 +3089,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 1320000,
     imageUrl:
-      "/images/products/1010682-2.webp",
+      "/images/products/1010682-2-225-40-zr18-extra-load-hn-pilot-super-sport-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -3108,7 +3108,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 2360000,
     imageUrl:
-      "/images/products/1010813-2.webp",
+      "/images/products/1010813-2-245-40-rf21-zp-pilot-super-sport-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -3127,7 +3127,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 2998000,
     imageUrl:
-      "/images/products/1010814-2.webp",
+      "/images/products/1010814-2-275-35-rf21-zp-pilot-super-sport-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -3146,7 +3146,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 1996000,
     imageUrl:
-      "/images/products/1010144-2.webp",
+      "/images/products/1010144-2-275-40-zr18-99y-pilot-super-sport-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -3165,7 +3165,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 2396000,
     imageUrl:
-      "/images/products/1010177-2.webp",
+      "/images/products/1010177-2-285-30-zr19-extraload-mo1-98y-pilot-super-sport-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -3184,7 +3184,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 2580000,
     imageUrl:
-      "/images/products/1010221-2.webp",
+      "/images/products/1010221-2-325-30-zr21-extraload-108-y-pilot-super-sport-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -3203,7 +3203,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 175000,
     imageUrl:
-      "/images/products/1010915.webp",
+      "/images/products/1010915-175-65r14-90t-pchrono-pirelli-chrono-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -3222,7 +3222,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 102000,
     imageUrl:
-      "/images/products/1010930.webp",
+      "/images/products/1010930-175-65r14-82t-pcinturato-p1-pirelli-cinturato-p1-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -3241,7 +3241,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 125000,
     imageUrl:
-      "/images/products/1010885.webp",
+      "/images/products/1010885-195-55r15-85v-pcinturato-p1-pirelli-cinturato-p1-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -3260,7 +3260,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 125000,
     imageUrl:
-      "/images/products/1010917.webp",
+      "/images/products/1010917-195-55r15-85h-pcinturato-p7-pirelli-cinturato-p7-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -3279,7 +3279,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 318000,
     imageUrl:
-      "/images/products/1010929-2.webp",
+      "/images/products/1010929-2-205-45r17-88v-pcinturato-p7-pirelli-cinturato-p7-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -3298,7 +3298,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["auto"],
     price: 190000,
     imageUrl:
-      "/images/products/1010807.webp",
+      "/images/products/1010807-195-65-r15-primacy-4-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -3317,7 +3317,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 1280000,
     imageUrl:
-      "/images/products/1010902-2.webp",
+      "/images/products/1010902-2-235-55-r19-105w-xl-mo-mi-primacy-4-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -3336,7 +3336,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 1392000,
     imageUrl:
-      "/images/products/1010879-4.webp",
+      "/images/products/1010879-4-225-65-r17-xl-primacy-4-suv-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -3355,7 +3355,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 301000,
     imageUrl:
-      "/images/products/1010995.webp",
+      "/images/products/1010995-205-50r17-xl-93w-primacy-4-primacy-4-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -3374,7 +3374,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 155000,
     imageUrl:
-      "/images/products/1010989.webp",
+      "/images/products/1010989-205-60r16-92v-primacy-4-primacy-4-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -3393,7 +3393,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 998000,
     imageUrl:
-      "/images/products/1010985-2.webp",
+      "/images/products/1010985-2-225-50-r18-99-w-primacy-4-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -3412,7 +3412,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 499000,
     imageUrl:
-      "/images/products/1010985.webp",
+      "/images/products/1010985-225-50-r18-99-w-primacy-4-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -3431,7 +3431,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 229000,
     imageUrl:
-      "/images/products/1011007.webp",
+      "/images/products/1011007-245-45r17-xl-99y-primacy-4-primacy-4-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -3450,7 +3450,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 529000,
     imageUrl:
-      "/images/products/1010978.webp",
+      "/images/products/1010978-225-60-r18-primacy-a-s-primacy-a-s-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -3469,7 +3469,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 792000,
     imageUrl:
-      "/images/products/1011136-4.webp",
+      "/images/products/1011136-4-265-60r18-110t-terra-xplorer-c2-a-t-terra-xplorer-c2-a-t-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -3488,7 +3488,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 396000,
     imageUrl:
-      "/images/products/1011136-2.webp",
+      "/images/products/1011136-2-265-60r18-110t-terra-xplorer-c2-a-t-terra-xplorer-c2-a-t-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -3507,7 +3507,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 792000,
     imageUrl:
-      "/images/products/1011137-4.webp",
+      "/images/products/1011137-4-265-65r17-112t-terra-xplorer-c2-a-t-terra-xplorer-c2-a-t-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -3526,7 +3526,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 198000,
     imageUrl:
-      "/images/products/1011137.webp",
+      "/images/products/1011137-265-65r17-112t-terra-xplorer-c2-a-t-terra-xplorer-c2-a-t-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
@@ -3545,7 +3545,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 3520000,
     imageUrl:
-      "/images/products/1011044-4.webp",
+      "/images/products/1011044-4-265-50r20-107h-x-lt-a-s-x-lt-a-s-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -3564,7 +3564,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 1140000,
     imageUrl:
-      "/images/products/1010599-4.webp",
+      "/images/products/1010599-4-225-65-r16-100h-a349-yokohama-yokohama-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -3583,7 +3583,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 516000,
     imageUrl:
-      "/images/products/1011134-4.webp",
+      "/images/products/1011134-4-215-65r16-98h-zmax-ly688-zmax-ly688-pack-x4.webp",
     tags: ["pack x4"],
     isEconomic: false,
     isImported: true,
@@ -3602,7 +3602,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 258000,
     imageUrl:
-      "/images/products/1011134-2.webp",
+      "/images/products/1011134-2-215-65r16-98h-zmax-ly688-zmax-ly688-pack-x2.webp",
     tags: ["pack x2"],
     isEconomic: false,
     isImported: true,
@@ -3621,7 +3621,7 @@ export const PRODUCTS: TireProduct[] = [
     vehicleType: ["camioneta"],
     price: 129000,
     imageUrl:
-      "/images/products/1011134.webp",
+      "/images/products/1011134-215-65r16-98h-zmax-ly688-zmax-ly688-x1.webp",
     tags: ["unidad"],
     isEconomic: false,
     isImported: true,
