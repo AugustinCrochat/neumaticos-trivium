@@ -1,14 +1,52 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState, useMemo, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import { TIRE_WIDTHS, TIRE_PROFILES, TIRE_RIMS } from "@/lib/config";
+import { PRODUCTS } from "@/lib/data";
+
+function unique<T>(arr: T[]): T[] {
+  return [...new Set(arr)].sort((a, b) => Number(a) - Number(b));
+}
 
 export function HeroSection() {
   const router = useRouter();
   const [width, setWidth] = useState("");
   const [profile, setProfile] = useState("");
   const [rim, setRim] = useState("");
+
+  const availableWidths = useMemo(
+    () => unique(PRODUCTS.map((p) => p.size.width)),
+    []
+  );
+
+  const availableProfiles = useMemo(() => {
+    if (!width) return unique(PRODUCTS.map((p) => p.size.profile));
+    return unique(
+      PRODUCTS.filter((p) => p.size.width === Number(width)).map((p) => p.size.profile)
+    );
+  }, [width]);
+
+  const availableRims = useMemo(() => {
+    if (!width && !profile) return unique(PRODUCTS.map((p) => p.size.rim));
+    return unique(
+      PRODUCTS.filter((p) => {
+        if (width && p.size.width !== Number(width)) return false;
+        if (profile && p.size.profile !== Number(profile)) return false;
+        return true;
+      }).map((p) => p.size.rim)
+    );
+  }, [width, profile]);
+
+  function handleWidthChange(v: string) {
+    setWidth(v);
+    setProfile("");
+    setRim("");
+  }
+
+  function handleProfileChange(v: string) {
+    setProfile(v);
+    setRim("");
+  }
 
   const handleSearch = (e: FormEvent) => {
     e.preventDefault();
@@ -19,7 +57,7 @@ export function HeroSection() {
   const isValid = width && profile && rim;
 
   return (
-    <section className="relative overflow-hidden bg-navy-900 min-h-[500px] flex items-center">
+    <section id="hero" className="relative overflow-hidden bg-navy-900 min-h-[500px] flex items-center">
       {/* Grid de puntos */}
       <div className="absolute inset-0 opacity-5 pointer-events-none">
         <div
@@ -61,11 +99,11 @@ export function HeroSection() {
                 <SelectField
                   label="Ancho"
                   value={width}
-                  onChange={setWidth}
+                  onChange={handleWidthChange}
                   placeholder="195"
                   hint="mm"
                 >
-                  {TIRE_WIDTHS.map((w) => (
+                  {availableWidths.map((w) => (
                     <option key={w} value={w}>{w}</option>
                   ))}
                 </SelectField>
@@ -73,11 +111,12 @@ export function HeroSection() {
                 <SelectField
                   label="Perfil"
                   value={profile}
-                  onChange={setProfile}
+                  onChange={handleProfileChange}
                   placeholder="55"
                   hint="%"
+                  disabled={!width}
                 >
-                  {TIRE_PROFILES.map((p) => (
+                  {availableProfiles.map((p) => (
                     <option key={p} value={p}>{p}</option>
                   ))}
                 </SelectField>
@@ -89,8 +128,9 @@ export function HeroSection() {
                   placeholder="16"
                   hint="R"
                   hintPrefix
+                  disabled={!profile}
                 >
-                  {TIRE_RIMS.map((r) => (
+                  {availableRims.map((r) => (
                     <option key={r} value={r}>{r}</option>
                   ))}
                 </SelectField>
@@ -163,6 +203,7 @@ function SelectField({
   placeholder,
   hint,
   hintPrefix,
+  disabled,
   children,
 }: {
   label: string;
@@ -171,6 +212,7 @@ function SelectField({
   placeholder: string;
   hint: string;
   hintPrefix?: boolean;
+  disabled?: boolean;
   children: React.ReactNode;
 }) {
   return (
@@ -182,7 +224,8 @@ function SelectField({
         <select
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="w-full appearance-none bg-slate-50 border-2 border-slate-200 hover:border-navy-300 focus:border-navy-600 focus:bg-white text-slate-800 font-semibold rounded-xl px-3 py-3 pr-8 text-sm transition-colors outline-none cursor-pointer"
+          disabled={disabled}
+          className="w-full appearance-none bg-slate-50 border-2 border-slate-200 hover:border-navy-300 focus:border-navy-600 focus:bg-white disabled:opacity-40 disabled:cursor-not-allowed text-slate-800 font-semibold rounded-xl px-3 py-3 pr-8 text-sm transition-colors outline-none cursor-pointer"
         >
           <option value="" disabled>
             {hintPrefix ? `R${placeholder}` : placeholder}
