@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { TireSizeSearch } from "@/components/ui/TireSizeSearch";
 
 export const metadata = {
@@ -39,29 +40,18 @@ export default function ComoLeerMedidaPage() {
 
       {/* Guide Content */}
       <div className="max-w-4xl mx-auto px-4 py-16 md:py-24">
-        <div className="grid md:grid-cols-2 gap-12 items-start">
+        <div className="grid md:grid-cols-2 gap-12 items-center">
           
-          {/* Visual Diagram Placeholder (CSS-based) */}
-          <div className="relative group">
-            <div className="aspect-square bg-slate-100 rounded-3xl overflow-hidden flex items-center justify-center p-8 border-2 border-slate-50">
-              <div className="w-full h-full rounded-full border-[40px] border-slate-900 flex items-center justify-center relative">
-                <div className="text-center">
-                  <p className="text-slate-400 text-xs font-black uppercase tracking-widest mb-1">Ejemplo</p>
-                  <p className="text-3xl md:text-4xl font-black text-slate-800 font-mono">
-                    <span className="text-orange-500">195</span>/
-                    <span className="text-blue-500">55</span> 
-                    <span className="text-green-500"> R15</span>
-                  </p>
-                </div>
-                
-                {/* Decorative labels */}
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-white px-3 py-1 rounded-full shadow-md border border-slate-100 flex flex-col items-center">
-                  <span className="text-[10px] font-black text-slate-400">ANCHO</span>
-                  <div className="w-[1px] h-4 bg-orange-500 my-1"></div>
-                </div>
-              </div>
-            </div>
-            <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-orange-500/10 rounded-full blur-3xl -z-10 group-hover:bg-orange-500/20 transition-all"></div>
+          {/* Visual Diagram Image */}
+          <div className="relative group rounded-3xl overflow-hidden shadow-2xl shadow-navy-900/10 border border-slate-100">
+            <Image 
+              src="/como-leer-la-medida-de-un-neumatico.webp" 
+              alt="Diagrama explicativo de cómo leer un neumático"
+              width={800}
+              height={800}
+              className="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-700"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-navy-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
           </div>
 
           {/* Text Guide */}

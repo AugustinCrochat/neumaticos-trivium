@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useRef, useEffect, forwardRef } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { PRODUCTS } from "@/lib/data";
 
@@ -14,8 +14,6 @@ export function TireSizeSearch({
   initialMedida?: string;
 }) {
   const router = useRouter();
-  const profileRef = useRef<HTMLSelectElement>(null);
-  const rimRef = useRef<HTMLSelectElement>(null);
 
   function parseInitial(medida?: string) {
     if (!medida) return { w: "", p: "", r: "" };
@@ -31,6 +29,9 @@ export function TireSizeSearch({
   const [width, setWidth] = useState(init.w);
   const [profile, setProfile] = useState(init.p);
   const [rim, setRim] = useState(init.r);
+
+  // 'width' | 'profile' | 'rim' | null
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
 
   const availableWidths = useMemo(
     () => unique(PRODUCTS.map((p) => p.size.width)),
@@ -61,44 +62,27 @@ export function TireSizeSearch({
 
   // Auto-search ONLY when all three are selected
   useEffect(() => {
-    if (width && profile && rim) {
+    if (width && profile && rim && !activeDropdown) {
       handleSearch();
     }
-  }, [width, profile, rim]);
+  }, [width, profile, rim, activeDropdown]);
 
   function onWidthChange(v: string) {
     setWidth(v);
     setProfile("");
     setRim("");
-    setTimeout(() => {
-      if (profileRef.current) {
-        profileRef.current.focus();
-        try {
-          if ('showPicker' in HTMLSelectElement.prototype) {
-            profileRef.current.showPicker();
-          }
-        } catch (e) {
-          // Ignore if showPicker throws (e.g., missing user activation context)
-        }
-      }
-    }, 10);
+    setActiveDropdown("profile"); // Auto-open next
   }
 
   function onProfileChange(v: string) {
     setProfile(v);
     setRim("");
-    setTimeout(() => {
-      if (rimRef.current) {
-        rimRef.current.focus();
-        try {
-          if ('showPicker' in HTMLSelectElement.prototype) {
-            rimRef.current.showPicker();
-          }
-        } catch (e) {
-          // Ignore if showPicker throws
-        }
-      }
-    }, 10);
+    setActiveDropdown("rim"); // Auto-open next
+  }
+
+  function onRimChange(v: string) {
+    setRim(v);
+    setActiveDropdown(null); // Close all
   }
 
   const isValid = !!(width && profile && rim);
@@ -107,15 +91,42 @@ export function TireSizeSearch({
   return (
     <form onSubmit={(e) => { e.preventDefault(); handleSearch(); }} className="flex flex-col gap-3">
       <div className="grid grid-cols-3 gap-3">
-        <Select label="Ancho" value={width} onChange={onWidthChange} placeholder="Ancho" example="195">
-          {availableWidths.map((w) => <option key={w} value={w}>{w}</option>)}
-        </Select>
-        <Select label="Perfil" value={profile} onChange={onProfileChange} placeholder="Perfil" example="55" ref={profileRef}>
-          {availableProfiles.map((p) => <option key={p} value={p}>{p}</option>)}
-        </Select>
-        <Select label="Rodado" value={rim} onChange={(v) => setRim(v)} placeholder="Rodado" example="16" ref={rimRef}>
-          {availableRims.map((r) => <option key={r} value={r}>R{r}</option>)}
-        </Select>
+        <CustomSelect 
+          label="Ancho" 
+          value={width} 
+          onChange={onWidthChange} 
+          placeholder="Ancho" 
+          example="195"
+          options={availableWidths.map(String)}
+          isOpen={activeDropdown === "width"}
+          onToggle={() => setActiveDropdown(activeDropdown === "width" ? null : "width")}
+          isActive={activeDropdown === "width"}
+        />
+        <CustomSelect 
+          label="Perfil" 
+          value={profile} 
+          onChange={onProfileChange} 
+          placeholder="Perfil" 
+          example="55"
+          options={availableProfiles.map(String)}
+          isOpen={activeDropdown === "profile"}
+          onToggle={() => setActiveDropdown(activeDropdown === "profile" ? null : "profile")}
+          isActive={activeDropdown === "profile"}
+          disabled={!width}
+        />
+        <CustomSelect 
+          label="Rodado" 
+          value={rim} 
+          onChange={onRimChange} 
+          placeholder="Rodado" 
+          example="16"
+          options={availableRims.map(String)}
+          formatOption={(v) => `R${v}`}
+          isOpen={activeDropdown === "rim"}
+          onToggle={() => setActiveDropdown(activeDropdown === "rim" ? null : "rim")}
+          isActive={activeDropdown === "rim"}
+          disabled={!profile}
+        />
       </div>
 
       {(width || profile || rim) && (
@@ -145,34 +156,105 @@ export function TireSizeSearch({
   );
 }
 
-const Select = forwardRef<HTMLSelectElement, {
-  label: string; value: string; example?: string; onChange: (v: string) => void; placeholder: string; disabled?: boolean; children: React.ReactNode;
-}>(({ value, example, onChange, placeholder, disabled, children }, ref) => {
+function CustomSelect({
+  label,
+  value,
+  example,
+  onChange,
+  placeholder,
+  disabled,
+  options,
+  formatOption,
+  isOpen,
+  onToggle,
+  isActive
+}: {
+  label: string;
+  value: string;
+  example?: string;
+  onChange: (v: string) => void;
+  placeholder: string;
+  disabled?: boolean;
+  options: string[];
+  formatOption?: (v: string) => string;
+  isOpen: boolean;
+  onToggle: () => void;
+  isActive: boolean;
+}) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Close when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (isOpen && containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        onToggle(); // essentially closes it if we just toggle or we could have a specific close
+      }
+    }
+    // We only attach the listener if it's open
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen, onToggle]);
+
   return (
-    <div className="flex-1 min-w-[80px]">
-      <div className="relative">
-        <select
-          ref={ref}
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          disabled={disabled}
-          className="w-full appearance-none bg-navy-800 border-2 border-navy-700 hover:border-navy-600 focus:border-orange-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold rounded-xl px-4 py-3 pr-8 text-sm transition-all outline-none cursor-pointer shadow-inner"
+    <div className="flex-1 min-w-[80px] flex flex-col relative" ref={containerRef}>
+      <button
+        type="button"
+        disabled={disabled}
+        onClick={onToggle}
+        className={`
+          w-full flex items-center justify-between
+          bg-navy-800 border-2 text-white font-bold rounded-xl px-4 py-3 text-sm transition-all outline-none shadow-inner
+          ${disabled ? "opacity-40 cursor-not-allowed border-navy-700" : "cursor-pointer hover:border-navy-600"}
+          ${isActive ? "border-orange-500 ring-2 ring-orange-500/20 shadow-orange-500/10" : "border-navy-700"}
+        `}
+      >
+        <span className={value ? "text-white" : "text-slate-500"}>
+          {value ? (formatOption ? formatOption(value) : value) : placeholder}
+        </span>
+        <svg 
+          className={`w-5 h-5 text-orange-500 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`} 
+          fill="none" 
+          viewBox="0 0 24 24" 
+          stroke="currentColor"
         >
-          <option value="" disabled className="text-slate-500">{placeholder}</option>
-          {children}
-        </select>
-        <div className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none">
-          <svg className="w-5 h-5 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-          </svg>
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+
+      {/* Dropdown Menu */}
+      {isOpen && !disabled && (
+        <div className="absolute top-[calc(100%+8px)] left-0 w-full bg-navy-800 border-2 border-navy-700 rounded-xl shadow-xl z-50 max-h-60 overflow-y-auto overflow-x-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+          <ul className="py-1">
+            {options.length === 0 ? (
+              <li className="px-4 py-3 text-sm text-slate-500 text-center font-medium">No hay opciones</li>
+            ) : (
+              options.map((opt) => (
+                <li key={opt}>
+                  <button
+                    type="button"
+                    className={`w-full text-left px-4 py-2.5 text-sm font-bold transition-colors hover:bg-navy-700 hover:text-orange-500 ${value === opt ? "text-orange-500 bg-navy-700/50" : "text-white"}`}
+                    onClick={() => {
+                      onChange(opt);
+                    }}
+                  >
+                    {formatOption ? formatOption(opt) : opt}
+                  </button>
+                </li>
+              ))
+            )}
+          </ul>
         </div>
-      </div>
+      )}
+
       {example && (
-        <span className="block text-center text-[10px] font-bold text-slate-500 mt-1 uppercase tracking-tighter">
+        <span className={`block text-center text-[10px] font-bold mt-1 uppercase tracking-tighter transition-colors ${isActive ? "text-orange-500" : "text-slate-500"}`}>
           Ej: {example}
         </span>
       )}
     </div>
   );
-});
-Select.displayName = "Select";
+}
