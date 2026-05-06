@@ -58,9 +58,9 @@ export function ProductCard({ product }: { product: TireProduct }) {
 
         {/* Tags */}
         {product.priceOld && (
-          <div className="absolute top-3 left-3">
-            <span className="bg-orange-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
-              −{discount(product.price, product.priceOld)}%
+          <div className="absolute top-3 left-3 z-10">
+            <span className="bg-red-600 text-white text-[10px] font-black px-2.5 py-1 rounded-md shadow-lg uppercase tracking-tighter">
+              {discount(product.price, product.priceOld)}% OFF
             </span>
           </div>
         )}

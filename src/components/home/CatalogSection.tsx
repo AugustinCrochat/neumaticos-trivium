@@ -17,6 +17,7 @@ export function CatalogSection() {
   const [brandFilter, setBrandFilter] = useState<string>("todos");
   const [priceRange, setPriceRange] = useState<number | null>(null);
   const [onlyEconomic, setOnlyEconomic] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
 
   const filtered = useMemo(() => {
     return PRODUCTS.filter((p) => {
@@ -57,9 +58,30 @@ export function CatalogSection() {
         </div>
 
         <div className="flex flex-col lg:flex-row gap-6">
+          {/* Mobile Filter Toggle */}
+          <button
+            onClick={() => setShowFilters(!showFilters)}
+            className="lg:hidden flex items-center justify-between w-full bg-white rounded-xl border border-slate-200 px-5 py-3 text-slate-700 font-bold shadow-sm active:scale-[0.98] transition-all"
+          >
+            <div className="flex items-center gap-2">
+              <svg className="w-5 h-5 text-navy-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+              </svg>
+              <span>{showFilters ? "Ocultar filtros" : "Mostrar filtros"}</span>
+            </div>
+            <svg
+              className={`w-5 h-5 transition-transform duration-300 ${showFilters ? "rotate-180" : ""}`}
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+
           {/* Filters sidebar */}
-          <aside className="lg:w-64 flex-shrink-0">
-            <div className="bg-white rounded-2xl border border-slate-100 p-5 space-y-6">
+          <aside className={`lg:w-64 flex-shrink-0 lg:block ${showFilters ? "block" : "hidden"}`}>
+            <div className="bg-white rounded-2xl border border-slate-100 p-5 space-y-6 shadow-sm">
               <h3 className="font-bold text-slate-800 text-sm uppercase tracking-wide">
                 Filtros
               </h3>

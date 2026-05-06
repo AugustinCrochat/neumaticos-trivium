@@ -73,7 +73,7 @@ export const BRANDS: TireBrand[] = [
   },
 ];
 
-export const PRODUCTS: TireProduct[] = [
+const RAW_PRODUCTS: TireProduct[] = [
   {
     id: "1011131-4",
     brand: "Zmax",
@@ -3628,6 +3628,12 @@ export const PRODUCTS: TireProduct[] = [
     slug: "1011134-21565r16-98h-zmax-ly688-zmax-ly688-x1",
   },
 ];
+
+export const PRODUCTS: TireProduct[] = RAW_PRODUCTS.map((p) => ({
+  ...p,
+  priceOld: p.price,
+  price: Math.round(p.price * 0.85),
+}));
 
 export const SERVICES: Service[] = [
   {

@@ -66,8 +66,8 @@ export default async function ProductPage({ params }: Props) {
         {/* Image */}
         <div className="bg-slate-50 rounded-2xl aspect-square flex items-center justify-center p-8 relative">
           {product.priceOld && (
-            <span className="absolute top-4 left-4 bg-orange-500 text-white text-sm font-bold px-3 py-1 rounded-full">
-              −{discount(product.price, product.priceOld)}%
+            <span className="absolute top-4 left-4 z-10 bg-red-600 text-white text-xs font-black px-3 py-1.5 rounded-md shadow-lg uppercase tracking-tighter">
+              {discount(product.price, product.priceOld)}% OFF
             </span>
           )}
           {hasImage ? (
