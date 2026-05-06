@@ -38,7 +38,8 @@ export function TireSizeSearch({
   const [isScanning, setIsScanning] = useState(false);
   const [scanProgress, setScanProgress] = useState("");
   const [scanError, setScanError] = useState<string | null>(null);
-  
+  const [isLandscape, setIsLandscape] = useState(true);
+
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const [hasTorch, setHasTorch] = useState(false);
@@ -98,23 +99,34 @@ export function TireSizeSearch({
 
   // --- CAMERA LOGIC ---
 
+  // Track landscape orientation while scanner is open
+  useEffect(() => {
+    if (!showScanner) return;
+    const update = () => setIsLandscape(window.matchMedia('(orientation: landscape)').matches);
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, [showScanner]);
+
   async function startCamera() {
     setShowScanner(true);
     setScanError(null);
+    // Try to lock landscape (works on Android Chrome; silent fail on iOS)
+    try {
+      await (screen.orientation as any).lock('landscape');
+    } catch {
+      // iOS doesn't support orientation lock — user will see the rotation hint
+    }
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "environment" }
+        video: { facingMode: "environment", width: { ideal: 1920 }, height: { ideal: 1080 } }
       });
       streamRef.current = stream;
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
       }
-      
-      // Check for flashlight (torch) support
       const track = stream.getVideoTracks()[0];
-      const capabilities = track.getCapabilities();
-      // TypeScript might complain about torch in getCapabilities, so we cast it to any to check
-      if ((capabilities as any).torch) {
+      if ((track.getCapabilities() as any).torch) {
         setHasTorch(true);
       }
     } catch (err) {
@@ -129,6 +141,7 @@ export function TireSizeSearch({
       streamRef.current.getTracks().forEach(track => track.stop());
       streamRef.current = null;
     }
+    try { (screen.orientation as any).unlock(); } catch { /* not supported */ }
     setShowScanner(false);
     setTorchOn(false);
   }
@@ -137,9 +150,7 @@ export function TireSizeSearch({
     if (!streamRef.current) return;
     const track = streamRef.current.getVideoTracks()[0];
     try {
-      await track.applyConstraints({
-        advanced: [{ torch: !torchOn }]
-      } as any);
+      await track.applyConstraints({ advanced: [{ torch: !torchOn }] } as any);
       setTorchOn(!torchOn);
     } catch (err) {
       console.error("Error toggling torch", err);
@@ -149,62 +160,39 @@ export function TireSizeSearch({
   async function captureAndScan() {
     if (!videoRef.current) return;
     setIsScanning(true);
-    setScanProgress("Capturando y analizando...");
-    
+    setScanProgress("Capturando...");
+
+    const video = videoRef.current;
     const canvas = document.createElement("canvas");
-    canvas.width = videoRef.current.videoWidth;
-    canvas.height = videoRef.current.videoHeight;
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
-    ctx.drawImage(videoRef.current, 0, 0);
-    
-    // Convert to base64
-    const base64Image = canvas.toDataURL("image/jpeg", 0.8);
-    
-    // Stop camera immediately to save battery
+    ctx.drawImage(video, 0, 0);
+    const base64Image = canvas.toDataURL("image/jpeg", 0.85);
+
     stopCamera();
+    setScanProgress("Analizando con IA...");
 
     try {
-      const formData = new FormData();
-      formData.append("base64Image", base64Image);
-      formData.append("apikey", "K89503802988957"); 
-      formData.append("language", "eng");
-      formData.append("isOverlayRequired", "false");
-      formData.append("OCREngine", "2");
-
-      const response = await fetch("https://api.ocr.space/parse/image", {
+      const res = await fetch("/api/scan-tire", {
         method: "POST",
-        body: formData,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ base64Image }),
       });
+      const data = await res.json();
 
-      const data = await response.json();
-      
-      if (data.IsErroredOnProcessing) {
-        setScanError("Error al procesar la imagen en el servidor.");
-        setIsScanning(false);
-        return;
-      }
-
-      const text = data.ParsedResults?.[0]?.ParsedText || "";
-      const cleanText = text.replace(/\s+/g, '').toUpperCase();
-      
-      // Expresión regular que busca (3 números) separador opcional (2 números) separador opcional [Rz] (2 números)
-      const regex = /(\d{3})[^\d]*(\d{2})[^\d]*R?(\d{2})/i;
-      const match = cleanText.match(regex);
-
-      if (match) {
-        const [, detectedWidth, detectedProfile, detectedRim] = match;
-        setWidth(detectedWidth);
-        setProfile(detectedProfile);
-        setRim(detectedRim);
+      if (data.found) {
+        setWidth(String(data.width));
+        setProfile(String(data.profile));
+        setRim(String(data.rim));
         setActiveDropdown(null);
         setScanError(null);
       } else {
-        setScanError("No se detectó la medida. Intenta alinear bien la curva superior.");
+        setScanError("No se detectó la medida. Intentá enfocar bien los números del lateral del neumático.");
       }
-    } catch (err) {
-      console.error(err);
-      setScanError("Ocurrió un error de conexión.");
+    } catch {
+      setScanError("Error de conexión. Verificá tu internet.");
     } finally {
       setIsScanning(false);
       setScanProgress("");
@@ -227,66 +215,87 @@ export function TireSizeSearch({
     <>
       {/* FULLSCREEN CAMERA OVERLAY */}
       {showScanner && (
-        <div className="fixed inset-0 z-50 bg-black flex flex-col animate-in fade-in zoom-in-95 duration-200">
-          
-          {/* Header Actions */}
+        <div className="fixed inset-0 z-50 bg-black flex flex-col animate-in fade-in duration-150">
+
+          {/* Header */}
           <div className="absolute top-0 left-0 right-0 p-4 z-20 flex justify-between items-center bg-gradient-to-b from-black/80 to-transparent">
-            <button 
+            <button
               onClick={stopCamera}
               className="bg-white/20 hover:bg-white/30 backdrop-blur-md text-white px-4 py-2 rounded-full font-bold text-sm transition-colors"
             >
               Cancelar
             </button>
+            {hasTorch && (
+              <button
+                onClick={toggleTorch}
+                className={`px-4 py-2 rounded-full flex items-center gap-2 backdrop-blur-md text-sm font-bold transition-colors ${torchOn ? 'bg-orange-500 text-white' : 'bg-white/20 text-white'}`}
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                {torchOn ? 'Flash on' : 'Flash'}
+              </button>
+            )}
           </div>
-          
-          {/* Camera View & Alignment Guide */}
-          <div className="relative flex-1 overflow-hidden flex items-center justify-center bg-zinc-900">
-            <video 
-              ref={videoRef} 
-              autoPlay 
-              playsInline 
-              muted
-              className="absolute w-full h-full object-cover" 
-            />
-            
-            {/* Dark overlay with transparent center window (Optional, if we want to dim the outside) */}
-            <div className="absolute inset-0 pointer-events-none border-[30px] border-black/40"></div>
 
-            {/* Tire Curve SVG Overlay & Flash Button */}
-            <div className="absolute inset-0 pointer-events-none flex flex-col items-center justify-center pb-10">
-              {hasTorch && (
-                <button 
-                  onClick={toggleTorch}
-                  className={`mb-6 px-6 py-3 rounded-full flex items-center justify-center gap-2 backdrop-blur-md transition-colors pointer-events-auto shadow-xl ${torchOn ? 'bg-orange-500 text-white' : 'bg-black/60 hover:bg-black/80 text-white border border-white/20'}`}
-                >
-                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                  <span className="font-bold text-sm">{torchOn ? 'Apagar flash' : 'Prender flash'}</span>
-                </button>
-              )}
-              <svg className="w-[80%] max-w-sm drop-shadow-xl opacity-80" viewBox="0 0 200 120" fill="none">
-                {/* Curved line representing top of the tire - Semi-circle */}
-                <path d="M 10 120 A 90 90 0 0 1 190 120" stroke="#f97316" strokeWidth="3" strokeDasharray="6 6" />
-                <text x="100" y="55" fill="white" fontSize="8" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0px 2px 4px rgba(0,0,0,0.8)" }}>
-                  ALINEAR PARTE SUPERIOR AQUÍ
-                </text>
-                <text x="100" y="70" fill="rgba(255,255,255,0.7)" fontSize="6" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0px 2px 4px rgba(0,0,0,0.8)" }}>
-                  Ej: 205/55 R16
-                </text>
-              </svg>
+          {/* Camera view */}
+          <div className="relative flex-1 overflow-hidden">
+            <video ref={videoRef} autoPlay playsInline muted className="absolute w-full h-full object-cover" />
+
+            {/* Horizontal scan guide — only shown in landscape */}
+            {isLandscape && (
+              <div className="absolute inset-0 pointer-events-none flex flex-col">
+                <div className="flex-1 bg-black/45" />
+                {/* Scan strip */}
+                <div className="relative" style={{ height: '22%' }}>
+                  <div className="absolute inset-x-0 top-0 h-[2px] bg-orange-500/90" />
+                  <div className="absolute inset-x-0 bottom-0 h-[2px] bg-orange-500/90" />
+                  {/* Corner brackets */}
+                  <div className="absolute top-[-1px] left-6 w-8 h-5 border-t-2 border-l-2 border-orange-400" />
+                  <div className="absolute top-[-1px] right-6 w-8 h-5 border-t-2 border-r-2 border-orange-400" />
+                  <div className="absolute bottom-[-1px] left-6 w-8 h-5 border-b-2 border-l-2 border-orange-400" />
+                  <div className="absolute bottom-[-1px] right-6 w-8 h-5 border-b-2 border-r-2 border-orange-400" />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="text-white/60 text-xs font-semibold tracking-widest uppercase bg-black/30 px-3 py-1 rounded-full">
+                      Ej: 205/55 R16
+                    </span>
+                  </div>
+                </div>
+                <div className="flex-1 bg-black/45" />
+              </div>
+            )}
+
+            {/* Portrait rotation hint */}
+            {!isLandscape && (
+              <div className="absolute inset-0 bg-black/75 flex flex-col items-center justify-center gap-5 pointer-events-none">
+                {/* Phone icon */}
+                <svg viewBox="0 0 48 72" className="w-14 h-20 text-white/70" fill="none" stroke="currentColor" strokeWidth="2">
+                  <rect x="4" y="2" width="40" height="68" rx="6" />
+                  <circle cx="24" cy="62" r="3" fill="currentColor" strokeWidth="0" />
+                </svg>
+                {/* Rotation arrow */}
+                <svg className="w-10 h-10 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 3H9m6 0a9 9 0 11-6 16.944M15 3l-3 3m3-3l-3-3" />
+                </svg>
+                <p className="text-white font-bold text-xl">Girá el teléfono</p>
+                <p className="text-white/55 text-sm text-center max-w-[220px] leading-relaxed">
+                  Rotá a horizontal para escanear el lateral del neumático
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* Capture button — only in landscape */}
+          {isLandscape && (
+            <div className="absolute bottom-0 left-0 right-0 p-8 z-20 flex justify-center bg-gradient-to-t from-black/80 to-transparent">
+              <button
+                onClick={captureAndScan}
+                className="w-20 h-20 rounded-full border-4 border-white/50 flex items-center justify-center active:scale-95 transition-transform"
+              >
+                <div className="w-16 h-16 rounded-full bg-white" />
+              </button>
             </div>
-          </div>
-          
-          {/* Footer Actions */}
-          <div className="absolute bottom-0 left-0 right-0 p-8 z-20 flex justify-center items-center bg-gradient-to-t from-black/80 to-transparent">
-            <button 
-              onClick={captureAndScan}
-              className="w-20 h-20 rounded-full border-4 border-white/50 flex items-center justify-center relative active:scale-95 transition-transform"
-            >
-              <div className="w-16 h-16 rounded-full bg-white"></div>
-            </button>
-          </div>
+          )}
         </div>
       )}
 
