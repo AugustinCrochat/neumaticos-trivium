@@ -228,12 +228,16 @@ export function TireSizeSearch({
             {hasTorch && (
               <button
                 onClick={toggleTorch}
-                className={`px-4 py-2 rounded-full flex items-center gap-2 backdrop-blur-md text-sm font-bold transition-colors ${torchOn ? 'bg-orange-500 text-white' : 'bg-white/20 text-white'}`}
+                className={`px-5 py-2.5 rounded-full flex items-center gap-2 font-bold text-sm transition-all shadow-lg ${
+                  torchOn
+                    ? 'bg-yellow-400 text-black shadow-yellow-400/40'
+                    : 'bg-yellow-400/20 border-2 border-yellow-400 text-yellow-300'
+                }`}
               >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                <svg className="w-5 h-5" fill={torchOn ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor" strokeWidth={torchOn ? 0 : 2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
-                {torchOn ? 'Flash on' : 'Flash'}
+                {torchOn ? 'Flash ON' : 'Prender flash'}
               </button>
             )}
           </div>
@@ -242,38 +246,48 @@ export function TireSizeSearch({
           <div className="relative flex-1 overflow-hidden">
             <video ref={videoRef} autoPlay playsInline muted className="absolute w-full h-full object-cover" />
 
-            {/* Horizontal scan guide — only shown in landscape */}
+            {/* Curved scan guide — only shown in landscape */}
             {isLandscape && (
-              <div className="absolute inset-0 pointer-events-none flex flex-col">
-                <div className="flex-1 bg-black/45" />
-                {/* Scan strip */}
-                <div className="relative" style={{ height: '22%' }}>
-                  <div className="absolute inset-x-0 top-0 h-[2px] bg-orange-500/90" />
-                  <div className="absolute inset-x-0 bottom-0 h-[2px] bg-orange-500/90" />
-                  {/* Corner brackets */}
-                  <div className="absolute top-[-1px] left-6 w-8 h-5 border-t-2 border-l-2 border-orange-400" />
-                  <div className="absolute top-[-1px] right-6 w-8 h-5 border-t-2 border-r-2 border-orange-400" />
-                  <div className="absolute bottom-[-1px] left-6 w-8 h-5 border-b-2 border-l-2 border-orange-400" />
-                  <div className="absolute bottom-[-1px] right-6 w-8 h-5 border-b-2 border-r-2 border-orange-400" />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-white/60 text-xs font-semibold tracking-widest uppercase bg-black/30 px-3 py-1 rounded-full">
-                      Ej: 205/55 R16
-                    </span>
-                  </div>
-                </div>
-                <div className="flex-1 bg-black/45" />
+              <svg
+                className="absolute inset-0 w-full h-full pointer-events-none"
+                viewBox="0 0 100 100"
+                preserveAspectRatio="none"
+              >
+                {/* Dark area top — bottom edge follows the top guide curve */}
+                <path d="M0,0 L100,0 L100,36 Q50,32 0,36 Z" fill="rgba(0,0,0,0.5)" />
+                {/* Dark area bottom — top edge follows the bottom guide curve */}
+                <path d="M0,100 L100,100 L100,64 Q50,68 0,64 Z" fill="rgba(0,0,0,0.5)" />
+                {/* Top guide curve */}
+                <path d="M0,36 Q50,32 100,36" stroke="#f97316" strokeWidth="0.5" fill="none" />
+                {/* Bottom guide curve */}
+                <path d="M0,64 Q50,68 100,64" stroke="#f97316" strokeWidth="0.5" fill="none" />
+                {/* Corner brackets — top left */}
+                <path d="M4,36 L4,41 M4,36 L12,36" stroke="#fb923c" strokeWidth="0.8" fill="none" strokeLinecap="round" />
+                {/* Corner brackets — top right */}
+                <path d="M96,36 L96,41 M96,36 L88,36" stroke="#fb923c" strokeWidth="0.8" fill="none" strokeLinecap="round" />
+                {/* Corner brackets — bottom left */}
+                <path d="M4,64 L4,59 M4,64 L12,64" stroke="#fb923c" strokeWidth="0.8" fill="none" strokeLinecap="round" />
+                {/* Corner brackets — bottom right */}
+                <path d="M96,64 L96,59 M96,64 L88,64" stroke="#fb923c" strokeWidth="0.8" fill="none" strokeLinecap="round" />
+              </svg>
+            )}
+
+            {/* Scan strip label */}
+            {isLandscape && (
+              <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+                <span className="text-white/50 text-xs font-semibold tracking-widest uppercase bg-black/30 px-3 py-1 rounded-full">
+                  Ej: 205/55 R16
+                </span>
               </div>
             )}
 
             {/* Portrait rotation hint */}
             {!isLandscape && (
               <div className="absolute inset-0 bg-black/75 flex flex-col items-center justify-center gap-5 pointer-events-none">
-                {/* Phone icon */}
                 <svg viewBox="0 0 48 72" className="w-14 h-20 text-white/70" fill="none" stroke="currentColor" strokeWidth="2">
                   <rect x="4" y="2" width="40" height="68" rx="6" />
                   <circle cx="24" cy="62" r="3" fill="currentColor" strokeWidth="0" />
                 </svg>
-                {/* Rotation arrow */}
                 <svg className="w-10 h-10 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15 3H9m6 0a9 9 0 11-6 16.944M15 3l-3 3m3-3l-3-3" />
                 </svg>
