@@ -7,10 +7,14 @@ import { SearchBar } from "./SearchBar";
 type Props = { searchParams: Promise<{ medida?: string }> };
 
 function parseMedida(medida: string) {
-  // Format: "195-55-r15"
-  const match = medida.match(/^(\d+)-(\d+)-r(\d+)$/i);
-  if (!match) return null;
-  return { width: Number(match[1]), profile: Number(match[2]), rim: Number(match[3]) };
+  // Format: "195-55-r15" or partials like "195--r15" or "195-55-r"
+  const parts = medida.toLowerCase().split("-");
+  const width = parts[0] ? Number(parts[0]) : null;
+  const profile = parts[1] ? Number(parts[1]) : null;
+  const rim = parts[2] && parts[2].startsWith("r") ? Number(parts[2].substring(1)) : null;
+  
+  if (!width && !profile && !rim) return null;
+  return { width, profile, rim };
 }
 
 export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
@@ -18,7 +22,13 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
   if (!medida) return { title: "Buscar neumáticos — Trivium" };
   const parsed = parseMedida(medida);
   if (!parsed) return { title: "Buscar neumáticos — Trivium" };
-  const label = `${parsed.width}/${parsed.profile} R${parsed.rim}`;
+  
+  const parts = [];
+  if (parsed.width) parts.push(parsed.width);
+  if (parsed.profile) parts.push(parsed.profile);
+  if (parsed.rim) parts.push(`R${parsed.rim}`);
+  const label = parts.join("/");
+  
   return {
     title: `Neumáticos ${label} — Trivium`,
     description: `Encontrá neumáticos en medida ${label} al mejor precio. Outlet de neumáticos importados.`,
@@ -30,17 +40,19 @@ export default async function BuscarPage({ searchParams }: Props) {
   const parsed = medida ? parseMedida(medida) : null;
 
   const results = parsed
-    ? PRODUCTS.filter(
-        (p) =>
-          p.size.width === parsed.width &&
-          p.size.profile === parsed.profile &&
-          p.size.rim === parsed.rim
-      )
+    ? PRODUCTS.filter((p) => {
+        if (parsed.width && p.size.width !== parsed.width) return false;
+        if (parsed.profile && p.size.profile !== parsed.profile) return false;
+        if (parsed.rim && p.size.rim !== parsed.rim) return false;
+        return true;
+      })
     : [];
 
-  const label = parsed
-    ? `${parsed.width}/${parsed.profile} R${parsed.rim}`
-    : null;
+  const parts = [];
+  if (parsed?.width) parts.push(parsed.width);
+  if (parsed?.profile) parts.push(parsed.profile);
+  if (parsed?.rim) parts.push(`R${parsed.rim}`);
+  const label = parts.length > 0 ? parts.join("/") : null;
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -74,7 +86,7 @@ export default async function BuscarPage({ searchParams }: Props) {
 
           {/* Search form inline */}
           <div className="mt-6">
-            <SearchBar initialMedida={medida} compact />
+            <SearchBar initialMedida={medida} />
           </div>
         </div>
       </div>

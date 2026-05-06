@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, type FormEvent } from "react";
+import { useState, useMemo, useRef, useEffect, forwardRef } from "react";
 import { useRouter } from "next/navigation";
 import { PRODUCTS } from "@/lib/data";
 
@@ -10,17 +10,21 @@ function unique<T>(arr: T[]): T[] {
 
 export function TireSizeSearch({
   initialMedida,
-  compact = false,
 }: {
   initialMedida?: string;
-  compact?: boolean;
 }) {
   const router = useRouter();
+  const profileRef = useRef<HTMLSelectElement>(null);
+  const rimRef = useRef<HTMLSelectElement>(null);
 
   function parseInitial(medida?: string) {
     if (!medida) return { w: "", p: "", r: "" };
-    const m = medida.match(/^(\d+)-(\d+)-r(\d+)$/i);
-    return m ? { w: m[1], p: m[2], r: m[3] } : { w: "", p: "", r: "" };
+    const parts = medida.toLowerCase().split("-");
+    return { 
+      w: parts[0] || "", 
+      p: parts[1] || "", 
+      r: (parts[2] && parts[2].startsWith("r")) ? parts[2].substring(1) : "" 
+    };
   }
 
   const init = parseInitial(initialMedida);
@@ -50,99 +54,89 @@ export function TireSizeSearch({
     [width, profile]
   );
 
-  function onWidthChange(v: string) { setWidth(v); setProfile(""); setRim(""); }
-  function onProfileChange(v: string) { setProfile(v); setRim(""); }
-
-  function handleSearch(e: FormEvent) {
-    e.preventDefault();
-    if (!width || !profile || !rim) return;
+  function handleSearch() {
+    if (!width && !profile && !rim) return;
     router.push(`/buscar?medida=${width}-${profile}-r${rim}`);
   }
 
-  const isValid = !!(width && profile && rim);
+  // Auto-search ONLY when all three are selected
+  useEffect(() => {
+    if (width && profile && rim) {
+      handleSearch();
+    }
+  }, [width, profile, rim]);
 
-  if (compact) {
-    return (
-      <form onSubmit={handleSearch} className="flex flex-wrap items-end gap-2">
-        <CompactSelect label="Ancho" value={width} onChange={onWidthChange} placeholder="Ej: 195">
-          {availableWidths.map((w) => <option key={w} value={w}>{w}</option>)}
-        </CompactSelect>
-        <CompactSelect label="Perfil" value={profile} onChange={onProfileChange} placeholder="Ej: 55" disabled={!width}>
-          {availableProfiles.map((p) => <option key={p} value={p}>{p}</option>)}
-        </CompactSelect>
-        <CompactSelect label="Rodado" value={rim} onChange={(v) => setRim(v)} placeholder="Ej: R15" disabled={!profile}>
-          {availableRims.map((r) => <option key={r} value={r}>R{r}</option>)}
-        </CompactSelect>
-        <button
-          type="submit"
-          disabled={!isValid}
-          className="bg-orange-500 hover:bg-orange-600 disabled:bg-navy-800 disabled:text-slate-600 disabled:cursor-not-allowed text-white font-black py-3 px-6 rounded-xl text-sm transition-all flex items-center gap-2 self-end shadow-lg shadow-orange-500/20 active:scale-[0.98]"
-        >
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
-          BUSCAR
-        </button>
-      </form>
-    );
+  function onWidthChange(v: string) {
+    setWidth(v);
+    setProfile("");
+    setRim("");
+    setTimeout(() => profileRef.current?.focus(), 10);
   }
 
+  function onProfileChange(v: string) {
+    setProfile(v);
+    setRim("");
+    setTimeout(() => rimRef.current?.focus(), 10);
+  }
+
+  const isValid = !!(width && profile && rim);
+  const canSearch = !!(width || profile || rim);
+
   return (
-    <form onSubmit={handleSearch}>
-      <div className="grid grid-cols-3 gap-3 mb-4">
-        <FullSelect label="Ancho" hint="mm" value={width} onChange={onWidthChange} placeholder="195">
+    <form onSubmit={(e) => { e.preventDefault(); handleSearch(); }} className="flex flex-col gap-3">
+      <div className="grid grid-cols-3 gap-3">
+        <Select label="Ancho" value={width} onChange={onWidthChange} placeholder="Ancho" example="195">
           {availableWidths.map((w) => <option key={w} value={w}>{w}</option>)}
-        </FullSelect>
-        <FullSelect label="Perfil" hint="%" value={profile} onChange={onProfileChange} placeholder="55" disabled={!width}>
+        </Select>
+        <Select label="Perfil" value={profile} onChange={onProfileChange} placeholder="Perfil" example="55" ref={profileRef}>
           {availableProfiles.map((p) => <option key={p} value={p}>{p}</option>)}
-        </FullSelect>
-        <FullSelect label="Rodado" hint="R" value={rim} onChange={(v) => setRim(v)} placeholder="16" hintPrefix disabled={!profile}>
-          {availableRims.map((r) => <option key={r} value={r}>{r}</option>)}
-        </FullSelect>
+        </Select>
+        <Select label="Rodado" value={rim} onChange={(v) => setRim(v)} placeholder="Rodado" example="16" ref={rimRef}>
+          {availableRims.map((r) => <option key={r} value={r}>R{r}</option>)}
+        </Select>
       </div>
 
       {(width || profile || rim) && (
-        <div className="flex items-center gap-2 mb-4 px-3 py-2 bg-orange-50 rounded-lg border border-orange-100">
+        <div className="flex items-center gap-2 px-3 py-2 bg-orange-50/50 rounded-lg border border-orange-100/50">
           <svg className="w-4 h-4 text-orange-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <span className="text-slate-700 text-sm font-mono font-semibold">
+          <span className="text-slate-700 text-xs font-mono font-bold">
             {width || "—"}/{profile || "—"} R{rim || "—"}
           </span>
         </div>
       )}
 
-      <button
-        type="submit"
-        disabled={!isValid}
-        className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed text-white font-bold py-4 rounded-xl transition-colors text-base flex items-center justify-center gap-2"
-      >
-        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-        </svg>
-        Buscar neumáticos
-      </button>
+      {!isValid && (
+        <button
+          type="submit"
+          disabled={!canSearch}
+          className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-navy-800 disabled:text-slate-600 disabled:cursor-not-allowed text-white font-black py-4 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-orange-500/20 active:scale-[0.98]"
+        >
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          BUSCAR NEUMÁTICOS
+        </button>
+      )}
     </form>
   );
 }
 
-function FullSelect({
-  label, hint, hintPrefix, value, onChange, placeholder, disabled, children,
-}: {
-  label: string; hint: string; hintPrefix?: boolean; value: string;
-  onChange: (v: string) => void; placeholder: string; disabled?: boolean; children: React.ReactNode;
-}) {
+const Select = forwardRef<HTMLSelectElement, {
+  label: string; value: string; example?: string; onChange: (v: string) => void; placeholder: string; disabled?: boolean; children: React.ReactNode;
+}>(({ value, example, onChange, placeholder, disabled, children }, ref) => {
   return (
-    <div>
-      <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5">{label}</label>
+    <div className="flex-1 min-w-[80px]">
       <div className="relative">
         <select
+          ref={ref}
           value={value}
           onChange={(e) => onChange(e.target.value)}
           disabled={disabled}
           className="w-full appearance-none bg-navy-800 border-2 border-navy-700 hover:border-navy-600 focus:border-orange-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold rounded-xl px-4 py-3 pr-8 text-sm transition-all outline-none cursor-pointer shadow-inner"
         >
-          <option value="" disabled className="text-slate-500">{hintPrefix ? `R${placeholder}` : placeholder}</option>
+          <option value="" disabled className="text-slate-500">{placeholder}</option>
           {children}
         </select>
         <div className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none">
@@ -151,36 +145,12 @@ function FullSelect({
           </svg>
         </div>
       </div>
-      <span className="block text-center text-[10px] font-bold text-slate-500 mt-1 uppercase tracking-tighter">{hintPrefix ? "" : hint}</span>
+      {example && (
+        <span className="block text-center text-[10px] font-bold text-slate-500 mt-1 uppercase tracking-tighter">
+          Ej: {example}
+        </span>
+      )}
     </div>
   );
-}
-
-function CompactSelect({
-  label, value, onChange, placeholder, disabled, children,
-}: {
-  label: string; value: string; onChange: (v: string) => void;
-  placeholder: string; disabled?: boolean; children: React.ReactNode;
-}) {
-  return (
-    <div className="flex-1 min-w-[100px]">
-      <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5">{label}</label>
-      <div className="relative">
-        <select
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          disabled={disabled}
-          className="w-full appearance-none bg-navy-800 border border-navy-700 hover:border-navy-600 focus:border-orange-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold rounded-xl px-4 py-3 text-sm outline-none cursor-pointer transition-all shadow-inner"
-        >
-          <option value="" disabled className="text-slate-500">{placeholder}</option>
-          {children}
-        </select>
-        <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-          <svg className="w-4 h-4 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-          </svg>
-        </div>
-      </div>
-    </div>
-  );
-}
+});
+Select.displayName = "Select";

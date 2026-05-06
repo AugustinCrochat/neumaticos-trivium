@@ -45,11 +45,8 @@ export function HeroSection() {
           {/* Right: search */}
           <div className="flex flex-col justify-center py-10 md:py-20">
             <div className="bg-slate-900 rounded-2xl p-6 md:p-8">
-              <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-1">
+              <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-6">
                 Buscador de neumáticos
-              </p>
-              <p className="text-white font-bold text-lg mb-6">
-                Ingresá la medida de tu vehículo
               </p>
 
               <TireSizeSearch />
