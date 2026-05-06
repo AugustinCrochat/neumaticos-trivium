@@ -43,15 +43,14 @@ export default function ComoLeerMedidaPage() {
         <div className="grid md:grid-cols-2 gap-12 items-center">
           
           {/* Visual Diagram Image */}
-          <div className="relative group rounded-3xl overflow-hidden shadow-2xl shadow-navy-900/10 border border-slate-100">
+          <div className="relative group overflow-hidden shadow-2xl shadow-navy-900/10 border border-slate-100">
             <Image 
               src="/como-leer-la-medida-de-un-neumatico.webp" 
               alt="Diagrama explicativo de cómo leer un neumático"
               width={800}
               height={800}
-              className="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-700"
+              className="w-full h-auto object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-navy-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
           </div>
 
           {/* Text Guide */}

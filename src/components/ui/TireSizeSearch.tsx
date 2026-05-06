@@ -3,6 +3,7 @@
 import { useState, useMemo, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { PRODUCTS } from "@/lib/data";
+import Tesseract from "tesseract.js";
 
 function unique<T>(arr: T[]): T[] {
   return [...new Set(arr)].sort((a, b) => Number(a) - Number(b));
@@ -32,6 +33,12 @@ export function TireSizeSearch({
 
   // 'width' | 'profile' | 'rim' | null
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+
+  // Scanner state
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isScanning, setIsScanning] = useState(false);
+  const [scanProgress, setScanProgress] = useState("");
+  const [scanError, setScanError] = useState<string | null>(null);
 
   const availableWidths = useMemo(
     () => unique(PRODUCTS.map((p) => p.size.width)),
@@ -85,6 +92,59 @@ export function TireSizeSearch({
     setActiveDropdown(null); // Close all
   }
 
+  async function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setIsScanning(true);
+    setScanError(null);
+    setScanProgress("Iniciando escáner...");
+
+    try {
+      // Usamos Tesseract.js para procesar la imagen de forma local
+      const result = await Tesseract.recognize(
+        file,
+        'eng', // Inglés es suficiente para leer números
+        {
+          logger: m => {
+            if (m.status === 'recognizing text') {
+              setScanProgress(`Analizando: ${Math.round(m.progress * 100)}%`);
+            }
+          }
+        }
+      );
+
+      const text = result.data.text.replace(/\s+/g, '').toUpperCase();
+      console.log("Texto detectado:", text); // Para depuración en consola
+
+      // Buscar patrones comunes como 205/55R16, 2055516, etc.
+      // Expresión regular que busca (3 números) separador opcional (2 números) separador opcional [Rz] (2 números)
+      const regex = /(\d{3})[^\d]*(\d{2})[^\d]*R?(\d{2})/i;
+      const match = text.match(regex);
+
+      if (match) {
+        const [, detectedWidth, detectedProfile, detectedRim] = match;
+        
+        setWidth(detectedWidth);
+        setProfile(detectedProfile);
+        setRim(detectedRim);
+        setActiveDropdown(null);
+        setScanError(null);
+      } else {
+        setScanError("No pudimos leer la medida con claridad. Intenta acercar la cámara o limpiar la zona.");
+      }
+
+    } catch (error) {
+      console.error(error);
+      setScanError("Ocurrió un error inesperado al escanear.");
+    } finally {
+      setIsScanning(false);
+      setScanProgress("");
+      // Clear input so the same file can be selected again if needed
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  }
+
   const isValid = !!(width && profile && rim);
   const canSearch = !!(width || profile || rim);
 
@@ -112,7 +172,6 @@ export function TireSizeSearch({
           isOpen={activeDropdown === "profile"}
           onToggle={() => setActiveDropdown(activeDropdown === "profile" ? null : "profile")}
           isActive={activeDropdown === "profile"}
-          disabled={!width}
         />
         <CustomSelect 
           label="Rodado" 
@@ -125,9 +184,44 @@ export function TireSizeSearch({
           isOpen={activeDropdown === "rim"}
           onToggle={() => setActiveDropdown(activeDropdown === "rim" ? null : "rim")}
           isActive={activeDropdown === "rim"}
-          disabled={!profile}
         />
       </div>
+
+      <div className="flex gap-2">
+        <input
+          type="file"
+          accept="image/*"
+          capture="environment"
+          ref={fileInputRef}
+          onChange={handleFileChange}
+          className="hidden"
+        />
+        <button
+          type="button"
+          onClick={() => fileInputRef.current?.click()}
+          disabled={isScanning}
+          className="flex-1 bg-navy-800 hover:bg-navy-700 disabled:opacity-50 text-orange-400 font-bold py-3 px-4 rounded-xl border border-navy-700 transition-all flex items-center justify-center gap-2 text-sm"
+        >
+          {isScanning ? (
+            <svg className="animate-spin h-5 w-5 text-orange-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+          ) : (
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+          )}
+          {isScanning ? (scanProgress || "Analizando foto...") : "Escanear medida"}
+        </button>
+      </div>
+
+      {scanError && (
+        <div className="bg-red-500/10 border border-red-500/20 text-red-500 text-xs px-3 py-2 rounded-lg text-center font-medium">
+          {scanError}
+        </div>
+      )}
 
       {(width || profile || rim) && (
         <div className="flex items-center gap-2 px-3 py-2 bg-orange-50/50 rounded-lg border border-orange-100/50">
