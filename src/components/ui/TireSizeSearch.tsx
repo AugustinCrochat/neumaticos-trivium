@@ -164,11 +164,13 @@ export function TireSizeSearch({
 
     const video = videoRef.current;
     const canvas = document.createElement("canvas");
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
+    // Resize to max 1280px wide to keep payload small and fast
+    const maxW = 1280;
+    canvas.width = Math.min(video.videoWidth, maxW);
+    canvas.height = Math.round(video.videoHeight * (canvas.width / video.videoWidth));
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
-    ctx.drawImage(video, 0, 0);
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
     const base64Image = canvas.toDataURL("image/jpeg", 0.85);
 
     stopCamera();
@@ -248,37 +250,42 @@ export function TireSizeSearch({
 
             {/* Curved scan guide — only shown in landscape */}
             {isLandscape && (
-              <svg
-                className="absolute inset-0 w-full h-full pointer-events-none"
-                viewBox="0 0 100 100"
-                preserveAspectRatio="none"
-              >
-                {/* Dark area top — bottom edge follows the top guide curve */}
-                <path d="M0,0 L100,0 L100,36 Q50,32 0,36 Z" fill="rgba(0,0,0,0.5)" />
-                {/* Dark area bottom — top edge follows the bottom guide curve */}
-                <path d="M0,100 L100,100 L100,64 Q50,68 0,64 Z" fill="rgba(0,0,0,0.5)" />
-                {/* Top guide curve */}
-                <path d="M0,36 Q50,32 100,36" stroke="#f97316" strokeWidth="0.5" fill="none" />
-                {/* Bottom guide curve */}
-                <path d="M0,64 Q50,68 100,64" stroke="#f97316" strokeWidth="0.5" fill="none" />
-                {/* Corner brackets — top left */}
-                <path d="M4,36 L4,41 M4,36 L12,36" stroke="#fb923c" strokeWidth="0.8" fill="none" strokeLinecap="round" />
-                {/* Corner brackets — top right */}
-                <path d="M96,36 L96,41 M96,36 L88,36" stroke="#fb923c" strokeWidth="0.8" fill="none" strokeLinecap="round" />
-                {/* Corner brackets — bottom left */}
-                <path d="M4,64 L4,59 M4,64 L12,64" stroke="#fb923c" strokeWidth="0.8" fill="none" strokeLinecap="round" />
-                {/* Corner brackets — bottom right */}
-                <path d="M96,64 L96,59 M96,64 L88,64" stroke="#fb923c" strokeWidth="0.8" fill="none" strokeLinecap="round" />
-              </svg>
-            )}
-
-            {/* Scan strip label */}
-            {isLandscape && (
-              <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
-                <span className="text-white/50 text-xs font-semibold tracking-widest uppercase bg-black/30 px-3 py-1 rounded-full">
-                  Ej: 205/55 R16
-                </span>
-              </div>
+              <>
+                {/*
+                  Ambas curvas van hacia abajo (como el lateral inferior del neumático).
+                  viewBox 0 0 100 100, preserveAspectRatio="none" → se estira al viewport.
+                  Línea superior: parte en y=22 en los extremos, baja a y=28 en el centro.
+                  Línea inferior: parte en y=78 en los extremos, baja a y=84 en el centro.
+                  Strip total: 56 unidades de alto ≈ 56% del viewport.
+                */}
+                <svg
+                  className="absolute inset-0 w-full h-full pointer-events-none"
+                  viewBox="0 0 100 100"
+                  preserveAspectRatio="none"
+                >
+                  {/* Dark top area — borde inferior sigue la curva superior */}
+                  <path d="M0,0 L100,0 L100,22 Q50,28 0,22 Z" fill="rgba(0,0,0,0.52)" />
+                  {/* Dark bottom area — borde superior sigue la curva inferior */}
+                  <path d="M0,100 L100,100 L100,78 Q50,84 0,78 Z" fill="rgba(0,0,0,0.52)" />
+                  {/* Línea guía superior */}
+                  <path d="M0,22 Q50,28 100,22" stroke="#f97316" strokeWidth="0.55" fill="none" />
+                  {/* Línea guía inferior */}
+                  <path d="M0,78 Q50,84 100,78" stroke="#f97316" strokeWidth="0.55" fill="none" />
+                  {/* Brackets esquina superior-izquierda */}
+                  <path d="M3,22 L3,29 M3,22 L13,22" stroke="#fb923c" strokeWidth="0.9" fill="none" strokeLinecap="round" />
+                  {/* Brackets esquina superior-derecha */}
+                  <path d="M97,22 L97,29 M97,22 L87,22" stroke="#fb923c" strokeWidth="0.9" fill="none" strokeLinecap="round" />
+                  {/* Brackets esquina inferior-izquierda */}
+                  <path d="M3,78 L3,71 M3,78 L13,78" stroke="#fb923c" strokeWidth="0.9" fill="none" strokeLinecap="round" />
+                  {/* Brackets esquina inferior-derecha */}
+                  <path d="M97,78 L97,71 M97,78 L87,78" stroke="#fb923c" strokeWidth="0.9" fill="none" strokeLinecap="round" />
+                </svg>
+                <div className="absolute inset-0 pointer-events-none flex items-center justify-center" style={{ paddingTop: '12%' }}>
+                  <span className="text-white/45 text-xs font-semibold tracking-widest uppercase bg-black/25 px-3 py-1 rounded-full">
+                    Ej: 205/55 R16
+                  </span>
+                </div>
+              </>
             )}
 
             {/* Portrait rotation hint */}
