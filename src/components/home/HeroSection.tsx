@@ -9,16 +9,15 @@ export function HeroSection() {
           {/* Left: copy */}
           <div className="flex flex-col justify-center py-14 md:py-20 pr-0 md:pr-12">
             <span className="inline-block text-orange-500 text-xs font-black uppercase tracking-widest mb-4">
-              Outlet de neumáticos · Importación directa
+              Importación directa · Precios outlet
             </span>
-            <h1 className="text-4xl md:text-5xl font-black text-slate-900 leading-tight mb-4">
-              El neumático que<br />
-              necesitás, al mejor<br />
-              <span className="text-orange-500">precio.</span>
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-slate-900 leading-[1.05] mb-5">
+              El outlet del{" "}
+              <span className="text-orange-500">neumático</span>
             </h1>
             <p className="text-slate-500 text-base md:text-lg leading-relaxed max-w-sm">
-              Más de 180 referencias importadas. Entrega en el local,
-              con balanceo y montaje incluido.
+              Más de 180 referencias importadas a precios imbatibles.
+              Montaje incluido en el local.
             </p>
 
             <div className="flex flex-wrap gap-5 mt-8 text-sm text-slate-500">
