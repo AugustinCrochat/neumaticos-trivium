@@ -38,8 +38,7 @@ export function TireSizeSearch({
   const [isScanning, setIsScanning] = useState(false);
   const [scanProgress, setScanProgress] = useState("");
   const [scanError, setScanError] = useState<string | null>(null);
-  // true when the camera stream is portrait (uncommon — most phones send landscape sensor data)
-  const [videoIsPortrait, setVideoIsPortrait] = useState(false);
+  const [showRotateHint, setShowRotateHint] = useState(false);
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -100,47 +99,51 @@ export function TireSizeSearch({
 
   // --- CAMERA LOGIC ---
 
+  // Auto-hide rotate hint when phone goes landscape
+  useEffect(() => {
+    if (!showScanner) return;
+    const check = () => {
+      if (window.matchMedia('(orientation: landscape)').matches) setShowRotateHint(false);
+    };
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, [showScanner]);
+
   async function startCamera() {
     setShowScanner(true);
     setScanError(null);
-    setVideoIsPortrait(false);
+    setShowRotateHint(false);
 
-    // Hide browser nav bar (works on Android Chrome; silent fail elsewhere)
+    // Hide browser nav bar on Android Chrome
     try {
       const el = document.documentElement;
       if (el.requestFullscreen) await el.requestFullscreen();
       else if ((el as any).webkitRequestFullscreen) (el as any).webkitRequestFullscreen();
-    } catch { /* ignored */ }
+    } catch { /* iOS ignores */ }
 
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: "environment", width: { ideal: 1920 }, height: { ideal: 1080 } }
       });
       streamRef.current = stream;
+      if (videoRef.current) videoRef.current.srcObject = stream;
 
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        // After metadata loads: detect portrait stream and auto-enable flash
-        videoRef.current.addEventListener('loadedmetadata', async () => {
-          const v = videoRef.current;
-          if (!v) return;
-          setVideoIsPortrait(v.videoHeight > v.videoWidth);
-          // Flash ON by default
-          if (streamRef.current) {
-            const track = streamRef.current.getVideoTracks()[0];
-            if ((track.getCapabilities() as any).torch) {
-              setHasTorch(true);
-              try {
-                await track.applyConstraints({ advanced: [{ torch: true }] } as any);
-                setTorchOn(true);
-              } catch { /* some devices reject even with capability */ }
-            }
-          }
-        }, { once: true });
+      const track = stream.getVideoTracks()[0];
+      if ((track.getCapabilities() as any).torch) {
+        setHasTorch(true);
+        try {
+          await track.applyConstraints({ advanced: [{ torch: true }] } as any);
+          setTorchOn(true);
+        } catch { /* device accepted capability but rejects apply — ignore */ }
       }
+
+      // Show rotate hint if phone is in portrait after camera loads
+      setTimeout(() => {
+        if (window.matchMedia('(orientation: portrait)').matches) setShowRotateHint(true);
+      }, 600);
     } catch (err) {
       console.error(err);
-      setScanError("No pudimos acceder a tu cámara. Asegúrate de dar permisos.");
+      setScanError("No pudimos acceder a tu cámara. Asegurate de dar permisos.");
       setShowScanner(false);
     }
   }
@@ -154,6 +157,7 @@ export function TireSizeSearch({
     setShowScanner(false);
     setHasTorch(false);
     setTorchOn(false);
+    setShowRotateHint(false);
   }
 
   async function toggleTorch() {
@@ -161,86 +165,77 @@ export function TireSizeSearch({
     const track = streamRef.current.getVideoTracks()[0];
     try {
       await track.applyConstraints({ advanced: [{ torch: !torchOn }] } as any);
-      setTorchOn(!torchOn);
+      setTorchOn(t => !t);
     } catch (err) {
       console.error("Error toggling torch", err);
     }
   }
 
-  async function captureAndScan() {
-    if (!videoRef.current) return;
-    setIsScanning(true);
-    setScanProgress("Capturando...");
-
-    const video = videoRef.current;
-    const isPort = video.videoHeight > video.videoWidth;
+  function captureFrame(): string {
+    const video = videoRef.current!;
     const MAX_W = 1280;
+    const s = Math.min(1, MAX_W / Math.max(video.videoWidth, 1));
     const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    canvas.width = Math.round(video.videoWidth * s);
+    canvas.height = Math.round(video.videoHeight * s);
+    const ctx = canvas.getContext("2d")!;
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    // Grayscale + contrast boost: embossed text on black rubber becomes more visible
+    const img = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    for (let i = 0; i < img.data.length; i += 4) {
+      const g = 0.299 * img.data[i] + 0.587 * img.data[i + 1] + 0.114 * img.data[i + 2];
+      const b = Math.min(255, Math.max(0, (g - 128) * 1.8 + 128));
+      img.data[i] = img.data[i + 1] = img.data[i + 2] = b;
+    }
+    ctx.putImageData(img, 0, 0);
+    return canvas.toDataURL("image/jpeg", 0.85);
+  }
 
-    if (isPort) {
-      // Rotate portrait stream 90° → produce landscape image
-      const s = Math.min(1, MAX_W / video.videoHeight);
-      canvas.width = Math.round(video.videoHeight * s);
-      canvas.height = Math.round(video.videoWidth * s);
-      ctx.translate(canvas.width / 2, canvas.height / 2);
-      ctx.rotate(Math.PI / 2);
-      ctx.scale(s, s);
-      ctx.drawImage(video, -video.videoWidth / 2, -video.videoHeight / 2);
-    } else {
-      const s = Math.min(1, MAX_W / video.videoWidth);
-      canvas.width = Math.round(video.videoWidth * s);
-      canvas.height = Math.round(video.videoHeight * s);
-      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+  async function tryScan(base64Image: string) {
+    const res = await fetch("/api/scan-tire", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ base64Image }),
+    });
+    return res.json() as Promise<{ found: boolean; width?: number; profile?: number; rim?: number }>;
+  }
+
+  // Burst: 2 attempts with camera live, stop only when done
+  async function captureAndScan() {
+    if (!videoRef.current || isScanning) return;
+    setIsScanning(true);
+    setScanError(null);
+    let found = false;
+
+    for (let attempt = 1; attempt <= 2; attempt++) {
+      setScanProgress(attempt === 1 ? "Analizando..." : "Segundo intento...");
+      try {
+        const base64Image = captureFrame();
+        const data = await tryScan(base64Image);
+        if (data.found && data.width) {
+          setWidth(String(data.width));
+          setProfile(String(data.profile));
+          setRim(String(data.rim));
+          setActiveDropdown(null);
+          setScanError(null);
+          found = true;
+          break;
+        }
+      } catch { /* network error — try next */ }
+
+      if (attempt < 2) await new Promise(r => setTimeout(r, 1200));
     }
 
-    // Preprocessing: grayscale + contrast boost → text on dark rubber pops more
-    const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    const d = imgData.data;
-    for (let i = 0; i < d.length; i += 4) {
-      const gray = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
-      const boosted = Math.min(255, Math.max(0, (gray - 128) * 1.8 + 128));
-      d[i] = d[i + 1] = d[i + 2] = boosted;
-    }
-    ctx.putImageData(imgData, 0, 0);
-
-    const base64Image = canvas.toDataURL("image/jpeg", 0.85);
-
+    if (!found) setScanError("No se detectó. Acercate más y asegurate que los números sean visibles.");
     stopCamera();
-    setScanProgress("Analizando con IA...");
-
-    try {
-      const res = await fetch("/api/scan-tire", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ base64Image }),
-      });
-      const data = await res.json();
-
-      if (data.found) {
-        setWidth(String(data.width));
-        setProfile(String(data.profile));
-        setRim(String(data.rim));
-        setActiveDropdown(null);
-        setScanError(null);
-      } else {
-        setScanError("No se detectó la medida. Intentá enfocar bien los números del lateral del neumático.");
-      }
-    } catch {
-      setScanError("Error de conexión. Verificá tu internet.");
-    } finally {
-      setIsScanning(false);
-      setScanProgress("");
-    }
+    setIsScanning(false);
+    setScanProgress("");
   }
 
   // Cleanup on unmount
   useEffect(() => {
     return () => {
-      if (streamRef.current) {
-        streamRef.current.getTracks().forEach(track => track.stop());
-      }
+      if (streamRef.current) streamRef.current.getTracks().forEach(t => t.stop());
     };
   }, []);
 
@@ -273,71 +268,82 @@ export function TireSizeSearch({
                 <svg className="w-5 h-5" fill={torchOn ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor" strokeWidth={torchOn ? 0 : 2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
-                {torchOn ? 'Flash ON' : 'Prender flash'}
+                {torchOn ? 'Flash ON' : 'Flash'}
               </button>
             )}
           </div>
 
-          {/* Camera view */}
+          {/* Camera — video simple, sin transformaciones CSS */}
           <div className="relative flex-1 overflow-hidden bg-black">
-            {/*
-              Si el stream viene en portrait (videoHeight > videoWidth, poco común),
-              rotamos el video -90° para que el usuario vea la vista en paisaje
-              aunque tenga el teléfono vertical.
-            */}
             <video
               ref={videoRef}
               autoPlay
               playsInline
               muted
-              style={videoIsPortrait ? {
-                position: 'absolute',
-                width: '100vh',
-                height: '100vw',
-                top: '50%',
-                left: '50%',
-                marginLeft: '-50vh',
-                marginTop: '-50vw',
-                objectFit: 'cover',
-                transform: 'rotate(90deg)',
-              } : {
-                position: 'absolute',
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-              }}
+              className="absolute inset-0 w-full h-full object-cover"
             />
 
-            {/* Guía horizontal — líneas rectas con mucho espacio (80% del viewport) */}
+            {/* Guía: dos líneas horizontales rectas, strip de 80% */}
             <div className="absolute inset-0 pointer-events-none flex flex-col">
-              {/* Zona oscura superior: 10% */}
               <div className="bg-black/50" style={{ height: '10%' }} />
-              {/* Strip de escaneo: 80% — sin oscurecer, solo bordes */}
               <div className="relative flex-1 border-y-2 border-orange-500">
-                {/* Brackets esquinas */}
-                <div className="absolute top-[-2px] left-5 w-10 h-6 border-t-2 border-l-2 border-orange-400" />
-                <div className="absolute top-[-2px] right-5 w-10 h-6 border-t-2 border-r-2 border-orange-400" />
-                <div className="absolute bottom-[-2px] left-5 w-10 h-6 border-b-2 border-l-2 border-orange-400" />
-                <div className="absolute bottom-[-2px] right-5 w-10 h-6 border-b-2 border-r-2 border-orange-400" />
-                {/* Etiqueta centrada */}
+                <div className="absolute -top-px left-4 w-10 h-6 border-t-2 border-l-2 border-orange-400" />
+                <div className="absolute -top-px right-4 w-10 h-6 border-t-2 border-r-2 border-orange-400" />
+                <div className="absolute -bottom-px left-4 w-10 h-6 border-b-2 border-l-2 border-orange-400" />
+                <div className="absolute -bottom-px right-4 w-10 h-6 border-b-2 border-r-2 border-orange-400" />
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-white/40 text-xs font-semibold tracking-widest uppercase bg-black/20 px-3 py-1 rounded-full">
+                  <span className="text-white/35 text-xs font-semibold tracking-widest uppercase">
                     205/55 R16
                   </span>
                 </div>
               </div>
-              {/* Zona oscura inferior: 10% */}
               <div className="bg-black/50" style={{ height: '10%' }} />
             </div>
+
+            {/* Hint de rotación — aparece si el teléfono está en portrait, se toca para cerrar */}
+            {showRotateHint && (
+              <button
+                onClick={() => setShowRotateHint(false)}
+                className="absolute inset-0 bg-black/80 flex flex-col items-center justify-center gap-5 z-10"
+              >
+                {/* Ícono teléfono rotando */}
+                <div className="relative">
+                  <svg viewBox="0 0 48 80" className="w-16 h-24 text-white/70" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <rect x="6" y="2" width="36" height="76" rx="6" />
+                    <circle cx="24" cy="70" r="3" fill="currentColor" strokeWidth="0" />
+                    <line x1="16" y1="12" x2="32" y2="12" strokeWidth="2" strokeLinecap="round" />
+                  </svg>
+                  {/* Flecha de rotación */}
+                  <svg className="absolute -right-6 top-1/2 -translate-y-1/2 w-8 h-8 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                </div>
+                <p className="text-white font-bold text-xl">Girá el teléfono</p>
+                <p className="text-white/55 text-sm text-center px-8 leading-relaxed">
+                  Mejor resultado en horizontal. Tocá para continuar igual.
+                </p>
+              </button>
+            )}
           </div>
 
-          {/* Capture button — siempre visible */}
-          <div className="absolute bottom-0 left-0 right-0 p-8 z-20 flex justify-center bg-gradient-to-t from-black/80 to-transparent">
+          {/* Botón de captura + estado */}
+          <div className="absolute bottom-0 left-0 right-0 pb-10 pt-6 z-20 flex flex-col items-center gap-3 bg-gradient-to-t from-black/80 to-transparent">
+            {isScanning && (
+              <span className="text-white/80 text-sm font-medium">{scanProgress}</span>
+            )}
             <button
               onClick={captureAndScan}
-              className="w-20 h-20 rounded-full border-4 border-white/50 flex items-center justify-center active:scale-95 transition-transform"
+              disabled={isScanning}
+              className="w-20 h-20 rounded-full border-4 border-white/50 flex items-center justify-center active:scale-95 transition-transform disabled:opacity-40"
             >
-              <div className="w-16 h-16 rounded-full bg-white" />
+              {isScanning ? (
+                <svg className="w-8 h-8 text-white animate-spin" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                </svg>
+              ) : (
+                <div className="w-16 h-16 rounded-full bg-white" />
+              )}
             </button>
           </div>
         </div>
