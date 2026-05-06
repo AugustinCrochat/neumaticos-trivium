@@ -167,8 +167,7 @@ export function TireSizeSearch({
     try {
       const formData = new FormData();
       formData.append("base64Image", base64Image);
-      // Usando una API Key pública gratuita común para OCR.space (o 'helloworld')
-      formData.append("apikey", "helloworld"); 
+      formData.append("apikey", "K89503802988957"); 
       formData.append("language", "eng");
       formData.append("isOverlayRequired", "false");
       formData.append("OCREngine", "2");
@@ -238,17 +237,6 @@ export function TireSizeSearch({
             >
               Cancelar
             </button>
-
-            {hasTorch && (
-              <button 
-                onClick={toggleTorch}
-                className={`w-12 h-12 rounded-full flex items-center justify-center backdrop-blur-md transition-colors ${torchOn ? 'bg-orange-500 text-white' : 'bg-white/20 hover:bg-white/30 text-white'}`}
-              >
-                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-              </button>
-            )}
           </div>
           
           {/* Camera View & Alignment Guide */}
@@ -264,15 +252,26 @@ export function TireSizeSearch({
             {/* Dark overlay with transparent center window (Optional, if we want to dim the outside) */}
             <div className="absolute inset-0 pointer-events-none border-[30px] border-black/40"></div>
 
-            {/* Tire Curve SVG Overlay */}
-            <div className="absolute inset-0 pointer-events-none flex flex-col items-center justify-center">
+            {/* Tire Curve SVG Overlay & Flash Button */}
+            <div className="absolute inset-0 pointer-events-none flex flex-col items-center justify-center pb-10">
+              {hasTorch && (
+                <button 
+                  onClick={toggleTorch}
+                  className={`mb-6 px-6 py-3 rounded-full flex items-center justify-center gap-2 backdrop-blur-md transition-colors pointer-events-auto shadow-xl ${torchOn ? 'bg-orange-500 text-white' : 'bg-black/60 hover:bg-black/80 text-white border border-white/20'}`}
+                >
+                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                  <span className="font-bold text-sm">{torchOn ? 'Apagar flash' : 'Prender flash'}</span>
+                </button>
+              )}
               <svg className="w-[80%] max-w-sm drop-shadow-xl opacity-80" viewBox="0 0 200 120" fill="none">
-                {/* Curved line representing top of the tire */}
-                <path d="M 10 120 Q 100 -20 190 120" stroke="#f97316" strokeWidth="3" strokeDasharray="6 6" />
-                <text x="100" y="40" fill="white" fontSize="8" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0px 2px 4px rgba(0,0,0,0.8)" }}>
+                {/* Curved line representing top of the tire - Semi-circle */}
+                <path d="M 10 120 A 90 90 0 0 1 190 120" stroke="#f97316" strokeWidth="3" strokeDasharray="6 6" />
+                <text x="100" y="55" fill="white" fontSize="8" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0px 2px 4px rgba(0,0,0,0.8)" }}>
                   ALINEAR PARTE SUPERIOR AQUÍ
                 </text>
-                <text x="100" y="55" fill="rgba(255,255,255,0.7)" fontSize="6" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0px 2px 4px rgba(0,0,0,0.8)" }}>
+                <text x="100" y="70" fill="rgba(255,255,255,0.7)" fontSize="6" fontWeight="bold" textAnchor="middle" style={{ textShadow: "0px 2px 4px rgba(0,0,0,0.8)" }}>
                   Ej: 205/55 R16
                 </text>
               </svg>
@@ -330,7 +329,7 @@ export function TireSizeSearch({
           />
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex gap-2 md:hidden">
           <button
             type="button"
             onClick={startCamera}
