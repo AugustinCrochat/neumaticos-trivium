@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useBranch } from "@/contexts/branch-context";
 import type { TireProduct } from "@/lib/types";
 
@@ -36,7 +37,7 @@ export function ProductCard({ product }: { product: TireProduct }) {
   return (
     <article className="group bg-white rounded-2xl border border-slate-100 hover:border-navy-200 hover:shadow-xl transition-all duration-200 overflow-hidden flex flex-col">
       {/* Image */}
-      <div className="relative bg-slate-50 pt-[60%] overflow-hidden">
+      <Link href={`/productos/${product.slug}`} className="relative bg-slate-50 pt-[60%] overflow-hidden block">
         <div className="absolute inset-0 p-3">
           {hasImage ? (
             <div className="relative w-full h-full">
@@ -68,7 +69,7 @@ export function ProductCard({ product }: { product: TireProduct }) {
             </span>
           )}
         </div>
-      </div>
+      </Link>
 
       {/* Content */}
       <div className="p-4 flex flex-col flex-1">
@@ -84,7 +85,9 @@ export function ProductCard({ product }: { product: TireProduct }) {
         </div>
 
         <h3 className="font-semibold text-slate-800 text-sm mb-1 line-clamp-2" title={product.model}>
-          {product.model}
+          <Link href={`/productos/${product.slug}`} className="hover:text-navy-700 transition-colors">
+            {product.model}
+          </Link>
         </h3>
 
         <p className="text-xs text-slate-400 mb-1 font-mono">SKU: {product.id}</p>
