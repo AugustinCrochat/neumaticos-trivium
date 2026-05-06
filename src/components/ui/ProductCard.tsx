@@ -73,7 +73,11 @@ export function ProductCard({ product }: { product: TireProduct }) {
             {product.brand}
           </span>
           {product.tags[0] && (
-            <span className="text-xs text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full whitespace-nowrap">
+            <span className={`text-[10px] font-black px-2.5 py-1 rounded-md uppercase tracking-wider whitespace-nowrap shadow-sm ${
+              product.tags[0].toLowerCase().includes('pack') 
+                ? 'bg-navy-900 text-white' 
+                : 'bg-slate-200 text-slate-700'
+            }`}>
               {product.tags[0]}
             </span>
           )}
@@ -107,7 +111,7 @@ export function ProductCard({ product }: { product: TireProduct }) {
             </span>
           )}
           <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-black text-navy-900">
+            <span className="text-2xl font-black text-red-600">
               {formatPrice(product.price)}
             </span>
           </div>

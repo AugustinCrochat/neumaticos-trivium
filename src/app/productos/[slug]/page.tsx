@@ -103,17 +103,13 @@ export default async function ProductPage({ params }: Props) {
             {product.tags.map((tag) => (
               <span
                 key={tag}
-                className="text-xs text-slate-500 bg-slate-100 px-3 py-1 rounded-full"
+                className={`text-[10px] font-black px-3 py-1.5 rounded-md uppercase tracking-wider shadow-sm ${
+                  tag.toLowerCase().includes('pack') 
+                    ? 'bg-navy-900 text-white' 
+                    : 'bg-slate-200 text-slate-700'
+                }`}
               >
                 {tag}
-              </span>
-            ))}
-            {product.vehicleType.map((vt) => (
-              <span
-                key={vt}
-                className="text-xs text-navy-600 bg-navy-50 px-3 py-1 rounded-full capitalize"
-              >
-                {vt}
               </span>
             ))}
           </div>
@@ -127,7 +123,7 @@ export default async function ProductPage({ params }: Props) {
                 {formatPrice(product.priceOld)}
               </span>
             )}
-            <span className="text-4xl font-black text-navy-900">
+            <span className="text-4xl font-black text-red-600">
               {formatPrice(product.price)}
             </span>
             <p className="text-xs text-slate-400 mt-1">Precio por unidad · IVA incluido</p>

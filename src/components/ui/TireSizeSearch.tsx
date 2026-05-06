@@ -76,12 +76,12 @@ export function TireSizeSearch({
         <button
           type="submit"
           disabled={!isValid}
-          className="bg-orange-500 hover:bg-orange-600 disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed text-white font-bold py-2 px-4 rounded-lg text-sm transition-colors flex items-center gap-1.5 self-end mb-[1px]"
+          className="bg-orange-500 hover:bg-orange-600 disabled:bg-navy-800 disabled:text-slate-600 disabled:cursor-not-allowed text-white font-black py-3 px-6 rounded-xl text-sm transition-all flex items-center gap-2 self-end shadow-lg shadow-orange-500/20 active:scale-[0.98]"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
-          Buscar
+          BUSCAR
         </button>
       </form>
     );
@@ -134,24 +134,24 @@ function FullSelect({
 }) {
   return (
     <div>
-      <label className="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5">{label}</label>
+      <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5">{label}</label>
       <div className="relative">
         <select
           value={value}
           onChange={(e) => onChange(e.target.value)}
           disabled={disabled}
-          className="w-full appearance-none bg-slate-50 border-2 border-slate-200 hover:border-slate-400 focus:border-orange-500 focus:bg-white disabled:opacity-40 disabled:cursor-not-allowed text-slate-900 font-semibold rounded-xl px-3 py-3 pr-8 text-sm transition-colors outline-none cursor-pointer"
+          className="w-full appearance-none bg-navy-800 border-2 border-navy-700 hover:border-navy-600 focus:border-orange-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold rounded-xl px-4 py-3 pr-8 text-sm transition-all outline-none cursor-pointer shadow-inner"
         >
-          <option value="" disabled>{hintPrefix ? `R${placeholder}` : placeholder}</option>
+          <option value="" disabled className="text-slate-500">{hintPrefix ? `R${placeholder}` : placeholder}</option>
           {children}
         </select>
         <div className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none">
-          <svg className="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="w-5 h-5 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
         </div>
       </div>
-      <span className="block text-center text-xs text-slate-400 mt-1">{hintPrefix ? "" : hint}</span>
+      <span className="block text-center text-[10px] font-bold text-slate-500 mt-1 uppercase tracking-tighter">{hintPrefix ? "" : hint}</span>
     </div>
   );
 }
@@ -163,17 +163,24 @@ function CompactSelect({
   placeholder: string; disabled?: boolean; children: React.ReactNode;
 }) {
   return (
-    <div>
-      <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">{label}</label>
-      <select
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        disabled={disabled}
-        className="appearance-none bg-white border border-slate-200 hover:border-slate-400 focus:border-orange-500 disabled:opacity-40 disabled:cursor-not-allowed text-slate-900 font-semibold rounded-lg px-3 py-2 text-sm outline-none cursor-pointer min-w-[80px]"
-      >
-        <option value="" disabled>{placeholder}</option>
-        {children}
-      </select>
+    <div className="flex-1 min-w-[100px]">
+      <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5">{label}</label>
+      <div className="relative">
+        <select
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          disabled={disabled}
+          className="w-full appearance-none bg-navy-800 border border-navy-700 hover:border-navy-600 focus:border-orange-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold rounded-xl px-4 py-3 text-sm outline-none cursor-pointer transition-all shadow-inner"
+        >
+          <option value="" disabled className="text-slate-500">{placeholder}</option>
+          {children}
+        </select>
+        <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+          <svg className="w-4 h-4 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
+      </div>
     </div>
   );
 }
