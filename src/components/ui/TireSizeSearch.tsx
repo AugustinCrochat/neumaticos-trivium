@@ -38,7 +38,8 @@ export function TireSizeSearch({
   const [isScanning, setIsScanning] = useState(false);
   const [scanProgress, setScanProgress] = useState("");
   const [scanError, setScanError] = useState<string | null>(null);
-  const [isLandscape, setIsLandscape] = useState(true);
+  // true when the camera stream is portrait (uncommon — most phones send landscape sensor data)
+  const [videoIsPortrait, setVideoIsPortrait] = useState(false);
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -99,35 +100,43 @@ export function TireSizeSearch({
 
   // --- CAMERA LOGIC ---
 
-  // Track landscape orientation while scanner is open
-  useEffect(() => {
-    if (!showScanner) return;
-    const update = () => setIsLandscape(window.matchMedia('(orientation: landscape)').matches);
-    update();
-    window.addEventListener('resize', update);
-    return () => window.removeEventListener('resize', update);
-  }, [showScanner]);
-
   async function startCamera() {
     setShowScanner(true);
     setScanError(null);
-    // Try to lock landscape (works on Android Chrome; silent fail on iOS)
+    setVideoIsPortrait(false);
+
+    // Hide browser nav bar (works on Android Chrome; silent fail elsewhere)
     try {
-      await (screen.orientation as any).lock('landscape');
-    } catch {
-      // iOS doesn't support orientation lock — user will see the rotation hint
-    }
+      const el = document.documentElement;
+      if (el.requestFullscreen) await el.requestFullscreen();
+      else if ((el as any).webkitRequestFullscreen) (el as any).webkitRequestFullscreen();
+    } catch { /* ignored */ }
+
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: "environment", width: { ideal: 1920 }, height: { ideal: 1080 } }
       });
       streamRef.current = stream;
+
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
-      }
-      const track = stream.getVideoTracks()[0];
-      if ((track.getCapabilities() as any).torch) {
-        setHasTorch(true);
+        // After metadata loads: detect portrait stream and auto-enable flash
+        videoRef.current.addEventListener('loadedmetadata', async () => {
+          const v = videoRef.current;
+          if (!v) return;
+          setVideoIsPortrait(v.videoHeight > v.videoWidth);
+          // Flash ON by default
+          if (streamRef.current) {
+            const track = streamRef.current.getVideoTracks()[0];
+            if ((track.getCapabilities() as any).torch) {
+              setHasTorch(true);
+              try {
+                await track.applyConstraints({ advanced: [{ torch: true }] } as any);
+                setTorchOn(true);
+              } catch { /* some devices reject even with capability */ }
+            }
+          }
+        }, { once: true });
       }
     } catch (err) {
       console.error(err);
@@ -141,8 +150,9 @@ export function TireSizeSearch({
       streamRef.current.getTracks().forEach(track => track.stop());
       streamRef.current = null;
     }
-    try { (screen.orientation as any).unlock(); } catch { /* not supported */ }
+    try { if (document.fullscreenElement) document.exitFullscreen(); } catch { /* ignored */ }
     setShowScanner(false);
+    setHasTorch(false);
     setTorchOn(false);
   }
 
@@ -163,14 +173,38 @@ export function TireSizeSearch({
     setScanProgress("Capturando...");
 
     const video = videoRef.current;
+    const isPort = video.videoHeight > video.videoWidth;
+    const MAX_W = 1280;
     const canvas = document.createElement("canvas");
-    // Resize to max 1280px wide to keep payload small and fast
-    const maxW = 1280;
-    canvas.width = Math.min(video.videoWidth, maxW);
-    canvas.height = Math.round(video.videoHeight * (canvas.width / video.videoWidth));
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    if (isPort) {
+      // Rotate portrait stream 90° → produce landscape image
+      const s = Math.min(1, MAX_W / video.videoHeight);
+      canvas.width = Math.round(video.videoHeight * s);
+      canvas.height = Math.round(video.videoWidth * s);
+      ctx.translate(canvas.width / 2, canvas.height / 2);
+      ctx.rotate(Math.PI / 2);
+      ctx.scale(s, s);
+      ctx.drawImage(video, -video.videoWidth / 2, -video.videoHeight / 2);
+    } else {
+      const s = Math.min(1, MAX_W / video.videoWidth);
+      canvas.width = Math.round(video.videoWidth * s);
+      canvas.height = Math.round(video.videoHeight * s);
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    }
+
+    // Preprocessing: grayscale + contrast boost → text on dark rubber pops more
+    const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const d = imgData.data;
+    for (let i = 0; i < d.length; i += 4) {
+      const gray = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
+      const boosted = Math.min(255, Math.max(0, (gray - 128) * 1.8 + 128));
+      d[i] = d[i + 1] = d[i + 2] = boosted;
+    }
+    ctx.putImageData(imgData, 0, 0);
+
     const base64Image = canvas.toDataURL("image/jpeg", 0.85);
 
     stopCamera();
@@ -233,7 +267,7 @@ export function TireSizeSearch({
                 className={`px-5 py-2.5 rounded-full flex items-center gap-2 font-bold text-sm transition-all shadow-lg ${
                   torchOn
                     ? 'bg-yellow-400 text-black shadow-yellow-400/40'
-                    : 'bg-yellow-400/20 border-2 border-yellow-400 text-yellow-300'
+                    : 'bg-yellow-400/20 border-2 border-yellow-400 text-yellow-300 animate-pulse'
                 }`}
               >
                 <svg className="w-5 h-5" fill={torchOn ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor" strokeWidth={torchOn ? 0 : 2}>
@@ -245,78 +279,67 @@ export function TireSizeSearch({
           </div>
 
           {/* Camera view */}
-          <div className="relative flex-1 overflow-hidden">
-            <video ref={videoRef} autoPlay playsInline muted className="absolute w-full h-full object-cover" />
+          <div className="relative flex-1 overflow-hidden bg-black">
+            {/*
+              Si el stream viene en portrait (videoHeight > videoWidth, poco común),
+              rotamos el video -90° para que el usuario vea la vista en paisaje
+              aunque tenga el teléfono vertical.
+            */}
+            <video
+              ref={videoRef}
+              autoPlay
+              playsInline
+              muted
+              style={videoIsPortrait ? {
+                position: 'absolute',
+                width: '100vh',
+                height: '100vw',
+                top: '50%',
+                left: '50%',
+                marginLeft: '-50vh',
+                marginTop: '-50vw',
+                objectFit: 'cover',
+                transform: 'rotate(90deg)',
+              } : {
+                position: 'absolute',
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+              }}
+            />
 
-            {/* Curved scan guide — only shown in landscape */}
-            {isLandscape && (
-              <>
-                {/*
-                  Ambas curvas van hacia abajo (como el lateral inferior del neumático).
-                  viewBox 0 0 100 100, preserveAspectRatio="none" → se estira al viewport.
-                  Línea superior: parte en y=22 en los extremos, baja a y=28 en el centro.
-                  Línea inferior: parte en y=78 en los extremos, baja a y=84 en el centro.
-                  Strip total: 56 unidades de alto ≈ 56% del viewport.
-                */}
-                <svg
-                  className="absolute inset-0 w-full h-full pointer-events-none"
-                  viewBox="0 0 100 100"
-                  preserveAspectRatio="none"
-                >
-                  {/* Dark top area — borde inferior sigue la curva superior */}
-                  <path d="M0,0 L100,0 L100,22 Q50,28 0,22 Z" fill="rgba(0,0,0,0.52)" />
-                  {/* Dark bottom area — borde superior sigue la curva inferior */}
-                  <path d="M0,100 L100,100 L100,78 Q50,84 0,78 Z" fill="rgba(0,0,0,0.52)" />
-                  {/* Línea guía superior */}
-                  <path d="M0,22 Q50,28 100,22" stroke="#f97316" strokeWidth="0.55" fill="none" />
-                  {/* Línea guía inferior */}
-                  <path d="M0,78 Q50,84 100,78" stroke="#f97316" strokeWidth="0.55" fill="none" />
-                  {/* Brackets esquina superior-izquierda */}
-                  <path d="M3,22 L3,29 M3,22 L13,22" stroke="#fb923c" strokeWidth="0.9" fill="none" strokeLinecap="round" />
-                  {/* Brackets esquina superior-derecha */}
-                  <path d="M97,22 L97,29 M97,22 L87,22" stroke="#fb923c" strokeWidth="0.9" fill="none" strokeLinecap="round" />
-                  {/* Brackets esquina inferior-izquierda */}
-                  <path d="M3,78 L3,71 M3,78 L13,78" stroke="#fb923c" strokeWidth="0.9" fill="none" strokeLinecap="round" />
-                  {/* Brackets esquina inferior-derecha */}
-                  <path d="M97,78 L97,71 M97,78 L87,78" stroke="#fb923c" strokeWidth="0.9" fill="none" strokeLinecap="round" />
-                </svg>
-                <div className="absolute inset-0 pointer-events-none flex items-center justify-center" style={{ paddingTop: '12%' }}>
-                  <span className="text-white/45 text-xs font-semibold tracking-widest uppercase bg-black/25 px-3 py-1 rounded-full">
-                    Ej: 205/55 R16
+            {/* Guía horizontal — líneas rectas con mucho espacio (80% del viewport) */}
+            <div className="absolute inset-0 pointer-events-none flex flex-col">
+              {/* Zona oscura superior: 10% */}
+              <div className="bg-black/50" style={{ height: '10%' }} />
+              {/* Strip de escaneo: 80% — sin oscurecer, solo bordes */}
+              <div className="relative flex-1 border-y-2 border-orange-500">
+                {/* Brackets esquinas */}
+                <div className="absolute top-[-2px] left-5 w-10 h-6 border-t-2 border-l-2 border-orange-400" />
+                <div className="absolute top-[-2px] right-5 w-10 h-6 border-t-2 border-r-2 border-orange-400" />
+                <div className="absolute bottom-[-2px] left-5 w-10 h-6 border-b-2 border-l-2 border-orange-400" />
+                <div className="absolute bottom-[-2px] right-5 w-10 h-6 border-b-2 border-r-2 border-orange-400" />
+                {/* Etiqueta centrada */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="text-white/40 text-xs font-semibold tracking-widest uppercase bg-black/20 px-3 py-1 rounded-full">
+                    205/55 R16
                   </span>
                 </div>
-              </>
-            )}
-
-            {/* Portrait rotation hint */}
-            {!isLandscape && (
-              <div className="absolute inset-0 bg-black/75 flex flex-col items-center justify-center gap-5 pointer-events-none">
-                <svg viewBox="0 0 48 72" className="w-14 h-20 text-white/70" fill="none" stroke="currentColor" strokeWidth="2">
-                  <rect x="4" y="2" width="40" height="68" rx="6" />
-                  <circle cx="24" cy="62" r="3" fill="currentColor" strokeWidth="0" />
-                </svg>
-                <svg className="w-10 h-10 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 3H9m6 0a9 9 0 11-6 16.944M15 3l-3 3m3-3l-3-3" />
-                </svg>
-                <p className="text-white font-bold text-xl">Girá el teléfono</p>
-                <p className="text-white/55 text-sm text-center max-w-[220px] leading-relaxed">
-                  Rotá a horizontal para escanear el lateral del neumático
-                </p>
               </div>
-            )}
+              {/* Zona oscura inferior: 10% */}
+              <div className="bg-black/50" style={{ height: '10%' }} />
+            </div>
           </div>
 
-          {/* Capture button — only in landscape */}
-          {isLandscape && (
-            <div className="absolute bottom-0 left-0 right-0 p-8 z-20 flex justify-center bg-gradient-to-t from-black/80 to-transparent">
-              <button
-                onClick={captureAndScan}
-                className="w-20 h-20 rounded-full border-4 border-white/50 flex items-center justify-center active:scale-95 transition-transform"
-              >
-                <div className="w-16 h-16 rounded-full bg-white" />
-              </button>
-            </div>
-          )}
+          {/* Capture button — siempre visible */}
+          <div className="absolute bottom-0 left-0 right-0 p-8 z-20 flex justify-center bg-gradient-to-t from-black/80 to-transparent">
+            <button
+              onClick={captureAndScan}
+              className="w-20 h-20 rounded-full border-4 border-white/50 flex items-center justify-center active:scale-95 transition-transform"
+            >
+              <div className="w-16 h-16 rounded-full bg-white" />
+            </button>
+          </div>
         </div>
       )}
 
