@@ -167,8 +167,7 @@ export function TireSizeSearch({
     try {
       const constraints: MediaStreamConstraints = {
         video: {
-          facingMode: "environment",
-          aspectRatio: { ideal: 0.75 }, // portrait 4:3 — wider horizontal FOV than default 16:9
+          facingMode: "environment"
         }
       };
 
@@ -383,21 +382,20 @@ export function TireSizeSearch({
             </div>
           </div>
 
-          {/* Camera — video simple, sin transformaciones CSS */}
-          <div className="relative flex-1 overflow-hidden bg-black">
+          <div className="flex-1 relative overflow-hidden bg-black">
             <video
               ref={videoRef}
               autoPlay
               playsInline
               muted
-              className="absolute inset-0 w-full h-full object-contain bg-black"
+              className="absolute inset-0 w-full h-full object-cover"
             />
 
             {/* Guía circular */}
             <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
               <div
                 className="rounded-full border-4 border-orange-500 border-dashed animate-[spin_20s_linear_infinite]"
-                style={{ width: '90vmin', height: '90vmin', boxShadow: '0 0 0 9999px rgba(0,0,0,0.55)' }}
+                style={{ width: '90vmin', height: '90vmin', boxShadow: '0 0 0 9999px #000' }}
               />
               <div className="absolute flex items-center justify-center top-1/2 -translate-y-1/2">
                 <span className="text-white font-black text-sm tracking-widest uppercase bg-black/70 px-6 py-3 rounded-full backdrop-blur-md border border-white/10 shadow-xl whitespace-nowrap">
@@ -410,7 +408,12 @@ export function TireSizeSearch({
           </div>
 
           {/* Botón de captura + estado */}
-          <div className="absolute bottom-0 left-0 right-0 pb-10 pt-6 z-20 flex flex-col items-center gap-3 bg-gradient-to-t from-black/80 to-transparent">
+          <div className="absolute bottom-0 left-0 right-0 pb-10 pt-6 z-20 flex flex-col items-center gap-4 bg-gradient-to-t from-black/80 to-transparent">
+            {!isScanning && (
+              <span className="text-white text-xs font-bold uppercase tracking-widest animate-pulse">
+                Presioná para escanear
+              </span>
+            )}
             {isScanning && (
               <span className="text-white/80 text-sm font-medium">{scanProgress}</span>
             )}
@@ -556,7 +559,7 @@ export function TireSizeSearch({
             placeholder="Rodado" 
             example="16"
             options={availableRims.map(String)}
-            formatOption={(v) => `R${v}`}
+            formatOption={(v: string) => `R${v}`}
             isOpen={activeDropdown === "rim"}
             onToggle={() => setActiveDropdown(activeDropdown === "rim" ? null : "rim")}
             isActive={activeDropdown === "rim"}
