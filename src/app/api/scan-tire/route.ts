@@ -72,12 +72,11 @@ function bestCandidate(nums: number[]): Candidate | null {
 
 async function scanWithGemini(
   originalImage: string,
-  processedImage: string,
   apiKey: string,
 ): Promise<Candidate | null> {
   try {
     const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${apiKey}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -85,31 +84,26 @@ async function scanWithGemini(
           contents: [{
             parts: [
               {
-                text: `Eres un experto en neumáticos. Te envío DOS imágenes del neumático completo:
-1. Foto en escala de grises con contraste aumentado.
-2. Foto procesada con detección de bordes Sobel + binarización adaptativa.
-
-Buscá en el lateral (sidewall) del neumático el marcado de medida. Es texto en relieve sobre goma negra, generalmente en la zona media del costado. Puede estar rotado en cualquier ángulo.
-Formato típico: 205/55 R16 o 195/65R15 o 225/40R18 o P205/55R16.
-
-Devolvé SOLO tres números enteros separados por espacios: ANCHO PERFIL ARO
-- ANCHO: 3 dígitos, rango 130-335 (ej: 205)
-- PERFIL: 2 dígitos, rango 25-90 (ej: 55)
-- ARO: 2 dígitos, rango 12-24 (ej: 16)
-Si hay múltiples medidas visibles, devolvé la más legible.
-Si no encontrás ninguna, devolvé: NO_ENCONTRADO`,
+                text: `Actúa como un experto inspector de neumáticos. Analiza la imagen minuciosamente y busca la nomenclatura técnica estándar de medidas (Ancho/Perfil R Diámetro).
+Ignora por completo las marcas comerciales (ej: Pirelli, Fate, Michelin), nombres de modelo (ej: P400 EVO, Agilis) o códigos de fabricación (ej: DOT).
+Ten en cuenta los siguientes desafíos visuales:
+1. Curvatura: El texto sigue la forma circular de la rueda y puede estar curvo, al revés o en diagonal dependiendo de dónde frenó el auto.
+2. Contraste: Al ser caucho negro con letras en relieve negras, busca sutiles sombras que definen los números.
+Por favor, escanea toda la circunferencia del flanco (sidewall) hasta encontrar el patrón (ej: 205/55 R16, P195/65R15, 225 40 18).
+Devuelve únicamente un objeto JSON estricto con las claves "ancho", "perfil" y "aro" (todas como números enteros). 
+Ejemplo: {"ancho": 205, "perfil": 55, "aro": 16}.
+Si no encuentras la medida, devuelve: {"error": "no encontrado"}`
               },
-              { inline_data: { mime_type: 'image/jpeg', data: originalImage } },
-              { inline_data: { mime_type: 'image/jpeg', data: processedImage } },
+              { inline_data: { mime_type: 'image/jpeg', data: originalImage } }
             ],
           }],
-          generationConfig: { temperature: 0, maxOutputTokens: 20 },
+          generationConfig: { temperature: 0, response_mime_type: "application/json" },
         }),
       },
     );
 
     if (!res.ok) {
-      console.error('Gemini error:', res.status, (await res.text()).slice(0, 200));
+      console.error('Gemini error:', res.status, await res.text());
       return null;
     }
 
@@ -117,8 +111,19 @@ Si no encontrás ninguna, devolvé: NO_ENCONTRADO`,
     const text: string = (data.candidates?.[0]?.content?.parts?.[0]?.text ?? '').trim();
     console.log('Gemini →', text);
 
-    if (!text || text.includes('NO_ENCONTRADO')) return null;
-    return bestCandidate((text.match(/\d+/g) ?? []).map(Number));
+    if (!text || text.includes('error') || text.includes('no encontrado')) return null;
+    
+    try {
+      const parsed = JSON.parse(text);
+      if (parsed.ancho && parsed.perfil && parsed.aro) {
+        return bestCandidate([parsed.ancho, parsed.perfil, parsed.aro]);
+      }
+    } catch (e) {
+      // Si falla el parseo JSON, intentamos usar nuestra regex por si acaso
+      return bestCandidate((text.match(/\d+/g) ?? []).map(Number));
+    }
+    
+    return null;
   } catch (err) {
     console.error('Gemini exception:', err);
     return null;
@@ -212,7 +217,7 @@ export async function POST(req: NextRequest) {
   const apiKey = process.env.GOOGLE_AI_KEY;
 
   if (apiKey) {
-    result = await scanWithGemini(imageData, processedData, apiKey);
+    result = await scanWithGemini(imageData, apiKey);
   }
 
   if (!result) {
