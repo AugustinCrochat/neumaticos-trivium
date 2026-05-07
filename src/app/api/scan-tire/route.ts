@@ -77,46 +77,32 @@ async function scanWithGemini(
   apiKey: string,
 ): Promise<Candidate | null> {
   try {
-    let res: Response;
-    let attempts = 0;
-    const maxAttempts = 3;
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro:generateContent?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{
+            parts: [
+              { text: "Analyze this tire sidewall image carefully. Identify the tire size markings (e.g., 205/55R16). Provide ONLY the detected size. If not found, say NO_ENCONTRADO." },
+              { inline_data: { mime_type: 'image/jpeg', data: imageData } }
+            ],
+          }],
+          generationConfig: { 
+            temperature: 0,
+          },
+        }),
+      },
+    );
 
-    while (attempts < maxAttempts) {
-      res = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            contents: [{
-              parts: [
-                { text: "Tire size? (e.g. 205/55R16). Answer only with the size or NO_ENCONTRADO." },
-                { inline_data: { mime_type: 'image/jpeg', data: imageData } }
-              ],
-            }],
-            generationConfig: { 
-              temperature: 0,
-            },
-          }),
-        },
-      );
-
-      if (res.status === 429 && attempts < maxAttempts - 1) {
-        attempts++;
-        console.log(`Gemini 429, retry ${attempts}...`);
-        await new Promise(r => setTimeout(r, 1500 * attempts));
-        continue;
-      }
-      break;
+    if (!res.ok) {
+      const errText = await res.text();
+      console.error('Gemini error:', res.status, errText);
+      return { width: -res.status, profile: 0, rim: 0, score: 0, raw: errText }; 
     }
 
-    if (!res!.ok) {
-      const errText = await res!.text();
-      console.error('Gemini error:', res!.status, errText);
-      return { width: -res!.status, profile: 0, rim: 0, score: 0, raw: errText }; 
-    }
-
-    const data = await res!.json();
+    const data = await res.json();
     const text: string = (data.candidates?.[0]?.content?.parts?.[0]?.text ?? '').trim();
     console.log('Gemini →', text);
 
