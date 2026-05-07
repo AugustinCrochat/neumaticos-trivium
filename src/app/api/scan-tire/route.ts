@@ -213,14 +213,23 @@ export async function POST(req: NextRequest) {
   const processedData = (base64Processed ?? base64Image).replace(/^data:image\/[a-z]+;base64,/, '');
 
   let result: Candidate | null = null;
-  const apiKey = process.env.GOOGLE_AI_KEY;
+  const apiKey = process.env.GOOGLE_AI_KEY || process.env.GEMINI_API_KEY;
 
-  if (apiKey) {
-    result = await scanWithGemini(imageData, apiKey);
+  if (!apiKey) {
+    return NextResponse.json({ 
+      found: false, 
+      error: "debug", 
+      status: 401, 
+      raw: "Configuración incompleta: GOOGLE_AI_KEY no definida." 
+    });
   }
 
-  if (!result) {
-    result = await scanWithOcrSpace(base64Image);
+  result = await scanWithGemini(imageData, apiKey);
+
+  if (!result || result.width < 0) {
+    // If Gemini fails or returns error, try OCR Space as last resort
+    const ocrResult = await scanWithOcrSpace(base64Image);
+    if (ocrResult) result = ocrResult;
   }
 
   // Scans are only saved when confirmed (either via AI success or manual fallback)
