@@ -78,7 +78,7 @@ async function scanWithGemini(
 ): Promise<Candidate | null> {
   try {
     const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -105,7 +105,11 @@ Si no encuentras la medida, devuelve: {"error": "no encontrado"}`
     );
 
     if (!res.ok) {
-      console.error('Gemini error:', res.status, await res.text());
+      const errText = await res.text();
+      console.error('Gemini error:', res.status, errText);
+      if (res.status === 429) {
+        return { width: -429, profile: 0, rim: 0, score: 0 }; 
+      }
       return null;
     }
 
@@ -229,6 +233,10 @@ export async function POST(req: NextRequest) {
   // Only save failed scans immediately — successful ones are saved when user confirms
   if (!result) {
     saveDatasetImage(imageData, null).catch(console.error);
+  }
+
+  if (result?.width === -429) {
+    return NextResponse.json({ found: false, error: "quota" });
   }
 
   if (result) {

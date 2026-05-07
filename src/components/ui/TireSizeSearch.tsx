@@ -244,13 +244,13 @@ export function TireSizeSearch({
         body: JSON.stringify({ base64Image: images.original, base64Processed: images.processed }),
         signal: controller.signal,
       });
-      return res.json() as Promise<{ found: boolean; width?: number; profile?: number; rim?: number }>;
+      return res.json() as Promise<{ found: boolean; width?: number; profile?: number; rim?: number; error?: string }>;
     } finally {
       clearTimeout(timeout);
     }
   }
 
-  // Burst: 2 attempts with camera live, stop only when done
+  // Burst: Single attempt to save API quota (Free Tier has low RPM)
   async function captureAndScan() {
     if (!videoRef.current || isScanning) return;
     setIsScanning(true);
@@ -259,25 +259,29 @@ export function TireSizeSearch({
     let found = false;
     let images = { original: "", processed: "" };
 
-    for (let attempt = 1; attempt <= 2; attempt++) {
-      setScanProgress(attempt === 1 ? "Analizando..." : "Segundo intento...");
-      try {
-        images = captureFrame();
-        const data = await tryScan(images);
-        if (data.found && data.width) {
-          setPendingScan({ width: data.width!, profile: data.profile!, rim: data.rim! });
-          setPendingImages(images);
-          setScanError(null);
-          found = true;
-          break;
-        }
-      } catch { /* network error — try next */ }
-
-      if (attempt < 2) await new Promise(r => setTimeout(r, 1200));
+    setScanProgress("Analizando...");
+    try {
+      images = captureFrame();
+      const data = await tryScan(images);
+      if (data.found && data.width) {
+        setPendingScan({ width: data.width!, profile: data.profile!, rim: data.rim! });
+        setPendingImages(images);
+        setScanError(null);
+        found = true;
+      } else if (data.error === "quota") {
+        setScanError("La IA está saturada. Por favor, esperá 1 minuto y volvé a intentar.");
+        found = true; 
+      }
+    } catch (err: any) {
+      console.error(err);
+      if (err.name === 'AbortError') {
+        setScanError("La IA tardó demasiado. Probá de nuevo con mejor luz.");
+        found = true;
+      }
     }
 
     if (!found) {
-      setScanError("No se detectó la medida.");
+      setScanError("No pudimos detectar la medida automáticamente.");
       setLastImage(images.original);
     }
     stopCamera();
