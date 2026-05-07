@@ -249,14 +249,29 @@ export async function POST(req: NextRequest) {
 
   if (!result || result.width < 0) {
     const ocrResult = await scanWithOcrSpace(base64Image);
-    if (ocrResult) result = ocrResult;
+    if (ocrResult) {
+      result = ocrResult;
+    } else if (base64Processed) {
+      const ocrProcessedResult = await scanWithOcrSpace(base64Processed);
+      if (ocrProcessedResult) result = ocrProcessedResult;
+    }
   }
 
   if (result && result.width < 0) {
+    const status = Math.abs(result.width);
+    if (status === 429) {
+      return NextResponse.json({
+        found: false,
+        error: "quota",
+        status: 429,
+        message: "Se agotó temporalmente la cuota de IA. Esperá 1 minuto y probá de nuevo.",
+      });
+    }
+
     return NextResponse.json({ 
       found: false, 
       error: "debug", 
-      status: Math.abs(result.width),
+      status,
       raw: result.raw 
     });
   }
