@@ -193,8 +193,19 @@ async function saveDatasetImage(imageData: string, result: Candidate | null) {
 }
 
 export async function POST(req: NextRequest) {
-  const { base64Image, base64Processed } = await req.json();
+  const { base64Image, base64Processed, confirmLabel } = await req.json();
   const imageData = base64Image.replace(/^data:image\/[a-z]+;base64,/, '');
+
+  // Confirmation-only mode: user verified the result — save with human-validated label
+  if (confirmLabel) {
+    const [w, p, r] = String(confirmLabel).split('-').map(Number);
+    const confirmed = (!isNaN(w) && !isNaN(p) && !isNaN(r))
+      ? { width: w, profile: p, rim: r, score: 0 }
+      : null;
+    saveDatasetImage(imageData, confirmed).catch(console.error);
+    return NextResponse.json({ ok: true });
+  }
+
   const processedData = (base64Processed ?? base64Image).replace(/^data:image\/[a-z]+;base64,/, '');
 
   let result: Candidate | null = null;
@@ -207,12 +218,14 @@ export async function POST(req: NextRequest) {
   if (!result) {
     result = await scanWithOcrSpace(base64Image);
   }
-  
-  // Guardamos la imagen asincrónicamente
-  saveDatasetImage(imageData, result).catch(console.error);
+
+  // Only save failed scans immediately — successful ones are saved when user confirms
+  if (!result) {
+    saveDatasetImage(imageData, null).catch(console.error);
+  }
 
   if (result) {
-      return NextResponse.json({ found: true, width: result.width, profile: result.profile, rim: result.rim });
+    return NextResponse.json({ found: true, width: result.width, profile: result.profile, rim: result.rim });
   }
 
   return NextResponse.json({ found: false });

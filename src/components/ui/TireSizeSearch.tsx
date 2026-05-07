@@ -49,6 +49,8 @@ export function TireSizeSearch({
   const [scanError, setScanError] = useState<string | null>(null);
   const [lastImage, setLastImage] = useState<string | null>(null);
   const [showRotateHint, setShowRotateHint] = useState(false);
+  const [pendingScan, setPendingScan] = useState<{ width: number; profile: number; rim: number } | null>(null);
+  const [pendingImages, setPendingImages] = useState<{ original: string; processed: string } | null>(null);
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -221,17 +223,31 @@ export function TireSizeSearch({
     const cropH = Math.max(1, Math.round((rawBot - rawTop) * s));
     const cropW = fullW;
 
-    // --- Image 1: cropped original (grayscale + contrast boost) ---
+    // --- Image 1: cropped original (grayscale + contrast boost + unsharp mask) ---
     const origCanvas = document.createElement("canvas");
     origCanvas.width = cropW;
     origCanvas.height = cropH;
     const origCtx = origCanvas.getContext("2d")!;
     origCtx.drawImage(fullCanvas, 0, cropY, cropW, cropH, 0, 0, cropW, cropH);
     const origImg = origCtx.getImageData(0, 0, cropW, cropH);
+    const origGray = new Float32Array(cropW * cropH);
     for (let i = 0; i < origImg.data.length; i += 4) {
       const g = 0.299 * origImg.data[i] + 0.587 * origImg.data[i + 1] + 0.114 * origImg.data[i + 2];
-      const b = Math.min(255, Math.max(0, (g - 128) * 1.8 + 128));
-      origImg.data[i] = origImg.data[i + 1] = origImg.data[i + 2] = b;
+      origGray[i >> 2] = Math.min(255, Math.max(0, (g - 128) * 1.8 + 128));
+    }
+    // 3×3 laplacian unsharp mask on contrast-boosted gray
+    for (let i = 0; i < origImg.data.length; i += 4) {
+      const idx = i >> 2;
+      const ox = idx % cropW, oy = Math.floor(idx / cropW);
+      let v = origGray[idx];
+      if (ox > 0 && ox < cropW - 1 && oy > 0 && oy < cropH - 1) {
+        v = Math.min(255, Math.max(0,
+          5 * origGray[idx] - origGray[idx - 1] - origGray[idx + 1]
+          - origGray[idx - cropW] - origGray[idx + cropW]
+        ));
+      }
+      origImg.data[i] = origImg.data[i + 1] = origImg.data[i + 2] = v;
+      origImg.data[i + 3] = 255;
     }
     origCtx.putImageData(origImg, 0, 0);
 
@@ -248,6 +264,16 @@ export function TireSizeSearch({
     const gray = new Float32Array(W * H);
     for (let i = 0; i < procImg.data.length; i += 4) {
       gray[i >> 2] = 0.299 * procImg.data[i] + 0.587 * procImg.data[i + 1] + 0.114 * procImg.data[i + 2];
+    }
+
+    // 3×3 laplacian unsharp mask — sharpens embossed text before Sobel
+    for (let y = 1; y < H - 1; y++) {
+      for (let x = 1; x < W - 1; x++) {
+        const idx = y * W + x;
+        gray[idx] = Math.min(255, Math.max(0,
+          5 * gray[idx] - gray[idx - 1] - gray[idx + 1] - gray[idx - W] - gray[idx + W]
+        ));
+      }
     }
 
     // Sobel edge detection
@@ -331,10 +357,8 @@ export function TireSizeSearch({
         images = captureFrame();
         const data = await tryScan(images);
         if (data.found && data.width) {
-          setWidth(String(data.width));
-          setProfile(String(data.profile));
-          setRim(String(data.rim));
-          setActiveDropdown(null);
+          setPendingScan({ width: data.width!, profile: data.profile!, rim: data.rim! });
+          setPendingImages(images);
           setScanError(null);
           found = true;
           break;
@@ -351,6 +375,33 @@ export function TireSizeSearch({
     stopCamera();
     setIsScanning(false);
     setScanProgress("");
+  }
+
+  // Confirm the pending scan: save confirmed image to dataset, then redirect
+  function confirmScan() {
+    const ps = pendingScan!;
+    const pi = pendingImages!;
+    // Fire-and-forget: save to dataset with human-confirmed label
+    fetch("/api/scan-tire", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        base64Image: pi.original,
+        confirmLabel: `${ps.width}-${ps.profile}-${ps.rim}`,
+      }),
+    }).catch(console.error);
+    // Set values — triggers auto-search useEffect
+    setWidth(String(ps.width));
+    setProfile(String(ps.profile));
+    setRim(String(ps.rim));
+    setActiveDropdown(null);
+    setPendingScan(null);
+    setPendingImages(null);
+  }
+
+  function cancelScan() {
+    setPendingScan(null);
+    setPendingImages(null);
   }
 
   // Cleanup on unmount
@@ -608,6 +659,38 @@ export function TireSizeSearch({
           </button>
         </div>
 
+        {/* Confirmation card: shown after a successful scan, before redirecting */}
+        {pendingScan && (
+          <div className="bg-navy-800 p-5 rounded-xl border border-orange-500/60 flex flex-col items-center gap-4 animate-in fade-in zoom-in duration-200">
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 rounded-full bg-orange-400 animate-pulse" />
+              <p className="text-white/70 text-xs font-semibold uppercase tracking-widest">Medida detectada</p>
+            </div>
+            <p className="text-orange-400 font-mono text-3xl font-black tracking-wider">
+              {pendingScan.width}/{pendingScan.profile} R{pendingScan.rim}
+            </p>
+            <div className="flex gap-2 w-full">
+              <button
+                onClick={cancelScan}
+                type="button"
+                className="flex-1 bg-navy-700 hover:bg-navy-600 text-white/70 hover:text-white font-bold py-3 rounded-xl text-sm transition-colors border border-navy-600"
+              >
+                Corregir
+              </button>
+              <button
+                onClick={confirmScan}
+                type="button"
+                className="flex-[2] bg-orange-500 hover:bg-orange-600 text-white font-black py-3 px-5 rounded-xl text-sm transition-colors shadow-lg shadow-orange-500/25 flex items-center justify-center gap-2"
+              >
+                Buscar estas medidas
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        )}
+
         {scanError && lastImage && (
           <div className="bg-navy-800 p-4 rounded-xl border border-orange-500/30 flex flex-col items-center gap-3 animate-in fade-in zoom-in duration-300">
             <p className="text-orange-400 font-bold text-sm text-center">
@@ -620,24 +703,25 @@ export function TireSizeSearch({
                </p>
             </div>
             <button
-              onClick={async () => {
-                const waText = encodeURIComponent(`Hola Trivium ${selectedBranch.shortName}! Estoy intentando buscar mis neumáticos pero el escáner no los detecta. ¿Me ayudan a identificar la medida con esta foto?`);
+              onClick={() => {
+                const waText = encodeURIComponent(`Hola Trivium ${selectedBranch.shortName}! Estoy intentando buscar mis neumáticos pero el escáner no los detecta. Enseguida les adjunto la foto que acabo de tomar para que me ayuden a identificar la medida.`);
+                
+                // 1. Forzar la descarga de la imagen a la galería/descargas del usuario
                 try {
-                  const res = await fetch(lastImage);
-                  const blob = await res.blob();
-                  const file = new File([blob], "neumatico.jpg", { type: "image/jpeg" });
-                  if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                    await navigator.share({
-                      files: [file],
-                      title: "Trivium - Medida Neumático",
-                      text: `Hola Trivium ${selectedBranch.shortName}! Estoy buscando esta medida de neumático.`,
-                    });
-                  } else {
-                    window.open(`https://wa.me/${selectedBranch.whatsapp}?text=${waText}`, "_blank");
-                  }
-                } catch (e) {
-                  window.open(`https://wa.me/${selectedBranch.whatsapp}?text=${waText}`, "_blank");
+                  const a = document.createElement("a");
+                  a.href = lastImage;
+                  a.download = "mi-neumatico-trivium.jpg";
+                  document.body.appendChild(a);
+                  a.click();
+                  document.body.removeChild(a);
+                } catch (err) {
+                  console.error("Error downloading image", err);
                 }
+
+                // 2. Abrir WhatsApp directamente con el número de la sucursal
+                setTimeout(() => {
+                  window.open(`https://wa.me/${selectedBranch.whatsapp}?text=${waText}`, "_blank");
+                }, 300);
               }}
               type="button"
               className="w-full bg-[#25D366] hover:bg-[#128C7E] text-white font-bold py-3 rounded-lg flex items-center justify-center gap-2 transition-colors mt-2 text-sm shadow-lg shadow-[#25D366]/20"
