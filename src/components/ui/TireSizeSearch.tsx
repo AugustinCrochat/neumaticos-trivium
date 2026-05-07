@@ -165,18 +165,6 @@ export function TireSizeSearch({
     setShowScanner(true);
     setScanError(null);
 
-    // Get list of cameras if not already fetched
-    if (cameras.length === 0) {
-      try {
-        const devices = await navigator.mediaDevices.enumerateDevices();
-        const videoDevices = devices.filter(d => d.kind === "videoinput");
-        setCameras(videoDevices);
-      } catch (err) {
-        console.error("Error listing devices", err);
-      }
-    }
-
-    // Hide browser nav bar on Android Chrome
     try {
       const el = document.documentElement;
       if (el.requestFullscreen) await el.requestFullscreen();
@@ -184,15 +172,20 @@ export function TireSizeSearch({
     } catch { /* iOS ignores */ }
 
     try {
-      const selectedCamera = cameras[cameraIndex];
-      const constraints: any = {
-        video: {
-          facingMode: selectedCamera ? undefined : "environment",
-          deviceId: selectedCamera ? { exact: selectedCamera.deviceId } : undefined,
-          width: { ideal: 1920 },
-          height: { ideal: 1080 },
-          zoom: { ideal: 1 },
-        }
+      // Use local var to avoid stale state (setCameras is async)
+      let currentCameras = cameras;
+      if (currentCameras.length === 0) {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        currentCameras = devices.filter(d => d.kind === "videoinput");
+        setCameras(currentCameras);
+      }
+
+      const selectedCamera = currentCameras[cameraIndex];
+      // Minimal constraints — let the browser use native camera defaults for maximum FOV
+      const constraints: MediaStreamConstraints = {
+        video: selectedCamera
+          ? { deviceId: { exact: selectedCamera.deviceId } }
+          : { facingMode: "environment" }
       };
 
       const stream = await navigator.mediaDevices.getUserMedia(constraints);
@@ -201,15 +194,12 @@ export function TireSizeSearch({
 
       const track = stream.getVideoTracks()[0];
       const capabilities = track.getCapabilities() as any;
-      if (capabilities.torch) {
-        setHasTorch(true);
-      }
+      if (capabilities.torch) setHasTorch(true);
       if (capabilities.zoom) {
         setHasZoom(true);
         const minZoom = capabilities.zoom.min || 1;
         setZoomCapabilities({ min: minZoom, max: capabilities.zoom.max });
         setZoomLevel(minZoom);
-        // Force minimum zoom immediately so the browser doesn't open a telephoto lens
         try {
           await track.applyConstraints({ advanced: [{ zoom: minZoom }] } as any);
         } catch { /* not all browsers support this */ }
