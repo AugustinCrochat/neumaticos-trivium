@@ -569,11 +569,11 @@ export function TireSizeSearch({
             ) : (
               <>
                 <span>Reconocer medida con IA</span>
-                <span className="relative -ml-0.5 inline-flex w-4 h-4 items-center justify-center">
-                  <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                <span className="relative -ml-0.5 inline-flex w-5 h-5 items-center justify-center">
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12 2l2.4 5.6L20 10l-5.6 2.4L12 18l-2.4-5.6L4 10l5.6-2.4L12 2z" />
                   </svg>
-                  <svg className="absolute -bottom-0.5 -right-0.5 w-2 h-2" fill="currentColor" viewBox="0 0 24 24">
+                  <svg className="absolute -bottom-0.5 -right-0.5 w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12 2l2 4.8L19 9l-5 2.2L12 16l-2-4.8L5 9l5-2.2L12 2z" />
                   </svg>
                 </span>

@@ -59,7 +59,7 @@ export function Footer() {
             <ul className="space-y-2">
               {[
                 { href: "/catalogo", label: "Catálogo de neumáticos" },
-                { href: "/#servicios", label: "Servicios" },
+                { href: "/servicios", label: "Servicios" },
                 { href: "/blog", label: "Blog" },
                 { href: "/contacto", label: "Contacto" },
                 { href: "/sucursales", label: "Sucursales" },
