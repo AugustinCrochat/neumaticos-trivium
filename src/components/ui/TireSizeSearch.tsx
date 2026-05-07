@@ -52,11 +52,6 @@ export function TireSizeSearch({
   const [isScanning, setIsScanning] = useState(false);
   const [scanProgress, setScanProgress] = useState("");
   const [scanError, setScanError] = useState<string | null>(null);
-  const [lastImage, setLastImage] = useState<string | null>(null);
-  const [pendingScan, setPendingScan] = useState<{ width: number; profile: number; rim: number } | null>(null);
-  const [pendingImages, setPendingImages] = useState<{ original: string; processed: string } | null>(null);
-  const [isManualLabeling, setIsManualLabeling] = useState(false);
-  const [manualSize, setManualSize] = useState<{w: string, p: string, r: string}>({w: "", p: "", r: ""});
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -97,27 +92,6 @@ export function TireSizeSearch({
   function handleSearch() {
     if (!width && !profile && !rim) return;
     router.push(`/buscar?medida=${width}-${profile}-r${rim}`);
-  }
-
-  function handleManualConfirm() {
-    if (!manualSize.w || !manualSize.p || !manualSize.r) return;
-    
-    const ps = { width: Number(manualSize.w), profile: Number(manualSize.p), rim: Number(manualSize.r) };
-    
-    // Save to dataset with labels
-    if (lastImage) {
-      fetch("/api/scan-tire", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          base64Image: lastImage, 
-          confirmLabel: `${ps.width}-${ps.profile}-${ps.rim}` 
-        })
-      }).catch(console.error);
-    }
-
-    // Redirect to results
-    router.push(`/buscar?medida=${ps.width}-${ps.profile}-r${ps.rim}`);
   }
 
   // Auto-search ONLY when all three are selected
@@ -287,9 +261,6 @@ export function TireSizeSearch({
     if (!videoRef.current || isScanning) return;
     setIsScanning(true);
     setScanError(null);
-    setLastImage(null);
-    setIsManualLabeling(false);
-    setManualSize({w: "", p: "", r: ""});
     let found = false;
     let images = { original: "", processed: "" };
 
@@ -298,8 +269,22 @@ export function TireSizeSearch({
       images = captureFrame();
       const data = await tryScan(images);
       if (data.found && data.width) {
-        setPendingScan({ width: data.width!, profile: data.profile!, rim: data.rim! });
-        setPendingImages(images);
+        const detected = { width: data.width!, profile: data.profile!, rim: data.rim! };
+        // Save detection sample in background and search immediately
+        fetch("/api/scan-tire", {
+          method: "POST",
+          keepalive: true,
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            base64Image: images.original,
+            base64Processed: images.processed,
+            confirmLabel: `${detected.width}-${detected.profile}-${detected.rim}`,
+          }),
+        }).catch(console.error);
+        setWidth(String(detected.width));
+        setProfile(String(detected.profile));
+        setRim(String(detected.rim));
+        setActiveDropdown(null);
         setScanError(null);
         found = true;
       } else if (data.error === "quota") {
@@ -319,39 +304,10 @@ export function TireSizeSearch({
 
     if (!found) {
       setScanError("No pudimos detectar la medida automáticamente.");
-      setLastImage(images.original);
     }
     stopCamera();
     setIsScanning(false);
     setScanProgress("");
-  }
-
-  // Confirm the pending scan: save confirmed image to dataset, then redirect
-  function confirmScan() {
-    const ps = pendingScan!;
-    const pi = pendingImages!;
-    // Fire-and-forget: save to dataset with human-confirmed label
-    fetch("/api/scan-tire", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        base64Image: pi.original,
-        base64Processed: pi.processed,
-        confirmLabel: `${ps.width}-${ps.profile}-${ps.rim}`,
-      }),
-    }).catch(console.error);
-    // Set values — triggers auto-search useEffect
-    setWidth(String(ps.width));
-    setProfile(String(ps.profile));
-    setRim(String(ps.rim));
-    setActiveDropdown(null);
-    setPendingScan(null);
-    setPendingImages(null);
-  }
-
-  function cancelScan() {
-    setPendingScan(null);
-    setPendingImages(null);
   }
 
   // Cleanup on unmount
@@ -600,136 +556,24 @@ export function TireSizeSearch({
           </button>
         </div>
 
-        {/* Confirmation card: shown after a successful scan, before redirecting */}
-        {pendingScan && (
-          <div className="bg-navy-800 p-5 rounded-xl border border-orange-500/60 flex flex-col items-center gap-4 animate-in fade-in zoom-in duration-200">
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-orange-400 animate-pulse" />
-              <p className="text-white/70 text-xs font-semibold uppercase tracking-widest">Medida detectada</p>
-            </div>
-            <p className="text-orange-400 font-mono text-3xl font-black tracking-wider">
-              {pendingScan.width}/{pendingScan.profile} R{pendingScan.rim}
-            </p>
-            <div className="flex gap-2 w-full">
-              <button
-                onClick={cancelScan}
-                type="button"
-                className="flex-1 bg-navy-700 hover:bg-navy-600 text-white/70 hover:text-white font-bold py-3 rounded-xl text-sm transition-colors border border-navy-600"
-              >
-                Corregir
-              </button>
-              <button
-                onClick={confirmScan}
-                type="button"
-                className="flex-[2] bg-orange-500 hover:bg-orange-600 text-white font-black py-3 px-5 rounded-xl text-sm transition-colors shadow-lg shadow-orange-500/25 flex items-center justify-center gap-2"
-              >
-                Buscar estas medidas
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
-            </div>
-          </div>
-        )}
-
-        {scanError && lastImage && (
+        {scanError && (
           <div className="bg-navy-800 p-5 rounded-xl border border-orange-500/30 flex flex-col gap-4 animate-in fade-in zoom-in duration-300">
-            <div className="flex gap-4 items-center">
-               <img src={lastImage} className="w-20 h-20 rounded-lg object-cover border border-white/10 shadow-lg" alt="Foto tomada" />
-               <div className="flex-1">
-                 <p className="text-orange-400 font-bold text-sm">No pudimos leer la medida.</p>
-                 <p className="text-white/60 text-xs leading-relaxed mt-1">
-                   Ingresala a mano para buscar y ayudarnos a entrenar nuestra IA con esta foto.
-                 </p>
-               </div>
+            <div>
+              <p className="text-orange-400 font-bold text-sm">No pudimos leer la medida.</p>
+              <p className="text-white/70 text-xs leading-relaxed mt-1">
+                {scanError}
+              </p>
             </div>
-
-            {!isManualLabeling ? (
-              <div className="flex flex-col gap-2">
-                <button
-                  onClick={() => setIsManualLabeling(true)}
-                  type="button"
-                  className="w-full bg-navy-700 hover:bg-navy-600 text-orange-400 font-bold py-3 rounded-lg text-sm transition-colors border border-navy-600 flex items-center justify-center gap-2"
-                >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                  </svg>
-                  Ingresar medida manualmente
-                </button>
-                <div className="flex items-center gap-2 my-1">
-                  <div className="h-px bg-white/10 flex-1" />
-                  <span className="text-[10px] text-white/30 uppercase font-bold">o también</span>
-                  <div className="h-px bg-white/10 flex-1" />
-                </div>
-                <button
-                  onClick={() => {
-                    const waText = encodeURIComponent(`Hola Trivium ${selectedBranch.shortName}! Estoy intentando buscar mis neumáticos pero el escáner no los detecta. Enseguida les adjunto la foto que acabo de tomar para que me ayuden a identificar la medida.`);
-                    try {
-                      const a = document.createElement("a");
-                      a.href = lastImage;
-                      a.download = "mi-neumatico-trivium.jpg";
-                      document.body.appendChild(a);
-                      a.click();
-                      document.body.removeChild(a);
-                    } catch (err) { console.error(err); }
-                    setTimeout(() => {
-                      window.open(`https://wa.me/${selectedBranch.whatsapp}?text=${waText}`, "_blank");
-                    }, 300);
-                  }}
-                  type="button"
-                  className="w-full bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#25D366] font-bold py-3 rounded-lg flex items-center justify-center gap-2 transition-colors text-sm border border-[#25D366]/30"
-                >
-                  Consultar por WhatsApp
-                </button>
-              </div>
-            ) : (
-              <div className="flex flex-col gap-3 animate-in fade-in slide-in-from-top-2">
-                <div className="grid grid-cols-3 gap-2">
-                  <input 
-                    type="number" 
-                    placeholder="Ancho"
-                    value={manualSize.w}
-                    onChange={(e) => setManualSize({...manualSize, w: e.target.value})}
-                    className="bg-navy-900 border border-navy-700 text-white rounded-lg p-2.5 text-center text-sm font-bold focus:border-orange-500 outline-none"
-                  />
-                  <input 
-                    type="number" 
-                    placeholder="Perfil"
-                    value={manualSize.p}
-                    onChange={(e) => setManualSize({...manualSize, p: e.target.value})}
-                    className="bg-navy-900 border border-navy-700 text-white rounded-lg p-2.5 text-center text-sm font-bold focus:border-orange-500 outline-none"
-                  />
-                  <input 
-                    type="number" 
-                    placeholder="Rodado"
-                    value={manualSize.r}
-                    onChange={(e) => setManualSize({...manualSize, r: e.target.value})}
-                    className="bg-navy-900 border border-navy-700 text-white rounded-lg p-2.5 text-center text-sm font-bold focus:border-orange-500 outline-none"
-                  />
-                </div>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => setIsManualLabeling(false)}
-                    className="flex-1 bg-navy-700 text-white/70 py-2.5 rounded-lg text-xs font-bold"
-                  >
-                    Volver
-                  </button>
-                  <button
-                    onClick={handleManualConfirm}
-                    disabled={!manualSize.w || !manualSize.p || !manualSize.r}
-                    className="flex-[2] bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white py-2.5 rounded-lg text-xs font-black uppercase tracking-wider"
-                  >
-                    Confirmar y Buscar
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-        )}
-
-        {scanError && !lastImage && (
-          <div className="bg-red-500/10 border border-red-500/20 text-red-500 text-xs px-3 py-2 rounded-lg text-center font-medium">
-            {scanError}
+            <button
+              onClick={() => {
+                const waText = encodeURIComponent(`Hola Trivium ${selectedBranch.shortName}! Estoy intentando buscar mis neumáticos pero el escáner no los detecta. ¿Me ayudan por favor? Ahora saco una foto nueva y se las envío por WhatsApp.`);
+                window.open(`https://wa.me/${selectedBranch.whatsapp}?text=${waText}`, "_blank");
+              }}
+              type="button"
+              className="w-full bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#25D366] font-bold py-3 rounded-lg flex items-center justify-center gap-2 transition-colors text-sm border border-[#25D366]/30"
+            >
+              Consultar por WhatsApp
+            </button>
           </div>
         )}
 

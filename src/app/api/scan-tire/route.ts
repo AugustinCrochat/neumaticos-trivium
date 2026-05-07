@@ -280,7 +280,8 @@ export async function POST(req: NextRequest) {
     const confirmed = (!isNaN(w) && !isNaN(p) && !isNaN(r))
       ? { width: w, profile: p, rim: r, score: 0 }
       : null;
-    saveDatasetSample(base64Image, confirmed, base64Processed).catch(console.error);
+    // Important in serverless: wait for Blob writes before returning.
+    await saveDatasetSample(base64Image, confirmed, base64Processed);
     return NextResponse.json({ ok: true });
   }
 
