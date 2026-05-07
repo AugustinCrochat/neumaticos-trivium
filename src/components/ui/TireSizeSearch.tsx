@@ -57,13 +57,10 @@ export function TireSizeSearch({
   const streamRef = useRef<MediaStream | null>(null);
   const [hasTorch, setHasTorch] = useState(false);
   const [torchOn, setTorchOn] = useState(false);
-  const [hasZoom, setHasZoom] = useState(false);
-  const [zoomLevel, setZoomLevel] = useState(1);
-  const [zoomCapabilities, setZoomCapabilities] = useState<{ min: number; max: number } | null>(null);
   const [guideMode, setGuideMode] = useState<"full" | "macro">("full");
 
   const [cameras, setCameras] = useState<MediaDeviceInfo[]>([]);
-  const [cameraIndex, setCameraIndex] = useState(0);
+  const [cameraIndex, setCameraIndex] = useState(-1);
 
   const availableWidths = useMemo(
     () => unique(PRODUCTS.map((p) => p.size.width)),
@@ -180,7 +177,7 @@ export function TireSizeSearch({
         setCameras(currentCameras);
       }
 
-      const selectedCamera = currentCameras[cameraIndex];
+      const selectedCamera = cameraIndex >= 0 ? currentCameras[cameraIndex] : undefined;
       // Minimal constraints — let the browser use native camera defaults for maximum FOV
       const constraints: MediaStreamConstraints = {
         video: selectedCamera
@@ -196,10 +193,7 @@ export function TireSizeSearch({
       const capabilities = track.getCapabilities() as any;
       if (capabilities.torch) setHasTorch(true);
       if (capabilities.zoom) {
-        setHasZoom(true);
         const minZoom = capabilities.zoom.min || 1;
-        setZoomCapabilities({ min: minZoom, max: capabilities.zoom.max });
-        setZoomLevel(minZoom);
         try {
           await track.applyConstraints({ advanced: [{ zoom: minZoom }] } as any);
         } catch { /* not all browsers support this */ }
@@ -215,7 +209,7 @@ export function TireSizeSearch({
   async function switchCamera() {
     if (cameras.length < 2) return;
     const nextIndex = (cameraIndex + 1) % cameras.length;
-    setCameraIndex(nextIndex);
+    setCameraIndex(nextIndex); // now always >= 0, explicit device selection
     
     // Stop current
     if (streamRef.current) {
@@ -248,17 +242,6 @@ export function TireSizeSearch({
       setTorchOn(t => !t);
     } catch (err) {
       console.error("Error toggling torch", err);
-    }
-  }
-
-  async function handleZoom(level: number) {
-    if (!streamRef.current) return;
-    const track = streamRef.current.getVideoTracks()[0];
-    try {
-      await track.applyConstraints({ advanced: [{ zoom: level }] } as any);
-      setZoomLevel(level);
-    } catch (err) {
-      console.error("Error applying zoom", err);
     }
   }
 
@@ -487,31 +470,6 @@ export function TireSizeSearch({
             </div>
 
             {/* Zoom Control */}
-            {hasZoom && zoomCapabilities && (
-              <div className="absolute right-6 top-1/2 -translate-y-1/2 flex flex-col items-center gap-6 z-30">
-                <div className="flex flex-col items-center gap-3 bg-black/40 backdrop-blur-md p-2 rounded-full border border-white/10">
-                  <button 
-                    onClick={() => handleZoom(Math.min(zoomLevel + 0.5, zoomCapabilities.max))}
-                    className="w-10 h-10 rounded-full flex items-center justify-center text-white hover:bg-white/10 active:bg-white/20"
-                  >
-                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
-                  </button>
-                  <div className="h-32 w-1 bg-white/20 rounded-full relative">
-                    <div 
-                      className="absolute bottom-0 left-0 right-0 bg-orange-500 rounded-full transition-all duration-200"
-                      style={{ height: `${((zoomLevel - zoomCapabilities.min) / (zoomCapabilities.max - zoomCapabilities.min)) * 100}%` }}
-                    />
-                  </div>
-                  <button 
-                    onClick={() => handleZoom(Math.max(zoomLevel - 0.5, zoomCapabilities.min))}
-                    className="w-10 h-10 rounded-full flex items-center justify-center text-white hover:bg-white/10 active:bg-white/20"
-                  >
-                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" /></svg>
-                  </button>
-                </div>
-                <span className="text-white text-[10px] font-bold bg-orange-600 px-2 py-1 rounded-md shadow-lg">{zoomLevel.toFixed(1)}x</span>
-              </div>
-            )}
           </div>
 
           {/* Botón de captura + estado */}
