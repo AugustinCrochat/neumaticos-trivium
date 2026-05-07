@@ -83,21 +83,19 @@ async function scanWithGemini(
 
     while (attempts < maxAttempts) {
       res = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${apiKey}`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             contents: [{
               parts: [
-                { text: "I need to know the tire size shown in this image. Please look for the technical markings on the sidewall, typically in the format: WIDTH/PROFILE R RIM (e.g., 205/55 R16). Answer ONLY with the detected size. If you cannot find it, answer NO_ENCONTRADO." },
+                { text: "Analyze this tire sidewall image carefully. I need to identify the tire size. Look for a sequence like 205/55R16 or 245/40R18. These numbers are often embossed on the black rubber. First, describe the numbers you see to ensure accuracy, and finally provide the size in the format WIDTH/PROFILE R RIM. If no size is found, state NO_ENCONTRADO." },
                 { inline_data: { mime_type: 'image/jpeg', data: imageData } }
               ],
             }],
             generationConfig: { 
               temperature: 0,
-              topP: 1,
-              topK: 1
             },
             safetySettings: [
               { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
