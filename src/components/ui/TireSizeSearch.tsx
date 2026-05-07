@@ -384,7 +384,7 @@ export function TireSizeSearch({
             <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
               <div
                 className="rounded-full border-4 border-orange-500 border-dashed flex items-center justify-center animate-[spin_20s_linear_infinite]"
-                style={{ width: '90vmin', height: '90vmin', boxShadow: '0 0 0 9999px rgba(0,0,0,0.55)' }}
+                style={{ width: '90vmin', height: '90vmin', boxShadow: '0 0 0 9999px #000' }}
               ></div>
               
               <div className="absolute flex items-center justify-center top-1/2 -translate-y-1/2">
