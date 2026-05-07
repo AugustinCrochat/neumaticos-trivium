@@ -173,8 +173,18 @@ export function TireSizeSearch({
           <div className="absolute top-0 left-0 right-0 p-4 z-20 flex justify-between items-center bg-gradient-to-b from-black/80 to-transparent">
             <button onClick={stopCamera} className="bg-white/20 text-white px-4 py-2 rounded-full font-bold text-sm">Cancelar</button>
             {hasTorch && (
-              <button onClick={toggleTorch} className={`px-5 py-2.5 rounded-full font-bold text-sm ${torchOn ? 'bg-yellow-400 text-black' : 'bg-yellow-400/20 text-yellow-300'}`}>
-                {torchOn ? 'Flash ON' : 'Flash'}
+              <button 
+                onClick={toggleTorch} 
+                className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-black text-xs sm:text-sm transition-all shadow-lg border-2 ${
+                  torchOn 
+                    ? 'bg-yellow-400 text-black border-yellow-300 shadow-yellow-400/50 scale-105' 
+                    : 'bg-black/40 text-yellow-400 border-yellow-400/50 backdrop-blur-md'
+                }`}
+              >
+                <svg className="w-4 h-4" fill={torchOn ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                {torchOn ? 'FLASH ENCENDIDO' : 'ACTIVAR FLASH'}
               </button>
             )}
           </div>
@@ -189,19 +199,25 @@ export function TireSizeSearch({
                 Centrá el neumático
               </span>
             </div>
-            {!isScanning && (
-              <div className="absolute top-[75%] left-1/2 -translate-x-1/2 z-30">
-                <span className="text-white text-xs font-bold uppercase tracking-widest animate-pulse bg-black/50 px-4 py-2 rounded-full backdrop-blur-sm border border-white/10">
-                  Presioná para escanear
-                </span>
-              </div>
-            )}
           </div>
 
-          <div className="absolute bottom-0 left-0 right-0 pb-10 pt-6 z-20 flex flex-col items-center gap-4 bg-gradient-to-t from-black/80 to-transparent">
-            {isScanning && <span className="text-white/80 text-sm font-medium">{scanProgress}</span>}
-            <button onClick={captureAndScan} disabled={isScanning} className="w-20 h-20 rounded-full border-4 border-white/50 flex items-center justify-center active:scale-95 disabled:opacity-40">
-              {isScanning ? <svg className="w-8 h-8 text-white animate-spin" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg> : <div className="w-16 h-16 rounded-full bg-white" />}
+          <div className="absolute bottom-0 left-0 right-0 pb-12 pt-8 z-20 flex flex-col items-center gap-6 bg-gradient-to-t from-black/90 via-black/40 to-transparent">
+            {isScanning ? (
+              <span className="text-white/90 text-sm font-bold tracking-widest uppercase animate-pulse">{scanProgress}</span>
+            ) : (
+              <span className="text-white text-sm sm:text-base font-black uppercase tracking-[0.2em] animate-pulse bg-black/60 px-6 py-3 rounded-full backdrop-blur-md border border-white/20 whitespace-nowrap shadow-2xl">
+                Presioná para escanear
+              </span>
+            )}
+            <button onClick={captureAndScan} disabled={isScanning} className="w-20 h-20 rounded-full border-4 border-white/60 flex items-center justify-center active:scale-90 transition-transform disabled:opacity-40 shadow-2xl">
+              {isScanning ? (
+                <svg className="w-10 h-10 text-white animate-spin" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                </svg>
+              ) : (
+                <div className="w-16 h-16 rounded-full bg-white shadow-[0_0_20px_rgba(255,255,255,0.5)]" />
+              )}
             </button>
           </div>
         </div>
