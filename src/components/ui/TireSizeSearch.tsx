@@ -244,7 +244,7 @@ export function TireSizeSearch({
         body: JSON.stringify({ base64Image: images.original, base64Processed: images.processed }),
         signal: controller.signal,
       });
-      return res.json() as Promise<{ found: boolean; width?: number; profile?: number; rim?: number; error?: string }>;
+      return res.json() as Promise<{ found: boolean; width?: number; profile?: number; rim?: number; error?: string; status?: number }>;
     } finally {
       clearTimeout(timeout);
     }
@@ -268,8 +268,8 @@ export function TireSizeSearch({
         setPendingImages(images);
         setScanError(null);
         found = true;
-      } else if (data.error === "quota") {
-        setScanError("La IA está saturada. Por favor, esperá 1 minuto y volvé a intentar.");
+      } else if (data.error === "debug") {
+        setScanError(`Error de IA (Código ${data.status}). Probá de nuevo en un momento.`);
         found = true; 
       }
     } catch (err: any) {

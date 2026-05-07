@@ -102,10 +102,7 @@ Si no la encuentras, responde NO_ENCONTRADO.`
     if (!res.ok) {
       const errText = await res.text();
       console.error('Gemini error:', res.status, errText);
-      if (res.status === 429) {
-        return { width: -429, profile: 0, rim: 0, score: 0 }; 
-      }
-      return null;
+      return { width: -res.status, profile: 0, rim: 0, score: 0 }; // Return negative status as width for debugging
     }
 
     const data = await res.json();
@@ -226,8 +223,8 @@ export async function POST(req: NextRequest) {
     saveDatasetImage(imageData, null).catch(console.error);
   }
 
-  if (result?.width === -429) {
-    return NextResponse.json({ found: false, error: "quota" });
+  if (result && result.width < 0) {
+    return NextResponse.json({ found: false, error: "debug", status: Math.abs(result.width) });
   }
 
   if (result) {
