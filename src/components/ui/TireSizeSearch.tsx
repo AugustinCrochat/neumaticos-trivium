@@ -190,7 +190,8 @@ export function TireSizeSearch({
           facingMode: selectedCamera ? undefined : "environment",
           deviceId: selectedCamera ? { exact: selectedCamera.deviceId } : undefined,
           width: { ideal: 1920 },
-          height: { ideal: 1080 }
+          height: { ideal: 1080 },
+          zoom: { ideal: 1 },
         }
       };
 
@@ -205,8 +206,13 @@ export function TireSizeSearch({
       }
       if (capabilities.zoom) {
         setHasZoom(true);
-        setZoomCapabilities({ min: capabilities.zoom.min, max: capabilities.zoom.max });
-        setZoomLevel(capabilities.zoom.min || 1);
+        const minZoom = capabilities.zoom.min || 1;
+        setZoomCapabilities({ min: minZoom, max: capabilities.zoom.max });
+        setZoomLevel(minZoom);
+        // Force minimum zoom immediately so the browser doesn't open a telephoto lens
+        try {
+          await track.applyConstraints({ advanced: [{ zoom: minZoom }] } as any);
+        } catch { /* not all browsers support this */ }
       }
 
     } catch (err) {
