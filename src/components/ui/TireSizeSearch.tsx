@@ -178,10 +178,6 @@ export function TireSizeSearch({
       const track = stream.getVideoTracks()[0];
       if ((track.getCapabilities() as any).torch) {
         setHasTorch(true);
-        try {
-          await track.applyConstraints({ advanced: [{ torch: true }] } as any);
-          setTorchOn(true);
-        } catch { /* device accepted capability but rejects apply — ignore */ }
       }
 
     } catch (err) {
@@ -239,123 +235,32 @@ export function TireSizeSearch({
     const offsetXNative = Math.max(0, (natW - dispW / covScale) / 2);
     const offsetYNative = Math.max(0, (natH - dispH / covScale) / 2);
 
-    // Circular guide: diameter = 85vw, centered — crop its bounding square
-    const guideR = 0.425 * dispW;
-    const rawLeft = Math.max(0, offsetXNative + (dispW / 2 - guideR) / covScale);
-    const rawTop  = Math.max(0, offsetYNative + (dispH / 2 - guideR) / covScale);
-    const rawSize = Math.min(natW - rawLeft, natH - rawTop, (2 * guideR) / covScale);
+    // Rectangular guide: width = 92vw, height = 40vw, centered
+    const guideW = 0.92 * dispW;
+    const guideH = 0.40 * dispW; // Since height is 40vw, it's 0.40 of dispW
+
+    const rawLeft = Math.max(0, offsetXNative + (dispW - guideW) / 2 / covScale);
+    const rawTop  = Math.max(0, offsetYNative + (dispH - guideH) / 2 / covScale);
+    const rawWidth = Math.min(natW - rawLeft, guideW / covScale);
+    const rawHeight = Math.min(natH - rawTop, guideH / covScale);
+
     const cropX = Math.round(rawLeft * s);
     const cropY = Math.round(rawTop * s);
-    const cropW = Math.max(1, Math.min(fullW - cropX, Math.round(rawSize * s)));
-    const cropH = Math.max(1, Math.min(fullH - cropY, Math.round(rawSize * s)));
+    const cropW = Math.max(1, Math.round(rawWidth * s));
+    const cropH = Math.max(1, Math.round(rawHeight * s));
 
-    // --- Image 1: cropped original (grayscale + contrast boost + unsharp mask) ---
-    const origCanvas = document.createElement("canvas");
-    origCanvas.width = cropW;
-    origCanvas.height = cropH;
-    const origCtx = origCanvas.getContext("2d")!;
-    origCtx.drawImage(fullCanvas, cropX, cropY, cropW, cropH, 0, 0, cropW, cropH);
-    const origImg = origCtx.getImageData(0, 0, cropW, cropH);
-    const origGray = new Float32Array(cropW * cropH);
-    for (let i = 0; i < origImg.data.length; i += 4) {
-      const g = 0.299 * origImg.data[i] + 0.587 * origImg.data[i + 1] + 0.114 * origImg.data[i + 2];
-      origGray[i >> 2] = Math.min(255, Math.max(0, (g - 128) * 1.8 + 128));
-    }
-    // 3×3 laplacian unsharp mask on contrast-boosted gray
-    for (let i = 0; i < origImg.data.length; i += 4) {
-      const idx = i >> 2;
-      const ox = idx % cropW, oy = Math.floor(idx / cropW);
-      let v = origGray[idx];
-      if (ox > 0 && ox < cropW - 1 && oy > 0 && oy < cropH - 1) {
-        v = Math.min(255, Math.max(0,
-          5 * origGray[idx] - origGray[idx - 1] - origGray[idx + 1]
-          - origGray[idx - cropW] - origGray[idx + cropW]
-        ));
-      }
-      origImg.data[i] = origImg.data[i + 1] = origImg.data[i + 2] = v;
-      origImg.data[i + 3] = 255;
-    }
-    origCtx.putImageData(origImg, 0, 0);
+    // Extract the exact crop (raw color) without aggressive filters
+    const cropCanvas = document.createElement("canvas");
+    cropCanvas.width = cropW;
+    cropCanvas.height = cropH;
+    const cropCtx = cropCanvas.getContext("2d")!;
+    cropCtx.drawImage(fullCanvas, cropX, cropY, cropW, cropH, 0, 0, cropW, cropH);
 
-    // --- Image 2: Sobel edge detection + adaptive binarization ---
-    const procCanvas = document.createElement("canvas");
-    procCanvas.width = cropW;
-    procCanvas.height = cropH;
-    const procCtx = procCanvas.getContext("2d")!;
-    procCtx.drawImage(fullCanvas, cropX, cropY, cropW, cropH, 0, 0, cropW, cropH);
-    const procImg = procCtx.getImageData(0, 0, cropW, cropH);
-    const W = cropW, H = cropH;
-
-    // Grayscale pass
-    const gray = new Float32Array(W * H);
-    for (let i = 0; i < procImg.data.length; i += 4) {
-      gray[i >> 2] = 0.299 * procImg.data[i] + 0.587 * procImg.data[i + 1] + 0.114 * procImg.data[i + 2];
-    }
-
-    // 3×3 laplacian unsharp mask — sharpens embossed text before Sobel
-    for (let y = 1; y < H - 1; y++) {
-      for (let x = 1; x < W - 1; x++) {
-        const idx = y * W + x;
-        gray[idx] = Math.min(255, Math.max(0,
-          5 * gray[idx] - gray[idx - 1] - gray[idx + 1] - gray[idx - W] - gray[idx + W]
-        ));
-      }
-    }
-
-    // Sobel edge detection
-    const edges = new Float32Array(W * H);
-    for (let y = 1; y < H - 1; y++) {
-      for (let x = 1; x < W - 1; x++) {
-        const gx =
-          -gray[(y-1)*W+(x-1)] + gray[(y-1)*W+(x+1)]
-          - 2*gray[y*W+(x-1)] + 2*gray[y*W+(x+1)]
-          - gray[(y+1)*W+(x-1)] + gray[(y+1)*W+(x+1)];
-        const gy =
-          -gray[(y-1)*W+(x-1)] - 2*gray[(y-1)*W+x] - gray[(y-1)*W+(x+1)]
-          + gray[(y+1)*W+(x-1)] + 2*gray[(y+1)*W+x] + gray[(y+1)*W+(x+1)];
-        edges[y*W+x] = Math.min(255, Math.sqrt(gx*gx + gy*gy) * 0.5);
-      }
-    }
-
-    // Adaptive binarization via integral image (O(n), handles uneven lighting)
-    const integral = new Float64Array((W+1)*(H+1));
-    for (let y = 0; y < H; y++) {
-      for (let x = 0; x < W; x++) {
-        integral[(y+1)*(W+1)+(x+1)] =
-          gray[y*W+x]
-          + integral[y*(W+1)+(x+1)]
-          + integral[(y+1)*(W+1)+x]
-          - integral[y*(W+1)+x];
-      }
-    }
-    const HALF = 24; // 48×48 px neighborhood
-    const BIAS = 5;  // pixel must be BIAS points above local mean to be "white"
-    const binarized = new Uint8Array(W * H);
-    for (let y = 0; y < H; y++) {
-      for (let x = 0; x < W; x++) {
-        const x0 = Math.max(0, x-HALF), x1 = Math.min(W-1, x+HALF);
-        const y0 = Math.max(0, y-HALF), y1 = Math.min(H-1, y+HALF);
-        const area = (x1-x0+1)*(y1-y0+1);
-        const sum = integral[(y1+1)*(W+1)+(x1+1)]
-                  - integral[y0*(W+1)+(x1+1)]
-                  - integral[(y1+1)*(W+1)+x0]
-                  + integral[y0*(W+1)+x0];
-        binarized[y*W+x] = gray[y*W+x] > (sum / area) + BIAS ? 255 : 0;
-      }
-    }
-
-    // Combine: white if strong Sobel edge OR adaptive binarization says bright
-    for (let i = 0; i < procImg.data.length; i += 4) {
-      const idx = i >> 2;
-      const v = Math.max(edges[idx] > 40 ? 255 : 0, binarized[idx]);
-      procImg.data[i] = procImg.data[i+1] = procImg.data[i+2] = v;
-      procImg.data[i+3] = 255;
-    }
-    procCtx.putImageData(procImg, 0, 0);
+    const colorJpeg = cropCanvas.toDataURL("image/jpeg", 0.90);
 
     return {
-      original: origCanvas.toDataURL("image/jpeg", 0.90),
-      processed: procCanvas.toDataURL("image/jpeg", 0.90),
+      original: colorJpeg,
+      processed: colorJpeg,
     };
   }
 
@@ -489,13 +394,14 @@ export function TireSizeSearch({
             />
 
             {/* Guía circular: centrar el neumático completo */}
+            {/* Guía rectangular: centrar el neumático horizontalmente */}
             <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
               <div
-                className="rounded-full border-2 border-orange-500 flex items-end justify-center pb-5"
-                style={{ width: '85vw', height: '85vw', boxShadow: '0 0 0 9999px rgba(0,0,0,0.55)' }}
+                className="rounded-3xl border-2 border-orange-500 flex items-end justify-center pb-4"
+                style={{ width: '92vw', height: '40vw', boxShadow: '0 0 0 9999px rgba(0,0,0,0.55)' }}
               >
-                <span className="text-white/40 text-xs font-semibold tracking-widest uppercase">
-                  Centrá el neumático
+                <span className="text-white/70 text-xs font-semibold tracking-widest uppercase mb-[-2rem]">
+                  Alineá los números acá
                 </span>
               </div>
             </div>
