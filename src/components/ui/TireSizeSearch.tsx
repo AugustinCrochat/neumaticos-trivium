@@ -158,6 +158,7 @@ export function TireSizeSearch({
     setShowScanner(true);
     setScanError(null);
 
+    // Hide browser nav bar on Android Chrome
     try {
       const el = document.documentElement;
       if (el.requestFullscreen) await el.requestFullscreen();
@@ -165,24 +166,15 @@ export function TireSizeSearch({
     } catch { /* iOS ignores */ }
 
     try {
-      const constraints: MediaStreamConstraints = {
-        video: {
-          facingMode: "environment"
-        }
-      };
-
-      const stream = await navigator.mediaDevices.getUserMedia(constraints);
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: "environment", width: { ideal: 1920 }, height: { ideal: 1080 } }
+      });
       streamRef.current = stream;
       if (videoRef.current) videoRef.current.srcObject = stream;
 
       const track = stream.getVideoTracks()[0];
-      const capabilities = track.getCapabilities() as any;
-      if (capabilities.torch) setHasTorch(true);
-      if (capabilities.zoom) {
-        const minZoom = capabilities.zoom.min || 1;
-        try {
-          await track.applyConstraints({ advanced: [{ zoom: minZoom }] } as any);
-        } catch { /* not all browsers support this */ }
+      if ((track.getCapabilities() as any).torch) {
+        setHasTorch(true);
       }
 
     } catch (err) {
@@ -222,8 +214,7 @@ export function TireSizeSearch({
     // We'll take a slightly larger square (98%) to ensure we don't cut off numbers at the edges.
     const natW = video.videoWidth;
     const natH = video.videoHeight;
-    const shortSide = Math.min(natW, natH);
-    const cropSize = Math.round(shortSide * 0.98);
+    const cropSize = Math.round(natH * 0.98); 
     const cropX = Math.round((natW - cropSize) / 2);
     const cropY = Math.round((natH - cropSize) / 2);
 
@@ -317,7 +308,7 @@ export function TireSizeSearch({
         saveFailedSample(images, "quota", data.status);
         found = true;
       } else if (data.error === "debug") {
-        setScanError("No logramos identificar la medida. Intentá acercarte un poco más a los números o mejorar la iluminación.");
+        setScanError(`IA: "${data.raw || 'No detectado'}" (Cod ${data.status || '404'})`);
         saveFailedSample(images, "debug", data.status);
         found = true; 
       }
@@ -363,26 +354,25 @@ export function TireSizeSearch({
             >
               Cancelar
             </button>
-            <div className="flex items-center gap-2">
-              {hasTorch && (
-                <button
-                  onClick={toggleTorch}
-                  className={`px-5 py-2.5 rounded-full flex items-center gap-2 font-bold text-sm transition-all shadow-lg ${
-                    torchOn
-                      ? 'bg-yellow-400 text-black shadow-yellow-400/40'
-                      : 'bg-yellow-400/20 border-2 border-yellow-400 text-yellow-300 animate-pulse'
-                  }`}
-                >
-                  <svg className="w-5 h-5" fill={torchOn ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor" strokeWidth={torchOn ? 0 : 2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                  {torchOn ? 'Flash ON' : 'Flash'}
-                </button>
-              )}
-            </div>
+            {hasTorch && (
+              <button
+                onClick={toggleTorch}
+                className={`px-5 py-2.5 rounded-full flex items-center gap-2 font-bold text-sm transition-all shadow-lg ${
+                  torchOn
+                    ? 'bg-yellow-400 text-black shadow-yellow-400/40'
+                    : 'bg-yellow-400/20 border-2 border-yellow-400 text-yellow-300 animate-pulse'
+                }`}
+              >
+                <svg className="w-5 h-5" fill={torchOn ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor" strokeWidth={torchOn ? 0 : 2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                {torchOn ? 'Flash ON' : 'Flash'}
+              </button>
+            )}
           </div>
 
-          <div className="flex-1 relative overflow-hidden bg-black">
+          {/* Camera — video simple, sin transformaciones CSS */}
+          <div className="relative flex-1 overflow-hidden bg-black">
             <video
               ref={videoRef}
               autoPlay
@@ -391,29 +381,27 @@ export function TireSizeSearch({
               className="absolute inset-0 w-full h-full object-cover"
             />
 
-            {/* Guía circular */}
-            <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+            {/* Guía circular grande */}
+            <div className="absolute inset-0 pointer-events-none flex items-center justify-center transition-opacity duration-500">
               <div
-                className="rounded-full border-4 border-orange-500 border-dashed animate-[spin_20s_linear_infinite]"
-                style={{ width: '90vmin', height: '90vmin', boxShadow: '0 0 0 9999px #000' }}
-              />
-              <div className="absolute flex items-center justify-center top-1/2 -translate-y-1/2">
-                <span className="text-white font-black text-sm tracking-widest uppercase bg-black/70 px-6 py-3 rounded-full backdrop-blur-md border border-white/10 shadow-xl whitespace-nowrap">
+                className="rounded-full border-4 border-orange-500 border-dashed flex items-center justify-center animate-[spin_20s_linear_infinite]"
+                style={{ width: '90vmin', height: '90vmin', boxShadow: '0 0 0 9999px rgba(0,0,0,0.55)' }}
+              ></div>
+              <div className="absolute flex items-center justify-center">
+                <span className="text-white font-black text-lg tracking-widest uppercase bg-black/70 px-6 py-3 rounded-full backdrop-blur-md border border-white/10 shadow-xl">
                   Centrá el neumático
                 </span>
               </div>
+              <div className="absolute bottom-8 px-4 text-center">
+                <span className="text-white/85 text-xs sm:text-sm font-medium bg-black/50 px-4 py-2 rounded-full backdrop-blur-sm border border-white/10">
+                  Podés usar vertical u horizontal. Priorizá enfoque y nitidez.
+                </span>
+              </div>
             </div>
-
-            {/* Zoom Control */}
           </div>
 
           {/* Botón de captura + estado */}
-          <div className="absolute bottom-0 left-0 right-0 pb-10 pt-6 z-20 flex flex-col items-center gap-4 bg-gradient-to-t from-black/80 to-transparent">
-            {!isScanning && (
-              <span className="text-white text-xs font-bold uppercase tracking-widest animate-pulse">
-                Presioná para escanear
-              </span>
-            )}
+          <div className="absolute bottom-0 left-0 right-0 pb-10 pt-6 z-20 flex flex-col items-center gap-3 bg-gradient-to-t from-black/80 to-transparent">
             {isScanning && (
               <span className="text-white/80 text-sm font-medium">{scanProgress}</span>
             )}
@@ -559,7 +547,7 @@ export function TireSizeSearch({
             placeholder="Rodado" 
             example="16"
             options={availableRims.map(String)}
-            formatOption={(v: string) => `R${v}`}
+            formatOption={(v) => `R${v}`}
             isOpen={activeDropdown === "rim"}
             onToggle={() => setActiveDropdown(activeDropdown === "rim" ? null : "rim")}
             isActive={activeDropdown === "rim"}
