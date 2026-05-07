@@ -202,6 +202,9 @@ async function saveDatasetSample(
   originalImageBase64: string,
   result: Candidate | null,
   processedImageBase64?: string,
+  source: 'app-confirmation' | 'app-failed-scan' = 'app-confirmation',
+  failureReason?: string,
+  failureStatus?: number,
 ) {
   try {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
@@ -229,7 +232,8 @@ async function saveDatasetSample(
         sampleId,
         timestamp: new Date().toISOString(),
         label: result ? { width: result.width, profile: result.profile, rim: result.rim } : null,
-        source: 'app-confirmation',
+        source,
+        failure: result ? null : { reason: failureReason ?? 'unknown', status: failureStatus ?? null },
         images: {
           original_crop: originalBlob.url,
           processed_crop: processedBlob?.url ?? null,
@@ -254,7 +258,8 @@ async function saveDatasetSample(
         sampleId,
         timestamp: new Date().toISOString(),
         label: result ? { width: result.width, profile: result.profile, rim: result.rim } : null,
-        source: 'app-confirmation',
+        source,
+        failure: result ? null : { reason: failureReason ?? 'unknown', status: failureStatus ?? null },
         images: {
           original_crop: `/dataset/${sampleId}/original_crop.jpg`,
           processed_crop: processedBuffer ? `/dataset/${sampleId}/processed_crop.jpg` : null,
@@ -271,7 +276,7 @@ async function saveDatasetSample(
 }
 
 export async function POST(req: NextRequest) {
-  const { base64Image, base64Processed, confirmLabel } = await req.json();
+  const { base64Image, base64Processed, confirmLabel, saveFailed, failReason, failStatus } = await req.json();
   const imageData = stripBase64Prefix(base64Image);
 
   // Confirmation-only mode: user verified the result — save with human-validated label
@@ -282,6 +287,11 @@ export async function POST(req: NextRequest) {
       : null;
     // Important in serverless: wait for Blob writes before returning.
     await saveDatasetSample(base64Image, confirmed, base64Processed);
+    return NextResponse.json({ ok: true });
+  }
+
+  if (saveFailed) {
+    await saveDatasetSample(base64Image, null, base64Processed, 'app-failed-scan', failReason, failStatus);
     return NextResponse.json({ ok: true });
   }
 

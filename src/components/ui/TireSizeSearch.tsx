@@ -256,6 +256,22 @@ export function TireSizeSearch({
     }
   }
 
+  function saveFailedSample(images: { original: string; processed: string }, reason: string, status?: number) {
+    if (!images.original) return;
+    fetch("/api/scan-tire", {
+      method: "POST",
+      keepalive: true,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        base64Image: images.original,
+        base64Processed: images.processed,
+        saveFailed: true,
+        failReason: reason,
+        failStatus: status,
+      }),
+    }).catch(console.error);
+  }
+
   // Burst: Single attempt to save API quota (Free Tier has low RPM)
   async function captureAndScan() {
     if (!videoRef.current || isScanning) return;
@@ -289,21 +305,25 @@ export function TireSizeSearch({
         found = true;
       } else if (data.error === "quota") {
         setScanError(data.message || "Cuota de IA agotada temporalmente. Probá de nuevo en 1 minuto.");
+        saveFailedSample(images, "quota", data.status);
         found = true;
       } else if (data.error === "debug") {
         setScanError(`IA: "${data.raw || 'No detectado'}" (Cod ${data.status || '404'})`);
+        saveFailedSample(images, "debug", data.status);
         found = true; 
       }
     } catch (err: any) {
       console.error(err);
       if (err.name === 'AbortError') {
         setScanError("La IA tardó demasiado. Probá de nuevo con mejor luz.");
+        saveFailedSample(images, "timeout");
         found = true;
       }
     }
 
     if (!found) {
       setScanError("No pudimos detectar la medida automáticamente.");
+      saveFailedSample(images, "not_found");
     }
     stopCamera();
     setIsScanning(false);
@@ -539,7 +559,7 @@ export function TireSizeSearch({
             type="button"
             onClick={startCamera}
             disabled={isScanning || showScanner}
-            className="flex-1 bg-navy-800 hover:bg-navy-700 disabled:opacity-50 text-orange-400 font-bold py-3 px-4 rounded-xl border border-navy-700 transition-all flex items-center justify-center gap-2 text-sm"
+            className="flex-1 bg-gradient-to-r from-violet-600 via-fuchsia-600 to-orange-500 hover:from-violet-500 hover:via-fuchsia-500 hover:to-orange-400 disabled:opacity-50 text-white font-black py-3 px-4 rounded-xl border border-violet-300/30 transition-all flex items-center justify-center gap-2 text-sm shadow-lg shadow-fuchsia-900/30"
           >
             {isScanning ? (
               <svg className="animate-spin h-5 w-5 text-orange-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -547,12 +567,11 @@ export function TireSizeSearch({
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
             ) : (
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2l2.4 5.6L20 10l-5.6 2.4L12 18l-2.4-5.6L4 10l5.6-2.4L12 2z" />
               </svg>
             )}
-            {isScanning ? (scanProgress || "Analizando foto...") : "Abrir cámara inteligente"}
+            {isScanning ? (scanProgress || "Analizando foto...") : "Reconocer medida con IA"}
           </button>
         </div>
 
