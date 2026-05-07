@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { writeFile } from 'fs/promises';
+import { join } from 'path';
 
 const WIDTHS   = [135, 145, 155, 165, 175, 185, 195, 205, 215, 220, 225, 235, 245, 255, 265, 275, 285, 295, 305, 315, 325];
 const PROFILES = [30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80];
@@ -155,18 +157,45 @@ async function scanWithOcrSpace(
   }
 }
 
+async function saveDatasetImage(imageData: string, result: Candidate | null) {
+  try {
+    const buffer = Buffer.from(imageData, 'base64');
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const label = result ? `${result.width}-${result.profile}-${result.rim}` : 'failed';
+    const filename = `${timestamp}_${label}.jpg`;
+    
+    // In local development, save to the public dataset folder
+    if (process.env.NODE_ENV === 'development') {
+       const filepath = join(process.cwd(), 'public', 'dataset', filename);
+       await writeFile(filepath, buffer);
+       console.log(`Saved dataset image: ${filename}`);
+    }
+  } catch (err) {
+    console.error('Failed to save dataset image:', err);
+  }
+}
+
 export async function POST(req: NextRequest) {
   const { base64Image } = await req.json();
   const imageData = base64Image.replace(/^data:image\/[a-z]+;base64,/, '');
 
+  let result: Candidate | null = null;
   const apiKey = process.env.GOOGLE_AI_KEY;
+  
   if (apiKey) {
-    const result = await scanWithGemini(imageData, apiKey);
-    if (result) return NextResponse.json({ found: true, width: result.width, profile: result.profile, rim: result.rim });
+    result = await scanWithGemini(imageData, apiKey);
   }
 
-  const result = await scanWithOcrSpace(base64Image);
-  if (result) return NextResponse.json({ found: true, width: result.width, profile: result.profile, rim: result.rim });
+  if (!result) {
+    result = await scanWithOcrSpace(base64Image);
+  }
+  
+  // Guardamos la imagen asincrónicamente
+  saveDatasetImage(imageData, result).catch(console.error);
+
+  if (result) {
+      return NextResponse.json({ found: true, width: result.width, profile: result.profile, rim: result.rim });
+  }
 
   return NextResponse.json({ found: false });
 }

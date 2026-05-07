@@ -154,6 +154,7 @@ export function TireSizeSearch({
       streamRef.current = null;
     }
     try { if (document.fullscreenElement) document.exitFullscreen(); } catch { /* ignored */ }
+    try { if (window.screen && window.screen.orientation && window.screen.orientation.unlock) window.screen.orientation.unlock(); } catch { /* ignored */ }
     setShowScanner(false);
     setHasTorch(false);
     setTorchOn(false);
