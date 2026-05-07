@@ -235,19 +235,17 @@ export function TireSizeSearch({
     const offsetXNative = Math.max(0, (natW - dispW / covScale) / 2);
     const offsetYNative = Math.max(0, (natH - dispH / covScale) / 2);
 
-    // Rectangular guide: width = 92vw, height = 40vw, centered
-    const guideW = 0.92 * dispW;
-    const guideH = 0.40 * dispW; // Since height is 40vw, it's 0.40 of dispW
+    // Circle guide: diameter = 90% of the smallest dimension (vmin)
+    const guideSize = 0.9 * Math.min(dispW, dispH);
 
-    const rawLeft = Math.max(0, offsetXNative + (dispW - guideW) / 2 / covScale);
-    const rawTop  = Math.max(0, offsetYNative + (dispH - guideH) / 2 / covScale);
-    const rawWidth = Math.min(natW - rawLeft, guideW / covScale);
-    const rawHeight = Math.min(natH - rawTop, guideH / covScale);
+    const rawLeft = Math.max(0, offsetXNative + (dispW - guideSize) / 2 / covScale);
+    const rawTop  = Math.max(0, offsetYNative + (dispH - guideSize) / 2 / covScale);
+    const rawSizeVal = Math.min(natW - rawLeft, natH - rawTop, guideSize / covScale);
 
     const cropX = Math.round(rawLeft * s);
     const cropY = Math.round(rawTop * s);
-    const cropW = Math.max(1, Math.round(rawWidth * s));
-    const cropH = Math.max(1, Math.round(rawHeight * s));
+    const cropW = Math.max(1, Math.round(rawSizeVal * s));
+    const cropH = Math.max(1, Math.round(rawSizeVal * s));
 
     // Extract the exact crop (raw color) without aggressive filters
     const cropCanvas = document.createElement("canvas");
@@ -393,15 +391,28 @@ export function TireSizeSearch({
               className="absolute inset-0 w-full h-full object-cover"
             />
 
-            {/* Guía circular: centrar el neumático completo */}
-            {/* Guía rectangular: centrar el neumático horizontalmente */}
-            <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+            {/* Rotate Hint */}
+            <div className="absolute inset-0 z-30 pointer-events-none flex items-center justify-center bg-black/80 portrait:flex landscape:hidden backdrop-blur-sm transition-opacity duration-500">
+              <div className="bg-navy-900/90 p-8 rounded-3xl flex flex-col items-center gap-5 text-center max-w-[85vw] border border-orange-500/50 shadow-2xl">
+                <svg className="w-16 h-16 text-orange-400 animate-[spin_2s_ease-in-out_infinite]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                </svg>
+                <div>
+                  <p className="text-white font-black text-xl mb-2 tracking-wide">Girá tu celular</p>
+                  <p className="text-slate-300 text-sm leading-relaxed font-medium">Usá el teléfono en horizontal para acercarte y enfocar el neumático completo.</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Guía circular grande */}
+            <div className="absolute inset-0 pointer-events-none flex items-center justify-center landscape:flex portrait:hidden transition-opacity duration-500">
               <div
-                className="rounded-3xl border-2 border-orange-500 flex items-end justify-center pb-4"
-                style={{ width: '92vw', height: '40vw', boxShadow: '0 0 0 9999px rgba(0,0,0,0.55)' }}
-              >
-                <span className="text-white/70 text-xs font-semibold tracking-widest uppercase mb-[-2rem]">
-                  Alineá los números acá
+                className="rounded-full border-4 border-orange-500 border-dashed flex items-center justify-center animate-[spin_20s_linear_infinite]"
+                style={{ width: '90vmin', height: '90vmin', boxShadow: '0 0 0 9999px rgba(0,0,0,0.55)' }}
+              ></div>
+              <div className="absolute flex items-center justify-center">
+                <span className="text-white font-black text-lg tracking-widest uppercase bg-black/70 px-6 py-3 rounded-full backdrop-blur-md border border-white/10 shadow-xl">
+                  Centrá el neumático
                 </span>
               </div>
             </div>
