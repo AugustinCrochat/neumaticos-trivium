@@ -83,14 +83,11 @@ async function scanWithGemini(
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          system_instruction: {
+            parts: [{ text: "Eres un experto en neumáticos. Tu única tarea es extraer la medida (ancho/perfil rodado) de la imagen. Responde solo con la medida (ej: 205/55 R16) o NO_ENCONTRADO." }]
+          },
           contents: [{
             parts: [
-              {
-                text: `¿Qué medida tiene este neumático? 
-Busca el patrón tipo 205/55 R16 en el flanco.
-Responde únicamente con la medida encontrada (ej: 225/45 R17). 
-Si no la encuentras, responde NO_ENCONTRADO.`
-              },
               { inline_data: { mime_type: 'image/jpeg', data: originalImage } }
             ],
           }],

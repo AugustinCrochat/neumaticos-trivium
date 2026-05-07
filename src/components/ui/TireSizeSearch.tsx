@@ -212,7 +212,7 @@ export function TireSizeSearch({
 
   function captureFrame(): { original: string; processed: string } {
     const video = videoRef.current!;
-    const MAX_W = 1280;
+    const MAX_W = 1920; // Increased from 1280 for better OCR detail
     const s = Math.min(1, MAX_W / Math.max(video.videoWidth, 1));
 
     // Full frame at reduced scale
@@ -222,11 +222,13 @@ export function TireSizeSearch({
     fullCanvas.width = fullW;
     fullCanvas.height = fullH;
     const fullCtx = fullCanvas.getContext("2d")!;
+    
+    // Apply a slight contrast and brightness boost to help the AI see black-on-black relief
+    fullCtx.filter = "contrast(1.2) brightness(1.05)";
     fullCtx.drawImage(video, 0, 0, fullW, fullH);
 
     // Send the entire frame to the AI without cropping. 
-    // This prevents accidentally cropping out the text if the tire fills the screen edges.
-    const colorJpeg = fullCanvas.toDataURL("image/jpeg", 0.90);
+    const colorJpeg = fullCanvas.toDataURL("image/jpeg", 0.85);
 
     return {
       original: colorJpeg,
