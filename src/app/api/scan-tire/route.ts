@@ -3,6 +3,8 @@ import { writeFile } from 'fs/promises';
 import { join } from 'path';
 import { put } from '@vercel/blob';
 
+export const maxDuration = 30; // Extend Vercel timeout to 30 seconds for Gemini Pro
+
 const WIDTHS   = [135, 145, 155, 165, 175, 185, 195, 205, 215, 220, 225, 235, 245, 255, 265, 275, 285, 295, 305, 315, 325];
 const PROFILES = [30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80];
 const RIMS     = [13, 14, 15, 16, 17, 18, 19, 20, 21];

@@ -224,37 +224,9 @@ export function TireSizeSearch({
     const fullCtx = fullCanvas.getContext("2d")!;
     fullCtx.drawImage(video, 0, 0, fullW, fullH);
 
-    // Compute the crop that matches the orange guide (10%-90% of visible height).
-    // The guide is an HTML overlay; we need to map those screen pixels back to
-    // native video coordinates, accounting for object-cover scaling.
-    const dispW = video.clientWidth || fullW;
-    const dispH = video.clientHeight || fullH;
-    const natW = video.videoWidth;
-    const natH = video.videoHeight;
-    const covScale = Math.max(dispW / natW, dispH / natH);
-    const offsetXNative = Math.max(0, (natW - dispW / covScale) / 2);
-    const offsetYNative = Math.max(0, (natH - dispH / covScale) / 2);
-
-    // Circle guide: diameter = 90% of the smallest dimension (vmin)
-    const guideSize = 0.9 * Math.min(dispW, dispH);
-
-    const rawLeft = Math.max(0, offsetXNative + (dispW - guideSize) / 2 / covScale);
-    const rawTop  = Math.max(0, offsetYNative + (dispH - guideSize) / 2 / covScale);
-    const rawSizeVal = Math.min(natW - rawLeft, natH - rawTop, guideSize / covScale);
-
-    const cropX = Math.round(rawLeft * s);
-    const cropY = Math.round(rawTop * s);
-    const cropW = Math.max(1, Math.round(rawSizeVal * s));
-    const cropH = Math.max(1, Math.round(rawSizeVal * s));
-
-    // Extract the exact crop (raw color) without aggressive filters
-    const cropCanvas = document.createElement("canvas");
-    cropCanvas.width = cropW;
-    cropCanvas.height = cropH;
-    const cropCtx = cropCanvas.getContext("2d")!;
-    cropCtx.drawImage(fullCanvas, cropX, cropY, cropW, cropH, 0, 0, cropW, cropH);
-
-    const colorJpeg = cropCanvas.toDataURL("image/jpeg", 0.90);
+    // Send the entire frame to the AI without cropping. 
+    // This prevents accidentally cropping out the text if the tire fills the screen edges.
+    const colorJpeg = fullCanvas.toDataURL("image/jpeg", 0.90);
 
     return {
       original: colorJpeg,
@@ -264,7 +236,7 @@ export function TireSizeSearch({
 
   async function tryScan(images: { original: string; processed: string }) {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 10000);
+    const timeout = setTimeout(() => controller.abort(), 25000);
     try {
       const res = await fetch("/api/scan-tire", {
         method: "POST",
