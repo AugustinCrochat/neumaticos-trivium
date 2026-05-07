@@ -86,7 +86,7 @@ export function ServicesSection() {
             </div>
           </div>
           <a
-            href={`/#contacto`}
+            href="/contacto"
             className="flex-shrink-0 bg-orange-500 hover:bg-orange-600 text-white font-bold px-8 py-3.5 rounded-xl transition-colors text-sm whitespace-nowrap"
           >
             Consultar por WhatsApp
