@@ -166,6 +166,9 @@ export function TireSizeSearch({
     finally { setIsScanning(false); setScanProgress(""); }
   }
 
+  const isValid = !!(width && profile && rim);
+  const canSearch = !!(width || profile || rim);
+
   return (
     <>
       {showScanner && (
@@ -224,31 +227,41 @@ export function TireSizeSearch({
       )}
 
       <div className="flex bg-navy-800/50 p-1.5 rounded-2xl mb-6 shadow-inner border border-navy-700/50">
-        {["medida", "vehiculo", "patente"].map(mode => (
-          <button 
-            key={mode} 
-            onClick={() => setSearchMode(mode as any)} 
-            className={`flex-1 py-3 px-2 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-2 ${searchMode === mode ? "bg-orange-500 text-white shadow-lg" : "text-navy-300 hover:text-white"}`}
-          >
-            {mode === "medida" && (
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-            )}
-            {mode === "vehiculo" && (
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
-              </svg>
-            )}
-            {mode === "patente" && (
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" />
-              </svg>
-            )}
-            {mode === "medida" ? "Medida" : mode === "vehiculo" ? "Auto" : "Patente"}
-          </button>
-        ))}
+        <button 
+          type="button" 
+          onClick={() => setSearchMode("medida")} 
+          className={`flex-1 py-3 px-2 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-1.5 sm:gap-2 ${searchMode === "medida" ? "bg-orange-500 text-white shadow-lg shadow-orange-500/20" : "bg-transparent text-navy-300 hover:text-white"}`}
+        >
+          <svg className="w-4 h-4 sm:w-5 sm:h-5 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <circle cx="12" cy="12" r="10" strokeWidth="2" />
+            <circle cx="12" cy="12" r="4" strokeWidth="2" />
+            <path strokeWidth="2" strokeLinecap="round" d="M12 2v2M12 20v2M2 12h2M20 12h2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+          </svg>
+          <span className="hidden sm:inline">Por Medida</span>
+          <span className="sm:hidden">Medida</span>
+        </button>
+        <button 
+          type="button" 
+          onClick={() => setSearchMode("vehiculo")} 
+          className={`flex-1 py-3 px-2 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-1.5 sm:gap-2 ${searchMode === "vehiculo" ? "bg-orange-500 text-white shadow-lg shadow-orange-500/20" : "bg-transparent text-navy-300 hover:text-white"}`}
+        >
+          <svg className="w-4 h-4 sm:w-5 sm:h-5 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2m10 0h-6m10 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm-10 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0z" />
+          </svg>
+          <span className="hidden sm:inline">Por Vehículo</span>
+          <span className="sm:hidden">Auto</span>
+        </button>
+        <button 
+          type="button" 
+          onClick={() => setSearchMode("patente")} 
+          className={`flex-1 py-3 px-2 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-1.5 sm:gap-2 ${searchMode === "patente" ? "bg-orange-500 text-white shadow-lg shadow-orange-500/20" : "bg-transparent text-navy-300 hover:text-white"}`}
+        >
+          <svg className="w-4 h-4 sm:w-5 sm:h-5 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <rect x="3" y="8" width="18" height="8" rx="2" strokeWidth="2" />
+            <path strokeLinecap="round" strokeWidth="2" d="M7 8v8M17 8v8" />
+          </svg>
+          Patente
+        </button>
       </div>
 
       {searchMode === "medida" && (
@@ -258,27 +271,30 @@ export function TireSizeSearch({
              <CustomSelect label="Perfil" value={profile} onChange={onProfileChange} placeholder="Perfil" options={availableProfiles.map(String)} isOpen={activeDropdown === "profile"} onToggle={() => setActiveDropdown(activeDropdown === "profile" ? null : "profile")} isActive={activeDropdown === "profile"} />
              <CustomSelect label="Rodado" value={rim} onChange={onRimChange} placeholder="Rodado" options={availableRims.map(String)} formatOption={(v: string) => `R${v}`} isOpen={activeDropdown === "rim"} onToggle={() => setActiveDropdown(activeDropdown === "rim" ? null : "rim")} isActive={activeDropdown === "rim"} />
           </div>
-          <button type="button" onClick={startCamera} className="w-full bg-red-600 hover:bg-red-700 text-white font-black py-4 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-lg active:scale-[0.98]">
-            Reconocer medida con IA 
-            <span className="flex items-center gap-0.5 text-yellow-300">
-              <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
-                <path d="M12 2l2.4 5.6L20 10l-5.6 2.4L12 22l-2.4-5.6L4 14l5.6-2.4L12 2z" />
+          <button 
+            type="button" 
+            onClick={startCamera} 
+            className="w-full bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 disabled:opacity-50 text-white font-black py-4 rounded-xl border border-red-300/30 transition-all flex items-center justify-center gap-2 shadow-lg shadow-red-900/30 active:scale-[0.98]"
+          >
+            <span>Reconocer medida con IA</span>
+            <span className="relative -ml-0.5 inline-flex w-5 h-5 items-center justify-center">
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2l2.4 5.6L20 10l-5.6 2.4L12 18l-2.4-5.6L4 10l5.6-2.4L12 2z" />
               </svg>
-              <svg className="w-3.5 h-3.5 fill-current opacity-80" viewBox="0 0 24 24">
-                <path d="M12 2l2.4 5.6L20 10l-5.6 2.4L12 22l-2.4-5.6L4 14l5.6-2.4L12 2z" />
+              <svg className="absolute -bottom-0.5 -right-0.5 w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2l2 4.8L19 9l-5 2.2L12 16l-2-4.8L5 9l5-2.2L12 2z" />
               </svg>
             </span>
           </button>
           {scanError && <div className="text-orange-500 text-sm font-bold text-center mt-2">{scanError}</div>}
-          <button 
-            onClick={handleSearch} 
-            disabled={!width || !profile || !rim} 
-            className={`w-full font-black py-4 rounded-xl mt-2 transition-all shadow-lg active:scale-[0.98] ${
-              (!width || !profile || !rim) 
-                ? "bg-navy-700 text-navy-400 cursor-not-allowed" 
-                : "bg-orange-500 text-white shadow-orange-500/20 hover:bg-orange-400"
-            }`}
+          <button
+            type="submit"
+            disabled={!canSearch}
+            className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-navy-800 disabled:text-slate-600 disabled:cursor-not-allowed text-white font-black py-4 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-orange-500/20 active:scale-[0.98]"
           >
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
             BUSCAR NEUMÁTICOS
           </button>
         </div>
