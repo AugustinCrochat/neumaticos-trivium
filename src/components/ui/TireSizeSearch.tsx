@@ -174,6 +174,12 @@ export function TireSizeSearch({
       const track = stream.getVideoTracks()[0];
       const capabilities = track.getCapabilities() as any;
       if (capabilities.torch) setHasTorch(true);
+      if (capabilities.zoom) {
+        const minZoom = capabilities.zoom.min || 1;
+        try {
+          await track.applyConstraints({ advanced: [{ zoom: minZoom }] } as any);
+        } catch { /* ignored */ }
+      }
 
     } catch (err) {
       console.error(err);
