@@ -71,12 +71,13 @@ function bestCandidate(nums: number[]): Candidate | null {
 }
 
 async function scanWithGemini(
-  imageData: string,
+  originalImage: string,
+  processedImage: string,
   apiKey: string,
 ): Promise<Candidate | null> {
   try {
     const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -84,8 +85,13 @@ async function scanWithGemini(
           contents: [{
             parts: [
               {
-                text: `Eres un lector de medidas de neumáticos. La imagen puede mostrar texto en relieve sobre goma negra (puede ser difícil de ver). Buscá el marcado de medida del neumático.
+                text: `Eres un lector experto de medidas de neumáticos. Te envío DOS imágenes del mismo sector del neumático:
+1. Foto en escala de grises con contraste aumentado (imagen original recortada).
+2. Foto procesada con detección de bordes Sobel + binarización adaptativa para resaltar el texto en relieve.
+
+Buscá el marcado de medida estampado en el lateral del neumático. El texto es texto en relieve sobre goma negra.
 Formato típico: 205/55 R16 o 195/65R15 o 225 40 18 o P205/55R16.
+
 Devolvé SOLO tres números enteros separados por espacios: ANCHO PERFIL ARO
 - ANCHO: 3 dígitos, rango 130-335 (ej: 205)
 - PERFIL: 2 dígitos, rango 25-90 (ej: 55)
@@ -93,7 +99,8 @@ Devolvé SOLO tres números enteros separados por espacios: ANCHO PERFIL ARO
 Si hay múltiples medidas, devolvé la más visible/central.
 Si no encontrás ninguna, devolvé: NO_ENCONTRADO`,
               },
-              { inline_data: { mime_type: 'image/jpeg', data: imageData } },
+              { inline_data: { mime_type: 'image/jpeg', data: originalImage } },
+              { inline_data: { mime_type: 'image/jpeg', data: processedImage } },
             ],
           }],
           generationConfig: { temperature: 0, maxOutputTokens: 20 },
@@ -186,14 +193,15 @@ async function saveDatasetImage(imageData: string, result: Candidate | null) {
 }
 
 export async function POST(req: NextRequest) {
-  const { base64Image } = await req.json();
+  const { base64Image, base64Processed } = await req.json();
   const imageData = base64Image.replace(/^data:image\/[a-z]+;base64,/, '');
+  const processedData = (base64Processed ?? base64Image).replace(/^data:image\/[a-z]+;base64,/, '');
 
   let result: Candidate | null = null;
   const apiKey = process.env.GOOGLE_AI_KEY;
-  
+
   if (apiKey) {
-    result = await scanWithGemini(imageData, apiKey);
+    result = await scanWithGemini(imageData, processedData, apiKey);
   }
 
   if (!result) {

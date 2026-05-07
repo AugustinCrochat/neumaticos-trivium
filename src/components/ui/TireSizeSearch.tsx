@@ -191,31 +191,127 @@ export function TireSizeSearch({
     }
   }
 
-  function captureFrame(): string {
+  function captureFrame(): { original: string; processed: string } {
     const video = videoRef.current!;
     const MAX_W = 1280;
     const s = Math.min(1, MAX_W / Math.max(video.videoWidth, 1));
-    const canvas = document.createElement("canvas");
-    canvas.width = Math.round(video.videoWidth * s);
-    canvas.height = Math.round(video.videoHeight * s);
-    const ctx = canvas.getContext("2d")!;
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-    // Grayscale + contrast boost: embossed text on black rubber becomes more visible
-    const img = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    for (let i = 0; i < img.data.length; i += 4) {
-      const g = 0.299 * img.data[i] + 0.587 * img.data[i + 1] + 0.114 * img.data[i + 2];
+
+    // Full frame at reduced scale
+    const fullW = Math.round(video.videoWidth * s);
+    const fullH = Math.round(video.videoHeight * s);
+    const fullCanvas = document.createElement("canvas");
+    fullCanvas.width = fullW;
+    fullCanvas.height = fullH;
+    const fullCtx = fullCanvas.getContext("2d")!;
+    fullCtx.drawImage(video, 0, 0, fullW, fullH);
+
+    // Compute the crop that matches the orange guide (10%-90% of visible height).
+    // The guide is an HTML overlay; we need to map those screen pixels back to
+    // native video coordinates, accounting for object-cover scaling.
+    const dispW = video.clientWidth || fullW;
+    const dispH = video.clientHeight || fullH;
+    const natW = video.videoWidth;
+    const natH = video.videoHeight;
+    const covScale = Math.max(dispW / natW, dispH / natH);
+    // How many native pixels are hidden above/below due to object-cover crop
+    const offsetYNative = Math.max(0, (natH - dispH / covScale) / 2);
+    const rawTop = Math.max(0, offsetYNative + 0.10 * dispH / covScale);
+    const rawBot = Math.min(natH, offsetYNative + 0.90 * dispH / covScale);
+    const cropY = Math.round(rawTop * s);
+    const cropH = Math.max(1, Math.round((rawBot - rawTop) * s));
+    const cropW = fullW;
+
+    // --- Image 1: cropped original (grayscale + contrast boost) ---
+    const origCanvas = document.createElement("canvas");
+    origCanvas.width = cropW;
+    origCanvas.height = cropH;
+    const origCtx = origCanvas.getContext("2d")!;
+    origCtx.drawImage(fullCanvas, 0, cropY, cropW, cropH, 0, 0, cropW, cropH);
+    const origImg = origCtx.getImageData(0, 0, cropW, cropH);
+    for (let i = 0; i < origImg.data.length; i += 4) {
+      const g = 0.299 * origImg.data[i] + 0.587 * origImg.data[i + 1] + 0.114 * origImg.data[i + 2];
       const b = Math.min(255, Math.max(0, (g - 128) * 1.8 + 128));
-      img.data[i] = img.data[i + 1] = img.data[i + 2] = b;
+      origImg.data[i] = origImg.data[i + 1] = origImg.data[i + 2] = b;
     }
-    ctx.putImageData(img, 0, 0);
-    return canvas.toDataURL("image/jpeg", 0.85);
+    origCtx.putImageData(origImg, 0, 0);
+
+    // --- Image 2: Sobel edge detection + adaptive binarization ---
+    const procCanvas = document.createElement("canvas");
+    procCanvas.width = cropW;
+    procCanvas.height = cropH;
+    const procCtx = procCanvas.getContext("2d")!;
+    procCtx.drawImage(fullCanvas, 0, cropY, cropW, cropH, 0, 0, cropW, cropH);
+    const procImg = procCtx.getImageData(0, 0, cropW, cropH);
+    const W = cropW, H = cropH;
+
+    // Grayscale pass
+    const gray = new Float32Array(W * H);
+    for (let i = 0; i < procImg.data.length; i += 4) {
+      gray[i >> 2] = 0.299 * procImg.data[i] + 0.587 * procImg.data[i + 1] + 0.114 * procImg.data[i + 2];
+    }
+
+    // Sobel edge detection
+    const edges = new Float32Array(W * H);
+    for (let y = 1; y < H - 1; y++) {
+      for (let x = 1; x < W - 1; x++) {
+        const gx =
+          -gray[(y-1)*W+(x-1)] + gray[(y-1)*W+(x+1)]
+          - 2*gray[y*W+(x-1)] + 2*gray[y*W+(x+1)]
+          - gray[(y+1)*W+(x-1)] + gray[(y+1)*W+(x+1)];
+        const gy =
+          -gray[(y-1)*W+(x-1)] - 2*gray[(y-1)*W+x] - gray[(y-1)*W+(x+1)]
+          + gray[(y+1)*W+(x-1)] + 2*gray[(y+1)*W+x] + gray[(y+1)*W+(x+1)];
+        edges[y*W+x] = Math.min(255, Math.sqrt(gx*gx + gy*gy) * 0.5);
+      }
+    }
+
+    // Adaptive binarization via integral image (O(n), handles uneven lighting)
+    const integral = new Float64Array((W+1)*(H+1));
+    for (let y = 0; y < H; y++) {
+      for (let x = 0; x < W; x++) {
+        integral[(y+1)*(W+1)+(x+1)] =
+          gray[y*W+x]
+          + integral[y*(W+1)+(x+1)]
+          + integral[(y+1)*(W+1)+x]
+          - integral[y*(W+1)+x];
+      }
+    }
+    const HALF = 24; // 48×48 px neighborhood
+    const BIAS = 5;  // pixel must be BIAS points above local mean to be "white"
+    const binarized = new Uint8Array(W * H);
+    for (let y = 0; y < H; y++) {
+      for (let x = 0; x < W; x++) {
+        const x0 = Math.max(0, x-HALF), x1 = Math.min(W-1, x+HALF);
+        const y0 = Math.max(0, y-HALF), y1 = Math.min(H-1, y+HALF);
+        const area = (x1-x0+1)*(y1-y0+1);
+        const sum = integral[(y1+1)*(W+1)+(x1+1)]
+                  - integral[y0*(W+1)+(x1+1)]
+                  - integral[(y1+1)*(W+1)+x0]
+                  + integral[y0*(W+1)+x0];
+        binarized[y*W+x] = gray[y*W+x] > (sum / area) + BIAS ? 255 : 0;
+      }
+    }
+
+    // Combine: white if strong Sobel edge OR adaptive binarization says bright
+    for (let i = 0; i < procImg.data.length; i += 4) {
+      const idx = i >> 2;
+      const v = Math.max(edges[idx] > 40 ? 255 : 0, binarized[idx]);
+      procImg.data[i] = procImg.data[i+1] = procImg.data[i+2] = v;
+      procImg.data[i+3] = 255;
+    }
+    procCtx.putImageData(procImg, 0, 0);
+
+    return {
+      original: origCanvas.toDataURL("image/jpeg", 0.90),
+      processed: procCanvas.toDataURL("image/jpeg", 0.90),
+    };
   }
 
-  async function tryScan(base64Image: string) {
+  async function tryScan(images: { original: string; processed: string }) {
     const res = await fetch("/api/scan-tire", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ base64Image }),
+      body: JSON.stringify({ base64Image: images.original, base64Processed: images.processed }),
     });
     return res.json() as Promise<{ found: boolean; width?: number; profile?: number; rim?: number }>;
   }
@@ -227,13 +323,13 @@ export function TireSizeSearch({
     setScanError(null);
     setLastImage(null);
     let found = false;
-    let img = "";
+    let images = { original: "", processed: "" };
 
     for (let attempt = 1; attempt <= 2; attempt++) {
       setScanProgress(attempt === 1 ? "Analizando..." : "Segundo intento...");
       try {
-        img = captureFrame();
-        const data = await tryScan(img);
+        images = captureFrame();
+        const data = await tryScan(images);
         if (data.found && data.width) {
           setWidth(String(data.width));
           setProfile(String(data.profile));
@@ -250,7 +346,7 @@ export function TireSizeSearch({
 
     if (!found) {
       setScanError("No se detectó la medida.");
-      setLastImage(img);
+      setLastImage(images.original);
     }
     stopCamera();
     setIsScanning(false);
