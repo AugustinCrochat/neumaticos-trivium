@@ -8,26 +8,7 @@ function unique<T>(arr: T[]): T[] {
   return [...new Set(arr)].sort((a, b) => Number(a) - Number(b));
 }
 
-const VEHICLE_DB = [
-  { brand: "Toyota", model: "Hilux", sizes: [{ w: "265", p: "65", r: "17" }, { w: "265", p: "60", r: "18" }, { w: "225", p: "70", r: "17" }] },
-  { brand: "Peugeot", model: "208", sizes: [{ w: "195", p: "55", r: "16" }, { w: "185", p: "65", r: "15" }, { w: "205", p: "45", r: "17" }] },
-  { brand: "Fiat", model: "Cronos", sizes: [{ w: "185", p: "60", r: "15" }, { w: "195", p: "55", r: "16" }] },
-  { brand: "Volkswagen", model: "Amarok", sizes: [{ w: "245", p: "70", r: "16" }, { w: "245", p: "65", r: "17" }, { w: "255", p: "60", r: "18" }, { w: "255", p: "50", r: "20" }] },
-  { brand: "Volkswagen", model: "Gol Trend", sizes: [{ w: "175", p: "70", r: "14" }, { w: "195", p: "55", r: "15" }] },
-  { brand: "Volkswagen", model: "Taos", sizes: [{ w: "215", p: "55", r: "18" }] },
-  { brand: "Ford", model: "Ranger", sizes: [{ w: "255", p: "70", r: "16" }, { w: "265", p: "65", r: "17" }, { w: "265", p: "60", r: "18" }] },
-  { brand: "Ford", model: "Territory", sizes: [{ w: "235", p: "50", r: "18" }, { w: "235", p: "55", r: "19" }] },
-  { brand: "Chevrolet", model: "Onix", sizes: [{ w: "185", p: "65", r: "15" }, { w: "195", p: "55", r: "16" }] },
-  { brand: "Chevrolet", model: "Tracker", sizes: [{ w: "215", p: "60", r: "16" }, { w: "215", p: "55", r: "17" }] },
-  { brand: "Toyota", model: "Corolla", sizes: [{ w: "205", p: "55", r: "16" }, { w: "225", p: "45", r: "17" }] },
-  { brand: "Toyota", model: "Yaris", sizes: [{ w: "185", p: "60", r: "15" }, { w: "195", p: "50", r: "16" }] },
-  { brand: "Toyota", model: "Corolla Cross", sizes: [{ w: "215", p: "60", r: "17" }, { w: "225", p: "50", r: "18" }] },
-  { brand: "Renault", model: "Kangoo", sizes: [{ w: "185", p: "65", r: "15" }] },
-  { brand: "Renault", model: "Sandero", sizes: [{ w: "185", p: "65", r: "15" }, { w: "195", p: "55", r: "16" }] },
-  { brand: "Nissan", model: "Frontier", sizes: [{ w: "255", p: "70", r: "16" }, { w: "255", p: "60", r: "18" }] },
-  { brand: "Jeep", model: "Renegade", sizes: [{ w: "215", p: "65", r: "16" }, { w: "215", p: "60", r: "17" }, { w: "225", p: "55", r: "18" }] },
-  { brand: "Honda", model: "HR-V", sizes: [{ w: "215", p: "55", r: "17" }] }
-].sort((a, b) => a.brand.localeCompare(b.brand));
+import { VEHICLE_DB } from "@/lib/vehicles";
 
 export function TireSizeSearch({
   initialMedida,
