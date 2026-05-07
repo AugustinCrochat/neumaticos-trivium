@@ -74,19 +74,21 @@ function bestCandidate(nums: number[]): Candidate | null {
 
 async function scanWithGemini(
   originalImage: string,
+  processedImage: string,
   apiKey: string,
 ): Promise<Candidate | null> {
   try {
     const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-pro-preview:generateContent?key=${apiKey}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           contents: [{
             parts: [
-              { text: "Eres un experto en neumáticos. Tu única tarea es extraer la medida (ej: 205/55 R16) de la imagen. Responde solo con la medida o NO_ENCONTRADO." },
-              { inline_data: { mime_type: 'image/jpeg', data: originalImage } }
+              { text: "Busca la medida del neumático (ej: 205/55 R16) en estas dos fotos del mismo neumático (una es la original y otra tiene contraste forzado para resaltar el relieve). Responde solo con la medida o NO_ENCONTRADO." },
+              { inline_data: { mime_type: 'image/jpeg', data: originalImage } },
+              { inline_data: { mime_type: 'image/jpeg', data: processedImage } }
             ],
           }],
           generationConfig: { temperature: 0 },
@@ -206,7 +208,7 @@ export async function POST(req: NextRequest) {
   const apiKey = process.env.GOOGLE_AI_KEY;
 
   if (apiKey) {
-    result = await scanWithGemini(imageData, apiKey);
+    result = await scanWithGemini(imageData, processedData, apiKey);
   }
 
   if (!result) {

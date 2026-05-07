@@ -212,28 +212,30 @@ export function TireSizeSearch({
 
   function captureFrame(): { original: string; processed: string } {
     const video = videoRef.current!;
-    const MAX_W = 1920; // Increased from 1280 for better OCR detail
+    const MAX_W = 1920; 
     const s = Math.min(1, MAX_W / Math.max(video.videoWidth, 1));
 
-    // Full frame at reduced scale
     const fullW = Math.round(video.videoWidth * s);
     const fullH = Math.round(video.videoHeight * s);
-    const fullCanvas = document.createElement("canvas");
-    fullCanvas.width = fullW;
-    fullCanvas.height = fullH;
-    const fullCtx = fullCanvas.getContext("2d")!;
     
-    // Apply a slight contrast and brightness boost to help the AI see black-on-black relief
-    fullCtx.filter = "contrast(1.2) brightness(1.05)";
-    fullCtx.drawImage(video, 0, 0, fullW, fullH);
+    // Original Canvas
+    const canvas1 = document.createElement("canvas");
+    canvas1.width = fullW;
+    canvas1.height = fullH;
+    const ctx1 = canvas1.getContext("2d")!;
+    ctx1.drawImage(video, 0, 0, fullW, fullH);
+    const original = canvas1.toDataURL("image/jpeg", 0.85);
 
-    // Send the entire frame to the AI without cropping. 
-    const colorJpeg = fullCanvas.toDataURL("image/jpeg", 0.85);
+    // High Contrast Processed Canvas (to highlight relief)
+    const canvas2 = document.createElement("canvas");
+    canvas2.width = fullW;
+    canvas2.height = fullH;
+    const ctx2 = canvas2.getContext("2d")!;
+    ctx2.filter = "contrast(1.6) brightness(1.1) saturate(0)"; // B&W High Contrast
+    ctx2.drawImage(video, 0, 0, fullW, fullH);
+    const processed = canvas2.toDataURL("image/jpeg", 0.80);
 
-    return {
-      original: colorJpeg,
-      processed: colorJpeg,
-    };
+    return { original, processed };
   }
 
   async function tryScan(images: { original: string; processed: string }) {
