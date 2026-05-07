@@ -385,13 +385,20 @@ export function TireSizeSearch({
             <div className="absolute inset-0 pointer-events-none flex items-center justify-center transition-opacity duration-500">
               <div
                 className="rounded-full border-4 border-orange-500 border-dashed flex items-center justify-center animate-[spin_20s_linear_infinite]"
-                style={{ width: '90vmin', height: '90vmin', boxShadow: '0 0 0 9999px rgba(0,0,0,0.55)' }}
+                style={{ width: '90vmin', height: '90vmin', boxShadow: '0 0 0 9999px #000' }}
               ></div>
               <div className="absolute flex items-center justify-center">
                 <span className="text-white font-black text-lg tracking-widest uppercase bg-black/70 px-6 py-3 rounded-full backdrop-blur-md border border-white/10 shadow-xl">
                   Centrá el neumático
                 </span>
               </div>
+              {!isScanning && (
+                <div className="absolute top-1/2 -translate-y-1/2 mt-32">
+                   <span className="text-white text-xs font-bold uppercase tracking-widest animate-pulse bg-black/50 px-4 py-2 rounded-full backdrop-blur-sm border border-white/10">
+                    Presioná para escanear
+                  </span>
+                </div>
+              )}
               <div className="absolute bottom-8 px-4 text-center">
                 <span className="text-white/85 text-xs sm:text-sm font-medium bg-black/50 px-4 py-2 rounded-full backdrop-blur-sm border border-white/10">
                   Podés usar vertical u horizontal. Priorizá enfoque y nitidez.
@@ -547,7 +554,7 @@ export function TireSizeSearch({
             placeholder="Rodado" 
             example="16"
             options={availableRims.map(String)}
-            formatOption={(v) => `R${v}`}
+            formatOption={(v: string) => `R${v}`}
             isOpen={activeDropdown === "rim"}
             onToggle={() => setActiveDropdown(activeDropdown === "rim" ? null : "rim")}
             isActive={activeDropdown === "rim"}
