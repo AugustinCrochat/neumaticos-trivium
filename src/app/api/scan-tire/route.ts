@@ -57,7 +57,7 @@ function marketScore(w: number, p: number, r: number): number {
   return s;
 }
 
-interface Candidate { width: number; profile: number; rim: number; score: number }
+interface Candidate { width: number; profile: number; rim: number; score: number; raw?: string }
 
 function bestCandidate(nums: number[]): Candidate | null {
   const candidates: Candidate[] = [];
@@ -78,14 +78,14 @@ async function scanWithGemini(
 ): Promise<Candidate | null> {
   try {
     const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro:generateContent?key=${apiKey}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           contents: [{
             parts: [
-              { text: "Extrae la medida del neumático de la foto (ej: 205/55 R16). Responde solo con la medida o NO_ENCONTRADO." },
+              { text: "I need to know the tire size shown in this image. Please look for the technical markings on the sidewall, typically in the format: WIDTH/PROFILE R RIM (e.g., 205/55 R16). Answer ONLY with the detected size. If you cannot find it, answer NO_ENCONTRADO." },
               { inline_data: { mime_type: 'image/jpeg', data: imageData } }
             ],
           }],
@@ -114,7 +114,7 @@ async function scanWithGemini(
     const text: string = (data.candidates?.[0]?.content?.parts?.[0]?.text ?? '').trim();
     console.log('Gemini →', text);
 
-    if (!text || text.includes('NO_ENCONTRADO')) return null;
+    if (!text || text.includes('NO_ENCONTRADO')) return { width: -100, profile: 0, rim: 0, score: 0, raw: text };
     
     // Extract numbers (e.g. 245, 40, 18) and find best candidate
     const nums = (text.match(/\d+/g) ?? []).map(Number);
@@ -122,7 +122,7 @@ async function scanWithGemini(
       return bestCandidate(nums);
     }
     
-    return null;
+    return { width: -101, profile: 0, rim: 0, score: 0, raw: text };
   } catch (err) {
     console.error('Gemini exception:', err);
     return null;
@@ -225,7 +225,12 @@ export async function POST(req: NextRequest) {
 
   // Scans are only saved when confirmed (either via AI success or manual fallback)
   if (result && result.width < 0) {
-    return NextResponse.json({ found: false, error: "debug", status: Math.abs(result.width) });
+    return NextResponse.json({ 
+      found: false, 
+      error: "debug", 
+      status: Math.abs(result.width),
+      raw: result.raw 
+    });
   }
 
   if (result) {

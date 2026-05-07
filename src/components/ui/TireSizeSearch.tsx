@@ -276,7 +276,7 @@ export function TireSizeSearch({
         body: JSON.stringify({ base64Image: images.original, base64Processed: images.processed }),
         signal: controller.signal,
       });
-      return res.json() as Promise<{ found: boolean; width?: number; profile?: number; rim?: number; error?: string; status?: number }>;
+      return res.json() as Promise<{ found: boolean; width?: number; profile?: number; rim?: number; error?: string; status?: number; raw?: string }>;
     } finally {
       clearTimeout(timeout);
     }
@@ -303,7 +303,7 @@ export function TireSizeSearch({
         setScanError(null);
         found = true;
       } else if (data.error === "debug") {
-        setScanError(`Error de IA (Código ${data.status}). Probá de nuevo en un momento.`);
+        setScanError(`IA: "${data.raw || 'Sin respuesta'}" (Cod ${data.status})`);
         found = true; 
       }
     } catch (err: any) {
