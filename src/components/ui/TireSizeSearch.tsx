@@ -37,10 +37,15 @@ export function TireSizeSearch({
   // 'width' | 'profile' | 'rim' | null
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
 
-  const [searchMode, setSearchMode] = useState<"medida" | "vehiculo">("medida");
+  const [searchMode, setSearchMode] = useState<"medida" | "vehiculo" | "patente">("medida");
   const [vehBrand, setVehBrand] = useState("");
   const [vehModel, setVehModel] = useState("");
   const [vehActiveDropdown, setVehActiveDropdown] = useState<string | null>(null);
+
+  // Patente state
+  const [patente, setPatente] = useState("");
+  const [patenteLoading, setPatenteLoading] = useState(false);
+  const [patenteError, setPatenteError] = useState<string | null>(null);
 
   // Custom Camera Scanner state
   const [showScanner, setShowScanner] = useState(false);
@@ -115,6 +120,39 @@ export function TireSizeSearch({
   function onRimChange(v: string) {
     setRim(v);
     setActiveDropdown(null); // Close all
+  }
+
+  // --- PATENTE LOGIC ---
+  async function searchByPatente(e: React.FormEvent) {
+    e.preventDefault();
+    if (!patente) return;
+    
+    setPatenteLoading(true);
+    setPatenteError(null);
+    
+    try {
+      const res = await fetch("/api/patente", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ patente })
+      });
+      
+      if (!res.ok) throw new Error("Error obteniendo datos");
+      
+      const data = await res.json();
+      
+      if (data.brand && data.model) {
+        setVehBrand(data.brand);
+        setVehModel(data.model);
+        setSearchMode("vehiculo");
+      } else {
+        setPatenteError("No encontramos un modelo asociado a esta patente.");
+      }
+    } catch (err) {
+      setPatenteError("Hubo un problema consultando la patente.");
+    } finally {
+      setPatenteLoading(false);
+    }
   }
 
   // --- CAMERA LOGIC ---
@@ -487,26 +525,41 @@ export function TireSizeSearch({
       )}
 
       {/* TABS */}
-      <div className="flex gap-2 mb-6">
+      <div className="flex bg-navy-800/50 p-1.5 rounded-2xl mb-6 shadow-inner border border-navy-700/50">
         <button 
+          type="button" 
           onClick={() => setSearchMode("medida")} 
-          className={`flex-1 py-3 px-2 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 ${searchMode === "medida" ? "bg-orange-500 text-white shadow-lg shadow-orange-500/20" : "bg-navy-800 text-navy-300 hover:text-white border border-transparent hover:border-navy-700"}`}
+          className={`flex-1 py-3 px-2 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-1.5 sm:gap-2 ${searchMode === "medida" ? "bg-orange-500 text-white shadow-lg shadow-orange-500/20" : "bg-transparent text-navy-300 hover:text-white"}`}
         >
-          <svg className="w-5 h-5 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="w-4 h-4 sm:w-5 sm:h-5 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <circle cx="12" cy="12" r="10" strokeWidth="2" />
             <circle cx="12" cy="12" r="4" strokeWidth="2" />
             <path strokeWidth="2" strokeLinecap="round" d="M12 2v2M12 20v2M2 12h2M20 12h2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
           </svg>
-          Por Medida
+          <span className="hidden sm:inline">Por Medida</span>
+          <span className="sm:hidden">Medida</span>
         </button>
         <button 
+          type="button" 
           onClick={() => setSearchMode("vehiculo")} 
-          className={`flex-1 py-3 px-2 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 ${searchMode === "vehiculo" ? "bg-orange-500 text-white shadow-lg shadow-orange-500/20" : "bg-navy-800 text-navy-300 hover:text-white border border-transparent hover:border-navy-700"}`}
+          className={`flex-1 py-3 px-2 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-1.5 sm:gap-2 ${searchMode === "vehiculo" ? "bg-orange-500 text-white shadow-lg shadow-orange-500/20" : "bg-transparent text-navy-300 hover:text-white"}`}
         >
-          <svg className="w-5 h-5 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="w-4 h-4 sm:w-5 sm:h-5 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2m10 0h-6m10 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm-10 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0z" />
           </svg>
-          Por Vehículo
+          <span className="hidden sm:inline">Por Vehículo</span>
+          <span className="sm:hidden">Auto</span>
+        </button>
+        <button 
+          type="button" 
+          onClick={() => setSearchMode("patente")} 
+          className={`flex-1 py-3 px-2 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-1.5 sm:gap-2 ${searchMode === "patente" ? "bg-orange-500 text-white shadow-lg shadow-orange-500/20" : "bg-transparent text-navy-300 hover:text-white"}`}
+        >
+          <svg className="w-4 h-4 sm:w-5 sm:h-5 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <rect x="3" y="8" width="18" height="8" rx="2" strokeWidth="2" />
+            <path strokeLinecap="round" strokeWidth="2" d="M7 8v8M17 8v8" />
+          </svg>
+          Patente
         </button>
       </div>
 
@@ -729,6 +782,61 @@ export function TireSizeSearch({
           </button>
         )}
       </form>
+      )}
+
+      {/* PATENTE MODE */}
+      {searchMode === "patente" && (
+        <form onSubmit={searchByPatente} className="flex flex-col gap-4">
+          <div className="bg-navy-800/80 p-4 rounded-xl border border-navy-700/50 backdrop-blur-sm">
+            <div className="flex flex-col gap-2 relative">
+              <label className="text-navy-300 font-semibold text-sm">Patente del vehículo</label>
+              <input
+                type="text"
+                placeholder="Ej: AD762AA o AB123CD"
+                value={patente}
+                onChange={(e) => setPatente(e.target.value.toUpperCase())}
+                className="w-full bg-navy-900 border border-navy-600 rounded-xl px-4 py-3.5 text-white font-bold text-center text-lg tracking-widest uppercase placeholder:text-navy-500 placeholder:font-normal placeholder:tracking-normal focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500 transition-all"
+                maxLength={7}
+              />
+              <div className="absolute top-[34px] left-2 bottom-2 w-4 bg-blue-600 rounded-l-lg border-r border-white/20"></div>
+            </div>
+            
+            {patenteError && (
+              <p className="text-red-400 text-xs mt-3 text-center">{patenteError}</p>
+            )}
+            
+            <p className="text-navy-400 text-xs text-center mt-4">
+              Consultaremos bases de datos públicas para obtener tu modelo exacto.
+            </p>
+          </div>
+
+          <button
+            type="submit"
+            disabled={patente.length < 6 || patenteLoading}
+            className={`w-full font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-all ${
+              patente.length >= 6 && !patenteLoading
+                ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/25 hover:from-orange-400 hover:to-orange-500"
+                : "bg-navy-800 text-navy-400 cursor-not-allowed border border-navy-700/50"
+            }`}
+          >
+            {patenteLoading ? (
+              <>
+                <svg className="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Buscando...
+              </>
+            ) : (
+              <>
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                Buscar Vehículo
+              </>
+            )}
+          </button>
+        </form>
       )}
     </>
   );
