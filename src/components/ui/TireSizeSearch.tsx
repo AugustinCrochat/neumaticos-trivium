@@ -559,7 +559,7 @@ export function TireSizeSearch({
             type="button"
             onClick={startCamera}
             disabled={isScanning || showScanner}
-            className="flex-1 bg-gradient-to-r from-violet-600 via-fuchsia-600 to-orange-500 hover:from-violet-500 hover:via-fuchsia-500 hover:to-orange-400 disabled:opacity-50 text-white font-black py-3 px-4 rounded-xl border border-violet-300/30 transition-all flex items-center justify-center gap-2 text-sm shadow-lg shadow-fuchsia-900/30"
+            className="flex-1 bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 disabled:opacity-50 text-white font-black py-3 px-4 rounded-xl border border-red-300/30 transition-all flex items-center justify-center gap-2 text-sm shadow-lg shadow-red-900/30"
           >
             {isScanning ? (
               <svg className="animate-spin h-5 w-5 text-orange-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -567,11 +567,14 @@ export function TireSizeSearch({
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
             ) : (
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2l2.4 5.6L20 10l-5.6 2.4L12 18l-2.4-5.6L4 10l5.6-2.4L12 2z" />
-              </svg>
+              <>
+                <span>Reconocer medida con IA</span>
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2l2.4 5.6L20 10l-5.6 2.4L12 18l-2.4-5.6L4 10l5.6-2.4L12 2z" />
+                </svg>
+              </>
             )}
-            {isScanning ? (scanProgress || "Analizando foto...") : "Reconocer medida con IA"}
+            {isScanning ? (scanProgress || "Analizando foto...") : null}
           </button>
         </div>
 
