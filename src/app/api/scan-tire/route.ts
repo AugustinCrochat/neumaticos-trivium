@@ -83,26 +83,20 @@ async function scanWithGemini(
 
     while (attempts < maxAttempts) {
       res = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${apiKey}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             contents: [{
               parts: [
-                { text: "Analyze this tire sidewall image carefully. I need to identify the tire size. Look for a sequence like 205/55R16 or 245/40R18. These numbers are often embossed on the black rubber. First, describe the numbers you see to ensure accuracy, and finally provide the size in the format WIDTH/PROFILE R RIM. If no size is found, state NO_ENCONTRADO." },
+                { text: "Tire size? (e.g. 205/55R16). Answer only with the size or NO_ENCONTRADO." },
                 { inline_data: { mime_type: 'image/jpeg', data: imageData } }
               ],
             }],
             generationConfig: { 
               temperature: 0,
             },
-            safetySettings: [
-              { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
-              { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" },
-              { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_NONE" },
-              { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" }
-            ]
           }),
         },
       );
@@ -119,7 +113,7 @@ async function scanWithGemini(
     if (!res!.ok) {
       const errText = await res!.text();
       console.error('Gemini error:', res!.status, errText);
-      return { width: -res!.status, profile: 0, rim: 0, score: 0 }; 
+      return { width: -res!.status, profile: 0, rim: 0, score: 0, raw: errText }; 
     }
 
     const data = await res!.json();
@@ -131,7 +125,7 @@ async function scanWithGemini(
     // Extract numbers (e.g. 245, 40, 18) and find best candidate
     const nums = (text.match(/\d+/g) ?? []).map(Number);
     if (nums.length >= 3) {
-      return bestCandidate(nums);
+      return bestCandidate(nums) ?? { width: -101, profile: 0, rim: 0, score: 0, raw: text };
     }
     
     return { width: -101, profile: 0, rim: 0, score: 0, raw: text };
@@ -239,7 +233,12 @@ export async function POST(req: NextRequest) {
   }
 
   if (result && result.width < 0) {
-    return NextResponse.json({ found: false, error: "not_found" });
+    return NextResponse.json({ 
+      found: false, 
+      error: "debug", 
+      status: Math.abs(result.width),
+      raw: result.raw 
+    });
   }
 
   if (result) {
