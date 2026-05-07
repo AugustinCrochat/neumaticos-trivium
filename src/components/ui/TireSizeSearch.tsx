@@ -166,7 +166,10 @@ export function TireSizeSearch({
 
     try {
       const constraints: MediaStreamConstraints = {
-        video: { facingMode: "environment" }
+        video: {
+          facingMode: "environment",
+          aspectRatio: { ideal: 0.75 }, // portrait 4:3 — wider horizontal FOV than default 16:9
+        }
       };
 
       const stream = await navigator.mediaDevices.getUserMedia(constraints);
