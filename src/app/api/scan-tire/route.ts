@@ -223,11 +223,7 @@ export async function POST(req: NextRequest) {
     result = await scanWithOcrSpace(base64Image);
   }
 
-  // Only save failed scans immediately — successful ones are saved when user confirms
-  if (!result) {
-    saveDatasetImage(imageData, null).catch(console.error);
-  }
-
+  // Scans are only saved when confirmed (either via AI success or manual fallback)
   if (result && result.width < 0) {
     return NextResponse.json({ found: false, error: "debug", status: Math.abs(result.width) });
   }
