@@ -57,10 +57,6 @@ export function TireSizeSearch({
   const streamRef = useRef<MediaStream | null>(null);
   const [hasTorch, setHasTorch] = useState(false);
   const [torchOn, setTorchOn] = useState(false);
-  const [guideMode, setGuideMode] = useState<"full" | "macro">("full");
-
-  const [cameras, setCameras] = useState<MediaDeviceInfo[]>([]);
-  const [cameraIndex, setCameraIndex] = useState(-1);
 
   const availableWidths = useMemo(
     () => unique(PRODUCTS.map((p) => p.size.width)),
@@ -169,20 +165,8 @@ export function TireSizeSearch({
     } catch { /* iOS ignores */ }
 
     try {
-      // Use local var to avoid stale state (setCameras is async)
-      let currentCameras = cameras;
-      if (currentCameras.length === 0) {
-        const devices = await navigator.mediaDevices.enumerateDevices();
-        currentCameras = devices.filter(d => d.kind === "videoinput");
-        setCameras(currentCameras);
-      }
-
-      const selectedCamera = cameraIndex >= 0 ? currentCameras[cameraIndex] : undefined;
-      // Minimal constraints — let the browser use native camera defaults for maximum FOV
       const constraints: MediaStreamConstraints = {
-        video: selectedCamera
-          ? { deviceId: { exact: selectedCamera.deviceId } }
-          : { facingMode: "environment" }
+        video: { facingMode: "environment" }
       };
 
       const stream = await navigator.mediaDevices.getUserMedia(constraints);
@@ -204,22 +188,6 @@ export function TireSizeSearch({
       setScanError("No pudimos acceder a tu cámara. Asegurate de dar permisos.");
       setShowScanner(false);
     }
-  }
-
-  async function switchCamera() {
-    if (cameras.length < 2) return;
-    const nextIndex = (cameraIndex + 1) % cameras.length;
-    setCameraIndex(nextIndex); // now always >= 0, explicit device selection
-    
-    // Stop current
-    if (streamRef.current) {
-      streamRef.current.getTracks().forEach(t => t.stop());
-    }
-    
-    // Start next with a small delay to avoid race conditions
-    setTimeout(() => {
-      startCamera();
-    }, 100);
   }
 
   function stopCamera() {
@@ -394,17 +362,6 @@ export function TireSizeSearch({
               Cancelar
             </button>
             <div className="flex items-center gap-2">
-              {cameras.length > 1 && (
-                <button
-                  onClick={switchCamera}
-                  className="bg-white/20 hover:bg-white/30 backdrop-blur-md text-white p-2.5 rounded-full transition-colors"
-                  title="Cambiar cámara"
-                >
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                  </svg>
-                </button>
-              )}
               {hasTorch && (
                 <button
                   onClick={toggleTorch}
@@ -433,39 +390,16 @@ export function TireSizeSearch({
               className="absolute inset-0 w-full h-full object-contain bg-black"
             />
 
-            {/* Guía circular grande */}
-            <div className="absolute inset-0 pointer-events-none flex items-center justify-center transition-opacity duration-500">
-              {guideMode === "full" ? (
-                <div
-                  className="rounded-full border-4 border-orange-500 border-dashed flex items-center justify-center animate-[spin_20s_linear_infinite]"
-                  style={{ width: '90vmin', height: '90vmin', boxShadow: '0 0 0 9999px rgba(0,0,0,0.55)' }}
-                ></div>
-              ) : (
-                <div
-                  className="w-[80vw] h-[30vw] border-4 border-orange-500 border-dashed rounded-3xl flex items-center justify-center"
-                  style={{ boxShadow: '0 0 0 9999px rgba(0,0,0,0.55)' }}
-                >
-                  <div className="absolute inset-0 border-2 border-white/20 rounded-3xl animate-pulse"></div>
-                </div>
-              )}
-              
+            {/* Guía circular */}
+            <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+              <div
+                className="rounded-full border-4 border-orange-500 border-dashed animate-[spin_20s_linear_infinite]"
+                style={{ width: '90vmin', height: '90vmin', boxShadow: '0 0 0 9999px rgba(0,0,0,0.55)' }}
+              />
               <div className="absolute flex items-center justify-center top-1/2 -translate-y-1/2">
                 <span className="text-white font-black text-sm tracking-widest uppercase bg-black/70 px-6 py-3 rounded-full backdrop-blur-md border border-white/10 shadow-xl whitespace-nowrap">
-                  {guideMode === "full" ? "Centrá el neumático" : "Enfocá los números"}
+                  Centrá el neumático
                 </span>
-              </div>
-
-              <div className="absolute bottom-32 px-4 text-center">
-                <button
-                  onClick={(e) => { e.stopPropagation(); setGuideMode(m => m === "full" ? "macro" : "full"); }}
-                  className="pointer-events-auto bg-navy-800/80 text-white px-5 py-2.5 rounded-full text-xs font-bold border border-white/20 backdrop-blur-md active:scale-95 transition-all flex items-center gap-2"
-                >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
-                  Cambiar modo: {guideMode === "full" ? "Macro / Detalle" : "Neumático completo"}
-                </button>
               </div>
             </div>
 
