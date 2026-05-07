@@ -73,25 +73,33 @@ function bestCandidate(nums: number[]): Candidate | null {
 }
 
 async function scanWithGemini(
-  originalImage: string,
-  processedImage: string,
+  imageData: string,
   apiKey: string,
 ): Promise<Candidate | null> {
   try {
     const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-pro-preview:generateContent?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           contents: [{
             parts: [
-              { text: "Busca la medida del neumático (ej: 205/55 R16) en estas dos fotos del mismo neumático (una es la original y otra tiene contraste forzado para resaltar el relieve). Responde solo con la medida o NO_ENCONTRADO." },
-              { inline_data: { mime_type: 'image/jpeg', data: originalImage } },
-              { inline_data: { mime_type: 'image/jpeg', data: processedImage } }
+              { text: "Extrae la medida del neumático de la foto (ej: 205/55 R16). Responde solo con la medida o NO_ENCONTRADO." },
+              { inline_data: { mime_type: 'image/jpeg', data: imageData } }
             ],
           }],
-          generationConfig: { temperature: 0 },
+          generationConfig: { 
+            temperature: 0,
+            topP: 1,
+            topK: 1
+          },
+          safetySettings: [
+            { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
+            { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" },
+            { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_NONE" },
+            { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" }
+          ]
         }),
       },
     );
@@ -99,7 +107,7 @@ async function scanWithGemini(
     if (!res.ok) {
       const errText = await res.text();
       console.error('Gemini error:', res.status, errText);
-      return { width: -res.status, profile: 0, rim: 0, score: 0 }; // Return negative status as width for debugging
+      return { width: -res.status, profile: 0, rim: 0, score: 0 }; 
     }
 
     const data = await res.json();
@@ -208,7 +216,7 @@ export async function POST(req: NextRequest) {
   const apiKey = process.env.GOOGLE_AI_KEY;
 
   if (apiKey) {
-    result = await scanWithGemini(imageData, processedData, apiKey);
+    result = await scanWithGemini(imageData, apiKey);
   }
 
   if (!result) {
