@@ -86,20 +86,15 @@ async function scanWithGemini(
           contents: [{
             parts: [
               {
-                text: `Actúa como un experto inspector de neumáticos. Analiza la imagen minuciosamente y busca la nomenclatura técnica estándar de medidas (Ancho/Perfil R Diámetro).
-Ignora por completo las marcas comerciales (ej: Pirelli, Fate, Michelin), nombres de modelo (ej: P400 EVO, Agilis) o códigos de fabricación (ej: DOT).
-Ten en cuenta los siguientes desafíos visuales:
-1. Curvatura: El texto sigue la forma circular de la rueda y puede estar curvo, al revés o en diagonal dependiendo de dónde frenó el auto.
-2. Contraste: Al ser caucho negro con letras en relieve negras, busca sutiles sombras que definen los números.
-Por favor, escanea toda la circunferencia del flanco (sidewall) hasta encontrar el patrón (ej: 205/55 R16, P195/65R15, 225 40 18).
-Devuelve únicamente un objeto JSON estricto con las claves "ancho", "perfil" y "aro" (todas como números enteros). 
-Ejemplo: {"ancho": 205, "perfil": 55, "aro": 16}.
-Si no encuentras la medida, devuelve: {"error": "no encontrado"}`
+                text: `¿Qué medida tiene este neumático? 
+Busca el patrón tipo 205/55 R16 en el flanco.
+Responde únicamente con la medida encontrada (ej: 225/45 R17). 
+Si no la encuentras, responde NO_ENCONTRADO.`
               },
               { inline_data: { mime_type: 'image/jpeg', data: originalImage } }
             ],
           }],
-          generationConfig: { temperature: 0, response_mime_type: "application/json" },
+          generationConfig: { temperature: 0 },
         }),
       },
     );
@@ -117,16 +112,12 @@ Si no encuentras la medida, devuelve: {"error": "no encontrado"}`
     const text: string = (data.candidates?.[0]?.content?.parts?.[0]?.text ?? '').trim();
     console.log('Gemini →', text);
 
-    if (!text || text.includes('error') || text.includes('no encontrado')) return null;
+    if (!text || text.includes('NO_ENCONTRADO')) return null;
     
-    try {
-      const parsed = JSON.parse(text);
-      if (parsed.ancho && parsed.perfil && parsed.aro) {
-        return bestCandidate([parsed.ancho, parsed.perfil, parsed.aro]);
-      }
-    } catch (e) {
-      // Si falla el parseo JSON, intentamos usar nuestra regex por si acaso
-      return bestCandidate((text.match(/\d+/g) ?? []).map(Number));
+    // Extract numbers (e.g. 245, 40, 18) and find best candidate
+    const nums = (text.match(/\d+/g) ?? []).map(Number);
+    if (nums.length >= 3) {
+      return bestCandidate(nums);
     }
     
     return null;
