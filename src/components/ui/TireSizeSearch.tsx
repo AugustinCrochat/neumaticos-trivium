@@ -189,8 +189,8 @@ export function TireSizeSearch({
         video: {
           facingMode: selectedCamera ? undefined : "environment",
           deviceId: selectedCamera ? { exact: selectedCamera.deviceId } : undefined,
-          width: { ideal: 1080 },
-          height: { ideal: 1920 },
+          width: { ideal: 1920 },
+          height: { ideal: 1080 },
           zoom: { ideal: 1 },
         }
       };
@@ -457,7 +457,7 @@ export function TireSizeSearch({
               autoPlay
               playsInline
               muted
-              className="absolute inset-0 w-full h-full object-cover"
+              className="absolute inset-0 w-full h-full object-contain bg-black"
             />
 
             {/* Guía circular grande */}
