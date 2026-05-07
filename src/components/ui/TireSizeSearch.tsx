@@ -62,6 +62,9 @@ export function TireSizeSearch({
   const [zoomCapabilities, setZoomCapabilities] = useState<{ min: number; max: number } | null>(null);
   const [guideMode, setGuideMode] = useState<"full" | "macro">("full");
 
+  const [cameras, setCameras] = useState<MediaDeviceInfo[]>([]);
+  const [cameraIndex, setCameraIndex] = useState(0);
+
   const availableWidths = useMemo(
     () => unique(PRODUCTS.map((p) => p.size.width)),
     []
@@ -162,6 +165,17 @@ export function TireSizeSearch({
     setShowScanner(true);
     setScanError(null);
 
+    // Get list of cameras if not already fetched
+    if (cameras.length === 0) {
+      try {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const videoDevices = devices.filter(d => d.kind === "videoinput");
+        setCameras(videoDevices);
+      } catch (err) {
+        console.error("Error listing devices", err);
+      }
+    }
+
     // Hide browser nav bar on Android Chrome
     try {
       const el = document.documentElement;
@@ -170,9 +184,17 @@ export function TireSizeSearch({
     } catch { /* iOS ignores */ }
 
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "environment", width: { ideal: 1920 }, height: { ideal: 1080 } }
-      });
+      const selectedCamera = cameras[cameraIndex];
+      const constraints: any = {
+        video: {
+          facingMode: selectedCamera ? undefined : "environment",
+          deviceId: selectedCamera ? { exact: selectedCamera.deviceId } : undefined,
+          width: { ideal: 1920 },
+          height: { ideal: 1080 }
+        }
+      };
+
+      const stream = await navigator.mediaDevices.getUserMedia(constraints);
       streamRef.current = stream;
       if (videoRef.current) videoRef.current.srcObject = stream;
 
@@ -192,6 +214,22 @@ export function TireSizeSearch({
       setScanError("No pudimos acceder a tu cámara. Asegurate de dar permisos.");
       setShowScanner(false);
     }
+  }
+
+  async function switchCamera() {
+    if (cameras.length < 2) return;
+    const nextIndex = (cameraIndex + 1) % cameras.length;
+    setCameraIndex(nextIndex);
+    
+    // Stop current
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach(t => t.stop());
+    }
+    
+    // Start next with a small delay to avoid race conditions
+    setTimeout(() => {
+      startCamera();
+    }, 100);
   }
 
   function stopCamera() {
@@ -375,21 +413,34 @@ export function TireSizeSearch({
             >
               Cancelar
             </button>
-            {hasTorch && (
-              <button
-                onClick={toggleTorch}
-                className={`px-5 py-2.5 rounded-full flex items-center gap-2 font-bold text-sm transition-all shadow-lg ${
-                  torchOn
-                    ? 'bg-yellow-400 text-black shadow-yellow-400/40'
-                    : 'bg-yellow-400/20 border-2 border-yellow-400 text-yellow-300 animate-pulse'
-                }`}
-              >
-                <svg className="w-5 h-5" fill={torchOn ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor" strokeWidth={torchOn ? 0 : 2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-                {torchOn ? 'Flash ON' : 'Flash'}
-              </button>
-            )}
+            <div className="flex items-center gap-2">
+              {cameras.length > 1 && (
+                <button
+                  onClick={switchCamera}
+                  className="bg-white/20 hover:bg-white/30 backdrop-blur-md text-white p-2.5 rounded-full transition-colors"
+                  title="Cambiar cámara"
+                >
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                </button>
+              )}
+              {hasTorch && (
+                <button
+                  onClick={toggleTorch}
+                  className={`px-5 py-2.5 rounded-full flex items-center gap-2 font-bold text-sm transition-all shadow-lg ${
+                    torchOn
+                      ? 'bg-yellow-400 text-black shadow-yellow-400/40'
+                      : 'bg-yellow-400/20 border-2 border-yellow-400 text-yellow-300 animate-pulse'
+                  }`}
+                >
+                  <svg className="w-5 h-5" fill={torchOn ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor" strokeWidth={torchOn ? 0 : 2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                  {torchOn ? 'Flash ON' : 'Flash'}
+                </button>
+              )}
+            </div>
           </div>
 
           {/* Camera — video simple, sin transformaciones CSS */}
