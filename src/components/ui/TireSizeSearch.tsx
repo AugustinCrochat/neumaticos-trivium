@@ -189,8 +189,8 @@ export function TireSizeSearch({
         video: {
           facingMode: selectedCamera ? undefined : "environment",
           deviceId: selectedCamera ? { exact: selectedCamera.deviceId } : undefined,
-          width: { ideal: 1920 },
-          height: { ideal: 1080 },
+          width: { ideal: 1080 },
+          height: { ideal: 1920 },
           zoom: { ideal: 1 },
         }
       };
@@ -279,7 +279,8 @@ export function TireSizeSearch({
     // We'll take a slightly larger square (98%) to ensure we don't cut off numbers at the edges.
     const natW = video.videoWidth;
     const natH = video.videoHeight;
-    const cropSize = Math.round(natH * 0.98); 
+    const shortSide = Math.min(natW, natH);
+    const cropSize = Math.round(shortSide * 0.98);
     const cropX = Math.round((natW - cropSize) / 2);
     const cropY = Math.round((natH - cropSize) / 2);
 
@@ -373,7 +374,7 @@ export function TireSizeSearch({
         saveFailedSample(images, "quota", data.status);
         found = true;
       } else if (data.error === "debug") {
-        setScanError(`IA: "${data.raw || 'No detectado'}" (Cod ${data.status || '404'})`);
+        setScanError("No logramos identificar la medida. Intentá acercarte un poco más a los números o mejorar la iluminación.");
         saveFailedSample(images, "debug", data.status);
         found = true; 
       }
