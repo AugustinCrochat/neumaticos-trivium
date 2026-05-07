@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { writeFile } from 'fs/promises';
 import { join } from 'path';
+import { put } from '@vercel/blob';
 
 const WIDTHS   = [135, 145, 155, 165, 175, 185, 195, 205, 215, 220, 225, 235, 245, 255, 265, 275, 285, 295, 305, 315, 325];
 const PROFILES = [30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80];
@@ -164,11 +165,20 @@ async function saveDatasetImage(imageData: string, result: Candidate | null) {
     const label = result ? `${result.width}-${result.profile}-${result.rim}` : 'failed';
     const filename = `${timestamp}_${label}.jpg`;
     
-    // In local development, save to the public dataset folder
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.BLOB_READ_WRITE_TOKEN) {
+       // Save to Vercel Blob if token is available (Production or Local with Env Var)
+       const blob = await put(`dataset/${filename}`, buffer, {
+         access: 'public',
+         contentType: 'image/jpeg'
+       });
+       console.log(`Saved dataset image to Vercel Blob: ${blob.url}`);
+    } else if (process.env.NODE_ENV === 'development') {
+       // Fallback to local file system only in development mode
        const filepath = join(process.cwd(), 'public', 'dataset', filename);
        await writeFile(filepath, buffer);
-       console.log(`Saved dataset image: ${filename}`);
+       console.log(`Saved dataset image locally: ${filename}`);
+    } else {
+       console.warn('Skipping image save: No Vercel Blob token configured.');
     }
   } catch (err) {
     console.error('Failed to save dataset image:', err);

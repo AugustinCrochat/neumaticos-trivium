@@ -8,6 +8,27 @@ function unique<T>(arr: T[]): T[] {
   return [...new Set(arr)].sort((a, b) => Number(a) - Number(b));
 }
 
+const VEHICLE_DB = [
+  { brand: "Toyota", model: "Hilux", sizes: [{ w: "265", p: "65", r: "17" }, { w: "265", p: "60", r: "18" }, { w: "225", p: "70", r: "17" }] },
+  { brand: "Peugeot", model: "208", sizes: [{ w: "195", p: "55", r: "16" }, { w: "185", p: "65", r: "15" }, { w: "205", p: "45", r: "17" }] },
+  { brand: "Fiat", model: "Cronos", sizes: [{ w: "185", p: "60", r: "15" }, { w: "195", p: "55", r: "16" }] },
+  { brand: "Volkswagen", model: "Amarok", sizes: [{ w: "245", p: "70", r: "16" }, { w: "245", p: "65", r: "17" }, { w: "255", p: "60", r: "18" }, { w: "255", p: "50", r: "20" }] },
+  { brand: "Volkswagen", model: "Gol Trend", sizes: [{ w: "175", p: "70", r: "14" }, { w: "195", p: "55", r: "15" }] },
+  { brand: "Volkswagen", model: "Taos", sizes: [{ w: "215", p: "55", r: "18" }] },
+  { brand: "Ford", model: "Ranger", sizes: [{ w: "255", p: "70", r: "16" }, { w: "265", p: "65", r: "17" }, { w: "265", p: "60", r: "18" }] },
+  { brand: "Ford", model: "Territory", sizes: [{ w: "235", p: "50", r: "18" }, { w: "235", p: "55", r: "19" }] },
+  { brand: "Chevrolet", model: "Onix", sizes: [{ w: "185", p: "65", r: "15" }, { w: "195", p: "55", r: "16" }] },
+  { brand: "Chevrolet", model: "Tracker", sizes: [{ w: "215", p: "60", r: "16" }, { w: "215", p: "55", r: "17" }] },
+  { brand: "Toyota", model: "Corolla", sizes: [{ w: "205", p: "55", r: "16" }, { w: "225", p: "45", r: "17" }] },
+  { brand: "Toyota", model: "Yaris", sizes: [{ w: "185", p: "60", r: "15" }, { w: "195", p: "50", r: "16" }] },
+  { brand: "Toyota", model: "Corolla Cross", sizes: [{ w: "215", p: "60", r: "17" }, { w: "225", p: "50", r: "18" }] },
+  { brand: "Renault", model: "Kangoo", sizes: [{ w: "185", p: "65", r: "15" }] },
+  { brand: "Renault", model: "Sandero", sizes: [{ w: "185", p: "65", r: "15" }, { w: "195", p: "55", r: "16" }] },
+  { brand: "Nissan", model: "Frontier", sizes: [{ w: "255", p: "70", r: "16" }, { w: "255", p: "60", r: "18" }] },
+  { brand: "Jeep", model: "Renegade", sizes: [{ w: "215", p: "65", r: "16" }, { w: "215", p: "60", r: "17" }, { w: "225", p: "55", r: "18" }] },
+  { brand: "Honda", model: "HR-V", sizes: [{ w: "215", p: "55", r: "17" }] }
+].sort((a, b) => a.brand.localeCompare(b.brand));
+
 export function TireSizeSearch({
   initialMedida,
 }: {
@@ -32,6 +53,11 @@ export function TireSizeSearch({
 
   // 'width' | 'profile' | 'rim' | null
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+
+  const [searchMode, setSearchMode] = useState<"medida" | "vehiculo">("medida");
+  const [vehBrand, setVehBrand] = useState("");
+  const [vehModel, setVehModel] = useState("");
+  const [vehActiveDropdown, setVehActiveDropdown] = useState<string | null>(null);
 
   // Custom Camera Scanner state
   const [showScanner, setShowScanner] = useState(false);
@@ -66,6 +92,15 @@ export function TireSizeSearch({
       ),
     [width, profile]
   );
+
+  const availableBrands = useMemo(() => Array.from(new Set(VEHICLE_DB.map(v => v.brand))), []);
+  const availableModels = useMemo(() => {
+    if (!vehBrand) return [];
+    return VEHICLE_DB.filter(v => v.brand === vehBrand).map(v => v.model);
+  }, [vehBrand]);
+  const selectedVehicle = useMemo(() => {
+    return VEHICLE_DB.find(v => v.brand === vehBrand && v.model === vehModel);
+  }, [vehBrand, vehModel]);
 
   function handleSearch() {
     if (!width && !profile && !rim) return;
@@ -350,8 +385,83 @@ export function TireSizeSearch({
         </div>
       )}
 
+      {/* TABS */}
+      <div className="flex gap-2 mb-6">
+        <button 
+          onClick={() => setSearchMode("medida")} 
+          className={`flex-1 py-3 px-2 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 ${searchMode === "medida" ? "bg-orange-500 text-white shadow-lg shadow-orange-500/20" : "bg-navy-800 text-navy-300 hover:text-white border border-transparent hover:border-navy-700"}`}
+        >
+          <svg className="w-4 h-4 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+          </svg>
+          Por Medida
+        </button>
+        <button 
+          onClick={() => setSearchMode("vehiculo")} 
+          className={`flex-1 py-3 px-2 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 ${searchMode === "vehiculo" ? "bg-orange-500 text-white shadow-lg shadow-orange-500/20" : "bg-navy-800 text-navy-300 hover:text-white border border-transparent hover:border-navy-700"}`}
+        >
+          <svg className="w-4 h-4 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+          </svg>
+          Por Vehículo
+        </button>
+      </div>
+
+      {/* VEHICLE SEARCH FORM */}
+      {searchMode === "vehiculo" && (
+        <div className="flex flex-col gap-3 animate-in fade-in slide-in-from-bottom-2 duration-300">
+          <div className="grid grid-cols-2 gap-3">
+            <CustomSelect 
+              label="Marca" 
+              value={vehBrand} 
+              onChange={(v) => { setVehBrand(v); setVehModel(""); setVehActiveDropdown("model"); }} 
+              placeholder="Marca" 
+              options={availableBrands}
+              isOpen={vehActiveDropdown === "brand"}
+              onToggle={() => setVehActiveDropdown(v => v === "brand" ? null : "brand")}
+              isActive={vehActiveDropdown === "brand"}
+            />
+            <CustomSelect 
+              label="Modelo" 
+              value={vehModel} 
+              onChange={(v) => { setVehModel(v); setVehActiveDropdown(null); }} 
+              placeholder="Modelo" 
+              disabled={!vehBrand}
+              options={availableModels}
+              isOpen={vehActiveDropdown === "model"}
+              onToggle={() => setVehActiveDropdown(v => v === "model" ? null : "model")}
+              isActive={vehActiveDropdown === "model"}
+            />
+          </div>
+          
+          {selectedVehicle && (
+            <div className="mt-4 p-5 bg-navy-800/50 rounded-2xl border border-navy-700/50">
+              <p className="text-white font-bold mb-4 text-center">Seleccioná la medida para tu {selectedVehicle.model}:</p>
+              <div className="flex flex-col gap-2">
+                {selectedVehicle.sizes.map((s, i) => (
+                   <button 
+                     key={i}
+                     onClick={() => router.push(`/buscar?medida=${s.w}-${s.p}-r${s.r}`)}
+                     className="bg-navy-800 hover:bg-navy-700 hover:text-orange-400 text-white py-3.5 px-4 rounded-xl font-mono text-sm border border-navy-700 hover:border-orange-500 transition-all shadow-inner flex items-center justify-between group"
+                   >
+                     <span>{s.w}/{s.p} R{s.r}</span>
+                     <svg className="w-5 h-5 opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                     </svg>
+                   </button>
+                ))}
+              </div>
+              <p className="text-slate-400 text-xs text-center mt-4 leading-relaxed">
+                * Las medidas pueden variar según la versión específica. Verificá tu manual o rueda actual.
+              </p>
+            </div>
+          )}
+        </div>
+      )}
+
       {/* REGULAR SEARCH FORM */}
-      <form onSubmit={(e) => { e.preventDefault(); handleSearch(); }} className="flex flex-col gap-3">
+      {searchMode === "medida" && (
+        <form onSubmit={(e) => { e.preventDefault(); handleSearch(); }} className="flex flex-col gap-3 animate-in fade-in slide-in-from-bottom-2 duration-300">
         <div className="grid grid-cols-3 gap-3">
           <CustomSelect 
             label="Ancho" 
@@ -441,6 +551,7 @@ export function TireSizeSearch({
           </button>
         )}
       </form>
+      )}
     </>
   );
 }
