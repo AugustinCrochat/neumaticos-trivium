@@ -165,23 +165,15 @@ export function TireSizeSearch({
     } catch { /* iOS ignores */ }
 
     try {
-      const constraints: MediaStreamConstraints = {
-        video: { facingMode: "environment" }
-      };
-
-      const stream = await navigator.mediaDevices.getUserMedia(constraints);
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: "environment", width: { ideal: 1920 }, height: { ideal: 1080 } }
+      });
       streamRef.current = stream;
       if (videoRef.current) videoRef.current.srcObject = stream;
 
       const track = stream.getVideoTracks()[0];
       const capabilities = track.getCapabilities() as any;
       if (capabilities.torch) setHasTorch(true);
-      if (capabilities.zoom) {
-        const minZoom = capabilities.zoom.min || 1;
-        try {
-          await track.applyConstraints({ advanced: [{ zoom: minZoom }] } as any);
-        } catch { /* not all browsers support this */ }
-      }
 
     } catch (err) {
       console.error(err);
@@ -215,9 +207,6 @@ export function TireSizeSearch({
 
   function captureFrame(): { original: string; processed: string } {
     const video = videoRef.current!;
-    
-    // In landscape, the circular guide is 90% of the video height.
-    // We'll take a slightly larger square (98%) to ensure we don't cut off numbers at the edges.
     const natW = video.videoWidth;
     const natH = video.videoHeight;
     const shortSide = Math.min(natW, natH);
@@ -225,9 +214,8 @@ export function TireSizeSearch({
     const cropX = Math.round((natW - cropSize) / 2);
     const cropY = Math.round((natH - cropSize) / 2);
 
-    const TARGET_SIZE = 1600; // Optimal resolution for Gemini OCR
+    const TARGET_SIZE = 1600; 
 
-    // 1. Original Crop
     const canvas1 = document.createElement("canvas");
     canvas1.width = TARGET_SIZE;
     canvas1.height = TARGET_SIZE;
@@ -235,7 +223,6 @@ export function TireSizeSearch({
     ctx1.drawImage(video, cropX, cropY, cropSize, cropSize, 0, 0, TARGET_SIZE, TARGET_SIZE);
     const original = canvas1.toDataURL("image/jpeg", 0.90);
 
-    // 2. High Contrast Crop
     const canvas2 = document.createElement("canvas");
     canvas2.width = TARGET_SIZE;
     canvas2.height = TARGET_SIZE;
@@ -279,7 +266,6 @@ export function TireSizeSearch({
     }).catch(console.error);
   }
 
-  // Burst: Single attempt to save API quota (Free Tier has low RPM)
   async function captureAndScan() {
     if (!videoRef.current || isScanning) return;
     setIsScanning(true);
@@ -293,7 +279,6 @@ export function TireSizeSearch({
       const data = await tryScan(images);
       if (data.found && data.width) {
         const detected = { width: data.width!, profile: data.profile!, rim: data.rim! };
-        // Save detection sample in background and search immediately
         fetch("/api/scan-tire", {
           method: "POST",
           keepalive: true,
@@ -337,7 +322,6 @@ export function TireSizeSearch({
     setScanProgress("");
   }
 
-  // Cleanup on unmount
   useEffect(() => {
     return () => {
       if (streamRef.current) streamRef.current.getTracks().forEach(t => t.stop());
@@ -380,34 +364,45 @@ export function TireSizeSearch({
             </div>
           </div>
 
-          {/* Camera — square crop matching the circle guide */}
-          <div className="flex-1 flex items-center justify-center bg-black">
-            <div className="relative rounded-full overflow-hidden" style={{ width: '90vmin', height: '90vmin' }}>
-              <video
-                ref={videoRef}
-                autoPlay
-                playsInline
-                muted
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 rounded-full border-4 border-orange-500 border-dashed animate-[spin_20s_linear_infinite] pointer-events-none" />
-            </div>
-            <div className="absolute pointer-events-none flex items-center justify-center" style={{ top: '50%', transform: 'translateY(-50%)' }}>
-              <span className="text-white font-black text-sm tracking-widest uppercase bg-black/70 px-6 py-3 rounded-full backdrop-blur-md border border-white/10 shadow-xl whitespace-nowrap">
-                Centrá el neumático
-              </span>
+          {/* Camera Viewport */}
+          <div className="flex-1 flex items-center justify-center bg-black overflow-hidden relative">
+            <video
+              ref={videoRef}
+              autoPlay
+              playsInline
+              muted
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+
+            {/* Circle Guide */}
+            <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+              <div
+                className="rounded-full border-4 border-orange-500 border-dashed flex items-center justify-center animate-[spin_20s_linear_infinite]"
+                style={{ width: '90vmin', height: '90vmin', boxShadow: '0 0 0 9999px rgba(0,0,0,0.55)' }}
+              ></div>
+              
+              <div className="absolute flex items-center justify-center top-1/2 -translate-y-1/2">
+                <span className="text-white font-black text-sm tracking-widest uppercase bg-black/70 px-6 py-3 rounded-full backdrop-blur-md border border-white/10 shadow-xl whitespace-nowrap">
+                  Centrá el neumático
+                </span>
+              </div>
             </div>
           </div>
 
           {/* Botón de captura + estado */}
-          <div className="absolute bottom-0 left-0 right-0 pb-10 pt-6 z-20 flex flex-col items-center gap-3 bg-gradient-to-t from-black/80 to-transparent">
+          <div className="absolute bottom-0 left-0 right-0 pb-10 pt-6 z-20 flex flex-col items-center gap-4 bg-gradient-to-t from-black/80 to-transparent">
+            {!isScanning && (
+              <span className="text-white text-xs font-bold uppercase tracking-widest animate-pulse">
+                Presioná para escanear
+              </span>
+            )}
             {isScanning && (
               <span className="text-white/80 text-sm font-medium">{scanProgress}</span>
             )}
             <button
               onClick={captureAndScan}
               disabled={isScanning}
-              className="w-20 h-20 rounded-full border-4 border-white/50 flex items-center justify-center active:scale-95 transition-transform disabled:opacity-40"
+              className="w-20 h-20 rounded-full border-4 border-white/50 flex items-center justify-center active:scale-95 transition-transform disabled:opacity-40 shadow-2xl"
             >
               {isScanning ? (
                 <svg className="w-8 h-8 text-white animate-spin" fill="none" viewBox="0 0 24 24">
