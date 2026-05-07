@@ -58,6 +58,11 @@ function marketScore(w: number, p: number, r: number): number {
 }
 
 interface Candidate { width: number; profile: number; rim: number; score: number; raw?: string }
+interface GeminiError {
+  code?: number;
+  status?: string;
+  message?: string;
+}
 
 function bestCandidate(nums: number[]): Candidate | null {
   const candidates: Candidate[] = [];
@@ -75,46 +80,74 @@ function bestCandidate(nums: number[]): Candidate | null {
 async function scanWithGemini(
   imageData: string,
   apiKey: string,
+  configuredModel?: string,
 ): Promise<Candidate | null> {
+  const modelCandidates = [
+    configuredModel,
+    'gemini-2.0-flash',
+    'gemini-2.0-flash-lite',
+    'gemini-1.5-flash',
+  ].filter((model, index, all): model is string => !!model && all.indexOf(model) === index);
+
+  let lastError: Candidate | null = null;
+
   try {
-    const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{
-            parts: [
-              { text: "Analyze this tire sidewall image carefully. Identify the tire size markings (e.g., 205/55R16). Provide ONLY the detected size. If not found, say NO_ENCONTRADO." },
-              { inline_data: { mime_type: 'image/jpeg', data: imageData } }
-            ],
-          }],
-          generationConfig: { 
-            temperature: 0,
-          },
-        }),
-      },
-    );
+    for (const modelName of modelCandidates) {
+      const res = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{
+              parts: [
+                { text: "Analyze this tire sidewall image carefully. Identify the tire size markings (e.g., 205/55R16). Provide ONLY the detected size. If not found, say NO_ENCONTRADO." },
+                { inline_data: { mime_type: 'image/jpeg', data: imageData } }
+              ],
+            }],
+            generationConfig: {
+              temperature: 0,
+            },
+          }),
+        },
+      );
 
-    if (!res.ok) {
-      const errText = await res.text();
-      console.error('Gemini error:', res.status, errText);
-      return { width: -res.status, profile: 0, rim: 0, score: 0, raw: errText }; 
+      if (!res.ok) {
+        const errText = await res.text();
+        console.error(`Gemini error (${modelName}):`, res.status, errText);
+        let parsedError: GeminiError | null = null;
+        try {
+          parsedError = JSON.parse(errText)?.error ?? null;
+        } catch {
+          parsedError = null;
+        }
+
+        lastError = { width: -res.status, profile: 0, rim: 0, score: 0, raw: errText };
+
+        const isModelUnavailable = res.status === 404
+          || parsedError?.status === 'NOT_FOUND'
+          || parsedError?.code === 404;
+        if (isModelUnavailable) continue;
+
+        return lastError;
+      }
+
+      const data = await res.json();
+      const text: string = (data.candidates?.[0]?.content?.parts?.[0]?.text ?? '').trim();
+      console.log(`Gemini (${modelName}) →`, text);
+
+      if (!text || text.includes('NO_ENCONTRADO')) return { width: -100, profile: 0, rim: 0, score: 0, raw: text };
+
+      // Extract numbers (e.g. 245, 40, 18) and find best candidate
+      const nums = (text.match(/\d+/g) ?? []).map(Number);
+      if (nums.length >= 3) {
+        return bestCandidate(nums) ?? { width: -101, profile: 0, rim: 0, score: 0, raw: text };
+      }
+
+      return { width: -101, profile: 0, rim: 0, score: 0, raw: text };
     }
 
-    const data = await res.json();
-    const text: string = (data.candidates?.[0]?.content?.parts?.[0]?.text ?? '').trim();
-    console.log('Gemini →', text);
-
-    if (!text || text.includes('NO_ENCONTRADO')) return { width: -100, profile: 0, rim: 0, score: 0, raw: text };
-    
-    // Extract numbers (e.g. 245, 40, 18) and find best candidate
-    const nums = (text.match(/\d+/g) ?? []).map(Number);
-    if (nums.length >= 3) {
-      return bestCandidate(nums) ?? { width: -101, profile: 0, rim: 0, score: 0, raw: text };
-    }
-    
-    return { width: -101, profile: 0, rim: 0, score: 0, raw: text };
+    return lastError ?? null;
   } catch (err) {
     console.error('Gemini exception:', err);
     return null;
@@ -205,13 +238,14 @@ export async function POST(req: NextRequest) {
   const processedData = (base64Processed ?? base64Image).replace(/^data:image\/[a-z]+;base64,/, '');
 
   const apiKey = process.env.GOOGLE_AI_KEY || process.env.GEMINI_API_KEY;
+  const configuredModel = process.env.GEMINI_MODEL;
   if (!apiKey) {
     console.error("Missing GOOGLE_AI_KEY");
     return NextResponse.json({ found: false, error: "config" });
   }
 
   let result: Candidate | null = null;
-  result = await scanWithGemini(imageData, apiKey);
+  result = await scanWithGemini(imageData, apiKey, configuredModel);
 
   if (!result || result.width < 0) {
     const ocrResult = await scanWithOcrSpace(base64Image);
