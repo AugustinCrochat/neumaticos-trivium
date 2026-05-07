@@ -77,40 +77,54 @@ async function scanWithGemini(
   apiKey: string,
 ): Promise<Candidate | null> {
   try {
-    const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{
-            parts: [
-              { text: "I need to know the tire size shown in this image. Please look for the technical markings on the sidewall, typically in the format: WIDTH/PROFILE R RIM (e.g., 205/55 R16). Answer ONLY with the detected size. If you cannot find it, answer NO_ENCONTRADO." },
-              { inline_data: { mime_type: 'image/jpeg', data: imageData } }
-            ],
-          }],
-          generationConfig: { 
-            temperature: 0,
-            topP: 1,
-            topK: 1
-          },
-          safetySettings: [
-            { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
-            { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" },
-            { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_NONE" },
-            { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" }
-          ]
-        }),
-      },
-    );
+    let res: Response;
+    let attempts = 0;
+    const maxAttempts = 3;
 
-    if (!res.ok) {
-      const errText = await res.text();
-      console.error('Gemini error:', res.status, errText);
-      return { width: -res.status, profile: 0, rim: 0, score: 0 }; 
+    while (attempts < maxAttempts) {
+      res = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{
+              parts: [
+                { text: "I need to know the tire size shown in this image. Please look for the technical markings on the sidewall, typically in the format: WIDTH/PROFILE R RIM (e.g., 205/55 R16). Answer ONLY with the detected size. If you cannot find it, answer NO_ENCONTRADO." },
+                { inline_data: { mime_type: 'image/jpeg', data: imageData } }
+              ],
+            }],
+            generationConfig: { 
+              temperature: 0,
+              topP: 1,
+              topK: 1
+            },
+            safetySettings: [
+              { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
+              { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" },
+              { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_NONE" },
+              { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" }
+            ]
+          }),
+        },
+      );
+
+      if (res.status === 429 && attempts < maxAttempts - 1) {
+        attempts++;
+        console.log(`Gemini 429, retry ${attempts}...`);
+        await new Promise(r => setTimeout(r, 1500 * attempts));
+        continue;
+      }
+      break;
     }
 
-    const data = await res.json();
+    if (!res!.ok) {
+      const errText = await res!.text();
+      console.error('Gemini error:', res!.status, errText);
+      return { width: -res!.status, profile: 0, rim: 0, score: 0 }; 
+    }
+
+    const data = await res!.json();
     const text: string = (data.candidates?.[0]?.content?.parts?.[0]?.text ?? '').trim();
     console.log('Gemini →', text);
 
@@ -212,34 +226,22 @@ export async function POST(req: NextRequest) {
 
   const processedData = (base64Processed ?? base64Image).replace(/^data:image\/[a-z]+;base64,/, '');
 
-  let result: Candidate | null = null;
   const apiKey = process.env.GOOGLE_AI_KEY || process.env.GEMINI_API_KEY;
-
   if (!apiKey) {
-    return NextResponse.json({ 
-      found: false, 
-      error: "debug", 
-      status: 401, 
-      raw: "Configuración incompleta: GOOGLE_AI_KEY no definida." 
-    });
+    console.error("Missing GOOGLE_AI_KEY");
+    return NextResponse.json({ found: false, error: "config" });
   }
 
+  let result: Candidate | null = null;
   result = await scanWithGemini(imageData, apiKey);
 
   if (!result || result.width < 0) {
-    // If Gemini fails or returns error, try OCR Space as last resort
     const ocrResult = await scanWithOcrSpace(base64Image);
     if (ocrResult) result = ocrResult;
   }
 
-  // Scans are only saved when confirmed (either via AI success or manual fallback)
   if (result && result.width < 0) {
-    return NextResponse.json({ 
-      found: false, 
-      error: "debug", 
-      status: Math.abs(result.width),
-      raw: result.raw 
-    });
+    return NextResponse.json({ found: false, error: "not_found" });
   }
 
   if (result) {

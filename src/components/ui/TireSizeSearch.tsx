@@ -303,7 +303,7 @@ export function TireSizeSearch({
         setScanError(null);
         found = true;
       } else if (data.error === "debug") {
-        setScanError(`IA: "${data.raw || 'Sin respuesta'}" (Cod ${data.status})`);
+        setScanError("No pudimos leer la medida. Asegurate de que haya buena luz y los números estén centrados.");
         found = true; 
       }
     } catch (err: any) {
