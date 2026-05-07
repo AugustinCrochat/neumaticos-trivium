@@ -78,16 +78,14 @@ async function scanWithGemini(
 ): Promise<Candidate | null> {
   try {
     const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          system_instruction: {
-            parts: [{ text: "Eres un experto en neumáticos. Tu única tarea es extraer la medida (ancho/perfil rodado) de la imagen. Responde solo con la medida (ej: 205/55 R16) o NO_ENCONTRADO." }]
-          },
           contents: [{
             parts: [
+              { text: "Eres un experto en neumáticos. Tu única tarea es extraer la medida (ej: 205/55 R16) de la imagen. Responde solo con la medida o NO_ENCONTRADO." },
               { inline_data: { mime_type: 'image/jpeg', data: originalImage } }
             ],
           }],
