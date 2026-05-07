@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { writeFile } from 'fs/promises';
+import { mkdir, writeFile } from 'fs/promises';
 import { join } from 'path';
 import { put } from '@vercel/blob';
 
@@ -194,36 +194,85 @@ async function scanWithOcrSpace(
   }
 }
 
-async function saveDatasetImage(imageData: string, result: Candidate | null) {
+function stripBase64Prefix(image: string): string {
+  return image.replace(/^data:image\/[a-z]+;base64,/, '');
+}
+
+async function saveDatasetSample(
+  originalImageBase64: string,
+  result: Candidate | null,
+  processedImageBase64?: string,
+) {
   try {
-    const buffer = Buffer.from(imageData, 'base64');
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     const label = result ? `${result.width}-${result.profile}-${result.rim}` : 'failed';
-    const filename = `${timestamp}_${label}.jpg`;
-    
+    const sampleId = `${timestamp}_${label}`;
+    const originalBuffer = Buffer.from(stripBase64Prefix(originalImageBase64), 'base64');
+    const processedBuffer = processedImageBase64
+      ? Buffer.from(stripBase64Prefix(processedImageBase64), 'base64')
+      : null;
+
     if (process.env.BLOB_READ_WRITE_TOKEN) {
-       // Save to Vercel Blob if token is available (Production or Local with Env Var)
-       const blob = await put(`dataset/${filename}`, buffer, {
-         access: 'public',
-         contentType: 'image/jpeg'
-       });
-       console.log(`Saved dataset image to Vercel Blob: ${blob.url}`);
+      // Save paired images + metadata for future model training
+      const originalBlob = await put(`dataset/${sampleId}/original_crop.jpg`, originalBuffer, {
+        access: 'public',
+        contentType: 'image/jpeg',
+      });
+      const processedBlob = processedBuffer
+        ? await put(`dataset/${sampleId}/processed_crop.jpg`, processedBuffer, {
+            access: 'public',
+            contentType: 'image/jpeg',
+          })
+        : null;
+
+      const metadata = {
+        sampleId,
+        timestamp: new Date().toISOString(),
+        label: result ? { width: result.width, profile: result.profile, rim: result.rim } : null,
+        source: 'app-confirmation',
+        images: {
+          original_crop: originalBlob.url,
+          processed_crop: processedBlob?.url ?? null,
+        },
+      };
+
+      await put(`dataset/${sampleId}/metadata.json`, JSON.stringify(metadata, null, 2), {
+        access: 'public',
+        contentType: 'application/json',
+      });
+      console.log(`Saved dataset sample to Vercel Blob: ${sampleId}`);
     } else if (process.env.NODE_ENV === 'development') {
-       // Fallback to local file system only in development mode
-       const filepath = join(process.cwd(), 'public', 'dataset', filename);
-       await writeFile(filepath, buffer);
-       console.log(`Saved dataset image locally: ${filename}`);
+      // Fallback to local file system only in development mode
+      const sampleDir = join(process.cwd(), 'public', 'dataset', sampleId);
+      await mkdir(sampleDir, { recursive: true });
+      await writeFile(join(sampleDir, 'original_crop.jpg'), originalBuffer);
+      if (processedBuffer) {
+        await writeFile(join(sampleDir, 'processed_crop.jpg'), processedBuffer);
+      }
+
+      const metadata = {
+        sampleId,
+        timestamp: new Date().toISOString(),
+        label: result ? { width: result.width, profile: result.profile, rim: result.rim } : null,
+        source: 'app-confirmation',
+        images: {
+          original_crop: `/dataset/${sampleId}/original_crop.jpg`,
+          processed_crop: processedBuffer ? `/dataset/${sampleId}/processed_crop.jpg` : null,
+        },
+      };
+      await writeFile(join(sampleDir, 'metadata.json'), JSON.stringify(metadata, null, 2));
+      console.log(`Saved dataset sample locally: ${sampleId}`);
     } else {
-       console.warn('Skipping image save: No Vercel Blob token configured.');
+      console.warn('Skipping image save: No Vercel Blob token configured.');
     }
   } catch (err) {
-    console.error('Failed to save dataset image:', err);
+    console.error('Failed to save dataset sample:', err);
   }
 }
 
 export async function POST(req: NextRequest) {
   const { base64Image, base64Processed, confirmLabel } = await req.json();
-  const imageData = base64Image.replace(/^data:image\/[a-z]+;base64,/, '');
+  const imageData = stripBase64Prefix(base64Image);
 
   // Confirmation-only mode: user verified the result — save with human-validated label
   if (confirmLabel) {
@@ -231,7 +280,7 @@ export async function POST(req: NextRequest) {
     const confirmed = (!isNaN(w) && !isNaN(p) && !isNaN(r))
       ? { width: w, profile: p, rim: r, score: 0 }
       : null;
-    saveDatasetImage(imageData, confirmed).catch(console.error);
+    saveDatasetSample(base64Image, confirmed, base64Processed).catch(console.error);
     return NextResponse.json({ ok: true });
   }
 

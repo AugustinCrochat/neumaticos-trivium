@@ -336,6 +336,7 @@ export function TireSizeSearch({
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         base64Image: pi.original,
+        base64Processed: pi.processed,
         confirmLabel: `${ps.width}-${ps.profile}-${ps.rim}`,
       }),
     }).catch(console.error);
@@ -404,21 +405,8 @@ export function TireSizeSearch({
               className="absolute inset-0 w-full h-full object-cover"
             />
 
-            {/* Rotate Hint */}
-            <div className="absolute inset-0 z-30 pointer-events-none flex items-center justify-center bg-black/80 portrait:flex landscape:hidden backdrop-blur-sm transition-opacity duration-500">
-              <div className="bg-navy-900/90 p-8 rounded-3xl flex flex-col items-center gap-5 text-center max-w-[85vw] border border-orange-500/50 shadow-2xl">
-                <svg className="w-16 h-16 text-orange-400 animate-[spin_2s_ease-in-out_infinite]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                </svg>
-                <div>
-                  <p className="text-white font-black text-xl mb-2 tracking-wide">Girá tu celular</p>
-                  <p className="text-slate-300 text-sm leading-relaxed font-medium">Usá el teléfono en horizontal para acercarte y enfocar el neumático completo.</p>
-                </div>
-              </div>
-            </div>
-
             {/* Guía circular grande */}
-            <div className="absolute inset-0 pointer-events-none flex items-center justify-center landscape:flex portrait:hidden transition-opacity duration-500">
+            <div className="absolute inset-0 pointer-events-none flex items-center justify-center transition-opacity duration-500">
               <div
                 className="rounded-full border-4 border-orange-500 border-dashed flex items-center justify-center animate-[spin_20s_linear_infinite]"
                 style={{ width: '90vmin', height: '90vmin', boxShadow: '0 0 0 9999px rgba(0,0,0,0.55)' }}
@@ -426,6 +414,11 @@ export function TireSizeSearch({
               <div className="absolute flex items-center justify-center">
                 <span className="text-white font-black text-lg tracking-widest uppercase bg-black/70 px-6 py-3 rounded-full backdrop-blur-md border border-white/10 shadow-xl">
                   Centrá el neumático
+                </span>
+              </div>
+              <div className="absolute bottom-8 px-4 text-center">
+                <span className="text-white/85 text-xs sm:text-sm font-medium bg-black/50 px-4 py-2 rounded-full backdrop-blur-sm border border-white/10">
+                  Podés usar vertical u horizontal. Priorizá enfoque y nitidez.
                 </span>
               </div>
             </div>
