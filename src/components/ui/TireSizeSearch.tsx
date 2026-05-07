@@ -166,10 +166,7 @@ export function TireSizeSearch({
 
     try {
       const constraints: MediaStreamConstraints = {
-        video: {
-          facingMode: "environment",
-          aspectRatio: { ideal: 0.75 }, // portrait 4:3 — wider horizontal FOV than default 16:9
-        }
+        video: { facingMode: "environment" }
       };
 
       const stream = await navigator.mediaDevices.getUserMedia(constraints);
@@ -383,30 +380,23 @@ export function TireSizeSearch({
             </div>
           </div>
 
-          {/* Camera — video simple, sin transformaciones CSS */}
-          <div className="relative flex-1 overflow-hidden bg-black">
-            <video
-              ref={videoRef}
-              autoPlay
-              playsInline
-              muted
-              className="absolute inset-0 w-full h-full object-contain bg-black"
-            />
-
-            {/* Guía circular */}
-            <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
-              <div
-                className="rounded-full border-4 border-orange-500 border-dashed animate-[spin_20s_linear_infinite]"
-                style={{ width: '90vmin', height: '90vmin', boxShadow: '0 0 0 9999px rgba(0,0,0,0.55)' }}
+          {/* Camera — square crop matching the circle guide */}
+          <div className="flex-1 flex items-center justify-center bg-black">
+            <div className="relative rounded-full overflow-hidden" style={{ width: '90vmin', height: '90vmin' }}>
+              <video
+                ref={videoRef}
+                autoPlay
+                playsInline
+                muted
+                className="absolute inset-0 w-full h-full object-cover"
               />
-              <div className="absolute flex items-center justify-center top-1/2 -translate-y-1/2">
-                <span className="text-white font-black text-sm tracking-widest uppercase bg-black/70 px-6 py-3 rounded-full backdrop-blur-md border border-white/10 shadow-xl whitespace-nowrap">
-                  Centrá el neumático
-                </span>
-              </div>
+              <div className="absolute inset-0 rounded-full border-4 border-orange-500 border-dashed animate-[spin_20s_linear_infinite] pointer-events-none" />
             </div>
-
-            {/* Zoom Control */}
+            <div className="absolute pointer-events-none flex items-center justify-center" style={{ top: '50%', transform: 'translateY(-50%)' }}>
+              <span className="text-white font-black text-sm tracking-widest uppercase bg-black/70 px-6 py-3 rounded-full backdrop-blur-md border border-white/10 shadow-xl whitespace-nowrap">
+                Centrá el neumático
+              </span>
+            </div>
           </div>
 
           {/* Botón de captura + estado */}
