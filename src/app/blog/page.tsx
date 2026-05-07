@@ -20,15 +20,6 @@ export default function BlogPage() {
     <div className="min-h-screen bg-slate-50">
       <div className="bg-navy-900 py-14">
         <div className="max-w-5xl mx-auto px-4">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-1.5 text-navy-300 hover:text-white text-sm mb-6 transition-colors"
-          >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-            Inicio
-          </Link>
           <span className="inline-block text-orange-400 text-sm font-bold uppercase tracking-widest mb-2">
             Blog y consejos
           </span>

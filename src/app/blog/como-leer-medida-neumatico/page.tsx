@@ -13,16 +13,6 @@ export default function ComoLeerMedidaPage() {
       {/* Header / Search Area */}
       <div className="bg-navy-900 py-12 md:py-16">
         <div className="max-w-4xl mx-auto px-4">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-1.5 text-navy-300 hover:text-white text-sm mb-8 transition-colors"
-          >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-            Volver al inicio
-          </Link>
-
           <div className="max-w-xl">
             <h1 className="text-3xl md:text-4xl font-black text-white mb-4">
               ¿No sabés tu medida?
