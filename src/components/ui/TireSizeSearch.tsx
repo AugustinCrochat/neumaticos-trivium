@@ -48,7 +48,6 @@ export function TireSizeSearch({
   const [scanProgress, setScanProgress] = useState("");
   const [scanError, setScanError] = useState<string | null>(null);
   const [lastImage, setLastImage] = useState<string | null>(null);
-  const [showRotateHint, setShowRotateHint] = useState(false);
   const [pendingScan, setPendingScan] = useState<{ width: number; profile: number; rim: number } | null>(null);
   const [pendingImages, setPendingImages] = useState<{ original: string; processed: string } | null>(null);
 
@@ -120,20 +119,9 @@ export function TireSizeSearch({
 
   // --- CAMERA LOGIC ---
 
-  // Auto-hide rotate hint when phone goes landscape
-  useEffect(() => {
-    if (!showScanner) return;
-    const check = () => {
-      if (window.matchMedia('(orientation: landscape)').matches) setShowRotateHint(false);
-    };
-    window.addEventListener('resize', check);
-    return () => window.removeEventListener('resize', check);
-  }, [showScanner]);
-
   async function startCamera() {
     setShowScanner(true);
     setScanError(null);
-    setShowRotateHint(false);
 
     // Hide browser nav bar on Android Chrome
     try {
@@ -158,10 +146,6 @@ export function TireSizeSearch({
         } catch { /* device accepted capability but rejects apply — ignore */ }
       }
 
-      // Show rotate hint if phone is in portrait after camera loads
-      setTimeout(() => {
-        if (window.matchMedia('(orientation: portrait)').matches) setShowRotateHint(true);
-      }, 600);
     } catch (err) {
       console.error(err);
       setScanError("No pudimos acceder a tu cámara. Asegurate de dar permisos.");
@@ -179,7 +163,6 @@ export function TireSizeSearch({
     setShowScanner(false);
     setHasTorch(false);
     setTorchOn(false);
-    setShowRotateHint(false);
   }
 
   async function toggleTorch() {
@@ -215,20 +198,25 @@ export function TireSizeSearch({
     const natW = video.videoWidth;
     const natH = video.videoHeight;
     const covScale = Math.max(dispW / natW, dispH / natH);
-    // How many native pixels are hidden above/below due to object-cover crop
+    const offsetXNative = Math.max(0, (natW - dispW / covScale) / 2);
     const offsetYNative = Math.max(0, (natH - dispH / covScale) / 2);
-    const rawTop = Math.max(0, offsetYNative + 0.10 * dispH / covScale);
-    const rawBot = Math.min(natH, offsetYNative + 0.90 * dispH / covScale);
+
+    // Circular guide: diameter = 85vw, centered — crop its bounding square
+    const guideR = 0.425 * dispW;
+    const rawLeft = Math.max(0, offsetXNative + (dispW / 2 - guideR) / covScale);
+    const rawTop  = Math.max(0, offsetYNative + (dispH / 2 - guideR) / covScale);
+    const rawSize = Math.min(natW - rawLeft, natH - rawTop, (2 * guideR) / covScale);
+    const cropX = Math.round(rawLeft * s);
     const cropY = Math.round(rawTop * s);
-    const cropH = Math.max(1, Math.round((rawBot - rawTop) * s));
-    const cropW = fullW;
+    const cropW = Math.max(1, Math.min(fullW - cropX, Math.round(rawSize * s)));
+    const cropH = Math.max(1, Math.min(fullH - cropY, Math.round(rawSize * s)));
 
     // --- Image 1: cropped original (grayscale + contrast boost + unsharp mask) ---
     const origCanvas = document.createElement("canvas");
     origCanvas.width = cropW;
     origCanvas.height = cropH;
     const origCtx = origCanvas.getContext("2d")!;
-    origCtx.drawImage(fullCanvas, 0, cropY, cropW, cropH, 0, 0, cropW, cropH);
+    origCtx.drawImage(fullCanvas, cropX, cropY, cropW, cropH, 0, 0, cropW, cropH);
     const origImg = origCtx.getImageData(0, 0, cropW, cropH);
     const origGray = new Float32Array(cropW * cropH);
     for (let i = 0; i < origImg.data.length; i += 4) {
@@ -256,7 +244,7 @@ export function TireSizeSearch({
     procCanvas.width = cropW;
     procCanvas.height = cropH;
     const procCtx = procCanvas.getContext("2d")!;
-    procCtx.drawImage(fullCanvas, 0, cropY, cropW, cropH, 0, 0, cropW, cropH);
+    procCtx.drawImage(fullCanvas, cropX, cropY, cropW, cropH, 0, 0, cropW, cropH);
     const procImg = procCtx.getImageData(0, 0, cropW, cropH);
     const W = cropW, H = cropH;
 
@@ -334,12 +322,19 @@ export function TireSizeSearch({
   }
 
   async function tryScan(images: { original: string; processed: string }) {
-    const res = await fetch("/api/scan-tire", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ base64Image: images.original, base64Processed: images.processed }),
-    });
-    return res.json() as Promise<{ found: boolean; width?: number; profile?: number; rim?: number }>;
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10000);
+    try {
+      const res = await fetch("/api/scan-tire", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ base64Image: images.original, base64Processed: images.processed }),
+        signal: controller.signal,
+      });
+      return res.json() as Promise<{ found: boolean; width?: number; profile?: number; rim?: number }>;
+    } finally {
+      clearTimeout(timeout);
+    }
   }
 
   // Burst: 2 attempts with camera live, stop only when done
@@ -455,47 +450,17 @@ export function TireSizeSearch({
               className="absolute inset-0 w-full h-full object-cover"
             />
 
-            {/* Guía: dos líneas horizontales rectas, strip de 80% */}
-            <div className="absolute inset-0 pointer-events-none flex flex-col">
-              <div className="bg-black/50" style={{ height: '10%' }} />
-              <div className="relative flex-1 border-y-2 border-orange-500">
-                <div className="absolute -top-px left-4 w-10 h-6 border-t-2 border-l-2 border-orange-400" />
-                <div className="absolute -top-px right-4 w-10 h-6 border-t-2 border-r-2 border-orange-400" />
-                <div className="absolute -bottom-px left-4 w-10 h-6 border-b-2 border-l-2 border-orange-400" />
-                <div className="absolute -bottom-px right-4 w-10 h-6 border-b-2 border-r-2 border-orange-400" />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-white/35 text-xs font-semibold tracking-widest uppercase">
-                    205/55 R16
-                  </span>
-                </div>
-              </div>
-              <div className="bg-black/50" style={{ height: '10%' }} />
-            </div>
-
-            {/* Hint de rotación — aparece si el teléfono está en portrait, se toca para cerrar */}
-            {showRotateHint && (
-              <button
-                onClick={() => setShowRotateHint(false)}
-                className="absolute inset-0 bg-black/80 flex flex-col items-center justify-center gap-5 z-10"
+            {/* Guía circular: centrar el neumático completo */}
+            <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+              <div
+                className="rounded-full border-2 border-orange-500 flex items-end justify-center pb-5"
+                style={{ width: '85vw', height: '85vw', boxShadow: '0 0 0 9999px rgba(0,0,0,0.55)' }}
               >
-                {/* Ícono teléfono rotando */}
-                <div className="relative">
-                  <svg viewBox="0 0 48 80" className="w-16 h-24 text-white/70" fill="none" stroke="currentColor" strokeWidth="2.5">
-                    <rect x="6" y="2" width="36" height="76" rx="6" />
-                    <circle cx="24" cy="70" r="3" fill="currentColor" strokeWidth="0" />
-                    <line x1="16" y1="12" x2="32" y2="12" strokeWidth="2" strokeLinecap="round" />
-                  </svg>
-                  {/* Flecha de rotación */}
-                  <svg className="absolute -right-6 top-1/2 -translate-y-1/2 w-8 h-8 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                  </svg>
-                </div>
-                <p className="text-white font-bold text-xl">Girá el teléfono</p>
-                <p className="text-white/55 text-sm text-center px-8 leading-relaxed">
-                  Mejor resultado en horizontal. Tocá para continuar igual.
-                </p>
-              </button>
-            )}
+                <span className="text-white/40 text-xs font-semibold tracking-widest uppercase">
+                  Centrá el neumático
+                </span>
+              </div>
+            </div>
           </div>
 
           {/* Botón de captura + estado */}

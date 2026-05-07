@@ -85,18 +85,18 @@ async function scanWithGemini(
           contents: [{
             parts: [
               {
-                text: `Eres un lector experto de medidas de neumáticos. Te envío DOS imágenes del mismo sector del neumático:
-1. Foto en escala de grises con contraste aumentado (imagen original recortada).
-2. Foto procesada con detección de bordes Sobel + binarización adaptativa para resaltar el texto en relieve.
+                text: `Eres un experto en neumáticos. Te envío DOS imágenes del neumático completo:
+1. Foto en escala de grises con contraste aumentado.
+2. Foto procesada con detección de bordes Sobel + binarización adaptativa.
 
-Buscá el marcado de medida estampado en el lateral del neumático. El texto es texto en relieve sobre goma negra.
-Formato típico: 205/55 R16 o 195/65R15 o 225 40 18 o P205/55R16.
+Buscá en el lateral (sidewall) del neumático el marcado de medida. Es texto en relieve sobre goma negra, generalmente en la zona media del costado. Puede estar rotado en cualquier ángulo.
+Formato típico: 205/55 R16 o 195/65R15 o 225/40R18 o P205/55R16.
 
 Devolvé SOLO tres números enteros separados por espacios: ANCHO PERFIL ARO
 - ANCHO: 3 dígitos, rango 130-335 (ej: 205)
 - PERFIL: 2 dígitos, rango 25-90 (ej: 55)
 - ARO: 2 dígitos, rango 12-24 (ej: 16)
-Si hay múltiples medidas, devolvé la más visible/central.
+Si hay múltiples medidas visibles, devolvé la más legible.
 Si no encontrás ninguna, devolvé: NO_ENCONTRADO`,
               },
               { inline_data: { mime_type: 'image/jpeg', data: originalImage } },
