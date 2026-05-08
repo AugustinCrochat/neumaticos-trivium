@@ -32,6 +32,12 @@ function tireDiameter(size: TireSize) {
   return size.rim * 25.4 + 2 * (size.width * (size.profile / 100));
 }
 
+function diameterDifferencePercent(productSize: TireSize, searchedSize: TireSize) {
+  const searchedDiameter = tireDiameter(searchedSize);
+  const productDiameter = tireDiameter(productSize);
+  return ((productDiameter - searchedDiameter) / searchedDiameter) * 100;
+}
+
 function isExactMatch(product: TireProduct, size: { width: number | null; profile: number | null; rim: number | null }) {
   if (size.width && product.size.width !== size.width) return false;
   if (size.profile && product.size.profile !== size.profile) return false;
@@ -79,6 +85,9 @@ export default async function BuscarPage({ searchParams }: Props) {
   const compatibleResults = parsed
     ? PRODUCTS.filter((p) => isCompatibleSize(p, parsed))
     : [];
+  const searchedSize = parsed?.width && parsed.profile && parsed.rim
+    ? { width: parsed.width, profile: parsed.profile, rim: parsed.rim }
+    : null;
 
   const resultsCount = exactResults.length + compatibleResults.length;
   const label = parsed ? formatSizeLabel(parsed) : null;
@@ -184,17 +193,28 @@ export default async function BuscarPage({ searchParams }: Props) {
               </div>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {compatibleResults.map((product) => (
-                <div key={product.id} className="relative">
-                  <div className="absolute top-2 right-2 z-20 inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-black uppercase tracking-wide text-white shadow-lg shadow-emerald-900/20">
-                    <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                    </svg>
-                    Compatible
+              {compatibleResults.map((product) => {
+                const diameterDiff = searchedSize
+                  ? diameterDifferencePercent(product.size, searchedSize)
+                  : null;
+
+                return (
+                  <div key={product.id} className="relative">
+                    <div className="absolute left-1/2 top-[calc(60%-0.75rem)] z-20 inline-flex -translate-x-1/2 items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-black uppercase tracking-wide text-white shadow-lg shadow-emerald-900/20">
+                      <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                      </svg>
+                      Compatible
+                    </div>
+                    <ProductCard product={product} />
+                    {diameterDiff !== null && (
+                      <p className="mt-2 text-center text-xs font-semibold text-emerald-800">
+                        Diámetro {diameterDiff >= 0 ? "+" : ""}{diameterDiff.toFixed(1)}%
+                      </p>
+                    )}
                   </div>
-                  <ProductCard product={product} />
-                </div>
-              ))}
+                );
+              })}
             </div>
           </section>
         )}
