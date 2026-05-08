@@ -161,8 +161,14 @@ export function TireSizeSearch({
       if (data.found && data.width) {
         setWidth(String(data.width)); setProfile(String(data.profile)); setRim(String(data.rim));
         setActiveDropdown(null); stopCamera();
-      } else { setScanError("No pudimos detectar la medida."); }
-    } catch (err) { setScanError("La IA tardó demasiado."); }
+      } else { 
+        setScanError("No pudimos detectar la medida automáticamente."); 
+        stopCamera();
+      }
+    } catch (err) { 
+      setScanError("La IA tardó demasiado."); 
+      stopCamera();
+    }
     finally { setIsScanning(false); setScanProgress(""); }
   }
 
@@ -286,7 +292,26 @@ export function TireSizeSearch({
               </svg>
             </span>
           </button>
-          {scanError && <div className="text-orange-500 text-sm font-bold text-center mt-2">{scanError}</div>}
+          {scanError && (
+            <div className="bg-navy-800 p-5 rounded-xl border border-orange-500/30 flex flex-col gap-4 animate-in fade-in zoom-in duration-300 mt-2">
+              <div>
+                <p className="text-orange-400 font-bold text-sm">No pudimos leer la medida.</p>
+                <p className="text-white/70 text-xs leading-relaxed mt-1">
+                  {scanError}
+                </p>
+              </div>
+              <button
+                onClick={() => {
+                  const waText = encodeURIComponent(`Hola Trivium ${selectedBranch.shortName}! Estoy intentando buscar mis neumáticos pero el escáner no los detecta. ¿Me ayudan por favor? Ahora saco una foto nueva y se las envío por WhatsApp.`);
+                  window.open(`https://wa.me/${selectedBranch.whatsapp}?text=${waText}`, "_blank");
+                }}
+                type="button"
+                className="w-full bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#25D366] font-bold py-3 rounded-lg flex items-center justify-center gap-2 transition-colors text-sm border border-[#25D366]/30"
+              >
+                Consultar por WhatsApp
+              </button>
+            </div>
+          )}
           <button
             type="submit"
             disabled={!canSearch}
