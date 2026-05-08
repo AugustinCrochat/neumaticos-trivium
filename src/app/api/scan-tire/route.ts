@@ -202,7 +202,7 @@ async function saveDatasetSample(
   originalImageBase64: string,
   result: Candidate | null,
   processedImageBase64?: string,
-  source: 'app-confirmation' | 'app-failed-scan' = 'app-confirmation',
+  source: 'app-confirmation' | 'app-failed-scan' | 'scan-auto' = 'scan-auto',
   failureReason?: string,
   failureStatus?: number,
 ) {
@@ -315,6 +315,17 @@ export async function POST(req: NextRequest) {
       const ocrProcessedResult = await scanWithOcrSpace(base64Processed);
       if (ocrProcessedResult) result = ocrProcessedResult;
     }
+  }
+
+  // Save the result (success or failure) automatically for dataset building
+  if (result && result.width > 0) {
+    // If it's a valid measurement, save as a candidate
+    await saveDatasetSample(base64Image, result, base64Processed, 'scan-auto');
+  } else {
+    // If it failed (either negative status or null), save as failed
+    const status = (result && result.width < 0) ? Math.abs(result.width) : 404;
+    const reason = result?.raw || 'No se detectó medida';
+    await saveDatasetSample(base64Image, null, base64Processed, 'app-failed-scan', reason, status);
   }
 
   if (result && result.width < 0) {
