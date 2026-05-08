@@ -165,19 +165,31 @@ export default async function BuscarPage({ searchParams }: Props) {
         )}
 
         {compatibleResults.length > 0 && (
-          <section className={exactResults.length > 0 ? "mt-12" : ""}>
-            <div className="mb-4">
-              <h2 className="text-xl font-black text-navy-900">
-                Medidas compatibles
-              </h2>
-              <p className="text-sm text-slate-500 mt-1">
-                No son la medida buscada: mantienen el mismo rodado y un diámetro total dentro de ±3%.
-              </p>
+          <section className={exactResults.length > 0 ? "mt-16 border-t border-slate-200 pt-10" : "border-t border-slate-200 pt-10"}>
+            <div className="mb-6 rounded-xl border border-emerald-200 bg-emerald-50 px-5 py-4">
+              <div className="flex items-start gap-3">
+                <span className="mt-0.5 inline-flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-emerald-600 text-white">
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                  </svg>
+                </span>
+                <div>
+                  <h2 className="text-xl font-black text-emerald-950">
+                    Medidas compatibles
+                  </h2>
+                  <p className="text-sm text-emerald-800 mt-1">
+                    No son la medida buscada: mantienen el mismo rodado y un diámetro total dentro de ±3%.
+                  </p>
+                </div>
+              </div>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {compatibleResults.map((product) => (
                 <div key={product.id} className="relative">
-                  <div className="absolute top-2 right-2 z-20 rounded-md bg-amber-100 px-2 py-1 text-[10px] font-black uppercase tracking-wide text-amber-800 shadow-sm">
+                  <div className="absolute top-2 right-2 z-20 inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-black uppercase tracking-wide text-white shadow-lg shadow-emerald-900/20">
+                    <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                    </svg>
                     Compatible
                   </div>
                   <ProductCard product={product} />
