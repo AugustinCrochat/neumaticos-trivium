@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { PRODUCTS } from "@/lib/data";
 import { ProductCard } from "@/components/ui/ProductCard";
 import { SearchBar } from "./SearchBar";
+import type { TireProduct, TireSize } from "@/lib/types";
 
 type Props = { searchParams: Promise<{ medida?: string }> };
 
@@ -17,17 +18,49 @@ function parseMedida(medida: string) {
   return { width, profile, rim };
 }
 
+function formatSizeLabel(size: { width: number | null; profile: number | null; rim: number | null }) {
+  const firstParts = [];
+  if (size.width) firstParts.push(size.width);
+  if (size.profile) firstParts.push(size.profile);
+
+  const label = firstParts.join("/");
+  if (size.rim) return label ? `${label} R${size.rim}` : `R${size.rim}`;
+  return label || null;
+}
+
+function tireDiameter(size: TireSize) {
+  return size.rim * 25.4 + 2 * (size.width * (size.profile / 100));
+}
+
+function isExactMatch(product: TireProduct, size: { width: number | null; profile: number | null; rim: number | null }) {
+  if (size.width && product.size.width !== size.width) return false;
+  if (size.profile && product.size.profile !== size.profile) return false;
+  if (size.rim && product.size.rim !== size.rim) return false;
+  return true;
+}
+
+function isCompatibleSize(product: TireProduct, size: { width: number | null; profile: number | null; rim: number | null }) {
+  if (!size.width || !size.profile || !size.rim) return false;
+  if (product.size.rim !== size.rim) return false;
+  if (isExactMatch(product, size)) return false;
+
+  const searchedDiameter = tireDiameter({
+    width: size.width,
+    profile: size.profile,
+    rim: size.rim,
+  });
+  const productDiameter = tireDiameter(product.size);
+
+  return Math.abs(productDiameter - searchedDiameter) / searchedDiameter <= 0.03;
+}
+
 export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
   const { medida } = await searchParams;
   if (!medida) return { title: "Buscar neumáticos — Trivium" };
   const parsed = parseMedida(medida);
   if (!parsed) return { title: "Buscar neumáticos — Trivium" };
   
-  const parts = [];
-  if (parsed.width) parts.push(parsed.width);
-  if (parsed.profile) parts.push(parsed.profile);
-  if (parsed.rim) parts.push(`R${parsed.rim}`);
-  const label = parts.join("/");
+  const label = formatSizeLabel(parsed);
   
   return {
     title: `Neumáticos ${label} — Trivium`,
@@ -39,20 +72,16 @@ export default async function BuscarPage({ searchParams }: Props) {
   const { medida } = await searchParams;
   const parsed = medida ? parseMedida(medida) : null;
 
-  const results = parsed
-    ? PRODUCTS.filter((p) => {
-        if (parsed.width && p.size.width !== parsed.width) return false;
-        if (parsed.profile && p.size.profile !== parsed.profile) return false;
-        if (parsed.rim && p.size.rim !== parsed.rim) return false;
-        return true;
-      })
+  const exactResults = parsed
+    ? PRODUCTS.filter((p) => isExactMatch(p, parsed))
     : [];
 
-  const parts = [];
-  if (parsed?.width) parts.push(parsed.width);
-  if (parsed?.profile) parts.push(parsed.profile);
-  if (parsed?.rim) parts.push(`R${parsed.rim}`);
-  const label = parts.length > 0 ? parts.join("/") : null;
+  const compatibleResults = parsed
+    ? PRODUCTS.filter((p) => isCompatibleSize(p, parsed))
+    : [];
+
+  const resultsCount = exactResults.length + compatibleResults.length;
+  const label = parsed ? formatSizeLabel(parsed) : null;
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -80,7 +109,8 @@ export default async function BuscarPage({ searchParams }: Props) {
           </h1>
           {label && (
             <p className="text-navy-300 text-sm">
-              {results.length} resultado{results.length !== 1 ? "s" : ""} encontrado{results.length !== 1 ? "s" : ""}
+              {exactResults.length} resultado{exactResults.length !== 1 ? "s" : ""} exacto{exactResults.length !== 1 ? "s" : ""}
+              {compatibleResults.length > 0 ? ` y ${compatibleResults.length} compatible${compatibleResults.length !== 1 ? "s" : ""}` : ""}
             </p>
           )}
 
@@ -101,7 +131,7 @@ export default async function BuscarPage({ searchParams }: Props) {
           </div>
         )}
 
-        {parsed && results.length === 0 && (
+        {parsed && resultsCount === 0 && (
           <div className="text-center py-20">
             <svg className="w-16 h-16 text-slate-200 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -121,12 +151,40 @@ export default async function BuscarPage({ searchParams }: Props) {
           </div>
         )}
 
-        {results.length > 0 && (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {results.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
+        {exactResults.length > 0 && (
+          <section>
+            <h2 className="text-xl font-black text-navy-900 mb-4">
+              Medida buscada
+            </h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {exactResults.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          </section>
+        )}
+
+        {compatibleResults.length > 0 && (
+          <section className={exactResults.length > 0 ? "mt-12" : ""}>
+            <div className="mb-4">
+              <h2 className="text-xl font-black text-navy-900">
+                Medidas compatibles
+              </h2>
+              <p className="text-sm text-slate-500 mt-1">
+                No son la medida buscada: mantienen el mismo rodado y un diámetro total dentro de ±3%.
+              </p>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {compatibleResults.map((product) => (
+                <div key={product.id} className="relative">
+                  <div className="absolute top-2 right-2 z-20 rounded-md bg-amber-100 px-2 py-1 text-[10px] font-black uppercase tracking-wide text-amber-800 shadow-sm">
+                    Compatible
+                  </div>
+                  <ProductCard product={product} />
+                </div>
+              ))}
+            </div>
+          </section>
         )}
       </div>
     </div>

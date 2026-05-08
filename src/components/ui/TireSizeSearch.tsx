@@ -280,7 +280,7 @@ export function TireSizeSearch({
           <button 
             type="button" 
             onClick={startCamera} 
-            className="w-full bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 disabled:opacity-50 text-white font-black py-4 rounded-xl border border-red-300/30 transition-all flex items-center justify-center gap-2 shadow-lg shadow-red-900/30 active:scale-[0.98]"
+            className="w-full bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 disabled:opacity-50 text-white font-black py-4 rounded-xl border border-red-300/30 transition-all flex items-center justify-center gap-2 shadow-lg shadow-red-900/30 active:scale-[0.98] lg:hidden"
           >
             <span>Reconocer medida con IA</span>
             <span className="relative -ml-0.5 inline-flex w-5 h-5 items-center justify-center">
