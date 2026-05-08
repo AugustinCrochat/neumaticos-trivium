@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { mkdir, writeFile } from 'fs/promises';
-import { join } from 'path';
-import { put } from '@vercel/blob';
 
-export const maxDuration = 30; // Extend Vercel timeout to 30 seconds for Gemini Pro
+export const maxDuration = 20;
+
+const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
+const RATE_LIMIT_MAX_SCANS = 3;
+const rateLimitBuckets = new Map<string, { count: number; resetAt: number }>();
 
 const WIDTHS   = [135, 145, 155, 165, 175, 185, 195, 205, 215, 220, 225, 235, 245, 255, 265, 275, 285, 295, 305, 315, 325];
 const PROFILES = [30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80];
@@ -58,10 +59,41 @@ function marketScore(w: number, p: number, r: number): number {
 }
 
 interface Candidate { width: number; profile: number; rim: number; score: number; raw?: string }
+interface OcrResult { candidate: Candidate | null; tireLike: boolean }
 interface GeminiError {
   code?: number;
   status?: string;
   message?: string;
+}
+
+function getClientIp(req: NextRequest): string {
+  const forwarded = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim();
+  return forwarded || req.headers.get('x-real-ip') || 'unknown';
+}
+
+function checkRateLimit(key: string): { limited: boolean; remaining: number; retryAfter: number } {
+  const now = Date.now();
+  const current = rateLimitBuckets.get(key);
+
+  if (!current || current.resetAt <= now) {
+    rateLimitBuckets.set(key, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
+    return { limited: false, remaining: RATE_LIMIT_MAX_SCANS - 1, retryAfter: 0 };
+  }
+
+  if (current.count >= RATE_LIMIT_MAX_SCANS) {
+    return {
+      limited: true,
+      remaining: 0,
+      retryAfter: Math.ceil((current.resetAt - now) / 1000),
+    };
+  }
+
+  current.count += 1;
+  return {
+    limited: false,
+    remaining: RATE_LIMIT_MAX_SCANS - current.count,
+    retryAfter: Math.ceil((current.resetAt - now) / 1000),
+  };
 }
 
 function bestCandidate(nums: number[]): Candidate | null {
@@ -83,9 +115,9 @@ async function scanWithGemini(
   configuredModel?: string,
 ): Promise<Candidate | null> {
   const modelCandidates = [
+    'gemini-2.0-flash-lite',
     configuredModel,
     'gemini-2.0-flash',
-    'gemini-2.0-flash-lite',
     'gemini-1.5-flash',
   ].filter((model, index, all): model is string => !!model && all.indexOf(model) === index);
 
@@ -101,7 +133,7 @@ async function scanWithGemini(
           body: JSON.stringify({
             contents: [{
               parts: [
-                { text: "Analyze this tire sidewall image carefully. Identify the tire size markings (e.g., 205/55R16). Provide ONLY the detected size. If not found, say NO_ENCONTRADO." },
+                { text: "First verify this is a tire sidewall photo. If it is not a tire sidewall, reply NOT_TIRE. If it is a tire sidewall, identify the tire size marking (e.g., 205/55R16). Reply ONLY with the detected size. If no size is visible, reply NO_ENCONTRADO." },
                 { inline_data: { mime_type: 'image/jpeg', data: imageData } }
               ],
             }],
@@ -136,6 +168,7 @@ async function scanWithGemini(
       const text: string = (data.candidates?.[0]?.content?.parts?.[0]?.text ?? '').trim();
       console.log(`Gemini (${modelName}) →`, text);
 
+      if (text.includes('NOT_TIRE')) return { width: -102, profile: 0, rim: 0, score: 0, raw: text };
       if (!text || text.includes('NO_ENCONTRADO')) return { width: -100, profile: 0, rim: 0, score: 0, raw: text };
 
       // Extract numbers (e.g. 245, 40, 18) and find best candidate
@@ -156,7 +189,7 @@ async function scanWithGemini(
 
 async function scanWithOcrSpace(
   base64Image: string,
-): Promise<Candidate | null> {
+): Promise<OcrResult> {
   try {
     const formData = new FormData();
     formData.append('base64Image', base64Image);
@@ -184,13 +217,20 @@ async function scanWithOcrSpace(
       if (m) {
         const nums = [+m[1], +m[2], +m[3]];
         const c = bestCandidate(nums);
-        if (c) return c;
+        if (c) return { candidate: c, tireLike: true };
       }
     }
-    return null;
+
+    const tireWords = [
+      'TUBELESS', 'RADIAL', 'STEEL', 'BELTED', 'SIDEWALL', 'TREAD',
+      'DOT', 'LOAD', 'MAX', 'PRESS', 'PSI', 'TRACTION', 'TEMPERATURE',
+      'OUTSIDE', 'INSIDE', 'ROTATION', 'M+S', 'XL', 'ZR',
+    ];
+    const tireLike = tireWords.some((word) => t.includes(word));
+    return { candidate: null, tireLike };
   } catch (err) {
     console.error('OCR.space exception:', err);
-    return null;
+    return { candidate: null, tireLike: false };
   }
 }
 
@@ -198,107 +238,59 @@ function stripBase64Prefix(image: string): string {
   return image.replace(/^data:image\/[a-z]+;base64,/, '');
 }
 
-async function saveDatasetSample(
-  originalImageBase64: string,
-  result: Candidate | null,
-  processedImageBase64?: string,
-  source: 'app-confirmation' | 'app-failed-scan' | 'scan-auto' = 'scan-auto',
-  failureReason?: string,
-  failureStatus?: number,
-) {
-  try {
-    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    const label = result ? `${result.width}-${result.profile}-${result.rim}` : 'failed';
-    const sampleId = `${timestamp}_${label}`;
-    const originalBuffer = Buffer.from(stripBase64Prefix(originalImageBase64), 'base64');
-    const processedBuffer = processedImageBase64
-      ? Buffer.from(stripBase64Prefix(processedImageBase64), 'base64')
-      : null;
-
-    if (process.env.BLOB_READ_WRITE_TOKEN) {
-      // Save paired images + metadata for future model training
-      const originalBlob = await put(`dataset/${sampleId}/original_crop.jpg`, originalBuffer, {
-        access: 'public',
-        contentType: 'image/jpeg',
-      });
-      const processedBlob = processedBuffer
-        ? await put(`dataset/${sampleId}/processed_crop.jpg`, processedBuffer, {
-            access: 'public',
-            contentType: 'image/jpeg',
-          })
-        : null;
-
-      const metadata = {
-        sampleId,
-        timestamp: new Date().toISOString(),
-        label: result ? { width: result.width, profile: result.profile, rim: result.rim } : null,
-        source,
-        failure: result ? null : { reason: failureReason ?? 'unknown', status: failureStatus ?? null },
-        images: {
-          original_crop: originalBlob.url,
-          processed_crop: processedBlob?.url ?? null,
-        },
-      };
-
-      await put(`dataset/${sampleId}/metadata.json`, JSON.stringify(metadata, null, 2), {
-        access: 'public',
-        contentType: 'application/json',
-      });
-      console.log(`Saved dataset sample to Vercel Blob: ${sampleId}`);
-    } else if (process.env.NODE_ENV === 'development') {
-      // Fallback to local file system only in development mode
-      const sampleDir = join(process.cwd(), 'public', 'dataset', sampleId);
-      await mkdir(sampleDir, { recursive: true });
-      await writeFile(join(sampleDir, 'original_crop.jpg'), originalBuffer);
-      if (processedBuffer) {
-        await writeFile(join(sampleDir, 'processed_crop.jpg'), processedBuffer);
-      }
-
-      const metadata = {
-        sampleId,
-        timestamp: new Date().toISOString(),
-        label: result ? { width: result.width, profile: result.profile, rim: result.rim } : null,
-        source,
-        failure: result ? null : { reason: failureReason ?? 'unknown', status: failureStatus ?? null },
-        images: {
-          original_crop: `/dataset/${sampleId}/original_crop.jpg`,
-          processed_crop: processedBuffer ? `/dataset/${sampleId}/processed_crop.jpg` : null,
-        },
-      };
-      await writeFile(join(sampleDir, 'metadata.json'), JSON.stringify(metadata, null, 2));
-      console.log(`Saved dataset sample locally: ${sampleId}`);
-    } else {
-      console.warn('Skipping image save: No Vercel Blob token configured.');
-    }
-  } catch (err) {
-    console.error('Failed to save dataset sample:', err);
-  }
-}
-
 export async function POST(req: NextRequest) {
-  const { base64Image, base64Processed, confirmLabel, saveFailed, failReason, failStatus } = await req.json();
+  const rateLimit = checkRateLimit(getClientIp(req));
+  if (rateLimit.limited) {
+    return NextResponse.json(
+      {
+        found: false,
+        error: 'rate_limit',
+        message: 'Alcanzaste el límite de escaneos. Probá de nuevo en unos minutos.',
+      },
+      {
+        status: 429,
+        headers: {
+          'Retry-After': String(rateLimit.retryAfter),
+          'X-RateLimit-Limit': String(RATE_LIMIT_MAX_SCANS),
+          'X-RateLimit-Remaining': '0',
+        },
+      },
+    );
+  }
+
+  const { base64Image, base64Processed } = await req.json();
   const imageData = stripBase64Prefix(base64Image);
-
-  // Confirmation-only mode: user verified the result — save with human-validated label
-  if (confirmLabel) {
-    const [w, p, r] = String(confirmLabel).split('-').map(Number);
-    const confirmed = (!isNaN(w) && !isNaN(p) && !isNaN(r))
-      ? { width: w, profile: p, rim: r, score: 0 }
-      : null;
-    // Important in serverless: wait for Blob writes before returning.
-    await saveDatasetSample(base64Image, confirmed, base64Processed);
-    return NextResponse.json({ ok: true });
-  }
-
-  if (saveFailed) {
-    await saveDatasetSample(base64Image, null, base64Processed, 'app-failed-scan', failReason, failStatus);
-    return NextResponse.json({ ok: true });
-  }
-
   const processedData = (base64Processed ?? base64Image).replace(/^data:image\/[a-z]+;base64,/, '');
 
+  const ocrResults = [
+    await scanWithOcrSpace(`data:image/jpeg;base64,${processedData}`),
+  ];
+  if (base64Processed) {
+    ocrResults.push(await scanWithOcrSpace(base64Image));
+  }
+
+  const ocrCandidate = ocrResults.find((ocr) => ocr.candidate)?.candidate ?? null;
+  if (ocrCandidate) {
+    return NextResponse.json(
+      { found: true, width: ocrCandidate.width, profile: ocrCandidate.profile, rim: ocrCandidate.rim, source: 'ocr' },
+      { headers: { 'X-RateLimit-Remaining': String(rateLimit.remaining) } },
+    );
+  }
+
+  const tireLike = ocrResults.some((ocr) => ocr.tireLike);
+  if (!tireLike) {
+    return NextResponse.json(
+      {
+        found: false,
+        error: 'not_tire',
+        message: 'No pudimos confirmar que la imagen sea del flanco de un neumático.',
+      },
+      { headers: { 'X-RateLimit-Remaining': String(rateLimit.remaining) } },
+    );
+  }
+
   const apiKey = process.env.GOOGLE_AI_KEY || process.env.GEMINI_API_KEY;
-  const configuredModel = process.env.GEMINI_MODEL;
+  const configuredModel = process.env.GEMINI_MODEL ?? 'gemini-2.0-flash-lite';
   if (!apiKey) {
     console.error("Missing GOOGLE_AI_KEY");
     return NextResponse.json({ found: false, error: "config" });
@@ -307,29 +299,16 @@ export async function POST(req: NextRequest) {
   let result: Candidate | null = null;
   result = await scanWithGemini(imageData, apiKey, configuredModel);
 
-  if (!result || result.width < 0) {
-    const ocrResult = await scanWithOcrSpace(base64Image);
-    if (ocrResult) {
-      result = ocrResult;
-    } else if (base64Processed) {
-      const ocrProcessedResult = await scanWithOcrSpace(base64Processed);
-      if (ocrProcessedResult) result = ocrProcessedResult;
-    }
-  }
-
-  // Save the result (success or failure) automatically for dataset building
-  if (result && result.width > 0) {
-    // If it's a valid measurement, save as a candidate
-    await saveDatasetSample(base64Image, result, base64Processed, 'scan-auto');
-  } else {
-    // If it failed (either negative status or null), save as failed
-    const status = (result && result.width < 0) ? Math.abs(result.width) : 404;
-    const reason = result?.raw || 'No se detectó medida';
-    await saveDatasetSample(base64Image, null, base64Processed, 'app-failed-scan', reason, status);
-  }
-
   if (result && result.width < 0) {
     const status = Math.abs(result.width);
+    if (status === 102) {
+      return NextResponse.json({
+        found: false,
+        error: "not_tire",
+        message: "No pudimos confirmar que la imagen sea del flanco de un neumático.",
+      });
+    }
+
     if (status === 429) {
       return NextResponse.json({
         found: false,
@@ -348,8 +327,14 @@ export async function POST(req: NextRequest) {
   }
 
   if (result) {
-    return NextResponse.json({ found: true, width: result.width, profile: result.profile, rim: result.rim });
+    return NextResponse.json(
+      { found: true, width: result.width, profile: result.profile, rim: result.rim, source: 'gemini' },
+      { headers: { 'X-RateLimit-Remaining': String(rateLimit.remaining) } },
+    );
   }
 
-  return NextResponse.json({ found: false });
+  return NextResponse.json(
+    { found: false },
+    { headers: { 'X-RateLimit-Remaining': String(rateLimit.remaining) } },
+  );
 }
