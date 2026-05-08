@@ -109,6 +109,97 @@ function bestCandidate(nums: number[]): Candidate | null {
   return candidates.reduce((best, c) => c.score > best.score ? c : best);
 }
 
+function candidateFromValues(
+  width: number,
+  profile: number,
+  rim: number,
+  bonus: number,
+  raw: string,
+): Candidate | null {
+  if (!plausible(width, profile, rim)) return null;
+
+  const snappedWidth = snap(width, WIDTHS);
+  const snappedProfile = snap(profile, PROFILES);
+  const snappedRim = snap(rim, RIMS);
+  const snapPenalty =
+    Math.abs(width - snappedWidth) / 5 +
+    Math.abs(profile - snappedProfile) +
+    Math.abs(rim - snappedRim) * 2;
+
+  return {
+    width: snappedWidth,
+    profile: snappedProfile,
+    rim: snappedRim,
+    score: marketScore(snappedWidth, snappedProfile, snappedRim) + bonus - snapPenalty,
+    raw,
+  };
+}
+
+function normalizeOcrForSize(raw: string): string {
+  return raw
+    .toUpperCase()
+    .replace(/[|]/g, 'I')
+    .replace(/(?<=\d)[OQ](?=\d)/g, '0')
+    .replace(/(?<=\d)[IL](?=\d)/g, '1')
+    .replace(/(?<=\d)S(?=\d)/g, '5')
+    .replace(/(?<=\d)B(?=\d)/g, '8')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function parseTireSizeFromText(raw: string): Candidate | null {
+  const text = normalizeOcrForSize(raw);
+  const candidates: Candidate[] = [];
+
+  function push(width: string, profile: string, rim: string, bonus: number, source: string) {
+    const candidate = candidateFromValues(Number(width), Number(profile), Number(rim), bonus, source);
+    if (candidate) candidates.push(candidate);
+  }
+
+  const explicitPatterns = [
+    /(?:^|[^\d])P?(\d{3})\s*[\/\\\-]\s*(\d{2})\s*(?:Z\s*)?[R8B]\s*[-\s]?(\d{2})(?:[^\d]|$)/g,
+    /(?:^|[^\d])P?(\d{3})\s*[\/\\\-]\s*(\d{2})\s*(\d{2})(?:[^\d]|$)/g,
+    /(?:^|[^\d])P?(\d{3})\s+(\d{2})\s*(?:Z\s*)?[R8B]?\s*(\d{2})(?:[^\d]|$)/g,
+  ];
+
+  for (const pattern of explicitPatterns) {
+    for (const match of text.matchAll(pattern)) {
+      push(match[1], match[2], match[3], 35, match[0]);
+    }
+  }
+
+  const compact = text.replace(/[^A-Z0-9]/g, '');
+  const compactPatterns = [
+    /P?(\d{3})(\d{2})(1[3-9]|2[0-4])/g,
+    /P?(\d{3})(\d{2})(?:ZR|R|8|B)(1[3-9]|2[0-4])/g,
+  ];
+
+  for (const pattern of compactPatterns) {
+    for (const match of compact.matchAll(pattern)) {
+      push(match[1], match[2], match[3], 22, match[0]);
+    }
+  }
+
+  const nums = (text.match(/\d+/g) ?? []).map(Number);
+  const looseCandidate = bestCandidate(nums);
+  if (looseCandidate) candidates.push({ ...looseCandidate, score: looseCandidate.score + 4, raw: text });
+
+  if (!candidates.length) return null;
+
+  const unique = new Map<string, Candidate>();
+  for (const candidate of candidates) {
+    const key = `${candidate.width}-${candidate.profile}-${candidate.rim}`;
+    const current = unique.get(key);
+    if (!current || candidate.score > current.score) unique.set(key, candidate);
+  }
+
+  const best = [...unique.values()].reduce((currentBest, candidate) =>
+    candidate.score > currentBest.score ? candidate : currentBest,
+  );
+
+  return best.score >= 8 ? best : null;
+}
+
 async function scanWithGemini(
   imageData: string,
   apiKey: string,
@@ -205,21 +296,8 @@ async function scanWithOcrSpace(
     const t = raw.replace(/\s+/g, '').toUpperCase();
     console.log('OCR.space →', t.slice(0, 80));
 
-    // Multiple patterns — most specific first
-    const patterns = [
-      /P?(\d{3})[\/\-](\d{2})R(\d{2})/i,
-      /(\d{3})[^\d]+(\d{2})[^\d]*R(\d{2})/i,
-      /(\d{3})[^\d]+(\d{2})[^\d]+(\d{2})/,
-    ];
-
-    for (const pat of patterns) {
-      const m = t.match(pat);
-      if (m) {
-        const nums = [+m[1], +m[2], +m[3]];
-        const c = bestCandidate(nums);
-        if (c) return { candidate: c, tireLike: true };
-      }
-    }
+    const candidate = parseTireSizeFromText(raw);
+    if (candidate) return { candidate, tireLike: true };
 
     const tireWords = [
       'TUBELESS', 'RADIAL', 'STEEL', 'BELTED', 'SIDEWALL', 'TREAD',
