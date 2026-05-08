@@ -71,13 +71,13 @@ export function ProductCard({
             </span>
           </div>
         )}
-      </Link>
 
-      {imageFooter && (
-        <div className="-mt-3 mb-1 flex justify-center px-3">
-          {imageFooter}
-        </div>
-      )}
+        {imageFooter && (
+          <div className="absolute bottom-2 left-0 right-0 z-10 flex justify-center px-3">
+            {imageFooter}
+          </div>
+        )}
+      </Link>
 
       {/* Content */}
       <div className="p-4 flex flex-col flex-1">
