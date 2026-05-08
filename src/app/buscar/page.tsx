@@ -199,20 +199,23 @@ export default async function BuscarPage({ searchParams }: Props) {
                   : null;
 
                 return (
-                  <div key={product.id} className="relative">
-                    <div className="absolute left-1/2 top-[60%] z-20 inline-flex -translate-x-1/2 -translate-y-1/2 items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-1.5 text-[11px] font-black uppercase tracking-wide text-white shadow-lg shadow-emerald-900/20 whitespace-nowrap">
-                      <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                      </svg>
-                      Compatible
-                      {diameterDiff !== null && (
-                        <span className="border-l border-white/30 pl-1.5">
-                          Diámetro {diameterDiff >= 0 ? "+" : ""}{diameterDiff.toFixed(1)}%
-                        </span>
-                      )}
-                    </div>
-                    <ProductCard product={product} />
-                  </div>
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    imageFooter={
+                      <span className="inline-flex max-w-full items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-1.5 text-[11px] font-black uppercase tracking-wide text-white shadow-lg shadow-emerald-900/20">
+                        <svg className="h-3.5 w-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span>Compatible</span>
+                        {diameterDiff !== null && (
+                          <span className="border-l border-white/30 pl-1.5">
+                            {diameterDiff >= 0 ? "+" : ""}{diameterDiff.toFixed(1)}%
+                          </span>
+                        )}
+                      </span>
+                    }
+                  />
                 );
               })}
             </div>

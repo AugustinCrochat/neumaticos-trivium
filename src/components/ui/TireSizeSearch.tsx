@@ -421,7 +421,7 @@ function CustomSelect({ label, value, onChange, placeholder, options, formatOpti
       {isOpen && (
         <div className="absolute top-[calc(100%+8px)] left-0 w-full bg-navy-800 border-2 border-navy-700 rounded-xl z-50 max-h-40 overflow-y-auto shadow-2xl animate-in fade-in slide-in-from-top-2 duration-150">
           {options.map((opt: string) => (
-            <button key={opt} onClick={() => { onChange(opt); onToggle(); }} className={`w-full text-left px-4 py-2.5 text-sm font-bold transition-colors ${value === opt ? "text-orange-500 bg-navy-700" : "text-white hover:bg-navy-700"}`}>
+            <button key={opt} onClick={() => { onChange(opt); }} className={`w-full text-left px-4 py-2.5 text-sm font-bold transition-colors ${value === opt ? "text-orange-500 bg-navy-700" : "text-white hover:bg-navy-700"}`}>
               {formatOption ? formatOption(opt) : opt}
             </button>
           ))}

@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useBranch } from "@/contexts/branch-context";
 import type { TireProduct } from "@/lib/types";
+import type { ReactNode } from "react";
 
 function formatPrice(price: number) {
   return new Intl.NumberFormat("es-AR", {
@@ -29,7 +30,13 @@ const TIRE_SVG = (
   </svg>
 );
 
-export function ProductCard({ product }: { product: TireProduct }) {
+export function ProductCard({
+  product,
+  imageFooter,
+}: {
+  product: TireProduct;
+  imageFooter?: ReactNode;
+}) {
   const { selectedBranch } = useBranch();
   const hasImage =
     !!product.imageUrl && product.imageUrl !== "/images/tire-placeholder.webp";
@@ -65,6 +72,12 @@ export function ProductCard({ product }: { product: TireProduct }) {
           </div>
         )}
       </Link>
+
+      {imageFooter && (
+        <div className="-mt-3 mb-1 flex justify-center px-3">
+          {imageFooter}
+        </div>
+      )}
 
       {/* Content */}
       <div className="p-4 flex flex-col flex-1">
