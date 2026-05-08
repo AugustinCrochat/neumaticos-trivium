@@ -51,8 +51,10 @@ export function TireSizeSearch({
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
+  const lightSampleCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const [hasTorch, setHasTorch] = useState(false);
   const [torchOn, setTorchOn] = useState(false);
+  const [lowLight, setLowLight] = useState(false);
 
   const availableWidths = useMemo(() => unique(PRODUCTS.map((p) => p.size.width)), []);
   const availableProfiles = useMemo(() => {
@@ -77,6 +79,41 @@ export function TireSizeSearch({
     if (width && profile && rim && !activeDropdown) handleSearch();
   }, [width, profile, rim, activeDropdown]);
 
+  useEffect(() => {
+    if (!showScanner) return;
+
+    function sampleLight() {
+      const video = videoRef.current;
+      if (!video || video.readyState < 2 || !video.videoWidth || !video.videoHeight) return;
+
+      const canvas = lightSampleCanvasRef.current ?? document.createElement("canvas");
+      lightSampleCanvasRef.current = canvas;
+      canvas.width = 24;
+      canvas.height = 24;
+
+      const ctx = canvas.getContext("2d", { willReadFrequently: true });
+      if (!ctx) return;
+
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+      let totalLuma = 0;
+
+      for (let i = 0; i < pixels.length; i += 4) {
+        totalLuma += 0.2126 * pixels[i] + 0.7152 * pixels[i + 1] + 0.0722 * pixels[i + 2];
+      }
+
+      const averageLuma = totalLuma / (pixels.length / 4);
+      setLowLight(averageLuma < 58);
+    }
+
+    const firstSample = window.setTimeout(sampleLight, 600);
+    const interval = window.setInterval(sampleLight, 800);
+    return () => {
+      window.clearTimeout(firstSample);
+      window.clearInterval(interval);
+    };
+  }, [showScanner]);
+
   function onWidthChange(v: string) { setWidth(v); setProfile(""); setRim(""); setActiveDropdown("profile"); }
   function onProfileChange(v: string) { setProfile(v); setRim(""); setActiveDropdown("rim"); }
   function onRimChange(v: string) { setRim(v); setActiveDropdown(null); }
@@ -96,7 +133,7 @@ export function TireSizeSearch({
   }
 
   async function startCamera() {
-    setShowScanner(true); setScanError(null);
+    setShowScanner(true); setScanError(null); setLowLight(false);
     try {
       const el = document.documentElement;
       if (el.requestFullscreen) await el.requestFullscreen();
@@ -115,7 +152,7 @@ export function TireSizeSearch({
   function stopCamera() {
     if (streamRef.current) { streamRef.current.getTracks().forEach(track => track.stop()); streamRef.current = null; }
     try { if (document.fullscreenElement) document.exitFullscreen(); } catch { }
-    setShowScanner(false); setHasTorch(false); setTorchOn(false);
+    setShowScanner(false); setHasTorch(false); setTorchOn(false); setLowLight(false);
   }
 
   async function toggleTorch() {
@@ -197,6 +234,27 @@ export function TireSizeSearch({
               </button>
             )}
           </div>
+
+          {lowLight && !isScanning && (
+            <div className="absolute top-20 left-4 right-4 z-20 flex justify-center">
+              {hasTorch && !torchOn ? (
+                <button
+                  type="button"
+                  onClick={toggleTorch}
+                  className="inline-flex items-center gap-2 rounded-full border border-yellow-300/60 bg-yellow-400 px-4 py-2 text-xs font-black uppercase tracking-wide text-black shadow-lg shadow-yellow-500/30"
+                >
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                  Poca luz · Activar flash
+                </button>
+              ) : (
+                <span className="inline-flex items-center rounded-full border border-yellow-300/40 bg-black/70 px-4 py-2 text-xs font-black uppercase tracking-wide text-yellow-300 shadow-lg backdrop-blur-md">
+                  Hay poca luz
+                </span>
+              )}
+            </div>
+          )}
 
           <div className="flex-1 flex items-center justify-center bg-black">
             <div className="relative rounded-full overflow-hidden" style={{ width: '90vmin', height: '90vmin', boxShadow: '0 0 0 9999px #000' }}>
