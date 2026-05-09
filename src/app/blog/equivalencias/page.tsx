@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { TireSizeSearch } from "@/components/ui/TireSizeSearch";
+import { EquivalenceCalculator } from "@/components/ui/EquivalenceCalculator";
 
 export const metadata = {
   title: "Equivalencias de neumáticos: ¿Qué son y cómo funcionan? — Trivium",
@@ -57,10 +58,29 @@ export default function EquivalenciasPage() {
             </ul>
           </div>
 
-          <h2 className="text-2xl font-black text-navy-900 mt-12 mb-6">¿Cómo compensamos la medida?</h2>
+          <h2 className="text-2xl font-black text-navy-900 mt-12 mb-6 flex items-center gap-3">
+            <span className="w-8 h-1 bg-emerald-500 rounded-full"></span>
+            ¿Cómo calculamos la equivalencia?
+          </h2>
           <p>
-            La regla general para encontrar equivalencias manteniendo la misma llanta es: si <strong>aumentás el ancho</strong> del neumático (ej. de 195 a 205), tenés que <strong>bajar el perfil</strong> (ej. de 65 a 60), de modo que el diámetro total se mantenga prácticamente igual.
+            El cálculo consiste en obtener el diámetro total de ambas ruedas y sacar la diferencia porcentual. El diámetro de una rueda se obtiene sumando el diámetro de la llanta en milímetros más dos veces la altura del perfil. 
           </p>
+          <div className="bg-slate-50 border border-slate-200 p-4 rounded-xl font-mono text-sm overflow-x-auto text-slate-700">
+            Diámetro = (Rodado × 25.4) + 2 × (Ancho × (Perfil / 100))
+            <br/><br/>
+            Diferencia % = ((Diámetro Nuevo - Diámetro Original) / Diámetro Original) × 100
+          </div>
+          <p>
+            La regla rápida para compensar medidas (manteniendo la misma llanta) es que si <strong>aumentás el ancho</strong> (ej. de 195 a 205), tenés que <strong>bajar el perfil</strong> (ej. de 65 a 60), de modo que el diámetro total se mantenga prácticamente igual.
+          </p>
+        </div>
+
+        <div className="mt-16">
+          <h2 className="text-2xl font-black text-navy-900 mb-8 flex items-center gap-3">
+            <span className="w-8 h-1 bg-emerald-500 rounded-full"></span>
+            Calculadora de Equivalencias
+          </h2>
+          <EquivalenceCalculator />
         </div>
       </div>
 
