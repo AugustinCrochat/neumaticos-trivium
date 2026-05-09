@@ -23,11 +23,7 @@ const TILE_SIZE = 256;
 const MIN_ZOOM = 5;
 const MAX_ZOOM = 16;
 const MAPTILER_KEY = "rZs55HHnOgNdmSMB2Jkn";
-const MAP_STYLES = [
-  { id: "streets-v4", label: "Calles" },
-  { id: "bright-v2", label: "Claro" },
-  { id: "basic-v2", label: "Simple" },
-] as const;
+const MAP_STYLE = "streets-v4";
 
 function cleanPhone(phone: string) {
   return phone.replace(/\s/g, "");
@@ -59,8 +55,8 @@ function worldToLatLng(point: Point, zoom: number) {
   return { lat, lng };
 }
 
-function makeTileUrl(x: number, y: number, z: number, styleId: string) {
-  return `https://api.maptiler.com/maps/${styleId}/256/${z}/${x}/${y}.png?key=${MAPTILER_KEY}`;
+function makeTileUrl(x: number, y: number, z: number) {
+  return `https://api.maptiler.com/maps/${MAP_STYLE}/256/${z}/${x}/${y}.png?key=${MAPTILER_KEY}`;
 }
 
 function getDistanceInKm(from: UserLocation, to: UserLocation) {
@@ -78,10 +74,9 @@ function getDistanceInKm(from: UserLocation, to: UserLocation) {
 
 export function BranchesMap({ branches }: BranchesMapProps) {
   const { selectedBranch, setSelectedBranch } = useBranch();
-  const [activeBranchId, setActiveBranchId] = useState(branches[0]?.id ?? "");
+  const [activeBranchId, setActiveBranchId] = useState<string | null>(null);
   const [center, setCenter] = useState({ lat: -32.9, lng: -61.6 });
   const [zoom, setZoom] = useState(6);
-  const [mapStyle, setMapStyle] = useState<(typeof MAP_STYLES)[number]["id"]>("streets-v4");
   const [mapSize, setMapSize] = useState({ width: 960, height: 560 });
   const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
   const [geoStatus, setGeoStatus] = useState<"idle" | "loading" | "ready" | "error">("idle");
@@ -91,10 +86,14 @@ export function BranchesMap({ branches }: BranchesMapProps) {
     start: Point;
     centerWorld: Point;
   } | null>(null);
+  const pointersRef = useRef(new Map<number, Point>());
+  const pinchDistanceRef = useRef<number | null>(null);
 
   const activeBranch = useMemo(
-    () => branches.find((branch) => branch.id === activeBranchId) ?? branches[0],
-    [activeBranchId, branches]
+    () =>
+      branches.find((branch) => branch.id === (activeBranchId ?? selectedBranch.id)) ??
+      branches[0],
+    [activeBranchId, branches, selectedBranch.id]
   );
 
   const centerWorld = useMemo(
@@ -121,7 +120,7 @@ export function BranchesMap({ branches }: BranchesMapProps) {
         const wrappedX = ((x % maxTile) + maxTile) % maxTile;
         nextTiles.push({
           id: `${zoom}-${wrappedX}-${y}`,
-          url: makeTileUrl(wrappedX, y, zoom, mapStyle),
+          url: makeTileUrl(wrappedX, y, zoom),
           left: x * TILE_SIZE - topLeft.x,
           top: y * TILE_SIZE - topLeft.y,
         });
@@ -129,7 +128,7 @@ export function BranchesMap({ branches }: BranchesMapProps) {
     }
 
     return nextTiles;
-  }, [centerWorld.x, centerWorld.y, mapSize.height, mapSize.width, mapStyle, zoom]);
+  }, [centerWorld.x, centerWorld.y, mapSize.height, mapSize.width, zoom]);
 
   const branchMarkers = useMemo(
     () =>
@@ -210,6 +209,10 @@ export function BranchesMap({ branches }: BranchesMapProps) {
     setZoom((currentZoom) => clamp(currentZoom + delta, MIN_ZOOM, MAX_ZOOM));
   }
 
+  function chooseButtonLabel(branch: Branch) {
+    return selectedBranch.id === branch.id ? "Tu sucursal" : "Elegir esta";
+  }
+
   function handleWheel(event: WheelEvent<HTMLDivElement>) {
     event.preventDefault();
     zoomBy(event.deltaY > 0 ? -1 : 1);
@@ -217,14 +220,54 @@ export function BranchesMap({ branches }: BranchesMapProps) {
 
   function handlePointerDown(event: PointerEvent<HTMLDivElement>) {
     event.currentTarget.setPointerCapture(event.pointerId);
-    dragRef.current = {
-      pointerId: event.pointerId,
-      start: { x: event.clientX, y: event.clientY },
-      centerWorld,
-    };
+    pointersRef.current.set(event.pointerId, { x: event.clientX, y: event.clientY });
+
+    if (pointersRef.current.size === 1) {
+      dragRef.current = {
+        pointerId: event.pointerId,
+        start: { x: event.clientX, y: event.clientY },
+        centerWorld,
+      };
+      pinchDistanceRef.current = null;
+      return;
+    }
+
+    const pointers = [...pointersRef.current.values()];
+    if (pointers.length >= 2) {
+      dragRef.current = null;
+      pinchDistanceRef.current = Math.hypot(
+        pointers[0].x - pointers[1].x,
+        pointers[0].y - pointers[1].y
+      );
+    }
   }
 
   function handlePointerMove(event: PointerEvent<HTMLDivElement>) {
+    if (pointersRef.current.has(event.pointerId)) {
+      pointersRef.current.set(event.pointerId, { x: event.clientX, y: event.clientY });
+    }
+
+    if (pointersRef.current.size >= 2) {
+      const pointers = [...pointersRef.current.values()];
+      const distance = Math.hypot(
+        pointers[0].x - pointers[1].x,
+        pointers[0].y - pointers[1].y
+      );
+      const lastDistance = pinchDistanceRef.current;
+
+      if (lastDistance && distance > lastDistance * 1.16) {
+        zoomBy(1);
+        pinchDistanceRef.current = distance;
+      } else if (lastDistance && distance < lastDistance * 0.86) {
+        zoomBy(-1);
+        pinchDistanceRef.current = distance;
+      } else if (!lastDistance) {
+        pinchDistanceRef.current = distance;
+      }
+
+      return;
+    }
+
     const drag = dragRef.current;
     if (!drag || drag.pointerId !== event.pointerId) return;
 
@@ -236,8 +279,20 @@ export function BranchesMap({ branches }: BranchesMapProps) {
   }
 
   function handlePointerUp(event: PointerEvent<HTMLDivElement>) {
+    pointersRef.current.delete(event.pointerId);
+    pinchDistanceRef.current = null;
+
     if (dragRef.current?.pointerId === event.pointerId) {
       dragRef.current = null;
+    }
+
+    const remainingPointer = [...pointersRef.current.entries()][0];
+    if (remainingPointer) {
+      dragRef.current = {
+        pointerId: remainingPointer[0],
+        start: remainingPointer[1],
+        centerWorld: latLngToWorld(center.lat, center.lng, zoom),
+      };
     }
   }
 
@@ -264,7 +319,7 @@ export function BranchesMap({ branches }: BranchesMapProps) {
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}
             onPointerCancel={handlePointerUp}
-            className="relative min-h-[430px] touch-none overflow-hidden rounded-2xl border border-slate-200 bg-slate-200 shadow-xl shadow-slate-200/80 md:min-h-[560px]"
+            className="relative h-[68vh] min-h-[520px] touch-none overflow-hidden rounded-2xl border border-slate-200 bg-slate-200 shadow-xl shadow-slate-200/80 lg:h-[620px] lg:min-h-0"
             aria-label="Mapa interactivo de sucursales"
           >
             {tiles.map((tile) => (
@@ -280,15 +335,6 @@ export function BranchesMap({ branches }: BranchesMapProps) {
             ))}
 
             <div className="absolute inset-0 pointer-events-none ring-1 ring-inset ring-black/5" />
-
-            <div className="absolute left-4 top-4 z-20 rounded-xl border border-white/80 bg-white/95 px-4 py-3 shadow-lg backdrop-blur">
-              <p className="text-xs font-bold uppercase tracking-wide text-orange-600">
-                Mapa real
-              </p>
-              <p className="text-sm font-black text-navy-900">
-                Arrastra para mover, rueda para zoom
-              </p>
-            </div>
 
             <div className="absolute right-4 top-4 z-20 flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-lg">
               <button
@@ -309,27 +355,10 @@ export function BranchesMap({ branches }: BranchesMapProps) {
               </button>
             </div>
 
-            <div className="absolute right-4 top-[100px] z-20 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-lg">
-              {MAP_STYLES.map((style) => (
-                <button
-                  key={style.id}
-                  type="button"
-                  onClick={() => setMapStyle(style.id)}
-                  className={`block w-full px-3 py-2 text-left text-xs font-bold transition-colors ${
-                    mapStyle === style.id
-                      ? "bg-navy-900 text-white"
-                      : "text-navy-900 hover:bg-navy-50"
-                  }`}
-                >
-                  {style.label}
-                </button>
-              ))}
-            </div>
-
             <button
               type="button"
               onClick={locateUser}
-              className="absolute left-4 top-[92px] z-20 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-bold text-navy-900 shadow-lg transition-colors hover:bg-navy-50 disabled:cursor-wait disabled:opacity-70"
+              className="absolute left-4 top-4 z-20 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-bold text-navy-900 shadow-lg transition-colors hover:bg-navy-50 disabled:cursor-wait disabled:opacity-70"
               disabled={geoStatus === "loading"}
             >
               {geoStatus === "loading" ? "Buscando..." : "Mi ubicacion"}
@@ -348,7 +377,7 @@ export function BranchesMap({ branches }: BranchesMapProps) {
                   aria-label={`Ver sucursal ${branch.shortName}`}
                 >
                   <span
-                    className={`relative flex h-16 w-16 items-center justify-center rounded-full border-4 bg-white shadow-2xl transition-all duration-200 group-hover:-translate-y-1 group-focus-visible:ring-4 group-focus-visible:ring-orange-500/30 ${
+                    className={`relative flex h-12 w-12 items-center justify-center rounded-full border-4 bg-white shadow-2xl transition-all duration-200 group-hover:-translate-y-1 group-focus-visible:ring-4 group-focus-visible:ring-orange-500/30 md:h-16 md:w-16 ${
                       isActive
                         ? "border-orange-500 shadow-orange-500/30"
                         : "border-white shadow-navy-900/20"
@@ -364,15 +393,15 @@ export function BranchesMap({ branches }: BranchesMapProps) {
                       alt=""
                       width={42}
                       height={42}
-                      className="relative h-10 w-10 object-contain"
+                      className="relative h-8 w-8 object-contain md:h-10 md:w-10"
                     />
                   </span>
                   <span
-                    className={`mx-auto block h-5 w-5 -translate-y-2 rotate-45 border-b-4 border-r-4 bg-white transition-colors ${
+                    className={`mx-auto block h-4 w-4 -translate-y-2 rotate-45 border-b-4 border-r-4 bg-white transition-colors md:h-5 md:w-5 ${
                       isActive ? "border-orange-500" : "border-white"
                     }`}
                   />
-                  <span className="absolute left-1/2 top-full mt-1 -translate-x-1/2 whitespace-nowrap rounded-lg bg-navy-900 px-3 py-1.5 text-xs font-bold text-white shadow-lg">
+                  <span className="absolute left-1/2 top-full mt-1 hidden -translate-x-1/2 whitespace-nowrap rounded-lg bg-navy-900 px-3 py-1.5 text-xs font-bold text-white shadow-lg sm:block">
                     {branch.shortName}
                   </span>
                 </button>
@@ -390,7 +419,18 @@ export function BranchesMap({ branches }: BranchesMapProps) {
               </div>
             )}
 
-            <div className="absolute bottom-5 left-5 right-5 z-20 rounded-2xl border border-white/80 bg-white/95 p-4 shadow-xl backdrop-blur md:left-auto md:w-[360px]">
+            <a
+              href="https://www.maptiler.com/copyright/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="absolute bottom-1 left-2 z-20 rounded bg-white/90 px-1.5 py-0.5 text-[10px] text-slate-600"
+            >
+              © MapTiler © OpenStreetMap contributors
+            </a>
+          </div>
+
+          <div className="grid grid-cols-1 content-start gap-4">
+            <article className="rounded-2xl border border-orange-500 bg-white p-5 shadow-xl shadow-orange-500/10">
               <p className="text-xs font-bold uppercase tracking-wide text-slate-500">
                 Sucursal seleccionada
               </p>
@@ -400,13 +440,20 @@ export function BranchesMap({ branches }: BranchesMapProps) {
               <p className="mt-2 text-sm text-slate-600">
                 {activeBranch.address}, {activeBranch.city}
               </p>
+              <p className="mt-2 text-xs text-slate-500">{activeBranch.hours}</p>
+
               <div className="mt-4 flex flex-wrap gap-2">
                 <button
                   type="button"
                   onClick={() => setSelectedBranch(activeBranch)}
-                  className="rounded-lg bg-navy-900 px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-navy-800"
+                  disabled={selectedBranch.id === activeBranch.id}
+                  className={`rounded-lg px-4 py-2 text-sm font-bold transition-colors ${
+                    selectedBranch.id === activeBranch.id
+                      ? "bg-orange-100 text-orange-700"
+                      : "bg-navy-900 text-white hover:bg-navy-800"
+                  }`}
                 >
-                  Elegir esta
+                  {chooseButtonLabel(activeBranch)}
                 </button>
                 <a
                   href={activeBranch.mapUrl}
@@ -425,29 +472,14 @@ export function BranchesMap({ branches }: BranchesMapProps) {
                   WhatsApp
                 </a>
               </div>
-              {selectedBranch.id === activeBranch.id && (
-                <p className="mt-3 text-xs font-bold text-orange-600">
-                  Es tu sucursal seleccionada
-                </p>
-              )}
+
               {geoError && (
                 <p className="mt-3 text-xs font-semibold text-orange-700">
                   {geoError}
                 </p>
               )}
-            </div>
+            </article>
 
-            <a
-              href="https://www.maptiler.com/copyright/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="absolute bottom-1 left-2 z-20 rounded bg-white/90 px-1.5 py-0.5 text-[10px] text-slate-600"
-            >
-              © MapTiler © OpenStreetMap contributors
-            </a>
-          </div>
-
-          <div className="grid grid-cols-1 gap-4">
             {branches.map((branch) => {
               const isActive = branch.id === activeBranch.id;
 
@@ -506,9 +538,14 @@ export function BranchesMap({ branches }: BranchesMapProps) {
                     <button
                       type="button"
                       onClick={() => setSelectedBranch(branch)}
-                      className="rounded-lg bg-navy-900 px-3 py-2 text-xs font-bold text-white transition-colors hover:bg-navy-800"
+                      disabled={selectedBranch.id === branch.id}
+                      className={`rounded-lg px-3 py-2 text-xs font-bold transition-colors ${
+                        selectedBranch.id === branch.id
+                          ? "bg-orange-100 text-orange-700"
+                          : "bg-navy-900 text-white hover:bg-navy-800"
+                      }`}
                     >
-                      Elegir esta
+                      {chooseButtonLabel(branch)}
                     </button>
                     <a
                       href={`tel:${cleanPhone(branch.phone)}`}
