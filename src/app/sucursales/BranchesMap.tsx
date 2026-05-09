@@ -1,6 +1,6 @@
 "use client";
 
-import { PointerEvent, WheelEvent, useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState, type PointerEvent, type WheelEvent } from "react";
 import Image from "next/image";
 import type { Branch } from "@/lib/config";
 import { useBranch } from "@/contexts/branch-context";
@@ -22,6 +22,12 @@ type UserLocation = {
 const TILE_SIZE = 256;
 const MIN_ZOOM = 5;
 const MAX_ZOOM = 16;
+const MAPTILER_KEY = "rZs55HHnOgNdmSMB2Jkn";
+const MAP_STYLES = [
+  { id: "streets-v4", label: "Calles" },
+  { id: "bright-v2", label: "Claro" },
+  { id: "basic-v2", label: "Simple" },
+] as const;
 
 function cleanPhone(phone: string) {
   return phone.replace(/\s/g, "");
@@ -53,9 +59,8 @@ function worldToLatLng(point: Point, zoom: number) {
   return { lat, lng };
 }
 
-function makeTileUrl(x: number, y: number, z: number) {
-  const subdomain = ["a", "b", "c"][Math.abs(x + y) % 3];
-  return `https://${subdomain}.tile.openstreetmap.org/${z}/${x}/${y}.png`;
+function makeTileUrl(x: number, y: number, z: number, styleId: string) {
+  return `https://api.maptiler.com/maps/${styleId}/256/${z}/${x}/${y}.png?key=${MAPTILER_KEY}`;
 }
 
 function getDistanceInKm(from: UserLocation, to: UserLocation) {
@@ -76,6 +81,7 @@ export function BranchesMap({ branches }: BranchesMapProps) {
   const [activeBranchId, setActiveBranchId] = useState(branches[0]?.id ?? "");
   const [center, setCenter] = useState({ lat: -32.9, lng: -61.6 });
   const [zoom, setZoom] = useState(6);
+  const [mapStyle, setMapStyle] = useState<(typeof MAP_STYLES)[number]["id"]>("streets-v4");
   const [mapSize, setMapSize] = useState({ width: 960, height: 560 });
   const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
   const [geoStatus, setGeoStatus] = useState<"idle" | "loading" | "ready" | "error">("idle");
@@ -115,7 +121,7 @@ export function BranchesMap({ branches }: BranchesMapProps) {
         const wrappedX = ((x % maxTile) + maxTile) % maxTile;
         nextTiles.push({
           id: `${zoom}-${wrappedX}-${y}`,
-          url: makeTileUrl(wrappedX, y, zoom),
+          url: makeTileUrl(wrappedX, y, zoom, mapStyle),
           left: x * TILE_SIZE - topLeft.x,
           top: y * TILE_SIZE - topLeft.y,
         });
@@ -123,7 +129,7 @@ export function BranchesMap({ branches }: BranchesMapProps) {
     }
 
     return nextTiles;
-  }, [centerWorld.x, centerWorld.y, mapSize.height, mapSize.width, zoom]);
+  }, [centerWorld.x, centerWorld.y, mapSize.height, mapSize.width, mapStyle, zoom]);
 
   const branchMarkers = useMemo(
     () =>
@@ -303,6 +309,23 @@ export function BranchesMap({ branches }: BranchesMapProps) {
               </button>
             </div>
 
+            <div className="absolute right-4 top-[100px] z-20 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-lg">
+              {MAP_STYLES.map((style) => (
+                <button
+                  key={style.id}
+                  type="button"
+                  onClick={() => setMapStyle(style.id)}
+                  className={`block w-full px-3 py-2 text-left text-xs font-bold transition-colors ${
+                    mapStyle === style.id
+                      ? "bg-navy-900 text-white"
+                      : "text-navy-900 hover:bg-navy-50"
+                  }`}
+                >
+                  {style.label}
+                </button>
+              ))}
+            </div>
+
             <button
               type="button"
               onClick={locateUser}
@@ -415,12 +438,12 @@ export function BranchesMap({ branches }: BranchesMapProps) {
             </div>
 
             <a
-              href="https://www.openstreetmap.org/copyright"
+              href="https://www.maptiler.com/copyright/"
               target="_blank"
               rel="noopener noreferrer"
               className="absolute bottom-1 left-2 z-20 rounded bg-white/90 px-1.5 py-0.5 text-[10px] text-slate-600"
             >
-              OpenStreetMap
+              © MapTiler © OpenStreetMap contributors
             </a>
           </div>
 
