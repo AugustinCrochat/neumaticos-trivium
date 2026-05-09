@@ -519,11 +519,14 @@ export function TireSizeSearch({
 
               {selectedVehicle.sizes.length > 1 ? (
                 <>
-                  <p className="text-white/60 text-sm mb-3 text-center">Este modelo tiene varias versiones. Si conocés la versión/trim, elegila; si no, elegí la medida correspondiente abajo.</p>
+                  <p className="text-white/60 text-sm mb-3 text-center">Este modelo tiene varias versiones. Elegí la que corresponde a tu auto según año o equipamiento.</p>
                   <div className="flex flex-col gap-2">
                     {selectedVehicle.sizes.map((s, i) => (
-                      <button key={i} type="button" onClick={() => goToMeasure(s)} className="w-full text-white py-3 px-4 rounded-lg bg-navy-900 border border-navy-700 text-left hover:border-orange-500 transition-colors font-mono">
-                        {s.w}/{s.p} R{s.r}
+                      <button key={i} type="button" onClick={() => goToMeasure(s as { w: string; p: string; r: string })} className="w-full text-white py-3 px-4 rounded-lg bg-navy-900 border border-navy-700 text-left hover:border-orange-500 transition-colors flex flex-col gap-1">
+                        {'version' in s && s.version && (
+                          <span className="text-xs font-bold text-orange-400 uppercase tracking-wider">{s.version}</span>
+                        )}
+                        <span className="font-mono">{s.w}/{s.p} R{s.r}</span>
                       </button>
                     ))}
                   </div>
@@ -531,8 +534,11 @@ export function TireSizeSearch({
               ) : (
                 <div className="flex flex-col gap-2">
                   {selectedVehicle.sizes.map((s, i) => (
-                    <button key={i} type="button" onClick={() => goToMeasure(s)} className="w-full text-white py-3 px-4 rounded-lg bg-navy-900 border border-navy-700 text-left hover:border-orange-500 transition-colors font-mono">
-                      {s.w}/{s.p} R{s.r}
+                    <button key={i} type="button" onClick={() => goToMeasure(s as { w: string; p: string; r: string })} className="w-full text-white py-3 px-4 rounded-lg bg-navy-900 border border-navy-700 text-left hover:border-orange-500 transition-colors flex flex-col gap-1">
+                      {'version' in s && s.version && (
+                        <span className="text-xs font-bold text-orange-400 uppercase tracking-wider">{s.version}</span>
+                      )}
+                      <span className="font-mono">{s.w}/{s.p} R{s.r}</span>
                     </button>
                   ))}
                 </div>
