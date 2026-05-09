@@ -242,6 +242,9 @@ export function TireSizeSearch({
     if (recognitionRef.current) { recognitionRef.current.stop(); recognitionRef.current = null; setListening(false); return; }
     const r = new Speech(); r.lang = 'es-AR'; r.interimResults = false; r.maxAlternatives = 1;
     (r as any).continuous = true;
+    
+    let searchTimeout: ReturnType<typeof setTimeout> | undefined;
+
     r.onresult = (ev) => {
       let fullTranscript = '';
       for (let i = 0; i < ev.results.length; i++) {
@@ -261,24 +264,34 @@ export function TireSizeSearch({
         else if (num >= 135 && num <= 355) w = numStr;
       });
 
-      if (w) setWidth(w.slice(0,3));
-      if (p) setProfile(p.slice(0,2));
-      if (rimVal) setRim(rimVal.slice(0,2));
+      if (w) { w = w.slice(0,3); setWidth(w); }
+      if (p) { p = p.slice(0,2); setProfile(p); }
+      if (rimVal) { rimVal = rimVal.slice(0,2); setRim(rimVal); }
+
+      clearTimeout(searchTimeout);
 
       if (w && p && rimVal) {
         if (document.activeElement instanceof HTMLElement) {
           document.activeElement.blur();
         }
         r.stop();
-      } else if (!w && widthRef.current) {
-        widthRef.current.focus();
-      } else if (!p && profileRef.current) {
-        profileRef.current.focus();
-      } else if (!rimVal && rimRef.current) {
-        rimRef.current.focus();
+        router.push(`/buscar?medida=${w}-${p}-r${rimVal}`);
+      } else if (w || p || rimVal) {
+        if (!w && widthRef.current) widthRef.current.focus();
+        else if (!p && profileRef.current) profileRef.current.focus();
+        else if (!rimVal && rimRef.current) rimRef.current.focus();
+
+        searchTimeout = setTimeout(() => {
+          r.stop();
+          router.push(`/buscar?medida=${w}-${p}-r${rimVal}`);
+        }, 2500);
       }
     };
-    r.onend = () => { recognitionRef.current = null; setListening(false); };
+    r.onend = () => { 
+      recognitionRef.current = null; 
+      setListening(false); 
+      clearTimeout(searchTimeout);
+    };
     recognitionRef.current = r; setListening(true);
     r.start();
   }
