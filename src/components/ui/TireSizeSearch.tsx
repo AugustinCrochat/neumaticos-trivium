@@ -236,6 +236,9 @@ export function TireSizeSearch({
       ? "bg-orange-500 text-white border-orange-300 shadow-lg shadow-orange-500/20"
       : "bg-navy-700 text-white border-navy-600 hover:border-orange-500 hover:bg-navy-600"
   }`;
+  const selectInputText = (e: React.SyntheticEvent<HTMLInputElement>) => {
+    e.currentTarget.select();
+  };
 
   function startVoiceForVehicle() {
     const Speech = (window as SpeechRecognitionWindow).SpeechRecognition || (window as SpeechRecognitionWindow).webkitSpeechRecognition;
@@ -385,9 +388,18 @@ export function TireSizeSearch({
       {searchMode === "medida" && (
         <div className="flex flex-col gap-3">
           <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_auto] gap-2 sm:gap-3">
-            <input ref={widthRef} type="text" inputMode="numeric" pattern="[0-9]*" autoComplete="off" value={width} onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, '').slice(0,3); setWidth(v); if (v.length >= 3 && profileRef.current) profileRef.current.focus(); }} placeholder="Ancho" aria-label="Ancho del neumático" className={measureInputClass} />
-            <input ref={profileRef} type="text" inputMode="numeric" pattern="[0-9]*" autoComplete="off" value={profile} onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, '').slice(0,2); setProfile(v); if (v.length >= 2 && rimRef.current) rimRef.current.focus(); }} placeholder="Perfil" aria-label="Perfil del neumático" className={measureInputClass} />
-            <input ref={rimRef} type="text" inputMode="numeric" pattern="[0-9]*" autoComplete="off" value={rim} onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, '').slice(0,2); setRim(v); }} placeholder="Rodado" aria-label="Rodado del neumático" className={measureInputClass} />
+            <div className="min-w-0">
+              <input ref={widthRef} type="text" inputMode="numeric" pattern="[0-9]*" autoComplete="off" value={width} onFocus={selectInputText} onClick={selectInputText} onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, '').slice(0,3); setWidth(v); if (v.length >= 3 && profileRef.current) profileRef.current.focus(); }} placeholder="Ancho" aria-label="Ancho del neumático" className={measureInputClass} />
+              <p className="mt-1 text-center text-[11px] font-bold text-slate-500">Ej: 205</p>
+            </div>
+            <div className="min-w-0">
+              <input ref={profileRef} type="text" inputMode="numeric" pattern="[0-9]*" autoComplete="off" value={profile} onFocus={selectInputText} onClick={selectInputText} onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, '').slice(0,2); setProfile(v); if (v.length >= 2 && rimRef.current) rimRef.current.focus(); }} placeholder="Perfil" aria-label="Perfil del neumático" className={measureInputClass} />
+              <p className="mt-1 text-center text-[11px] font-bold text-slate-500">Ej: 55</p>
+            </div>
+            <div className="min-w-0">
+              <input ref={rimRef} type="text" inputMode="numeric" pattern="[0-9]*" autoComplete="off" value={rim} onFocus={selectInputText} onClick={selectInputText} onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, '').slice(0,2); setRim(v); }} placeholder="Rodado" aria-label="Rodado del neumático" className={measureInputClass} />
+              <p className="mt-1 text-center text-[11px] font-bold text-slate-500">Ej: 16</p>
+            </div>
             <button type="button" onClick={startVoiceForMeasure} aria-label="Ingresar medida por voz" className={voiceButtonClass}>
               <svg className="w-5 h-5" viewBox="0 0 82.05 122.88" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <path d="M59.89,20.83V52.3c0,27-37.73,27-37.73,0V20.83c0-27.77,37.73-27.77,37.73,0Zm-14.18,76V118.2a4.69,4.69,0,0,1-9.37,0V96.78a40.71,40.71,0,0,1-12.45-3.51A41.63,41.63,0,0,1,12.05,85L12,84.91A41.31,41.31,0,0,1,3.12,71.68,40.73,40.73,0,0,1,0,56a4.67,4.67,0,0,1,8-3.31l.1.1A4.68,4.68,0,0,1,9.37,56a31.27,31.27,0,0,0,2.4,12.06A32,32,0,0,0,29,85.28a31.41,31.41,0,0,0,24.13,0,31.89,31.89,0,0,0,10.29-6.9l.08-.07a32,32,0,0,0,6.82-10.22A31.27,31.27,0,0,0,72.68,56a4.69,4.69,0,0,1,9.37,0,40.65,40.65,0,0,1-3.12,15.65A41.45,41.45,0,0,1,70,85l-.09.08a41.34,41.34,0,0,1-11.75,8.18,40.86,40.86,0,0,1-12.46,3.51Z"/>
@@ -432,7 +444,6 @@ export function TireSizeSearch({
             </div>
           )}
 
-          <p className="text-center text-xs font-bold text-slate-500">La búsqueda se inicia al completar ancho, perfil y rodado.</p>
         </div>
       )}
 
