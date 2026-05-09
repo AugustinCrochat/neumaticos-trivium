@@ -171,7 +171,7 @@ export const VEHICLE_DB: VehicleDBEntry[] = [
   // Renault
   { brand: "Renault", model: "Alaskan", sizes: [{ w: "255", p: "60", r: "18" }] },
   { brand: "Renault", model: "Captur", sizes: [{ w: "215", p: "60", r: "17" }] },
-  { brand: "Renault", model: "Clio", sizes: [{ w: "175", p: "65", r: "14" }] },
+  { brand: "Renault", model: "Clio", sizes: [{ w: "165", p: "70", r: "13", version: "RL / RN / Base (1996-2006)" }, { w: "175", p: "65", r: "14", version: "RT / Dynamique / Mio (2000-2016)" }, { w: "185", p: "60", r: "14", version: "RSI / Sport 1.6" }, { w: "185", p: "55", r: "15", version: "Sport 2.0 / Williams" }] },
   { brand: "Renault", model: "Duster", sizes: [{ w: "215", p: "65", r: "16" }] },
   { brand: "Renault", model: "Fluence", sizes: [{ w: "205", p: "60", r: "16", version: "Dynamique" }, { w: "205", p: "55", r: "17", version: "Privilege / GT" }] },
   { brand: "Renault", model: "Kangoo", sizes: [{ w: "175", p: "70", r: "14", version: "Kangoo 1 (1998-2018)" }, { w: "185", p: "65", r: "15", version: "Kangoo 2 (2018+)" }] },
