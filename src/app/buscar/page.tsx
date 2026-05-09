@@ -97,35 +97,26 @@ export default async function BuscarPage({ searchParams }: Props) {
       {/* Header */}
       <div className="bg-navy-900 py-10">
         <div className="max-w-5xl mx-auto px-4">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-1.5 text-navy-300 hover:text-white text-sm mb-6 transition-colors"
-          >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-            Inicio
-          </Link>
-          <h1 className="text-2xl md:text-3xl font-black text-white mb-2">
+          <h1 className="text-2xl md:text-3xl font-black text-white mb-2 flex items-center gap-3 flex-wrap">
             {label ? (
               <>
-                Neumáticos{" "}
-                <span className="text-orange-400 font-mono">{label}</span>
+                Neumáticos
+                <span className="inline-block bg-orange-500/20 text-orange-400 px-3 py-1 rounded-xl border border-orange-500/30 text-2xl tracking-wide">{label}</span>
               </>
             ) : (
               "Buscar neumáticos"
             )}
           </h1>
           {label && (
-            <p className="text-navy-300 text-sm">
+            <p className="text-navy-300 text-sm mt-3">
               {exactResults.length} resultado{exactResults.length !== 1 ? "s" : ""} exacto{exactResults.length !== 1 ? "s" : ""}
               {compatibleResults.length > 0 ? ` y ${compatibleResults.length} compatible${compatibleResults.length !== 1 ? "s" : ""}` : ""}
             </p>
           )}
 
           {/* Search form inline */}
-          <div className="mt-6">
-            <SearchBar initialMedida={medida} />
+          <div className="mt-8">
+            <SearchBar />
           </div>
         </div>
       </div>
