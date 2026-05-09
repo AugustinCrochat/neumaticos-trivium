@@ -1,7 +1,8 @@
 "use client";
 
-import { useMemo, useRef, useState, type PointerEvent, type WheelEvent } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
+import maplibregl, { type LngLatBoundsLike, type Map, type Marker } from "maplibre-gl";
 import type { Branch } from "@/lib/config";
 import { useBranch } from "@/contexts/branch-context";
 
@@ -9,54 +10,16 @@ type BranchesMapProps = {
   branches: Branch[];
 };
 
-type Point = {
-  x: number;
-  y: number;
-};
-
 type UserLocation = {
   lat: number;
   lng: number;
 };
 
-const TILE_SIZE = 256;
-const MIN_ZOOM = 5;
-const MAX_ZOOM = 16;
 const MAPTILER_KEY = "rZs55HHnOgNdmSMB2Jkn";
-const MAP_STYLE = "streets-v4";
+const MAP_STYLE_URL = `https://api.maptiler.com/maps/streets-v4/style.json?key=${MAPTILER_KEY}`;
 
 function cleanPhone(phone: string) {
   return phone.replace(/\s/g, "");
-}
-
-function clamp(value: number, min: number, max: number) {
-  return Math.min(Math.max(value, min), max);
-}
-
-function latLngToWorld(lat: number, lng: number, zoom: number): Point {
-  const scale = TILE_SIZE * 2 ** zoom;
-  const sinLat = Math.sin((lat * Math.PI) / 180);
-
-  return {
-    x: ((lng + 180) / 360) * scale,
-    y:
-      (0.5 -
-        Math.log((1 + sinLat) / (1 - sinLat)) / (4 * Math.PI)) *
-      scale,
-  };
-}
-
-function worldToLatLng(point: Point, zoom: number) {
-  const scale = TILE_SIZE * 2 ** zoom;
-  const lng = (point.x / scale) * 360 - 180;
-  const n = Math.PI - (2 * Math.PI * point.y) / scale;
-  const lat = (180 / Math.PI) * Math.atan(0.5 * (Math.exp(n) - Math.exp(-n)));
-
-  return { lat, lng };
-}
-
-function makeTileUrl(x: number, y: number, z: number) {
-  return `https://api.maptiler.com/maps/${MAP_STYLE}/256/${z}/${x}/${y}.png?key=${MAPTILER_KEY}`;
 }
 
 function getDistanceInKm(from: UserLocation, to: UserLocation) {
@@ -72,22 +35,47 @@ function getDistanceInKm(from: UserLocation, to: UserLocation) {
   return earthRadiusKm * 2 * Math.atan2(Math.sqrt(haversine), Math.sqrt(1 - haversine));
 }
 
+function getBranchLngLat(branch: Branch): [number, number] {
+  return [branch.coordinates.lng, branch.coordinates.lat];
+}
+
+function createBranchMarkerElement(branch: Branch, isActive: boolean) {
+  const wrapper = document.createElement("button");
+  wrapper.type = "button";
+  wrapper.className = "trivium-map-pin";
+  wrapper.setAttribute("aria-label", `Ver sucursal ${branch.shortName}`);
+
+  if (isActive) {
+    wrapper.classList.add("trivium-map-pin-active");
+  }
+
+  const icon = document.createElement("img");
+  icon.src = "/icon.svg";
+  icon.alt = "";
+  icon.className = "trivium-map-pin-icon";
+  wrapper.appendChild(icon);
+
+  return wrapper;
+}
+
+function createUserMarkerElement() {
+  const wrapper = document.createElement("div");
+  wrapper.className = "trivium-user-pin";
+  wrapper.setAttribute("aria-label", "Tu ubicacion");
+  return wrapper;
+}
+
 export function BranchesMap({ branches }: BranchesMapProps) {
   const { selectedBranch, setSelectedBranch } = useBranch();
+  const mapContainerRef = useRef<HTMLDivElement | null>(null);
+  const mapRef = useRef<Map | null>(null);
+  const branchMarkersRef = useRef<Marker[]>([]);
+  const userMarkerRef = useRef<Marker | null>(null);
+  const initialBranchRef = useRef<Branch | null>(null);
   const [activeBranchId, setActiveBranchId] = useState<string | null>(null);
-  const [center, setCenter] = useState({ lat: -32.9, lng: -61.6 });
-  const [zoom, setZoom] = useState(6);
-  const [mapSize, setMapSize] = useState({ width: 960, height: 560 });
   const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
   const [geoStatus, setGeoStatus] = useState<"idle" | "loading" | "ready" | "error">("idle");
   const [geoError, setGeoError] = useState("");
-  const dragRef = useRef<{
-    pointerId: number;
-    start: Point;
-    centerWorld: Point;
-  } | null>(null);
-  const pointersRef = useRef(new Map<number, Point>());
-  const pinchDistanceRef = useRef<number | null>(null);
 
   const activeBranch = useMemo(
     () =>
@@ -96,77 +84,111 @@ export function BranchesMap({ branches }: BranchesMapProps) {
     [activeBranchId, branches, selectedBranch.id]
   );
 
-  const centerWorld = useMemo(
-    () => latLngToWorld(center.lat, center.lng, zoom),
-    [center.lat, center.lng, zoom]
-  );
+  const sortedBranches = useMemo(() => {
+    return [...branches].sort((a, b) => {
+      if (a.id === activeBranch.id) return -1;
+      if (b.id === activeBranch.id) return 1;
+      return a.shortName.localeCompare(b.shortName);
+    });
+  }, [activeBranch.id, branches]);
 
-  const tiles = useMemo(() => {
-    const topLeft = {
-      x: centerWorld.x - mapSize.width / 2,
-      y: centerWorld.y - mapSize.height / 2,
-    };
-    const maxTile = 2 ** zoom;
-    const minTileX = Math.floor(topLeft.x / TILE_SIZE) - 1;
-    const maxTileX = Math.floor((topLeft.x + mapSize.width) / TILE_SIZE) + 1;
-    const minTileY = Math.floor(topLeft.y / TILE_SIZE) - 1;
-    const maxTileY = Math.floor((topLeft.y + mapSize.height) / TILE_SIZE) + 1;
-    const nextTiles = [];
+  if (!initialBranchRef.current && activeBranch) {
+    initialBranchRef.current = activeBranch;
+  }
 
-    for (let x = minTileX; x <= maxTileX; x += 1) {
-      for (let y = minTileY; y <= maxTileY; y += 1) {
-        if (y < 0 || y >= maxTile) continue;
+  useEffect(() => {
+    if (!mapContainerRef.current || mapRef.current) return;
+    const initialBranch = initialBranchRef.current ?? branches[0];
 
-        const wrappedX = ((x % maxTile) + maxTile) % maxTile;
-        nextTiles.push({
-          id: `${zoom}-${wrappedX}-${y}`,
-          url: makeTileUrl(wrappedX, y, zoom),
-          left: x * TILE_SIZE - topLeft.x,
-          top: y * TILE_SIZE - topLeft.y,
-        });
-      }
-    }
+    const map = new maplibregl.Map({
+      container: mapContainerRef.current,
+      style: MAP_STYLE_URL,
+      center: getBranchLngLat(initialBranch),
+      zoom: 11,
+      attributionControl: false,
+    });
 
-    return nextTiles;
-  }, [centerWorld.x, centerWorld.y, mapSize.height, mapSize.width, zoom]);
-
-  const branchMarkers = useMemo(
-    () =>
-      branches.map((branch) => {
-        const world = latLngToWorld(
-          branch.coordinates.lat,
-          branch.coordinates.lng,
-          zoom
-        );
-
-        return {
-          branch,
-          left: world.x - centerWorld.x + mapSize.width / 2,
-          top: world.y - centerWorld.y + mapSize.height / 2,
-        };
+    map.addControl(
+      new maplibregl.NavigationControl({
+        showCompass: false,
+        visualizePitch: false,
       }),
-    [branches, centerWorld.x, centerWorld.y, mapSize.height, mapSize.width, zoom]
-  );
+      "top-right"
+    );
+    map.addControl(new maplibregl.AttributionControl({ compact: true }), "bottom-left");
+    map.touchZoomRotate.enable();
+    map.dragPan.enable();
+    map.scrollZoom.enable();
 
-  const userMarker = useMemo(() => {
-    if (!userLocation) return null;
+    mapRef.current = map;
 
-    const world = latLngToWorld(userLocation.lat, userLocation.lng, zoom);
-    return {
-      left: world.x - centerWorld.x + mapSize.width / 2,
-      top: world.y - centerWorld.y + mapSize.height / 2,
+    return () => {
+      branchMarkersRef.current.forEach((marker) => marker.remove());
+      branchMarkersRef.current = [];
+      userMarkerRef.current?.remove();
+      userMarkerRef.current = null;
+      map.remove();
+      mapRef.current = null;
     };
-  }, [centerWorld.x, centerWorld.y, mapSize.height, mapSize.width, userLocation, zoom]);
+  }, [branches]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+
+    branchMarkersRef.current.forEach((marker) => marker.remove());
+    branchMarkersRef.current = branches.map((branch) => {
+      const markerElement = createBranchMarkerElement(branch, branch.id === activeBranch.id);
+      markerElement.addEventListener("click", () => selectBranch(branch));
+
+      return new maplibregl.Marker({
+        element: markerElement,
+        anchor: "bottom",
+      })
+        .setLngLat(getBranchLngLat(branch))
+        .addTo(map);
+    });
+  }, [activeBranch.id, branches]);
+
+  useEffect(() => {
+    if (activeBranchId) return;
+
+    mapRef.current?.flyTo({
+      center: getBranchLngLat(activeBranch),
+      zoom: Math.max(mapRef.current.getZoom(), 11),
+      essential: true,
+    });
+  }, [activeBranch, activeBranchId]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !userLocation) return;
+
+    userMarkerRef.current?.remove();
+    userMarkerRef.current = new maplibregl.Marker({
+      element: createUserMarkerElement(),
+      anchor: "center",
+    })
+      .setLngLat([userLocation.lng, userLocation.lat])
+      .addTo(map);
+  }, [userLocation]);
 
   if (!activeBranch) return null;
 
   function selectBranch(branch: Branch) {
     setActiveBranchId(branch.id);
-    setCenter(branch.coordinates);
-    setZoom((currentZoom) => Math.max(currentZoom, 13));
+    mapRef.current?.flyTo({
+      center: getBranchLngLat(branch),
+      zoom: Math.max(mapRef.current.getZoom(), 13),
+      essential: true,
+    });
   }
 
-  function locateUser() {
+  function chooseButtonLabel(branch: Branch) {
+    return selectedBranch.id === branch.id ? "Tu sucursal" : "Elegir esta";
+  }
+
+  function locateNearestBranch() {
     if (!navigator.geolocation) {
       setGeoStatus("error");
       setGeoError("Tu navegador no permite obtener ubicacion.");
@@ -186,12 +208,19 @@ export function BranchesMap({ branches }: BranchesMapProps) {
           const nearestDistance = getDistanceInKm(nextLocation, nearest.coordinates);
           return currentDistance < nearestDistance ? branch : nearest;
         }, branches[0]);
+        const bounds: LngLatBoundsLike = [
+          [nextLocation.lng, nextLocation.lat],
+          getBranchLngLat(nearestBranch),
+        ];
 
         setUserLocation(nextLocation);
-        setCenter(nextLocation);
-        setZoom(13);
         setActiveBranchId(nearestBranch.id);
         setGeoStatus("ready");
+        mapRef.current?.fitBounds(bounds, {
+          padding: 90,
+          maxZoom: 14,
+          essential: true,
+        });
       },
       () => {
         setGeoStatus("error");
@@ -205,283 +234,32 @@ export function BranchesMap({ branches }: BranchesMapProps) {
     );
   }
 
-  function zoomBy(delta: number) {
-    setZoom((currentZoom) => clamp(currentZoom + delta, MIN_ZOOM, MAX_ZOOM));
-  }
-
-  function chooseButtonLabel(branch: Branch) {
-    return selectedBranch.id === branch.id ? "Tu sucursal" : "Elegir esta";
-  }
-
-  function handleWheel(event: WheelEvent<HTMLDivElement>) {
-    event.preventDefault();
-    zoomBy(event.deltaY > 0 ? -1 : 1);
-  }
-
-  function handlePointerDown(event: PointerEvent<HTMLDivElement>) {
-    event.currentTarget.setPointerCapture(event.pointerId);
-    pointersRef.current.set(event.pointerId, { x: event.clientX, y: event.clientY });
-
-    if (pointersRef.current.size === 1) {
-      dragRef.current = {
-        pointerId: event.pointerId,
-        start: { x: event.clientX, y: event.clientY },
-        centerWorld,
-      };
-      pinchDistanceRef.current = null;
-      return;
-    }
-
-    const pointers = [...pointersRef.current.values()];
-    if (pointers.length >= 2) {
-      dragRef.current = null;
-      pinchDistanceRef.current = Math.hypot(
-        pointers[0].x - pointers[1].x,
-        pointers[0].y - pointers[1].y
-      );
-    }
-  }
-
-  function handlePointerMove(event: PointerEvent<HTMLDivElement>) {
-    if (pointersRef.current.has(event.pointerId)) {
-      pointersRef.current.set(event.pointerId, { x: event.clientX, y: event.clientY });
-    }
-
-    if (pointersRef.current.size >= 2) {
-      const pointers = [...pointersRef.current.values()];
-      const distance = Math.hypot(
-        pointers[0].x - pointers[1].x,
-        pointers[0].y - pointers[1].y
-      );
-      const lastDistance = pinchDistanceRef.current;
-
-      if (lastDistance && distance > lastDistance * 1.16) {
-        zoomBy(1);
-        pinchDistanceRef.current = distance;
-      } else if (lastDistance && distance < lastDistance * 0.86) {
-        zoomBy(-1);
-        pinchDistanceRef.current = distance;
-      } else if (!lastDistance) {
-        pinchDistanceRef.current = distance;
-      }
-
-      return;
-    }
-
-    const drag = dragRef.current;
-    if (!drag || drag.pointerId !== event.pointerId) return;
-
-    const nextWorld = {
-      x: drag.centerWorld.x - (event.clientX - drag.start.x),
-      y: drag.centerWorld.y - (event.clientY - drag.start.y),
-    };
-    setCenter(worldToLatLng(nextWorld, zoom));
-  }
-
-  function handlePointerUp(event: PointerEvent<HTMLDivElement>) {
-    pointersRef.current.delete(event.pointerId);
-    pinchDistanceRef.current = null;
-
-    if (dragRef.current?.pointerId === event.pointerId) {
-      dragRef.current = null;
-    }
-
-    const remainingPointer = [...pointersRef.current.entries()][0];
-    if (remainingPointer) {
-      dragRef.current = {
-        pointerId: remainingPointer[0],
-        start: remainingPointer[1],
-        centerWorld: latLngToWorld(center.lat, center.lng, zoom),
-      };
-    }
-  }
-
   return (
     <section className="bg-slate-50">
       <div className="max-w-7xl mx-auto px-4 py-10 md:py-14">
-        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.35fr)_minmax(320px,0.65fr)] gap-6 lg:gap-8 items-stretch">
-          <div
-            ref={(node) => {
-              if (!node) return;
-              const rect = node.getBoundingClientRect();
-              if (
-                Math.round(rect.width) !== Math.round(mapSize.width) ||
-                Math.round(rect.height) !== Math.round(mapSize.height)
-              ) {
-                setMapSize({
-                  width: Math.round(rect.width),
-                  height: Math.round(rect.height),
-                });
-              }
-            }}
-            onWheel={handleWheel}
-            onPointerDown={handlePointerDown}
-            onPointerMove={handlePointerMove}
-            onPointerUp={handlePointerUp}
-            onPointerCancel={handlePointerUp}
-            className="relative h-[68vh] min-h-[520px] touch-none overflow-hidden rounded-2xl border border-slate-200 bg-slate-200 shadow-xl shadow-slate-200/80 lg:h-[620px] lg:min-h-0"
-            aria-label="Mapa interactivo de sucursales"
-          >
-            {tiles.map((tile) => (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                key={tile.id}
-                src={tile.url}
-                alt=""
-                draggable={false}
-                className="absolute h-64 w-64 select-none"
-                style={{ left: tile.left, top: tile.top }}
-              />
-            ))}
-
-            <div className="absolute inset-0 pointer-events-none ring-1 ring-inset ring-black/5" />
-
-            <div className="absolute right-4 top-4 z-20 flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-lg">
-              <button
-                type="button"
-                onClick={() => zoomBy(1)}
-                className="h-10 w-10 text-xl font-black text-navy-900 transition-colors hover:bg-navy-50"
-                aria-label="Acercar mapa"
-              >
-                +
-              </button>
-              <button
-                type="button"
-                onClick={() => zoomBy(-1)}
-                className="h-10 w-10 border-t border-slate-200 text-xl font-black text-navy-900 transition-colors hover:bg-navy-50"
-                aria-label="Alejar mapa"
-              >
-                -
-              </button>
-            </div>
-
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1.35fr)_minmax(320px,0.65fr)] lg:gap-8">
+          <div className="relative h-[72vh] min-h-[560px] overflow-hidden rounded-2xl border border-slate-200 bg-slate-200 shadow-xl shadow-slate-200/80 lg:h-[680px] lg:min-h-0">
+            <div ref={mapContainerRef} className="absolute inset-0" />
             <button
               type="button"
-              onClick={locateUser}
-              className="absolute left-4 top-4 z-20 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-bold text-navy-900 shadow-lg transition-colors hover:bg-navy-50 disabled:cursor-wait disabled:opacity-70"
+              onClick={locateNearestBranch}
+              className="absolute left-4 top-4 z-10 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-bold text-navy-900 shadow-lg transition-colors hover:bg-navy-50 disabled:cursor-wait disabled:opacity-70"
               disabled={geoStatus === "loading"}
             >
-              {geoStatus === "loading" ? "Buscando..." : "Mi ubicacion"}
+              {geoStatus === "loading" ? "Buscando..." : "Sucursal mas cercana"}
             </button>
-
-            {branchMarkers.map(({ branch, left, top }) => {
-              const isActive = branch.id === activeBranch.id;
-
-              return (
-                <button
-                  key={branch.id}
-                  type="button"
-                  onClick={() => selectBranch(branch)}
-                  className="group absolute z-30 -translate-x-1/2 -translate-y-full outline-none"
-                  style={{ left, top }}
-                  aria-label={`Ver sucursal ${branch.shortName}`}
-                >
-                  <span
-                    className={`relative flex h-12 w-12 items-center justify-center rounded-full border-4 bg-white shadow-2xl transition-all duration-200 group-hover:-translate-y-1 group-focus-visible:ring-4 group-focus-visible:ring-orange-500/30 md:h-16 md:w-16 ${
-                      isActive
-                        ? "border-orange-500 shadow-orange-500/30"
-                        : "border-white shadow-navy-900/20"
-                    }`}
-                  >
-                    <span
-                      className={`absolute inset-0 rounded-full ${
-                        isActive ? "animate-ping bg-orange-500/20" : ""
-                      }`}
-                    />
-                    <Image
-                      src="/icon.svg"
-                      alt=""
-                      width={42}
-                      height={42}
-                      className="relative h-8 w-8 object-contain md:h-10 md:w-10"
-                    />
-                  </span>
-                  <span
-                    className={`mx-auto block h-4 w-4 -translate-y-2 rotate-45 border-b-4 border-r-4 bg-white transition-colors md:h-5 md:w-5 ${
-                      isActive ? "border-orange-500" : "border-white"
-                    }`}
-                  />
-                  <span className="absolute left-1/2 top-full mt-1 hidden -translate-x-1/2 whitespace-nowrap rounded-lg bg-navy-900 px-3 py-1.5 text-xs font-bold text-white shadow-lg sm:block">
-                    {branch.shortName}
-                  </span>
-                </button>
-              );
-            })}
-
-            {userMarker && (
-              <div
-                className="absolute z-20 -translate-x-1/2 -translate-y-1/2"
-                style={{ left: userMarker.left, top: userMarker.top }}
-                aria-label="Tu ubicacion"
-              >
-                <span className="absolute left-1/2 top-1/2 h-12 w-12 -translate-x-1/2 -translate-y-1/2 rounded-full bg-navy-500/20" />
-                <span className="relative block h-5 w-5 rounded-full border-4 border-white bg-navy-600 shadow-lg shadow-navy-900/30" />
-              </div>
-            )}
-
-            <a
-              href="https://www.maptiler.com/copyright/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="absolute bottom-1 left-2 z-20 rounded bg-white/90 px-1.5 py-0.5 text-[10px] text-slate-600"
-            >
-              © MapTiler © OpenStreetMap contributors
-            </a>
           </div>
 
           <div className="grid grid-cols-1 content-start gap-4">
-            <article className="rounded-2xl border border-orange-500 bg-white p-5 shadow-xl shadow-orange-500/10">
-              <p className="text-xs font-bold uppercase tracking-wide text-slate-500">
-                Sucursal seleccionada
+            {geoError && (
+              <p className="rounded-xl border border-orange-200 bg-orange-50 px-4 py-3 text-sm font-semibold text-orange-700">
+                {geoError}
               </p>
-              <h2 className="mt-1 text-xl font-black text-navy-900">
-                {activeBranch.name}
-              </h2>
-              <p className="mt-2 text-sm text-slate-600">
-                {activeBranch.address}, {activeBranch.city}
-              </p>
-              <p className="mt-2 text-xs text-slate-500">{activeBranch.hours}</p>
+            )}
 
-              <div className="mt-4 flex flex-wrap gap-2">
-                <button
-                  type="button"
-                  onClick={() => setSelectedBranch(activeBranch)}
-                  disabled={selectedBranch.id === activeBranch.id}
-                  className={`rounded-lg px-4 py-2 text-sm font-bold transition-colors ${
-                    selectedBranch.id === activeBranch.id
-                      ? "bg-orange-100 text-orange-700"
-                      : "bg-navy-900 text-white hover:bg-navy-800"
-                  }`}
-                >
-                  {chooseButtonLabel(activeBranch)}
-                </button>
-                <a
-                  href={activeBranch.mapUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="rounded-lg bg-orange-500 px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-orange-600"
-                >
-                  Como llegar
-                </a>
-                <a
-                  href={`https://wa.me/${activeBranch.whatsapp}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="rounded-lg bg-[#25d366]/15 px-4 py-2 text-sm font-bold text-[#1f9f4b] transition-colors hover:bg-[#25d366]/25"
-                >
-                  WhatsApp
-                </a>
-              </div>
-
-              {geoError && (
-                <p className="mt-3 text-xs font-semibold text-orange-700">
-                  {geoError}
-                </p>
-              )}
-            </article>
-
-            {branches.map((branch) => {
+            {sortedBranches.map((branch) => {
               const isActive = branch.id === activeBranch.id;
+              const isSelected = selectedBranch.id === branch.id;
 
               return (
                 <article
@@ -507,8 +285,15 @@ export function BranchesMap({ branches }: BranchesMapProps) {
                       />
                     </span>
                     <span className="min-w-0">
-                      <span className="block text-lg font-black text-navy-900">
-                        {branch.name}
+                      <span className="flex flex-wrap items-center gap-2">
+                        <span className="block text-lg font-black text-navy-900">
+                          {branch.name}
+                        </span>
+                        {isSelected && (
+                          <span className="rounded-full bg-orange-100 px-2 py-0.5 text-xs font-bold text-orange-700">
+                            Tu sucursal
+                          </span>
+                        )}
                       </span>
                       <span className="mt-1 block text-sm text-slate-600">
                         {branch.address}
@@ -538,9 +323,9 @@ export function BranchesMap({ branches }: BranchesMapProps) {
                     <button
                       type="button"
                       onClick={() => setSelectedBranch(branch)}
-                      disabled={selectedBranch.id === branch.id}
+                      disabled={isSelected}
                       className={`rounded-lg px-3 py-2 text-xs font-bold transition-colors ${
-                        selectedBranch.id === branch.id
+                        isSelected
                           ? "bg-orange-100 text-orange-700"
                           : "bg-navy-900 text-white hover:bg-navy-800"
                       }`}
