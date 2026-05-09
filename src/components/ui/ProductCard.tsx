@@ -47,11 +47,18 @@ export function ProductCard({
     <article className={`group bg-white rounded-2xl border hover:shadow-xl transition-all duration-200 overflow-hidden flex flex-col ${isCheapest ? "border-orange-500 shadow-orange-500/10 shadow-lg" : "border-slate-100 hover:border-navy-200"}`}>
       {/* Image */}
       <Link href={`/productos/${product.slug}`} className="relative bg-slate-50 pt-[60%] overflow-hidden block">
-        {isCheapest && (
-          <div className="absolute top-2 left-2 z-10 bg-orange-500 text-white text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded-md shadow-md">
-            Mejor precio
-          </div>
-        )}
+        <div className="absolute top-3 left-3 z-10 flex flex-col gap-2 items-start">
+          {isCheapest && (
+            <span className="bg-orange-500 text-white text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded-md shadow-md">
+              Mejor precio
+            </span>
+          )}
+          {product.priceOld && (
+            <span className="bg-red-600 text-white text-[10px] font-black px-2.5 py-1 rounded-md shadow-lg uppercase tracking-tighter">
+              {discount(product.price, product.priceOld)}% OFF
+            </span>
+          )}
+        </div>
         <div className="absolute inset-0 p-3">
           {hasImage ? (
             <div className="relative w-full h-full">
@@ -69,15 +76,6 @@ export function ProductCard({
             </div>
           )}
         </div>
-
-        {/* Tags */}
-        {product.priceOld && (
-          <div className="absolute top-3 left-3 z-10">
-            <span className="bg-red-600 text-white text-[10px] font-black px-2.5 py-1 rounded-md shadow-lg uppercase tracking-tighter">
-              {discount(product.price, product.priceOld)}% OFF
-            </span>
-          </div>
-        )}
 
         {imageFooter && (
           <div className="absolute bottom-2 left-0 right-0 z-10 flex justify-center px-3">
@@ -116,18 +114,30 @@ export function ProductCard({
         </p>
 
         {/* Price */}
-
-        {/* Price */}
         <div className="mt-auto">
           {product.priceOld && (
             <span className="text-slate-400 line-through text-xs block">
               {formatPrice(product.priceOld)}
             </span>
           )}
-          <div className="flex items-baseline gap-2">
+          <div className="flex flex-col items-start gap-0.5">
             <span className="text-2xl font-black text-red-600">
               {formatPrice(product.price)}
             </span>
+            {product.tags.find(t => t.toLowerCase().startsWith('pack')) && (() => {
+              const packTag = product.tags.find(t => t.toLowerCase().startsWith('pack'));
+              const match = packTag?.match(/x(\d+)/i);
+              if (match && match[1]) {
+                const qty = parseInt(match[1], 10);
+                const unitPrice = product.price / qty;
+                return (
+                  <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wide bg-slate-100 px-2 py-0.5 rounded">
+                    {formatPrice(unitPrice)} c/u
+                  </span>
+                );
+              }
+              return null;
+            })()}
           </div>
 
           {/* CTA */}

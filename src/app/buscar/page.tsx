@@ -60,6 +60,17 @@ function isCompatibleSize(product: TireProduct, size: { width: number | null; pr
   return Math.abs(productDiameter - searchedDiameter) / searchedDiameter <= 0.03;
 }
 
+function getUnitPrice(product: TireProduct) {
+  const packTag = product.tags.find(t => t.toLowerCase().startsWith('pack'));
+  if (packTag) {
+    const match = packTag.match(/x(\d+)/i);
+    if (match && match[1]) {
+      return product.price / parseInt(match[1], 10);
+    }
+  }
+  return product.price;
+}
+
 export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
   const { medida } = await searchParams;
   if (!medida) return { title: "Buscar neumáticos — Trivium" };
@@ -82,6 +93,11 @@ export default async function BuscarPage({ searchParams }: Props) {
     ? PRODUCTS.filter((p) => isExactMatch(p, parsed))
     : [];
 
+  // Sort exact results by unit price
+  if (exactResults.length > 0) {
+    exactResults.sort((a, b) => getUnitPrice(a) - getUnitPrice(b));
+  }
+
   const compatibleResults = parsed
     ? PRODUCTS.filter((p) => isCompatibleSize(p, parsed))
     : [];
@@ -92,9 +108,7 @@ export default async function BuscarPage({ searchParams }: Props) {
   const resultsCount = exactResults.length + compatibleResults.length;
   const label = parsed ? formatSizeLabel(parsed) : null;
   
-  const cheapestExactId = exactResults.length > 0 
-    ? exactResults.reduce((min, p) => p.price < min.price ? p : min, exactResults[0]).id 
-    : null;
+  const cheapestExactId = exactResults.length > 0 ? exactResults[0].id : null;
 
   return (
     <div className="min-h-screen bg-slate-50">
