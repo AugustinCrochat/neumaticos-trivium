@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { TireSizeSearch } from "@/components/ui/TireSizeSearch";
 import { EquivalenceCalculator } from "@/components/ui/EquivalenceCalculator";
 
 export const metadata = {
@@ -13,16 +12,16 @@ export default function EquivalenciasPage() {
       {/* Header */}
       <div className="bg-navy-900 py-12 md:py-16">
         <div className="max-w-4xl mx-auto px-4">
-          <div className="max-w-xl">
+          <div className="max-w-3xl">
             <h1 className="text-3xl md:text-4xl font-black text-white mb-4">
               ¿Qué es una medida equivalente?
             </h1>
             <p className="text-navy-200 text-lg mb-10">
-              A veces no se consigue la medida original de fábrica. Descubrí cómo buscar una alternativa segura.
+              A veces no se consigue la medida original de fábrica. Ingresá tu medida en la herramienta acá abajo para verificar compatibilidades, o seguí leyendo para aprender cómo se calculan.
             </p>
 
-            <div className="bg-slate-800/50 p-6 rounded-2xl border border-white/10 shadow-2xl">
-              <TireSizeSearch />
+            <div className="shadow-2xl">
+              <EquivalenceCalculator />
             </div>
           </div>
         </div>
@@ -37,7 +36,7 @@ export default function EquivalenciasPage() {
 
         <div className="space-y-8 text-slate-600 leading-relaxed">
           <p>
-            Al cambiar los neumáticos de tu vehículo por unos de diferente medida, es fundamental asegurarse de que el <strong>diámetro total de la nueva rueda no varíe más de un ±3%</strong> con respecto al diámetro del neumático original de fábrica.
+            Al cambiar los neumáticos de tu vehículo por unos de diferente medida, es fundamental asegurarse de que el <strong>diámetro total de la nueva rueda no varíe más de un ±3%</strong> con respecto al diámetro del neumático original de fábrica. Este límite no es arbitrario: en muchos lugares, como en la Unión Europea, las normativas de homologación establecen explícitamente que la tolerancia legal y segura para considerar un neumático como equivalente es exactamente de un ±3% de diferencia en su diámetro exterior.
           </p>
           
           <p>
@@ -73,14 +72,6 @@ export default function EquivalenciasPage() {
           <p>
             La regla rápida para compensar medidas (manteniendo la misma llanta) es que si <strong>aumentás el ancho</strong> (ej. de 195 a 205), tenés que <strong>bajar el perfil</strong> (ej. de 65 a 60), de modo que el diámetro total se mantenga prácticamente igual.
           </p>
-        </div>
-
-        <div className="mt-16">
-          <h2 className="text-2xl font-black text-navy-900 mb-8 flex items-center gap-3">
-            <span className="w-8 h-1 bg-emerald-500 rounded-full"></span>
-            Calculadora de Equivalencias
-          </h2>
-          <EquivalenceCalculator />
         </div>
       </div>
 
