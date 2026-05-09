@@ -76,21 +76,21 @@ export function TireSizeSearch({
   const containerRef = useRef<HTMLDivElement>(null);
 
   const POPULAR_SIZES = [
-    { w: "175", p: "65", r: "14" },
-    { w: "185", p: "60", r: "14" },
-    { w: "185", p: "65", r: "14" },
-    { w: "185", p: "60", r: "15" },
-    { w: "185", p: "65", r: "15" },
-    { w: "195", p: "55", r: "15" },
-    { w: "195", p: "60", r: "15" },
-    { w: "195", p: "65", r: "15" },
-    { w: "205", p: "55", r: "16" },
-    { w: "205", p: "60", r: "16" },
-    { w: "215", p: "65", r: "16" },
-    { w: "225", p: "45", r: "17" },
-    { w: "225", p: "40", r: "18" },
-    { w: "265", p: "60", r: "18" },
-    { w: "265", p: "65", r: "17" },
+    { w: "205", p: "55", r: "16" }, // Muy popular (Cruze, Corolla, Focus, etc)
+    { w: "175", p: "65", r: "14" }, // Muy popular (Gol, Etios, Ka, etc)
+    { w: "195", p: "65", r: "15" }, // Muy popular (Peugeot 308/408, Corolla, Vento)
+    { w: "225", p: "45", r: "17" }, // Muy popular (Sedanes alta gama, SUVs)
+    { w: "185", p: "60", r: "15" }, // Popular (Etios, Onix, Prisma)
+    { w: "185", p: "65", r: "15" }, // Popular (Logan, Sandero, Partner, Berlingo)
+    { w: "215", p: "65", r: "16" }, // Popular (Duster, Oroch, Renegade)
+    { w: "265", p: "60", r: "18" }, // Muy popular (Hilux, Ranger, Amarok)
+    { w: "265", p: "65", r: "17" }, // Muy popular (Hilux, Ranger, Amarok, SW4)
+    { w: "175", p: "70", r: "13" }, // Popular Rodado 13 (Corsa, Gol viejo, Fiat Uno)
+    { w: "165", p: "70", r: "13" }, // Popular Rodado 13 (Fiat Uno, Palio, Clio)
+    { w: "195", p: "55", r: "15" }, // Popular (Punto, Fiesta, Fit)
+    { w: "225", p: "40", r: "18" }, // Popular Deportivo (Vento, Scirocco)
+    { w: "205", p: "60", r: "16" }, // Popular (EcoSport, Stepway)
+    { w: "185", p: "60", r: "14" }, // Popular (Corsa, Palio)
   ];
 
   const filteredSizes = POPULAR_SIZES.filter(s => {
@@ -102,7 +102,7 @@ export function TireSizeSearch({
     const rMatch = !rim || s.r.startsWith(rim);
     
     return wMatch && pMatch && rMatch;
-  }).slice(0, 6);
+  }).slice(0, 8);
 
   // Check if the current input is already a "complete" valid size from our list
   const isComplete = POPULAR_SIZES.some(s => s.w === width && s.p === profile && s.r === rim);
