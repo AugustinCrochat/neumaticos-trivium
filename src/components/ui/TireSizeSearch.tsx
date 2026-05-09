@@ -139,14 +139,18 @@ export function TireSizeSearch({
   const [listening, setListening] = useState(false);
   const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
 
-  function executeSearch() {
-    if (!hasInput) return;
-    const medida = `${width}-${profile}-r${rim}`;
+  const performSearch = (w: string, p: string, rVal: string) => {
+    if (!w && !p && !rVal) return;
+    const medida = `${w}-${p}-r${rVal}`;
     if (document.activeElement instanceof HTMLElement) {
       document.activeElement.blur();
     }
     setWidth(""); setProfile(""); setRim("");
     router.push(`/buscar?medida=${medida}`);
+  };
+
+  function executeSearch() {
+    performSearch(width, profile, rim);
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -356,7 +360,7 @@ export function TireSizeSearch({
   }
 
   return (
-    <div className="bg-navy-900 rounded-2xl border border-navy-800 p-6 shadow-2xl relative overflow-hidden group w-full">
+    <div className="bg-navy-900 rounded-2xl border border-navy-800 p-6 shadow-2xl relative group w-full">
       <p className="text-xs font-black text-orange-400 uppercase tracking-widest mb-4 flex items-center gap-2 relative z-10">
         <span className="w-8 h-[1px] bg-orange-400"></span>
         Buscador de medidas
@@ -528,6 +532,7 @@ export function TireSizeSearch({
                       setProfile(s.p);
                       setRim(s.r);
                       setShowPopular(false);
+                      performSearch(s.w, s.p, s.r);
                     }}
                     className="w-full px-4 py-3 text-left hover:bg-navy-700 transition-colors flex items-center justify-between group border-b border-navy-700/50 last:border-0"
                   >
