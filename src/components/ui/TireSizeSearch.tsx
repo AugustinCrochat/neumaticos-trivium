@@ -364,10 +364,19 @@ export function TireSizeSearch({
             <input ref={rimRef} value={rim} onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, '').slice(0,2); setRim(v); }} placeholder="Rodado" className="w-full bg-navy-800 border-2 rounded-xl px-3 py-3 text-white font-bold text-center" />
           </div>
 
-          <div className="flex gap-2">
-            <button type="button" onClick={startVoiceForMeasure} className="flex-1 bg-navy-700 text-white font-bold py-3 rounded-xl">🎤 Voz</button>
-            <button type="button" onClick={startCamera} className="flex-1 bg-red-600 text-white font-black py-3 rounded-xl">📷 Escanear</button>
-          </div>
+          <button 
+            type="button" 
+            onClick={startCamera} 
+            className="w-full bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 disabled:opacity-50 text-white font-black py-4 rounded-xl border border-red-300/30 transition-all flex items-center justify-center gap-2 shadow-lg shadow-red-900/30 active:scale-[0.98] lg:hidden"
+          >
+            <span>Reconocer medida con IA</span>
+            <span className="relative -ml-0.5 inline-flex w-5 h-5 items-center justify-center">
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 1a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
+                <path d="M19 11v1a7 7 0 0 1-14 0v-1" />
+              </svg>
+            </span>
+          </button>
 
           {scanError && (
             <div className="bg-navy-800 p-5 rounded-xl border border-orange-500/30 flex flex-col gap-4 animate-in fade-in zoom-in duration-300 mt-2">
@@ -390,16 +399,24 @@ export function TireSizeSearch({
             </div>
           )}
 
-          <button
-            type="submit"
-            disabled={!canSearch}
-            className="w-full bg-sky-600 hover:bg-sky-500 disabled:bg-navy-800 disabled:text-slate-600 disabled:cursor-not-allowed text-white font-black py-4 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-sky-900/20 active:scale-[0.98]"
-          >
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-            BUSCAR NEUMÁTICOS
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="submit"
+              disabled={!canSearch}
+              className="flex-1 bg-sky-600 hover:bg-sky-500 disabled:bg-navy-800 disabled:text-slate-600 disabled:cursor-not-allowed text-white font-black py-4 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-sky-900/20 active:scale-[0.98]"
+            >
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+              BUSCAR NEUMÁTICOS
+            </button>
+            <button type="button" onClick={() => { if (searchMode === 'medida') startVoiceForMeasure(); else startVoiceForVehicle(); }} aria-label="Iniciar voz" className="w-12 h-12 flex items-center justify-center rounded-xl bg-navy-700 text-white">
+              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 1v11a3 3 0 0 0 6 0V1" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 11v1a7 7 0 01-14 0v-1" />
+              </svg>
+            </button>
+          </div>
         </div>
       )}
 
