@@ -8,6 +8,7 @@ import { useBranch } from "@/contexts/branch-context";
 const NAV_LINKS = [
   { href: "/catalogo", label: "Neumáticos" },
   { href: "/servicios", label: "Servicios" },
+  { href: "/sucursales", label: "Sucursales" },
   { href: "/blog", label: "Blog" },
   { href: "/contacto", label: "Contacto" },
 ];

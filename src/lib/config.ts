@@ -8,6 +8,14 @@ export type Branch = {
   whatsapp: string;
   hours: string;
   mapUrl: string;
+  coordinates: {
+    lat: number;
+    lng: number;
+  };
+  mapPosition: {
+    x: number;
+    y: number;
+  };
 };
 
 export const BRANCHES: Branch[] = [
@@ -21,6 +29,14 @@ export const BRANCHES: Branch[] = [
     whatsapp: "5491171279909",
     hours: "Lun–Vie 8:30–18:30 | Sáb 9–14",
     mapUrl: "https://maps.google.com/?q=Av.+Angel+Torcuato+de+Alvear+2659+Don+Torcuato+Tigre",
+    coordinates: {
+      lat: -34.4853,
+      lng: -58.6206,
+    },
+    mapPosition: {
+      x: 56,
+      y: 36,
+    },
   },
   {
     id: "cordoba",
@@ -32,6 +48,14 @@ export const BRANCHES: Branch[] = [
     whatsapp: "5493510000002",
     hours: "Lun–Vie 8:00–19:00 | Sáb 9–14",
     mapUrl: "https://maps.google.com/?q=Donato+Alvarez+7954+Cordoba+Argentina",
+    coordinates: {
+      lat: -31.3486,
+      lng: -64.2501,
+    },
+    mapPosition: {
+      x: 31,
+      y: 22,
+    },
   },
 ];
 
