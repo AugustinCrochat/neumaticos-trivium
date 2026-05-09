@@ -39,6 +39,7 @@ export function TireSizeSearch({
   const [vehBrand, setVehBrand] = useState("");
   const [vehModel, setVehModel] = useState("");
   const [vehQuery, setVehQuery] = useState("");
+  const [vehYear, setVehYear] = useState("");
   const [vehActiveDropdown, setVehActiveDropdown] = useState<string | null>(null);
 
 
@@ -55,6 +56,13 @@ export function TireSizeSearch({
   const [torchOn, setTorchOn] = useState(false);
   const [lowLight, setLowLight] = useState(false);
 
+  const widthRef = useRef<HTMLInputElement | null>(null);
+  const profileRef = useRef<HTMLInputElement | null>(null);
+  const rimRef = useRef<HTMLInputElement | null>(null);
+
+  const [listening, setListening] = useState(false);
+  const recognitionRef = useRef<any>(null);
+
   const availableWidths = useMemo(() => unique(PRODUCTS.map((p) => p.size.width)), []);
   const availableProfiles = useMemo(() => {
     if (!width) return unique(PRODUCTS.map((p) => p.size.profile));
@@ -67,6 +75,7 @@ export function TireSizeSearch({
     if (!vehBrand) return [];
     return VEHICLE_DB.filter(v => v.brand === vehBrand).map(v => v.model);
   }, [vehBrand]);
+
   const filteredVehicles = useMemo(() => {
     const q = vehQuery.trim().toLowerCase();
     if (!q) return VEHICLE_DB.slice(0, 50);
@@ -204,6 +213,43 @@ export function TireSizeSearch({
   const isValid = !!(width && profile && rim);
   const canSearch = !!(width || profile || rim);
 
+  function startVoiceForVehicle() {
+    const Speech = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!Speech) return alert('Tu navegador no soporta reconocimiento de voz');
+    if (recognitionRef.current) { recognitionRef.current.stop(); recognitionRef.current = null; setListening(false); return; }
+    const r = new Speech();
+    r.lang = 'es-AR';
+    r.interimResults = false;
+    r.maxAlternatives = 1;
+    r.onresult = (ev: any) => {
+      const txt = ev.results[0][0].transcript || '';
+      // detect year 4 digits
+      const yearMatch = txt.match(/\b(19|20)\d{2}\b/);
+      if (yearMatch) setVehYear(yearMatch[0]);
+      setVehQuery(txt);
+    };
+    r.onend = () => { recognitionRef.current = null; setListening(false); };
+    recognitionRef.current = r; setListening(true); r.start();
+  }
+
+  function startVoiceForMeasure() {
+    const Speech = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!Speech) return alert('Tu navegador no soporta reconocimiento de voz');
+    const r = new Speech(); r.lang = 'es-AR'; r.interimResults = false; r.maxAlternatives = 1;
+    r.onresult = (ev: any) => {
+      const txt = (ev.results[0][0].transcript || '').replace(/[^0-9 ]/g, ' ').trim();
+      const nums = txt.split(/\s+/).filter(Boolean);
+      if (nums.length >= 1) setWidth(nums[0].slice(0,3));
+      if (nums.length >= 2) setProfile(nums[1].slice(0,2));
+      if (nums.length >= 3) setRim(nums[2].slice(0,2));
+      // focus next
+      if (nums.length >= 1 && profileRef.current) profileRef.current.focus();
+      if (nums.length >= 2 && rimRef.current) rimRef.current.focus();
+    };
+    r.onend = () => {};
+    r.start();
+  }
+
   return (
     <>
       {showScanner && (
@@ -313,25 +359,16 @@ export function TireSizeSearch({
       {searchMode === "medida" && (
         <div className="flex flex-col gap-3">
           <div className="grid grid-cols-3 gap-3">
-             <CustomSelect label="Ancho" value={width} onChange={onWidthChange} placeholder="Ancho" options={availableWidths.map(String)} isOpen={activeDropdown === "width"} onToggle={() => setActiveDropdown(activeDropdown === "width" ? null : "width")} isActive={activeDropdown === "width"} />
-             <CustomSelect label="Perfil" value={profile} onChange={onProfileChange} placeholder="Perfil" options={availableProfiles.map(String)} isOpen={activeDropdown === "profile"} onToggle={() => setActiveDropdown(activeDropdown === "profile" ? null : "profile")} isActive={activeDropdown === "profile"} />
-             <CustomSelect label="Rodado" value={rim} onChange={onRimChange} placeholder="Rodado" options={availableRims.map(String)} formatOption={(v: string) => `R${v}`} isOpen={activeDropdown === "rim"} onToggle={() => setActiveDropdown(activeDropdown === "rim" ? null : "rim")} isActive={activeDropdown === "rim"} />
+            <input ref={widthRef} value={width} onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, '').slice(0,3); setWidth(v); if (v.length >= 3 && profileRef.current) profileRef.current.focus(); }} placeholder="Ancho" className="w-full bg-navy-800 border-2 rounded-xl px-3 py-3 text-white font-bold text-center" />
+            <input ref={profileRef} value={profile} onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, '').slice(0,2); setProfile(v); if (v.length >= 2 && rimRef.current) rimRef.current.focus(); }} placeholder="Perfil" className="w-full bg-navy-800 border-2 rounded-xl px-3 py-3 text-white font-bold text-center" />
+            <input ref={rimRef} value={rim} onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, '').slice(0,2); setRim(v); }} placeholder="Rodado" className="w-full bg-navy-800 border-2 rounded-xl px-3 py-3 text-white font-bold text-center" />
           </div>
-          <button 
-            type="button" 
-            onClick={startCamera} 
-            className="w-full bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 disabled:opacity-50 text-white font-black py-4 rounded-xl border border-red-300/30 transition-all flex items-center justify-center gap-2 shadow-lg shadow-red-900/30 active:scale-[0.98] lg:hidden"
-          >
-            <span>Reconocer medida con IA</span>
-            <span className="relative -ml-0.5 inline-flex w-5 h-5 items-center justify-center">
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2l2.4 5.6L20 10l-5.6 2.4L12 18l-2.4-5.6L4 10l5.6-2.4L12 2z" />
-              </svg>
-              <svg className="absolute -bottom-0.5 -right-0.5 w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2l2 4.8L19 9l-5 2.2L12 16l-2-4.8L5 9l5-2.2L12 2z" />
-              </svg>
-            </span>
-          </button>
+
+          <div className="flex gap-2">
+            <button type="button" onClick={startVoiceForMeasure} className="flex-1 bg-navy-700 text-white font-bold py-3 rounded-xl">🎤 Voz</button>
+            <button type="button" onClick={startCamera} className="flex-1 bg-red-600 text-white font-black py-3 rounded-xl">📷 Escanear</button>
+          </div>
+
           {scanError && (
             <div className="bg-navy-800 p-5 rounded-xl border border-orange-500/30 flex flex-col gap-4 animate-in fade-in zoom-in duration-300 mt-2">
               <div>
@@ -352,6 +389,7 @@ export function TireSizeSearch({
               </button>
             </div>
           )}
+
           <button
             type="submit"
             disabled={!canSearch}
@@ -371,8 +409,10 @@ export function TireSizeSearch({
           <div className="bg-navy-800 border border-navy-700 rounded-xl max-h-48 overflow-y-auto">
             {filteredVehicles.map((v) => (
               <button type="button" key={`${v.brand}-${v.model}`} onClick={() => { setVehBrand(v.brand); setVehModel(v.model); setVehQuery(""); }} className="w-full text-left px-4 py-3 border-b border-navy-700 hover:bg-navy-700 transition-colors text-white">
-                <div className="font-bold">{v.brand}</div>
-                <div className="text-sm text-white/70">{v.model}</div>
+                <div className="flex items-center justify-between gap-3">
+                  <span className="font-bold">{v.brand}</span>
+                  <span className="font-bold text-sm text-white/80">{v.model}</span>
+                </div>
               </button>
             ))}
             {filteredVehicles.length === 0 && (
@@ -382,12 +422,33 @@ export function TireSizeSearch({
 
           {selectedVehicle && (
             <div className="bg-navy-800 p-4 rounded-xl border border-navy-700">
-              <p className="text-white font-bold mb-4 text-center">Seleccioná la medida:</p>
-              <div className="flex flex-col gap-2">
-                {selectedVehicle.sizes.map((s, i) => (
-                  <button key={i} onClick={() => router.push(`/buscar?medida=${s.w}-${s.p}-r${s.r}`)} className="w-full text-white py-3 px-4 rounded-lg bg-navy-900 border border-navy-700 text-left hover:border-orange-500 transition-colors font-mono">{s.w}/{s.p} R{s.r}</button>
-                ))}
-              </div>
+              <p className="text-white font-bold mb-2 text-center">Medidas recomendadas para {selectedVehicle.brand} {selectedVehicle.model}{vehYear ? ` — año ${vehYear}` : ''}</p>
+              {vehYear && !(selectedVehicle as any).years && (
+                <p className="text-white/60 text-xs mb-3 text-center">No tenemos datos por año para este modelo en la base; seleccioná la versión/trim o consultanos si dudás.</p>
+              )}
+
+              {selectedVehicle.sizes.length > 1 ? (
+                <>
+                  <p className="text-white/60 text-sm mb-3 text-center">Este modelo tiene varias versiones. Si conocés la versión/trim, elegila; si no, elegí la medida correspondiente abajo.</p>
+                  <div className="flex flex-col gap-2">
+                    {selectedVehicle.sizes.map((s, i) => (
+                      <button key={i} onClick={() => router.push(`/buscar?medida=${s.w}-${s.p}-r${s.r}${vehYear ? `&year=${vehYear}` : ''}`)} className="w-full text-white py-3 px-4 rounded-lg bg-navy-900 border border-navy-700 text-left hover:border-orange-500 transition-colors font-mono flex items-center justify-between">
+                        <span>Versión {i + 1}</span>
+                        <span className="text-xs text-white/70">{s.w}/{s.p} R{s.r}</span>
+                      </button>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <div className="flex flex-col gap-2">
+                  {selectedVehicle.sizes.map((s, i) => (
+                    <button key={i} onClick={() => router.push(`/buscar?medida=${s.w}-${s.p}-r${s.r}${vehYear ? `&year=${vehYear}` : ''}`)} className="w-full text-white py-3 px-4 rounded-lg bg-navy-900 border border-navy-700 text-left hover:border-orange-500 transition-colors font-mono">
+                      {s.w}/{s.p} R{s.r}
+                    </button>
+                  ))}
+                </div>
+              )}
+
             </div>
           )}
         </form>
