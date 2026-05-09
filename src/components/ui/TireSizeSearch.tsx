@@ -35,14 +35,13 @@ export function TireSizeSearch({
   const [rim, setRim] = useState(init.r);
 
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-  const [searchMode, setSearchMode] = useState<"medida" | "vehiculo" | "patente">("medida");
+  const [searchMode, setSearchMode] = useState<"medida" | "vehiculo">("medida");
   const [vehBrand, setVehBrand] = useState("");
   const [vehModel, setVehModel] = useState("");
+  const [vehQuery, setVehQuery] = useState("");
   const [vehActiveDropdown, setVehActiveDropdown] = useState<string | null>(null);
 
-  const [patente, setPatente] = useState("");
-  const [patenteLoading, setPatenteLoading] = useState(false);
-  const [patenteError, setPatenteError] = useState<string | null>(null);
+
 
   const [showScanner, setShowScanner] = useState(false);
   const [isScanning, setIsScanning] = useState(false);
@@ -68,6 +67,11 @@ export function TireSizeSearch({
     if (!vehBrand) return [];
     return VEHICLE_DB.filter(v => v.brand === vehBrand).map(v => v.model);
   }, [vehBrand]);
+  const filteredVehicles = useMemo(() => {
+    const q = vehQuery.trim().toLowerCase();
+    if (!q) return VEHICLE_DB.slice(0, 50);
+    return VEHICLE_DB.filter(v => v.brand.toLowerCase().includes(q) || v.model.toLowerCase().includes(q)).slice(0, 50);
+  }, [vehQuery]);
   const selectedVehicle = useMemo(() => VEHICLE_DB.find(v => v.brand === vehBrand && v.model === vehModel), [vehBrand, vehModel]);
 
   function handleSearch() {
@@ -118,19 +122,7 @@ export function TireSizeSearch({
   function onProfileChange(v: string) { setProfile(v); setRim(""); setActiveDropdown("rim"); }
   function onRimChange(v: string) { setRim(v); setActiveDropdown(null); }
 
-  async function searchByPatente(e: React.FormEvent) {
-    e.preventDefault();
-    if (!patente) return;
-    setPatenteLoading(true); setPatenteError(null);
-    try {
-      const res = await fetch("/api/patente", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ patente }) });
-      if (!res.ok) throw new Error("Error obteniendo datos");
-      const data = await res.json();
-      if (data.brand && data.model) { setVehBrand(data.brand); setVehModel(data.model); setSearchMode("vehiculo"); }
-      else setPatenteError("No encontramos un modelo asociado a esta patente.");
-    } catch (err) { setPatenteError("Hubo un problema consultando la patente."); }
-    finally { setPatenteLoading(false); }
-  }
+
 
   async function startCamera() {
     setShowScanner(true); setScanError(null); setLowLight(false);
@@ -315,17 +307,7 @@ export function TireSizeSearch({
           <span className="hidden sm:inline">Por Vehículo</span>
           <span className="sm:hidden">Auto</span>
         </button>
-        <button 
-          type="button" 
-          onClick={() => setSearchMode("patente")} 
-          className={`flex-1 py-3 px-2 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-1.5 sm:gap-2 ${searchMode === "patente" ? "bg-orange-500 text-white shadow-lg shadow-orange-500/20" : "bg-transparent text-navy-300 hover:text-white"}`}
-        >
-          <svg className="w-4 h-4 sm:w-5 sm:h-5 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <rect x="3" y="8" width="18" height="8" rx="2" strokeWidth="2" />
-            <path strokeLinecap="round" strokeWidth="2" d="M7 8v8M17 8v8" />
-          </svg>
-          Patente
-        </button>
+
       </div>
 
       {searchMode === "medida" && (
@@ -384,30 +366,34 @@ export function TireSizeSearch({
       )}
 
       {searchMode === "vehiculo" && (
-        <div className="grid grid-cols-2 gap-3">
-           <CustomSelect label="Marca" value={vehBrand} onChange={(v: string) => { setVehBrand(v); setVehModel(""); }} placeholder="Marca" options={availableBrands} isOpen={vehActiveDropdown === "brand"} onToggle={() => setVehActiveDropdown(vehActiveDropdown === "brand" ? null : "brand")} isActive={vehActiveDropdown === "brand"} />
-           <CustomSelect label="Modelo" value={vehModel} onChange={setVehModel} placeholder="Modelo" options={availableModels} isOpen={vehActiveDropdown === "model"} onToggle={() => setVehActiveDropdown(vehActiveDropdown === "model" ? null : "model")} isActive={vehActiveDropdown === "model"} disabled={!vehBrand} />
-           {selectedVehicle && (
-             <div className="col-span-2 mt-4 bg-navy-800 p-4 rounded-xl border border-navy-700">
-               <p className="text-white font-bold mb-4 text-center">Seleccioná la medida:</p>
-               <div className="flex flex-col gap-2">
-                 {selectedVehicle.sizes.map((s, i) => (
-                   <button key={i} onClick={() => router.push(`/buscar?medida=${s.w}-${s.p}-r${s.r}`)} className="w-full text-white py-3 px-4 rounded-lg bg-navy-900 border border-navy-700 text-left hover:border-orange-500 transition-colors font-mono">{s.w}/{s.p} R{s.r}</button>
-                 ))}
-               </div>
-             </div>
-           )}
-        </div>
-      )}
+        <form className="flex flex-col gap-3" onSubmit={(e) => { e.preventDefault(); if (selectedVehicle) { const s = selectedVehicle.sizes[0]; router.push(`/buscar?medida=${s.w}-${s.p}-r${s.r}`); } }}>
+          <input type="text" placeholder="Buscar por marca o modelo" value={vehQuery} onChange={(e) => { setVehQuery(e.target.value); setVehBrand(""); setVehModel(""); }} className="w-full bg-navy-900 border border-navy-600 rounded-xl px-4 py-3 text-white font-bold" />
+          <div className="bg-navy-800 border border-navy-700 rounded-xl max-h-48 overflow-y-auto">
+            {filteredVehicles.map((v) => (
+              <button type="button" key={`${v.brand}-${v.model}`} onClick={() => { setVehBrand(v.brand); setVehModel(v.model); setVehQuery(""); }} className="w-full text-left px-4 py-3 border-b border-navy-700 hover:bg-navy-700 transition-colors text-white">
+                <div className="font-bold">{v.brand}</div>
+                <div className="text-sm text-white/70">{v.model}</div>
+              </button>
+            ))}
+            {filteredVehicles.length === 0 && (
+              <div className="p-4 text-white/70">No hay resultados</div>
+            )}
+          </div>
 
-      {searchMode === "patente" && (
-        <form onSubmit={searchByPatente} className="flex flex-col gap-4">
-          <input type="text" placeholder="ABC 123" value={patente} onChange={e => setPatente(e.target.value.toUpperCase())} className="w-full bg-navy-900 border border-navy-600 rounded-xl px-4 py-4 text-white font-bold text-center text-xl tracking-widest uppercase" maxLength={7} />
-          <button type="submit" disabled={patente.length < 6 || patenteLoading} className="w-full bg-orange-500 text-white font-bold py-4 rounded-xl shadow-lg shadow-orange-500/20">
-            {patenteLoading ? "Buscando..." : "Buscar Vehículo"}
-          </button>
+          {selectedVehicle && (
+            <div className="bg-navy-800 p-4 rounded-xl border border-navy-700">
+              <p className="text-white font-bold mb-4 text-center">Seleccioná la medida:</p>
+              <div className="flex flex-col gap-2">
+                {selectedVehicle.sizes.map((s, i) => (
+                  <button key={i} onClick={() => router.push(`/buscar?medida=${s.w}-${s.p}-r${s.r}`)} className="w-full text-white py-3 px-4 rounded-lg bg-navy-900 border border-navy-700 text-left hover:border-orange-500 transition-colors font-mono">{s.w}/{s.p} R{s.r}</button>
+                ))}
+              </div>
+            </div>
+          )}
         </form>
       )}
+
+
     </>
   );
 }
