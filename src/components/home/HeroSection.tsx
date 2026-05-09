@@ -44,23 +44,17 @@ export function HeroSection() {
 
           {/* Right: search */}
           <div className="flex flex-col justify-center py-10 md:py-20">
-            <div className="bg-slate-900 rounded-2xl p-6 md:p-8">
-              <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-6">
-                Buscador de neumáticos
-              </p>
+            <TireSizeSearch />
 
-              <TireSizeSearch />
-
-              <p className="text-center text-xs text-slate-500 mt-5">
-                ¿No sabés tu medida?{" "}
-                <a
-                  href="/blog/como-leer-medida-neumatico"
-                  className="text-slate-300 hover:text-white font-medium underline underline-offset-2 transition-colors"
-                >
-                  Aprendé a leerla acá
-                </a>
-              </p>
-            </div>
+            <p className="text-center text-xs text-slate-500 mt-5">
+              ¿No sabés tu medida?{" "}
+              <a
+                href="/blog/como-leer-medida-neumatico"
+                className="text-slate-600 hover:text-slate-900 font-medium underline underline-offset-2 transition-colors"
+              >
+                Aprendé a leerla acá
+              </a>
+            </p>
           </div>
 
         </div>

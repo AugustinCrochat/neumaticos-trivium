@@ -33,18 +33,25 @@ const TIRE_SVG = (
 export function ProductCard({
   product,
   imageFooter,
+  isCheapest,
 }: {
   product: TireProduct;
   imageFooter?: ReactNode;
+  isCheapest?: boolean;
 }) {
   const { selectedBranch } = useBranch();
   const hasImage =
     !!product.imageUrl && product.imageUrl !== "/images/tire-placeholder.webp";
 
   return (
-    <article className="group bg-white rounded-2xl border border-slate-100 hover:border-navy-200 hover:shadow-xl transition-all duration-200 overflow-hidden flex flex-col">
+    <article className={`group bg-white rounded-2xl border hover:shadow-xl transition-all duration-200 overflow-hidden flex flex-col ${isCheapest ? "border-orange-500 shadow-orange-500/10 shadow-lg" : "border-slate-100 hover:border-navy-200"}`}>
       {/* Image */}
       <Link href={`/productos/${product.slug}`} className="relative bg-slate-50 pt-[60%] overflow-hidden block">
+        {isCheapest && (
+          <div className="absolute top-2 left-2 z-10 bg-orange-500 text-white text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded-md shadow-md">
+            Mejor precio
+          </div>
+        )}
         <div className="absolute inset-0 p-3">
           {hasImage ? (
             <div className="relative w-full h-full">

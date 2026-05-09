@@ -91,6 +91,10 @@ export default async function BuscarPage({ searchParams }: Props) {
 
   const resultsCount = exactResults.length + compatibleResults.length;
   const label = parsed ? formatSizeLabel(parsed) : null;
+  
+  const cheapestExactId = exactResults.length > 0 
+    ? exactResults.reduce((min, p) => p.price < min.price ? p : min, exactResults[0]).id 
+    : null;
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -158,7 +162,11 @@ export default async function BuscarPage({ searchParams }: Props) {
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {exactResults.map((product) => (
-                <ProductCard key={product.id} product={product} />
+                <ProductCard 
+                  key={product.id} 
+                  product={product} 
+                  isCheapest={product.id === cheapestExactId} 
+                />
               ))}
             </div>
           </section>

@@ -99,6 +99,7 @@ export function TireSizeSearch({
     if (document.activeElement instanceof HTMLElement) {
       document.activeElement.blur();
     }
+    setWidth(""); setProfile(""); setRim("");
     router.push(`/buscar?medida=${medida}`);
   }
 
@@ -244,6 +245,16 @@ export function TireSizeSearch({
     (r as any).continuous = true;
     
     let searchTimeout: ReturnType<typeof setTimeout> | undefined;
+    let lastRecognized = { w: '', p: '', r: '' };
+    let hasNavigated = false;
+
+    const navigate = (w: string, p: string, rVal: string) => {
+      if (hasNavigated) return;
+      hasNavigated = true;
+      if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+      setWidth(""); setProfile(""); setRim("");
+      router.push(`/buscar?medida=${w}-${p}-r${rVal}`);
+    };
 
     r.onresult = (ev) => {
       let fullTranscript = '';
@@ -268,14 +279,12 @@ export function TireSizeSearch({
       if (p) { p = p.slice(0,2); setProfile(p); }
       if (rimVal) { rimVal = rimVal.slice(0,2); setRim(rimVal); }
 
+      lastRecognized = { w, p, r: rimVal };
       clearTimeout(searchTimeout);
 
       if (w && p && rimVal) {
-        if (document.activeElement instanceof HTMLElement) {
-          document.activeElement.blur();
-        }
         r.stop();
-        router.push(`/buscar?medida=${w}-${p}-r${rimVal}`);
+        navigate(w, p, rimVal);
       } else if (w || p || rimVal) {
         if (!w && widthRef.current) widthRef.current.focus();
         else if (!p && profileRef.current) profileRef.current.focus();
@@ -283,21 +292,30 @@ export function TireSizeSearch({
 
         searchTimeout = setTimeout(() => {
           r.stop();
-          router.push(`/buscar?medida=${w}-${p}-r${rimVal}`);
-        }, 2500);
+          navigate(lastRecognized.w, lastRecognized.p, lastRecognized.r);
+        }, 2000);
       }
     };
     r.onend = () => { 
       recognitionRef.current = null; 
       setListening(false); 
       clearTimeout(searchTimeout);
+      
+      if (!hasNavigated && (lastRecognized.w || lastRecognized.p || lastRecognized.r)) {
+        navigate(lastRecognized.w, lastRecognized.p, lastRecognized.r);
+      }
     };
     recognitionRef.current = r; setListening(true);
     r.start();
   }
 
   return (
-    <>
+    <div className="bg-navy-900 rounded-2xl border border-navy-800 p-6 shadow-2xl relative overflow-hidden group w-full">
+      <p className="text-xs font-black text-orange-400 uppercase tracking-widest mb-4 flex items-center gap-2 relative z-10">
+        <span className="w-8 h-[1px] bg-orange-400"></span>
+        Buscador de medidas
+      </p>
+
       {showScanner && (
         <div className="fixed inset-0 z-50 bg-black flex flex-col">
           <div className="absolute top-0 left-0 right-0 p-4 z-20 flex justify-between items-center bg-gradient-to-b from-black/80 to-transparent">
@@ -442,6 +460,6 @@ export function TireSizeSearch({
         )}
 
       </div>
-    </>
+    </div>
   );
 }
