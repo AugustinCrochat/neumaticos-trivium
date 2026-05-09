@@ -72,6 +72,52 @@ export function TireSizeSearch({
   const [profile, setProfile] = useState(init.p);
   const [rim, setRim] = useState(init.r);
 
+  const [showPopular, setShowPopular] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const POPULAR_SIZES = [
+    { w: "175", p: "65", r: "14" },
+    { w: "185", p: "60", r: "14" },
+    { w: "185", p: "65", r: "14" },
+    { w: "185", p: "60", r: "15" },
+    { w: "185", p: "65", r: "15" },
+    { w: "195", p: "55", r: "15" },
+    { w: "195", p: "60", r: "15" },
+    { w: "195", p: "65", r: "15" },
+    { w: "205", p: "55", r: "16" },
+    { w: "205", p: "60", r: "16" },
+    { w: "215", p: "65", r: "16" },
+    { w: "225", p: "45", r: "17" },
+    { w: "225", p: "40", r: "18" },
+    { w: "265", p: "60", r: "18" },
+    { w: "265", p: "65", r: "17" },
+  ];
+
+  const filteredSizes = POPULAR_SIZES.filter(s => {
+    // If all fields are filled and match exactly, don't show any options
+    if (width === s.w && profile === s.p && rim === s.r) return false;
+    
+    const wMatch = !width || s.w.startsWith(width);
+    const pMatch = !profile || s.p.startsWith(profile);
+    const rMatch = !rim || s.r.startsWith(rim);
+    
+    return wMatch && pMatch && rMatch;
+  }).slice(0, 6);
+
+  // Check if the current input is already a "complete" valid size from our list
+  const isComplete = POPULAR_SIZES.some(s => s.w === width && s.p === profile && s.r === rim);
+  const shouldShowDropdown = showPopular && filteredSizes.length > 0 && !isComplete;
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setShowPopular(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   const hasInput = width.trim() !== "" || profile.trim() !== "" || rim.trim() !== "";
 
   const [showScanner, setShowScanner] = useState(false);
@@ -393,32 +439,108 @@ export function TireSizeSearch({
       )}
 
       <div className="flex flex-col gap-3">
-        <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_auto] gap-2 sm:gap-3">
-          <div className="min-w-0">
-            <input ref={widthRef} type="text" inputMode="numeric" pattern="[0-9]*" autoComplete="off" value={width} onFocus={selectInputText} onClick={selectInputText} onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, '').slice(0,3); setWidth(v); if (v.length >= 3 && profileRef.current) profileRef.current.focus(); }} onKeyDown={handleKeyDown} placeholder="Ancho" aria-label="Ancho del neumático" className={measureInputClass} />
-            <p className="mt-1 text-center text-[11px] font-bold text-slate-500">Ej: 205</p>
+        <div ref={containerRef} className="relative">
+          <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_auto] gap-2 sm:gap-3">
+            <div className="min-w-0">
+              <input 
+                ref={widthRef} 
+                type="text" 
+                inputMode="numeric" 
+                pattern="[0-9]*" 
+                autoComplete="off" 
+                value={width} 
+                onFocus={(e) => { selectInputText(e); setShowPopular(true); }} 
+                onClick={(e) => { selectInputText(e as any); setShowPopular(true); }} 
+                onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, '').slice(0,3); setWidth(v); if (v.length >= 3 && profileRef.current) profileRef.current.focus(); }} 
+                onKeyDown={handleKeyDown} 
+                placeholder="Ancho" 
+                aria-label="Ancho del neumático" 
+                className={measureInputClass} 
+              />
+              <p className="mt-1 text-center text-[11px] font-bold text-slate-500">Ej: 205</p>
+            </div>
+            <div className="min-w-0">
+              <input 
+                ref={profileRef} 
+                type="text" 
+                inputMode="numeric" 
+                pattern="[0-9]*" 
+                autoComplete="off" 
+                value={profile} 
+                onFocus={(e) => { selectInputText(e); setShowPopular(true); }} 
+                onClick={(e) => { selectInputText(e as any); setShowPopular(true); }} 
+                onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, '').slice(0,2); setProfile(v); if (v.length >= 2 && rimRef.current) rimRef.current.focus(); }} 
+                onKeyDown={handleKeyDown} 
+                placeholder="Perfil" 
+                aria-label="Perfil del neumático" 
+                className={measureInputClass} 
+              />
+              <p className="mt-1 text-center text-[11px] font-bold text-slate-500">Ej: 55</p>
+            </div>
+            <div className="min-w-0">
+              <input 
+                ref={rimRef} 
+                type="text" 
+                inputMode="numeric" 
+                pattern="[0-9]*" 
+                autoComplete="off" 
+                value={rim} 
+                onFocus={(e) => { selectInputText(e); setShowPopular(true); }} 
+                onClick={(e) => { selectInputText(e as any); setShowPopular(true); }} 
+                onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, '').slice(0,2); setRim(v); }} 
+                onKeyDown={handleKeyDown} 
+                placeholder="Rodado" 
+                aria-label="Rodado del neumático" 
+                className={measureInputClass} 
+              />
+              <p className="mt-1 text-center text-[11px] font-bold text-slate-500">Ej: 16</p>
+            </div>
+            
+            {hasInput ? (
+              <button type="button" onClick={executeSearch} aria-label="Buscar medida" className={searchButtonClass}>
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            ) : (
+              <button type="button" onClick={startVoiceForMeasure} aria-label="Ingresar medida por voz" className={voiceButtonClass}>
+                <svg className="w-5 h-5" viewBox="0 0 82.05 122.88" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <path d="M59.89,20.83V52.3c0,27-37.73,27-37.73,0V20.83c0-27.77,37.73-27.77,37.73,0Zm-14.18,76V118.2a4.69,4.69,0,0,1-9.37,0V96.78a40.71,40.71,0,0,1-12.45-3.51A41.63,41.63,0,0,1,12.05,85L12,84.91A41.31,41.31,0,0,1,3.12,71.68,40.73,40.73,0,0,1,0,56a4.67,4.67,0,0,1,8-3.31l.1.1A4.68,4.68,0,0,1,9.37,56a31.27,31.27,0,0,0,2.4,12.06A32,32,0,0,0,29,85.28a31.41,31.41,0,0,0,24.13,0,31.89,31.89,0,0,0,10.29-6.9l.08-.07a32,32,0,0,0,6.82-10.22A31.27,31.27,0,0,0,72.68,56a4.69,4.69,0,0,1,9.37,0,40.65,40.65,0,0,1-3.12,15.65A41.45,41.45,0,0,1,70,85l-.09.08a41.34,41.34,0,0,1-11.75,8.18,40.86,40.86,0,0,1-12.46,3.51Z"/>
+                </svg>
+              </button>
+            )}
           </div>
-          <div className="min-w-0">
-            <input ref={profileRef} type="text" inputMode="numeric" pattern="[0-9]*" autoComplete="off" value={profile} onFocus={selectInputText} onClick={selectInputText} onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, '').slice(0,2); setProfile(v); if (v.length >= 2 && rimRef.current) rimRef.current.focus(); }} onKeyDown={handleKeyDown} placeholder="Perfil" aria-label="Perfil del neumático" className={measureInputClass} />
-            <p className="mt-1 text-center text-[11px] font-bold text-slate-500">Ej: 55</p>
-          </div>
-          <div className="min-w-0">
-            <input ref={rimRef} type="text" inputMode="numeric" pattern="[0-9]*" autoComplete="off" value={rim} onFocus={selectInputText} onClick={selectInputText} onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, '').slice(0,2); setRim(v); }} onKeyDown={handleKeyDown} placeholder="Rodado" aria-label="Rodado del neumático" className={measureInputClass} />
-            <p className="mt-1 text-center text-[11px] font-bold text-slate-500">Ej: 16</p>
-          </div>
-          
-          {hasInput ? (
-            <button type="button" onClick={executeSearch} aria-label="Buscar medida" className={searchButtonClass}>
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
-          ) : (
-            <button type="button" onClick={startVoiceForMeasure} aria-label="Ingresar medida por voz" className={voiceButtonClass}>
-              <svg className="w-5 h-5" viewBox="0 0 82.05 122.88" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path d="M59.89,20.83V52.3c0,27-37.73,27-37.73,0V20.83c0-27.77,37.73-27.77,37.73,0Zm-14.18,76V118.2a4.69,4.69,0,0,1-9.37,0V96.78a40.71,40.71,0,0,1-12.45-3.51A41.63,41.63,0,0,1,12.05,85L12,84.91A41.31,41.31,0,0,1,3.12,71.68,40.73,40.73,0,0,1,0,56a4.67,4.67,0,0,1,8-3.31l.1.1A4.68,4.68,0,0,1,9.37,56a31.27,31.27,0,0,0,2.4,12.06A32,32,0,0,0,29,85.28a31.41,31.41,0,0,0,24.13,0,31.89,31.89,0,0,0,10.29-6.9l.08-.07a32,32,0,0,0,6.82-10.22A31.27,31.27,0,0,0,72.68,56a4.69,4.69,0,0,1,9.37,0,40.65,40.65,0,0,1-3.12,15.65A41.45,41.45,0,0,1,70,85l-.09.08a41.34,41.34,0,0,1-11.75,8.18,40.86,40.86,0,0,1-12.46,3.51Z"/>
-              </svg>
-            </button>
+
+          {shouldShowDropdown && (
+            <div className="absolute top-full left-0 right-[56px] z-50 mt-2 bg-navy-800 border border-navy-700 rounded-xl shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+              <p className="px-4 py-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest border-b border-navy-700 bg-navy-900/50">
+                Medidas populares
+              </p>
+              <div className="max-h-[240px] overflow-y-auto">
+                {filteredSizes.map((s) => (
+                  <button
+                    key={`${s.w}-${s.p}-${s.r}`}
+                    type="button"
+                    onMouseDown={(e) => {
+                      // Use onMouseDown to prevent blur before click
+                      e.preventDefault();
+                      setWidth(s.w);
+                      setProfile(s.p);
+                      setRim(s.r);
+                      setShowPopular(false);
+                    }}
+                    className="w-full px-4 py-3 text-left hover:bg-navy-700 transition-colors flex items-center justify-between group border-b border-navy-700/50 last:border-0"
+                  >
+                    <span className="text-white font-bold">
+                      {s.w} / {s.p} <span className="text-slate-400 font-medium">R</span>{s.r}
+                    </span>
+                    <svg className="w-4 h-4 text-orange-500 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                ))}
+              </div>
+            </div>
           )}
         </div>
 
