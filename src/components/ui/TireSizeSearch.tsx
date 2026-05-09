@@ -22,6 +22,7 @@ type ScanTireResponse = {
 
 type SpeechRecognitionResultEvent = Event & {
   results: {
+    length: number;
     [resultIndex: number]: {
       [alternativeIndex: number]: {
         transcript: string;
@@ -240,15 +241,42 @@ export function TireSizeSearch({
     if (!Speech) return alert('Tu navegador no soporta reconocimiento de voz');
     if (recognitionRef.current) { recognitionRef.current.stop(); recognitionRef.current = null; setListening(false); return; }
     const r = new Speech(); r.lang = 'es-AR'; r.interimResults = false; r.maxAlternatives = 1;
+    (r as any).continuous = true;
     r.onresult = (ev) => {
-      const txt = (ev.results[0][0].transcript || '').replace(/[^0-9 ]/g, ' ').trim();
+      let fullTranscript = '';
+      for (let i = 0; i < ev.results.length; i++) {
+        fullTranscript += (ev.results[i][0].transcript || '') + ' ';
+      }
+      const txt = fullTranscript.replace(/[^0-9 ]/g, ' ').trim();
       const nums = txt.split(/\s+/).filter(Boolean);
-      if (nums.length >= 1) setWidth(nums[0].slice(0,3));
-      if (nums.length >= 2) setProfile(nums[1].slice(0,2));
-      if (nums.length >= 3) setRim(nums[2].slice(0,2));
-      // focus next
-      if (nums.length >= 1 && profileRef.current) profileRef.current.focus();
-      if (nums.length >= 2 && rimRef.current) rimRef.current.focus();
+      
+      let w = '';
+      let p = '';
+      let rimVal = '';
+
+      nums.forEach(numStr => {
+        const num = parseInt(numStr, 10);
+        if (num >= 12 && num <= 28) rimVal = numStr;
+        else if (num >= 30 && num <= 95) p = numStr;
+        else if (num >= 135 && num <= 355) w = numStr;
+      });
+
+      if (w) setWidth(w.slice(0,3));
+      if (p) setProfile(p.slice(0,2));
+      if (rimVal) setRim(rimVal.slice(0,2));
+
+      if (w && p && rimVal) {
+        if (document.activeElement instanceof HTMLElement) {
+          document.activeElement.blur();
+        }
+        r.stop();
+      } else if (!w && widthRef.current) {
+        widthRef.current.focus();
+      } else if (!p && profileRef.current) {
+        profileRef.current.focus();
+      } else if (!rimVal && rimRef.current) {
+        rimRef.current.focus();
+      }
     };
     r.onend = () => { recognitionRef.current = null; setListening(false); };
     recognitionRef.current = r; setListening(true);
