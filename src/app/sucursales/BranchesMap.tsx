@@ -119,8 +119,10 @@ export function BranchesMap({ branches }: BranchesMapProps) {
     map.touchZoomRotate.enable();
     map.dragPan.enable();
     map.scrollZoom.enable();
+    map.on("load", () => map.resize());
 
     mapRef.current = map;
+    window.setTimeout(() => map.resize(), 0);
 
     return () => {
       branchMarkersRef.current.forEach((marker) => marker.remove());
@@ -236,10 +238,10 @@ export function BranchesMap({ branches }: BranchesMapProps) {
 
   return (
     <section className="bg-slate-50">
-      <div className="max-w-7xl mx-auto px-4 py-10 md:py-14">
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1.35fr)_minmax(320px,0.65fr)] lg:gap-8">
-          <div className="relative h-[72vh] min-h-[560px] overflow-hidden rounded-2xl border border-slate-200 bg-slate-200 shadow-xl shadow-slate-200/80 lg:h-[680px] lg:min-h-0">
-            <div ref={mapContainerRef} className="absolute inset-0" />
+      <div className="max-w-7xl mx-auto px-4 py-8 md:py-10">
+        <div className="grid grid-cols-1 gap-6">
+          <div className="relative h-[78vh] min-h-[620px] w-full overflow-hidden rounded-2xl border border-slate-200 bg-slate-200 shadow-xl shadow-slate-200/80 md:h-[760px]">
+            <div ref={mapContainerRef} className="absolute inset-0 min-h-full w-full" />
             <button
               type="button"
               onClick={locateNearestBranch}
@@ -250,7 +252,7 @@ export function BranchesMap({ branches }: BranchesMapProps) {
             </button>
           </div>
 
-          <div className="grid grid-cols-1 content-start gap-4">
+          <div className="grid grid-cols-1 content-start gap-4 lg:grid-cols-2">
             {geoError && (
               <p className="rounded-xl border border-orange-200 bg-orange-50 px-4 py-3 text-sm font-semibold text-orange-700">
                 {geoError}
