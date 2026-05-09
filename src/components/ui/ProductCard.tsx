@@ -39,7 +39,7 @@ export function ProductCard({
   imageFooter?: ReactNode;
   isCheapest?: boolean;
 }) {
-  const { selectedBranch } = useBranch();
+  const { selectedBranch, hasConfirmedBranch, openModalForAction } = useBranch();
   const hasImage =
     !!product.imageUrl && product.imageUrl !== "/images/tire-placeholder.webp";
 
@@ -141,12 +141,20 @@ export function ProductCard({
           </div>
 
           {/* CTA */}
-          <a
-            href={`https://wa.me/${selectedBranch.whatsapp}?text=${encodeURIComponent(
-              `Hola, quiero consultar por el neumático ${product.brand} ${product.model} (SKU: ${product.id})`
-            )}`}
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            onClick={() => {
+              const waUrl = (branch: typeof selectedBranch) =>
+                `https://wa.me/${branch.whatsapp}?text=${encodeURIComponent(
+                  `Hola, quiero consultar por el neumático ${product.brand} ${product.model} (SKU: ${product.id})`
+                )}`;
+              if (hasConfirmedBranch) {
+                window.open(waUrl(selectedBranch), "_blank", "noopener,noreferrer");
+              } else {
+                openModalForAction((branch) =>
+                  window.open(waUrl(branch), "_blank", "noopener,noreferrer")
+                );
+              }
+            }}
             className="mt-3 w-full flex items-center justify-center gap-2 bg-navy-800 hover:bg-navy-700 text-white font-semibold py-2.5 rounded-xl text-sm transition-colors"
             title="Consultar por WhatsApp"
           >
@@ -155,7 +163,7 @@ export function ProductCard({
             </svg>
             <span className="hidden sm:inline">Consultar por WhatsApp</span>
             <span className="sm:hidden">WhatsApp</span>
-          </a>
+          </button>
         </div>
       </div>
     </article>
