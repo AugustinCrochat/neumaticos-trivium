@@ -37,20 +37,23 @@ function getNearestBranch(lat: number, lng: number): Branch {
 type GeoState = "idle" | "loading" | "done" | "error";
 
 export function BranchModal() {
-  const { isModalOpen, closeModal, setSelectedBranch, selectedBranch } = useBranch();
+  const { isModalOpen, closeModal, setSelectedBranch, selectedBranch, autoDetect } = useBranch();
   const [nearestId, setNearestId] = useState<string | null>(null);
   const [geoState, setGeoState] = useState<GeoState>("idle");
 
   useEffect(() => {
     if (isModalOpen) {
       document.body.style.overflow = "hidden";
+      if (autoDetect) detectLocation();
     } else {
       document.body.style.overflow = "";
       setGeoState("idle");
       setNearestId(null);
     }
     return () => { document.body.style.overflow = ""; };
-  }, [isModalOpen]);
+  // detectLocation is stable (only uses state setters)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isModalOpen, autoDetect]);
 
   function detectLocation() {
     if (!navigator.geolocation) {

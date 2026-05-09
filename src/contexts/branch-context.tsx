@@ -15,6 +15,7 @@ type BranchContextType = {
   isModalOpen: boolean;
   openModal: () => void;
   closeModal: () => void;
+  autoDetect: boolean;
 };
 
 const BranchContext = createContext<BranchContextType | null>(null);
@@ -26,12 +27,16 @@ export function BranchProvider({ children }: { children: ReactNode }) {
     BRANCHES.find((b) => b.id === DEFAULT_BRANCH_ID)!
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [autoDetect, setAutoDetect] = useState(false);
 
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
       const branch = BRANCHES.find((b) => b.id === stored);
       if (branch) setSelectedBranchState(branch);
+    } else {
+      setIsModalOpen(true);
+      setAutoDetect(true);
     }
   }, []);
 
@@ -49,6 +54,7 @@ export function BranchProvider({ children }: { children: ReactNode }) {
         isModalOpen,
         openModal: () => setIsModalOpen(true),
         closeModal: () => setIsModalOpen(false),
+        autoDetect,
       }}
     >
       {children}
