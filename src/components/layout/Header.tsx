@@ -13,7 +13,7 @@ const NAV_LINKS = [
 ];
 
 export function Header() {
-  const { selectedBranch, openModal } = useBranch();
+  const { selectedBranch, hasConfirmedBranch, openModal } = useBranch();
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
@@ -73,7 +73,7 @@ export function Header() {
                 />
               </svg>
               <span className="truncate max-w-[90px] sm:max-w-none">
-                {selectedBranch.shortName}
+                {hasConfirmedBranch ? selectedBranch.shortName : "Elegir sucursal"}
               </span>
               <svg
                 className="w-3.5 h-3.5 text-navy-400 group-hover:text-navy-200 transition-colors flex-shrink-0"
