@@ -3,13 +3,51 @@
 import { useState, useMemo, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useBranch } from "@/contexts/branch-context";
-import { PRODUCTS } from "@/lib/data";
-
-function unique<T>(arr: T[]): T[] {
-  return [...new Set(arr)].sort((a, b) => Number(a) - Number(b));
-}
-
 import { VEHICLE_DB } from "@/lib/vehicles";
+
+type FullscreenDocumentElement = HTMLElement & {
+  webkitRequestFullscreen?: () => Promise<void> | void;
+};
+
+type TorchMediaTrackCapabilities = MediaTrackCapabilities & {
+  torch?: boolean;
+};
+
+type ScanTireResponse = {
+  found?: boolean;
+  width?: string | number;
+  profile?: string | number;
+  rim?: string | number;
+  message?: string;
+};
+
+type SpeechRecognitionResultEvent = Event & {
+  results: {
+    [resultIndex: number]: {
+      [alternativeIndex: number]: {
+        transcript: string;
+      };
+    };
+  };
+};
+
+type SpeechRecognitionInstance = {
+  lang: string;
+  interimResults: boolean;
+  maxAlternatives: number;
+  onresult: ((ev: SpeechRecognitionResultEvent) => void) | null;
+  onend: (() => void) | null;
+  start: () => void;
+  stop: () => void;
+};
+
+type SpeechRecognitionConstructor = new () => SpeechRecognitionInstance;
+
+type SpeechRecognitionWindow = Window &
+  typeof globalThis & {
+    SpeechRecognition?: SpeechRecognitionConstructor;
+    webkitSpeechRecognition?: SpeechRecognitionConstructor;
+  };
 
 export function TireSizeSearch({
   initialMedida,
@@ -33,14 +71,13 @@ export function TireSizeSearch({
   const [width, setWidth] = useState(init.w);
   const [profile, setProfile] = useState(init.p);
   const [rim, setRim] = useState(init.r);
+  const lastAutoSearchRef = useRef(init.w && init.p && init.r ? `${init.w}-${init.p}-r${init.r}` : "");
 
-  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [searchMode, setSearchMode] = useState<"medida" | "vehiculo">("medida");
   const [vehBrand, setVehBrand] = useState("");
   const [vehModel, setVehModel] = useState("");
   const [vehQuery, setVehQuery] = useState("");
   const [vehYear, setVehYear] = useState("");
-  const [vehActiveDropdown, setVehActiveDropdown] = useState<string | null>(null);
 
 
 
@@ -61,20 +98,7 @@ export function TireSizeSearch({
   const rimRef = useRef<HTMLInputElement | null>(null);
 
   const [listening, setListening] = useState(false);
-  const recognitionRef = useRef<any>(null);
-
-  const availableWidths = useMemo(() => unique(PRODUCTS.map((p) => p.size.width)), []);
-  const availableProfiles = useMemo(() => {
-    if (!width) return unique(PRODUCTS.map((p) => p.size.profile));
-    return unique(PRODUCTS.filter((p) => p.size.width === Number(width)).map((p) => p.size.profile));
-  }, [width]);
-  const availableRims = useMemo(() => unique(PRODUCTS.filter((p) => (!width || p.size.width === Number(width)) && (!profile || p.size.profile === Number(profile))).map((p) => p.size.rim)), [width, profile]);
-
-  const availableBrands = useMemo(() => Array.from(new Set(VEHICLE_DB.map(v => v.brand))), []);
-  const availableModels = useMemo(() => {
-    if (!vehBrand) return [];
-    return VEHICLE_DB.filter(v => v.brand === vehBrand).map(v => v.model);
-  }, [vehBrand]);
+  const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
 
   const filteredVehicles = useMemo(() => {
     const q = vehQuery.trim().toLowerCase();
@@ -83,14 +107,15 @@ export function TireSizeSearch({
   }, [vehQuery]);
   const selectedVehicle = useMemo(() => VEHICLE_DB.find(v => v.brand === vehBrand && v.model === vehModel), [vehBrand, vehModel]);
 
-  function handleSearch() {
-    if (!width && !profile && !rim) return;
-    router.push(`/buscar?medida=${width}-${profile}-r${rim}`);
-  }
-
   useEffect(() => {
-    if (width && profile && rim && !activeDropdown) handleSearch();
-  }, [width, profile, rim, activeDropdown]);
+    if (width.length < 3 || profile.length < 2 || rim.length < 2) return;
+
+    const medida = `${width}-${profile}-r${rim}`;
+    if (medida === lastAutoSearchRef.current) return;
+
+    lastAutoSearchRef.current = medida;
+    router.push(`/buscar?medida=${medida}`);
+  }, [width, profile, rim, router]);
 
   useEffect(() => {
     if (!showScanner) return;
@@ -127,27 +152,21 @@ export function TireSizeSearch({
     };
   }, [showScanner]);
 
-  function onWidthChange(v: string) { setWidth(v); setProfile(""); setRim(""); setActiveDropdown("profile"); }
-  function onProfileChange(v: string) { setProfile(v); setRim(""); setActiveDropdown("rim"); }
-  function onRimChange(v: string) { setRim(v); setActiveDropdown(null); }
-
-
-
   async function startCamera() {
     setShowScanner(true); setScanError(null); setLowLight(false);
     try {
-      const el = document.documentElement;
+      const el = document.documentElement as FullscreenDocumentElement;
       if (el.requestFullscreen) await el.requestFullscreen();
-      else if ((el as any).webkitRequestFullscreen) (el as any).webkitRequestFullscreen();
+      else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
     } catch { }
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
       streamRef.current = stream;
       if (videoRef.current) videoRef.current.srcObject = stream;
       const track = stream.getVideoTracks()[0];
-      const capabilities = track.getCapabilities() as any;
+      const capabilities = track.getCapabilities() as TorchMediaTrackCapabilities;
       if (capabilities.torch) setHasTorch(true);
-    } catch (err) { setScanError("No pudimos acceder a tu cámara."); setShowScanner(false); }
+    } catch { setScanError("No pudimos acceder a tu cámara."); setShowScanner(false); }
   }
 
   function stopCamera() {
@@ -159,7 +178,8 @@ export function TireSizeSearch({
   async function toggleTorch() {
     if (!streamRef.current) return;
     const track = streamRef.current.getVideoTracks()[0];
-    try { await track.applyConstraints({ advanced: [{ torch: !torchOn }] } as any); setTorchOn(t => !t); } catch { }
+    const torchConstraint = { torch: !torchOn } as MediaTrackConstraintSet;
+    try { await track.applyConstraints({ advanced: [torchConstraint] }); setTorchOn(t => !t); } catch { }
   }
 
   function captureFrame(): { original: string; processed: string } {
@@ -186,7 +206,7 @@ export function TireSizeSearch({
     const controller = new AbortController(); const timeout = setTimeout(() => controller.abort(), 25000);
     try {
       const res = await fetch("/api/scan-tire", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ base64Image: images.original, base64Processed: images.processed }), signal: controller.signal });
-      return res.json() as Promise<any>;
+      return res.json() as Promise<ScanTireResponse>;
     } finally { clearTimeout(timeout); }
   }
 
@@ -198,30 +218,34 @@ export function TireSizeSearch({
       const data = await tryScan(images);
       if (data.found && data.width) {
         setWidth(String(data.width)); setProfile(String(data.profile)); setRim(String(data.rim));
-        setActiveDropdown(null); stopCamera();
+        stopCamera();
       } else { 
         setScanError(data.message || "No pudimos detectar la medida automáticamente."); 
         stopCamera();
       }
-    } catch (err) { 
+    } catch { 
       setScanError("La IA tardó demasiado."); 
       stopCamera();
     }
     finally { setIsScanning(false); setScanProgress(""); }
   }
 
-  const isValid = !!(width && profile && rim);
-  const canSearch = !!(width || profile || rim);
+  const measureInputClass = "w-full min-w-0 bg-navy-800 border-2 border-navy-700 rounded-xl px-2 sm:px-3 py-3 text-white font-bold text-center transition-all outline-none placeholder:text-slate-500 focus:bg-navy-700 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20 focus:shadow-lg focus:shadow-orange-500/10";
+  const voiceButtonClass = `h-[52px] w-12 shrink-0 flex items-center justify-center rounded-xl border transition-all ${
+    listening
+      ? "bg-orange-500 text-white border-orange-300 shadow-lg shadow-orange-500/20"
+      : "bg-navy-700 text-white border-navy-600 hover:border-orange-500 hover:bg-navy-600"
+  }`;
 
   function startVoiceForVehicle() {
-    const Speech = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const Speech = (window as SpeechRecognitionWindow).SpeechRecognition || (window as SpeechRecognitionWindow).webkitSpeechRecognition;
     if (!Speech) return alert('Tu navegador no soporta reconocimiento de voz');
     if (recognitionRef.current) { recognitionRef.current.stop(); recognitionRef.current = null; setListening(false); return; }
     const r = new Speech();
     r.lang = 'es-AR';
     r.interimResults = false;
     r.maxAlternatives = 1;
-    r.onresult = (ev: any) => {
+    r.onresult = (ev) => {
       const txt = ev.results[0][0].transcript || '';
       // detect year 4 digits
       const yearMatch = txt.match(/\b(19|20)\d{2}\b/);
@@ -233,10 +257,11 @@ export function TireSizeSearch({
   }
 
   function startVoiceForMeasure() {
-    const Speech = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const Speech = (window as SpeechRecognitionWindow).SpeechRecognition || (window as SpeechRecognitionWindow).webkitSpeechRecognition;
     if (!Speech) return alert('Tu navegador no soporta reconocimiento de voz');
+    if (recognitionRef.current) { recognitionRef.current.stop(); recognitionRef.current = null; setListening(false); return; }
     const r = new Speech(); r.lang = 'es-AR'; r.interimResults = false; r.maxAlternatives = 1;
-    r.onresult = (ev: any) => {
+    r.onresult = (ev) => {
       const txt = (ev.results[0][0].transcript || '').replace(/[^0-9 ]/g, ' ').trim();
       const nums = txt.split(/\s+/).filter(Boolean);
       if (nums.length >= 1) setWidth(nums[0].slice(0,3));
@@ -246,7 +271,8 @@ export function TireSizeSearch({
       if (nums.length >= 1 && profileRef.current) profileRef.current.focus();
       if (nums.length >= 2 && rimRef.current) rimRef.current.focus();
     };
-    r.onend = () => {};
+    r.onend = () => { recognitionRef.current = null; setListening(false); };
+    recognitionRef.current = r; setListening(true);
     r.start();
   }
 
@@ -358,10 +384,15 @@ export function TireSizeSearch({
 
       {searchMode === "medida" && (
         <div className="flex flex-col gap-3">
-          <div className="grid grid-cols-3 gap-3">
-            <input ref={widthRef} value={width} onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, '').slice(0,3); setWidth(v); if (v.length >= 3 && profileRef.current) profileRef.current.focus(); }} placeholder="Ancho" className="w-full bg-navy-800 border-2 rounded-xl px-3 py-3 text-white font-bold text-center" />
-            <input ref={profileRef} value={profile} onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, '').slice(0,2); setProfile(v); if (v.length >= 2 && rimRef.current) rimRef.current.focus(); }} placeholder="Perfil" className="w-full bg-navy-800 border-2 rounded-xl px-3 py-3 text-white font-bold text-center" />
-            <input ref={rimRef} value={rim} onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, '').slice(0,2); setRim(v); }} placeholder="Rodado" className="w-full bg-navy-800 border-2 rounded-xl px-3 py-3 text-white font-bold text-center" />
+          <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_auto] gap-2 sm:gap-3">
+            <input ref={widthRef} type="text" inputMode="numeric" pattern="[0-9]*" autoComplete="off" value={width} onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, '').slice(0,3); setWidth(v); if (v.length >= 3 && profileRef.current) profileRef.current.focus(); }} placeholder="Ancho" aria-label="Ancho del neumático" className={measureInputClass} />
+            <input ref={profileRef} type="text" inputMode="numeric" pattern="[0-9]*" autoComplete="off" value={profile} onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, '').slice(0,2); setProfile(v); if (v.length >= 2 && rimRef.current) rimRef.current.focus(); }} placeholder="Perfil" aria-label="Perfil del neumático" className={measureInputClass} />
+            <input ref={rimRef} type="text" inputMode="numeric" pattern="[0-9]*" autoComplete="off" value={rim} onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, '').slice(0,2); setRim(v); }} placeholder="Rodado" aria-label="Rodado del neumático" className={measureInputClass} />
+            <button type="button" onClick={startVoiceForMeasure} aria-label="Ingresar medida por voz" className={voiceButtonClass}>
+              <svg className="w-5 h-5" viewBox="0 0 82.05 122.88" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M59.89,20.83V52.3c0,27-37.73,27-37.73,0V20.83c0-27.77,37.73-27.77,37.73,0Zm-14.18,76V118.2a4.69,4.69,0,0,1-9.37,0V96.78a40.71,40.71,0,0,1-12.45-3.51A41.63,41.63,0,0,1,12.05,85L12,84.91A41.31,41.31,0,0,1,3.12,71.68,40.73,40.73,0,0,1,0,56a4.67,4.67,0,0,1,8-3.31l.1.1A4.68,4.68,0,0,1,9.37,56a31.27,31.27,0,0,0,2.4,12.06A32,32,0,0,0,29,85.28a31.41,31.41,0,0,0,24.13,0,31.89,31.89,0,0,0,10.29-6.9l.08-.07a32,32,0,0,0,6.82-10.22A31.27,31.27,0,0,0,72.68,56a4.69,4.69,0,0,1,9.37,0,40.65,40.65,0,0,1-3.12,15.65A41.45,41.45,0,0,1,70,85l-.09.08a41.34,41.34,0,0,1-11.75,8.18,40.86,40.86,0,0,1-12.46,3.51Z"/>
+              </svg>
+            </button>
           </div>
 
           <button 
@@ -401,30 +432,20 @@ export function TireSizeSearch({
             </div>
           )}
 
-          <div className="flex items-center gap-2">
-            <button
-              type="submit"
-              disabled={!canSearch}
-              className="flex-1 bg-sky-600 hover:bg-sky-500 disabled:bg-navy-800 disabled:text-slate-600 disabled:cursor-not-allowed text-white font-black py-4 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-sky-900/20 active:scale-[0.98]"
-            >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-              BUSCAR NEUMÁTICOS
-            </button>
-            <button type="button" onClick={() => { if (searchMode === 'medida') startVoiceForMeasure(); else startVoiceForVehicle(); }} aria-label="Iniciar voz" className="w-12 h-12 flex items-center justify-center rounded-xl bg-navy-700 text-white">
-              <svg className="w-5 h-5" viewBox="0 0 82.05 122.88" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <title>mic-microphone</title>
-              <path d="M59.89,20.83V52.3c0,27-37.73,27-37.73,0V20.83c0-27.77,37.73-27.77,37.73,0Zm-14.18,76V118.2a4.69,4.69,0,0,1-9.37,0V96.78a40.71,40.71,0,0,1-12.45-3.51A41.63,41.63,0,0,1,12.05,85L12,84.91A41.31,41.31,0,0,1,3.12,71.68,40.73,40.73,0,0,1,0,56a4.67,4.67,0,0,1,8-3.31l.1.1A4.68,4.68,0,0,1,9.37,56a31.27,31.27,0,0,0,2.4,12.06A32,32,0,0,0,29,85.28a31.41,31.41,0,0,0,24.13,0,31.89,31.89,0,0,0,10.29-6.9l.08-.07a32,32,0,0,0,6.82-10.22A31.27,31.27,0,0,0,72.68,56a4.69,4.69,0,0,1,9.37,0,40.65,40.65,0,0,1-3.12,15.65A41.45,41.45,0,0,1,70,85l-.09.08a41.34,41.34,0,0,1-11.75,8.18,40.86,40.86,0,0,1-12.46,3.51Z"/>
-            </svg>
-            </button>
-          </div>
+          <p className="text-center text-xs font-bold text-slate-500">La búsqueda se inicia al completar ancho, perfil y rodado.</p>
         </div>
       )}
 
       {searchMode === "vehiculo" && (
         <form className="flex flex-col gap-3" onSubmit={(e) => { e.preventDefault(); if (selectedVehicle) { const s = selectedVehicle.sizes[0]; router.push(`/buscar?medida=${s.w}-${s.p}-r${s.r}`); } }}>
-          <input type="text" placeholder="Buscar por marca o modelo" value={vehQuery} onChange={(e) => { setVehQuery(e.target.value); setVehBrand(""); setVehModel(""); }} className="w-full bg-navy-900 border border-navy-600 rounded-xl px-4 py-3 text-white font-bold" />
+          <div className="flex items-center gap-2 sm:gap-3">
+            <input type="text" placeholder="Buscar por marca o modelo" value={vehQuery} onChange={(e) => { setVehQuery(e.target.value); setVehBrand(""); setVehModel(""); }} className="min-w-0 flex-1 bg-navy-900 border-2 border-navy-600 rounded-xl px-4 py-3 text-white font-bold transition-all outline-none placeholder:text-slate-500 focus:bg-navy-800 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20" />
+            <button type="button" onClick={startVoiceForVehicle} aria-label="Buscar modelo por voz" className={voiceButtonClass}>
+              <svg className="w-5 h-5" viewBox="0 0 82.05 122.88" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M59.89,20.83V52.3c0,27-37.73,27-37.73,0V20.83c0-27.77,37.73-27.77,37.73,0Zm-14.18,76V118.2a4.69,4.69,0,0,1-9.37,0V96.78a40.71,40.71,0,0,1-12.45-3.51A41.63,41.63,0,0,1,12.05,85L12,84.91A41.31,41.31,0,0,1,3.12,71.68,40.73,40.73,0,0,1,0,56a4.67,4.67,0,0,1,8-3.31l.1.1A4.68,4.68,0,0,1,9.37,56a31.27,31.27,0,0,0,2.4,12.06A32,32,0,0,0,29,85.28a31.41,31.41,0,0,0,24.13,0,31.89,31.89,0,0,0,10.29-6.9l.08-.07a32,32,0,0,0,6.82-10.22A31.27,31.27,0,0,0,72.68,56a4.69,4.69,0,0,1,9.37,0,40.65,40.65,0,0,1-3.12,15.65A41.45,41.45,0,0,1,70,85l-.09.08a41.34,41.34,0,0,1-11.75,8.18,40.86,40.86,0,0,1-12.46,3.51Z"/>
+              </svg>
+            </button>
+          </div>
           <div className="bg-navy-800 border border-navy-700 rounded-xl max-h-48 overflow-y-auto">
             {filteredVehicles.map((v) => (
               <button type="button" key={`${v.brand}-${v.model}`} onClick={() => { setVehBrand(v.brand); setVehModel(v.model); setVehQuery(""); }} className="w-full text-left px-4 py-3 border-b border-navy-700 hover:bg-navy-700 transition-colors text-white">
@@ -442,7 +463,7 @@ export function TireSizeSearch({
           {selectedVehicle && (
             <div className="bg-navy-800 p-4 rounded-xl border border-navy-700">
               <p className="text-white font-bold mb-2 text-center">Medidas recomendadas para {selectedVehicle.brand} {selectedVehicle.model}{vehYear ? ` — año ${vehYear}` : ''}</p>
-              {vehYear && !(selectedVehicle as any).years && (
+              {vehYear && !("years" in selectedVehicle) && (
                 <p className="text-white/60 text-xs mb-3 text-center">No tenemos datos por año para este modelo en la base; seleccioná la versión/trim o consultanos si dudás.</p>
               )}
 
@@ -475,24 +496,5 @@ export function TireSizeSearch({
 
 
     </>
-  );
-}
-
-function CustomSelect({ label, value, onChange, placeholder, options, formatOption, isOpen, onToggle, isActive, disabled }: any) {
-  return (
-    <div className="flex-1 relative">
-      <button type="button" onClick={onToggle} disabled={disabled} className={`w-full bg-navy-800 border-2 rounded-xl px-2 py-3 text-sm font-bold text-white transition-all ${isActive ? "border-orange-500 shadow-lg shadow-orange-500/10" : "border-navy-700"} ${disabled ? "opacity-30" : ""}`}>
-        {value ? (formatOption ? formatOption(value) : value) : placeholder}
-      </button>
-      {isOpen && (
-        <div className="absolute top-[calc(100%+8px)] left-0 w-full bg-navy-800 border-2 border-navy-700 rounded-xl z-50 max-h-40 overflow-y-auto shadow-2xl animate-in fade-in slide-in-from-top-2 duration-150">
-          {options.map((opt: string) => (
-            <button key={opt} onClick={() => { onChange(opt); }} className={`w-full text-left px-4 py-2.5 text-sm font-bold transition-colors ${value === opt ? "text-orange-500 bg-navy-700" : "text-white hover:bg-navy-700"}`}>
-              {formatOption ? formatOption(opt) : opt}
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
   );
 }
