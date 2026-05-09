@@ -44,12 +44,12 @@ export function ProductCard({
     !!product.imageUrl && product.imageUrl !== "/images/tire-placeholder.webp";
 
   return (
-    <article className={`group bg-white rounded-2xl border hover:shadow-xl transition-all duration-200 overflow-hidden flex flex-col ${isCheapest ? "border-orange-500 shadow-orange-500/10 shadow-lg" : "border-slate-100 hover:border-navy-200"}`}>
+    <article className={`group bg-white rounded-2xl border transition-all duration-300 overflow-hidden flex flex-col ${isCheapest ? "border-emerald-500 shadow-2xl shadow-emerald-500/20 scale-[1.02] relative z-20 ring-4 ring-emerald-500/10" : "border-slate-100 hover:border-navy-200 hover:shadow-xl"}`}>
       {/* Image */}
       <Link href={`/productos/${product.slug}`} className="relative bg-slate-50 pt-[60%] overflow-hidden block">
         <div className="absolute top-3 left-3 z-10 flex flex-col gap-2 items-start">
           {isCheapest && (
-            <span className="bg-orange-500 text-white text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded-md shadow-md">
+            <span className="bg-emerald-600 text-white text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-md shadow-md animate-pulse">
               Mejor precio
             </span>
           )}
