@@ -187,7 +187,13 @@ export default async function BuscarPage({ searchParams }: Props) {
                     Medidas compatibles
                   </h2>
                   <p className="text-sm text-emerald-800 mt-1">
-                    No son la medida buscada: mantienen el mismo rodado y un diámetro total dentro de ±3%.
+                    No son la medida buscada: mantienen el mismo rodado y un diámetro total dentro de ±3%.{" "}
+                    <Link href="/blog/equivalencias" className="font-semibold underline hover:text-emerald-950">
+                      Entendé cómo funcionan las equivalencias.
+                    </Link>
+                  </p>
+                  <p className="text-xs text-emerald-800 mt-2 p-2 bg-emerald-100/50 rounded border border-emerald-200/50">
+                    <span className="font-bold">Importante:</span> Para usar otra medida que la de fábrica, el auto tiene que ser de caja manual. Es necesario probar luego de la instalación que el neumático de medida distinta no toque partes del tren delantero o los plásticos del auto.
                   </p>
                 </div>
               </div>

@@ -3708,4 +3708,14 @@ export const BLOG_POSTS: BlogPost[] = [
     slug: "como-leer-medida-neumatico",
     category: "Guías",
   },
+  {
+    id: "4",
+    title: "Equivalencias de neumáticos: ¿Qué son y cómo funcionan?",
+    excerpt:
+      "Entendé cómo funcionan las medidas equivalentes, qué significa el límite del ±3% y cuándo se pueden usar.",
+    imageUrl: "/images/blog-2.webp",
+    date: "2025-05-15",
+    slug: "equivalencias",
+    category: "Guías",
+  },
 ];
