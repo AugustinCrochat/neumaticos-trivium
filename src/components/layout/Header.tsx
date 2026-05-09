@@ -73,7 +73,7 @@ export function Header() {
                 />
               </svg>
               <span className="truncate max-w-[90px] sm:max-w-none">
-                {hasConfirmedBranch ? selectedBranch.shortName : "Elegir sucursal"}
+                {hasConfirmedBranch ? selectedBranch.shortName : "Sucursal"}
               </span>
               <svg
                 className="w-3.5 h-3.5 text-navy-400 group-hover:text-navy-200 transition-colors flex-shrink-0"
