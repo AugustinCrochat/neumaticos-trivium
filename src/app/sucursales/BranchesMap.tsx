@@ -3,6 +3,7 @@
 import { PointerEvent, WheelEvent, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import type { Branch } from "@/lib/config";
+import { useBranch } from "@/contexts/branch-context";
 
 type BranchesMapProps = {
   branches: Branch[];
@@ -11,6 +12,11 @@ type BranchesMapProps = {
 type Point = {
   x: number;
   y: number;
+};
+
+type UserLocation = {
+  lat: number;
+  lng: number;
 };
 
 const TILE_SIZE = 256;
@@ -52,11 +58,28 @@ function makeTileUrl(x: number, y: number, z: number) {
   return `https://${subdomain}.tile.openstreetmap.org/${z}/${x}/${y}.png`;
 }
 
+function getDistanceInKm(from: UserLocation, to: UserLocation) {
+  const earthRadiusKm = 6371;
+  const latDelta = ((to.lat - from.lat) * Math.PI) / 180;
+  const lngDelta = ((to.lng - from.lng) * Math.PI) / 180;
+  const fromLat = (from.lat * Math.PI) / 180;
+  const toLat = (to.lat * Math.PI) / 180;
+  const haversine =
+    Math.sin(latDelta / 2) ** 2 +
+    Math.cos(fromLat) * Math.cos(toLat) * Math.sin(lngDelta / 2) ** 2;
+
+  return earthRadiusKm * 2 * Math.atan2(Math.sqrt(haversine), Math.sqrt(1 - haversine));
+}
+
 export function BranchesMap({ branches }: BranchesMapProps) {
+  const { selectedBranch, setSelectedBranch } = useBranch();
   const [activeBranchId, setActiveBranchId] = useState(branches[0]?.id ?? "");
   const [center, setCenter] = useState({ lat: -32.9, lng: -61.6 });
   const [zoom, setZoom] = useState(6);
   const [mapSize, setMapSize] = useState({ width: 960, height: 560 });
+  const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
+  const [geoStatus, setGeoStatus] = useState<"idle" | "loading" | "ready" | "error">("idle");
+  const [geoError, setGeoError] = useState("");
   const dragRef = useRef<{
     pointerId: number;
     start: Point;
@@ -120,12 +143,61 @@ export function BranchesMap({ branches }: BranchesMapProps) {
     [branches, centerWorld.x, centerWorld.y, mapSize.height, mapSize.width, zoom]
   );
 
+  const userMarker = useMemo(() => {
+    if (!userLocation) return null;
+
+    const world = latLngToWorld(userLocation.lat, userLocation.lng, zoom);
+    return {
+      left: world.x - centerWorld.x + mapSize.width / 2,
+      top: world.y - centerWorld.y + mapSize.height / 2,
+    };
+  }, [centerWorld.x, centerWorld.y, mapSize.height, mapSize.width, userLocation, zoom]);
+
   if (!activeBranch) return null;
 
   function selectBranch(branch: Branch) {
     setActiveBranchId(branch.id);
     setCenter(branch.coordinates);
     setZoom((currentZoom) => Math.max(currentZoom, 13));
+  }
+
+  function locateUser() {
+    if (!navigator.geolocation) {
+      setGeoStatus("error");
+      setGeoError("Tu navegador no permite obtener ubicacion.");
+      return;
+    }
+
+    setGeoStatus("loading");
+    setGeoError("");
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const nextLocation = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        };
+        const nearestBranch = branches.reduce((nearest, branch) => {
+          const currentDistance = getDistanceInKm(nextLocation, branch.coordinates);
+          const nearestDistance = getDistanceInKm(nextLocation, nearest.coordinates);
+          return currentDistance < nearestDistance ? branch : nearest;
+        }, branches[0]);
+
+        setUserLocation(nextLocation);
+        setCenter(nextLocation);
+        setZoom(13);
+        setActiveBranchId(nearestBranch.id);
+        setGeoStatus("ready");
+      },
+      () => {
+        setGeoStatus("error");
+        setGeoError("No pudimos acceder a tu ubicacion.");
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 60000,
+      }
+    );
   }
 
   function zoomBy(delta: number) {
@@ -231,6 +303,15 @@ export function BranchesMap({ branches }: BranchesMapProps) {
               </button>
             </div>
 
+            <button
+              type="button"
+              onClick={locateUser}
+              className="absolute left-4 top-[92px] z-20 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-bold text-navy-900 shadow-lg transition-colors hover:bg-navy-50 disabled:cursor-wait disabled:opacity-70"
+              disabled={geoStatus === "loading"}
+            >
+              {geoStatus === "loading" ? "Buscando..." : "Mi ubicacion"}
+            </button>
+
             {branchMarkers.map(({ branch, left, top }) => {
               const isActive = branch.id === activeBranch.id;
 
@@ -275,6 +356,17 @@ export function BranchesMap({ branches }: BranchesMapProps) {
               );
             })}
 
+            {userMarker && (
+              <div
+                className="absolute z-20 -translate-x-1/2 -translate-y-1/2"
+                style={{ left: userMarker.left, top: userMarker.top }}
+                aria-label="Tu ubicacion"
+              >
+                <span className="absolute left-1/2 top-1/2 h-12 w-12 -translate-x-1/2 -translate-y-1/2 rounded-full bg-navy-500/20" />
+                <span className="relative block h-5 w-5 rounded-full border-4 border-white bg-navy-600 shadow-lg shadow-navy-900/30" />
+              </div>
+            )}
+
             <div className="absolute bottom-5 left-5 right-5 z-20 rounded-2xl border border-white/80 bg-white/95 p-4 shadow-xl backdrop-blur md:left-auto md:w-[360px]">
               <p className="text-xs font-bold uppercase tracking-wide text-slate-500">
                 Sucursal seleccionada
@@ -286,6 +378,13 @@ export function BranchesMap({ branches }: BranchesMapProps) {
                 {activeBranch.address}, {activeBranch.city}
               </p>
               <div className="mt-4 flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => setSelectedBranch(activeBranch)}
+                  className="rounded-lg bg-navy-900 px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-navy-800"
+                >
+                  Elegir esta
+                </button>
                 <a
                   href={activeBranch.mapUrl}
                   target="_blank"
@@ -303,6 +402,16 @@ export function BranchesMap({ branches }: BranchesMapProps) {
                   WhatsApp
                 </a>
               </div>
+              {selectedBranch.id === activeBranch.id && (
+                <p className="mt-3 text-xs font-bold text-orange-600">
+                  Es tu sucursal seleccionada
+                </p>
+              )}
+              {geoError && (
+                <p className="mt-3 text-xs font-semibold text-orange-700">
+                  {geoError}
+                </p>
+              )}
             </div>
 
             <a
@@ -371,6 +480,13 @@ export function BranchesMap({ branches }: BranchesMapProps) {
                   </dl>
 
                   <div className="mt-5 flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setSelectedBranch(branch)}
+                      className="rounded-lg bg-navy-900 px-3 py-2 text-xs font-bold text-white transition-colors hover:bg-navy-800"
+                    >
+                      Elegir esta
+                    </button>
                     <a
                       href={`tel:${cleanPhone(branch.phone)}`}
                       className="rounded-lg bg-navy-100 px-3 py-2 text-xs font-bold text-navy-900 transition-colors hover:bg-navy-200"
