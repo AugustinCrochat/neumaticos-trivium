@@ -137,8 +137,8 @@ export function TireSizeSearch({
   const profileRef = useRef<HTMLInputElement | null>(null);
   const rimRef = useRef<HTMLInputElement | null>(null);
 
+  const [focused, setFocused] = useState<'width' | 'aspect' | 'rim' | null>(null);
   const [listening, setListening] = useState(false);
-  const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
 
   const performSearch = (w: string, p: string, rVal: string) => {
     if (!w && !p && !rVal) return;
@@ -367,7 +367,7 @@ export function TireSizeSearch({
         Buscador de medidas
       </p>
 
-      <TireDiagram width={width} profile={profile} rim={rim} />
+      <TireDiagram width={width} aspect={profile} rim={rim} focused={focused} />
 
       {showScanner && (
         <div className="fixed inset-0 z-50 bg-black flex flex-col">
@@ -456,7 +456,8 @@ export function TireSizeSearch({
                 pattern="[0-9]*" 
                 autoComplete="off" 
                 value={width} 
-                onFocus={(e) => { selectInputText(e); setShowPopular(true); }} 
+                onFocus={(e) => { selectInputText(e); setShowPopular(true); setFocused('width'); }} 
+                onBlur={() => setFocused(null)}
                 onClick={(e) => { selectInputText(e as any); setShowPopular(true); }} 
                 onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, '').slice(0,3); setWidth(v); if (v.length >= 3 && profileRef.current) profileRef.current.focus(); }} 
                 onKeyDown={handleKeyDown} 
@@ -474,7 +475,8 @@ export function TireSizeSearch({
                 pattern="[0-9]*" 
                 autoComplete="off" 
                 value={profile} 
-                onFocus={(e) => { selectInputText(e); setShowPopular(true); }} 
+                onFocus={(e) => { selectInputText(e); setShowPopular(true); setFocused('aspect'); }} 
+                onBlur={() => setFocused(null)}
                 onClick={(e) => { selectInputText(e as any); setShowPopular(true); }} 
                 onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, '').slice(0,2); setProfile(v); if (v.length >= 2 && rimRef.current) rimRef.current.focus(); }} 
                 onKeyDown={handleKeyDown} 
@@ -492,7 +494,8 @@ export function TireSizeSearch({
                 pattern="[0-9]*" 
                 autoComplete="off" 
                 value={rim} 
-                onFocus={(e) => { selectInputText(e); setShowPopular(true); }} 
+                onFocus={(e) => { selectInputText(e); setShowPopular(true); setFocused('rim'); }} 
+                onBlur={() => setFocused(null)}
                 onClick={(e) => { selectInputText(e as any); setShowPopular(true); }} 
                 onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, '').slice(0,2); setRim(v); }} 
                 onKeyDown={handleKeyDown} 

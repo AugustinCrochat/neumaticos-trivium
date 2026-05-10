@@ -1,31 +1,87 @@
 "use client";
 
 type TireDiagramProps = {
-  width?: string;
-  profile?: string;
-  rim?: string;
+  width?: string | number;
+  aspect?: string | number;
+  rim?: string | number;
+  focused?: 'width' | 'aspect' | 'rim' | null;
+  theme?: {
+    bg?: string;
+    accent?: string;
+    font?: string;
+    mono?: string;
+    grid?: string;
+  };
 };
 
-export function TireDiagram({ width = "", profile = "", rim = "" }: TireDiagramProps) {
-  const hasData = !!(width || profile || rim);
+export function TireDiagram({
+  width = "",
+  aspect = "",
+  rim = "",
+  focused = null,
+  theme = { accent: "#ff6a3d" }
+}: TireDiagramProps) {
+  const cx = 681.5;
+  const cy = 682.3;
+  const textRadius = 528;
+  const secondaryTextRadius = 638;
+
+  // Convertir valores a string y manejar placeholders
+  const widthStr = width ? String(width) : "___";
+  const aspectStr = aspect ? String(aspect) : "__";
+  const rimStr = rim ? String(rim) : "__";
+
+  // Estilos para los tspans
+  const getTspanStyle = (segment: 'width' | 'aspect' | 'rim') => {
+    const isFocused = focused === segment;
+    return {
+      fontSize: isFocused ? `${64 * 1.18}px` : "64px",
+      fontWeight: isFocused ? "800" : "700",
+      fill: isFocused ? theme.accent : "#e8e6df",
+      transition: "font-size 0.2s, fill 0.2s",
+      letterSpacing: "0.04em",
+    };
+  };
 
   return (
     <div className="flex flex-col items-center gap-6 py-4">
       <svg
-        viewBox="0 0 1362.9773 682.33777"
+        viewBox="0 0 1362.9773 712"
         className="w-full max-w-2xl h-auto"
         xmlns="http://www.w3.org/2000/svg"
       >
         <defs>
-          {/* Path para el texto curvo - siguiendo la parte superior del neumático */}
+          {/* Halo radial sutil detrás de la rueda */}
+          <radialGradient id="haloGradient" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" style={{ stopColor: "#ffffff", stopOpacity: 0.1 }} />
+            <stop offset="100%" style={{ stopColor: "#ffffff", stopOpacity: 0 }} />
+          </radialGradient>
+
+          {/* Path para el texto principal curvado */}
           <path
-            id="topTireCurve"
-            d="M 500,300 Q 681.489,150 862.978,300"
+            id="textPath"
+            d={`M ${cx - textRadius} ${cy} A ${textRadius} ${textRadius} 0 0 1 ${cx + textRadius} ${cy}`}
+            fill="none"
+          />
+
+          {/* Path para el texto secundario */}
+          <path
+            id="secondaryTextPath"
+            d={`M ${cx - secondaryTextRadius} ${cy} A ${secondaryTextRadius} ${secondaryTextRadius} 0 0 1 ${cx + secondaryTextRadius} ${cy}`}
             fill="none"
           />
         </defs>
 
-        {/* SVG del neumático original */}
+        {/* Halo radial detrás de la rueda */}
+        <circle
+          cx={cx}
+          cy={cy}
+          r="650"
+          fill="url(#haloGradient)"
+          opacity="0.3"
+        />
+
+        {/* SVG del neumático original - EMBEBIDO TAL CUAL */}
         <g transform="matrix(1.3333333 0 0 -1.3333333 2841.76 1842.7029) translate(150.3846 -240.21272) translate(-2419.8917 511.11992)">
           <path
             fill="#a0a6a7"
@@ -73,89 +129,43 @@ export function TireDiagram({ width = "", profile = "", rim = "" }: TireDiagramP
           />
         </g>
 
-        {/* TEXTO DINÁMICO SIGUIENDO LA CURVA DEL NEUMÁTICO */}
-        <g>
-          {/* Ancho */}
-          {width && (
-            <text
-              fontSize="64"
-              fontWeight="900"
-              fill={hasData && width ? "#f97316" : "#cbd5e1"}
-              opacity={hasData && width ? 1 : 0.5}
-              className="font-mono"
-              style={{ transition: "fill 0.3s ease, opacity 0.3s ease" }}
-            >
-              <textPath href="#topTireCurve" startOffset="15%" textAnchor="middle">
-                {width}
-              </textPath>
-            </text>
-          )}
+        {/* TEXTO PRINCIPAL CURVADO SOBRE EL FLANCO */}
+        <text
+          fontFamily={theme.mono || "JetBrains Mono, monospace"}
+          fontSize="64"
+          fontWeight="700"
+          letterSpacing="0.04em"
+          fill="#e8e6df"
+        >
+          <textPath href="#textPath" startOffset="50%" textAnchor="middle">
+            <tspan style={getTspanStyle('width')}>{widthStr}</tspan>
+            <tspan>/</tspan>
+            <tspan style={getTspanStyle('aspect')}>{aspectStr}</tspan>
+            <tspan> R</tspan>
+            <tspan style={getTspanStyle('rim')}>{rimStr}</tspan>
+          </textPath>
+        </text>
 
-          {/* DIAGONAL SEPARADOR */}
-          <text
-            fontSize="56"
-            fontWeight="900"
-            fill={hasData ? "#f97316" : "#cbd5e1"}
-            opacity={hasData ? 1 : 0.5}
-            className="font-mono"
-          >
-            <textPath href="#topTireCurve" startOffset="38%" textAnchor="middle">
-              /
-            </textPath>
-          </text>
-
-          {/* Perfil */}
-          {profile && (
-            <text
-              fontSize="64"
-              fontWeight="900"
-              fill={hasData && profile ? "#f97316" : "#cbd5e1"}
-              opacity={hasData && profile ? 1 : 0.5}
-              className="font-mono"
-              style={{ transition: "fill 0.3s ease, opacity 0.3s ease" }}
-            >
-              <textPath href="#topTireCurve" startOffset="62%" textAnchor="middle">
-                {profile}
-              </textPath>
-            </text>
-          )}
-
-          {/* R */}
-          <text
-            fontSize="56"
-            fontWeight="900"
-            fill={hasData ? "#f97316" : "#cbd5e1"}
-            opacity={hasData ? 1 : 0.5}
-            className="font-mono"
-          >
-            <textPath href="#topTireCurve" startOffset="80%" textAnchor="middle">
-              R
-            </textPath>
-          </text>
-
-          {/* Rodado */}
-          {rim && (
-            <text
-              fontSize="64"
-              fontWeight="900"
-              fill={hasData && rim ? "#f97316" : "#cbd5e1"}
-              opacity={hasData && rim ? 1 : 0.5}
-              className="font-mono"
-              style={{ transition: "fill 0.3s ease, opacity 0.3s ease" }}
-            >
-              <textPath href="#topTireCurve" startOffset="92%" textAnchor="middle">
-                {rim}
-              </textPath>
-            </text>
-          )}
-        </g>
+        {/* TEXTO SECUNDARIO EMBOSSED CERCA DEL TREAD */}
+        <text
+          fontFamily={theme.mono || "JetBrains Mono, monospace"}
+          fontSize="22"
+          fontWeight="700"
+          letterSpacing="0.42em"
+          fill="#35373a"
+          opacity="0.4"
+        >
+          <textPath href="#secondaryTextPath" startOffset="50%" textAnchor="middle">
+            RADIAL · TUBELESS
+          </textPath>
+        </text>
       </svg>
 
-      {/* Leyenda */}
-      {hasData && (
+      {/* Leyenda opcional */}
+      {(width || aspect || rim) && (
         <div className="text-center text-sm text-slate-400 animate-in fade-in duration-300">
           <p>
-            Medida: <span className="text-orange-400 font-black text-lg">{width || "—"}/{profile || "—"} R{rim || "—"}</span>
+            Medida: <span className="text-orange-400 font-black text-lg">{widthStr}/{aspectStr} R{rimStr}</span>
           </p>
         </div>
       )}
