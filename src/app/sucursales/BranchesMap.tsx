@@ -19,10 +19,6 @@ const MAPTILER_KEY = "rZs55HHnOgNdmSMB2Jkn";
 const MAP_STYLE_URL = `https://api.maptiler.com/maps/streets-v4/style.json?key=${MAPTILER_KEY}`;
 const ARGENTINA_MIN_ZOOM = 3.5;
 
-function cleanPhone(phone: string) {
-  return phone.replace(/\s/g, "");
-}
-
 function getDistanceInKm(from: UserLocation, to: UserLocation) {
   const earthRadiusKm = 6371;
   const latDelta = ((to.lat - from.lat) * Math.PI) / 180;
@@ -71,7 +67,6 @@ type BranchSummaryProps = {
   isActive: boolean;
   isSelected: boolean;
   onSelectBranch: (branch: Branch) => void;
-  onSetSelectedBranch: (branch: Branch) => void;
 };
 
 function BranchSummary({
@@ -79,7 +74,6 @@ function BranchSummary({
   isActive,
   isSelected,
   onSelectBranch,
-  onSetSelectedBranch,
 }: BranchSummaryProps) {
   return (
     <article
@@ -126,30 +120,12 @@ function BranchSummary({
         </div>
       </dl>
 
-      <div className="mt-5 flex flex-wrap gap-2">
-        <button
-          type="button"
-          onClick={() => onSetSelectedBranch(branch)}
-          disabled={isSelected}
-          className={`rounded-lg px-3 py-2 text-xs font-bold transition-colors ${
-            isSelected
-              ? "bg-orange-100 text-orange-700"
-              : "bg-navy-900 text-white hover:bg-navy-800"
-          }`}
-        >
-          {isSelected ? "Tu sucursal" : "Elegir esta"}
-        </button>
-        <a
-          href={`tel:${cleanPhone(branch.phone)}`}
-          className="rounded-lg bg-navy-100 px-3 py-2 text-xs font-bold text-navy-900 transition-colors hover:bg-navy-200"
-        >
-          Llamar
-        </a>
+      <div className="mt-5 grid grid-cols-1 gap-2 sm:grid-cols-2">
         <a
           href={`https://wa.me/${branch.whatsapp}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="rounded-lg bg-[#25d366]/15 px-3 py-2 text-xs font-bold text-[#1f9f4b] transition-colors hover:bg-[#25d366]/25"
+          className="inline-flex min-h-11 items-center justify-center rounded-xl bg-[#25d366] px-4 py-2.5 text-sm font-black text-white shadow-sm shadow-[#25d366]/20 transition-colors hover:bg-[#1fbd59]"
         >
           WhatsApp
         </a>
@@ -157,9 +133,9 @@ function BranchSummary({
           href={branch.mapUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="rounded-lg bg-orange-100 px-3 py-2 text-xs font-bold text-orange-700 transition-colors hover:bg-orange-200"
+          className="inline-flex min-h-11 items-center justify-center rounded-xl border border-navy-200 bg-white px-4 py-2.5 text-sm font-black text-navy-900 shadow-sm transition-colors hover:border-orange-500 hover:bg-orange-50 hover:text-orange-700"
         >
-          Ver mapa
+          Como llegar
         </a>
       </div>
     </article>
@@ -167,7 +143,7 @@ function BranchSummary({
 }
 
 export function BranchesMap({ branches }: BranchesMapProps) {
-  const { selectedBranch, setSelectedBranch } = useBranch();
+  const { selectedBranch } = useBranch();
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<Map | null>(null);
   const branchMarkersRef = useRef<Marker[]>([]);
@@ -208,6 +184,7 @@ export function BranchesMap({ branches }: BranchesMapProps) {
       zoom: 11,
       minZoom: ARGENTINA_MIN_ZOOM,
       maxZoom: 17,
+      cooperativeGestures: true,
       attributionControl: false,
     });
 
@@ -359,7 +336,6 @@ export function BranchesMap({ branches }: BranchesMapProps) {
                 isActive
                 isSelected={selectedBranch.id === activeBranch.id}
                 onSelectBranch={selectBranch}
-                onSetSelectedBranch={setSelectedBranch}
               />
             </div>
           </div>
@@ -382,7 +358,6 @@ export function BranchesMap({ branches }: BranchesMapProps) {
                   isActive={isActive}
                   isSelected={isSelected}
                   onSelectBranch={selectBranch}
-                  onSetSelectedBranch={setSelectedBranch}
                 />
               );
             })}
