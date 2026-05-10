@@ -22,7 +22,10 @@ const BRANCH_SOURCE_ID = "trivium-branches";
 const BRANCH_HALO_LAYER_ID = "trivium-branch-halos";
 const BRANCH_POINT_LAYER_ID = "trivium-branch-points";
 const BRANCH_DOT_LAYER_ID = "trivium-branch-dots";
+const BRANCH_ICON_LAYER_ID = "trivium-branch-icons";
 const BRANCH_LABEL_LAYER_ID = "trivium-branch-labels";
+const BRANCH_ICON_ID = "trivium-branch-icon";
+const BRANCH_ACTIVE_ICON_ID = "trivium-branch-icon-active";
 const MAP_LOCALE = {
   "CooperativeGesturesHandler.WindowsHelpText": "Usa Ctrl + scroll para acercar o alejar el mapa",
   "CooperativeGesturesHandler.MacHelpText": "Usa ⌘ + scroll para acercar o alejar el mapa",
@@ -79,8 +82,56 @@ function getBranchSource(map: Map) {
   return map.getSource(BRANCH_SOURCE_ID) as GeoJSONSource | undefined;
 }
 
+function createBranchIconImage(color: string) {
+  const size = 64;
+  const canvas = document.createElement("canvas");
+  canvas.width = size;
+  canvas.height = size;
+  const context = canvas.getContext("2d");
+
+  if (!context) return new ImageData(size, size);
+
+  context.clearRect(0, 0, size, size);
+  context.beginPath();
+  context.arc(32, 32, 26, 0, Math.PI * 2);
+  context.fillStyle = "#ffffff";
+  context.fill();
+  context.beginPath();
+  context.arc(32, 32, 21, 0, Math.PI * 2);
+  context.fillStyle = color;
+  context.fill();
+  context.beginPath();
+  context.arc(32, 32, 11, 0, Math.PI * 2);
+  context.fillStyle = "#ffffff";
+  context.fill();
+  context.beginPath();
+  context.arc(32, 32, 5, 0, Math.PI * 2);
+  context.fillStyle = color;
+  context.fill();
+
+  context.fillStyle = "#ffffff";
+  context.font = "900 18px sans-serif";
+  context.textAlign = "center";
+  context.textBaseline = "middle";
+  context.fillText("T", 32, 32);
+
+  return context.getImageData(0, 0, size, size);
+}
+
+function addBranchImages(map: Map) {
+  if (!map.hasImage(BRANCH_ICON_ID)) {
+    map.addImage(BRANCH_ICON_ID, createBranchIconImage("#0a1a30"), { pixelRatio: 2 });
+  }
+
+  if (!map.hasImage(BRANCH_ACTIVE_ICON_ID)) {
+    map.addImage(BRANCH_ACTIVE_ICON_ID, createBranchIconImage("#ff1e00"), { pixelRatio: 2 });
+  }
+}
+
 function addBranchLayers(map: Map, branches: Branch[], activeBranchId: string) {
   if (getBranchSource(map)) return;
+
+  addBranchImages(map);
 
   map.addSource(BRANCH_SOURCE_ID, {
     type: "geojson",
@@ -120,6 +171,18 @@ function addBranchLayers(map: Map, branches: Branch[], activeBranchId: string) {
       "circle-radius": 4,
       "circle-color": "#ffffff",
       "circle-opacity": 0.95,
+    },
+  });
+
+  map.addLayer({
+    id: BRANCH_ICON_LAYER_ID,
+    type: "symbol",
+    source: BRANCH_SOURCE_ID,
+    layout: {
+      "icon-image": ["case", ["get", "isActive"], BRANCH_ACTIVE_ICON_ID, BRANCH_ICON_ID],
+      "icon-size": 1,
+      "icon-allow-overlap": true,
+      "icon-ignore-placement": true,
     },
   });
 
@@ -289,18 +352,21 @@ export function BranchesMap({ branches }: BranchesMapProps) {
     map.scrollZoom.enable();
     map.on("load", () => {
       map.resize();
-      addBranchLayers(map, branches, activeBranch.id);
-      map.on("click", BRANCH_POINT_LAYER_ID, (event) => {
-        const branchId = event.features?.[0]?.properties?.id;
-        const branch = branches.find((currentBranch) => currentBranch.id === branchId);
-        if (branch) selectBranch(branch);
-      });
-      map.on("mouseenter", BRANCH_POINT_LAYER_ID, () => {
-        map.getCanvas().style.cursor = "pointer";
-      });
-      map.on("mouseleave", BRANCH_POINT_LAYER_ID, () => {
-        map.getCanvas().style.cursor = "";
-      });
+      addBranchLayers(map, branches, initialBranch.id);
+
+      for (const layerId of [BRANCH_POINT_LAYER_ID, BRANCH_ICON_LAYER_ID]) {
+        map.on("click", layerId, (event) => {
+          const branchId = event.features?.[0]?.properties?.id;
+          const branch = branches.find((currentBranch) => currentBranch.id === branchId);
+          if (branch) selectBranch(branch);
+        });
+        map.on("mouseenter", layerId, () => {
+          map.getCanvas().style.cursor = "pointer";
+        });
+        map.on("mouseleave", layerId, () => {
+          map.getCanvas().style.cursor = "";
+        });
+      }
     });
 
     mapRef.current = map;
@@ -312,7 +378,7 @@ export function BranchesMap({ branches }: BranchesMapProps) {
       map.remove();
       mapRef.current = null;
     };
-  }, [activeBranch.id, branches]);
+  }, [branches]);
 
   useEffect(() => {
     const map = mapRef.current;

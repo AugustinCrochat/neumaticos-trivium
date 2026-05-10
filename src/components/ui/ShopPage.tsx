@@ -535,11 +535,6 @@ export function ShopPage({ showCatalogTitle = false }: { showCatalogTitle?: bool
               <section className={exactResults.length > 0 ? "mt-16 border-t border-slate-100 pt-10" : ""}>
                 <div className="mb-8 rounded-[2.5rem] border border-emerald-100 bg-emerald-50/50 p-6 md:p-10">
                   <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
-                    <div className="inline-flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-2xl bg-emerald-600 text-white shadow-xl shadow-emerald-600/20">
-                      <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                      </svg>
-                    </div>
                     <div className="flex-1">
                       <div className="flex items-baseline gap-3 mb-1">
                         <h2 className="text-2xl font-black text-emerald-950">Medidas compatibles</h2>
@@ -579,9 +574,6 @@ export function ShopPage({ showCatalogTitle = false }: { showCatalogTitle?: bool
                         product={product}
                         imageFooter={
                           <span className="inline-flex max-w-full items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-1.5 text-[11px] font-black uppercase tracking-wide text-white shadow-lg shadow-emerald-900/20">
-                            <svg className="h-3.5 w-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                            </svg>
                             <span>Compatible</span>
                             {diff !== null && (
                               <span className="border-l border-white/30 pl-1.5">
