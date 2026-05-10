@@ -27,7 +27,6 @@ export function TireDiagram({
   const cy = 682.3;
   const measureTextCy = 662;
   const textRadius = 528;
-  const secondaryTextRadius = 638;
 
   const isWidthPlaceholder = !width;
   const isAspectPlaceholder = !aspect;
@@ -43,7 +42,7 @@ export function TireDiagram({
     return {
       fontSize: isFocused ? `${74 * 1.16}px` : "74px",
       fontWeight: isFocused ? "800" : "700",
-      fill: isFocused ? theme.accent : isPlaceholder ? "#2d3748" : "#e8e6df",
+      fill: isFocused ? theme.accent : isPlaceholder ? "#a0a6a7" : "#e8e6df",
       transition: "font-size 0.2s, fill 0.2s",
       letterSpacing: "0.04em",
     };
@@ -67,13 +66,6 @@ export function TireDiagram({
           <path
             id="textPath"
             d={`M ${cx - textRadius} ${measureTextCy} A ${textRadius} ${textRadius} 0 0 1 ${cx + textRadius} ${measureTextCy}`}
-            fill="none"
-          />
-
-          {/* Path para el texto secundario */}
-          <path
-            id="secondaryTextPath"
-            d={`M ${cx - secondaryTextRadius} ${cy} A ${secondaryTextRadius} ${secondaryTextRadius} 0 0 1 ${cx + secondaryTextRadius} ${cy}`}
             fill="none"
           />
         </defs>
@@ -151,20 +143,6 @@ export function TireDiagram({
             <tspan style={getTspanStyle('aspect')}>{aspectStr}</tspan>
             <tspan> R</tspan>
             <tspan style={getTspanStyle('rim')}>{rimStr}</tspan>
-          </textPath>
-        </text>
-
-        {/* TEXTO SECUNDARIO EMBOSSED CERCA DEL TREAD */}
-        <text
-          style={{ fontFamily: theme.mono || 'var(--font-geist-sans, system-ui, sans-serif)' }}
-          fontSize="22"
-          fontWeight="700"
-          letterSpacing="0.42em"
-          fill="#35373a"
-          opacity="0.4"
-        >
-          <textPath href="#secondaryTextPath" startOffset="50%" textAnchor="middle">
-            RADIAL · TUBELESS
           </textPath>
         </text>
       </svg>

@@ -36,6 +36,7 @@ type SpeechRecognitionInstance = {
   lang: string;
   interimResults: boolean;
   maxAlternatives: number;
+  continuous: boolean;
   onresult: ((ev: SpeechRecognitionResultEvent) => void) | null;
   onend: (() => void) | null;
   start: () => void;
@@ -302,7 +303,7 @@ export function TireSizeSearch({
     finally { setIsScanning(false); setScanProgress(""); }
   }
 
-  const measureInputClass = "w-full min-w-0 bg-navy-800 border-2 border-navy-700 rounded-xl px-2 sm:px-3 py-3 text-white font-bold text-center transition-all outline-none placeholder:text-slate-400 focus:bg-navy-700 focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20 focus:shadow-lg focus:shadow-orange-500/10";
+  const measureInputClass = "w-full min-w-0 bg-slate-50 border-2 border-slate-200 rounded-xl px-2 sm:px-3 py-3 text-navy-900 font-bold text-center transition-all outline-none placeholder:text-slate-500 focus:bg-white focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20 focus:shadow-lg focus:shadow-orange-500/10";
   
   const voiceButtonClass = `h-[52px] w-12 shrink-0 flex items-center justify-center rounded-xl border transition-all ${
     listening
@@ -324,10 +325,9 @@ export function TireSizeSearch({
     if (!Speech) return alert('Tu navegador no soporta reconocimiento de voz');
     if (recognitionRef.current) { recognitionRef.current.stop(); recognitionRef.current = null; setListening(false); return; }
     const r = new Speech(); r.lang = 'es-AR'; r.interimResults = false; r.maxAlternatives = 1;
-    (r as any).continuous = true;
+    r.continuous = true;
     
     let searchTimeout: ReturnType<typeof setTimeout> | undefined;
-    let lastRecognized = { w: '', p: '', r: '' };
     let hasNavigated = false;
 
     const navigate = (w: string, p: string, rVal: string) => {
@@ -362,7 +362,6 @@ export function TireSizeSearch({
       if (p) { p = p.slice(0,2); setProfile(p); }
       if (rimVal) { rimVal = rimVal.slice(0,2); setRim(rimVal); }
 
-      lastRecognized = { w, p, r: rimVal };
       clearTimeout(searchTimeout);
 
       if (w && p && rimVal) {
@@ -485,7 +484,7 @@ export function TireSizeSearch({
                   selectInputText(e); setShowPopular(true); setFocused('width');
                 }}
                 onBlur={() => setFocused(null)}
-                onClick={(e) => { selectInputText(e as any); setShowPopular(true); }}
+                onClick={(e) => { selectInputText(e); setShowPopular(true); }}
                 onChange={(e) => {
                   const v = e.target.value.replace(/[^0-9]/g, '').slice(0,3);
                   setWidth(v);
@@ -509,7 +508,7 @@ export function TireSizeSearch({
                   selectInputText(e); setShowPopular(true); setFocused('aspect');
                 }}
                 onBlur={() => setFocused(null)}
-                onClick={(e) => { selectInputText(e as any); setShowPopular(true); }}
+                onClick={(e) => { selectInputText(e); setShowPopular(true); }}
                 onChange={(e) => {
                   const v = e.target.value.replace(/[^0-9]/g, '').slice(0,2);
                   setProfile(v);
@@ -533,7 +532,7 @@ export function TireSizeSearch({
                   selectInputText(e); setShowPopular(true); setFocused('rim');
                 }}
                 onBlur={() => setFocused(null)}
-                onClick={(e) => { selectInputText(e as any); setShowPopular(true); }}
+                onClick={(e) => { selectInputText(e); setShowPopular(true); }}
                 onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, '').slice(0,2); setRim(v); }}
                 onKeyDown={handleKeyDown}
                 placeholder="rodado"
@@ -574,7 +573,7 @@ export function TireSizeSearch({
                     selectInputText(e); setShowPopular(true); setFocused('width');
                   }}
                   onBlur={() => setFocused(null)}
-                  onClick={(e) => { selectInputText(e as any); setShowPopular(true); }}
+                  onClick={(e) => { selectInputText(e); setShowPopular(true); }}
                   onChange={(e) => {
                     const v = e.target.value.replace(/[^0-9]/g, '').slice(0,3);
                     setWidth(v);
@@ -600,7 +599,7 @@ export function TireSizeSearch({
                     selectInputText(e); setShowPopular(true); setFocused('aspect');
                   }}
                   onBlur={() => setFocused(null)}
-                  onClick={(e) => { selectInputText(e as any); setShowPopular(true); }}
+                  onClick={(e) => { selectInputText(e); setShowPopular(true); }}
                   onChange={(e) => {
                     const v = e.target.value.replace(/[^0-9]/g, '').slice(0,2);
                     setProfile(v);
@@ -626,7 +625,7 @@ export function TireSizeSearch({
                     selectInputText(e); setShowPopular(true); setFocused('rim');
                   }}
                   onBlur={() => setFocused(null)}
-                  onClick={(e) => { selectInputText(e as any); setShowPopular(true); }}
+                  onClick={(e) => { selectInputText(e); setShowPopular(true); }}
                   onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, '').slice(0,2); setRim(v); }}
                   onKeyDown={handleKeyDown}
                   placeholder="rodado"
