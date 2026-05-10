@@ -308,7 +308,7 @@ export function TireSizeSearch({
   const voiceButtonClass = `h-[52px] w-12 shrink-0 flex items-center justify-center rounded-xl border transition-all ${
     listening
       ? "bg-orange-500 text-white border-orange-300 shadow-lg shadow-orange-500/20"
-      : "bg-navy-700 text-white border-navy-600 hover:border-orange-500 hover:bg-navy-600"
+      : "bg-white text-navy-900 border-slate-200 shadow-sm hover:border-orange-500 hover:bg-orange-50 hover:text-orange-700"
   }`;
 
   const searchButtonClass = `h-[52px] w-12 shrink-0 flex items-center justify-center rounded-xl border transition-all bg-orange-500 text-white border-orange-400 shadow-lg shadow-orange-500/20 hover:bg-orange-400`;
@@ -384,8 +384,8 @@ export function TireSizeSearch({
   }
 
   return (
-    <div className={`bg-navy-900 rounded-2xl border border-navy-800 ${compact ? 'p-4' : 'p-6'} shadow-2xl relative group w-full`}>
-      <p className={`font-bold text-slate-400 uppercase tracking-widest ${compact ? 'text-[10px] mb-1' : 'text-xs mb-2'}`}>
+    <div className={`bg-slate-100 rounded-2xl border border-slate-200 ${compact ? 'p-4' : 'p-6'} shadow-xl shadow-slate-300/40 relative group w-full`}>
+      <p className={`font-bold text-navy-700 uppercase tracking-widest ${compact ? 'text-[10px] mb-1' : 'text-xs mb-2'}`}>
         Buscar por medida
       </p>
       <TireDiagram width={width} aspect={profile} rim={rim} focused={focused} compact={compact} />
@@ -651,8 +651,8 @@ export function TireSizeSearch({
           )}
 
           {shouldShowDropdown && (
-            <div className={`absolute left-0 z-50 bg-navy-800 border border-navy-700 rounded-xl shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200 ${compact ? 'top-full mt-2 right-[56px] lg:right-0' : 'top-full mt-2 right-[56px]'}`}>
-              <p className="px-4 py-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest border-b border-navy-700 bg-navy-900/50">
+            <div className={`absolute left-0 z-50 bg-white border border-slate-200 rounded-xl shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200 ${compact ? 'top-full mt-2 right-[56px] lg:right-0' : 'top-full mt-2 right-[56px]'}`}>
+              <p className="px-4 py-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest border-b border-slate-200 bg-slate-50">
                 Medidas populares
               </p>
               <div className="max-h-[240px] overflow-y-auto">
@@ -669,10 +669,10 @@ export function TireSizeSearch({
                       setShowPopular(false);
                       performSearch(s.w, s.p, s.r);
                     }}
-                    className="w-full px-4 py-3 text-left hover:bg-navy-700 transition-colors flex items-center justify-between group border-b border-navy-700/50 last:border-0"
+                    className="w-full px-4 py-3 text-left hover:bg-orange-50 transition-colors flex items-center justify-between group border-b border-slate-100 last:border-0"
                   >
-                    <span className="text-white font-bold">
-                      {s.w} / {s.p} <span className="text-slate-400 font-medium">R</span>{s.r}
+                    <span className="text-navy-900 font-bold">
+                      {s.w} / {s.p} <span className="text-slate-500 font-medium">R</span>{s.r}
                     </span>
                     <svg className="w-4 h-4 text-orange-500 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
@@ -699,7 +699,7 @@ export function TireSizeSearch({
                 className={`w-full h-[52px] font-bold text-sm rounded-xl border transition-all flex items-center justify-center gap-2 ${
                   listening
                     ? "bg-orange-500 text-white border-orange-300 shadow-lg shadow-orange-500/20"
-                    : "bg-navy-700 text-white border-navy-600 hover:border-orange-500 hover:bg-navy-600"
+                    : "bg-white text-navy-900 border-slate-200 shadow-sm hover:border-orange-500 hover:bg-orange-50 hover:text-orange-700"
                 }`}>
                 <svg className="w-4 h-4" viewBox="0 0 82.05 122.88" fill="currentColor">
                   <path d="M59.89,20.83V52.3c0,27-37.73,27-37.73,0V20.83c0-27.77,37.73-27.77,37.73,0Zm-14.18,76V118.2a4.69,4.69,0,0,1-9.37,0V96.78a40.71,40.71,0,0,1-12.45-3.51A41.63,41.63,0,0,1,12.05,85L12,84.91A41.31,41.31,0,0,1,3.12,71.68,40.73,40.73,0,0,1,0,56a4.67,4.67,0,0,1,8-3.31l.1.1A4.68,4.68,0,0,1,9.37,56a31.27,31.27,0,0,0,2.4,12.06A32,32,0,0,0,29,85.28a31.41,31.41,0,0,0,24.13,0,31.89,31.89,0,0,0,10.29-6.9l.08-.07a32,32,0,0,0,6.82-10.22A31.27,31.27,0,0,0,72.68,56a4.69,4.69,0,0,1,9.37,0,40.65,40.65,0,0,1-3.12,15.65A41.45,41.45,0,0,1,70,85l-.09.08a41.34,41.34,0,0,1-11.75,8.18,40.86,40.86,0,0,1-12.46,3.51Z"/>
@@ -711,7 +711,7 @@ export function TireSizeSearch({
         )}
 
         {sizeWarning && (
-          <p className="flex items-start gap-1.5 text-orange-400 text-[11px] font-medium leading-snug">
+          <p className="flex items-start gap-1.5 text-orange-700 text-[11px] font-medium leading-snug">
             <svg className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
             </svg>
@@ -736,10 +736,10 @@ export function TireSizeSearch({
         </button>
 
         {scanError && (
-          <div className="bg-navy-800 p-5 rounded-xl border border-orange-500/30 flex flex-col gap-4 animate-in fade-in zoom-in duration-300 mt-2">
+          <div className="bg-white p-5 rounded-xl border border-orange-200 flex flex-col gap-4 animate-in fade-in zoom-in duration-300 mt-2">
             <div>
-              <p className="text-orange-400 font-bold text-sm">No pudimos leer la medida.</p>
-              <p className="text-white/70 text-xs leading-relaxed mt-1">
+              <p className="text-orange-700 font-bold text-sm">No pudimos leer la medida.</p>
+              <p className="text-slate-600 text-xs leading-relaxed mt-1">
                 {scanError}
               </p>
             </div>
