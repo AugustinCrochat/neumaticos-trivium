@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useBranch } from "@/contexts/branch-context";
+import { TireDiagram } from "./TireDiagram";
 
 type FullscreenDocumentElement = HTMLElement & {
   webkitRequestFullscreen?: () => Promise<void> | void;
@@ -365,6 +366,8 @@ export function TireSizeSearch({
         <span className="w-8 h-[1px] bg-orange-400"></span>
         Buscador de medidas
       </p>
+
+      <TireDiagram width={width} profile={profile} rim={rim} />
 
       {showScanner && (
         <div className="fixed inset-0 z-50 bg-black flex flex-col">
