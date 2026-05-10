@@ -9,175 +9,100 @@ type TireDiagramProps = {
 export function TireDiagram({ width = "", profile = "", rim = "" }: TireDiagramProps) {
   const hasData = !!(width || profile || rim);
 
-  // Radio fijo para simplificar
-  const tireRadius = 140;
-  const rimRadius = 70;
-
-  const cx = 200;
-  const cy = 200;
-
   return (
     <div className="flex flex-col items-center gap-6 py-4">
       <svg
-        viewBox="0 0 400 280"
-        className="w-full max-w-sm h-auto"
+        viewBox="0 0 1362.9773 682.33777"
+        className="w-full max-w-2xl h-auto"
         xmlns="http://www.w3.org/2000/svg"
       >
         <defs>
-          {/* Gradiente para el flanco del neumático */}
-          <linearGradient id="tireFlankGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" style={{ stopColor: "#1e293b", stopOpacity: 1 }} />
-            <stop offset="50%" style={{ stopColor: "#0f172a", stopOpacity: 1 }} />
-            <stop offset="100%" style={{ stopColor: "#1e293b", stopOpacity: 1 }} />
-          </linearGradient>
-
-          {/* Gradiente para la banda de rodadura */}
-          <linearGradient id="tireThreadGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" style={{ stopColor: "#0f172a", stopOpacity: 1 }} />
-            <stop offset="50%" style={{ stopColor: "#000000", stopOpacity: 1 }} />
-            <stop offset="100%" style={{ stopColor: "#0f172a", stopOpacity: 1 }} />
-          </linearGradient>
-
-          {/* Gradiente para la llanta */}
-          <radialGradient id="rimGradient" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" style={{ stopColor: "#cbd5e1", stopOpacity: 1 }} />
-            <stop offset="70%" style={{ stopColor: "#64748b", stopOpacity: 1 }} />
-            <stop offset="100%" style={{ stopColor: "#475569", stopOpacity: 1 }} />
-          </radialGradient>
-
-          {/* Filtro para sombra */}
-          <filter id="shadow">
-            <feDropShadow dx="0" dy="2" stdDeviation="3" floodOpacity="0.3" />
-          </filter>
+          {/* Path para hacer el texto curvo en el neumático */}
+          <path
+            id="topCurve"
+            d="M 200,400 A 300,300 0 0,1 1100,400"
+            fill="none"
+          />
+          <path
+            id="bottomCurve"
+            d="M 1100,400 A 300,300 0 0,1 200,400"
+            fill="none"
+          />
         </defs>
 
-        {/* Solo la mitad/tercio superior del neumático */}
-        {/* Banda de rodadura (parte negra de arriba) */}
-        <path
-          d={`M ${cx - tireRadius} ${cy} A ${tireRadius} ${tireRadius} 0 0 1 ${cx + tireRadius} ${cy} L ${cx + tireRadius} ${cy - 20} A ${tireRadius} ${tireRadius} 0 0 0 ${cx - tireRadius} ${cy - 20} Z`}
-          fill={hasData ? "url(#tireThreadGradient)" : "#1e293b"}
-          opacity={hasData ? 1 : 0.6}
-          filter="url(#shadow)"
-        />
+        {/* SVG del neumático original */}
+        <g transform="matrix(1.3333333 0 0 -1.3333333 2841.76 1842.7029) translate(150.3846 -240.21272) translate(-2419.8917 511.11992)">
+          <path
+            fill="#a0a6a7"
+            d="m 649.304,315.94 c -156.882,0 -284.059,127.178 -284.059,284.06 0,156.882 127.177,284.06 284.059,284.06 156.882,0 284.06,-127.178 284.06,-284.06 0,-156.882 -127.178,-284.06 -284.06,-284.06 z m 0,634.27 c -193.415,0 -350.21,-156.794 -350.21,-350.21 0,-193.416 156.795,-350.21 350.21,-350.21 193.416,0 350.211,156.794 350.211,350.21 0,193.416 -156.795,350.21 -350.211,350.21"
+          />
+          <path
+            fill="#515455"
+            d="m 649.304,281.972 c -175.635,0 -318.028,142.393 -318.028,318.028 0,175.635 142.393,318.029 318.028,318.029 175.635,0 318.029,-142.394 318.029,-318.029 0,-175.635 -142.394,-318.028 -318.029,-318.028 z m 0,829.148 c -282.288,0 -511.117,-228.831 -511.117,-511.12 0,-282.288 228.829,-511.1199 511.117,-511.1199 282.289,0 511.116,228.8319 511.116,511.1199 0,282.289 -228.827,511.12 -511.116,511.12"
+          />
+          <path
+            fill="#35373a"
+            d="m 649.304,125.39 c -262.125,0 -474.609,212.485 -474.609,474.61 0,262.125 212.484,474.61 474.609,474.61 262.125,0 474.606,-212.485 474.606,-474.61 0,-262.125 -212.481,-474.61 -474.606,-474.61 z m 0,985.73 c -282.288,0 -511.117,-228.831 -511.117,-511.12 0,-282.288 228.829,-511.1199 511.117,-511.1199 282.289,0 511.116,228.8319 511.116,511.1199 0,282.289 -228.827,511.12 -511.116,511.12"
+          />
+          <path
+            fill="#e3e5e4"
+            d="m 649.304,281.972 c -175.642,0 -318.028,142.385 -318.028,318.028 0,175.643 142.386,318.029 318.028,318.029 175.643,0 318.029,-142.386 318.029,-318.029 0,-175.643 -142.386,-318.028 -318.029,-318.028 z m 0,673.917 C 452.752,955.889 293.415,796.552 293.415,600 c 0,-196.552 159.337,-355.89 355.889,-355.89 196.552,0 355.886,159.338 355.886,355.89 0,196.552 -159.334,355.889 -355.886,355.889"
+          />
+          <path
+            fill="#e3e5e4"
+            d="m 967.333,600 c 0,-14.974 -1.041,-29.721 -3.048,-44.146 L 857.367,553.98 c -58.04,-1.022 -84.921,-47.59 -56.791,-98.362 l 54.406,-98.19 C 829.369,335.677 800.254,317.92 768.603,305.123 l -55.106,91.68 c -29.91,49.748 -83.691,49.748 -113.601,0 l -57.87,-96.28 c -32.2,11.529 -61.977,28.112 -88.423,48.783 l 51.831,93.516 c 28.13,50.771 1.231,97.339 -56.809,98.362 l -112.295,1.968 c -3.313,18.439 -5.054,37.445 -5.054,56.848 0,14.974 1.041,29.721 3.047,44.146 l 106.919,1.874 c 58.04,1.022 84.921,47.59 56.79,98.361 l -54.406,98.192 c 25.613,21.751 54.728,39.507 86.38,52.304 l 55.106,-91.679 c 29.909,-49.749 83.69,-49.749 113.6,0 l 57.87,96.279 c 32.2,-11.528 61.978,-28.111 88.423,-48.784 l -51.831,-93.515 c -28.13,-50.771 -1.23,-97.34 56.81,-98.362 l 112.295,-1.968 c 3.312,-18.438 5.054,-37.445 5.054,-56.848"
+          />
+          <path
+            fill="#a0a6a7"
+            d="m 649.304,668.149 c -37.638,0 -68.149,-30.511 -68.149,-68.149 0,-37.639 30.511,-68.149 68.149,-68.149 37.639,0 68.149,30.51 68.149,68.149 0,37.638 -30.51,68.149 -68.149,68.149"
+          />
+          <path
+            fill="#727c82"
+            d="m 649.304,747.656 c -15.682,0 -28.395,-12.713 -28.395,-28.395 0,-15.683 12.713,-28.396 28.395,-28.396 15.683,0 28.396,12.713 28.396,28.396 0,15.682 -12.713,28.395 -28.396,28.395"
+          />
+          <path
+            fill="#727c82"
+            d="m 511.167,650.045 c -4.846,-14.915 3.316,-30.935 18.231,-35.781 14.916,-4.846 30.935,3.317 35.781,18.231 4.846,14.916 -3.316,30.934 -18.231,35.781 -14.915,4.846 -30.934,-3.317 -35.781,-18.231"
+          />
+          <path
+            fill="#727c82"
+            d="m 561.315,488.506 c 12.687,-9.219 30.445,-6.406 39.663,6.281 9.218,12.688 6.405,30.445 -6.282,39.663 -12.688,9.218 -30.445,6.405 -39.663,-6.282 -9.218,-12.688 -6.406,-30.444 6.282,-39.662"
+          />
+          <path
+            fill="#727c82"
+            d="m 730.444,486.28 c 12.688,9.218 15.501,26.975 6.283,39.663 -9.219,12.688 -26.976,15.499 -39.663,6.282 -12.688,-9.218 -15.501,-26.976 -6.282,-39.663 9.218,-12.688 26.975,-15.5 39.662,-6.282"
+          />
+          <path
+            fill="#727c82"
+            d="m 784.825,646.444 c -4.846,14.915 -20.866,23.077 -35.78,18.231 -14.916,-4.846 -23.077,-20.865 -18.232,-35.78 4.847,-14.916 20.866,-23.078 35.781,-18.231 14.915,4.846 23.077,20.865 18.231,35.78"
+          />
+        </g>
 
-        {/* Flanco del neumático (gris oscuro) - semicírculo hasta la llanta */}
-        <path
-          d={`M ${cx - tireRadius} ${cy} A ${tireRadius} ${tireRadius} 0 0 1 ${cx + tireRadius} ${cy} L ${cx + rimRadius} ${cy} A ${rimRadius} ${rimRadius} 0 0 0 ${cx - rimRadius} ${cy} Z`}
-          fill={hasData ? "url(#tireFlankGradient)" : "#334155"}
-          opacity={hasData ? 0.9 : 0.5}
-          filter="url(#shadow)"
-        />
-
-        {/* Borde del neumático (línea más oscura) */}
-        <path
-          d={`M ${cx - tireRadius} ${cy} A ${tireRadius} ${tireRadius} 0 0 1 ${cx + tireRadius} ${cy}`}
-          fill="none"
-          stroke="#000000"
-          strokeWidth="1"
-          opacity="0.5"
-        />
-
-        {/* Llanta/Rim - visible en el centro inferior */}
-        <circle
-          cx={cx}
-          cy={cy}
-          r={rimRadius}
-          fill={hasData ? "url(#rimGradient)" : "#94a3b8"}
-          opacity={hasData ? 0.9 : 0.5}
-        />
-
-        {/* Centro de llanta */}
-        <circle cx={cx} cy={cy} r={rimRadius * 0.35} fill="#0f172a" opacity="0.8" />
-
-        {/* Tornillos de la rueda */}
-        {[45, 135, 225, 315].map((angle) => {
-          const rad = (angle * Math.PI) / 180;
-          const x = cx + Math.cos(rad) * (rimRadius * 0.6);
-          const y = cy + Math.sin(rad) * (rimRadius * 0.6);
-          return (
-            <circle
-              key={angle}
-              cx={x}
-              cy={y}
-              r="3.5"
-              fill={hasData ? "#f97316" : "#64748b"}
-              opacity={hasData ? 0.8 : 0.3}
-            />
-          );
-        })}
-
-        {/* TEXTO DE MEDIDA SUPERPUESTO EN EL FLANCO */}
+        {/* TEXTO DINÁMICO CENTRADO Y EN LA CURVA */}
         <g>
-          {/* Sombra para mejor legibilidad */}
-          <text
-            x={cx}
-            y={cy - 35}
-            textAnchor="middle"
-            fontSize="48"
-            fontWeight="900"
-            fill="#000000"
-            opacity="0.4"
-            className="font-mono"
-          >
-            {width || "—"}
-          </text>
-          <text
-            x={cx - 75}
-            y={cy - 35}
-            textAnchor="middle"
-            fontSize="48"
-            fontWeight="900"
-            fill="#000000"
-            opacity="0.4"
-            className="font-mono"
-          >
-            /
-          </text>
-          <text
-            x={cx + 75}
-            y={cy - 35}
-            textAnchor="middle"
-            fontSize="48"
-            fontWeight="900"
-            fill="#000000"
-            opacity="0.4"
-            className="font-mono"
-          >
-            {profile || "—"}
-          </text>
-          <text
-            x={cx}
-            y={cy + 25}
-            textAnchor="middle"
-            fontSize="42"
-            fontWeight="900"
-            fill="#000000"
-            opacity="0.4"
-            className="font-mono"
-          >
-            R{rim || "—"}
-          </text>
+          {/* Ancho - arriba siguiendo la curva */}
+          {width && (
+            <text
+              x="681"
+              y="120"
+              textAnchor="middle"
+              fontSize="72"
+              fontWeight="900"
+              fill={hasData && width ? "#f97316" : "#cbd5e1"}
+              opacity={hasData && width ? 1 : 0.5}
+              className="font-mono"
+              style={{ transition: "fill 0.3s ease, opacity 0.3s ease" }}
+            >
+              {width}
+            </text>
+          )}
 
-          {/* Texto principal - ANCHO */}
+          {/* DIAGONAL SEPARADOR */}
           <text
-            x={cx - 75}
-            y={cy - 40}
+            x="681"
+            y="280"
             textAnchor="middle"
-            fontSize="48"
-            fontWeight="900"
-            fill={hasData && width ? "#f97316" : "#cbd5e1"}
-            opacity={hasData && width ? 1 : 0.5}
-            className="font-mono transition-all"
-          >
-            {width || "—"}
-          </text>
-
-          {/* DIAGONAL */}
-          <text
-            x={cx}
-            y={cy - 40}
-            textAnchor="middle"
-            fontSize="48"
+            fontSize="68"
             fontWeight="900"
             fill={hasData ? "#f97316" : "#cbd5e1"}
             opacity={hasData ? 1 : 0.5}
@@ -186,41 +111,62 @@ export function TireDiagram({ width = "", profile = "", rim = "" }: TireDiagramP
             /
           </text>
 
-          {/* PERFIL */}
-          <text
-            x={cx + 75}
-            y={cy - 40}
-            textAnchor="middle"
-            fontSize="48"
-            fontWeight="900"
-            fill={hasData && profile ? "#f97316" : "#cbd5e1"}
-            opacity={hasData && profile ? 1 : 0.5}
-            className="font-mono"
-          >
-            {profile || "—"}
-          </text>
+          {/* Perfil - centro */}
+          {profile && (
+            <text
+              x="681"
+              y="350"
+              textAnchor="middle"
+              fontSize="72"
+              fontWeight="900"
+              fill={hasData && profile ? "#f97316" : "#cbd5e1"}
+              opacity={hasData && profile ? 1 : 0.5}
+              className="font-mono"
+              style={{ transition: "fill 0.3s ease, opacity 0.3s ease" }}
+            >
+              {profile}
+            </text>
+          )}
 
-          {/* RODADO */}
-          <text
-            x={cx}
-            y={cy + 20}
-            textAnchor="middle"
-            fontSize="42"
-            fontWeight="900"
-            fill={hasData && rim ? "#f97316" : "#cbd5e1"}
-            opacity={hasData && rim ? 1 : 0.5}
-            className="font-mono"
-          >
-            R{rim || "—"}
-          </text>
+          {/* Rodado - abajo */}
+          {rim && (
+            <g>
+              <text
+                x="610"
+                y="520"
+                textAnchor="middle"
+                fontSize="56"
+                fontWeight="900"
+                fill={hasData && rim ? "#f97316" : "#cbd5e1"}
+                opacity={hasData && rim ? 1 : 0.5}
+                className="font-mono"
+                style={{ transition: "fill 0.3s ease, opacity 0.3s ease" }}
+              >
+                R
+              </text>
+              <text
+                x="750"
+                y="520"
+                textAnchor="middle"
+                fontSize="72"
+                fontWeight="900"
+                fill={hasData && rim ? "#f97316" : "#cbd5e1"}
+                opacity={hasData && rim ? 1 : 0.5}
+                className="font-mono"
+                style={{ transition: "fill 0.3s ease, opacity 0.3s ease" }}
+              >
+                {rim}
+              </text>
+            </g>
+          )}
         </g>
       </svg>
 
       {/* Leyenda */}
       {hasData && (
-        <div className="text-center text-xs text-slate-500 animate-in fade-in duration-300">
+        <div className="text-center text-sm text-slate-400 animate-in fade-in duration-300">
           <p>
-            Medida: <span className="text-orange-400 font-black">{width || "—"}/{profile || "—"} R{rim || "—"}</span>
+            Medida: <span className="text-orange-400 font-black text-lg">{width || "—"}/{profile || "—"} R{rim || "—"}</span>
           </p>
         </div>
       )}
