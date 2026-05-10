@@ -12,26 +12,21 @@ export function TireDiagram({ width = "", profile = "", rim = "" }: TireDiagramP
   return (
     <div className="flex flex-col items-center gap-6 py-4">
       <svg
-        viewBox="0 0 1000 500"
-        className="w-full max-w-md h-auto"
+        viewBox="0 0 1362.9773 682.33777"
+        className="w-full max-w-2xl h-auto"
         xmlns="http://www.w3.org/2000/svg"
       >
         <defs>
-          {/* Path para hacer el texto curvo en el neumático */}
+          {/* Path para el texto curvo - siguiendo la parte superior del neumático */}
           <path
-            id="topCurve"
-            d="M 200,400 A 300,300 0 0,1 1100,400"
-            fill="none"
-          />
-          <path
-            id="bottomCurve"
-            d="M 1100,400 A 300,300 0 0,1 200,400"
+            id="topTireCurve"
+            d="M 500,300 Q 681.489,150 862.978,300"
             fill="none"
           />
         </defs>
 
-        {/* SVG del neumático - ESCALADO Y REPOSICIONADO */}
-        <g transform="matrix(0.6 0 0 -0.6 320 620) translate(150.3846 -240.21272) translate(-2419.8917 511.11992)">
+        {/* SVG del neumático original */}
+        <g transform="matrix(1.3333333 0 0 -1.3333333 2841.76 1842.7029) translate(150.3846 -240.21272) translate(-2419.8917 511.11992)">
           <path
             fill="#a0a6a7"
             d="m 649.304,315.94 c -156.882,0 -284.059,127.178 -284.059,284.06 0,156.882 127.177,284.06 284.059,284.06 156.882,0 284.06,-127.178 284.06,-284.06 0,-156.882 -127.178,-284.06 -284.06,-284.06 z m 0,634.27 c -193.415,0 -350.21,-156.794 -350.21,-350.21 0,-193.416 156.795,-350.21 350.21,-350.21 193.416,0 350.211,156.794 350.211,350.21 0,193.416 -156.795,350.21 -350.211,350.21"
@@ -78,79 +73,79 @@ export function TireDiagram({ width = "", profile = "", rim = "" }: TireDiagramP
           />
         </g>
 
-        {/* TEXTO DINÁMICO - TODO EN UNA LÍNEA HORIZONTAL */}
+        {/* TEXTO DINÁMICO SIGUIENDO LA CURVA DEL NEUMÁTICO */}
         <g>
           {/* Ancho */}
           {width && (
             <text
-              x="280"
-              y="130"
-              fontSize="48"
+              fontSize="64"
               fontWeight="900"
               fill={hasData && width ? "#f97316" : "#cbd5e1"}
               opacity={hasData && width ? 1 : 0.5}
               className="font-mono"
               style={{ transition: "fill 0.3s ease, opacity 0.3s ease" }}
             >
-              {width}
+              <textPath href="#topTireCurve" startOffset="15%" textAnchor="middle">
+                {width}
+              </textPath>
             </text>
           )}
 
-          {/* DIAGONAL SEPARADOR 1 */}
+          {/* DIAGONAL SEPARADOR */}
           <text
-            x="380"
-            y="130"
-            fontSize="48"
+            fontSize="56"
             fontWeight="900"
             fill={hasData ? "#f97316" : "#cbd5e1"}
             opacity={hasData ? 1 : 0.5}
             className="font-mono"
           >
-            /
+            <textPath href="#topTireCurve" startOffset="38%" textAnchor="middle">
+              /
+            </textPath>
           </text>
 
           {/* Perfil */}
           {profile && (
             <text
-              x="450"
-              y="130"
-              fontSize="48"
+              fontSize="64"
               fontWeight="900"
               fill={hasData && profile ? "#f97316" : "#cbd5e1"}
               opacity={hasData && profile ? 1 : 0.5}
               className="font-mono"
               style={{ transition: "fill 0.3s ease, opacity 0.3s ease" }}
             >
-              {profile}
+              <textPath href="#topTireCurve" startOffset="62%" textAnchor="middle">
+                {profile}
+              </textPath>
             </text>
           )}
 
-          {/* DIAGONAL SEPARADOR 2 */}
+          {/* R */}
           <text
-            x="530"
-            y="130"
-            fontSize="48"
+            fontSize="56"
             fontWeight="900"
             fill={hasData ? "#f97316" : "#cbd5e1"}
             opacity={hasData ? 1 : 0.5}
             className="font-mono"
           >
-            R
+            <textPath href="#topTireCurve" startOffset="80%" textAnchor="middle">
+              R
+            </textPath>
           </text>
 
           {/* Rodado */}
           {rim && (
             <text
-              x="610"
-              y="130"
-              fontSize="48"
+              fontSize="64"
               fontWeight="900"
               fill={hasData && rim ? "#f97316" : "#cbd5e1"}
               opacity={hasData && rim ? 1 : 0.5}
               className="font-mono"
               style={{ transition: "fill 0.3s ease, opacity 0.3s ease" }}
             >
-              {rim}
+              <textPath href="#topTireCurve" startOffset="92%" textAnchor="middle">
+                {rim}
+              </textPath>
             </text>
           )}
         </g>
