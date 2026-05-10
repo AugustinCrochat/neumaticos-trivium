@@ -26,18 +26,21 @@ export function TireDiagram({
   const textRadius = 528;
   const secondaryTextRadius = 638;
 
-  // Convertir valores a string y manejar placeholders
-  const widthStr = width ? String(width) : "___";
-  const aspectStr = aspect ? String(aspect) : "__";
-  const rimStr = rim ? String(rim) : "__";
+  const isWidthPlaceholder = !width;
+  const isAspectPlaceholder = !aspect;
+  const isRimPlaceholder = !rim;
 
-  // Estilos para los tspans
+  const widthStr = width ? String(width) : "205";
+  const aspectStr = aspect ? String(aspect) : "55";
+  const rimStr = rim ? String(rim) : "16";
+
   const getTspanStyle = (segment: 'width' | 'aspect' | 'rim') => {
     const isFocused = focused === segment;
+    const isPlaceholder = segment === 'width' ? isWidthPlaceholder : segment === 'aspect' ? isAspectPlaceholder : isRimPlaceholder;
     return {
       fontSize: isFocused ? `${64 * 1.18}px` : "64px",
       fontWeight: isFocused ? "800" : "700",
-      fill: isFocused ? theme.accent : "#e8e6df",
+      fill: isFocused ? theme.accent : isPlaceholder ? "#2d3748" : "#e8e6df",
       transition: "font-size 0.2s, fill 0.2s",
       letterSpacing: "0.04em",
     };
@@ -131,7 +134,7 @@ export function TireDiagram({
 
         {/* TEXTO PRINCIPAL CURVADO SOBRE EL FLANCO */}
         <text
-          fontFamily={theme.mono || "JetBrains Mono, monospace"}
+          fontFamily={theme.mono || "ui-monospace, 'Courier New', Courier, monospace"}
           fontSize="64"
           fontWeight="700"
           letterSpacing="0.04em"
@@ -148,7 +151,7 @@ export function TireDiagram({
 
         {/* TEXTO SECUNDARIO EMBOSSED CERCA DEL TREAD */}
         <text
-          fontFamily={theme.mono || "JetBrains Mono, monospace"}
+          fontFamily={theme.mono || "ui-monospace, 'Courier New', Courier, monospace"}
           fontSize="22"
           fontWeight="700"
           letterSpacing="0.42em"

@@ -115,9 +115,6 @@ export default async function BuscarPage({ searchParams }: Props) {
       {/* Header */}
       <div className={`bg-navy-900 ${label ? 'py-6' : 'py-10'}`}>
         <div className="max-w-5xl mx-auto px-4">
-          <h1 className="text-2xl md:text-3xl font-black text-white mb-2">
-            Buscar neumáticos
-          </h1>
           {label && (
             <p className="text-navy-300 text-sm mt-3">
               {exactResults.length} resultado{exactResults.length !== 1 ? "s" : ""} exacto{exactResults.length !== 1 ? "s" : ""}
