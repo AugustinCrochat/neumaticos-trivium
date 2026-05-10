@@ -52,8 +52,10 @@ type SpeechRecognitionWindow = Window &
 
 export function TireSizeSearch({
   initialMedida,
+  compact = false,
 }: {
   initialMedida?: string;
+  compact?: boolean;
 }) {
   const router = useRouter();
   const { selectedBranch } = useBranch();
@@ -119,7 +121,7 @@ export function TireSizeSearch({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const hasInput = width.trim() !== "" || profile.trim() !== "" || rim.trim() !== "";
+  const hasInput = width.trim() !== "" && profile.trim() !== "" && rim.trim() !== "";
 
   const [showScanner, setShowScanner] = useState(false);
   const [isScanning, setIsScanning] = useState(false);
@@ -137,12 +139,13 @@ export function TireSizeSearch({
   const profileRef = useRef<HTMLInputElement | null>(null);
   const rimRef = useRef<HTMLInputElement | null>(null);
   const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
+  const autoAdvancingRef = useRef(false);
 
   const [focused, setFocused] = useState<'width' | 'aspect' | 'rim' | null>(null);
   const [listening, setListening] = useState(false);
 
   const performSearch = (w: string, p: string, rVal: string) => {
-    if (!w && !p && !rVal) return;
+    if (!w || !p || !rVal) return;
     const medida = `${w}-${p}-r${rVal}`;
     if (document.activeElement instanceof HTMLElement) {
       document.activeElement.blur();
@@ -306,6 +309,7 @@ export function TireSizeSearch({
 
     const navigate = (w: string, p: string, rVal: string) => {
       if (hasNavigated) return;
+      if (!w || !p || !rVal) return;
       hasNavigated = true;
       if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
       setWidth(""); setProfile(""); setRim("");
@@ -319,7 +323,7 @@ export function TireSizeSearch({
       }
       const txt = fullTranscript.replace(/[^0-9 ]/g, ' ').trim();
       const nums = txt.split(/\s+/).filter(Boolean);
-      
+
       let w = '';
       let p = '';
       let rimVal = '';
@@ -342,32 +346,24 @@ export function TireSizeSearch({
         r.stop();
         navigate(w, p, rimVal);
       } else if (w || p || rimVal) {
-        if (!w && widthRef.current) widthRef.current.focus();
-        else if (!p && profileRef.current) profileRef.current.focus();
-        else if (!rimVal && rimRef.current) rimRef.current.focus();
-
-        searchTimeout = setTimeout(() => {
-          r.stop();
-          navigate(lastRecognized.w, lastRecognized.p, lastRecognized.r);
-        }, 2000);
+        // Focus the first missing field without triggering the clear-all behavior
+        if (!w && widthRef.current) { autoAdvancingRef.current = true; widthRef.current.focus(); }
+        else if (!p && profileRef.current) { autoAdvancingRef.current = true; profileRef.current.focus(); }
+        else if (!rimVal && rimRef.current) { autoAdvancingRef.current = true; rimRef.current.focus(); }
       }
     };
-    r.onend = () => { 
-      recognitionRef.current = null; 
-      setListening(false); 
+    r.onend = () => {
+      recognitionRef.current = null;
+      setListening(false);
       clearTimeout(searchTimeout);
-      
-      if (!hasNavigated && (lastRecognized.w || lastRecognized.p || lastRecognized.r)) {
-        navigate(lastRecognized.w, lastRecognized.p, lastRecognized.r);
-      }
     };
     recognitionRef.current = r; setListening(true);
     r.start();
   }
 
   return (
-    <div className="bg-navy-900 rounded-2xl border border-navy-800 p-6 shadow-2xl relative group w-full">
-      <TireDiagram width={width} aspect={profile} rim={rim} focused={focused} />
+    <div className={`bg-navy-900 rounded-2xl border border-navy-800 ${compact ? 'p-4' : 'p-6'} shadow-2xl relative group w-full`}>
+      <TireDiagram width={width} aspect={profile} rim={rim} focused={focused} compact={compact} />
 
       {showScanner && (
         <div className="fixed inset-0 z-50 bg-black flex flex-col">
@@ -447,8 +443,8 @@ export function TireSizeSearch({
 
       <div className="flex flex-col gap-3">
         <div ref={containerRef} className="relative">
-          <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_auto] gap-2 sm:gap-3">
-            <div className="min-w-0">
+          {compact ? (
+            <div className="flex flex-col gap-2">
               <input
                 ref={widthRef}
                 type="text"
@@ -456,17 +452,23 @@ export function TireSizeSearch({
                 pattern="[0-9]*"
                 autoComplete="off"
                 value={width}
-                onFocus={(e) => { selectInputText(e); setWidth(""); setProfile(""); setRim(""); setShowPopular(true); setFocused('width'); }}
+                onFocus={(e) => {
+                  if (!autoAdvancingRef.current) { setWidth(""); setProfile(""); setRim(""); }
+                  autoAdvancingRef.current = false;
+                  selectInputText(e); setShowPopular(true); setFocused('width');
+                }}
                 onBlur={() => setFocused(null)}
                 onClick={(e) => { selectInputText(e as any); setShowPopular(true); }}
-                onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, '').slice(0,3); setWidth(v); if (v.length >= 3 && profileRef.current) profileRef.current.focus(); }}
+                onChange={(e) => {
+                  const v = e.target.value.replace(/[^0-9]/g, '').slice(0,3);
+                  setWidth(v);
+                  if (v.length >= 3 && profileRef.current) { autoAdvancingRef.current = true; profileRef.current.focus(); }
+                }}
                 onKeyDown={handleKeyDown}
-                placeholder="205"
+                placeholder="ancho"
                 aria-label="Ancho del neumático"
                 className={measureInputClass}
               />
-            </div>
-            <div className="min-w-0">
               <input
                 ref={profileRef}
                 type="text"
@@ -474,17 +476,23 @@ export function TireSizeSearch({
                 pattern="[0-9]*"
                 autoComplete="off"
                 value={profile}
-                onFocus={(e) => { selectInputText(e); setWidth(""); setProfile(""); setRim(""); setShowPopular(true); setFocused('aspect'); }}
+                onFocus={(e) => {
+                  if (!autoAdvancingRef.current) { setWidth(""); setProfile(""); setRim(""); }
+                  autoAdvancingRef.current = false;
+                  selectInputText(e); setShowPopular(true); setFocused('aspect');
+                }}
                 onBlur={() => setFocused(null)}
                 onClick={(e) => { selectInputText(e as any); setShowPopular(true); }}
-                onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, '').slice(0,2); setProfile(v); if (v.length >= 2 && rimRef.current) rimRef.current.focus(); }}
+                onChange={(e) => {
+                  const v = e.target.value.replace(/[^0-9]/g, '').slice(0,2);
+                  setProfile(v);
+                  if (v.length >= 2 && rimRef.current) { autoAdvancingRef.current = true; rimRef.current.focus(); }
+                }}
                 onKeyDown={handleKeyDown}
-                placeholder="55"
+                placeholder="perfil"
                 aria-label="Perfil del neumático"
                 className={measureInputClass}
               />
-            </div>
-            <div className="min-w-0">
               <input
                 ref={rimRef}
                 type="text"
@@ -492,34 +500,115 @@ export function TireSizeSearch({
                 pattern="[0-9]*"
                 autoComplete="off"
                 value={rim}
-                onFocus={(e) => { selectInputText(e); setWidth(""); setProfile(""); setRim(""); setShowPopular(true); setFocused('rim'); }}
+                onFocus={(e) => {
+                  if (!autoAdvancingRef.current) { setWidth(""); setProfile(""); setRim(""); }
+                  autoAdvancingRef.current = false;
+                  selectInputText(e); setShowPopular(true); setFocused('rim');
+                }}
                 onBlur={() => setFocused(null)}
                 onClick={(e) => { selectInputText(e as any); setShowPopular(true); }}
                 onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, '').slice(0,2); setRim(v); }}
                 onKeyDown={handleKeyDown}
-                placeholder="16"
+                placeholder="rodado"
                 aria-label="Rodado del neumático"
                 className={measureInputClass}
               />
             </div>
-            
-            {hasInput ? (
-              <button type="button" onClick={executeSearch} aria-label="Buscar medida" className={searchButtonClass}>
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
-            ) : (
-              <button type="button" onClick={startVoiceForMeasure} aria-label="Ingresar medida por voz" className={voiceButtonClass}>
-                <svg className="w-5 h-5" viewBox="0 0 82.05 122.88" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                  <path d="M59.89,20.83V52.3c0,27-37.73,27-37.73,0V20.83c0-27.77,37.73-27.77,37.73,0Zm-14.18,76V118.2a4.69,4.69,0,0,1-9.37,0V96.78a40.71,40.71,0,0,1-12.45-3.51A41.63,41.63,0,0,1,12.05,85L12,84.91A41.31,41.31,0,0,1,3.12,71.68,40.73,40.73,0,0,1,0,56a4.67,4.67,0,0,1,8-3.31l.1.1A4.68,4.68,0,0,1,9.37,56a31.27,31.27,0,0,0,2.4,12.06A32,32,0,0,0,29,85.28a31.41,31.41,0,0,0,24.13,0,31.89,31.89,0,0,0,10.29-6.9l.08-.07a32,32,0,0,0,6.82-10.22A31.27,31.27,0,0,0,72.68,56a4.69,4.69,0,0,1,9.37,0,40.65,40.65,0,0,1-3.12,15.65A41.45,41.45,0,0,1,70,85l-.09.08a41.34,41.34,0,0,1-11.75,8.18,40.86,40.86,0,0,1-12.46,3.51Z"/>
-                </svg>
-              </button>
-            )}
-          </div>
+          ) : (
+            <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_auto] gap-2 sm:gap-3">
+              <div className="min-w-0">
+                <input
+                  ref={widthRef}
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  autoComplete="off"
+                  value={width}
+                  onFocus={(e) => {
+                    if (!autoAdvancingRef.current) { setWidth(""); setProfile(""); setRim(""); }
+                    autoAdvancingRef.current = false;
+                    selectInputText(e); setShowPopular(true); setFocused('width');
+                  }}
+                  onBlur={() => setFocused(null)}
+                  onClick={(e) => { selectInputText(e as any); setShowPopular(true); }}
+                  onChange={(e) => {
+                    const v = e.target.value.replace(/[^0-9]/g, '').slice(0,3);
+                    setWidth(v);
+                    if (v.length >= 3 && profileRef.current) { autoAdvancingRef.current = true; profileRef.current.focus(); }
+                  }}
+                  onKeyDown={handleKeyDown}
+                  placeholder="ancho"
+                  aria-label="Ancho del neumático"
+                  className={measureInputClass}
+                />
+              </div>
+              <div className="min-w-0">
+                <input
+                  ref={profileRef}
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  autoComplete="off"
+                  value={profile}
+                  onFocus={(e) => {
+                    if (!autoAdvancingRef.current) { setWidth(""); setProfile(""); setRim(""); }
+                    autoAdvancingRef.current = false;
+                    selectInputText(e); setShowPopular(true); setFocused('aspect');
+                  }}
+                  onBlur={() => setFocused(null)}
+                  onClick={(e) => { selectInputText(e as any); setShowPopular(true); }}
+                  onChange={(e) => {
+                    const v = e.target.value.replace(/[^0-9]/g, '').slice(0,2);
+                    setProfile(v);
+                    if (v.length >= 2 && rimRef.current) { autoAdvancingRef.current = true; rimRef.current.focus(); }
+                  }}
+                  onKeyDown={handleKeyDown}
+                  placeholder="perfil"
+                  aria-label="Perfil del neumático"
+                  className={measureInputClass}
+                />
+              </div>
+              <div className="min-w-0">
+                <input
+                  ref={rimRef}
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  autoComplete="off"
+                  value={rim}
+                  onFocus={(e) => {
+                    if (!autoAdvancingRef.current) { setWidth(""); setProfile(""); setRim(""); }
+                    autoAdvancingRef.current = false;
+                    selectInputText(e); setShowPopular(true); setFocused('rim');
+                  }}
+                  onBlur={() => setFocused(null)}
+                  onClick={(e) => { selectInputText(e as any); setShowPopular(true); }}
+                  onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, '').slice(0,2); setRim(v); }}
+                  onKeyDown={handleKeyDown}
+                  placeholder="rodado"
+                  aria-label="Rodado del neumático"
+                  className={measureInputClass}
+                />
+              </div>
+
+              {hasInput ? (
+                <button type="button" onClick={executeSearch} aria-label="Buscar medida" className={searchButtonClass}>
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              ) : (
+                <button type="button" onClick={startVoiceForMeasure} aria-label="Ingresar medida por voz" className={voiceButtonClass}>
+                  <svg className="w-5 h-5" viewBox="0 0 82.05 122.88" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M59.89,20.83V52.3c0,27-37.73,27-37.73,0V20.83c0-27.77,37.73-27.77,37.73,0Zm-14.18,76V118.2a4.69,4.69,0,0,1-9.37,0V96.78a40.71,40.71,0,0,1-12.45-3.51A41.63,41.63,0,0,1,12.05,85L12,84.91A41.31,41.31,0,0,1,3.12,71.68,40.73,40.73,0,0,1,0,56a4.67,4.67,0,0,1,8-3.31l.1.1A4.68,4.68,0,0,1,9.37,56a31.27,31.27,0,0,0,2.4,12.06A32,32,0,0,0,29,85.28a31.41,31.41,0,0,0,24.13,0,31.89,31.89,0,0,0,10.29-6.9l.08-.07a32,32,0,0,0,6.82-10.22A31.27,31.27,0,0,0,72.68,56a4.69,4.69,0,0,1,9.37,0,40.65,40.65,0,0,1-3.12,15.65A41.45,41.45,0,0,1,70,85l-.09.08a41.34,41.34,0,0,1-11.75,8.18,40.86,40.86,0,0,1-12.46,3.51Z"/>
+                  </svg>
+                </button>
+              )}
+            </div>
+          )}
 
           {shouldShowDropdown && (
-            <div className="absolute top-full left-0 right-[56px] z-50 mt-2 bg-navy-800 border border-navy-700 rounded-xl shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+            <div className={`absolute top-full left-0 ${compact ? 'right-0' : 'right-[56px]'} z-50 mt-2 bg-navy-800 border border-navy-700 rounded-xl shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200`}>
               <p className="px-4 py-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest border-b border-navy-700 bg-navy-900/50">
                 Medidas populares
               </p>
@@ -552,9 +641,33 @@ export function TireSizeSearch({
           )}
         </div>
 
-        <button 
-          type="button" 
-          onClick={startCamera} 
+        {compact && (
+          hasInput ? (
+            <button type="button" onClick={executeSearch} aria-label="Buscar medida"
+              className="w-full h-[52px] bg-orange-500 hover:bg-orange-400 text-white font-black rounded-xl border border-orange-400 shadow-lg shadow-orange-500/20 transition-all flex items-center justify-center gap-2">
+              Buscar medida
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          ) : (
+            <button type="button" onClick={startVoiceForMeasure} aria-label="Ingresar medida por voz"
+              className={`w-full h-[52px] font-bold text-sm rounded-xl border transition-all flex items-center justify-center gap-2 ${
+                listening
+                  ? "bg-orange-500 text-white border-orange-300 shadow-lg shadow-orange-500/20"
+                  : "bg-navy-700 text-white border-navy-600 hover:border-orange-500 hover:bg-navy-600"
+              }`}>
+              <svg className="w-4 h-4" viewBox="0 0 82.05 122.88" fill="currentColor">
+                <path d="M59.89,20.83V52.3c0,27-37.73,27-37.73,0V20.83c0-27.77,37.73-27.77,37.73,0Zm-14.18,76V118.2a4.69,4.69,0,0,1-9.37,0V96.78a40.71,40.71,0,0,1-12.45-3.51A41.63,41.63,0,0,1,12.05,85L12,84.91A41.31,41.31,0,0,1,3.12,71.68,40.73,40.73,0,0,1,0,56a4.67,4.67,0,0,1,8-3.31l.1.1A4.68,4.68,0,0,1,9.37,56a31.27,31.27,0,0,0,2.4,12.06A32,32,0,0,0,29,85.28a31.41,31.41,0,0,0,24.13,0,31.89,31.89,0,0,0,10.29-6.9l.08-.07a32,32,0,0,0,6.82-10.22A31.27,31.27,0,0,0,72.68,56a4.69,4.69,0,0,1,9.37,0,40.65,40.65,0,0,1-3.12,15.65A41.45,41.45,0,0,1,70,85l-.09.08a41.34,41.34,0,0,1-11.75,8.18,40.86,40.86,0,0,1-12.46,3.51Z"/>
+              </svg>
+              {listening ? 'Escuchando...' : 'Ingresar por voz'}
+            </button>
+          )
+        )}
+
+        <button
+          type="button"
+          onClick={startCamera}
           className="w-full bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 disabled:opacity-50 text-white font-black py-4 rounded-xl border border-red-300/30 transition-all flex items-center justify-center gap-2 shadow-lg shadow-red-900/30 active:scale-[0.98] lg:hidden"
         >
           <span>Reconocer medida con IA</span>

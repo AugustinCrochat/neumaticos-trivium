@@ -5,6 +5,7 @@ type TireDiagramProps = {
   aspect?: string | number;
   rim?: string | number;
   focused?: 'width' | 'aspect' | 'rim' | null;
+  compact?: boolean;
   theme?: {
     bg?: string;
     accent?: string;
@@ -19,6 +20,7 @@ export function TireDiagram({
   aspect = "",
   rim = "",
   focused = null,
+  compact = false,
   theme = { accent: "#ff6a3d" }
 }: TireDiagramProps) {
   const cx = 681.5;
@@ -47,10 +49,10 @@ export function TireDiagram({
   };
 
   return (
-    <div className="flex flex-col items-center gap-6 py-4">
+    <div className={`flex flex-col items-center ${compact ? 'py-1' : 'py-3'}`}>
       <svg
         viewBox="0 0 1362.9773 712"
-        className="w-full max-w-2xl h-auto"
+        className={`w-full h-auto ${compact ? 'max-w-[200px]' : 'max-w-lg'}`}
         xmlns="http://www.w3.org/2000/svg"
       >
         <defs>
@@ -134,7 +136,7 @@ export function TireDiagram({
 
         {/* TEXTO PRINCIPAL CURVADO SOBRE EL FLANCO */}
         <text
-          fontFamily={theme.mono || "ui-monospace, 'Courier New', Courier, monospace"}
+          fontFamily={theme.mono || "'Courier New', Courier, monospace"}
           fontSize="64"
           fontWeight="700"
           letterSpacing="0.04em"
@@ -151,7 +153,7 @@ export function TireDiagram({
 
         {/* TEXTO SECUNDARIO EMBOSSED CERCA DEL TREAD */}
         <text
-          fontFamily={theme.mono || "ui-monospace, 'Courier New', Courier, monospace"}
+          fontFamily={theme.mono || "'Courier New', Courier, monospace"}
           fontSize="22"
           fontWeight="700"
           letterSpacing="0.42em"
