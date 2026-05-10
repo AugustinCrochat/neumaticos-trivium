@@ -25,6 +25,7 @@ export function TireDiagram({
 }: TireDiagramProps) {
   const cx = 681.5;
   const cy = 682.3;
+  const measureTextCy = 662;
   const textRadius = 528;
   const secondaryTextRadius = 638;
 
@@ -40,7 +41,7 @@ export function TireDiagram({
     const isFocused = focused === segment;
     const isPlaceholder = segment === 'width' ? isWidthPlaceholder : segment === 'aspect' ? isAspectPlaceholder : isRimPlaceholder;
     return {
-      fontSize: isFocused ? `${64 * 1.18}px` : "64px",
+      fontSize: isFocused ? `${74 * 1.16}px` : "74px",
       fontWeight: isFocused ? "800" : "700",
       fill: isFocused ? theme.accent : isPlaceholder ? "#2d3748" : "#e8e6df",
       transition: "font-size 0.2s, fill 0.2s",
@@ -51,7 +52,7 @@ export function TireDiagram({
   return (
     <div className={`flex flex-col items-center ${compact ? 'py-1' : 'py-3'}`}>
       <svg
-        viewBox="0 0 1362.9773 712"
+        viewBox="0 0 1362.9773 682.33777"
         className={`w-full h-auto ${compact ? 'max-w-[200px]' : 'max-w-lg'}`}
         xmlns="http://www.w3.org/2000/svg"
       >
@@ -65,7 +66,7 @@ export function TireDiagram({
           {/* Path para el texto principal curvado */}
           <path
             id="textPath"
-            d={`M ${cx - textRadius} ${cy} A ${textRadius} ${textRadius} 0 0 1 ${cx + textRadius} ${cy}`}
+            d={`M ${cx - textRadius} ${measureTextCy} A ${textRadius} ${textRadius} 0 0 1 ${cx + textRadius} ${measureTextCy}`}
             fill="none"
           />
 
@@ -86,18 +87,20 @@ export function TireDiagram({
           opacity="0.3"
         />
 
-        {/* SVG del neumático original - EMBEBIDO TAL CUAL */}
+        {/* SVG del neumático */}
         <g transform="matrix(1.3333333 0 0 -1.3333333 2841.76 1842.7029) translate(150.3846 -240.21272) translate(-2419.8917 511.11992)">
           <path
             fill="#a0a6a7"
             d="m 649.304,315.94 c -156.882,0 -284.059,127.178 -284.059,284.06 0,156.882 127.177,284.06 284.059,284.06 156.882,0 284.06,-127.178 284.06,-284.06 0,-156.882 -127.178,-284.06 -284.06,-284.06 z m 0,634.27 c -193.415,0 -350.21,-156.794 -350.21,-350.21 0,-193.416 156.795,-350.21 350.21,-350.21 193.416,0 350.211,156.794 350.211,350.21 0,193.416 -156.795,350.21 -350.211,350.21"
           />
           <path
-            fill="#515455"
+            fill="#1c1c1c"
             d="m 649.304,281.972 c -175.635,0 -318.028,142.393 -318.028,318.028 0,175.635 142.393,318.029 318.028,318.029 175.635,0 318.029,-142.394 318.029,-318.029 0,-175.635 -142.394,-318.028 -318.029,-318.028 z m 0,829.148 c -282.288,0 -511.117,-228.831 -511.117,-511.12 0,-282.288 228.829,-511.1199 511.117,-511.1199 282.289,0 511.116,228.8319 511.116,511.1199 0,282.289 -228.827,511.12 -511.116,511.12"
           />
           <path
-            fill="#35373a"
+            fill="#1c1c1c"
+            stroke="#ff0000"
+            strokeWidth="0.09975"
             d="m 649.304,125.39 c -262.125,0 -474.609,212.485 -474.609,474.61 0,262.125 212.484,474.61 474.609,474.61 262.125,0 474.606,-212.485 474.606,-474.61 0,-262.125 -212.481,-474.61 -474.606,-474.61 z m 0,985.73 c -282.288,0 -511.117,-228.831 -511.117,-511.12 0,-282.288 228.829,-511.1199 511.117,-511.1199 282.289,0 511.116,228.8319 511.116,511.1199 0,282.289 -228.827,511.12 -511.116,511.12"
           />
           <path
@@ -137,7 +140,7 @@ export function TireDiagram({
         {/* TEXTO PRINCIPAL CURVADO SOBRE EL FLANCO */}
         <text
           style={{ fontFamily: theme.mono || 'var(--font-geist-sans, system-ui, sans-serif)' }}
-          fontSize="64"
+          fontSize="74"
           fontWeight="700"
           letterSpacing="0.04em"
           fill="#e8e6df"
