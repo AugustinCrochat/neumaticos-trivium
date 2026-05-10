@@ -42,7 +42,7 @@ export function TireDiagram({
     return {
       fontSize: isFocused ? `${74 * 1.16}px` : "74px",
       fontWeight: isFocused ? "800" : "700",
-      fill: isFocused ? theme.accent : isPlaceholder ? "#a0a6a7" : "#e8e6df",
+      fill: isFocused ? theme.accent : isPlaceholder ? "#737b80" : "#e8e6df",
       transition: "font-size 0.2s, fill 0.2s",
       letterSpacing: "0.04em",
     };
