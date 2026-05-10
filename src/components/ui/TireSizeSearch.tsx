@@ -444,7 +444,8 @@ export function TireSizeSearch({
       <div className="flex flex-col gap-3">
         <div ref={containerRef} className="relative">
           {compact ? (
-            <div className="flex flex-col gap-2">
+            // Compact: single DOM — 3-column + button on mobile, stacked on desktop
+            <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_auto] lg:grid-cols-1 gap-2">
               <input
                 ref={widthRef}
                 type="text"
@@ -513,8 +514,25 @@ export function TireSizeSearch({
                 aria-label="Rodado del neumático"
                 className={measureInputClass}
               />
+              {/* Inline button: mobile only (desktop gets full-width button below) */}
+              <div className="lg:hidden">
+                {hasInput ? (
+                  <button type="button" onClick={executeSearch} aria-label="Buscar medida" className={searchButtonClass}>
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                ) : (
+                  <button type="button" onClick={startVoiceForMeasure} aria-label="Ingresar medida por voz" className={voiceButtonClass}>
+                    <svg className="w-5 h-5" viewBox="0 0 82.05 122.88" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                      <path d="M59.89,20.83V52.3c0,27-37.73,27-37.73,0V20.83c0-27.77,37.73-27.77,37.73,0Zm-14.18,76V118.2a4.69,4.69,0,0,1-9.37,0V96.78a40.71,40.71,0,0,1-12.45-3.51A41.63,41.63,0,0,1,12.05,85L12,84.91A41.31,41.31,0,0,1,3.12,71.68,40.73,40.73,0,0,1,0,56a4.67,4.67,0,0,1,8-3.31l.1.1A4.68,4.68,0,0,1,9.37,56a31.27,31.27,0,0,0,2.4,12.06A32,32,0,0,0,29,85.28a31.41,31.41,0,0,0,24.13,0,31.89,31.89,0,0,0,10.29-6.9l.08-.07a32,32,0,0,0,6.82-10.22A31.27,31.27,0,0,0,72.68,56a4.69,4.69,0,0,1,9.37,0,40.65,40.65,0,0,1-3.12,15.65A41.45,41.45,0,0,1,70,85l-.09.08a41.34,41.34,0,0,1-11.75,8.18,40.86,40.86,0,0,1-12.46,3.51Z"/>
+                    </svg>
+                  </button>
+                )}
+              </div>
             </div>
           ) : (
+            // Non-compact: always horizontal
             <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_auto] gap-2 sm:gap-3">
               <div className="min-w-0">
                 <input
@@ -608,7 +626,7 @@ export function TireSizeSearch({
           )}
 
           {shouldShowDropdown && (
-            <div className={`absolute top-full left-0 ${compact ? 'right-0' : 'right-[56px]'} z-50 mt-2 bg-navy-800 border border-navy-700 rounded-xl shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200`}>
+            <div className={`absolute left-0 z-50 bg-navy-800 border border-navy-700 rounded-xl shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200 ${compact ? 'top-full mt-2 right-[56px] lg:top-auto lg:bottom-full lg:mt-0 lg:mb-2 lg:right-0' : 'top-full mt-2 right-[56px]'}`}>
               <p className="px-4 py-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest border-b border-navy-700 bg-navy-900/50">
                 Medidas populares
               </p>
@@ -642,27 +660,29 @@ export function TireSizeSearch({
         </div>
 
         {compact && (
-          hasInput ? (
-            <button type="button" onClick={executeSearch} aria-label="Buscar medida"
-              className="w-full h-[52px] bg-orange-500 hover:bg-orange-400 text-white font-black rounded-xl border border-orange-400 shadow-lg shadow-orange-500/20 transition-all flex items-center justify-center gap-2">
-              Buscar medida
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
-          ) : (
-            <button type="button" onClick={startVoiceForMeasure} aria-label="Ingresar medida por voz"
-              className={`w-full h-[52px] font-bold text-sm rounded-xl border transition-all flex items-center justify-center gap-2 ${
-                listening
-                  ? "bg-orange-500 text-white border-orange-300 shadow-lg shadow-orange-500/20"
-                  : "bg-navy-700 text-white border-navy-600 hover:border-orange-500 hover:bg-navy-600"
-              }`}>
-              <svg className="w-4 h-4" viewBox="0 0 82.05 122.88" fill="currentColor">
-                <path d="M59.89,20.83V52.3c0,27-37.73,27-37.73,0V20.83c0-27.77,37.73-27.77,37.73,0Zm-14.18,76V118.2a4.69,4.69,0,0,1-9.37,0V96.78a40.71,40.71,0,0,1-12.45-3.51A41.63,41.63,0,0,1,12.05,85L12,84.91A41.31,41.31,0,0,1,3.12,71.68,40.73,40.73,0,0,1,0,56a4.67,4.67,0,0,1,8-3.31l.1.1A4.68,4.68,0,0,1,9.37,56a31.27,31.27,0,0,0,2.4,12.06A32,32,0,0,0,29,85.28a31.41,31.41,0,0,0,24.13,0,31.89,31.89,0,0,0,10.29-6.9l.08-.07a32,32,0,0,0,6.82-10.22A31.27,31.27,0,0,0,72.68,56a4.69,4.69,0,0,1,9.37,0,40.65,40.65,0,0,1-3.12,15.65A41.45,41.45,0,0,1,70,85l-.09.08a41.34,41.34,0,0,1-11.75,8.18,40.86,40.86,0,0,1-12.46,3.51Z"/>
-              </svg>
-              {listening ? 'Escuchando...' : 'Ingresar por voz'}
-            </button>
-          )
+          <div className="hidden lg:block">
+            {hasInput ? (
+              <button type="button" onClick={executeSearch} aria-label="Buscar medida"
+                className="w-full h-[52px] bg-orange-500 hover:bg-orange-400 text-white font-black rounded-xl border border-orange-400 shadow-lg shadow-orange-500/20 transition-all flex items-center justify-center gap-2">
+                Buscar medida
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            ) : (
+              <button type="button" onClick={startVoiceForMeasure} aria-label="Ingresar medida por voz"
+                className={`w-full h-[52px] font-bold text-sm rounded-xl border transition-all flex items-center justify-center gap-2 ${
+                  listening
+                    ? "bg-orange-500 text-white border-orange-300 shadow-lg shadow-orange-500/20"
+                    : "bg-navy-700 text-white border-navy-600 hover:border-orange-500 hover:bg-navy-600"
+                }`}>
+                <svg className="w-4 h-4" viewBox="0 0 82.05 122.88" fill="currentColor">
+                  <path d="M59.89,20.83V52.3c0,27-37.73,27-37.73,0V20.83c0-27.77,37.73-27.77,37.73,0Zm-14.18,76V118.2a4.69,4.69,0,0,1-9.37,0V96.78a40.71,40.71,0,0,1-12.45-3.51A41.63,41.63,0,0,1,12.05,85L12,84.91A41.31,41.31,0,0,1,3.12,71.68,40.73,40.73,0,0,1,0,56a4.67,4.67,0,0,1,8-3.31l.1.1A4.68,4.68,0,0,1,9.37,56a31.27,31.27,0,0,0,2.4,12.06A32,32,0,0,0,29,85.28a31.41,31.41,0,0,0,24.13,0,31.89,31.89,0,0,0,10.29-6.9l.08-.07a32,32,0,0,0,6.82-10.22A31.27,31.27,0,0,0,72.68,56a4.69,4.69,0,0,1,9.37,0,40.65,40.65,0,0,1-3.12,15.65A41.45,41.45,0,0,1,70,85l-.09.08a41.34,41.34,0,0,1-11.75,8.18,40.86,40.86,0,0,1-12.46,3.51Z"/>
+                </svg>
+                {listening ? 'Escuchando...' : 'Ingresar por voz'}
+              </button>
+            )}
+          </div>
         )}
 
         <button
