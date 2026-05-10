@@ -53,7 +53,7 @@ export function TireDiagram({
     <div className={`flex flex-col items-center ${compact ? 'py-1' : 'py-3'}`}>
       <svg
         viewBox="0 0 1362.9773 682.33777"
-        className={`w-full h-auto ${compact ? 'max-w-[200px]' : 'max-w-lg'}`}
+        className={`w-full h-auto overflow-visible ${compact ? 'max-w-[200px]' : 'max-w-lg'}`}
         xmlns="http://www.w3.org/2000/svg"
       >
         <defs>
@@ -63,9 +63,16 @@ export function TireDiagram({
             <stop offset="100%" style={{ stopColor: "#ffffff", stopOpacity: 0 }} />
           </radialGradient>
 
-          <filter id="tireEdgeShadow" x="-12%" y="-12%" width="124%" height="124%">
-            <feDropShadow dx="0" dy="12" stdDeviation="18" floodColor="#000000" floodOpacity="0.38" />
-            <feDropShadow dx="0" dy="-3" stdDeviation="8" floodColor="#000000" floodOpacity="0.22" />
+          <filter
+            id="tireEdgeShadow"
+            x="-220"
+            y="-220"
+            width="1802.9773"
+            height="1122.33777"
+            filterUnits="userSpaceOnUse"
+          >
+            <feDropShadow dx="0" dy="14" stdDeviation="20" floodColor="#000000" floodOpacity="0.34" />
+            <feDropShadow dx="0" dy="-4" stdDeviation="10" floodColor="#000000" floodOpacity="0.18" />
           </filter>
 
           {/* Path para el texto principal curvado */}
