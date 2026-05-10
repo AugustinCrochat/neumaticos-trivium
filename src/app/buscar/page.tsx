@@ -158,7 +158,7 @@ export default async function BuscarPage({ searchParams }: Props) {
                     <span className="text-sm text-slate-400">{exactResults.length} resultados</span>
                   )}
                 </div>
-                <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                   {exactResults.slice(0, 5).map((product) => (
                     <ProductCard
                       key={product.id}
@@ -203,7 +203,7 @@ export default async function BuscarPage({ searchParams }: Props) {
                     </div>
                   </div>
                 </div>
-                <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                   {compatibleResults.slice(0, 5).map((product) => {
                     const diameterDiff = searchedSize
                       ? diameterDifferencePercent(product.size, searchedSize)

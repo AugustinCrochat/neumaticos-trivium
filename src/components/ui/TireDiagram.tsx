@@ -136,7 +136,7 @@ export function TireDiagram({
 
         {/* TEXTO PRINCIPAL CURVADO SOBRE EL FLANCO */}
         <text
-          fontFamily={theme.mono || "'Courier New', Courier, monospace"}
+          style={{ fontFamily: theme.mono || 'var(--font-geist-sans, system-ui, sans-serif)' }}
           fontSize="64"
           fontWeight="700"
           letterSpacing="0.04em"
@@ -153,7 +153,7 @@ export function TireDiagram({
 
         {/* TEXTO SECUNDARIO EMBOSSED CERCA DEL TREAD */}
         <text
-          fontFamily={theme.mono || "'Courier New', Courier, monospace"}
+          style={{ fontFamily: theme.mono || 'var(--font-geist-sans, system-ui, sans-serif)' }}
           fontSize="22"
           fontWeight="700"
           letterSpacing="0.42em"
