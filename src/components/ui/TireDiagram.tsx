@@ -53,7 +53,7 @@ export function TireDiagram({
     <div className={`flex flex-col items-center ${compact ? 'py-1' : 'py-3'}`}>
       <svg
         viewBox="0 0 1362.9773 682.33777"
-        className={`w-full h-auto overflow-visible ${compact ? 'max-w-[200px]' : 'max-w-lg'}`}
+        className={`w-full h-auto ${compact ? 'max-w-[200px]' : 'max-w-lg'}`}
         xmlns="http://www.w3.org/2000/svg"
       >
         <defs>
@@ -62,18 +62,6 @@ export function TireDiagram({
             <stop offset="0%" style={{ stopColor: "#ffffff", stopOpacity: 0.1 }} />
             <stop offset="100%" style={{ stopColor: "#ffffff", stopOpacity: 0 }} />
           </radialGradient>
-
-          <filter
-            id="tireEdgeShadow"
-            x="-220"
-            y="-220"
-            width="1802.9773"
-            height="1122.33777"
-            filterUnits="userSpaceOnUse"
-          >
-            <feDropShadow dx="0" dy="14" stdDeviation="20" floodColor="#000000" floodOpacity="0.34" />
-            <feDropShadow dx="0" dy="-4" stdDeviation="10" floodColor="#000000" floodOpacity="0.18" />
-          </filter>
 
           {/* Path para el texto principal curvado */}
           <path
@@ -93,10 +81,7 @@ export function TireDiagram({
         />
 
         {/* SVG del neumático */}
-        <g
-          filter="url(#tireEdgeShadow)"
-          transform="matrix(1.3333333 0 0 -1.3333333 2841.76 1842.7029) translate(150.3846 -240.21272) translate(-2419.8917 511.11992)"
-        >
+        <g transform="matrix(1.3333333 0 0 -1.3333333 2841.76 1842.7029) translate(150.3846 -240.21272) translate(-2419.8917 511.11992)">
           <path
             fill="#a0a6a7"
             d="m 649.304,315.94 c -156.882,0 -284.059,127.178 -284.059,284.06 0,156.882 127.177,284.06 284.059,284.06 156.882,0 284.06,-127.178 284.06,-284.06 0,-156.882 -127.178,-284.06 -284.06,-284.06 z m 0,634.27 c -193.415,0 -350.21,-156.794 -350.21,-350.21 0,-193.416 156.795,-350.21 350.21,-350.21 193.416,0 350.211,156.794 350.211,350.21 0,193.416 -156.795,350.21 -350.211,350.21"
@@ -116,6 +101,13 @@ export function TireDiagram({
           <path
             fill="#e3e5e4"
             d="m 967.333,600 c 0,-14.974 -1.041,-29.721 -3.048,-44.146 L 857.367,553.98 c -58.04,-1.022 -84.921,-47.59 -56.791,-98.362 l 54.406,-98.19 C 829.369,335.677 800.254,317.92 768.603,305.123 l -55.106,91.68 c -29.91,49.748 -83.691,49.748 -113.601,0 l -57.87,-96.28 c -32.2,11.529 -61.977,28.112 -88.423,48.783 l 51.831,93.516 c 28.13,50.771 1.231,97.339 -56.809,98.362 l -112.295,1.968 c -3.313,18.439 -5.054,37.445 -5.054,56.848 0,14.974 1.041,29.721 3.047,44.146 l 106.919,1.874 c 58.04,1.022 84.921,47.59 56.79,98.361 l -54.406,98.192 c 25.613,21.751 54.728,39.507 86.38,52.304 l 55.106,-91.679 c 29.909,-49.749 83.69,-49.749 113.6,0 l 57.87,96.279 c 32.2,-11.528 61.978,-28.111 88.423,-48.784 l -51.831,-93.515 c -28.13,-50.771 -1.23,-97.34 56.81,-98.362 l 112.295,-1.968 c 3.312,-18.438 5.054,-37.445 5.054,-56.848"
+          />
+          <path
+            d="m 649.304,315.94 c -156.882,0 -284.059,127.178 -284.059,284.06 0,156.882 127.177,284.06 284.059,284.06 156.882,0 284.06,-127.178 284.06,-284.06 0,-156.882 -127.178,-284.06 -284.06,-284.06 z"
+            fill="none"
+            stroke="#c7ccce"
+            strokeWidth="3"
+            opacity="0.45"
           />
           <path
             fill="#a0a6a7"
@@ -154,9 +146,9 @@ export function TireDiagram({
         >
           <textPath href="#textPath" startOffset="50%" textAnchor="middle">
             <tspan style={getTspanStyle('width')}>{widthStr}</tspan>
-            <tspan>/</tspan>
+            <tspan fill="#ffffff" opacity="1">/</tspan>
             <tspan style={getTspanStyle('aspect')}>{aspectStr}</tspan>
-            <tspan> R</tspan>
+            <tspan fill="#ffffff" opacity="1"> R</tspan>
             <tspan style={getTspanStyle('rim')}>{rimStr}</tspan>
           </textPath>
         </text>
