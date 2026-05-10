@@ -1,7 +1,5 @@
 "use client";
 
-import { useMemo } from "react";
-
 type TireDiagramProps = {
   width?: string;
   profile?: string;
@@ -11,288 +9,228 @@ type TireDiagramProps = {
 export function TireDiagram({ width = "", profile = "", rim = "" }: TireDiagramProps) {
   const hasData = !!(width || profile || rim);
 
-  // Calcular altura del perfil basado en la entrada
-  const profileHeight = profile ? Math.min(parseInt(profile) / 100 * 40, 45) : 20;
+  // Calcular proporciones del neumático
+  const profileNum = profile ? parseInt(profile) : 65;
+  const profileRatio = profileNum / 100;
   
-  // Calcular radio basado en rodado
-  const rimRadius = rim ? Math.min(parseInt(rim) * 3 + 20, 120) : 60;
-  const tireRadius = rimRadius + profileHeight;
+  const rimNum = rim ? parseInt(rim) : 15;
+  // Convertir pulgadas a mm aproximadamente (1 pulgada = 25.4mm, pero simplificamos)
+  const rimDiameterMm = rimNum * 25.4;
+  const widthNum = width ? parseInt(width) : 175;
 
-  // Colores dinámicos basados en si hay datos
-  const tireColor = hasData ? "url(#tireGradient)" : "#1e293b";
-  const rimColor = hasData ? "url(#rimGradient)" : "#334155";
-  const textColor = hasData ? "#f97316" : "#64748b";
-  const labelColor = hasData ? "#ffffff" : "#94a3b8";
+  // Radio del neumático en mm
+  const tireOuterRadius = (rimDiameterMm + widthNum * profileRatio * 2) / 2;
+  const rimRadius = rimDiameterMm / 2;
+
+  // Escalar a SVG (dividir por 2 para que quepa bien)
+  const scale = 150 / tireOuterRadius;
+  const svgTireRadius = tireOuterRadius * scale;
+  const svgRimRadius = rimRadius * scale;
+  const svgProfileWidth = widthNum * scale;
+  const svgProfileHeight = (widthNum * profileRatio) * scale;
+
+  const cx = 200;
+  const cy = 180;
 
   return (
-    <div className="flex flex-col items-center gap-4 py-6">
+    <div className="flex flex-col items-center gap-6 py-4">
       <svg
-        viewBox="0 0 400 320"
-        className="w-full max-w-sm h-auto drop-shadow-2xl"
+        viewBox="0 0 400 360"
+        className="w-full max-w-sm h-auto"
         xmlns="http://www.w3.org/2000/svg"
       >
         <defs>
-          {/* Gradientes */}
-          <linearGradient id="tireGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <linearGradient id="tireOuterGradient" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" style={{ stopColor: "#1e293b", stopOpacity: 1 }} />
-            <stop offset="100%" style={{ stopColor: "#0f172a", stopOpacity: 1 }} />
+            <stop offset="50%" style={{ stopColor: "#0f172a", stopOpacity: 1 }} />
+            <stop offset="100%" style={{ stopColor: "#1e293b", stopOpacity: 1 }} />
           </linearGradient>
-          <linearGradient id="rimGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <radialGradient id="rimGradient" cx="50%" cy="50%" r="50%">
             <stop offset="0%" style={{ stopColor: "#94a3b8", stopOpacity: 1 }} />
-            <stop offset="100%" style={{ stopColor: "#64748b", stopOpacity: 1 }} />
-          </linearGradient>
-
-          {/* Filtros de sombra */}
-          <filter id="shadow">
-            <feDropShadow
-              dx="0"
-              dy="4"
-              stdDeviation="6"
-              floodOpacity={hasData ? 0.3 : 0.15}
-            />
+            <stop offset="70%" style={{ stopColor: "#64748b", stopOpacity: 1 }} />
+            <stop offset="100%" style={{ stopColor: "#475569", stopOpacity: 1 }} />
+          </radialGradient>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+            <feMerge>
+              <feMergeNode in="coloredBlur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
           </filter>
         </defs>
 
-        {/* Fondo */}
-        <rect width="400" height="320" fill="transparent" />
+        {/* Banda de rodadura - círculo exterior */}
+        <circle
+          cx={cx}
+          cy={cy}
+          r={svgTireRadius}
+          fill={hasData ? "url(#tireOuterGradient)" : "#334155"}
+          opacity={hasData ? 1 : 0.6}
+          filter={hasData ? "url(#glow)" : "none"}
+        />
 
-        {/* Sección izquierda: Neumático de lado */}
-        <g>
-          {/* Banda de rodadura - Exterior */}
-          <ellipse
-            cx="120"
-            cy="160"
-            rx={tireRadius}
-            ry={profileHeight + 28}
-            fill={tireColor}
-            filter="url(#shadow)"
-            opacity={hasData ? 0.95 : 0.7}
-          />
+        {/* Llanta/Rim */}
+        <circle
+          cx={cx}
+          cy={cy}
+          r={svgRimRadius}
+          fill={hasData ? "url(#rimGradient)" : "#94a3b8"}
+          opacity={hasData ? 0.95 : 0.5}
+        />
 
-          {/* Llanta/Rim */}
-          <ellipse
-            cx="120"
-            cy="160"
-            rx={rimRadius}
-            ry={rimRadius * 0.65}
-            fill={rimColor}
-            filter="url(#shadow)"
-          />
+        {/* Centro de llanta */}
+        <circle
+          cx={cx}
+          cy={cy}
+          r={svgRimRadius * 0.4}
+          fill="#0f172a"
+        />
 
-          {/* Centro de llanta */}
-          <circle
-            cx="120"
-            cy="160"
-            r={rimRadius * 0.35}
-            fill="#1e293b"
-            filter="url(#shadow)"
-          />
+        {/* Tornillos de la rueda */}
+        {[0, 72, 144, 216, 288].map((angle) => {
+          const rad = (angle * Math.PI) / 180;
+          const x = cx + Math.cos(rad) * (svgRimRadius * 0.7);
+          const y = cy + Math.sin(rad) * (svgRimRadius * 0.7);
+          return (
+            <circle
+              key={angle}
+              cx={x}
+              cy={y}
+              r="4"
+              fill={hasData ? "#f97316" : "#64748b"}
+              opacity={hasData ? 0.8 : 0.3}
+            />
+          );
+        })}
 
-          {/* Detalle de aguja central */}
-          <circle cx="120" cy="160" r="8" fill="#f97316" opacity={hasData ? 0.6 : 0.2} />
+        {/* Líneas de medida - Ancho (arriba) */}
+        {width && (
+          <g>
+            <line
+              x1={cx - svgProfileWidth / 2}
+              y1={cy - svgTireRadius - 25}
+              x2={cx + svgProfileWidth / 2}
+              y2={cy - svgTireRadius - 25}
+              stroke="#f97316"
+              strokeWidth="2"
+              markerStart="url(#arrowStart)"
+              markerEnd="url(#arrowEnd)"
+            />
+            <circle cx={cx - svgProfileWidth / 2} cy={cy - svgTireRadius - 25} r="3" fill="#f97316" />
+            <circle cx={cx + svgProfileWidth / 2} cy={cy - svgTireRadius - 25} r="3" fill="#f97316" />
+            <text
+              x={cx}
+              y={cy - svgTireRadius - 35}
+              textAnchor="middle"
+              fontSize="16"
+              fontWeight="900"
+              fill="#f97316"
+              className="font-sans"
+            >
+              {width} mm
+            </text>
+            <text
+              x={cx}
+              y={cy - svgTireRadius - 50}
+              textAnchor="middle"
+              fontSize="11"
+              fontWeight="bold"
+              fill="#cbd5e1"
+              className="font-sans"
+            >
+              ANCHO
+            </text>
+          </g>
+        )}
 
-          {/* Línea de corte para ver el perfil */}
-          <line
-            x1="120"
-            y1={160 - profileHeight - 28}
-            x2="120"
-            y2={160 + profileHeight + 28}
-            stroke="#f97316"
-            strokeWidth={hasData ? "2" : "1"}
-            strokeDasharray="4,4"
-            opacity={hasData ? 0.5 : 0.2}
-          />
-        </g>
+        {/* Líneas de medida - Perfil (izquierda) */}
+        {profile && (
+          <g>
+            <line
+              x1={cx - svgProfileWidth / 2 - 35}
+              y1={cy - svgProfileHeight}
+              x2={cx - svgProfileWidth / 2 - 35}
+              y2={cy + svgProfileHeight}
+              stroke="#f97316"
+              strokeWidth="2"
+            />
+            <circle cx={cx - svgProfileWidth / 2 - 35} cy={cy - svgProfileHeight} r="3" fill="#f97316" />
+            <circle cx={cx - svgProfileWidth / 2 - 35} cy={cy + svgProfileHeight} r="3" fill="#f97316" />
+            <text
+              x={cx - svgProfileWidth / 2 - 50}
+              y={cy + 5}
+              textAnchor="middle"
+              fontSize="16"
+              fontWeight="900"
+              fill="#f97316"
+              className="font-sans"
+            >
+              {profile}%
+            </text>
+            <text
+              x={cx - svgProfileWidth / 2 - 50}
+              y={cy - 20}
+              textAnchor="middle"
+              fontSize="11"
+              fontWeight="bold"
+              fill="#cbd5e1"
+              className="font-sans"
+            >
+              PERFIL
+            </text>
+          </g>
+        )}
 
-        {/* Sección derecha: Diagrama de medidas */}
-        <g>
-          {/* Línea horizontal para ancho */}
-          <line
-            x1="240"
-            y1="80"
-            x2="380"
-            y2="80"
-            stroke={textColor}
-            strokeWidth={width ? "3" : "1.5"}
-            opacity={width ? 1 : 0.3}
-          />
-          <circle
-            cx="240"
-            cy="80"
-            r="4"
-            fill={textColor}
-            opacity={width ? 1 : 0.3}
-          />
-          <circle
-            cx="380"
-            cy="80"
-            r="4"
-            fill={textColor}
-            opacity={width ? 1 : 0.3}
-          />
+        {/* Rodado - en el centro */}
+        {rim && (
+          <g>
+            <text
+              x={cx}
+              y={cy - 5}
+              textAnchor="middle"
+              fontSize="14"
+              fontWeight="bold"
+              fill="#cbd5e1"
+              className="font-sans"
+            >
+              R
+            </text>
+            <text
+              x={cx}
+              y={cy + 15}
+              textAnchor="middle"
+              fontSize="22"
+              fontWeight="900"
+              fill="#f97316"
+              className="font-sans"
+            >
+              {rim}"
+            </text>
+          </g>
+        )}
 
-          {/* Línea de perfil (altura lateral) */}
-          <line
-            x1="230"
-            y1="120"
-            x2="230"
-            y2="200"
-            stroke={textColor}
-            strokeWidth={profile ? "3" : "1.5"}
-            opacity={profile ? 1 : 0.3}
-          />
-          <circle
-            cx="230"
-            cy="120"
-            r="4"
-            fill={textColor}
-            opacity={profile ? 1 : 0.3}
-          />
-          <circle
-            cx="230"
-            cy="200"
-            r="4"
-            fill={textColor}
-            opacity={profile ? 1 : 0.3}
-          />
-
-          {/* Línea de rodado (tamaño llanta) */}
-          <circle
-            cx="310"
-            cy="240"
-            r="30"
-            fill="none"
-            stroke={textColor}
-            strokeWidth={rim ? "3" : "1.5"}
-            opacity={rim ? 1 : 0.3}
-          />
-          <circle
-            cx="310"
-            cy="240"
-            r="6"
-            fill={textColor}
-            opacity={rim ? 1 : 0.3}
-          />
-
-          {/* Etiquetas */}
+        {/* Etiqueta de rodado - abajo */}
+        {rim && (
           <text
-            x="310"
-            y="65"
+            x={cx}
+            y={cy + svgTireRadius + 45}
             textAnchor="middle"
-            fontSize="12"
+            fontSize="11"
             fontWeight="bold"
-            fill={labelColor}
-            opacity={width ? 1 : 0.4}
-            className="font-sans"
-          >
-            ANCHO
-          </text>
-          <text
-            x="310"
-            y="78"
-            textAnchor="middle"
-            fontSize="18"
-            fontWeight="900"
-            fill={textColor}
-            opacity={width ? 1 : 0.3}
-            className="font-sans"
-          >
-            {width || "—"}
-          </text>
-          <text
-            x="310"
-            y="95"
-            textAnchor="middle"
-            fontSize="10"
-            fill={labelColor}
-            opacity={width ? 1 : 0.3}
-            className="font-sans"
-          >
-            mm
-          </text>
-
-          <text
-            x="190"
-            y="165"
-            textAnchor="middle"
-            fontSize="12"
-            fontWeight="bold"
-            fill={labelColor}
-            opacity={profile ? 1 : 0.4}
-            className="font-sans"
-          >
-            PERFIL
-          </text>
-          <text
-            x="190"
-            y="185"
-            textAnchor="middle"
-            fontSize="18"
-            fontWeight="900"
-            fill={textColor}
-            opacity={profile ? 1 : 0.3}
-            className="font-sans"
-          >
-            {profile || "—"}
-          </text>
-          <text
-            x="190"
-            y="202"
-            textAnchor="middle"
-            fontSize="10"
-            fill={labelColor}
-            opacity={profile ? 1 : 0.3}
-            className="font-sans"
-          >
-            %
-          </text>
-
-          <text
-            x="310"
-            y="235"
-            textAnchor="middle"
-            fontSize="12"
-            fontWeight="bold"
-            fill={labelColor}
-            opacity={rim ? 1 : 0.4}
+            fill="#cbd5e1"
             className="font-sans"
           >
             RODADO
           </text>
-          <text
-            x="310"
-            y="255"
-            textAnchor="middle"
-            fontSize="18"
-            fontWeight="900"
-            fill={textColor}
-            opacity={rim ? 1 : 0.3}
-            className="font-sans"
-          >
-            {rim || "—"}
-          </text>
-          <text
-            x="310"
-            y="272"
-            textAnchor="middle"
-            fontSize="10"
-            fill={labelColor}
-            opacity={rim ? 1 : 0.3}
-            className="font-sans"
-          >
-            pulgadas
-          </text>
-        </g>
+        )}
       </svg>
 
-      {/* Leyenda informativa */}
-      {hasData && (
-        <div className="text-center text-xs text-slate-400 px-4 animate-in fade-in duration-300">
-          <p>
-            Medida completa: <span className="text-orange-400 font-bold">{width || "—"}/{profile || "—"} R{rim || "—"}</span>
-          </p>
-        </div>
-      )}
+      {/* Medida completa */}
+      <div className={`text-center transition-opacity duration-300 ${hasData ? "opacity-100" : "opacity-0"}`}>
+        <p className="text-sm text-slate-400">
+          Medida: <span className="text-orange-400 font-black text-lg">{width || "—"}/{profile || "—"} R{rim || "—"}</span>
+        </p>
+      </div>
     </div>
   );
 }
