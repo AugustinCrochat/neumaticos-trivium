@@ -1,5 +1,6 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
-import { CatalogSection } from "@/components/home/CatalogSection";
+import { ShopPage } from "@/components/ui/ShopPage";
 
 export const metadata: Metadata = {
   title: "Catálogo de Neumáticos — Trivium",
@@ -7,5 +8,9 @@ export const metadata: Metadata = {
 };
 
 export default function CatalogoPage() {
-  return <CatalogSection />;
+  return (
+    <Suspense>
+      <ShopPage showCatalogTitle />
+    </Suspense>
+  );
 }
