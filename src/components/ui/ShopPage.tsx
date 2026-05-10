@@ -66,6 +66,143 @@ function getUnitPrice(product: TireProduct) {
   return product.price;
 }
 
+function FilterBar({
+  vehicleFilter, setVehicleFilter,
+  brandFilter, setBrandFilter,
+  priceRange, setPriceRange,
+  onlyEconomic, setOnlyEconomic,
+  hasActiveFilters, clearFilters,
+  layout,
+}: {
+  vehicleFilter: VehicleType | "todos";
+  setVehicleFilter: (v: VehicleType | "todos") => void;
+  brandFilter: string;
+  setBrandFilter: (v: string) => void;
+  priceRange: number | null;
+  setPriceRange: (v: number | null) => void;
+  onlyEconomic: boolean;
+  setOnlyEconomic: (v: boolean) => void;
+  hasActiveFilters: boolean;
+  clearFilters: () => void;
+  layout: "horizontal" | "vertical";
+}) {
+  if (layout === "horizontal") {
+    return (
+      <div className="flex items-center gap-2 flex-wrap bg-white rounded-xl border border-slate-200 px-4 py-3 shadow-sm mb-5">
+        {/* Vehicle type pills */}
+        <div className="flex items-center gap-1">
+          {([
+            { value: "todos", label: "Todos" },
+            { value: "auto", label: "Auto" },
+            { value: "camioneta", label: "Camioneta / SUV" },
+          ] as const).map(opt => (
+            <button
+              key={opt.value}
+              onClick={() => setVehicleFilter(opt.value)}
+              className={`px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors ${
+                vehicleFilter === opt.value ? "bg-navy-800 text-white" : "text-slate-600 hover:bg-slate-100"
+              }`}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
+        <div className="w-px h-5 bg-slate-200 mx-1 shrink-0" />
+        <select
+          value={brandFilter}
+          onChange={e => setBrandFilter(e.target.value)}
+          className="text-sm border border-slate-200 rounded-lg px-3 py-1.5 text-slate-700 bg-white focus:border-navy-400 outline-none"
+        >
+          <option value="todos">Todas las marcas</option>
+          {BRANDS.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}
+        </select>
+        <select
+          value={priceRange ?? ""}
+          onChange={e => setPriceRange(e.target.value === "" ? null : Number(e.target.value))}
+          className="text-sm border border-slate-200 rounded-lg px-3 py-1.5 text-slate-700 bg-white focus:border-navy-400 outline-none"
+        >
+          <option value="">Todos los precios</option>
+          {PRICE_RANGES.map((range, i) => <option key={i} value={i}>{range.label}</option>)}
+        </select>
+        <div className="w-px h-5 bg-slate-200 mx-1 shrink-0" />
+        <label className="flex items-center gap-2 cursor-pointer">
+          <div
+            onClick={() => setOnlyEconomic(!onlyEconomic)}
+            className={`w-8 h-4 rounded-full relative transition-colors ${onlyEconomic ? "bg-navy-700" : "bg-slate-200"}`}
+          >
+            <div className={`absolute top-0.5 w-3 h-3 bg-white rounded-full shadow transition-transform ${onlyEconomic ? "translate-x-4" : "translate-x-0.5"}`} />
+          </div>
+          <span className="text-sm font-medium text-slate-700">Solo económicos</span>
+        </label>
+        {hasActiveFilters && (
+          <button onClick={clearFilters} className="ml-auto text-sm text-navy-600 hover:text-navy-800 font-semibold transition-colors">
+            ✕ Limpiar
+          </button>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <div className="bg-white rounded-2xl border border-slate-100 p-5 space-y-6 shadow-sm">
+      <h3 className="font-bold text-slate-800 text-sm uppercase tracking-wide">Filtros</h3>
+      <div>
+        <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Tipo de vehículo</p>
+        <div className="space-y-1">
+          {([
+            { value: "todos", label: "Todos" },
+            { value: "auto", label: "Auto" },
+            { value: "camioneta", label: "Camioneta / SUV" },
+          ] as const).map(opt => (
+            <label key={opt.value} className="flex items-center gap-2 cursor-pointer group">
+              <input type="radio" name="vehicle-m" value={opt.value} checked={vehicleFilter === opt.value}
+                onChange={() => setVehicleFilter(opt.value)} className="accent-navy-700" />
+              <span className="text-sm text-slate-600 group-hover:text-slate-900 transition-colors">{opt.label}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+      <div>
+        <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Marca</p>
+        <select value={brandFilter} onChange={e => setBrandFilter(e.target.value)}
+          className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2 text-slate-700 bg-white focus:border-navy-400 outline-none">
+          <option value="todos">Todas las marcas</option>
+          {BRANDS.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}
+        </select>
+      </div>
+      <div>
+        <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Precio</p>
+        <div className="space-y-1">
+          <label className="flex items-center gap-2 cursor-pointer group">
+            <input type="radio" name="price-m" checked={priceRange === null} onChange={() => setPriceRange(null)} className="accent-navy-700" />
+            <span className="text-sm text-slate-600 group-hover:text-slate-900 transition-colors">Todos los precios</span>
+          </label>
+          {PRICE_RANGES.map((range, i) => (
+            <label key={i} className="flex items-center gap-2 cursor-pointer group">
+              <input type="radio" name="price-m" checked={priceRange === i} onChange={() => setPriceRange(i)} className="accent-navy-700" />
+              <span className="text-sm text-slate-600 group-hover:text-slate-900 transition-colors">{range.label}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+      <div className="pt-2 border-t border-slate-100">
+        <label className="flex items-center gap-3 cursor-pointer">
+          <div onClick={() => setOnlyEconomic(!onlyEconomic)}
+            className={`w-10 h-5 rounded-full transition-colors relative ${onlyEconomic ? "bg-navy-700" : "bg-slate-200"}`}>
+            <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${onlyEconomic ? "translate-x-5" : "translate-x-0.5"}`} />
+          </div>
+          <span className="text-sm font-medium text-slate-700">Solo económicos</span>
+        </label>
+      </div>
+      {hasActiveFilters && (
+        <button onClick={clearFilters} className="text-sm text-navy-600 hover:text-navy-800 font-semibold w-full text-left transition-colors">
+          ✕ Limpiar filtros
+        </button>
+      )}
+    </div>
+  );
+}
+
 export function ShopPage({ showCatalogTitle = false }: { showCatalogTitle?: boolean }) {
   const searchParams = useSearchParams();
   const medida = searchParams.get("medida") ?? undefined;
@@ -110,136 +247,59 @@ export function ShopPage({ showCatalogTitle = false }: { showCatalogTitle?: bool
   const hasActiveFilters =
     vehicleFilter !== "todos" || brandFilter !== "todos" || priceRange !== null || onlyEconomic;
 
-  function clearFilters() {
-    setVehicleFilter("todos");
-    setBrandFilter("todos");
-    setPriceRange(null);
-    setOnlyEconomic(false);
-  }
+  const filterProps = {
+    vehicleFilter, setVehicleFilter,
+    brandFilter, setBrandFilter,
+    priceRange, setPriceRange,
+    onlyEconomic, setOnlyEconomic,
+    hasActiveFilters,
+    clearFilters() {
+      setVehicleFilter("todos");
+      setBrandFilter("todos");
+      setPriceRange(null);
+      setOnlyEconomic(false);
+    },
+  };
 
   return (
     <div className="min-h-screen bg-white">
       <div className="max-w-7xl mx-auto px-4 pt-4 pb-8">
         <div className="flex flex-col lg:flex-row gap-8 items-start">
 
-          {/* Sidebar */}
-          <aside className="w-full lg:w-72 shrink-0 lg:sticky lg:top-8 lg:self-start flex flex-col gap-3">
+          {/* Sidebar — search widget only */}
+          <aside className="w-full lg:w-72 shrink-0 lg:sticky lg:top-8 lg:self-start">
             <TireSizeSearch compact />
-
-            {/* Mobile: filter toggle */}
-            <button
-              onClick={() => setShowFilters(!showFilters)}
-              className="lg:hidden flex items-center justify-between w-full bg-white rounded-xl border border-slate-200 px-5 py-3 text-slate-700 font-bold shadow-sm active:scale-[0.98] transition-all"
-            >
-              <div className="flex items-center gap-2">
-                <svg className="w-5 h-5 text-navy-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
-                </svg>
-                <span>{showFilters ? "Ocultar filtros" : "Mostrar filtros"}</span>
-              </div>
-              <svg
-                className={`w-5 h-5 transition-transform duration-300 ${showFilters ? "rotate-180" : ""}`}
-                fill="none" viewBox="0 0 24 24" stroke="currentColor"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-
-            {/* Filter panel */}
-            <div className={`bg-white rounded-2xl border border-slate-100 p-5 space-y-6 shadow-sm ${showFilters ? "block" : "hidden"} lg:block`}>
-              <h3 className="font-bold text-slate-800 text-sm uppercase tracking-wide">Filtros</h3>
-
-              {/* Vehicle type */}
-              <div>
-                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Tipo de vehículo</p>
-                <div className="space-y-1">
-                  {([
-                    { value: "todos", label: "Todos" },
-                    { value: "auto", label: "Auto" },
-                    { value: "camioneta", label: "Camioneta / SUV" },
-                  ] as const).map(opt => (
-                    <label key={opt.value} className="flex items-center gap-2 cursor-pointer group">
-                      <input
-                        type="radio"
-                        name="vehicle"
-                        value={opt.value}
-                        checked={vehicleFilter === opt.value}
-                        onChange={() => setVehicleFilter(opt.value)}
-                        className="accent-navy-700"
-                      />
-                      <span className="text-sm text-slate-600 group-hover:text-slate-900 transition-colors">{opt.label}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              {/* Brand */}
-              <div>
-                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Marca</p>
-                <select
-                  value={brandFilter}
-                  onChange={e => setBrandFilter(e.target.value)}
-                  className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2 text-slate-700 bg-white focus:border-navy-400 outline-none"
-                >
-                  <option value="todos">Todas las marcas</option>
-                  {BRANDS.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}
-                </select>
-              </div>
-
-              {/* Price */}
-              <div>
-                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Precio</p>
-                <div className="space-y-1">
-                  <label className="flex items-center gap-2 cursor-pointer group">
-                    <input
-                      type="radio"
-                      name="price"
-                      checked={priceRange === null}
-                      onChange={() => setPriceRange(null)}
-                      className="accent-navy-700"
-                    />
-                    <span className="text-sm text-slate-600 group-hover:text-slate-900 transition-colors">Todos los precios</span>
-                  </label>
-                  {PRICE_RANGES.map((range, i) => (
-                    <label key={i} className="flex items-center gap-2 cursor-pointer group">
-                      <input
-                        type="radio"
-                        name="price"
-                        checked={priceRange === i}
-                        onChange={() => setPriceRange(i)}
-                        className="accent-navy-700"
-                      />
-                      <span className="text-sm text-slate-600 group-hover:text-slate-900 transition-colors">{range.label}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              {/* Economic only */}
-              <div className="pt-2 border-t border-slate-100">
-                <label className="flex items-center gap-3 cursor-pointer">
-                  <div
-                    onClick={() => setOnlyEconomic(!onlyEconomic)}
-                    className={`w-10 h-5 rounded-full transition-colors relative ${onlyEconomic ? "bg-navy-700" : "bg-slate-200"}`}
-                  >
-                    <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${onlyEconomic ? "translate-x-5" : "translate-x-0.5"}`} />
-                  </div>
-                  <span className="text-sm font-medium text-slate-700">Solo económicos</span>
-                </label>
-              </div>
-
-              {hasActiveFilters && (
-                <button onClick={clearFilters} className="text-sm text-navy-600 hover:text-navy-800 font-semibold w-full text-left transition-colors">
-                  ✕ Limpiar filtros
-                </button>
-              )}
-            </div>
           </aside>
 
           {/* Main content */}
           <div className="flex-1 min-w-0">
 
-            {/* Catalog mode (no medida in URL) */}
+            {/* Mobile: filter toggle + collapsible panel */}
+            <div className="lg:hidden mb-4 flex flex-col gap-3">
+              <button
+                onClick={() => setShowFilters(!showFilters)}
+                className="flex items-center justify-between w-full bg-white rounded-xl border border-slate-200 px-5 py-3 text-slate-700 font-bold shadow-sm active:scale-[0.98] transition-all"
+              >
+                <div className="flex items-center gap-2">
+                  <svg className="w-5 h-5 text-navy-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                  </svg>
+                  <span>{showFilters ? "Ocultar filtros" : "Mostrar filtros"}</span>
+                </div>
+                <svg className={`w-5 h-5 transition-transform duration-300 ${showFilters ? "rotate-180" : ""}`}
+                  fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              {showFilters && <FilterBar {...filterProps} layout="vertical" />}
+            </div>
+
+            {/* Desktop: horizontal filter bar */}
+            <div className="hidden lg:block">
+              <FilterBar {...filterProps} layout="horizontal" />
+            </div>
+
+            {/* ── Catalog mode (no medida) ── */}
             {!parsed && showCatalogTitle && (
               <>
                 <div className="mb-4">
@@ -254,7 +314,7 @@ export function ShopPage({ showCatalogTitle = false }: { showCatalogTitle?: bool
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <p className="text-slate-500 font-medium">No hay productos con esos filtros.</p>
-                    <button onClick={clearFilters} className="mt-3 text-navy-600 hover:text-navy-800 font-semibold text-sm transition-colors">
+                    <button onClick={filterProps.clearFilters} className="mt-3 text-navy-600 hover:text-navy-800 font-semibold text-sm transition-colors">
                       Limpiar filtros
                     </button>
                   </div>
@@ -268,14 +328,14 @@ export function ShopPage({ showCatalogTitle = false }: { showCatalogTitle?: bool
               </>
             )}
 
-            {/* Buscar mode — no medida entered yet */}
+            {/* ── Buscar mode — no medida entered ── */}
             {!parsed && !showCatalogTitle && (
               <div className="flex flex-col items-center justify-center py-24 text-center">
                 <p className="text-slate-400 text-lg font-medium">Ingresá una medida para buscar.</p>
               </div>
             )}
 
-            {/* Search results */}
+            {/* ── Search results ── */}
             {parsed && exactResults.length === 0 && compatibleResults.length === 0 && (
               <div className="text-center py-20">
                 <svg className="w-16 h-16 text-slate-200 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -287,22 +347,17 @@ export function ShopPage({ showCatalogTitle = false }: { showCatalogTitle?: bool
                 <p className="text-slate-400 text-sm mb-6">
                   Consultanos por WhatsApp, es posible que tengamos stock no publicado.
                 </p>
-                <Link
-                  href="/catalogo"
-                  className="inline-flex items-center gap-2 bg-navy-800 hover:bg-navy-700 text-white font-semibold py-2.5 px-5 rounded-xl text-sm transition-colors"
-                >
+                <Link href="/catalogo" className="inline-flex items-center gap-2 bg-navy-800 hover:bg-navy-700 text-white font-semibold py-2.5 px-5 rounded-xl text-sm transition-colors">
                   Ver catálogo completo
                 </Link>
               </div>
             )}
 
-            {exactResults.length > 0 && (
+            {parsed && exactResults.length > 0 && (
               <section>
                 <div className="flex items-baseline flex-wrap gap-x-3 gap-y-1 mb-4">
                   <h2 className="text-xl font-black text-navy-900">Medida buscada</h2>
-                  {label && (
-                    <span className="text-base font-bold text-slate-500">{label}</span>
-                  )}
+                  {label && <span className="text-base font-bold text-slate-500">{label}</span>}
                   <span className="text-sm text-slate-400">
                     {exactResults.length} resultado{exactResults.length !== 1 ? "s" : ""}
                   </span>
@@ -312,18 +367,27 @@ export function ShopPage({ showCatalogTitle = false }: { showCatalogTitle?: bool
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                   {exactResults.slice(0, 5).map(product => (
-                    <ProductCard
-                      key={product.id}
-                      product={product}
-                      isCheapest={product.id === cheapestExactId}
-                    />
+                    <ProductCard key={product.id} product={product} isCheapest={product.id === cheapestExactId} />
                   ))}
                 </div>
               </section>
             )}
 
-            {compatibleResults.length > 0 && (
+            {parsed && compatibleResults.length > 0 && (
               <section className={exactResults.length > 0 ? "mt-16 border-t border-slate-100 pt-10" : ""}>
+                {/* No exact match notice */}
+                {exactResults.length === 0 && (
+                  <div className="mb-5 flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+                    <svg className="mt-0.5 h-5 w-5 flex-shrink-0 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35M17 11A6 6 0 105 11a6 6 0 0012 0z" />
+                    </svg>
+                    <p className="text-sm text-slate-600">
+                      No encontramos la medida exacta{label && <> <strong className="font-bold text-slate-800">{label}</strong></>}.
+                      {" "}Pero hay medidas compatibles que pueden funcionar en tu vehículo.
+                    </p>
+                  </div>
+                )}
+
                 <div className="mb-6 rounded-xl border border-emerald-200 bg-emerald-50 px-5 py-4">
                   <div className="flex items-start gap-3">
                     <span className="mt-0.5 inline-flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-emerald-600 text-white">

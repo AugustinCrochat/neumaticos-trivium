@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
-import maplibregl, { type LngLatBoundsLike, type Map, type Marker } from "maplibre-gl";
+import maplibregl, { type Map, type Marker } from "maplibre-gl";
 import type { Branch } from "@/lib/config";
 import { useBranch } from "@/contexts/branch-context";
 
@@ -17,6 +17,7 @@ type UserLocation = {
 
 const MAPTILER_KEY = "rZs55HHnOgNdmSMB2Jkn";
 const MAP_STYLE_URL = `https://api.maptiler.com/maps/streets-v4/style.json?key=${MAPTILER_KEY}`;
+const ARGENTINA_MIN_ZOOM = 3.5;
 
 function cleanPhone(phone: string) {
   return phone.replace(/\s/g, "");
@@ -65,6 +66,106 @@ function createUserMarkerElement() {
   return wrapper;
 }
 
+type BranchSummaryProps = {
+  branch: Branch;
+  isActive: boolean;
+  isSelected: boolean;
+  onSelectBranch: (branch: Branch) => void;
+  onSetSelectedBranch: (branch: Branch) => void;
+};
+
+function BranchSummary({
+  branch,
+  isActive,
+  isSelected,
+  onSelectBranch,
+  onSetSelectedBranch,
+}: BranchSummaryProps) {
+  return (
+    <article
+      className={`rounded-2xl border bg-white p-5 shadow-sm transition-all ${
+        isActive
+          ? "border-orange-500 shadow-xl shadow-orange-500/10"
+          : "border-slate-200 hover:border-navy-200"
+      }`}
+    >
+      <button
+        type="button"
+        onClick={() => onSelectBranch(branch)}
+        className="flex w-full items-start gap-4 text-left"
+      >
+        <span className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-navy-50">
+          <Image src="/icon.svg" alt="" width={32} height={32} className="h-8 w-8 object-contain" />
+        </span>
+        <span className="min-w-0">
+          <span className="flex flex-wrap items-center gap-2">
+            <span className="block text-lg font-black text-navy-900">{branch.name}</span>
+            {isSelected && (
+              <span className="rounded-full bg-orange-100 px-2 py-0.5 text-xs font-bold text-orange-700">
+                Tu sucursal
+              </span>
+            )}
+          </span>
+          <span className="mt-1 block text-sm text-slate-600">{branch.address}</span>
+          <span className="block text-sm text-slate-600">{branch.city}</span>
+        </span>
+      </button>
+
+      <dl className="mt-4 grid grid-cols-1 gap-3 text-sm">
+        <div>
+          <dt className="text-xs font-bold uppercase tracking-wide text-slate-400">
+            Horarios
+          </dt>
+          <dd className="mt-0.5 text-slate-700">{branch.hours}</dd>
+        </div>
+        <div>
+          <dt className="text-xs font-bold uppercase tracking-wide text-slate-400">
+            Telefono
+          </dt>
+          <dd className="mt-0.5 text-slate-700">{branch.phone}</dd>
+        </div>
+      </dl>
+
+      <div className="mt-5 flex flex-wrap gap-2">
+        <button
+          type="button"
+          onClick={() => onSetSelectedBranch(branch)}
+          disabled={isSelected}
+          className={`rounded-lg px-3 py-2 text-xs font-bold transition-colors ${
+            isSelected
+              ? "bg-orange-100 text-orange-700"
+              : "bg-navy-900 text-white hover:bg-navy-800"
+          }`}
+        >
+          {isSelected ? "Tu sucursal" : "Elegir esta"}
+        </button>
+        <a
+          href={`tel:${cleanPhone(branch.phone)}`}
+          className="rounded-lg bg-navy-100 px-3 py-2 text-xs font-bold text-navy-900 transition-colors hover:bg-navy-200"
+        >
+          Llamar
+        </a>
+        <a
+          href={`https://wa.me/${branch.whatsapp}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="rounded-lg bg-[#25d366]/15 px-3 py-2 text-xs font-bold text-[#1f9f4b] transition-colors hover:bg-[#25d366]/25"
+        >
+          WhatsApp
+        </a>
+        <a
+          href={branch.mapUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="rounded-lg bg-orange-100 px-3 py-2 text-xs font-bold text-orange-700 transition-colors hover:bg-orange-200"
+        >
+          Ver mapa
+        </a>
+      </div>
+    </article>
+  );
+}
+
 export function BranchesMap({ branches }: BranchesMapProps) {
   const { selectedBranch, setSelectedBranch } = useBranch();
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
@@ -105,6 +206,8 @@ export function BranchesMap({ branches }: BranchesMapProps) {
       style: MAP_STYLE_URL,
       center: getBranchLngLat(initialBranch),
       zoom: 11,
+      minZoom: ARGENTINA_MIN_ZOOM,
+      maxZoom: 17,
       attributionControl: false,
     });
 
@@ -186,10 +289,6 @@ export function BranchesMap({ branches }: BranchesMapProps) {
     });
   }
 
-  function chooseButtonLabel(branch: Branch) {
-    return selectedBranch.id === branch.id ? "Tu sucursal" : "Elegir esta";
-  }
-
   function locateNearestBranch() {
     if (!navigator.geolocation) {
       setGeoStatus("error");
@@ -210,17 +309,21 @@ export function BranchesMap({ branches }: BranchesMapProps) {
           const nearestDistance = getDistanceInKm(nextLocation, nearest.coordinates);
           return currentDistance < nearestDistance ? branch : nearest;
         }, branches[0]);
-        const bounds: LngLatBoundsLike = [
-          [nextLocation.lng, nextLocation.lat],
-          getBranchLngLat(nearestBranch),
-        ];
+        const bounds = new maplibregl.LngLatBounds()
+          .extend([nextLocation.lng, nextLocation.lat])
+          .extend(getBranchLngLat(nearestBranch));
 
         setUserLocation(nextLocation);
         setActiveBranchId(nearestBranch.id);
         setGeoStatus("ready");
         mapRef.current?.fitBounds(bounds, {
-          padding: 90,
-          maxZoom: 14,
+          padding: {
+            top: 110,
+            right: 110,
+            bottom: 110,
+            left: 110,
+          },
+          maxZoom: 13,
           essential: true,
         });
       },
@@ -240,7 +343,7 @@ export function BranchesMap({ branches }: BranchesMapProps) {
     <section className="bg-slate-50">
       <div className="max-w-7xl mx-auto px-4 py-8 md:py-10">
         <div className="grid grid-cols-1 gap-6">
-          <div className="relative h-[78vh] min-h-[620px] w-full overflow-hidden rounded-2xl border border-slate-200 bg-slate-200 shadow-xl shadow-slate-200/80 md:h-[760px]">
+          <div className="relative h-[54vh] min-h-[360px] max-h-[520px] w-full overflow-hidden rounded-2xl border border-slate-200 bg-slate-200 shadow-xl shadow-slate-200/80 md:h-[720px] md:max-h-none">
             <div ref={mapContainerRef} className="absolute inset-0 min-h-full w-full" />
             <button
               type="button"
@@ -250,6 +353,15 @@ export function BranchesMap({ branches }: BranchesMapProps) {
             >
               {geoStatus === "loading" ? "Buscando..." : "Sucursal mas cercana"}
             </button>
+            <div className="pointer-events-auto absolute bottom-5 right-5 z-10 hidden w-[min(390px,calc(100%-40px))] lg:block">
+              <BranchSummary
+                branch={activeBranch}
+                isActive
+                isSelected={selectedBranch.id === activeBranch.id}
+                onSelectBranch={selectBranch}
+                onSetSelectedBranch={setSelectedBranch}
+              />
+            </div>
           </div>
 
           <div className="grid grid-cols-1 content-start gap-4 lg:grid-cols-2">
@@ -264,100 +376,14 @@ export function BranchesMap({ branches }: BranchesMapProps) {
               const isSelected = selectedBranch.id === branch.id;
 
               return (
-                <article
+                <BranchSummary
                   key={branch.id}
-                  className={`rounded-2xl border bg-white p-5 shadow-sm transition-all ${
-                    isActive
-                      ? "border-orange-500 shadow-xl shadow-orange-500/10"
-                      : "border-slate-200 hover:border-navy-200"
-                  }`}
-                >
-                  <button
-                    type="button"
-                    onClick={() => selectBranch(branch)}
-                    className="flex w-full items-start gap-4 text-left"
-                  >
-                    <span className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-navy-50">
-                      <Image
-                        src="/icon.svg"
-                        alt=""
-                        width={32}
-                        height={32}
-                        className="h-8 w-8 object-contain"
-                      />
-                    </span>
-                    <span className="min-w-0">
-                      <span className="flex flex-wrap items-center gap-2">
-                        <span className="block text-lg font-black text-navy-900">
-                          {branch.name}
-                        </span>
-                        {isSelected && (
-                          <span className="rounded-full bg-orange-100 px-2 py-0.5 text-xs font-bold text-orange-700">
-                            Tu sucursal
-                          </span>
-                        )}
-                      </span>
-                      <span className="mt-1 block text-sm text-slate-600">
-                        {branch.address}
-                      </span>
-                      <span className="block text-sm text-slate-600">
-                        {branch.city}
-                      </span>
-                    </span>
-                  </button>
-
-                  <dl className="mt-4 grid grid-cols-1 gap-3 text-sm">
-                    <div>
-                      <dt className="text-xs font-bold uppercase tracking-wide text-slate-400">
-                        Horarios
-                      </dt>
-                      <dd className="mt-0.5 text-slate-700">{branch.hours}</dd>
-                    </div>
-                    <div>
-                      <dt className="text-xs font-bold uppercase tracking-wide text-slate-400">
-                        Telefono
-                      </dt>
-                      <dd className="mt-0.5 text-slate-700">{branch.phone}</dd>
-                    </div>
-                  </dl>
-
-                  <div className="mt-5 flex flex-wrap gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setSelectedBranch(branch)}
-                      disabled={isSelected}
-                      className={`rounded-lg px-3 py-2 text-xs font-bold transition-colors ${
-                        isSelected
-                          ? "bg-orange-100 text-orange-700"
-                          : "bg-navy-900 text-white hover:bg-navy-800"
-                      }`}
-                    >
-                      {chooseButtonLabel(branch)}
-                    </button>
-                    <a
-                      href={`tel:${cleanPhone(branch.phone)}`}
-                      className="rounded-lg bg-navy-100 px-3 py-2 text-xs font-bold text-navy-900 transition-colors hover:bg-navy-200"
-                    >
-                      Llamar
-                    </a>
-                    <a
-                      href={`https://wa.me/${branch.whatsapp}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="rounded-lg bg-[#25d366]/15 px-3 py-2 text-xs font-bold text-[#1f9f4b] transition-colors hover:bg-[#25d366]/25"
-                    >
-                      WhatsApp
-                    </a>
-                    <a
-                      href={branch.mapUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="rounded-lg bg-orange-100 px-3 py-2 text-xs font-bold text-orange-700 transition-colors hover:bg-orange-200"
-                    >
-                      Ver mapa
-                    </a>
-                  </div>
-                </article>
+                  branch={branch}
+                  isActive={isActive}
+                  isSelected={isSelected}
+                  onSelectBranch={selectBranch}
+                  onSetSelectedBranch={setSelectedBranch}
+                />
               );
             })}
           </div>

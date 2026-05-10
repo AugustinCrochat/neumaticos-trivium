@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useBranch } from "@/contexts/branch-context";
 import { TireDiagram } from "./TireDiagram";
@@ -122,6 +122,29 @@ export function TireSizeSearch({
   }, []);
 
   const hasInput = width.trim() !== "" && profile.trim() !== "" && rim.trim() !== "";
+
+  const sizeWarning = useMemo(() => {
+    // Validate against standard tire size ranges
+    if (width.length >= 3) {
+      const w = Number(width);
+      if (w < 135 || w > 355 || w % 5 !== 0) {
+        return `Ancho no estándar. Los anchos van de 135 a 355 en múltiplos de 5 (ej: 195, 205, 225)`;
+      }
+    }
+    if (profile.length >= 2) {
+      const p = Number(profile);
+      if (p < 25 || p > 85 || p % 5 !== 0) {
+        return `Perfil no estándar. Los perfiles van de 25 a 85 en múltiplos de 5 (ej: 45, 55, 65)`;
+      }
+    }
+    if (rim.length >= 2) {
+      const r = Number(rim);
+      if (r < 13 || r > 24) {
+        return `Rodado no estándar. Los rodados van del 13 al 24 (ej: 15, 16, 17)`;
+      }
+    }
+    return null;
+  }, [width, profile, rim]);
 
   const [showScanner, setShowScanner] = useState(false);
   const [isScanning, setIsScanning] = useState(false);
@@ -686,6 +709,15 @@ export function TireSizeSearch({
               </button>
             )}
           </div>
+        )}
+
+        {sizeWarning && (
+          <p className="flex items-start gap-1.5 text-orange-400 text-[11px] font-medium leading-snug">
+            <svg className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
+            </svg>
+            {sizeWarning}
+          </p>
         )}
 
         <button
