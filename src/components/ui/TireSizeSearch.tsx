@@ -363,6 +363,9 @@ export function TireSizeSearch({
 
   return (
     <div className={`bg-navy-900 rounded-2xl border border-navy-800 ${compact ? 'p-4' : 'p-6'} shadow-2xl relative group w-full`}>
+      <p className={`font-bold text-slate-400 uppercase tracking-widest ${compact ? 'text-[10px] mb-1' : 'text-xs mb-2'}`}>
+        Buscar por medida
+      </p>
       <TireDiagram width={width} aspect={profile} rim={rim} focused={focused} compact={compact} />
 
       {showScanner && (

@@ -112,7 +112,7 @@ export default async function BuscarPage({ searchParams }: Props) {
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-4 pt-4 pb-8">
         <div className="flex flex-col lg:flex-row gap-8 items-start">
 
           {/* Sidebar con buscador */}
@@ -153,9 +153,12 @@ export default async function BuscarPage({ searchParams }: Props) {
             {exactResults.length > 0 && (
               <section>
                 <div className="flex items-baseline justify-between mb-4">
-                  <h2 className="text-xl font-black text-navy-900">Medida buscada</h2>
+                  <div className="flex items-baseline gap-3">
+                    <h2 className="text-xl font-black text-navy-900">Medida buscada</h2>
+                    <span className="text-sm text-slate-400">{exactResults.length} resultado{exactResults.length !== 1 ? "s" : ""}</span>
+                  </div>
                   {exactResults.length > 5 && (
-                    <span className="text-sm text-slate-400">{exactResults.length} resultados</span>
+                    <span className="text-sm text-slate-400">Mostrando 5 de {exactResults.length}</span>
                   )}
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">

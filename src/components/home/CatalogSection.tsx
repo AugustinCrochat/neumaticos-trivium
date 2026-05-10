@@ -43,10 +43,10 @@ export function CatalogSection() {
   }
 
   return (
-    <section id="catalogo" className="py-16 bg-slate-50">
+    <section id="catalogo" className="pt-6 pb-16 bg-slate-50">
       <div className="max-w-7xl mx-auto px-4">
         {/* Header */}
-        <div className="mb-6">
+        <div className="mb-4">
           <h2 className="text-3xl font-black text-navy-900 mb-1">
             Catálogo de Neumáticos
           </h2>
