@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
-import maplibregl, { type Map, type Marker } from "maplibre-gl";
+import maplibregl, { type GeoJSONSource, type Map, type Marker } from "maplibre-gl";
 import type { Branch } from "@/lib/config";
 import { useBranch } from "@/contexts/branch-context";
 
@@ -18,6 +18,19 @@ type UserLocation = {
 const MAPTILER_KEY = "rZs55HHnOgNdmSMB2Jkn";
 const MAP_STYLE_URL = `https://api.maptiler.com/maps/streets-v4/style.json?key=${MAPTILER_KEY}`;
 const ARGENTINA_MIN_ZOOM = 3.5;
+const BRANCH_SOURCE_ID = "trivium-branches";
+const BRANCH_HALO_LAYER_ID = "trivium-branch-halos";
+const BRANCH_POINT_LAYER_ID = "trivium-branch-points";
+const BRANCH_DOT_LAYER_ID = "trivium-branch-dots";
+const BRANCH_LABEL_LAYER_ID = "trivium-branch-labels";
+
+type BranchFeatureProperties = {
+  id: string;
+  shortName: string;
+  isActive: boolean;
+};
+
+type BranchFeatureCollection = GeoJSON.FeatureCollection<GeoJSON.Point, BranchFeatureProperties>;
 
 function getDistanceInKm(from: UserLocation, to: UserLocation) {
   const earthRadiusKm = 6371;
@@ -36,23 +49,93 @@ function getBranchLngLat(branch: Branch): [number, number] {
   return [branch.coordinates.lng, branch.coordinates.lat];
 }
 
-function createBranchMarkerElement(branch: Branch, isActive: boolean) {
-  const wrapper = document.createElement("button");
-  wrapper.type = "button";
-  wrapper.className = "trivium-map-pin";
-  wrapper.setAttribute("aria-label", `Ver sucursal ${branch.shortName}`);
+function createBranchFeatureCollection(
+  branches: Branch[],
+  activeBranchId: string
+): BranchFeatureCollection {
+  return {
+    type: "FeatureCollection",
+    features: branches.map((branch) => ({
+      type: "Feature",
+      properties: {
+        id: branch.id,
+        shortName: branch.shortName,
+        isActive: branch.id === activeBranchId,
+      },
+      geometry: {
+        type: "Point",
+        coordinates: getBranchLngLat(branch),
+      },
+    })),
+  };
+}
 
-  if (isActive) {
-    wrapper.classList.add("trivium-map-pin-active");
-  }
+function getBranchSource(map: Map) {
+  return map.getSource(BRANCH_SOURCE_ID) as GeoJSONSource | undefined;
+}
 
-  const icon = document.createElement("img");
-  icon.src = "/icon.svg";
-  icon.alt = "";
-  icon.className = "trivium-map-pin-icon";
-  wrapper.appendChild(icon);
+function addBranchLayers(map: Map, branches: Branch[], activeBranchId: string) {
+  if (getBranchSource(map)) return;
 
-  return wrapper;
+  map.addSource(BRANCH_SOURCE_ID, {
+    type: "geojson",
+    data: createBranchFeatureCollection(branches, activeBranchId),
+  });
+
+  map.addLayer({
+    id: BRANCH_HALO_LAYER_ID,
+    type: "circle",
+    source: BRANCH_SOURCE_ID,
+    paint: {
+      "circle-radius": ["case", ["get", "isActive"], 20, 17],
+      "circle-color": "#ffffff",
+      "circle-stroke-color": ["case", ["get", "isActive"], "#ff1e00", "#0a1a30"],
+      "circle-stroke-width": ["case", ["get", "isActive"], 3, 2],
+      "circle-opacity": 0.98,
+    },
+  });
+
+  map.addLayer({
+    id: BRANCH_POINT_LAYER_ID,
+    type: "circle",
+    source: BRANCH_SOURCE_ID,
+    paint: {
+      "circle-radius": ["case", ["get", "isActive"], 13, 11],
+      "circle-color": ["case", ["get", "isActive"], "#ff1e00", "#0a1a30"],
+      "circle-stroke-color": "#ffffff",
+      "circle-stroke-width": 2,
+    },
+  });
+
+  map.addLayer({
+    id: BRANCH_DOT_LAYER_ID,
+    type: "circle",
+    source: BRANCH_SOURCE_ID,
+    paint: {
+      "circle-radius": 4,
+      "circle-color": "#ffffff",
+      "circle-opacity": 0.95,
+    },
+  });
+
+  map.addLayer({
+    id: BRANCH_LABEL_LAYER_ID,
+    type: "symbol",
+    source: BRANCH_SOURCE_ID,
+    layout: {
+      "text-field": ["get", "shortName"],
+      "text-anchor": "top",
+      "text-offset": [0, 1.65],
+      "text-size": 12,
+      "text-font": ["Noto Sans Bold"],
+      "text-allow-overlap": true,
+    },
+    paint: {
+      "text-color": "#0a1a30",
+      "text-halo-color": "#ffffff",
+      "text-halo-width": 2,
+    },
+  });
 }
 
 function createUserMarkerElement() {
@@ -146,7 +229,6 @@ export function BranchesMap({ branches }: BranchesMapProps) {
   const { selectedBranch } = useBranch();
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<Map | null>(null);
-  const branchMarkersRef = useRef<Marker[]>([]);
   const userMarkerRef = useRef<Marker | null>(null);
   const initialBranchRef = useRef<Branch | null>(null);
   const [activeBranchId, setActiveBranchId] = useState<string | null>(null);
@@ -199,37 +281,38 @@ export function BranchesMap({ branches }: BranchesMapProps) {
     map.touchZoomRotate.enable();
     map.dragPan.enable();
     map.scrollZoom.enable();
-    map.on("load", () => map.resize());
+    map.on("load", () => {
+      map.resize();
+      addBranchLayers(map, branches, activeBranch.id);
+      map.on("click", BRANCH_POINT_LAYER_ID, (event) => {
+        const branchId = event.features?.[0]?.properties?.id;
+        const branch = branches.find((currentBranch) => currentBranch.id === branchId);
+        if (branch) selectBranch(branch);
+      });
+      map.on("mouseenter", BRANCH_POINT_LAYER_ID, () => {
+        map.getCanvas().style.cursor = "pointer";
+      });
+      map.on("mouseleave", BRANCH_POINT_LAYER_ID, () => {
+        map.getCanvas().style.cursor = "";
+      });
+    });
 
     mapRef.current = map;
     window.setTimeout(() => map.resize(), 0);
 
     return () => {
-      branchMarkersRef.current.forEach((marker) => marker.remove());
-      branchMarkersRef.current = [];
       userMarkerRef.current?.remove();
       userMarkerRef.current = null;
       map.remove();
       mapRef.current = null;
     };
-  }, [branches]);
+  }, [activeBranch.id, branches]);
 
   useEffect(() => {
     const map = mapRef.current;
     if (!map) return;
-
-    branchMarkersRef.current.forEach((marker) => marker.remove());
-    branchMarkersRef.current = branches.map((branch) => {
-      const markerElement = createBranchMarkerElement(branch, branch.id === activeBranch.id);
-      markerElement.addEventListener("click", () => selectBranch(branch));
-
-      return new maplibregl.Marker({
-        element: markerElement,
-        anchor: "center",
-      })
-        .setLngLat(getBranchLngLat(branch))
-        .addTo(map);
-    });
+    const source = getBranchSource(map);
+    source?.setData(createBranchFeatureCollection(branches, activeBranch.id));
   }, [activeBranch.id, branches]);
 
   useEffect(() => {

@@ -9,11 +9,185 @@ import { TireSizeSearch } from "@/components/ui/TireSizeSearch";
 import { useBranch } from "@/contexts/branch-context";
 import type { TireProduct, TireSize, VehicleType } from "@/lib/types";
 
-const PRICE_RANGES = [
-  { label: "Hasta $100.000", min: 0, max: 100000 },
-  { label: "$100.000 – $150.000", min: 100000, max: 150000 },
-  { label: "Más de $150.000", min: 150000, max: Infinity },
-];
+// Removed PRICE_RANGES in favor of a slider
+const MAX_POSSIBLE_PRICE = 6000000; // 6 million limit for the slider
+const MIN_POSSIBLE_PRICE = 50000;  // 50k min
+
+function getBrandLogo(brandId: string) {
+  const domains: Record<string, string> = {
+    michelin: "michelin.com",
+    bridgestone: "bridgestone.com",
+    pirelli: "pirelli.com",
+    goodyear: "goodyear.com",
+    continental: "continental-tires.com",
+    fate: "fate.com.ar",
+    hankook: "hankooktire.com",
+    kumho: "kumhotire.com",
+    yokohama: "yokohamatire.com",
+    nexen: "nexentire.com",
+    linglong: "linglongtire.com",
+    firemax: "firemaxtire.com",
+    bfgoodrich: "bfgoodrichtires.com",
+    zmax: "zmax-tire.com",
+  };
+  const domain = domains[brandId];
+  if (!domain) return null;
+  return `https://logo.clearbit.com/${domain}`;
+}
+
+function BrandDropdown({
+  value,
+  onChange,
+  className = "",
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  className?: string;
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+  const selectedBrand = BRANDS.find((b) => b.id === value);
+
+  return (
+    <div className={`relative ${className}`}>
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center justify-between w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-medium text-slate-700 hover:border-navy-300 transition-all focus:ring-2 focus:ring-navy-500/10 outline-none"
+      >
+        <div className="flex items-center gap-3 overflow-hidden">
+          {selectedBrand ? (
+            <>
+              <div className="w-6 h-6 shrink-0 bg-slate-50 rounded flex items-center justify-center p-0.5 border border-slate-100">
+                {getBrandLogo(selectedBrand.id) ? (
+                  <img
+                    src={getBrandLogo(selectedBrand.id)!}
+                    alt={selectedBrand.name}
+                    className="w-full h-full object-contain"
+                    onError={(e) => (e.currentTarget.style.display = "none")}
+                  />
+                ) : (
+                  <div className="w-full h-full bg-navy-100 text-navy-600 text-[10px] flex items-center justify-center font-bold">
+                    {selectedBrand.name[0]}
+                  </div>
+                )}
+              </div>
+              <span className="truncate">{selectedBrand.name}</span>
+            </>
+          ) : (
+            <span className="text-slate-500">Todas las marcas</span>
+          )}
+        </div>
+        <svg
+          className={`w-4 h-4 text-slate-400 transition-transform ${isOpen ? "rotate-180" : ""}`}
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+
+      {isOpen && (
+        <>
+          <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)} />
+          <div className="absolute top-full left-0 right-0 mt-2 z-50 bg-white border border-slate-100 rounded-xl shadow-2xl overflow-hidden py-1 animate-in fade-in zoom-in duration-150">
+            <button
+              onClick={() => {
+                onChange("todos");
+                setIsOpen(false);
+              }}
+              className={`w-full px-4 py-2.5 text-left text-sm flex items-center gap-3 transition-colors ${
+                value === "todos" ? "bg-navy-50 text-navy-700 font-bold" : "text-slate-600 hover:bg-slate-50"
+              }`}
+            >
+              <div className="w-6 h-6 shrink-0 flex items-center justify-center text-slate-400">
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </div>
+              Todas las marcas
+            </button>
+            <div className="max-h-[300px] overflow-y-auto">
+              {BRANDS.map((b) => (
+                <button
+                  key={b.id}
+                  onClick={() => {
+                    onChange(b.id);
+                    setIsOpen(false);
+                  }}
+                  className={`w-full px-4 py-2.5 text-left text-sm flex items-center gap-3 transition-colors ${
+                    value === b.id ? "bg-navy-50 text-navy-700 font-bold" : "text-slate-600 hover:bg-slate-50"
+                  }`}
+                >
+                  <div className="w-6 h-6 shrink-0 bg-slate-50 rounded flex items-center justify-center p-0.5 border border-slate-100">
+                    {getBrandLogo(b.id) ? (
+                      <img
+                        src={getBrandLogo(b.id)!}
+                        alt={b.name}
+                        className="w-full h-full object-contain"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-navy-100 text-navy-600 text-[10px] flex items-center justify-center font-bold">
+                        {b.name[0]}
+                      </div>
+                    )}
+                  </div>
+                  {b.name}
+                </button>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+function PriceSlider({
+  value,
+  onChange,
+  max = MAX_POSSIBLE_PRICE,
+}: {
+  value: number;
+  onChange: (v: number) => void;
+  max?: number;
+}) {
+  const percent = ((value - MIN_POSSIBLE_PRICE) / (max - MIN_POSSIBLE_PRICE)) * 100;
+
+  return (
+    <div className="space-y-4">
+      <div className="flex justify-between items-center px-1">
+        <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Precio Máx.</span>
+        <span className="text-sm font-black text-navy-900 bg-navy-50 px-2 py-0.5 rounded-md">
+          {new Intl.NumberFormat("es-AR", {
+            style: "currency",
+            currency: "ARS",
+            maximumFractionDigits: 0,
+          }).format(value)}
+        </span>
+      </div>
+      <div className="relative h-6 flex items-center group">
+        <div className="absolute h-1.5 w-full bg-slate-100 rounded-full" />
+        <div
+          className="absolute h-1.5 bg-navy-600 rounded-full"
+          style={{ width: `${percent}%` }}
+        />
+        <input
+          type="range"
+          min={MIN_POSSIBLE_PRICE}
+          max={max}
+          step={10000}
+          value={value}
+          onChange={(e) => onChange(Number(e.target.value))}
+          className="absolute w-full h-full opacity-0 cursor-pointer z-10"
+        />
+        <div
+          className="absolute w-5 h-5 bg-white border-2 border-navy-600 rounded-full shadow-lg group-hover:scale-110 transition-transform pointer-events-none"
+          style={{ left: `calc(${percent}% - 10px)` }}
+        />
+      </div>
+    </div>
+  );
+}
 
 function parseMedida(medida: string) {
   const parts = medida.toLowerCase().split("-");
@@ -68,19 +242,16 @@ function getUnitPrice(product: TireProduct) {
 }
 
 function FilterBar({
-  vehicleFilter, setVehicleFilter,
   brandFilter, setBrandFilter,
-  priceRange, setPriceRange,
+  maxPrice, setMaxPrice,
   onlyEconomic, setOnlyEconomic,
   hasActiveFilters, clearFilters,
   layout,
 }: {
-  vehicleFilter: VehicleType | "todos";
-  setVehicleFilter: (v: VehicleType | "todos") => void;
   brandFilter: string;
   setBrandFilter: (v: string) => void;
-  priceRange: number | null;
-  setPriceRange: (v: number | null) => void;
+  maxPrice: number;
+  setMaxPrice: (v: number) => void;
   onlyEconomic: boolean;
   setOnlyEconomic: (v: boolean) => void;
   hasActiveFilters: boolean;
@@ -89,55 +260,34 @@ function FilterBar({
 }) {
   if (layout === "horizontal") {
     return (
-      <div className="flex items-center gap-2 flex-wrap bg-white rounded-xl border border-slate-200 px-4 py-3 shadow-sm mb-5">
-        {/* Vehicle type pills */}
-        <div className="flex items-center gap-1">
-          {([
-            { value: "todos", label: "Todos" },
-            { value: "auto", label: "Auto" },
-            { value: "camioneta", label: "Camioneta / SUV" },
-          ] as const).map(opt => (
-            <button
-              key={opt.value}
-              onClick={() => setVehicleFilter(opt.value)}
-              className={`px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors ${
-                vehicleFilter === opt.value ? "bg-navy-800 text-white" : "text-slate-600 hover:bg-slate-100"
-              }`}
-            >
-              {opt.label}
-            </button>
-          ))}
-        </div>
-        <div className="w-px h-5 bg-slate-200 mx-1 shrink-0" />
-        <select
+      <div className="flex items-center gap-4 flex-wrap bg-white rounded-2xl border border-slate-100 px-5 py-4 shadow-sm mb-6">
+        <BrandDropdown
           value={brandFilter}
-          onChange={e => setBrandFilter(e.target.value)}
-          className="text-sm border border-slate-200 rounded-lg px-3 py-1.5 text-slate-700 bg-white focus:border-navy-400 outline-none"
-        >
-          <option value="todos">Todas las marcas</option>
-          {BRANDS.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}
-        </select>
-        <select
-          value={priceRange ?? ""}
-          onChange={e => setPriceRange(e.target.value === "" ? null : Number(e.target.value))}
-          className="text-sm border border-slate-200 rounded-lg px-3 py-1.5 text-slate-700 bg-white focus:border-navy-400 outline-none"
-        >
-          <option value="">Todos los precios</option>
-          {PRICE_RANGES.map((range, i) => <option key={i} value={i}>{range.label}</option>)}
-        </select>
-        <div className="w-px h-5 bg-slate-200 mx-1 shrink-0" />
-        <label className="flex items-center gap-2 cursor-pointer">
+          onChange={setBrandFilter}
+          className="w-56"
+        />
+        
+        <div className="w-px h-8 bg-slate-100 mx-1 shrink-0" />
+        
+        <div className="w-64">
+          <PriceSlider value={maxPrice} onChange={setMaxPrice} />
+        </div>
+
+        <div className="w-px h-8 bg-slate-100 mx-1 shrink-0" />
+
+        <label className="flex items-center gap-3 cursor-pointer group">
           <div
             onClick={() => setOnlyEconomic(!onlyEconomic)}
-            className={`w-8 h-4 rounded-full relative transition-colors ${onlyEconomic ? "bg-navy-700" : "bg-slate-200"}`}
+            className={`w-10 h-5 rounded-full relative transition-all duration-300 ${onlyEconomic ? "bg-navy-700 shadow-inner" : "bg-slate-200"}`}
           >
-            <div className={`absolute top-0.5 w-3 h-3 bg-white rounded-full shadow transition-transform ${onlyEconomic ? "translate-x-4" : "translate-x-0.5"}`} />
+            <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow-md transition-transform duration-300 ${onlyEconomic ? "translate-x-5" : "translate-x-0.5"}`} />
           </div>
-          <span className="text-sm font-medium text-slate-700">Solo económicos</span>
+          <span className="text-sm font-bold text-slate-700 group-hover:text-navy-900 transition-colors">Solo económicos</span>
         </label>
+
         {hasActiveFilters && (
-          <button onClick={clearFilters} className="ml-auto text-sm text-navy-600 hover:text-navy-800 font-semibold transition-colors">
-            ✕ Limpiar
+          <button onClick={clearFilters} className="ml-auto text-sm text-navy-600 hover:text-navy-800 font-bold px-3 py-1.5 rounded-lg hover:bg-navy-50 transition-all flex items-center gap-2">
+            ✕ Limpiar filtros
           </button>
         )}
       </div>
@@ -145,58 +295,29 @@ function FilterBar({
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-100 p-5 space-y-6 shadow-sm">
-      <h3 className="font-bold text-slate-800 text-sm uppercase tracking-wide">Filtros</h3>
+    <div className="bg-white rounded-2xl border border-slate-100 p-6 space-y-8 shadow-sm">
       <div>
-        <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Tipo de vehículo</p>
-        <div className="space-y-1">
-          {([
-            { value: "todos", label: "Todos" },
-            { value: "auto", label: "Auto" },
-            { value: "camioneta", label: "Camioneta / SUV" },
-          ] as const).map(opt => (
-            <label key={opt.value} className="flex items-center gap-2 cursor-pointer group">
-              <input type="radio" name="vehicle-m" value={opt.value} checked={vehicleFilter === opt.value}
-                onChange={() => setVehicleFilter(opt.value)} className="accent-navy-700" />
-              <span className="text-sm text-slate-600 group-hover:text-slate-900 transition-colors">{opt.label}</span>
-            </label>
-          ))}
-        </div>
+        <p className="text-xs font-black text-slate-400 uppercase tracking-[0.15em] mb-4">Marca</p>
+        <BrandDropdown value={brandFilter} onChange={setBrandFilter} className="w-full" />
       </div>
+
       <div>
-        <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Marca</p>
-        <select value={brandFilter} onChange={e => setBrandFilter(e.target.value)}
-          className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2 text-slate-700 bg-white focus:border-navy-400 outline-none">
-          <option value="todos">Todas las marcas</option>
-          {BRANDS.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}
-        </select>
+        <p className="text-xs font-black text-slate-400 uppercase tracking-[0.15em] mb-6">Precio</p>
+        <PriceSlider value={maxPrice} onChange={setMaxPrice} />
       </div>
-      <div>
-        <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Precio</p>
-        <div className="space-y-1">
-          <label className="flex items-center gap-2 cursor-pointer group">
-            <input type="radio" name="price-m" checked={priceRange === null} onChange={() => setPriceRange(null)} className="accent-navy-700" />
-            <span className="text-sm text-slate-600 group-hover:text-slate-900 transition-colors">Todos los precios</span>
-          </label>
-          {PRICE_RANGES.map((range, i) => (
-            <label key={i} className="flex items-center gap-2 cursor-pointer group">
-              <input type="radio" name="price-m" checked={priceRange === i} onChange={() => setPriceRange(i)} className="accent-navy-700" />
-              <span className="text-sm text-slate-600 group-hover:text-slate-900 transition-colors">{range.label}</span>
-            </label>
-          ))}
-        </div>
-      </div>
-      <div className="pt-2 border-t border-slate-100">
-        <label className="flex items-center gap-3 cursor-pointer">
+
+      <div className="pt-6 border-t border-slate-100">
+        <label className="flex items-center gap-4 cursor-pointer group">
           <div onClick={() => setOnlyEconomic(!onlyEconomic)}
-            className={`w-10 h-5 rounded-full transition-colors relative ${onlyEconomic ? "bg-navy-700" : "bg-slate-200"}`}>
-            <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${onlyEconomic ? "translate-x-5" : "translate-x-0.5"}`} />
+            className={`w-12 h-6 rounded-full transition-all duration-300 relative ${onlyEconomic ? "bg-navy-700 shadow-inner" : "bg-slate-200"}`}>
+            <div className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow-md transition-transform duration-300 ${onlyEconomic ? "translate-x-7" : "translate-x-1"}`} />
           </div>
-          <span className="text-sm font-medium text-slate-700">Solo económicos</span>
+          <span className="text-sm font-bold text-slate-700 group-hover:text-navy-900 transition-colors">Solo económicos</span>
         </label>
       </div>
+
       {hasActiveFilters && (
-        <button onClick={clearFilters} className="text-sm text-navy-600 hover:text-navy-800 font-semibold w-full text-left transition-colors">
+        <button onClick={clearFilters} className="text-sm text-navy-600 hover:text-navy-800 font-bold w-full text-center py-3 bg-navy-50 rounded-xl transition-all">
           ✕ Limpiar filtros
         </button>
       )}
@@ -209,9 +330,8 @@ export function ShopPage({ showCatalogTitle = false }: { showCatalogTitle?: bool
   const searchParams = useSearchParams();
   const medida = searchParams.get("medida") ?? undefined;
 
-  const [vehicleFilter, setVehicleFilter] = useState<VehicleType | "todos">("todos");
   const [brandFilter, setBrandFilter] = useState("todos");
-  const [priceRange, setPriceRange] = useState<number | null>(null);
+  const [maxPrice, setMaxPrice] = useState(MAX_POSSIBLE_PRICE);
   const [onlyEconomic, setOnlyEconomic] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
 
@@ -219,12 +339,8 @@ export function ShopPage({ showCatalogTitle = false }: { showCatalogTitle?: bool
 
   const { exactResults, compatibleResults, allProducts } = useMemo(() => {
     const ok = (p: TireProduct) => {
-      if (vehicleFilter !== "todos" && !p.vehicleType.includes(vehicleFilter as VehicleType)) return false;
       if (brandFilter !== "todos" && p.brandId !== brandFilter) return false;
-      if (priceRange !== null) {
-        const r = PRICE_RANGES[priceRange];
-        if (p.price < r.min || p.price > r.max) return false;
-      }
+      if (p.price > maxPrice) return false;
       if (onlyEconomic && !p.isEconomic) return false;
       return true;
     };
@@ -238,7 +354,7 @@ export function ShopPage({ showCatalogTitle = false }: { showCatalogTitle?: bool
     const compatible = PRODUCTS.filter(p => isCompatibleSize(p, parsed) && ok(p));
 
     return { exactResults: exact, compatibleResults: compatible, allProducts: [] };
-  }, [parsed, vehicleFilter, brandFilter, priceRange, onlyEconomic]);
+  }, [parsed, brandFilter, maxPrice, onlyEconomic]);
 
   const label = parsed ? formatSizeLabel(parsed) : null;
   const searchedSize: TireSize | null =
@@ -247,18 +363,30 @@ export function ShopPage({ showCatalogTitle = false }: { showCatalogTitle?: bool
       : null;
   const cheapestExactId = exactResults[0]?.id ?? null;
   const hasActiveFilters =
-    vehicleFilter !== "todos" || brandFilter !== "todos" || priceRange !== null || onlyEconomic;
+    brandFilter !== "todos" || maxPrice < MAX_POSSIBLE_PRICE || onlyEconomic;
+
+  const handleWhatsApp = (waLabel: string | null) => {
+    const waUrl = (branch: typeof selectedBranch) =>
+      `https://wa.me/${branch.whatsapp}?text=${encodeURIComponent(
+        `Hola, no encontré neumáticos en medida ${waLabel || "específica"} en la web. ¿Tienen stock disponible?`
+      )}`;
+    if (hasConfirmedBranch) {
+      window.open(waUrl(selectedBranch), "_blank", "noopener,noreferrer");
+    } else {
+      openModalForAction((branch) =>
+        window.open(waUrl(branch), "_blank", "noopener,noreferrer")
+      );
+    }
+  };
 
   const filterProps = {
-    vehicleFilter, setVehicleFilter,
     brandFilter, setBrandFilter,
-    priceRange, setPriceRange,
+    maxPrice, setMaxPrice,
     onlyEconomic, setOnlyEconomic,
     hasActiveFilters,
     clearFilters() {
-      setVehicleFilter("todos");
       setBrandFilter("todos");
-      setPriceRange(null);
+      setMaxPrice(MAX_POSSIBLE_PRICE);
       setOnlyEconomic(false);
     },
   };
@@ -338,57 +466,62 @@ export function ShopPage({ showCatalogTitle = false }: { showCatalogTitle?: bool
             )}
 
             {/* ── Search results ── */}
-            {parsed && exactResults.length === 0 && compatibleResults.length === 0 && (
-              <div className="text-center py-20">
-                <svg className="w-16 h-16 text-slate-200 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <p className="text-slate-600 font-semibold text-lg mb-2">
-                  No encontramos neumáticos en medida {label}
-                </p>
-                <p className="text-slate-400 text-sm mb-6">
-                  Consultanos por WhatsApp, es posible que tengamos stock no publicado.
-                </p>
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-                  <button
-                    onClick={() => {
-                      const waUrl = (branch: typeof selectedBranch) =>
-                        `https://wa.me/${branch.whatsapp}?text=${encodeURIComponent(
-                          `Hola, no encontré neumáticos en medida ${label} en la web. ¿Tienen stock disponible?`
-                        )}`;
-                      if (hasConfirmedBranch) {
-                        window.open(waUrl(selectedBranch), "_blank", "noopener,noreferrer");
-                      } else {
-                        openModalForAction((branch) =>
-                          window.open(waUrl(branch), "_blank", "noopener,noreferrer")
-                        );
-                      }
-                    }}
-                    className="flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 px-6 rounded-xl text-sm transition-all shadow-lg shadow-emerald-600/20 active:scale-[0.98]"
-                  >
-                    <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+            {parsed && exactResults.length === 0 && (
+              <div className={`mb-12 ${compatibleResults.length === 0 ? 'py-20' : ''}`}>
+                <div className={`text-center ${compatibleResults.length > 0 ? 'bg-slate-50 border border-slate-100 rounded-[2.5rem] p-8 md:p-12 mb-10' : ''}`}>
+                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white text-slate-300 mb-6 shadow-sm">
+                    <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
-                    <span>Consultar por WhatsApp</span>
-                  </button>
-                  <Link href="/catalogo" className="inline-flex items-center gap-2 bg-white hover:bg-slate-50 text-navy-800 border border-slate-200 font-semibold py-2.5 px-6 rounded-xl text-sm transition-all active:scale-[0.98]">
-                    Ver catálogo completo
-                  </Link>
+                  </div>
+                  <h3 className="text-slate-800 font-black text-2xl md:text-3xl mb-3">
+                    No encontramos neumáticos en medida {label}
+                  </h3>
+                  <p className="text-slate-500 font-medium mb-8 max-w-lg mx-auto">
+                    Consultanos por WhatsApp, es posible que tengamos stock no publicado o alternativas para tu vehículo.
+                  </p>
+                  <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <button
+                      onClick={() => handleWhatsApp(label)}
+                      className="w-full sm:w-auto flex items-center justify-center gap-3 bg-emerald-600 hover:bg-emerald-700 text-white font-black py-4 px-8 rounded-2xl text-base transition-all shadow-xl shadow-emerald-600/20 active:scale-[0.98]"
+                    >
+                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                      </svg>
+                      <span>Consultar por WhatsApp</span>
+                    </button>
+                    <Link
+                      href="/catalogo"
+                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white hover:bg-slate-50 text-navy-800 border-2 border-slate-200 font-black py-4 px-8 rounded-2xl text-base transition-all active:scale-[0.98]"
+                    >
+                      Ver catálogo completo
+                    </Link>
+                  </div>
                 </div>
+
+                {compatibleResults.length > 0 && (
+                  <div className="flex items-start gap-4 bg-navy-50/50 border border-navy-100 p-5 rounded-2xl mb-8">
+                    <div className="mt-0.5 w-6 h-6 flex-shrink-0 text-navy-600">
+                      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <p className="text-sm md:text-base text-navy-900 font-bold leading-relaxed">
+                      No encontramos la medida exacta <strong>{label}</strong>. Pero hay medidas compatibles que pueden funcionar en tu vehículo manteniendo el rodado original.
+                    </p>
+                  </div>
+                )}
               </div>
             )}
 
             {parsed && exactResults.length > 0 && (
-              <section>
-                <div className="flex items-baseline flex-wrap gap-x-3 gap-y-1 mb-4">
-                  <h2 className="text-xl font-black text-navy-900">Medida buscada</h2>
-                  {label && <span className="text-base font-bold text-slate-500">{label}</span>}
-                  <span className="text-sm text-slate-400">
-                    {exactResults.length} resultado{exactResults.length !== 1 ? "s" : ""}
+              <section className="mb-12">
+                <div className="flex items-baseline flex-wrap gap-x-3 gap-y-1 mb-6">
+                  <h2 className="text-2xl font-black text-navy-900">Medida buscada</h2>
+                  {label && <span className="text-lg font-bold text-slate-500">{label}</span>}
+                  <span className="text-sm text-slate-400 font-medium">
+                    ({exactResults.length} resultado{exactResults.length !== 1 ? "s" : ""})
                   </span>
-                  {exactResults.length > 5 && (
-                    <span className="text-sm text-slate-400 ml-auto">Mostrando 5 de {exactResults.length}</span>
-                  )}
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                   {exactResults.slice(0, 5).map(product => (
@@ -400,51 +533,44 @@ export function ShopPage({ showCatalogTitle = false }: { showCatalogTitle?: bool
 
             {parsed && compatibleResults.length > 0 && (
               <section className={exactResults.length > 0 ? "mt-16 border-t border-slate-100 pt-10" : ""}>
-                {/* No exact match notice */}
-                {exactResults.length === 0 && (
-                  <div className="mb-5 flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
-                    <svg className="mt-0.5 h-5 w-5 flex-shrink-0 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35M17 11A6 6 0 105 11a6 6 0 0012 0z" />
-                    </svg>
-                    <p className="text-sm text-slate-600">
-                      No encontramos la medida exacta{label && <> <strong className="font-bold text-slate-800">{label}</strong></>}.
-                      {" "}Pero hay medidas compatibles que pueden funcionar en tu vehículo.
-                    </p>
-                  </div>
-                )}
-
-                <div className="mb-6 rounded-xl border border-emerald-200 bg-emerald-50 px-5 py-4">
-                  <div className="flex items-start gap-3">
-                    <span className="mt-0.5 inline-flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-emerald-600 text-white">
-                      <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div className="mb-8 rounded-[2.5rem] border border-emerald-100 bg-emerald-50/50 p-6 md:p-10">
+                  <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
+                    <div className="inline-flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-2xl bg-emerald-600 text-white shadow-xl shadow-emerald-600/20">
+                      <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                       </svg>
-                    </span>
-                    <div>
-                      <div className="flex items-baseline gap-3">
-                        <h2 className="text-xl font-black text-emerald-950">Medidas compatibles</h2>
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-baseline gap-3 mb-1">
+                        <h2 className="text-2xl font-black text-emerald-950">Medidas compatibles</h2>
                         {compatibleResults.length > 5 && (
-                          <span className="text-sm text-emerald-700">{compatibleResults.length} resultados</span>
+                          <span className="text-sm font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-lg">
+                            {compatibleResults.length} resultados
+                          </span>
                         )}
                       </div>
-                      <p className="text-sm text-emerald-800 mt-1">
-                        No son la medida buscada: mantienen el mismo rodado y un diámetro total dentro de ±3%.{" "}
-                        <Link href="/blog/equivalencias" className="font-semibold underline hover:text-emerald-950">
-                          Entendé cómo funcionan las equivalencias.
+                      <p className="text-slate-700 font-medium leading-relaxed">
+                        Estas medidas mantienen el mismo rodado y un diámetro total dentro de ±3% de la medida {label}.{" "}
+                        <Link href="/blog/equivalencias" className="text-emerald-700 font-black underline decoration-2 underline-offset-4 hover:text-emerald-800 transition-colors">
+                          Entendé cómo funcionan.
                         </Link>
-                      </p>
-                      <p className="text-xs text-yellow-900 mt-2 p-3 bg-yellow-50 rounded-lg border border-yellow-200 flex items-start gap-2 shadow-sm">
-                        <svg className="w-5 h-5 flex-shrink-0 text-yellow-600 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                        </svg>
-                        <span>
-                          <span className="font-bold">Importante:</span> Para usar otra medida que la de fábrica, el auto tiene que ser de caja manual. Es necesario probar luego de la instalación que el neumático de medida distinta no toque partes del tren delantero o los plásticos del auto.
-                        </span>
                       </p>
                     </div>
                   </div>
+                  
+                  <div className="mt-8 p-5 bg-white/80 rounded-2xl border border-yellow-200/50 shadow-sm flex items-start gap-4">
+                    <div className="mt-0.5 flex-shrink-0 text-yellow-600">
+                      <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    <p className="text-sm text-slate-600 font-medium leading-relaxed">
+                      <strong className="text-slate-900">Importante:</strong> Para usar medidas alternativas, el vehículo debe ser de caja manual. Verificá que no toque partes del tren delantero o plásticos tras la instalación.
+                    </p>
+                  </div>
                 </div>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-8">
                   {compatibleResults.slice(0, 5).map(product => {
                     const diff = searchedSize ? diameterDifferencePercent(product.size, searchedSize) : null;
                     return (

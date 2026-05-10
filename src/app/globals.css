@@ -49,63 +49,6 @@ html {
   scroll-behavior: auto;
 }
 
-.trivium-map-pin {
-  position: relative;
-  width: 42px;
-  height: 42px;
-  border: 0;
-  background: transparent;
-  padding: 0;
-  cursor: pointer;
-  filter: drop-shadow(0 12px 18px rgb(15 23 42 / 0.28));
-}
-
-.trivium-map-pin::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border: 3px solid white;
-  border-radius: 999px;
-  background: var(--color-navy-900);
-}
-
-.trivium-map-pin::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  z-index: 2;
-  width: 8px;
-  height: 8px;
-  transform: translate(-50%, -50%);
-  border: 2px solid white;
-  border-radius: 999px;
-  background: var(--color-orange-500);
-}
-
-.trivium-map-pin-active::before {
-  border-color: var(--color-orange-500);
-  background: var(--color-orange-500);
-}
-
-.trivium-map-pin-active::after {
-  border-color: white;
-  background: var(--color-navy-900);
-}
-
-.trivium-map-pin-icon {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  z-index: 1;
-  width: 28px;
-  height: 28px;
-  transform: translate(-50%, -50%);
-  border-radius: 999px;
-  background: white;
-  padding: 5px;
-}
-
 .trivium-user-pin {
   width: 20px;
   height: 20px;
