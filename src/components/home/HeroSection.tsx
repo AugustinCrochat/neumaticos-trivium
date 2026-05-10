@@ -7,43 +7,18 @@ export function HeroSection() {
         <div className="grid md:grid-cols-2 gap-0 min-h-[480px]">
 
           {/* Left: copy */}
-          <div className="flex flex-col justify-center py-14 md:py-20 pr-0 md:pr-12">
+          <div className="flex flex-col justify-center pt-10 pb-5 md:py-20 pr-0 md:pr-12">
             <span className="inline-block text-orange-500 text-xs font-black uppercase tracking-widest mb-4">
               Importación directa · Precios outlet
             </span>
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-slate-900 leading-[1.05] mb-5">
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-slate-900 leading-[1.05]">
               El outlet del{" "}
               <span className="text-orange-500">neumático</span>
             </h1>
-            <p className="text-slate-500 text-base md:text-lg leading-relaxed max-w-sm">
-              Más de 180 referencias importadas a precios imbatibles.
-              Montaje incluido en el local.
-            </p>
-
-            <div className="flex flex-wrap gap-5 mt-8 text-sm text-slate-500">
-              <div className="flex items-center gap-2">
-                <svg className="w-4 h-4 text-orange-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                </svg>
-                Precios outlet
-              </div>
-              <div className="flex items-center gap-2">
-                <svg className="w-4 h-4 text-orange-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                </svg>
-                Montaje incluido
-              </div>
-              <div className="flex items-center gap-2">
-                <svg className="w-4 h-4 text-orange-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                </svg>
-                2 sucursales
-              </div>
-            </div>
           </div>
 
           {/* Right: search */}
-          <div className="flex flex-col justify-center py-10 md:py-20">
+          <div className="flex flex-col justify-center pt-0 pb-8 md:py-20">
             <TireSizeSearch />
 
             <p className="text-center text-xs text-slate-500 mt-5">

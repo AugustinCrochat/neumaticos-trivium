@@ -385,9 +385,23 @@ export function TireSizeSearch({
 
   return (
     <div className={`bg-slate-100 rounded-2xl border border-slate-200 ${compact ? 'p-4' : 'p-6'} shadow-xl shadow-slate-300/40 relative group w-full`}>
-      <p className={`font-bold text-navy-700 uppercase tracking-widest ${compact ? 'text-[10px] mb-1' : 'text-xs mb-2'}`}>
-        Buscar por medida
-      </p>
+      <div className={`flex items-center gap-2 ${compact ? 'mb-2' : 'mb-3'}`}>
+        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-orange-100 text-orange-600">
+          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 7h8M7 12h10M9 17h6" />
+          </svg>
+        </span>
+        <div className="min-w-0">
+          <p className={`font-black text-navy-900 ${compact ? 'text-sm' : 'text-base'}`}>
+            Buscar por medida
+          </p>
+          {!compact && (
+            <p className="text-xs font-medium text-slate-500">
+              Ingresá ancho, perfil y rodado
+            </p>
+          )}
+        </div>
+      </div>
       <TireDiagram width={width} aspect={profile} rim={rim} focused={focused} compact={compact} />
 
       {showScanner && (

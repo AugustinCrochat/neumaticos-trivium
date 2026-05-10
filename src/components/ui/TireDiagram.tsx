@@ -42,7 +42,8 @@ export function TireDiagram({
     return {
       fontSize: isFocused ? `${74 * 1.16}px` : "74px",
       fontWeight: isFocused ? "800" : "700",
-      fill: isFocused ? theme.accent : isPlaceholder ? "#737b80" : "#e8e6df",
+      fill: isFocused ? theme.accent : isPlaceholder ? "#4f575c" : "#c7c9c7",
+      opacity: isFocused ? 1 : isPlaceholder ? 0.78 : 0.86,
       transition: "font-size 0.2s, fill 0.2s",
       letterSpacing: "0.04em",
     };
@@ -62,6 +63,11 @@ export function TireDiagram({
             <stop offset="100%" style={{ stopColor: "#ffffff", stopOpacity: 0 }} />
           </radialGradient>
 
+          <filter id="tireEdgeShadow" x="-12%" y="-12%" width="124%" height="124%">
+            <feDropShadow dx="0" dy="12" stdDeviation="18" floodColor="#000000" floodOpacity="0.38" />
+            <feDropShadow dx="0" dy="-3" stdDeviation="8" floodColor="#000000" floodOpacity="0.22" />
+          </filter>
+
           {/* Path para el texto principal curvado */}
           <path
             id="textPath"
@@ -80,7 +86,10 @@ export function TireDiagram({
         />
 
         {/* SVG del neumático */}
-        <g transform="matrix(1.3333333 0 0 -1.3333333 2841.76 1842.7029) translate(150.3846 -240.21272) translate(-2419.8917 511.11992)">
+        <g
+          filter="url(#tireEdgeShadow)"
+          transform="matrix(1.3333333 0 0 -1.3333333 2841.76 1842.7029) translate(150.3846 -240.21272) translate(-2419.8917 511.11992)"
+        >
           <path
             fill="#a0a6a7"
             d="m 649.304,315.94 c -156.882,0 -284.059,127.178 -284.059,284.06 0,156.882 127.177,284.06 284.059,284.06 156.882,0 284.06,-127.178 284.06,-284.06 0,-156.882 -127.178,-284.06 -284.06,-284.06 z m 0,634.27 c -193.415,0 -350.21,-156.794 -350.21,-350.21 0,-193.416 156.795,-350.21 350.21,-350.21 193.416,0 350.211,156.794 350.211,350.21 0,193.416 -156.795,350.21 -350.211,350.21"
@@ -133,7 +142,8 @@ export function TireDiagram({
           fontSize="74"
           fontWeight="700"
           letterSpacing="0.04em"
-          fill="#e8e6df"
+          fill="#c7c9c7"
+          opacity="0.86"
         >
           <textPath href="#textPath" startOffset="50%" textAnchor="middle">
             <tspan style={getTspanStyle('width')}>{widthStr}</tspan>
