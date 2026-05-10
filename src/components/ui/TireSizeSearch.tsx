@@ -148,6 +148,7 @@ export function TireSizeSearch({
       document.activeElement.blur();
     }
     setWidth(""); setProfile(""); setRim("");
+    setShowPopular(false); // Ocultar dropdown después de búsqueda
     router.push(`/buscar?medida=${medida}`);
   };
 

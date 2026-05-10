@@ -160,15 +160,6 @@ export function TireDiagram({
           </textPath>
         </text>
       </svg>
-
-      {/* Leyenda opcional */}
-      {(width || aspect || rim) && (
-        <div className="text-center text-sm text-slate-400 animate-in fade-in duration-300">
-          <p>
-            Medida: <span className="text-orange-400 font-black text-lg">{widthStr}/{aspectStr} R{rimStr}</span>
-          </p>
-        </div>
-      )}
     </div>
   );
 }

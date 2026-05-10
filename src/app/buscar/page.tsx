@@ -113,17 +113,10 @@ export default async function BuscarPage({ searchParams }: Props) {
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Header */}
-      <div className="bg-navy-900 py-10">
+      <div className={`bg-navy-900 ${label ? 'py-6' : 'py-10'}`}>
         <div className="max-w-5xl mx-auto px-4">
-          <h1 className="text-2xl md:text-3xl font-black text-white mb-2 flex items-center gap-3 flex-wrap">
-            {label ? (
-              <>
-                Neumáticos
-                <span className="inline-block bg-orange-500/20 text-orange-400 px-3 py-1 rounded-xl border border-orange-500/30 text-2xl tracking-wide">{label}</span>
-              </>
-            ) : (
-              "Buscar neumáticos"
-            )}
+          <h1 className="text-2xl md:text-3xl font-black text-white mb-2">
+            Buscar neumáticos
           </h1>
           {label && (
             <p className="text-navy-300 text-sm mt-3">
@@ -133,8 +126,8 @@ export default async function BuscarPage({ searchParams }: Props) {
           )}
 
           {/* Search form inline */}
-          <div className="mt-8">
-            <SearchBar />
+          <div className={`${label ? 'mt-4' : 'mt-8'}`}>
+            <SearchBar initialMedida={medida} />
           </div>
         </div>
       </div>
