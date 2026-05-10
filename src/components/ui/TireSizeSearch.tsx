@@ -136,6 +136,7 @@ export function TireSizeSearch({
   const widthRef = useRef<HTMLInputElement | null>(null);
   const profileRef = useRef<HTMLInputElement | null>(null);
   const rimRef = useRef<HTMLInputElement | null>(null);
+  const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
 
   const [focused, setFocused] = useState<'width' | 'aspect' | 'rim' | null>(null);
   const [listening, setListening] = useState(false);
