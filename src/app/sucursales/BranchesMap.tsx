@@ -248,7 +248,7 @@ export function BranchesMap({ branches }: BranchesMapProps) {
 
       return new maplibregl.Marker({
         element: markerElement,
-        anchor: "bottom",
+        anchor: "center",
       })
         .setLngLat(getBranchLngLat(branch))
         .addTo(map);

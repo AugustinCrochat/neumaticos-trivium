@@ -121,7 +121,7 @@ export function TireSizeSearch({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const hasInput = width.trim() !== "" && profile.trim() !== "" && rim.trim() !== "";
+  const hasInput = width.trim() !== "" || profile.trim() !== "" || rim.trim() !== "";
 
   const sizeWarning = useMemo(() => {
     // Validate against standard tire size ranges
@@ -168,7 +168,7 @@ export function TireSizeSearch({
   const [listening, setListening] = useState(false);
 
   const performSearch = (w: string, p: string, rVal: string) => {
-    if (!w || !p || !rVal) return;
+    if (!w && !p && !rVal) return;
     const medida = `${w}-${p}-r${rVal}`;
     if (document.activeElement instanceof HTMLElement) {
       document.activeElement.blur();
@@ -652,7 +652,7 @@ export function TireSizeSearch({
           )}
 
           {shouldShowDropdown && (
-            <div className={`absolute left-0 z-50 bg-navy-800 border border-navy-700 rounded-xl shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200 ${compact ? 'top-full mt-2 right-[56px] lg:top-auto lg:bottom-full lg:mt-0 lg:mb-2 lg:right-0' : 'top-full mt-2 right-[56px]'}`}>
+            <div className={`absolute left-0 z-50 bg-navy-800 border border-navy-700 rounded-xl shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200 ${compact ? 'top-full mt-2 right-[56px] lg:right-0' : 'top-full mt-2 right-[56px]'}`}>
               <p className="px-4 py-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest border-b border-navy-700 bg-navy-900/50">
                 Medidas populares
               </p>
