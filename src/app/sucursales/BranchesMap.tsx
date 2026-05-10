@@ -23,6 +23,11 @@ const BRANCH_HALO_LAYER_ID = "trivium-branch-halos";
 const BRANCH_POINT_LAYER_ID = "trivium-branch-points";
 const BRANCH_DOT_LAYER_ID = "trivium-branch-dots";
 const BRANCH_LABEL_LAYER_ID = "trivium-branch-labels";
+const MAP_LOCALE = {
+  "CooperativeGesturesHandler.WindowsHelpText": "Usa Ctrl + scroll para acercar o alejar el mapa",
+  "CooperativeGesturesHandler.MacHelpText": "Usa ⌘ + scroll para acercar o alejar el mapa",
+  "CooperativeGesturesHandler.MobileHelpText": "Usa dos dedos para mover el mapa",
+};
 
 type BranchFeatureProperties = {
   id: string;
@@ -267,6 +272,7 @@ export function BranchesMap({ branches }: BranchesMapProps) {
       minZoom: ARGENTINA_MIN_ZOOM,
       maxZoom: 17,
       cooperativeGestures: true,
+      locale: MAP_LOCALE,
       attributionControl: false,
     });
 
