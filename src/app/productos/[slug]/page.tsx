@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { PRODUCTS } from "@/lib/data";
+import { getBrandLogo } from "@/lib/brand-utils";
 import { ProductPageClient } from "./ProductPageClient";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -49,11 +50,12 @@ export default async function ProductPage({ params }: Props) {
 
   const hasImage =
     !!product.imageUrl && product.imageUrl !== "/images/tire-placeholder.webp";
+  const brandLogo = getBrandLogo(product.brandId);
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-8 md:py-12">
       <Link
-        href="/#catalogo"
+        href="/catalogo"
         className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-navy-700 mb-8 transition-colors"
       >
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -88,10 +90,22 @@ export default async function ProductPage({ params }: Props) {
 
         {/* Info */}
         <div className="flex flex-col">
-          <span className="text-sm font-bold text-navy-600 uppercase tracking-wide mb-1">
-            {product.brand}
-          </span>
-          <h1 className="text-2xl md:text-3xl font-black text-slate-900 mb-2">
+          <Link href={`/marcas/${product.brandId}`} className="flex items-center gap-3 mb-4 group/brand">
+            <div className="w-12 h-12 bg-white border border-slate-100 rounded-xl p-1.5 flex items-center justify-center shrink-0 shadow-sm group-hover/brand:border-navy-200 transition-colors">
+              {brandLogo ? (
+                <img src={brandLogo} alt={product.brand} className="w-full h-full object-contain" />
+              ) : (
+                <div className="text-xl font-black text-navy-200">{product.brand[0]}</div>
+              )}
+            </div>
+            <div>
+              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Marca</p>
+              <h2 className="text-base font-bold text-navy-600 uppercase tracking-wide group-hover/brand:text-navy-900 transition-colors">
+                {product.brand}
+              </h2>
+            </div>
+          </Link>
+          <h1 className="text-2xl md:text-4xl font-black text-slate-900 mb-2 leading-tight">
             {product.model}
           </h1>
 

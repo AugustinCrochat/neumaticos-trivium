@@ -21,9 +21,7 @@ export default function ComoLeerMedidaPage() {
               Ingresala acá abajo si ya la tenés, o seguí leyendo para aprender a identificarla en tu rueda.
             </p>
 
-            <div className="bg-slate-800/50 p-6 rounded-2xl border border-white/10 shadow-2xl">
-              <TireSizeSearch />
-            </div>
+            <TireSizeSearch />
           </div>
         </div>
       </div>
@@ -68,7 +66,7 @@ export default function ComoLeerMedidaPage() {
               <section>
                 <h3 className="text-lg font-bold text-green-600 mb-2 uppercase tracking-tight">3. Rodado (Ej: 15)</h3>
                 <p className="text-slate-600 leading-relaxed">
-                  Acompañado de una "R" (de estructura Radial), este número indica el diámetro de la llanta en pulgadas. Es fundamental para que el neumático calce perfectamente en tu vehículo.
+                  Acompañado de una <span className="font-bold text-slate-900">R</span> (de estructura Radial), este número indica el diámetro de la llanta en pulgadas. Es fundamental para que el neumático calce perfectamente en tu vehículo.
                 </p>
               </section>
             </div>

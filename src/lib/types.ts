@@ -11,6 +11,8 @@ export type TireBrand = {
   name: string;
   origin: string; // "china" | "argentina" | "korea" | etc
   logoUrl?: string;
+  description?: string;
+  fullDescription?: string;
 };
 
 export type TireProduct = {

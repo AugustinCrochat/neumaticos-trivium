@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { PRODUCTS, BRANDS } from "@/lib/data";
+import { getBrandLogo } from "@/lib/brand-utils";
 import { ProductCard } from "@/components/ui/ProductCard";
 import { TireSizeSearch } from "@/components/ui/TireSizeSearch";
 import { useBranch } from "@/contexts/branch-context";
@@ -13,27 +14,7 @@ import type { TireProduct, TireSize, VehicleType } from "@/lib/types";
 const MAX_POSSIBLE_PRICE = 6000000; // 6 million limit for the slider
 const MIN_POSSIBLE_PRICE = 50000;  // 50k min
 
-function getBrandLogo(brandId: string) {
-  const domains: Record<string, string> = {
-    michelin: "michelin.com",
-    bridgestone: "bridgestone.com",
-    pirelli: "pirelli.com",
-    goodyear: "goodyear.com",
-    continental: "continental-tires.com",
-    fate: "fate.com.ar",
-    hankook: "hankooktire.com",
-    kumho: "kumhotire.com",
-    yokohama: "yokohamatire.com",
-    nexen: "nexentire.com",
-    linglong: "linglongtire.com",
-    firemax: "firemaxtire.com",
-    bfgoodrich: "bfgoodrichtires.com",
-    zmax: "zmax-tire.com",
-  };
-  const domain = domains[brandId];
-  if (!domain) return null;
-  return `https://logo.clearbit.com/${domain}`;
-}
+
 
 function BrandDropdown({
   value,

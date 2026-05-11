@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useBranch } from "@/contexts/branch-context";
+import { getBrandLogo } from "@/lib/brand-utils";
 import type { TireProduct } from "@/lib/types";
 import type { ReactNode } from "react";
 
@@ -42,6 +43,7 @@ export function ProductCard({
   const { selectedBranch, hasConfirmedBranch, openModalForAction } = useBranch();
   const hasImage =
     !!product.imageUrl && product.imageUrl !== "/images/tire-placeholder.webp";
+  const brandLogo = getBrandLogo(product.brandId);
 
   return (
     <article className={`group bg-white rounded-2xl border transition-all duration-300 overflow-hidden flex flex-col ${isCheapest ? "border-emerald-500 shadow-2xl shadow-emerald-500/20 scale-[1.02] relative z-20 ring-4 ring-emerald-500/10" : "border-slate-100 hover:border-navy-200 hover:shadow-xl"}`}>
@@ -86,10 +88,19 @@ export function ProductCard({
 
       {/* Content */}
       <div className="p-4 flex flex-col flex-1">
-        <div className="flex items-start justify-between gap-2 mb-1">
-          <span className="text-xs font-bold text-navy-600 uppercase tracking-wide">
-            {product.brand}
-          </span>
+        <div className="flex items-start justify-between gap-2 mb-2">
+          <Link href={`/marcas/${product.brandId}`} className="flex items-center gap-2 group/brand">
+            <div className="w-6 h-6 bg-white border border-slate-100 rounded p-0.5 flex items-center justify-center shrink-0">
+              {brandLogo ? (
+                <img src={brandLogo} alt={product.brand} className="w-full h-full object-contain" />
+              ) : (
+                <div className="text-[8px] font-black text-navy-200">{product.brand[0]}</div>
+              )}
+            </div>
+            <span className="text-xs font-bold text-navy-600 uppercase tracking-wide group-hover/brand:text-navy-900 transition-colors">
+              {product.brand}
+            </span>
+          </Link>
           {product.tags[0] && (
             <span className={`text-[10px] font-black px-2.5 py-1 rounded-md uppercase tracking-wider whitespace-nowrap shadow-sm ${
               product.tags[0].toLowerCase().includes('pack') 

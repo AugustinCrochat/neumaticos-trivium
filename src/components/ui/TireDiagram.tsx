@@ -25,7 +25,7 @@ export function TireDiagram({
 }: TireDiagramProps) {
   const cx = 708.06;
   const cy = 686.9;
-  const measureTextCy = 676;
+  const measureTextCy = 690;
   const textRadius = 548;
 
   const isWidthPlaceholder = !width;
@@ -40,10 +40,10 @@ export function TireDiagram({
     const isFocused = focused === segment;
     const isPlaceholder = segment === 'width' ? isWidthPlaceholder : segment === 'aspect' ? isAspectPlaceholder : isRimPlaceholder;
     return {
-      fontSize: isFocused ? `${80 * 1.14}px` : "80px",
+      fontSize: isFocused ? `${92 * 1.12}px` : "92px",
       fontWeight: isFocused ? "800" : "700",
-      fill: isFocused ? theme.accent : isPlaceholder ? "#6f787d" : "#d7d9d7",
-      opacity: isFocused ? 1 : isPlaceholder ? 0.84 : 0.9,
+      fill: isFocused ? theme.accent : isPlaceholder ? "#7f898e" : "#dfe1df",
+      opacity: isFocused ? 1 : isPlaceholder ? 0.88 : 0.92,
       transition: "font-size 0.2s, fill 0.2s",
       letterSpacing: "0.04em",
     };
@@ -134,11 +134,11 @@ export function TireDiagram({
         {/* TEXTO PRINCIPAL CURVADO SOBRE EL FLANCO */}
         <text
           style={{ fontFamily: theme.mono || 'var(--font-geist-sans, system-ui, sans-serif)' }}
-          fontSize="80"
+          fontSize="92"
           fontWeight="700"
           letterSpacing="0.04em"
-          fill="#d7d9d7"
-          opacity="0.9"
+          fill="#dfe1df"
+          opacity="0.92"
         >
           <textPath href="#textPath" startOffset="50%" textAnchor="middle">
             <tspan style={getTspanStyle('width')}>{widthStr}</tspan>
