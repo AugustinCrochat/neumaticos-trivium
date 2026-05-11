@@ -4,6 +4,11 @@ type TireDiagramProps = {
   width?: string | number;
   aspect?: string | number;
   rim?: string | number;
+  placeholderSize?: {
+    w: string;
+    p: string;
+    r: string;
+  };
   focused?: 'width' | 'aspect' | 'rim' | null;
   onSegmentSelect?: (segment: 'width' | 'aspect' | 'rim') => void;
   compact?: boolean;
@@ -20,6 +25,7 @@ export function TireDiagram({
   width = "",
   aspect = "",
   rim = "",
+  placeholderSize = { w: "205", p: "55", r: "16" },
   focused = null,
   onSegmentSelect,
   compact = false,
@@ -34,9 +40,9 @@ export function TireDiagram({
   const isAspectPlaceholder = !aspect;
   const isRimPlaceholder = !rim;
 
-  const widthStr = width ? String(width) : "205";
-  const aspectStr = aspect ? String(aspect) : "55";
-  const rimStr = rim ? String(rim) : "16";
+  const widthStr = width ? String(width) : placeholderSize.w;
+  const aspectStr = aspect ? String(aspect) : placeholderSize.p;
+  const rimStr = rim ? String(rim) : placeholderSize.r;
 
   const getTspanStyle = (segment: 'width' | 'aspect' | 'rim') => {
     const isFocused = focused === segment;

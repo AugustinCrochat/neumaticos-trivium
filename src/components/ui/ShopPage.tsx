@@ -371,7 +371,7 @@ export function ShopPage({ showCatalogTitle = false }: { showCatalogTitle?: bool
 
           {/* Sidebar — search widget only */}
           <aside className="w-full lg:w-72 shrink-0 lg:sticky lg:top-8 lg:self-start">
-            <TireSizeSearch compact />
+            <TireSizeSearch key={medida ?? "empty"} compact initialMedida={medida} />
           </aside>
 
           {/* Main content */}

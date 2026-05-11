@@ -77,6 +77,8 @@ export function TireSizeSearch({
   const [width, setWidth] = useState(init.w);
   const [profile, setProfile] = useState(init.p);
   const [rim, setRim] = useState(init.r);
+  const [shouldClearInitialOnEdit, setShouldClearInitialOnEdit] = useState(Boolean(initialMedida));
+  const [placeholderIndex, setPlaceholderIndex] = useState(0);
 
   const [showPopular, setShowPopular] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -115,6 +117,13 @@ export function TireSizeSearch({
   const shouldShowDropdown = showPopular && filteredSizes.length > 0 && !isComplete;
 
   useEffect(() => {
+    const interval = window.setInterval(() => {
+      setPlaceholderIndex((index) => (index + 1) % POPULAR_SIZES.length);
+    }, 1800);
+    return () => window.clearInterval(interval);
+  }, [POPULAR_SIZES.length]);
+
+  useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
         setShowPopular(false);
@@ -125,6 +134,7 @@ export function TireSizeSearch({
   }, []);
 
   const hasInput = width.trim() !== "" || profile.trim() !== "" || rim.trim() !== "";
+  const placeholderSize = POPULAR_SIZES[placeholderIndex];
 
   const sizeWarning = useMemo(() => {
     // Validate against standard tire size ranges
@@ -178,7 +188,6 @@ export function TireSizeSearch({
     if (document.activeElement instanceof HTMLElement) {
       document.activeElement.blur();
     }
-    setWidth(""); setProfile(""); setRim("");
     setShowPopular(false); // Ocultar dropdown después de búsqueda
     router.push(`/buscar?medida=${medida}`);
   };
@@ -194,7 +203,27 @@ export function TireSizeSearch({
     }
   };
 
+  const clearInitialMeasureForEdit = () => {
+    if (!shouldClearInitialOnEdit) return;
+    setWidth("");
+    setProfile("");
+    setRim("");
+    setShouldClearInitialOnEdit(false);
+  };
+
+  const handleMeasureInputFocus = (
+    e: React.FocusEvent<HTMLInputElement>,
+    segment: MeasureSegment,
+  ) => {
+    if (!autoAdvancingRef.current) clearInitialMeasureForEdit();
+    autoAdvancingRef.current = false;
+    selectInputText(e);
+    setShowPopular(true);
+    setFocused(segment);
+  };
+
   const focusDiagramSegment = (segment: MeasureSegment) => {
+    clearInitialMeasureForEdit();
     setFocused(segment);
     setShowPopular(true);
     diagramFreshSelectionRef.current = true;
@@ -390,7 +419,7 @@ export function TireSizeSearch({
     finally { setIsScanning(false); setScanProgress(""); }
   }
 
-  const measureInputClass = "w-full min-w-0 bg-slate-50 border-2 border-slate-200 rounded-xl px-2 sm:px-3 py-3 text-navy-900 font-bold text-center transition-all outline-none placeholder:text-slate-500 focus:bg-white focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20 focus:shadow-lg focus:shadow-orange-500/10";
+  const measureInputClass = "w-full min-w-0 bg-white border-2 border-slate-300 rounded-xl px-2 sm:px-3 py-3 text-navy-950 font-black text-center shadow-sm transition-all outline-none placeholder:text-slate-600 focus:bg-white focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20 focus:shadow-lg focus:shadow-orange-500/10";
   const measureSeparatorClass = "flex h-[52px] items-center justify-center text-lg font-black text-slate-500";
   
   const voiceButtonClass = `h-[52px] w-12 shrink-0 flex items-center justify-center rounded-xl border transition-all ${
@@ -423,7 +452,6 @@ export function TireSizeSearch({
       if (!w || !p || !rVal) return;
       hasNavigated = true;
       if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
-      setWidth(""); setProfile(""); setRim("");
       router.push(`/buscar?medida=${w}-${p}-r${rVal}`);
     };
 
@@ -492,6 +520,7 @@ export function TireSizeSearch({
           width={width}
           aspect={profile}
           rim={rim}
+          placeholderSize={placeholderSize}
           focused={focused}
           compact={compact}
           onSegmentSelect={focusDiagramSegment}
@@ -586,11 +615,7 @@ export function TireSizeSearch({
                 pattern="[0-9]*"
                 autoComplete="off"
                 value={width}
-                onFocus={(e) => {
-                  if (!autoAdvancingRef.current) { setWidth(""); setProfile(""); setRim(""); }
-                  autoAdvancingRef.current = false;
-                  selectInputText(e); setShowPopular(true); setFocused('width');
-                }}
+                onFocus={(e) => handleMeasureInputFocus(e, 'width')}
                 onBlur={() => setFocused(null)}
                 onClick={(e) => { selectInputText(e); setShowPopular(true); }}
                 onChange={(e) => {
@@ -611,11 +636,7 @@ export function TireSizeSearch({
                 pattern="[0-9]*"
                 autoComplete="off"
                 value={profile}
-                onFocus={(e) => {
-                  if (!autoAdvancingRef.current) { setWidth(""); setProfile(""); setRim(""); }
-                  autoAdvancingRef.current = false;
-                  selectInputText(e); setShowPopular(true); setFocused('aspect');
-                }}
+                onFocus={(e) => handleMeasureInputFocus(e, 'aspect')}
                 onBlur={() => setFocused(null)}
                 onClick={(e) => { selectInputText(e); setShowPopular(true); }}
                 onChange={(e) => {
@@ -636,11 +657,7 @@ export function TireSizeSearch({
                 pattern="[0-9]*"
                 autoComplete="off"
                 value={rim}
-                onFocus={(e) => {
-                  if (!autoAdvancingRef.current) { setWidth(""); setProfile(""); setRim(""); }
-                  autoAdvancingRef.current = false;
-                  selectInputText(e); setShowPopular(true); setFocused('rim');
-                }}
+                onFocus={(e) => handleMeasureInputFocus(e, 'rim')}
                 onBlur={() => setFocused(null)}
                 onClick={(e) => { selectInputText(e); setShowPopular(true); }}
                 onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, '').slice(0,2); setRim(v); }}
@@ -677,11 +694,7 @@ export function TireSizeSearch({
                   pattern="[0-9]*"
                   autoComplete="off"
                   value={width}
-                  onFocus={(e) => {
-                    if (!autoAdvancingRef.current) { setWidth(""); setProfile(""); setRim(""); }
-                    autoAdvancingRef.current = false;
-                    selectInputText(e); setShowPopular(true); setFocused('width');
-                  }}
+                  onFocus={(e) => handleMeasureInputFocus(e, 'width')}
                   onBlur={() => setFocused(null)}
                   onClick={(e) => { selectInputText(e); setShowPopular(true); }}
                   onChange={(e) => {
@@ -704,11 +717,7 @@ export function TireSizeSearch({
                   pattern="[0-9]*"
                   autoComplete="off"
                   value={profile}
-                  onFocus={(e) => {
-                    if (!autoAdvancingRef.current) { setWidth(""); setProfile(""); setRim(""); }
-                    autoAdvancingRef.current = false;
-                    selectInputText(e); setShowPopular(true); setFocused('aspect');
-                  }}
+                  onFocus={(e) => handleMeasureInputFocus(e, 'aspect')}
                   onBlur={() => setFocused(null)}
                   onClick={(e) => { selectInputText(e); setShowPopular(true); }}
                   onChange={(e) => {
@@ -731,11 +740,7 @@ export function TireSizeSearch({
                   pattern="[0-9]*"
                   autoComplete="off"
                   value={rim}
-                  onFocus={(e) => {
-                    if (!autoAdvancingRef.current) { setWidth(""); setProfile(""); setRim(""); }
-                    autoAdvancingRef.current = false;
-                    selectInputText(e); setShowPopular(true); setFocused('rim');
-                  }}
+                  onFocus={(e) => handleMeasureInputFocus(e, 'rim')}
                   onBlur={() => setFocused(null)}
                   onClick={(e) => { selectInputText(e); setShowPopular(true); }}
                   onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, '').slice(0,2); setRim(v); }}
