@@ -1,6 +1,7 @@
+import { randomBytes } from 'crypto';
 import { NextRequest, NextResponse } from 'next/server';
 
-export const maxDuration = 20;
+export const maxDuration = 25;
 
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
 const RATE_LIMIT_MAX_SCANS = 3;
@@ -59,7 +60,7 @@ function marketScore(w: number, p: number, r: number): number {
 }
 
 interface Candidate { width: number; profile: number; rim: number; score: number; raw?: string }
-interface OcrResult { candidate: Candidate | null; tireLike: boolean }
+interface OcrResult { candidate: Candidate | null; tireLike: boolean; ocrFailed?: boolean }
 interface GeminiError {
   code?: number;
   status?: string;
@@ -308,9 +309,96 @@ async function scanWithOcrSpace(
     return { candidate: null, tireLike };
   } catch (err) {
     console.error('OCR.space exception:', err);
-    return { candidate: null, tireLike: false };
+    // Mark as failed (not "definitely not a tire") so AI fallback still runs
+    return { candidate: null, tireLike: false, ocrFailed: true };
   }
 }
+
+// --- Michelin TyreSnap FullTyre API ---
+
+let michelinTokenCache: { token: string; expiresAt: number } | null = null;
+
+async function getMichelinToken(): Promise<string | null> {
+  const clientId = process.env.MICHELIN_CLIENT_ID;
+  const clientSecret = process.env.MICHELIN_CLIENT_SECRET;
+  if (!clientId || !clientSecret) return null;
+
+  if (michelinTokenCache && michelinTokenCache.expiresAt > Date.now() + 60_000) {
+    return michelinTokenCache.token;
+  }
+
+  try {
+    const res = await fetch(
+      'https://api.michelin.com/idp/v1/internal/oauth/token/accesstoken?grant_type=client_credentials',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `client_id=${encodeURIComponent(clientId)}&client_secret=${encodeURIComponent(clientSecret)}`,
+      },
+    );
+    if (!res.ok) {
+      console.error('Michelin token error:', res.status);
+      return null;
+    }
+    const data = await res.json();
+    if (!data.access_token) return null;
+    const expiresIn = Number(data.expires_in) || 3600;
+    michelinTokenCache = { token: data.access_token, expiresAt: Date.now() + (expiresIn - 60) * 1000 };
+    return data.access_token;
+  } catch (err) {
+    console.error('Michelin token exception:', err);
+    return null;
+  }
+}
+
+async function scanWithMichelin(base64Image: string): Promise<Candidate | null> {
+  const clientId = process.env.MICHELIN_CLIENT_ID;
+  if (!clientId) return null;
+
+  const token = await getMichelinToken();
+  if (!token) return null;
+
+  try {
+    const buffer = Buffer.from(base64Image, 'base64');
+    const uniqueId = randomBytes(11).toString('hex'); // 22 chars, within 21-23 range
+    const formData = new FormData();
+    formData.append('tyre_image', new Blob([buffer], { type: 'image/jpeg' }), 'tyre.jpg');
+    formData.append('unique_request_id', uniqueId);
+
+    const res = await fetch('https://api.michelin.com/tire-size-recognition/v1/score', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'apikey': clientId,
+      },
+      body: formData,
+    });
+
+    if (!res.ok) {
+      console.error('Michelin API error:', res.status, await res.text().catch(() => ''));
+      return null;
+    }
+
+    const data = await res.json();
+    const front = data.result?.car_models?.[0]?.tyre_dimensions?.front;
+    console.log('Michelin →', data.error?.code, front?.tyresize ?? 'no size');
+
+    if (data.error?.code !== 0 || !front?.width || !front?.height || !front?.diameter) return null;
+
+    return candidateFromValues(
+      Number(front.width),
+      Number(front.height),
+      Number(front.diameter),
+      50,
+      front.tyresize ?? '',
+    );
+  } catch (err) {
+    console.error('Michelin exception:', err);
+    return null;
+  }
+}
+
+// ---
 
 function stripBase64Prefix(image: string): string {
   return image.replace(/^data:image\/[a-z]+;base64,/, '');
@@ -340,6 +428,9 @@ export async function POST(req: NextRequest) {
   const imageData = stripBase64Prefix(base64Image);
   const processedData = (base64Processed ?? base64Image).replace(/^data:image\/[a-z]+;base64,/, '');
 
+  const rlHeader = { 'X-RateLimit-Remaining': String(rateLimit.remaining) };
+
+  // 1. OCR (fast, cheap — handles clear sidewall text)
   const ocrResults = [
     await scanWithOcrSpace(`data:image/jpeg;base64,${processedData}`),
   ];
@@ -351,68 +442,70 @@ export async function POST(req: NextRequest) {
   if (ocrCandidate) {
     return NextResponse.json(
       { found: true, width: ocrCandidate.width, profile: ocrCandidate.profile, rim: ocrCandidate.rim, source: 'ocr' },
-      { headers: { 'X-RateLimit-Remaining': String(rateLimit.remaining) } },
+      { headers: rlHeader },
     );
   }
 
   const tireLike = ocrResults.some((ocr) => ocr.tireLike);
-  if (!tireLike) {
+  const ocrAllFailed = ocrResults.every((ocr) => ocr.ocrFailed);
+
+  // If OCR ran successfully but saw no tire-related content → not a tire (skip AI)
+  if (!tireLike && !ocrAllFailed) {
     return NextResponse.json(
       {
         found: false,
         error: 'not_tire',
         message: 'No pudimos confirmar que la imagen sea del flanco de un neumático.',
       },
-      { headers: { 'X-RateLimit-Remaining': String(rateLimit.remaining) } },
+      { headers: rlHeader },
     );
   }
 
+  // 2. Michelin TyreSnap (purpose-built, structured output)
+  const michelinResult = await scanWithMichelin(imageData);
+  if (michelinResult) {
+    return NextResponse.json(
+      { found: true, width: michelinResult.width, profile: michelinResult.profile, rim: michelinResult.rim, source: 'michelin' },
+      { headers: rlHeader },
+    );
+  }
+
+  // 3. Gemini (fallback — also validates if it's a tire)
   const apiKey = process.env.GOOGLE_AI_KEY || process.env.GEMINI_API_KEY;
   const configuredModel = process.env.GEMINI_MODEL ?? 'gemini-2.0-flash-lite';
   if (!apiKey) {
-    console.error("Missing GOOGLE_AI_KEY");
-    return NextResponse.json({ found: false, error: "config" });
+    console.error('Missing GOOGLE_AI_KEY');
+    return NextResponse.json({ found: false, error: 'config' }, { headers: rlHeader });
   }
 
-  let result: Candidate | null = null;
-  result = await scanWithGemini(imageData, apiKey, configuredModel);
+  const geminiResult = await scanWithGemini(imageData, apiKey, configuredModel);
 
-  if (result && result.width < 0) {
-    const status = Math.abs(result.width);
+  if (geminiResult && geminiResult.width < 0) {
+    const status = Math.abs(geminiResult.width);
     if (status === 102) {
       return NextResponse.json({
         found: false,
-        error: "not_tire",
-        message: "No pudimos confirmar que la imagen sea del flanco de un neumático.",
-      });
+        error: 'not_tire',
+        message: 'No pudimos confirmar que la imagen sea del flanco de un neumático.',
+      }, { headers: rlHeader });
     }
-
     if (status === 429) {
       return NextResponse.json({
         found: false,
-        error: "quota",
+        error: 'quota',
         status: 429,
-        message: "Se agotó temporalmente la cuota de IA. Esperá 1 minuto y probá de nuevo.",
-      });
+        message: 'Se agotó temporalmente la cuota de IA. Esperá 1 minuto y probá de nuevo.',
+      }, { headers: rlHeader });
     }
-
-    return NextResponse.json({ 
-      found: false, 
-      error: "debug", 
-      status,
-      raw: result.raw 
-    });
+    return NextResponse.json({ found: false, error: 'debug', status, raw: geminiResult.raw }, { headers: rlHeader });
   }
 
-  if (result) {
+  if (geminiResult) {
     return NextResponse.json(
-      { found: true, width: result.width, profile: result.profile, rim: result.rim, source: 'gemini' },
-      { headers: { 'X-RateLimit-Remaining': String(rateLimit.remaining) } },
+      { found: true, width: geminiResult.width, profile: geminiResult.profile, rim: geminiResult.rim, source: 'gemini' },
+      { headers: rlHeader },
     );
   }
 
-  return NextResponse.json(
-    { found: false },
-    { headers: { 'X-RateLimit-Remaining': String(rateLimit.remaining) } },
-  );
+  return NextResponse.json({ found: false }, { headers: rlHeader });
 }

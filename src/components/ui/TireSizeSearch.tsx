@@ -397,7 +397,7 @@ export function TireSizeSearch({
     const cropSize = Math.round(shortSide * 0.98);
     const cropX = Math.round((natW - cropSize) / 2);
     const cropY = Math.round((natH - cropSize) / 2);
-    const TARGET_SIZE = 1027; 
+    const TARGET_SIZE = 1920;
     const canvas1 = document.createElement("canvas"); canvas1.width = TARGET_SIZE; canvas1.height = TARGET_SIZE;
     const ctx1 = canvas1.getContext("2d")!;
     ctx1.drawImage(video, cropX, cropY, cropSize, cropSize, 0, 0, TARGET_SIZE, TARGET_SIZE);
