@@ -293,7 +293,14 @@ async function scanWithOcrSpace(
 
     const res = await fetch('https://api.ocr.space/parse/image', { method: 'POST', body: formData });
     const data = await res.json();
-    const raw: string = data.ParsedResults?.[0]?.ParsedText ?? '';
+
+    // API key exhausted or other OCR.space error
+    if (!res.ok || data.IsErroredOnProcessing || !data.ParsedResults) {
+      console.error('OCR.space API error:', data.ErrorMessage ?? res.status);
+      return { candidate: null, tireLike: false, ocrFailed: true };
+    }
+
+    const raw: string = data.ParsedResults[0]?.ParsedText ?? '';
     const t = raw.replace(/\s+/g, '').toUpperCase();
     console.log('OCR.space →', t.slice(0, 80));
 
@@ -309,7 +316,6 @@ async function scanWithOcrSpace(
     return { candidate: null, tireLike };
   } catch (err) {
     console.error('OCR.space exception:', err);
-    // Mark as failed (not "definitely not a tire") so AI fallback still runs
     return { candidate: null, tireLike: false, ocrFailed: true };
   }
 }
@@ -461,16 +467,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // 2. Michelin TyreSnap (purpose-built, structured output)
-  const michelinResult = await scanWithMichelin(imageData);
-  if (michelinResult) {
-    return NextResponse.json(
-      { found: true, width: michelinResult.width, profile: michelinResult.profile, rim: michelinResult.rim, source: 'michelin' },
-      { headers: rlHeader },
-    );
-  }
-
-  // 3. Gemini (fallback — also validates if it's a tire)
+  // 2. Gemini (fallback — also validates if it's a tire)
   const apiKey = process.env.GOOGLE_AI_KEY || process.env.GEMINI_API_KEY;
   const configuredModel = process.env.GEMINI_MODEL ?? 'gemini-2.0-flash-lite';
   if (!apiKey) {
