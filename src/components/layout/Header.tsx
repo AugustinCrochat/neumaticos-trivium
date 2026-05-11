@@ -20,7 +20,7 @@ export function Header() {
   return (
     <header className="sticky top-0 z-40 w-full">
       {/* Main nav */}
-      <nav className="bg-navy-800 shadow-lg">
+      <nav className="bg-tire-800 shadow-lg">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center h-16 gap-6">
             {/* Logo */}
@@ -41,7 +41,7 @@ export function Header() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-navy-100 hover:text-white hover:bg-navy-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                  className="text-tire-100 hover:text-white hover:bg-tire-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors"
                 >
                   {link.label}
                 </Link>
@@ -51,7 +51,7 @@ export function Header() {
             {/* Branch selector — always visible */}
             <button
               onClick={openModal}
-              className="flex items-center gap-1.5 bg-navy-700 hover:bg-navy-600 border border-navy-600 hover:border-navy-500 text-white pl-3 pr-2.5 py-2 rounded-lg text-sm font-medium transition-all group ml-auto md:ml-0"
+              className="flex items-center gap-1.5 bg-tire-700 hover:bg-tire-600 border border-tire-600 hover:border-tire-500 text-white pl-3 pr-2.5 py-2 rounded-lg text-sm font-medium transition-all group ml-auto md:ml-0"
               title="Cambiar sucursal"
             >
               <svg
@@ -77,7 +77,7 @@ export function Header() {
                 {hasConfirmedBranch ? selectedBranch.shortName : "Sucursal"}
               </span>
               <svg
-                className="w-3.5 h-3.5 text-navy-400 group-hover:text-navy-200 transition-colors flex-shrink-0"
+                className="w-3.5 h-3.5 text-tire-400 group-hover:text-tire-100 transition-colors flex-shrink-0"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -105,12 +105,12 @@ export function Header() {
 
         {/* Mobile dropdown menu */}
         {menuOpen && (
-          <div className="md:hidden border-t border-navy-700 bg-navy-900 px-4 py-3 space-y-1">
+          <div className="md:hidden border-t border-tire-700 bg-tire-900 px-4 py-3 space-y-1">
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="block text-navy-100 hover:text-white hover:bg-navy-700 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors"
+                className="block text-tire-100 hover:text-white hover:bg-tire-700 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors"
                 onClick={() => setMenuOpen(false)}
               >
                 {link.label}

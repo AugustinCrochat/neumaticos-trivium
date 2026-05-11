@@ -187,6 +187,20 @@ export function TireSizeSearch({
   const [focused, setFocused] = useState<MeasureSegment | null>(null);
   const [listening, setListening] = useState(false);
 
+  // Auto-search when all three fields are complete
+  useEffect(() => {
+    if (shouldClearInitialOnEdit) return; // values came from the initialMedida prop
+    if (width.length !== 3 || profile.length !== 2 || rim.length !== 2) return;
+    const t = setTimeout(() => {
+      const medida = `${width}-${profile}-r${rim}`;
+      if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+      setShowPopular(false);
+      router.push(`/buscar?medida=${medida}`);
+    }, 300);
+    return () => clearTimeout(t);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [width, profile, rim]);
+
   const performSearch = (w: string, p: string, rVal: string) => {
     if (!w && !p && !rVal) return;
     const medida = `${w}-${p}-r${rVal}`;

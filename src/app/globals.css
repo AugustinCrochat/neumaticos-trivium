@@ -34,6 +34,16 @@
   --color-slate-800: #1e293b;
   --color-slate-900: #0f172a;
 
+  /* Tire charcoal palette — matches SVG tire body (#1c1c1c) */
+  --color-tire-950: #111111;
+  --color-tire-900: #161616;
+  --color-tire-800: #1c1c1c;
+  --color-tire-700: #2a2a2a;
+  --color-tire-600: #3a3a3a;
+  --color-tire-500: #4d4d4d;
+  --color-tire-400: #6a6a6a;
+  --color-tire-100: #d8d8d8;
+
   --color-background: #f8fafc;
   --color-foreground: #0f172a;
 
