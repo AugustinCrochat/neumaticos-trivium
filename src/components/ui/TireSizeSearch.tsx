@@ -397,16 +397,16 @@ export function TireSizeSearch({
     const cropSize = Math.round(shortSide * 0.98);
     const cropX = Math.round((natW - cropSize) / 2);
     const cropY = Math.round((natH - cropSize) / 2);
-    const TARGET_SIZE = 1920;
+    const TARGET_SIZE = 1024;
     const canvas1 = document.createElement("canvas"); canvas1.width = TARGET_SIZE; canvas1.height = TARGET_SIZE;
     const ctx1 = canvas1.getContext("2d")!;
     ctx1.drawImage(video, cropX, cropY, cropSize, cropSize, 0, 0, TARGET_SIZE, TARGET_SIZE);
-    const original = canvas1.toDataURL("image/jpeg", 0.75);
+    const original = canvas1.toDataURL("image/jpeg", 0.85);
     const canvas2 = document.createElement("canvas"); canvas2.width = TARGET_SIZE; canvas2.height = TARGET_SIZE;
     const ctx2 = canvas2.getContext("2d")!;
-    ctx2.filter = "contrast(1.6) brightness(1.1) saturate(0)"; 
+    ctx2.filter = "contrast(2.0) brightness(1.05) saturate(0)";
     ctx2.drawImage(video, cropX, cropY, cropSize, cropSize, 0, 0, TARGET_SIZE, TARGET_SIZE);
-    const processed = canvas2.toDataURL("image/jpeg", 0.75);
+    const processed = canvas2.toDataURL("image/jpeg", 0.85);
     return { original, processed };
   }
 

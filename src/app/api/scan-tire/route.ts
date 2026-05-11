@@ -1,7 +1,6 @@
-import { randomBytes } from 'crypto';
 import { NextRequest, NextResponse } from 'next/server';
 
-export const maxDuration = 25;
+export const maxDuration = 20;
 
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
 const RATE_LIMIT_MAX_SCANS = 3;
@@ -19,33 +18,24 @@ function plausible(w: number, p: number, r: number): boolean {
   return w >= 130 && w <= 335 && p >= 25 && p <= 90 && r >= 12 && r <= 24;
 }
 
-/**
- * Score how common this combination is in the Argentine passenger car market.
- * Higher = more likely.
- */
 function marketScore(w: number, p: number, r: number): number {
   let s = 0;
 
-  // Ancho más común AR: 175–235
   if (w >= 175 && w <= 235) s += 12;
   else if (w >= 155 && w <= 265) s += 5;
 
-  // Perfil más común AR: 55–70 (autos); SUV usa 60-75
   if (p >= 55 && p <= 70) s += 12;
   else if (p >= 45 && p <= 80) s += 5;
 
-  // Rodado más común AR: 14–17
   if (r >= 14 && r <= 17) s += 12;
   else if (r === 13 || r === 18) s += 4;
 
-  // Combinaciones físicamente imposibles o muy raras en AR:
-  if (w > 225 && r < 15) s -= 25;     // ancho + rodado chico (ej: 285/30/13)
-  if (w < 175 && r > 17) s -= 20;     // angosto + rodado grande
-  if (p < 40 && r < 16) s -= 20;      // perfil muy bajo + rodado chico
-  if (p > 75 && r > 18) s -= 15;      // perfil muy alto + rodado grande
-  if (w > 275 && p < 50) s -= 10;     // muy ancho + perfil bajo (exótico en AR)
+  if (w > 225 && r < 15) s -= 25;
+  if (w < 175 && r > 17) s -= 20;
+  if (p < 40 && r < 16) s -= 20;
+  if (p > 75 && r > 18) s -= 15;
+  if (w > 275 && p < 50) s -= 10;
 
-  // Combinaciones comunes en AR: premio extra
   const common: Array<[number, number, number]> = [
     [185, 65, 15], [185, 70, 14], [195, 65, 15], [205, 55, 16],
     [205, 65, 15], [205, 65, 16], [215, 65, 16], [215, 60, 16],
@@ -61,11 +51,7 @@ function marketScore(w: number, p: number, r: number): number {
 
 interface Candidate { width: number; profile: number; rim: number; score: number; raw?: string }
 interface OcrResult { candidate: Candidate | null; tireLike: boolean; ocrFailed?: boolean }
-interface GeminiError {
-  code?: number;
-  status?: string;
-  message?: string;
-}
+interface GeminiError { code?: number; status?: string; message?: string; }
 
 function getClientIp(req: NextRequest): string {
   const forwarded = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim();
@@ -82,19 +68,11 @@ function checkRateLimit(key: string): { limited: boolean; remaining: number; ret
   }
 
   if (current.count >= RATE_LIMIT_MAX_SCANS) {
-    return {
-      limited: true,
-      remaining: 0,
-      retryAfter: Math.ceil((current.resetAt - now) / 1000),
-    };
+    return { limited: true, remaining: 0, retryAfter: Math.ceil((current.resetAt - now) / 1000) };
   }
 
   current.count += 1;
-  return {
-    limited: false,
-    remaining: RATE_LIMIT_MAX_SCANS - current.count,
-    retryAfter: Math.ceil((current.resetAt - now) / 1000),
-  };
+  return { limited: false, remaining: RATE_LIMIT_MAX_SCANS - current.count, retryAfter: Math.ceil((current.resetAt - now) / 1000) };
 }
 
 function bestCandidate(nums: number[]): Candidate | null {
@@ -110,13 +88,7 @@ function bestCandidate(nums: number[]): Candidate | null {
   return candidates.reduce((best, c) => c.score > best.score ? c : best);
 }
 
-function candidateFromValues(
-  width: number,
-  profile: number,
-  rim: number,
-  bonus: number,
-  raw: string,
-): Candidate | null {
+function candidateFromValues(width: number, profile: number, rim: number, bonus: number, raw: string): Candidate | null {
   if (!plausible(width, profile, rim)) return null;
 
   const snappedWidth = snap(width, WIDTHS);
@@ -194,10 +166,7 @@ function parseTireSizeFromText(raw: string): Candidate | null {
     if (!current || candidate.score > current.score) unique.set(key, candidate);
   }
 
-  const best = [...unique.values()].reduce((currentBest, candidate) =>
-    candidate.score > currentBest.score ? candidate : currentBest,
-  );
-
+  const best = [...unique.values()].reduce((a, b) => b.score > a.score ? b : a);
   return best.score >= 8 ? best : null;
 }
 
@@ -225,13 +194,13 @@ async function scanWithGemini(
           body: JSON.stringify({
             contents: [{
               parts: [
-                { text: "First verify this is a tire sidewall photo. If it is not a tire sidewall, reply NOT_TIRE. If it is a tire sidewall, identify the tire size marking (e.g., 205/55R16). Reply ONLY with the detected size. If no size is visible, reply NO_ENCONTRADO." },
-                { inline_data: { mime_type: 'image/jpeg', data: imageData } }
+                {
+                  text: 'Analyze this image. If it shows a tire or tire sidewall (even partially or at an angle), find the tire size marking — it follows the format WIDTH/PROFILE R RIM (e.g. 205/55R16, 175/70R13, 265/65R17) — and reply ONLY with that size, nothing else. If the tire is visible but the size marking is not readable, reply NO_ENCONTRADO. If this is not a tire image at all, reply NOT_TIRE.',
+                },
+                { inline_data: { mime_type: 'image/jpeg', data: imageData } },
               ],
             }],
-            generationConfig: {
-              temperature: 0,
-            },
+            generationConfig: { temperature: 0 },
           }),
         },
       );
@@ -240,11 +209,7 @@ async function scanWithGemini(
         const errText = await res.text();
         console.error(`Gemini error (${modelName}):`, res.status, errText);
         let parsedError: GeminiError | null = null;
-        try {
-          parsedError = JSON.parse(errText)?.error ?? null;
-        } catch {
-          parsedError = null;
-        }
+        try { parsedError = JSON.parse(errText)?.error ?? null; } catch { parsedError = null; }
 
         lastError = { width: -res.status, profile: 0, rim: 0, score: 0, raw: errText };
 
@@ -263,7 +228,6 @@ async function scanWithGemini(
       if (text.includes('NOT_TIRE')) return { width: -102, profile: 0, rim: 0, score: 0, raw: text };
       if (!text || text.includes('NO_ENCONTRADO')) return { width: -100, profile: 0, rim: 0, score: 0, raw: text };
 
-      // Extract numbers (e.g. 245, 40, 18) and find best candidate
       const nums = (text.match(/\d+/g) ?? []).map(Number);
       if (nums.length >= 3) {
         return bestCandidate(nums) ?? { width: -101, profile: 0, rim: 0, score: 0, raw: text };
@@ -279,9 +243,7 @@ async function scanWithGemini(
   }
 }
 
-async function scanWithOcrSpace(
-  base64Image: string,
-): Promise<OcrResult> {
+async function scanWithOcrSpace(base64Image: string): Promise<OcrResult> {
   try {
     const formData = new FormData();
     formData.append('base64Image', base64Image);
@@ -294,7 +256,6 @@ async function scanWithOcrSpace(
     const res = await fetch('https://api.ocr.space/parse/image', { method: 'POST', body: formData });
     const data = await res.json();
 
-    // API key exhausted or other OCR.space error
     if (!res.ok || data.IsErroredOnProcessing || !data.ParsedResults) {
       console.error('OCR.space API error:', data.ErrorMessage ?? res.status);
       return { candidate: null, tireLike: false, ocrFailed: true };
@@ -319,92 +280,6 @@ async function scanWithOcrSpace(
     return { candidate: null, tireLike: false, ocrFailed: true };
   }
 }
-
-// --- Michelin TyreSnap FullTyre API ---
-
-let michelinTokenCache: { token: string; expiresAt: number } | null = null;
-
-async function getMichelinToken(): Promise<string | null> {
-  const clientId = process.env.MICHELIN_CLIENT_ID;
-  const clientSecret = process.env.MICHELIN_CLIENT_SECRET;
-  if (!clientId || !clientSecret) return null;
-
-  if (michelinTokenCache && michelinTokenCache.expiresAt > Date.now() + 60_000) {
-    return michelinTokenCache.token;
-  }
-
-  try {
-    const res = await fetch(
-      'https://api.michelin.com/idp/v1/internal/oauth/token/accesstoken?grant_type=client_credentials',
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: `client_id=${encodeURIComponent(clientId)}&client_secret=${encodeURIComponent(clientSecret)}`,
-      },
-    );
-    if (!res.ok) {
-      console.error('Michelin token error:', res.status);
-      return null;
-    }
-    const data = await res.json();
-    if (!data.access_token) return null;
-    const expiresIn = Number(data.expires_in) || 3600;
-    michelinTokenCache = { token: data.access_token, expiresAt: Date.now() + (expiresIn - 60) * 1000 };
-    return data.access_token;
-  } catch (err) {
-    console.error('Michelin token exception:', err);
-    return null;
-  }
-}
-
-async function scanWithMichelin(base64Image: string): Promise<Candidate | null> {
-  const clientId = process.env.MICHELIN_CLIENT_ID;
-  if (!clientId) return null;
-
-  const token = await getMichelinToken();
-  if (!token) return null;
-
-  try {
-    const buffer = Buffer.from(base64Image, 'base64');
-    const uniqueId = randomBytes(11).toString('hex'); // 22 chars, within 21-23 range
-    const formData = new FormData();
-    formData.append('tyre_image', new Blob([buffer], { type: 'image/jpeg' }), 'tyre.jpg');
-    formData.append('unique_request_id', uniqueId);
-
-    const res = await fetch('https://api.michelin.com/tire-size-recognition/v1/score', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'apikey': clientId,
-      },
-      body: formData,
-    });
-
-    if (!res.ok) {
-      console.error('Michelin API error:', res.status, await res.text().catch(() => ''));
-      return null;
-    }
-
-    const data = await res.json();
-    const front = data.result?.car_models?.[0]?.tyre_dimensions?.front;
-    console.log('Michelin →', data.error?.code, front?.tyresize ?? 'no size');
-
-    if (data.error?.code !== 0 || !front?.width || !front?.height || !front?.diameter) return null;
-
-    return candidateFromValues(
-      Number(front.width),
-      Number(front.height),
-      Number(front.diameter),
-      50,
-      front.tyresize ?? '',
-    );
-  } catch (err) {
-    console.error('Michelin exception:', err);
-    return null;
-  }
-}
-
-// ---
 
 function stripBase64Prefix(image: string): string {
   return image.replace(/^data:image\/[a-z]+;base64,/, '');
@@ -436,15 +311,11 @@ export async function POST(req: NextRequest) {
 
   const rlHeader = { 'X-RateLimit-Remaining': String(rateLimit.remaining) };
 
-  // 1. OCR (fast, cheap — handles clear sidewall text)
-  const ocrResults = [
-    await scanWithOcrSpace(`data:image/jpeg;base64,${processedData}`),
-  ];
-  if (base64Processed) {
-    ocrResults.push(await scanWithOcrSpace(base64Image));
-  }
+  // 1. OCR — fast, free, handles clear sidewall text
+  const ocrResults = [await scanWithOcrSpace(`data:image/jpeg;base64,${processedData}`)];
+  if (base64Processed) ocrResults.push(await scanWithOcrSpace(base64Image));
 
-  const ocrCandidate = ocrResults.find((ocr) => ocr.candidate)?.candidate ?? null;
+  const ocrCandidate = ocrResults.find((r) => r.candidate)?.candidate ?? null;
   if (ocrCandidate) {
     return NextResponse.json(
       { found: true, width: ocrCandidate.width, profile: ocrCandidate.profile, rim: ocrCandidate.rim, source: 'ocr' },
@@ -452,22 +323,18 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const tireLike = ocrResults.some((ocr) => ocr.tireLike);
-  const ocrAllFailed = ocrResults.every((ocr) => ocr.ocrFailed);
+  const tireLike = ocrResults.some((r) => r.tireLike);
+  const ocrAllFailed = ocrResults.every((r) => r.ocrFailed);
 
-  // If OCR ran successfully but saw no tire-related content → not a tire (skip AI)
+  // OCR ran and found no tire-related content → skip Gemini
   if (!tireLike && !ocrAllFailed) {
     return NextResponse.json(
-      {
-        found: false,
-        error: 'not_tire',
-        message: 'No pudimos confirmar que la imagen sea del flanco de un neumático.',
-      },
+      { found: false, error: 'not_tire', message: 'No pudimos confirmar que la imagen sea del flanco de un neumático.' },
       { headers: rlHeader },
     );
   }
 
-  // 2. Gemini (fallback — also validates if it's a tire)
+  // 2. Gemini — send the contrast-enhanced image (better for reading tire markings)
   const apiKey = process.env.GOOGLE_AI_KEY || process.env.GEMINI_API_KEY;
   const configuredModel = process.env.GEMINI_MODEL ?? 'gemini-2.0-flash-lite';
   if (!apiKey) {
@@ -475,24 +342,21 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ found: false, error: 'config' }, { headers: rlHeader });
   }
 
-  const geminiResult = await scanWithGemini(imageData, apiKey, configuredModel);
+  const geminiResult = await scanWithGemini(processedData, apiKey, configuredModel);
 
   if (geminiResult && geminiResult.width < 0) {
     const status = Math.abs(geminiResult.width);
     if (status === 102) {
-      return NextResponse.json({
-        found: false,
-        error: 'not_tire',
-        message: 'No pudimos confirmar que la imagen sea del flanco de un neumático.',
-      }, { headers: rlHeader });
+      return NextResponse.json(
+        { found: false, error: 'not_tire', message: 'No pudimos confirmar que la imagen sea del flanco de un neumático.' },
+        { headers: rlHeader },
+      );
     }
     if (status === 429) {
-      return NextResponse.json({
-        found: false,
-        error: 'quota',
-        status: 429,
-        message: 'Se agotó temporalmente la cuota de IA. Esperá 1 minuto y probá de nuevo.',
-      }, { headers: rlHeader });
+      return NextResponse.json(
+        { found: false, error: 'quota', status: 429, message: 'Se agotó temporalmente la cuota de IA. Esperá 1 minuto y probá de nuevo.' },
+        { headers: rlHeader },
+      );
     }
     return NextResponse.json({ found: false, error: 'debug', status, raw: geminiResult.raw }, { headers: rlHeader });
   }
