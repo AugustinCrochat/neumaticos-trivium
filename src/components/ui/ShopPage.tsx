@@ -37,7 +37,6 @@ function BrandDropdown({
         <div className="flex items-center gap-3 overflow-hidden">
           {selectedBrand ? (
             <>
-            <>
               {getBrandLogo(selectedBrand.id) ? (
                 <img
                   src={getBrandLogo(selectedBrand.id)!}
@@ -48,7 +47,6 @@ function BrandDropdown({
               ) : (
                 <span className="truncate font-bold text-navy-900">{selectedBrand.name}</span>
               )}
-            </>
             </>
           ) : (
             <span className="text-slate-500">Todas las marcas</span>
