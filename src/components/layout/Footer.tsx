@@ -6,7 +6,7 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer id="contacto" className="bg-navy-950 text-navy-200">
+    <footer id="contacto" className="bg-black text-zinc-300">
       {/* Main content */}
       <div className="max-w-7xl mx-auto px-4 py-14">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
@@ -21,7 +21,7 @@ export function Footer() {
                 className="h-9 w-auto"
               />
             </div>
-            <p className="text-sm text-navy-400 leading-relaxed mb-4">
+            <p className="text-sm text-zinc-400 leading-relaxed mb-4">
               El outlet del neumático. Importación directa desde China con la mejor
               relación calidad-precio del mercado argentino.
             </p>
@@ -30,7 +30,7 @@ export function Footer() {
                 href="https://instagram.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-9 h-9 bg-navy-800 hover:bg-orange-500 rounded-lg flex items-center justify-center transition-colors"
+                className="w-9 h-9 bg-zinc-900 hover:bg-[#e30613] rounded-lg flex items-center justify-center transition-colors"
                 aria-label="Instagram"
               >
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -41,7 +41,7 @@ export function Footer() {
                 href="https://facebook.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-9 h-9 bg-navy-800 hover:bg-orange-500 rounded-lg flex items-center justify-center transition-colors"
+                className="w-9 h-9 bg-zinc-900 hover:bg-[#e30613] rounded-lg flex items-center justify-center transition-colors"
                 aria-label="Facebook"
               >
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -67,7 +67,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-navy-400 hover:text-white transition-colors"
+                    className="text-sm text-zinc-400 hover:text-white transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -85,18 +85,18 @@ export function Footer() {
               {BRANCHES.map((branch) => (
                 <div
                   key={branch.id}
-                  className="bg-navy-900 rounded-xl p-4 border border-navy-800"
+                  className="bg-black rounded-xl p-4 border border-zinc-900"
                 >
                   <p className="text-white font-semibold text-sm mb-1">
                     {branch.name}
                   </p>
-                  <p className="text-navy-400 text-xs mb-0.5">{branch.address}</p>
-                  <p className="text-navy-400 text-xs mb-2">{branch.city}</p>
-                  <p className="text-navy-500 text-xs mb-3">{branch.hours}</p>
+                  <p className="text-zinc-400 text-xs mb-0.5">{branch.address}</p>
+                  <p className="text-zinc-400 text-xs mb-2">{branch.city}</p>
+                  <p className="text-zinc-500 text-xs mb-3">{branch.hours}</p>
                   <div className="flex gap-2">
                     <a
                       href={`tel:${branch.phone.replace(/\s/g, "")}`}
-                      className="flex items-center gap-1 text-xs text-navy-300 hover:text-white transition-colors"
+                      className="flex items-center gap-1 text-xs text-zinc-300 hover:text-white transition-colors"
                     >
                       <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
@@ -118,7 +118,7 @@ export function Footer() {
                       href={branch.mapUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-1 text-xs text-navy-300 hover:text-white transition-colors"
+                      className="flex items-center gap-1 text-xs text-zinc-300 hover:text-white transition-colors"
                     >
                       <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -135,14 +135,14 @@ export function Footer() {
       </div>
 
       {/* Bottom bar */}
-      <div className="border-t border-navy-900">
-        <div className="max-w-7xl mx-auto px-4 py-5 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-navy-500">
+      <div className="border-t border-zinc-900">
+        <div className="max-w-7xl mx-auto px-4 py-5 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-zinc-500">
           <p>© {year} Neumáticos Trivium. Todos los derechos reservados.</p>
           <div className="flex gap-4">
-            <Link href="/privacidad" className="hover:text-navy-300 transition-colors">
+            <Link href="/privacidad" className="hover:text-zinc-300 transition-colors">
               Política de privacidad
             </Link>
-            <Link href="/terminos" className="hover:text-navy-300 transition-colors">
+            <Link href="/terminos" className="hover:text-zinc-300 transition-colors">
               Términos de uso
             </Link>
           </div>

@@ -20,7 +20,7 @@ export function Header() {
   return (
     <header className="sticky top-0 z-40 w-full">
       {/* Main nav */}
-      <nav className="bg-tire-800 shadow-lg">
+      <nav className="bg-black shadow-lg">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center h-16 gap-6">
             {/* Logo */}
@@ -41,7 +41,7 @@ export function Header() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-tire-100 hover:text-white hover:bg-tire-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                  className="text-zinc-200 hover:text-white hover:bg-zinc-900 px-4 py-2 rounded-lg text-sm font-medium transition-colors"
                 >
                   {link.label}
                 </Link>
@@ -51,33 +51,22 @@ export function Header() {
             {/* Branch selector — always visible */}
             <button
               onClick={openModal}
-              className="flex items-center gap-1.5 bg-tire-700 hover:bg-tire-600 border border-tire-600 hover:border-tire-500 text-white pl-3 pr-2.5 py-2 rounded-lg text-sm font-medium transition-all group ml-auto md:ml-0"
+              className="flex items-center gap-1.5 bg-zinc-950 hover:bg-zinc-900 border border-zinc-800 hover:border-zinc-700 text-white pl-3 pr-2.5 py-2 rounded-lg text-sm font-medium transition-all group ml-auto md:ml-0"
               title="Cambiar sucursal"
             >
               <svg
-                className="w-4 h-4 text-orange-500 flex-shrink-0"
-                fill="none"
+                className="w-4 h-4 text-[#e30613] flex-shrink-0"
+                fill="currentColor"
                 viewBox="0 0 24 24"
-                stroke="currentColor"
+                aria-hidden="true"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                />
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                />
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5Z" />
               </svg>
               <span className="truncate max-w-[90px] sm:max-w-none">
                 {hasConfirmedBranch ? selectedBranch.shortName : "Sucursal"}
               </span>
               <svg
-                className="w-3.5 h-3.5 text-tire-400 group-hover:text-tire-100 transition-colors flex-shrink-0"
+                className="w-3.5 h-3.5 text-zinc-500 group-hover:text-zinc-200 transition-colors flex-shrink-0"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -105,12 +94,12 @@ export function Header() {
 
         {/* Mobile dropdown menu */}
         {menuOpen && (
-          <div className="md:hidden border-t border-tire-700 bg-tire-900 px-4 py-3 space-y-1">
+          <div className="md:hidden border-t border-zinc-900 bg-black px-4 py-3 space-y-1">
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="block text-tire-100 hover:text-white hover:bg-tire-700 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors"
+                className="block text-zinc-200 hover:text-white hover:bg-zinc-900 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors"
                 onClick={() => setMenuOpen(false)}
               >
                 {link.label}
