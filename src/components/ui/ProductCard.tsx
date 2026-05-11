@@ -93,7 +93,7 @@ export function ProductCard({
             {brandLogo ? (
               <img src={brandLogo} alt={product.brand} className="h-6 w-auto object-contain max-w-[100px] transition-all hover:scale-105" />
             ) : (
-              <span className="text-xs font-bold text-navy-600 uppercase tracking-wide group-hover/brand:text-navy-900 transition-colors">
+              <span className="text-sm font-black text-navy-700 uppercase tracking-tight group-hover/brand:text-navy-900 transition-colors">
                 {product.brand}
               </span>
             )}

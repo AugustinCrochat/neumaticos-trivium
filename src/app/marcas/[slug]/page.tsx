@@ -35,8 +35,8 @@ export default async function BrandPage({ params }: Props) {
               {brandLogo ? (
                 <img src={brandLogo} alt={brand.name} className="h-20 md:h-32 w-auto object-contain" />
               ) : (
-                <div className="w-32 h-32 bg-white rounded-3xl shadow-xl flex items-center justify-center p-6 border border-slate-100">
-                  <div className="text-6xl font-black text-navy-100">{brand.name[0]}</div>
+                <div className="py-4">
+                  <h2 className="text-4xl md:text-6xl font-black text-navy-900 tracking-tighter uppercase">{brand.name}</h2>
                 </div>
               )}
             </div>

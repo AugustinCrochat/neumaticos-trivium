@@ -10,18 +10,16 @@ export const metadata = {
 export default function ComoLeerMedidaPage() {
   return (
     <div className="min-h-screen bg-white">
-      {/* Header / Search Area */}
+      {/* Header */}
       <div className="bg-white py-10 md:py-14 border-b border-slate-100">
         <div className="max-w-4xl mx-auto px-4">
-          <div className="max-w-md">
+          <div className="max-w-2xl">
             <h1 className="text-3xl md:text-4xl font-black text-navy-900 mb-4">
               ¿No sabés tu medida?
             </h1>
-            <p className="text-slate-600 text-base md:text-lg mb-6">
-              Ingresala acá abajo si ya la tenés, o seguí leyendo para aprender a identificarla en tu rueda.
+            <p className="text-slate-600 text-base md:text-lg">
+              Aprendé a identificar el ancho, perfil y rodado en tu rueda.
             </p>
-
-            <TireSizeSearch compact hideLearnLink />
           </div>
         </div>
       </div>
@@ -79,6 +77,10 @@ export default function ComoLeerMedidaPage() {
             </div>
           </div>
 
+        </div>
+
+        <div className="mt-16 max-w-md mx-auto">
+          <TireSizeSearch compact hideLearnLink />
         </div>
       </div>
 
