@@ -91,7 +91,7 @@ export function ProductCard({
         <div className="flex items-start justify-between gap-2 mb-3">
           <Link href={`/marcas/${product.brandId}`} className="group/brand">
             {brandLogo ? (
-              <img src={brandLogo} alt={product.brand} className="h-6 w-auto object-contain max-w-[100px] opacity-80 group-hover/brand:opacity-100 transition-opacity" />
+              <img src={brandLogo} alt={product.brand} className="h-6 w-auto object-contain max-w-[100px] transition-all hover:scale-105" />
             ) : (
               <span className="text-xs font-bold text-navy-600 uppercase tracking-wide group-hover/brand:text-navy-900 transition-colors">
                 {product.brand}

@@ -92,7 +92,7 @@ export default async function ProductPage({ params }: Props) {
         <div className="flex flex-col">
           <Link href={`/marcas/${product.brandId}`} className="mb-6 group/brand inline-block">
             {brandLogo ? (
-              <img src={brandLogo} alt={product.brand} className="h-10 md:h-12 w-auto object-contain max-w-[180px] opacity-90 group-hover/brand:opacity-100 transition-opacity" />
+              <img src={brandLogo} alt={product.brand} className="h-10 md:h-12 w-auto object-contain max-w-[180px] transition-all hover:scale-105" />
             ) : (
               <div>
                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Marca</p>

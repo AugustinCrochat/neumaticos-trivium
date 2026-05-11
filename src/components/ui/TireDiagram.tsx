@@ -25,7 +25,7 @@ export function TireDiagram({
 }: TireDiagramProps) {
   const cx = 708.06;
   const cy = 686.9;
-  const measureTextCy = 696;
+  const measureTextCy = 702;
   const textRadius = 548;
 
   const isWidthPlaceholder = !width;
@@ -40,7 +40,7 @@ export function TireDiagram({
     const isFocused = focused === segment;
     const isPlaceholder = segment === 'width' ? isWidthPlaceholder : segment === 'aspect' ? isAspectPlaceholder : isRimPlaceholder;
     return {
-      fontSize: isFocused ? `${96 * 1.12}px` : "96px",
+      fontSize: isFocused ? `${100 * 1.12}px` : "100px",
       fontWeight: isFocused ? "800" : "700",
       fill: isFocused ? theme.accent : isPlaceholder ? "#7f898e" : "#dfe1df",
       opacity: isFocused ? 1 : isPlaceholder ? 0.88 : 0.92,
@@ -67,10 +67,6 @@ export function TireDiagram({
             <rect x="633.08" y="1780.8" width="2118.6" height="1010.4" fill="#1c1c1c" strokeWidth="19.238" />
           </clipPath>
 
-          <filter id="tireFineShadow" x="-6%" y="-6%" width="112%" height="112%" colorInterpolationFilters="sRGB">
-            <feDropShadow dx="0" dy="1.5" stdDeviation="1.2" floodColor="#000000" floodOpacity="0.22" />
-          </filter>
-
           {/* Path para el texto principal curvado */}
           <path
             id="textPath"
@@ -94,7 +90,6 @@ export function TireDiagram({
             transform="translate(1540.2 337.88)"
             d="m754.78 719.98c-209.18 0-378.75-169.57-378.75-378.75s169.57-378.75 378.75-378.75c209.18 0 378.75 169.57 378.75 378.75s-169.57 378.75-378.75 378.75zm0-845.69c-257.89 0-466.95 209.06-466.95 466.95 0 257.89 209.06 466.95 466.95 466.95 257.89 0 466.95-209.06 466.95-466.95 0-257.89-209.06-466.95-466.95-466.95"
             fill="#a0a6a7"
-            filter="url(#tireFineShadow)"
           />
           <path
             transform="translate(1544.5 341.11)"
@@ -139,7 +134,7 @@ export function TireDiagram({
         {/* TEXTO PRINCIPAL CURVADO SOBRE EL FLANCO */}
         <text
           style={{ fontFamily: theme.mono || 'var(--font-geist-sans, system-ui, sans-serif)' }}
-          fontSize="96"
+          fontSize="100"
           fontWeight="700"
           letterSpacing="0.04em"
           fill="#dfe1df"
