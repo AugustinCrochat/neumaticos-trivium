@@ -11,17 +11,17 @@ export default function ComoLeerMedidaPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Header / Search Area */}
-      <div className="bg-navy-900 py-12 md:py-16">
+      <div className="bg-white py-10 md:py-14 border-b border-slate-100">
         <div className="max-w-4xl mx-auto px-4">
-          <div className="max-w-xl">
-            <h1 className="text-3xl md:text-4xl font-black text-white mb-4">
+          <div className="max-w-md">
+            <h1 className="text-3xl md:text-4xl font-black text-navy-900 mb-4">
               ¿No sabés tu medida?
             </h1>
-            <p className="text-navy-200 text-lg mb-10">
+            <p className="text-slate-600 text-base md:text-lg mb-6">
               Ingresala acá abajo si ya la tenés, o seguí leyendo para aprender a identificarla en tu rueda.
             </p>
 
-            <TireSizeSearch hideLearnLink />
+            <TireSizeSearch compact hideLearnLink />
           </div>
         </div>
       </div>

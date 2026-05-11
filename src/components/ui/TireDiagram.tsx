@@ -50,8 +50,8 @@ export function TireDiagram({
     return {
       fontSize: isFocused ? `${100 * 1.12}px` : "100px",
       fontWeight: isFocused ? "800" : "700",
-      fill: isFocused ? theme.accent : isPlaceholder ? "#7f898e" : "#dfe1df",
-      opacity: isFocused ? 1 : isPlaceholder ? 0.88 : 0.92,
+      fill: isFocused ? theme.accent : isPlaceholder ? "#7f898e" : "#ffffff",
+      opacity: isFocused ? 1 : isPlaceholder ? 0.88 : 1,
       transition: "font-size 0.2s, fill 0.2s",
       letterSpacing: "0.04em",
       cursor: onSegmentSelect ? "pointer" : "default",
@@ -150,8 +150,8 @@ export function TireDiagram({
           fontSize="100"
           fontWeight="700"
           letterSpacing="0.04em"
-          fill="#dfe1df"
-          opacity="0.92"
+          fill="#ffffff"
+          opacity="1"
         >
           <textPath href="#textPath" startOffset="50%" textAnchor="middle">
             <tspan
