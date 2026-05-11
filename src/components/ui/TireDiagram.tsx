@@ -5,6 +5,7 @@ type TireDiagramProps = {
   aspect?: string | number;
   rim?: string | number;
   focused?: 'width' | 'aspect' | 'rim' | null;
+  onSegmentSelect?: (segment: 'width' | 'aspect' | 'rim') => void;
   compact?: boolean;
   theme?: {
     bg?: string;
@@ -20,6 +21,7 @@ export function TireDiagram({
   aspect = "",
   rim = "",
   focused = null,
+  onSegmentSelect,
   compact = false,
   theme = { accent: "#ff6a3d" }
 }: TireDiagramProps) {
@@ -46,7 +48,12 @@ export function TireDiagram({
       opacity: isFocused ? 1 : isPlaceholder ? 0.88 : 0.92,
       transition: "font-size 0.2s, fill 0.2s",
       letterSpacing: "0.04em",
+      cursor: onSegmentSelect ? "pointer" : "default",
     };
+  };
+
+  const handleSegmentSelect = (segment: 'width' | 'aspect' | 'rim') => {
+    onSegmentSelect?.(segment);
   };
 
   return (
@@ -141,11 +148,29 @@ export function TireDiagram({
           opacity="0.92"
         >
           <textPath href="#textPath" startOffset="50%" textAnchor="middle">
-            <tspan style={getTspanStyle('width')}>{widthStr}</tspan>
+            <tspan
+              style={getTspanStyle('width')}
+              onClick={() => handleSegmentSelect('width')}
+              role={onSegmentSelect ? "button" : undefined}
+            >
+              {widthStr}
+            </tspan>
             <tspan fill="#ffffff" opacity="1">/</tspan>
-            <tspan style={getTspanStyle('aspect')}>{aspectStr}</tspan>
+            <tspan
+              style={getTspanStyle('aspect')}
+              onClick={() => handleSegmentSelect('aspect')}
+              role={onSegmentSelect ? "button" : undefined}
+            >
+              {aspectStr}
+            </tspan>
             <tspan fill="#ffffff" opacity="1"> R</tspan>
-            <tspan style={getTspanStyle('rim')}>{rimStr}</tspan>
+            <tspan
+              style={getTspanStyle('rim')}
+              onClick={() => handleSegmentSelect('rim')}
+              role={onSegmentSelect ? "button" : undefined}
+            >
+              {rimStr}
+            </tspan>
           </textPath>
         </text>
       </svg>

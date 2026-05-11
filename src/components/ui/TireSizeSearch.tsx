@@ -51,6 +51,8 @@ type SpeechRecognitionWindow = Window &
     webkitSpeechRecognition?: SpeechRecognitionConstructor;
   };
 
+type MeasureSegment = 'width' | 'aspect' | 'rim';
+
 export function TireSizeSearch({
   initialMedida,
   compact = false,
@@ -162,10 +164,12 @@ export function TireSizeSearch({
   const widthRef = useRef<HTMLInputElement | null>(null);
   const profileRef = useRef<HTMLInputElement | null>(null);
   const rimRef = useRef<HTMLInputElement | null>(null);
+  const tireEditorRef = useRef<HTMLDivElement | null>(null);
+  const diagramFreshSelectionRef = useRef(false);
   const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
   const autoAdvancingRef = useRef(false);
 
-  const [focused, setFocused] = useState<'width' | 'aspect' | 'rim' | null>(null);
+  const [focused, setFocused] = useState<MeasureSegment | null>(null);
   const [listening, setListening] = useState(false);
 
   const performSearch = (w: string, p: string, rVal: string) => {
@@ -187,6 +191,89 @@ export function TireSizeSearch({
     if (e.key === "Enter") {
       e.preventDefault();
       executeSearch();
+    }
+  };
+
+  const focusDiagramSegment = (segment: MeasureSegment) => {
+    setFocused(segment);
+    setShowPopular(true);
+    diagramFreshSelectionRef.current = true;
+    window.requestAnimationFrame(() => tireEditorRef.current?.focus());
+  };
+
+  const getSegmentValue = (segment: MeasureSegment) => {
+    if (segment === 'width') return width;
+    if (segment === 'aspect') return profile;
+    return rim;
+  };
+
+  const setSegmentValue = (segment: MeasureSegment, value: string) => {
+    if (segment === 'width') setWidth(value);
+    else if (segment === 'aspect') setProfile(value);
+    else setRim(value);
+  };
+
+  const nextSegment = (segment: MeasureSegment): MeasureSegment => {
+    if (segment === 'width') return 'aspect';
+    if (segment === 'aspect') return 'rim';
+    return 'rim';
+  };
+
+  const previousSegment = (segment: MeasureSegment): MeasureSegment => {
+    if (segment === 'rim') return 'aspect';
+    if (segment === 'aspect') return 'width';
+    return 'width';
+  };
+
+  const handleDiagramKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    const activeSegment = focused ?? 'width';
+
+    if (e.key === "Enter") {
+      e.preventDefault();
+      executeSearch();
+      return;
+    }
+
+    if (e.key === "Escape") {
+      e.preventDefault();
+      setFocused(null);
+      tireEditorRef.current?.blur();
+      return;
+    }
+
+    if (e.key === "ArrowRight") {
+      e.preventDefault();
+      focusDiagramSegment(nextSegment(activeSegment));
+      return;
+    }
+
+    if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      focusDiagramSegment(previousSegment(activeSegment));
+      return;
+    }
+
+    if (e.key === "Backspace") {
+      e.preventDefault();
+      const currentValue = getSegmentValue(activeSegment);
+      setSegmentValue(activeSegment, currentValue.slice(0, -1));
+      diagramFreshSelectionRef.current = false;
+      return;
+    }
+
+    if (!/^[0-9]$/.test(e.key)) return;
+
+    e.preventDefault();
+    const maxLength = activeSegment === 'width' ? 3 : 2;
+    const currentValue = diagramFreshSelectionRef.current ? "" : getSegmentValue(activeSegment);
+    const nextValue = `${currentValue}${e.key}`.slice(0, maxLength);
+
+    setSegmentValue(activeSegment, nextValue);
+    setShowPopular(true);
+    diagramFreshSelectionRef.current = false;
+
+    if (nextValue.length >= maxLength && activeSegment !== 'rim') {
+      focusDiagramSegment(nextSegment(activeSegment));
     }
   };
 
@@ -389,7 +476,27 @@ export function TireSizeSearch({
       <p className={`font-black text-navy-900 ${compact ? 'text-sm mb-2' : 'text-base mb-3'}`}>
         Buscar por medida
       </p>
-      <TireDiagram width={width} aspect={profile} rim={rim} focused={focused} compact={compact} />
+      <div
+        ref={tireEditorRef}
+        tabIndex={0}
+        role="group"
+        aria-label="Editar medida desde el neumático"
+        onFocus={() => {
+          if (!focused) focusDiagramSegment('width');
+        }}
+        onBlur={() => setFocused(null)}
+        onKeyDown={handleDiagramKeyDown}
+        className="rounded-xl outline-none focus-visible:ring-4 focus-visible:ring-orange-500/20"
+      >
+        <TireDiagram
+          width={width}
+          aspect={profile}
+          rim={rim}
+          focused={focused}
+          compact={compact}
+          onSegmentSelect={focusDiagramSegment}
+        />
+      </div>
 
       {showScanner && (
         <div className="fixed inset-0 z-50 bg-black flex flex-col">
