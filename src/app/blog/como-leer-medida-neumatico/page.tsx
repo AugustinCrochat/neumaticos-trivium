@@ -21,7 +21,7 @@ export default function ComoLeerMedidaPage() {
               Ingresala acá abajo si ya la tenés, o seguí leyendo para aprender a identificarla en tu rueda.
             </p>
 
-            <TireSizeSearch />
+            <TireSizeSearch hideLearnLink />
           </div>
         </div>
       </div>

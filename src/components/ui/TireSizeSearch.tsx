@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useMemo } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useBranch } from "@/contexts/branch-context";
 import { TireDiagram } from "./TireDiagram";
@@ -56,9 +57,13 @@ type MeasureSegment = 'width' | 'aspect' | 'rim';
 export function TireSizeSearch({
   initialMedida,
   compact = false,
+  forceVoiceButton = false,
+  hideLearnLink = false,
 }: {
   initialMedida?: string;
   compact?: boolean;
+  forceVoiceButton?: boolean;
+  hideLearnLink?: boolean;
 }) {
   const router = useRouter();
   const { selectedBranch } = useBranch();
@@ -222,12 +227,26 @@ export function TireSizeSearch({
     setFocused(segment);
   };
 
+  const getInputForSegment = (segment: MeasureSegment) => {
+    if (segment === 'width') return widthRef.current;
+    if (segment === 'aspect') return profileRef.current;
+    return rimRef.current;
+  };
+
   const focusDiagramSegment = (segment: MeasureSegment) => {
     clearInitialMeasureForEdit();
     setFocused(segment);
     setShowPopular(true);
     diagramFreshSelectionRef.current = true;
-    window.requestAnimationFrame(() => tireEditorRef.current?.focus());
+    window.requestAnimationFrame(() => {
+      const input = getInputForSegment(segment);
+      if (input) {
+        input.focus();
+        input.select();
+      } else {
+        tireEditorRef.current?.focus();
+      }
+    });
   };
 
   const getSegmentValue = (segment: MeasureSegment) => {
@@ -424,8 +443,8 @@ export function TireSizeSearch({
   
   const voiceButtonClass = `h-[52px] w-12 shrink-0 flex items-center justify-center rounded-xl border transition-all ${
     listening
-      ? "bg-orange-500 text-white border-orange-300 shadow-lg shadow-orange-500/20"
-      : "bg-white text-navy-900 border-slate-200 shadow-sm hover:border-orange-500 hover:bg-orange-50 hover:text-orange-700"
+      ? "bg-red-700 text-white border-red-400 shadow-lg shadow-red-700/25"
+      : "bg-red-600 text-white border-red-400 shadow-lg shadow-red-700/20 hover:bg-red-500 hover:border-red-300"
   }`;
 
   const searchButtonClass = `h-[52px] w-12 shrink-0 flex items-center justify-center rounded-xl border transition-all bg-orange-500 text-white border-orange-400 shadow-lg shadow-orange-500/20 hover:bg-orange-400`;
@@ -504,13 +523,21 @@ export function TireSizeSearch({
       <p className={`font-black text-navy-900 ${compact ? 'text-sm mb-2' : 'text-base mb-3'}`}>
         Buscar por medida
       </p>
+      {!hideLearnLink && (
+        <p className={`text-slate-600 ${compact ? 'text-xs mb-2' : 'text-sm mb-3'}`}>
+          ¿No sabés tu medida?{" "}
+          <Link href="/blog/como-leer-medida-neumatico" className="font-bold text-red-600 underline underline-offset-2 hover:text-red-700">
+            Aprendé a leerla acá
+          </Link>
+        </p>
+      )}
       <div
         ref={tireEditorRef}
         tabIndex={0}
         role="group"
         aria-label="Editar medida desde el neumático"
-        onFocus={() => {
-          if (!focused) focusDiagramSegment('width');
+        onFocus={(e) => {
+          if (e.target === e.currentTarget && !focused) focusDiagramSegment('width');
         }}
         onBlur={() => setFocused(null)}
         onKeyDown={handleDiagramKeyDown}
@@ -668,7 +695,7 @@ export function TireSizeSearch({
               />
               {/* Inline button: mobile only (desktop gets full-width button below) */}
               <div className="lg:hidden">
-                {hasInput ? (
+                {!forceVoiceButton && hasInput ? (
                   <button type="button" onClick={executeSearch} aria-label="Buscar medida" className={searchButtonClass}>
                     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
@@ -751,7 +778,7 @@ export function TireSizeSearch({
                 />
               </div>
 
-              {hasInput ? (
+              {!forceVoiceButton && hasInput ? (
                 <button type="button" onClick={executeSearch} aria-label="Buscar medida" className={searchButtonClass}>
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
@@ -803,7 +830,7 @@ export function TireSizeSearch({
 
         {compact && (
           <div className="hidden lg:block">
-            {hasInput ? (
+            {!forceVoiceButton && hasInput ? (
               <button type="button" onClick={executeSearch} aria-label="Buscar medida"
                 className="w-full h-[52px] bg-orange-500 hover:bg-orange-400 text-white font-black rounded-xl border border-orange-400 shadow-lg shadow-orange-500/20 transition-all flex items-center justify-center gap-2">
                 Buscar medida
@@ -815,8 +842,8 @@ export function TireSizeSearch({
               <button type="button" onClick={startVoiceForMeasure} aria-label="Ingresar medida por voz"
                 className={`w-full h-[52px] font-bold text-sm rounded-xl border transition-all flex items-center justify-center gap-2 ${
                   listening
-                    ? "bg-orange-500 text-white border-orange-300 shadow-lg shadow-orange-500/20"
-                    : "bg-white text-navy-900 border-slate-200 shadow-sm hover:border-orange-500 hover:bg-orange-50 hover:text-orange-700"
+                    ? "bg-red-700 text-white border-red-400 shadow-lg shadow-red-700/25"
+                    : "bg-red-600 text-white border-red-400 shadow-lg shadow-red-700/20 hover:bg-red-500 hover:border-red-300"
                 }`}>
                 <svg className="w-4 h-4" viewBox="0 0 82.05 122.88" fill="currentColor">
                   <path d="M59.89,20.83V52.3c0,27-37.73,27-37.73,0V20.83c0-27.77,37.73-27.77,37.73,0Zm-14.18,76V118.2a4.69,4.69,0,0,1-9.37,0V96.78a40.71,40.71,0,0,1-12.45-3.51A41.63,41.63,0,0,1,12.05,85L12,84.91A41.31,41.31,0,0,1,3.12,71.68,40.73,40.73,0,0,1,0,56a4.67,4.67,0,0,1,8-3.31l.1.1A4.68,4.68,0,0,1,9.37,56a31.27,31.27,0,0,0,2.4,12.06A32,32,0,0,0,29,85.28a31.41,31.41,0,0,0,24.13,0,31.89,31.89,0,0,0,10.29-6.9l.08-.07a32,32,0,0,0,6.82-10.22A31.27,31.27,0,0,0,72.68,56a4.69,4.69,0,0,1,9.37,0,40.65,40.65,0,0,1-3.12,15.65A41.45,41.45,0,0,1,70,85l-.09.08a41.34,41.34,0,0,1-11.75,8.18,40.86,40.86,0,0,1-12.46,3.51Z"/>
@@ -841,15 +868,11 @@ export function TireSizeSearch({
           onClick={startCamera}
           className="w-full bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 disabled:opacity-50 text-white font-black py-4 rounded-xl border border-red-300/30 transition-all flex items-center justify-center gap-2 shadow-lg shadow-red-900/30 active:scale-[0.98] lg:hidden"
         >
+          <svg className="w-5 h-5 shrink-0" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M15 12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h1.172a3 3 0 0 0 2.12-.879l.83-.828A1 1 0 0 1 6.827 3h2.344a1 1 0 0 1 .707.293l.828.828A3 3 0 0 0 12.828 5H14a1 1 0 0 1 1 1v6zM2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4H2z" />
+            <path d="M8 11a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5zm0 1a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM3 6.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z" />
+          </svg>
           <span>Reconocer medida con IA</span>
-          <span className="relative -ml-0.5 inline-flex w-5 h-5 items-center justify-center">
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 2l2.4 5.6L20 10l-5.6 2.4L12 18l-2.4-5.6L4 10l5.6-2.4L12 2z" />
-            </svg>
-            <svg className="absolute -bottom-0.5 -right-0.5 w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 2l2 4.8L19 9l-5 2.2L12 16l-2-4.8L5 9l5-2.2L12 2z" />
-            </svg>
-          </span>
         </button>
 
         {scanError && (
