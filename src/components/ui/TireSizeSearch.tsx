@@ -304,6 +304,7 @@ export function TireSizeSearch({
   }
 
   const measureInputClass = "w-full min-w-0 bg-slate-50 border-2 border-slate-200 rounded-xl px-2 sm:px-3 py-3 text-navy-900 font-bold text-center transition-all outline-none placeholder:text-slate-500 focus:bg-white focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20 focus:shadow-lg focus:shadow-orange-500/10";
+  const measureSeparatorClass = "flex h-[52px] items-center justify-center text-lg font-black text-slate-500";
   
   const voiceButtonClass = `h-[52px] w-12 shrink-0 flex items-center justify-center rounded-xl border transition-all ${
     listening
@@ -470,7 +471,7 @@ export function TireSizeSearch({
         <div ref={containerRef} className="relative">
           {compact ? (
             // Compact: single DOM — 3-column + button on mobile, stacked on desktop
-            <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_auto] lg:grid-cols-1 gap-2">
+            <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)_auto_minmax(0,1fr)_auto] lg:grid-cols-1 gap-2">
               <input
                 ref={widthRef}
                 type="text"
@@ -495,6 +496,7 @@ export function TireSizeSearch({
                 aria-label="Ancho del neumático"
                 className={measureInputClass}
               />
+              <span aria-hidden="true" className={`${measureSeparatorClass} lg:hidden`}>/</span>
               <input
                 ref={profileRef}
                 type="text"
@@ -519,6 +521,7 @@ export function TireSizeSearch({
                 aria-label="Perfil del neumático"
                 className={measureInputClass}
               />
+              <span aria-hidden="true" className={`${measureSeparatorClass} lg:hidden`}>R</span>
               <input
                 ref={rimRef}
                 type="text"
@@ -558,7 +561,7 @@ export function TireSizeSearch({
             </div>
           ) : (
             // Non-compact: always horizontal
-            <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_auto] gap-2 sm:gap-3">
+            <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)_auto_minmax(0,1fr)_auto] gap-2 sm:gap-3">
               <div className="min-w-0">
                 <input
                   ref={widthRef}
@@ -585,6 +588,7 @@ export function TireSizeSearch({
                   className={measureInputClass}
                 />
               </div>
+              <span aria-hidden="true" className={measureSeparatorClass}>/</span>
               <div className="min-w-0">
                 <input
                   ref={profileRef}
@@ -611,6 +615,7 @@ export function TireSizeSearch({
                   className={measureInputClass}
                 />
               </div>
+              <span aria-hidden="true" className={measureSeparatorClass}>R</span>
               <div className="min-w-0">
                 <input
                   ref={rimRef}
