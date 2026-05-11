@@ -88,18 +88,15 @@ export function ProductCard({
 
       {/* Content */}
       <div className="p-4 flex flex-col flex-1">
-        <div className="flex items-start justify-between gap-2 mb-2">
-          <Link href={`/marcas/${product.brandId}`} className="flex items-center gap-2 group/brand">
-            <div className="w-6 h-6 bg-white border border-slate-100 rounded p-0.5 flex items-center justify-center shrink-0">
-              {brandLogo ? (
-                <img src={brandLogo} alt={product.brand} className="w-full h-full object-contain" />
-              ) : (
-                <div className="text-[8px] font-black text-navy-200">{product.brand[0]}</div>
-              )}
-            </div>
-            <span className="text-xs font-bold text-navy-600 uppercase tracking-wide group-hover/brand:text-navy-900 transition-colors">
-              {product.brand}
-            </span>
+        <div className="flex items-start justify-between gap-2 mb-3">
+          <Link href={`/marcas/${product.brandId}`} className="group/brand">
+            {brandLogo ? (
+              <img src={brandLogo} alt={product.brand} className="h-6 w-auto object-contain max-w-[100px] opacity-80 group-hover/brand:opacity-100 transition-opacity" />
+            ) : (
+              <span className="text-xs font-bold text-navy-600 uppercase tracking-wide group-hover/brand:text-navy-900 transition-colors">
+                {product.brand}
+              </span>
+            )}
           </Link>
           {product.tags[0] && (
             <span className={`text-[10px] font-black px-2.5 py-1 rounded-md uppercase tracking-wider whitespace-nowrap shadow-sm ${

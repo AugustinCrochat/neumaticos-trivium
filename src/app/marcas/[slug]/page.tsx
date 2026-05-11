@@ -30,13 +30,14 @@ export default async function BrandPage({ params }: Props) {
       {/* Brand Header */}
       <header className="bg-slate-50 border-b border-slate-100 pt-12 md:pt-20 pb-12 md:pb-16">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex flex-col md:flex-row items-center md:items-start gap-8 md:gap-12">
-            <div className="w-40 h-40 md:w-56 md:h-56 bg-white rounded-[2.5rem] shadow-2xl shadow-navy-900/5 flex items-center justify-center p-8 md:p-12 border border-slate-100/50 relative group">
-              <div className="absolute inset-0 bg-gradient-to-br from-navy-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-[2.5rem]" />
+          <div className="flex flex-col md:flex-row items-center md:items-start gap-10 md:gap-16">
+            <div className="shrink-0 flex items-center justify-center py-4">
               {brandLogo ? (
-                <img src={brandLogo} alt={brand.name} className="w-full h-full object-contain relative z-10" />
+                <img src={brandLogo} alt={brand.name} className="h-20 md:h-32 w-auto object-contain" />
               ) : (
-                <div className="text-6xl font-black text-navy-100 relative z-10">{brand.name[0]}</div>
+                <div className="w-32 h-32 bg-white rounded-3xl shadow-xl flex items-center justify-center p-6 border border-slate-100">
+                  <div className="text-6xl font-black text-navy-100">{brand.name[0]}</div>
+                </div>
               )}
             </div>
             <div className="flex-1 text-center md:text-left">

@@ -90,20 +90,17 @@ export default async function ProductPage({ params }: Props) {
 
         {/* Info */}
         <div className="flex flex-col">
-          <Link href={`/marcas/${product.brandId}`} className="flex items-center gap-3 mb-4 group/brand">
-            <div className="w-12 h-12 bg-white border border-slate-100 rounded-xl p-1.5 flex items-center justify-center shrink-0 shadow-sm group-hover/brand:border-navy-200 transition-colors">
-              {brandLogo ? (
-                <img src={brandLogo} alt={product.brand} className="w-full h-full object-contain" />
-              ) : (
-                <div className="text-xl font-black text-navy-200">{product.brand[0]}</div>
-              )}
-            </div>
-            <div>
-              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Marca</p>
-              <h2 className="text-base font-bold text-navy-600 uppercase tracking-wide group-hover/brand:text-navy-900 transition-colors">
-                {product.brand}
-              </h2>
-            </div>
+          <Link href={`/marcas/${product.brandId}`} className="mb-6 group/brand inline-block">
+            {brandLogo ? (
+              <img src={brandLogo} alt={product.brand} className="h-10 md:h-12 w-auto object-contain max-w-[180px] opacity-90 group-hover/brand:opacity-100 transition-opacity" />
+            ) : (
+              <div>
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Marca</p>
+                <h2 className="text-base font-bold text-navy-600 uppercase tracking-wide group-hover/brand:text-navy-900 transition-colors">
+                  {product.brand}
+                </h2>
+              </div>
+            )}
           </Link>
           <h1 className="text-2xl md:text-4xl font-black text-slate-900 mb-2 leading-tight">
             {product.model}

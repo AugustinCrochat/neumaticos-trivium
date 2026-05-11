@@ -37,21 +37,18 @@ function BrandDropdown({
         <div className="flex items-center gap-3 overflow-hidden">
           {selectedBrand ? (
             <>
-              <div className="w-6 h-6 shrink-0 bg-slate-50 rounded flex items-center justify-center p-0.5 border border-slate-100">
-                {getBrandLogo(selectedBrand.id) ? (
-                  <img
-                    src={getBrandLogo(selectedBrand.id)!}
-                    alt={selectedBrand.name}
-                    className="w-full h-full object-contain"
-                    onError={(e) => (e.currentTarget.style.display = "none")}
-                  />
-                ) : (
-                  <div className="w-full h-full bg-navy-100 text-navy-600 text-[10px] flex items-center justify-center font-bold">
-                    {selectedBrand.name[0]}
-                  </div>
-                )}
-              </div>
-              <span className="truncate">{selectedBrand.name}</span>
+            <>
+              {getBrandLogo(selectedBrand.id) ? (
+                <img
+                  src={getBrandLogo(selectedBrand.id)!}
+                  alt={selectedBrand.name}
+                  className="h-7 w-auto object-contain max-w-[120px]"
+                  onError={(e) => (e.currentTarget.style.display = "none")}
+                />
+              ) : (
+                <span className="truncate font-bold text-navy-900">{selectedBrand.name}</span>
+              )}
+            </>
             </>
           ) : (
             <span className="text-slate-500">Todas las marcas</span>
@@ -99,20 +96,15 @@ function BrandDropdown({
                     value === b.id ? "bg-navy-50 text-navy-700 font-bold" : "text-slate-600 hover:bg-slate-50"
                   }`}
                 >
-                  <div className="w-6 h-6 shrink-0 bg-slate-50 rounded flex items-center justify-center p-0.5 border border-slate-100">
-                    {getBrandLogo(b.id) ? (
-                      <img
-                        src={getBrandLogo(b.id)!}
-                        alt={b.name}
-                        className="w-full h-full object-contain"
-                      />
-                    ) : (
-                      <div className="w-full h-full bg-navy-100 text-navy-600 text-[10px] flex items-center justify-center font-bold">
-                        {b.name[0]}
-                      </div>
-                    )}
-                  </div>
-                  {b.name}
+                  {getBrandLogo(b.id) ? (
+                    <img
+                      src={getBrandLogo(b.id)!}
+                      alt={b.name}
+                      className="h-6 w-auto object-contain max-w-[100px]"
+                    />
+                  ) : (
+                    <span className="font-medium">{b.name}</span>
+                  )}
                 </button>
               ))}
             </div>
