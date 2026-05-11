@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { PRODUCTS } from "@/lib/data";
 import { getBrandLogo } from "@/lib/brand-utils";
+import { ProductNameWithHighlightedSize } from "@/components/ui/ProductNameWithHighlightedSize";
 import { ProductPageClient } from "./ProductPageClient";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -103,12 +104,11 @@ export default async function ProductPage({ params }: Props) {
             )}
           </Link>
           <h1 className="text-2xl md:text-4xl font-black text-slate-900 mb-2 leading-tight">
-            {product.model}
+            <ProductNameWithHighlightedSize
+              product={product}
+              sizeClassName="inline-flex rounded-xl bg-orange-100 px-2.5 py-1 font-black text-orange-700"
+            />
           </h1>
-
-          <p className="text-navy-700 font-mono text-xl font-semibold mb-4">
-            {product.size.width}/{product.size.profile} R{product.size.rim}
-          </p>
 
           <div className="flex flex-wrap gap-2 mb-6">
             {product.tags.map((tag) => (
@@ -124,8 +124,6 @@ export default async function ProductPage({ params }: Props) {
               </span>
             ))}
           </div>
-
-          <p className="text-xs text-slate-400 font-mono mb-6">SKU: {product.id}</p>
 
           {/* Price */}
           <div className="border-t border-slate-100 pt-6 mt-auto">

@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useBranch } from "@/contexts/branch-context";
 import { getBrandLogo } from "@/lib/brand-utils";
+import { ProductNameWithHighlightedSize } from "@/components/ui/ProductNameWithHighlightedSize";
 import type { TireProduct } from "@/lib/types";
 import type { ReactNode } from "react";
 
@@ -111,15 +112,9 @@ export function ProductCard({
 
         <h3 className="font-semibold text-slate-800 text-sm mb-1 line-clamp-2" title={product.model}>
           <Link href={`/productos/${product.slug}`} className="hover:text-navy-700 transition-colors">
-            {product.model}
+            <ProductNameWithHighlightedSize product={product} />
           </Link>
         </h3>
-
-        <p className="text-xs text-slate-400 mb-1 font-mono">SKU: {product.id}</p>
-
-        <p className="text-navy-700 font-mono text-sm font-semibold mb-3">
-          {product.size.width}/{product.size.profile} R{product.size.rim}
-        </p>
 
         {/* Price */}
         <div className="mt-auto">
