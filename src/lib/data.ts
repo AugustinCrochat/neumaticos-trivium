@@ -77,6 +77,13 @@ export const BRANDS: TireBrand[] = [
     name: "Yokohama",
     origin: "Japón",
   },
+  {
+    id: "grenlander",
+    name: "Grenlander",
+    origin: "China",
+    description: "Neumáticos de alto rendimiento a precio accesible, respaldados por el grupo Sailun.",
+    fullDescription: "Grenlander es una marca china fundada en 2009, parte del grupo Sailun Tire —uno de los diez mayores fabricantes de neumáticos del mundo—. Combina tecnología de construcción radial de acero, compuestos de silicio en sus modelos de mayor segmento y certificaciones ECE y DOT, ofreciendo una relación costo-kilómetro muy competitiva para uso urbano, ruta, SUVs y vehículos de carga.",
+  },
 ];
 
 const RAW_PRODUCTS: TireProduct[] = [

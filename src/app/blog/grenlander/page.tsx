@@ -269,6 +269,77 @@ export default function GrenlanderPage() {
         </div>
       </div>
 
+      {/* Models section */}
+      <div className="bg-zinc-50 border-t border-zinc-100 py-16 md:py-24">
+        <div className="max-w-3xl mx-auto px-4">
+          <h2 className="text-2xl font-black text-zinc-900 mb-2 flex items-center gap-3">
+            <span className="w-8 h-1 bg-red-600 rounded-full flex-shrink-0" />
+            Modelos disponibles en Trivium
+          </h2>
+          <p className="text-zinc-500 mb-10">
+            Estos son los modelos Grenlander que podés encontrar en nuestro catálogo.
+          </p>
+
+          <div className="grid sm:grid-cols-2 gap-4">
+            <div className="bg-white rounded-2xl border border-zinc-200 p-5">
+              <p className="text-xs font-bold text-red-600 uppercase tracking-widest mb-1">Turismo / Ciudad</p>
+              <h3 className="text-lg font-black text-zinc-900 mb-2">COLO H02</h3>
+              <p className="text-sm text-zinc-500 leading-relaxed">
+                Neumático de turismo para uso urbano y ruta. Banda asimétrica con buena evacuación de agua y rodadura silenciosa. Apunta a sedanes y hatchbacks de uso diario.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-2xl border border-zinc-200 p-5">
+              <p className="text-xs font-bold text-red-600 uppercase tracking-widest mb-1">Turismo / Ciudad</p>
+              <h3 className="text-lg font-black text-zinc-900 mb-2">KINGPRO ONE</h3>
+              <p className="text-sm text-zinc-500 leading-relaxed">
+                Orientado a autos compactos y medianos. Diseño de banda enfocado en la durabilidad y el bajo consumo de combustible, ideal para quienes buscan largo kilometraje.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-2xl border border-zinc-200 p-5">
+              <p className="text-xs font-bold text-blue-600 uppercase tracking-widest mb-1">SUV / Crossover</p>
+              <h3 className="text-lg font-black text-zinc-900 mb-2">L-MAX9</h3>
+              <p className="text-sm text-zinc-500 leading-relaxed">
+                Diseñado para SUVs y vehículos de mayor porte. Carcasa reforzada para soportar más carga, con buen desempeño tanto en asfalto como en camino consolidado.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-2xl border border-zinc-200 p-5">
+              <p className="text-xs font-bold text-blue-600 uppercase tracking-widest mb-1">SUV / Crossover</p>
+              <h3 className="text-lg font-black text-zinc-900 mb-2">L-ZEAL56</h3>
+              <p className="text-sm text-zinc-500 leading-relaxed">
+                Perfil deportivo para SUVs. Mayor respuesta de dirección y agarre en curva, pensado para vehículos donde el conductor busca algo más de dinamismo.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-2xl border border-zinc-200 p-5">
+              <p className="text-xs font-bold text-blue-600 uppercase tracking-widest mb-1">SUV / Larga distancia</p>
+              <h3 className="text-lg font-black text-zinc-900 mb-2">STRATOUR E1</h3>
+              <p className="text-sm text-zinc-500 leading-relaxed">
+                Touring de larga distancia. Perfil optimizado para minimizar el calentamiento en viajes largos y autopista, con bajo nivel sonoro y estabilidad a alta velocidad.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-2xl border border-zinc-200 p-5">
+              <p className="text-xs font-bold text-emerald-600 uppercase tracking-widest mb-1">All-Terrain / 4×4</p>
+              <h3 className="text-lg font-black text-zinc-900 mb-2">MAGA A/T TWO</h3>
+              <p className="text-sm text-zinc-500 leading-relaxed">
+                All-Terrain para pick-ups y 4×4. Tacos pronunciados con certificación M+S, pensado para quienes alternan asfalto con ripio, campo o caminos de tierra.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-2xl border border-zinc-200 p-5 sm:col-span-2">
+              <p className="text-xs font-bold text-amber-600 uppercase tracking-widest mb-1">Comercial / Carga</p>
+              <h3 className="text-lg font-black text-zinc-900 mb-2">AA112</h3>
+              <p className="text-sm text-zinc-500 leading-relaxed">
+                Neumático para uso comercial y vehículos de carga liviana. Alta resistencia a la deformación bajo peso sostenido, indicado para furgones, camionetas de reparto y flotas.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* CTA — Link to brand page */}
       <div className="bg-zinc-950 py-16 text-center">
         <p className="text-zinc-400 text-sm uppercase tracking-widest mb-3 font-semibold">
