@@ -16,6 +16,9 @@ export const metadata: Metadata = {
   description:
     "Neumáticos de importación directa a precios outlet.",
   keywords: ["neumáticos", "cubiertas", "outlet", "importación", "china", "baratos", "Argentina"],
+  verification: {
+    google: "g5tLlITOx48HSWIByq6VoJlZbRq9ygS-k15x8CyA5BE",
+  },
 };
 
 export default function RootLayout({
