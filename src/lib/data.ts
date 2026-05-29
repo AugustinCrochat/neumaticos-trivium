@@ -3724,4 +3724,14 @@ export const BLOG_POSTS: BlogPost[] = [
     slug: "equivalencias",
     category: "Guías",
   },
+  {
+    id: "5",
+    title: "Grenlander: ¿son buenos los neumáticos?",
+    excerpt:
+      "Analizamos la marca Grenlander en profundidad: calidad, tecnología, comparación con Zmax, Pirelli y BFGoodrich, y cuándo conviene elegirlos.",
+    imageUrl: "/images/blog-2.webp",
+    date: "2026-05-29",
+    slug: "grenlander",
+    category: "Marcas",
+  },
 ];
