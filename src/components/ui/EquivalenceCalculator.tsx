@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { PRODUCTS } from "@/lib/data";
 import type { TireSize } from "@/lib/types";
@@ -27,6 +27,37 @@ export function EquivalenceCalculator() {
   const [w2, setW2] = useState("205");
   const [p2, setP2] = useState("60");
   const [r2, setR2] = useState("15");
+
+  const [copied, setCopied] = useState(false);
+
+  // Prefill values from the URL when arriving from a shared link.
+  // Format: ?modo=check|list&original=195-65-15&equivalente=205-60-15
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+
+    const modo = params.get("modo");
+    if (modo === "check" || modo === "list") setMode(modo);
+
+    const parseSize = (value: string | null) => {
+      if (!value) return null;
+      const m = value.match(/^(\d+)-(\d+)-(\d+)$/);
+      return m ? { width: m[1], profile: m[2], rim: m[3] } : null;
+    };
+
+    const original = parseSize(params.get("original"));
+    if (original) {
+      setW1(original.width);
+      setP1(original.profile);
+      setR1(original.rim);
+    }
+
+    const equivalente = parseSize(params.get("equivalente"));
+    if (equivalente) {
+      setW2(equivalente.width);
+      setP2(equivalente.profile);
+      setR2(equivalente.rim);
+    }
+  }, []);
 
   // Parse inputs safely
   const s1: TireSize | null = (w1 && p1 && r1) ? { width: parseInt(w1), profile: parseInt(p1), rim: parseInt(r1) } : null;
@@ -61,6 +92,44 @@ export function EquivalenceCalculator() {
 
     compatibleInStock = Array.from(uniqueSizes.values()).sort((a, b) => Math.abs(a.diff) - Math.abs(b.diff));
   }
+
+  // Reset the "copied" hint whenever the inputs or mode change.
+  useEffect(() => {
+    setCopied(false);
+  }, [mode, w1, p1, r1, w2, p2, r2]);
+
+  function buildShareUrl() {
+    const params = new URLSearchParams();
+    params.set("modo", mode);
+    if (s1) params.set("original", `${s1.width}-${s1.profile}-${s1.rim}`);
+    if (mode === "check" && s2) params.set("equivalente", `${s2.width}-${s2.profile}-${s2.rim}`);
+    return `${window.location.origin}${window.location.pathname}?${params.toString()}`;
+  }
+
+  async function handleShare() {
+    const url = buildShareUrl();
+    // Keep the address bar in sync so a manual copy also works.
+    window.history.replaceState(null, "", url);
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+    } catch {
+      setCopied(false);
+    }
+  }
+
+  const shareButton = (
+    <button
+      type="button"
+      onClick={handleShare}
+      className="inline-flex items-center gap-2 mt-4 text-sm font-bold text-slate-600 hover:text-slate-900 bg-white border border-slate-200 hover:border-slate-300 rounded-xl px-4 py-2 transition-colors"
+    >
+      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+      </svg>
+      {copied ? "¡Enlace copiado!" : "Compartir esta equivalencia"}
+    </button>
+  );
 
   const inputClass = "w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-slate-900 font-bold text-center outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20";
 
@@ -166,6 +235,7 @@ export function EquivalenceCalculator() {
                   Buscar stock de {s2.width}/{s2.profile} R{s2.rim}
                 </Link>
               )}
+              <div>{shareButton}</div>
             </div>
           </div>
         </div>
@@ -209,6 +279,8 @@ export function EquivalenceCalculator() {
               ))}
             </div>
           )}
+
+          {s1 && shareButton}
         </div>
       )}
     </div>
