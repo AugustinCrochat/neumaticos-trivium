@@ -1,9 +1,10 @@
 // Genera un QR en SVG por sucursal, apuntando a su pagina en el sitio.
 //
-// El SVG se emite "lo menos compacto posible": un <rect> por modulo (sin fusionar
-// en paths), con indentacion legible, para que sea facil de editar, recolorear y
-// escalar sin perder nitidez. Alta correccion de errores (nivel H) para que siga
-// escaneando aunque el impreso se manche o se pegue un logo encima.
+// El codigo se dibuja como un unico <path>: los modulos contiguos de cada fila se
+// fusionan en un solo rectangulo y todo va en un mismo relleno, asi los cuadrados
+// que se tocan quedan unidos sin costura (no se ve la linea de separacion que dejan
+// los <rect> sueltos por el anti-aliasing). Nivel de correccion "M" (15%) para que
+// la matriz sea menos densa; suficiente para un impreso limpio.
 //
 // Uso:  node scripts/generate-branch-qr.mjs
 // (o)   corepack npm run generate-qr
@@ -35,25 +36,30 @@ const LIGHT = "#ffffff";
 function buildSvg(matrix, size) {
   const total = size + QUIET_ZONE * 2;
   const dim = total * MODULE_PX;
-  const rects = [];
+  const runs = [];
 
+  // Fusiona modulos negros contiguos de cada fila en un solo rectangulo.
   for (let y = 0; y < size; y++) {
-    for (let x = 0; x < size; x++) {
-      if (matrix[y * size + x]) {
-        const px = (x + QUIET_ZONE) * MODULE_PX;
-        const py = (y + QUIET_ZONE) * MODULE_PX;
-        rects.push(
-          `    <rect x="${px}" y="${py}" width="${MODULE_PX}" height="${MODULE_PX}" />`
-        );
+    let x = 0;
+    while (x < size) {
+      if (!matrix[y * size + x]) {
+        x++;
+        continue;
       }
+      let run = 1;
+      while (x + run < size && matrix[y * size + x + run]) run++;
+      const px = (x + QUIET_ZONE) * MODULE_PX;
+      const py = (y + QUIET_ZONE) * MODULE_PX;
+      const w = run * MODULE_PX;
+      runs.push(`M${px} ${py}h${w}v${MODULE_PX}h-${w}z`);
+      x += run;
     }
   }
 
+  // Un unico path (un solo relleno) -> los cuadrados que se tocan quedan unidos.
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${dim}" height="${dim}" viewBox="0 0 ${dim} ${dim}" shape-rendering="crispEdges" role="img">
   <rect width="${dim}" height="${dim}" fill="${LIGHT}" />
-  <g fill="${DARK}">
-${rects.join("\n")}
-  </g>
+  <path fill="${DARK}" d="${runs.join("")}" />
 </svg>
 `;
 }
@@ -63,7 +69,7 @@ mkdirSync(outDir, { recursive: true });
 
 for (const branch of branches) {
   const url = `${siteUrl}/sucursales/${branch.id}`;
-  const qr = QRCode.create(url, { errorCorrectionLevel: "H" });
+  const qr = QRCode.create(url, { errorCorrectionLevel: "M" });
   const svg = buildSvg(qr.modules.data, qr.modules.size);
   const file = join(outDir, `sucursal-${branch.id}.svg`);
   writeFileSync(file, svg);
