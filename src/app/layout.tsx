@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import "./globals.css";
+import { SITE_URL } from "@/lib/config";
 import { BranchProvider } from "@/contexts/branch-context";
 import { BranchModal } from "@/components/ui/BranchModal";
 import { Header } from "@/components/layout/Header";
@@ -12,6 +13,7 @@ const geist = Geist({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "Neumáticos Trivium — El outlet del neumático",
   description:
     "Neumáticos de importación directa a precios outlet.",

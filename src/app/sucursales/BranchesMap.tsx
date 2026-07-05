@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import maplibregl, { type GeoJSONSource, type Map, type Marker } from "maplibre-gl";
 import type { Branch } from "@/lib/config";
 import { useBranch } from "@/contexts/branch-context";
@@ -289,6 +290,16 @@ function BranchSummary({
           Como llegar
         </a>
       </div>
+
+      <Link
+        href={`/sucursales/${branch.id}`}
+        className="mt-2 inline-flex w-full min-h-11 items-center justify-center gap-1.5 rounded-xl bg-navy-900 px-4 py-2.5 text-sm font-black text-white transition-colors hover:bg-navy-800"
+      >
+        Ver información de la sucursal
+        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+        </svg>
+      </Link>
     </article>
   );
 }

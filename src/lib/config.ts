@@ -1,3 +1,15 @@
+/** URL canonica del sitio en produccion (sin barra final). Usada para SEO y QR. */
+export const SITE_URL = "https://neumaticos.trivium.ar";
+
+export type ScheduleRule = {
+  /** Dias de la semana segun Date.getDay(): 0=Domingo ... 6=Sabado */
+  days: number[];
+  /** Hora de apertura en formato "HH:MM" (24h) */
+  open: string;
+  /** Hora de cierre en formato "HH:MM" (24h) */
+  close: string;
+};
+
 export type Branch = {
   id: string;
   name: string;
@@ -7,6 +19,8 @@ export type Branch = {
   phone: string;
   whatsapp: string;
   hours: string;
+  /** Horario estructurado para calcular el estado abierto/cerrado en vivo */
+  schedule: ScheduleRule[];
   mapUrl: string;
   coordinates: {
     lat: number;
@@ -28,6 +42,10 @@ export const BRANCHES: Branch[] = [
     phone: "+54 11 0000-0001",
     whatsapp: "5491171279909",
     hours: "Lun–Vie 8:30–18:30 | Sáb 9–14",
+    schedule: [
+      { days: [1, 2, 3, 4, 5], open: "08:30", close: "18:30" },
+      { days: [6], open: "09:00", close: "14:00" },
+    ],
     mapUrl: "https://maps.google.com/?q=Av.+Angel+Torcuato+de+Alvear+2659+Don+Torcuato+Tigre",
     coordinates: {
       lat: -34.4853,
@@ -47,6 +65,10 @@ export const BRANCHES: Branch[] = [
     phone: "+54 351 000-0002",
     whatsapp: "5493510000002",
     hours: "Lun–Vie 8:00–19:00 | Sáb 9–14",
+    schedule: [
+      { days: [1, 2, 3, 4, 5], open: "08:00", close: "19:00" },
+      { days: [6], open: "09:00", close: "14:00" },
+    ],
     mapUrl: "https://maps.google.com/?q=Donato+Alvarez+7954+Cordoba+Argentina",
     coordinates: {
       lat: -31.3486,

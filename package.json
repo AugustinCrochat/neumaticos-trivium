@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "fetch-images": "node scripts/fetch-images.mjs",
-    "composite-images": "node scripts/composite-images.mjs"
+    "composite-images": "node scripts/composite-images.mjs",
+    "generate-qr": "node scripts/generate-branch-qr.mjs"
   },
   "dependencies": {
     "maplibre-gl": "^5.24.0",
@@ -23,6 +24,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.4",
+    "qrcode": "^1.5.4",
     "sharp": "^0.34.5",
     "tailwindcss": "^4",
     "typescript": "^5"
