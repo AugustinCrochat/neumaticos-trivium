@@ -23,8 +23,6 @@ export type Branch = {
   schedule: ScheduleRule[];
   /** Link a la ficha de Google Maps (para ver ubicacion y como llegar) */
   mapUrl: string;
-  /** Link que abre el boton "Como llegar" (ficha de Google Maps del local) */
-  directionsUrl?: string;
   /** Link directo para dejar una resena en Google Maps */
   reviewUrl?: string;
   coordinates: {
@@ -49,7 +47,6 @@ export const BRANCHES: Branch[] = [
     hours: "Lun–Sáb 9–19h (de corrido)",
     schedule: [{ days: [1, 2, 3, 4, 5, 6], open: "09:00", close: "19:00" }],
     mapUrl: "https://maps.app.goo.gl/tQrXVQCQ5VviAYY46",
-    directionsUrl: "https://maps.app.goo.gl/iPXtxJ8S8BRQBgRU6",
     reviewUrl: "https://g.page/r/CWBPMZ1uJwaREBI/review",
     coordinates: {
       lat: -31.3302015,
