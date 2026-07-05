@@ -14,10 +14,10 @@ function createBranchPin(): HTMLElement {
 
   const badge = document.createElement("div");
   badge.style.cssText =
-    "display:flex;align-items:center;justify-content:center;width:56px;height:56px;padding:7px;border-radius:16px;background:#0a1a30;border:2px solid #ffffff;box-shadow:0 4px 12px rgba(10,26,48,0.4)";
+    "display:flex;align-items:center;justify-content:center;width:54px;height:54px;padding:8px;border-radius:16px;background:#ffffff;border:2px solid #0a1a30;box-shadow:0 4px 12px rgba(10,26,48,0.35)";
 
   const img = document.createElement("img");
-  img.src = "/pin-trivium.svg";
+  img.src = "/pin-trivium.png";
   img.alt = "Neumáticos Trivium";
   img.style.cssText = "width:100%;height:100%;object-fit:contain;display:block";
   badge.appendChild(img);

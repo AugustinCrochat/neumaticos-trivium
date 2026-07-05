@@ -6,7 +6,7 @@ import { BRANCHES, type Branch } from "@/lib/config";
 
 // Coordenadas aproximadas de cada sucursal
 const BRANCH_COORDS: Record<string, { lat: number; lng: number }> = {
-  arguello: { lat: -31.3486, lng: -64.2501 },
+  arguello: { lat: -31.3302015, lng: -64.2650135 },
 };
 
 function haversineKm(

@@ -52,10 +52,10 @@ function createBranchMarkerElement(shortName: string) {
   const badge = document.createElement("div");
   badge.dataset.role = "badge";
   badge.style.cssText =
-    "display:flex;align-items:center;justify-content:center;width:52px;height:52px;padding:7px;border-radius:15px;background:#0a1a30;border:2px solid #ffffff;box-shadow:0 4px 12px rgba(10,26,48,0.4);transition:transform .15s ease,border-color .15s ease";
+    "display:flex;align-items:center;justify-content:center;width:52px;height:52px;padding:8px;border-radius:15px;background:#ffffff;border:2px solid #0a1a30;box-shadow:0 4px 12px rgba(10,26,48,0.35);transition:transform .15s ease,border-color .15s ease";
 
   const img = document.createElement("img");
-  img.src = "/pin-trivium.svg";
+  img.src = "/pin-trivium.png";
   img.alt = "Neumáticos Trivium";
   img.style.cssText = "width:100%;height:100%;object-fit:contain;display:block";
   badge.appendChild(img);
@@ -261,7 +261,7 @@ export function BranchesMap({ branches }: BranchesMapProps) {
   useEffect(() => {
     for (const [id, { badge, pointer }] of Object.entries(branchMarkersRef.current)) {
       const isActive = id === activeBranch.id;
-      badge.style.borderColor = isActive ? "#ff1e00" : "#ffffff";
+      badge.style.borderColor = isActive ? "#ff1e00" : "#0a1a30";
       badge.style.transform = isActive ? "scale(1.12)" : "scale(1)";
       pointer.style.borderTopColor = isActive ? "#ff1e00" : "#0a1a30";
     }
