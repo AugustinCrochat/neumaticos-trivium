@@ -17,8 +17,8 @@ export function BranchStatusBadge({ branch }: { branch: Branch }) {
 
   if (!status) {
     return (
-      <span className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-sm font-bold text-slate-500">
-        <span className="h-2 w-2 rounded-full bg-slate-300" />
+      <span className="inline-flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full bg-slate-100 px-3 py-1 text-sm font-bold text-slate-500">
+        <span className="h-2 w-2 shrink-0 rounded-full bg-slate-300" />
         Horarios
       </span>
     );
@@ -26,14 +26,14 @@ export function BranchStatusBadge({ branch }: { branch: Branch }) {
 
   return (
     <span
-      className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-sm font-bold ${
+      className={`inline-flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full px-3 py-1 text-sm font-bold ${
         status.isOpen
           ? "bg-green-100 text-green-700"
           : "bg-slate-100 text-slate-600"
       }`}
     >
       <span
-        className={`h-2 w-2 rounded-full ${
+        className={`h-2 w-2 shrink-0 rounded-full ${
           status.isOpen ? "bg-green-500 animate-pulse" : "bg-slate-400"
         }`}
       />

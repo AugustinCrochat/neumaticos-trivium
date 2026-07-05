@@ -166,7 +166,7 @@ export default async function BranchPage({ params }: Props) {
 
         {/* Horarios */}
         <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-          <div className="mb-3 flex items-center justify-between gap-3">
+          <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
             <h2 className="text-lg font-black text-navy-900">Horarios de atención</h2>
             <BranchStatusBadge branch={branch} />
           </div>
