@@ -3,10 +3,10 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { BRANCHES, SITE_URL, type Branch } from "@/lib/config";
 import { SERVICES } from "@/lib/data";
-import { getDirectionsLinks } from "@/lib/branch-status";
 import { BranchStatusBadge } from "./BranchStatusBadge";
 import { BranchMiniMap } from "./BranchMiniMap";
 import { SetActiveBranch } from "./SetActiveBranch";
+import { DirectionsButton } from "./DirectionsButton";
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -77,7 +77,6 @@ export default async function BranchPage({ params }: Props) {
   const branch = BRANCHES.find((b) => b.id === id);
   if (!branch) notFound();
 
-  const directions = getDirectionsLinks(branch);
   const waMessage = encodeURIComponent(
     `¡Hola! Te escribo desde la sucursal ${branch.shortName}. Quería hacer una consulta.`
   );
@@ -151,17 +150,17 @@ export default async function BranchPage({ params }: Props) {
             </svg>
             Llamar
           </a>
-          <a
-            href={directions.google}
-            target="_blank"
-            rel="noopener noreferrer"
+          <DirectionsButton
+            lat={branch.coordinates.lat}
+            lng={branch.coordinates.lng}
+            label={`Neumáticos Trivium ${branch.shortName}`}
             className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-black text-navy-900 shadow-sm transition-colors hover:border-orange-400 hover:text-orange-700"
           >
-            <svg className="h-5 w-5 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+            <svg className="h-5 w-5 text-orange-500" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M21.71 11.29l-9-9a1 1 0 00-1.42 0l-9 9a1 1 0 000 1.42l9 9a1 1 0 001.42 0l9-9a1 1 0 000-1.42zM14 14.5V12h-4v3H8v-4a1 1 0 011-1h5V7.5l3.5 3.5z" />
             </svg>
             Cómo llegar
-          </a>
+          </DirectionsButton>
         </section>
 
         {/* Horarios */}
@@ -192,24 +191,17 @@ export default async function BranchPage({ params }: Props) {
             {branch.address}, {branch.city}
           </p>
           <BranchMiniMap branch={branch} />
-          <div className="mt-4 grid grid-cols-2 gap-3">
-            <a
-              href={directions.google}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-navy-900 px-4 text-sm font-black text-white transition-transform active:scale-[0.98]"
-            >
-              Google Maps
-            </a>
-            <a
-              href={directions.waze}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[#33ccff] bg-[#e6f9ff] px-4 text-sm font-black text-[#0b7fab] transition-transform active:scale-[0.98]"
-            >
-              Waze
-            </a>
-          </div>
+          <DirectionsButton
+            lat={branch.coordinates.lat}
+            lng={branch.coordinates.lng}
+            label={`Neumáticos Trivium ${branch.shortName}`}
+            className="mt-4 inline-flex w-full min-h-12 items-center justify-center gap-2 rounded-xl bg-navy-900 px-4 text-sm font-black text-white transition-transform active:scale-[0.98]"
+          >
+            <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M21.71 11.29l-9-9a1 1 0 00-1.42 0l-9 9a1 1 0 000 1.42l9 9a1 1 0 001.42 0l9-9a1 1 0 000-1.42zM14 14.5V12h-4v3H8v-4a1 1 0 011-1h5V7.5l3.5 3.5z" />
+            </svg>
+            Cómo llegar
+          </DirectionsButton>
         </section>
 
         {/* Servicios */}

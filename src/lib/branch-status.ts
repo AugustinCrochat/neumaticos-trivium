@@ -72,12 +72,3 @@ export function getBranchStatus(branch: Branch, now: Date = new Date()): BranchS
 
   return { isOpen: false, label: "Cerrado", detail: nextOpening(branch.schedule, day) };
 }
-
-/** Links de navegacion hacia la sucursal (arrancan la app de mapas del telefono). */
-export function getDirectionsLinks(branch: Branch): { google: string; waze: string } {
-  const { lat, lng } = branch.coordinates;
-  return {
-    google: `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`,
-    waze: `https://waze.com/ul?ll=${lat},${lng}&navigate=yes`,
-  };
-}
