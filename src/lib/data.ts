@@ -419,42 +419,42 @@ export const PRODUCTS: TireProduct[] = RAW_PRODUCTS.map((p) => ({
 
 export const SERVICES: Service[] = [
   {
-    id: "alineacion-balanceo",
-    title: "Alineación y Balanceo",
+    id: "alineacion",
+    title: "Alineación",
     description:
-      "Servicio profesional con equipos de última generación para garantizar la seguridad y prolongar la vida útil de tus neumáticos.",
+      "Alineación computarizada 3D con equipos de última generación. Dejamos las ruedas en su ángulo correcto para que el auto ruede derecho, se maneje seguro y los neumáticos duren más.",
     icon: "alignment",
     features: [
       "Alineación computarizada 3D",
-      "Balanceo dinámico",
-      "Control de presión de neumáticos",
-      "Revisión de suspensión sin cargo",
+      "Corrección de ángulos (camber, caster, convergencia)",
+      "Diagnóstico de desgaste irregular",
+      "Control de presión sin cargo",
     ],
   },
   {
-    id: "gomineria",
-    title: "Gominería Integral",
+    id: "balanceo",
+    title: "Balanceo",
     description:
-      "Reemplazo y mantenimiento de todos los elementos de goma del sistema de dirección y suspensión de tu vehículo.",
+      "Balanceo dinámico computarizado de cada rueda para eliminar las vibraciones en el volante y evitar el desgaste prematuro de los neumáticos.",
     icon: "rubber",
     features: [
-      "Silent blocks y bujes",
-      "Rótulas y terminales",
-      "Guardapolvos de dirección",
-      "Parabrisa y sellos",
+      "Balanceo dinámico computarizado",
+      "Contrapesos de precisión",
+      "Eliminación de vibraciones",
+      "Control de presión post-balanceo",
     ],
   },
   {
     id: "montaje",
-    title: "Montaje y Desmontaje",
+    title: "Arme y Desarme",
     description:
-      "Cambio de neumáticos con desmontadora automática. Sin riesgo de daño a llantas ni neumáticos.",
+      "Arme y desarme de neumáticos con desmontadora automática, sin riesgo de daño a llantas ni cubiertas. Comprando el neumático en nuestro local, la colocación y el cambio de válvulas son sin cargo.",
     icon: "wrench",
     features: [
       "Desmontadora automática",
       "Lubricación con pastallantas",
-      "Válvulas nuevas incluidas",
-      "Prueba de presión post-montaje",
+      "Colocación sin cargo comprando en el local",
+      "Cambio de válvulas sin cargo",
     ],
   },
 ];

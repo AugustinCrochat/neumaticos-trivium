@@ -39,10 +39,10 @@ const VALUE_ITEMS = [
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
       </svg>
     ),
-    title: "2 Sucursales",
+    title: "Sucursal Argüello",
     description:
-      "Presente en Don Torcuato (Tigre) y Córdoba Capital. Montaje profesional en el momento con técnicos certificados.",
-    highlight: "Don Torcuato • Córdoba",
+      "Nos encontrás en Av. Donato Alvarez 7971, Córdoba. Colocación profesional en el momento con técnicos certificados.",
+    highlight: "Córdoba • Argüello",
   },
 ];
 

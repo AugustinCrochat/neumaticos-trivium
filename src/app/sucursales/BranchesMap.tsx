@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import maplibregl, { type GeoJSONSource, type Map, type Marker } from "maplibre-gl";
+import maplibregl, { type Map, type Marker } from "maplibre-gl";
 import type { Branch } from "@/lib/config";
 import { useBranch } from "@/contexts/branch-context";
 
@@ -19,27 +19,11 @@ type UserLocation = {
 const MAPTILER_KEY = "rZs55HHnOgNdmSMB2Jkn";
 const MAP_STYLE_URL = `https://api.maptiler.com/maps/streets-v4/style.json?key=${MAPTILER_KEY}`;
 const ARGENTINA_MIN_ZOOM = 3.5;
-const BRANCH_SOURCE_ID = "trivium-branches";
-const BRANCH_HALO_LAYER_ID = "trivium-branch-halos";
-const BRANCH_POINT_LAYER_ID = "trivium-branch-points";
-const BRANCH_DOT_LAYER_ID = "trivium-branch-dots";
-const BRANCH_ICON_LAYER_ID = "trivium-branch-icons";
-const BRANCH_LABEL_LAYER_ID = "trivium-branch-labels";
-const BRANCH_ICON_ID = "trivium-branch-icon";
-const BRANCH_ACTIVE_ICON_ID = "trivium-branch-icon-active";
 const MAP_LOCALE = {
   "CooperativeGesturesHandler.WindowsHelpText": "Usa Ctrl + scroll para acercar o alejar el mapa",
   "CooperativeGesturesHandler.MacHelpText": "Usa ⌘ + scroll para acercar o alejar el mapa",
   "CooperativeGesturesHandler.MobileHelpText": "Usa dos dedos para mover el mapa",
 };
-
-type BranchFeatureProperties = {
-  id: string;
-  shortName: string;
-  isActive: boolean;
-};
-
-type BranchFeatureCollection = GeoJSON.FeatureCollection<GeoJSON.Point, BranchFeatureProperties>;
 
 function getDistanceInKm(from: UserLocation, to: UserLocation) {
   const earthRadiusKm = 6371;
@@ -58,153 +42,38 @@ function getBranchLngLat(branch: Branch): [number, number] {
   return [branch.coordinates.lng, branch.coordinates.lat];
 }
 
-function createBranchFeatureCollection(
-  branches: Branch[],
-  activeBranchId: string
-): BranchFeatureCollection {
-  return {
-    type: "FeatureCollection",
-    features: branches.map((branch) => ({
-      type: "Feature",
-      properties: {
-        id: branch.id,
-        shortName: branch.shortName,
-        isActive: branch.id === activeBranchId,
-      },
-      geometry: {
-        type: "Point",
-        coordinates: getBranchLngLat(branch),
-      },
-    })),
-  };
-}
+// Marcador HTML con el logo de Trivium sobre una insignia navy (para que el
+// logo blanco se lea sobre el mapa claro) y una etiqueta con el nombre corto.
+function createBranchMarkerElement(shortName: string) {
+  const wrapper = document.createElement("div");
+  wrapper.style.cssText =
+    "display:flex;flex-direction:column;align-items:center;cursor:pointer;user-select:none";
 
-function getBranchSource(map: Map) {
-  return map.getSource(BRANCH_SOURCE_ID) as GeoJSONSource | undefined;
-}
+  const badge = document.createElement("div");
+  badge.dataset.role = "badge";
+  badge.style.cssText =
+    "display:flex;align-items:center;justify-content:center;width:52px;height:52px;padding:7px;border-radius:15px;background:#0a1a30;border:2px solid #ffffff;box-shadow:0 4px 12px rgba(10,26,48,0.4);transition:transform .15s ease,border-color .15s ease";
 
-function createBranchIconImage(color: string) {
-  const size = 64;
-  const canvas = document.createElement("canvas");
-  canvas.width = size;
-  canvas.height = size;
-  const context = canvas.getContext("2d");
+  const img = document.createElement("img");
+  img.src = "/pin-trivium.svg";
+  img.alt = "Neumáticos Trivium";
+  img.style.cssText = "width:100%;height:100%;object-fit:contain;display:block";
+  badge.appendChild(img);
 
-  if (!context) return new ImageData(size, size);
+  const pointer = document.createElement("div");
+  pointer.dataset.role = "pointer";
+  pointer.style.cssText =
+    "width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:8px solid #0a1a30;margin-top:-1px";
 
-  context.clearRect(0, 0, size, size);
-  context.beginPath();
-  context.arc(32, 32, 26, 0, Math.PI * 2);
-  context.fillStyle = "#ffffff";
-  context.fill();
-  context.beginPath();
-  context.arc(32, 32, 21, 0, Math.PI * 2);
-  context.fillStyle = color;
-  context.fill();
-  context.beginPath();
-  context.arc(32, 32, 11, 0, Math.PI * 2);
-  context.fillStyle = "#ffffff";
-  context.fill();
-  context.beginPath();
-  context.arc(32, 32, 5, 0, Math.PI * 2);
-  context.fillStyle = color;
-  context.fill();
+  const label = document.createElement("div");
+  label.textContent = shortName;
+  label.style.cssText =
+    "margin-top:3px;font-weight:800;font-size:12px;color:#0a1a30;white-space:nowrap;text-shadow:0 0 2px #fff,0 0 2px #fff,0 0 2px #fff,0 0 2px #fff";
 
-  context.fillStyle = "#ffffff";
-  context.font = "900 18px sans-serif";
-  context.textAlign = "center";
-  context.textBaseline = "middle";
-  context.fillText("T", 32, 32);
-
-  return context.getImageData(0, 0, size, size);
-}
-
-function addBranchImages(map: Map) {
-  if (!map.hasImage(BRANCH_ICON_ID)) {
-    map.addImage(BRANCH_ICON_ID, createBranchIconImage("#0a1a30"), { pixelRatio: 2 });
-  }
-
-  if (!map.hasImage(BRANCH_ACTIVE_ICON_ID)) {
-    map.addImage(BRANCH_ACTIVE_ICON_ID, createBranchIconImage("#ff1e00"), { pixelRatio: 2 });
-  }
-}
-
-function addBranchLayers(map: Map, branches: Branch[], activeBranchId: string) {
-  if (getBranchSource(map)) return;
-
-  addBranchImages(map);
-
-  map.addSource(BRANCH_SOURCE_ID, {
-    type: "geojson",
-    data: createBranchFeatureCollection(branches, activeBranchId),
-  });
-
-  map.addLayer({
-    id: BRANCH_HALO_LAYER_ID,
-    type: "circle",
-    source: BRANCH_SOURCE_ID,
-    paint: {
-      "circle-radius": ["case", ["get", "isActive"], 20, 17],
-      "circle-color": "#ffffff",
-      "circle-stroke-color": ["case", ["get", "isActive"], "#ff1e00", "#0a1a30"],
-      "circle-stroke-width": ["case", ["get", "isActive"], 3, 2],
-      "circle-opacity": 0.98,
-    },
-  });
-
-  map.addLayer({
-    id: BRANCH_POINT_LAYER_ID,
-    type: "circle",
-    source: BRANCH_SOURCE_ID,
-    paint: {
-      "circle-radius": ["case", ["get", "isActive"], 13, 11],
-      "circle-color": ["case", ["get", "isActive"], "#ff1e00", "#0a1a30"],
-      "circle-stroke-color": "#ffffff",
-      "circle-stroke-width": 2,
-    },
-  });
-
-  map.addLayer({
-    id: BRANCH_DOT_LAYER_ID,
-    type: "circle",
-    source: BRANCH_SOURCE_ID,
-    paint: {
-      "circle-radius": 4,
-      "circle-color": "#ffffff",
-      "circle-opacity": 0.95,
-    },
-  });
-
-  map.addLayer({
-    id: BRANCH_ICON_LAYER_ID,
-    type: "symbol",
-    source: BRANCH_SOURCE_ID,
-    layout: {
-      "icon-image": ["case", ["get", "isActive"], BRANCH_ACTIVE_ICON_ID, BRANCH_ICON_ID],
-      "icon-size": 1,
-      "icon-allow-overlap": true,
-      "icon-ignore-placement": true,
-    },
-  });
-
-  map.addLayer({
-    id: BRANCH_LABEL_LAYER_ID,
-    type: "symbol",
-    source: BRANCH_SOURCE_ID,
-    layout: {
-      "text-field": ["get", "shortName"],
-      "text-anchor": "top",
-      "text-offset": [0, 1.65],
-      "text-size": 12,
-      "text-font": ["Noto Sans Bold"],
-      "text-allow-overlap": true,
-    },
-    paint: {
-      "text-color": "#0a1a30",
-      "text-halo-color": "#ffffff",
-      "text-halo-width": 2,
-    },
-  });
+  wrapper.appendChild(badge);
+  wrapper.appendChild(pointer);
+  wrapper.appendChild(label);
+  return { wrapper, badge, pointer };
 }
 
 function createUserMarkerElement() {
@@ -309,6 +178,7 @@ export function BranchesMap({ branches }: BranchesMapProps) {
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<Map | null>(null);
   const userMarkerRef = useRef<Marker | null>(null);
+  const branchMarkersRef = useRef<Record<string, { marker: Marker; badge: HTMLElement; pointer: HTMLElement }>>({});
   const initialBranchRef = useRef<Branch | null>(null);
   const [activeBranchId, setActiveBranchId] = useState<string | null>(null);
   const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
@@ -342,7 +212,7 @@ export function BranchesMap({ branches }: BranchesMapProps) {
       container: mapContainerRef.current,
       style: MAP_STYLE_URL,
       center: getBranchLngLat(initialBranch),
-      zoom: 11,
+      zoom: 12,
       minZoom: ARGENTINA_MIN_ZOOM,
       maxZoom: 17,
       cooperativeGestures: true,
@@ -363,20 +233,14 @@ export function BranchesMap({ branches }: BranchesMapProps) {
     map.scrollZoom.enable();
     map.on("load", () => {
       map.resize();
-      addBranchLayers(map, branches, initialBranch.id);
 
-      for (const layerId of [BRANCH_POINT_LAYER_ID, BRANCH_ICON_LAYER_ID]) {
-        map.on("click", layerId, (event) => {
-          const branchId = event.features?.[0]?.properties?.id;
-          const branch = branches.find((currentBranch) => currentBranch.id === branchId);
-          if (branch) selectBranch(branch);
-        });
-        map.on("mouseenter", layerId, () => {
-          map.getCanvas().style.cursor = "pointer";
-        });
-        map.on("mouseleave", layerId, () => {
-          map.getCanvas().style.cursor = "";
-        });
+      for (const branch of branches) {
+        const { wrapper, badge, pointer } = createBranchMarkerElement(branch.shortName);
+        wrapper.addEventListener("click", () => selectBranch(branch));
+        const marker = new maplibregl.Marker({ element: wrapper, anchor: "bottom" })
+          .setLngLat(getBranchLngLat(branch))
+          .addTo(map);
+        branchMarkersRef.current[branch.id] = { marker, badge, pointer };
       }
     });
 
@@ -386,24 +250,29 @@ export function BranchesMap({ branches }: BranchesMapProps) {
     return () => {
       userMarkerRef.current?.remove();
       userMarkerRef.current = null;
+      for (const { marker } of Object.values(branchMarkersRef.current)) marker.remove();
+      branchMarkersRef.current = {};
       map.remove();
       mapRef.current = null;
     };
   }, [branches]);
 
+  // Resalta el marcador de la sucursal activa.
   useEffect(() => {
-    const map = mapRef.current;
-    if (!map) return;
-    const source = getBranchSource(map);
-    source?.setData(createBranchFeatureCollection(branches, activeBranch.id));
-  }, [activeBranch.id, branches]);
+    for (const [id, { badge, pointer }] of Object.entries(branchMarkersRef.current)) {
+      const isActive = id === activeBranch.id;
+      badge.style.borderColor = isActive ? "#ff1e00" : "#ffffff";
+      badge.style.transform = isActive ? "scale(1.12)" : "scale(1)";
+      pointer.style.borderTopColor = isActive ? "#ff1e00" : "#0a1a30";
+    }
+  }, [activeBranch.id]);
 
   useEffect(() => {
     if (activeBranchId) return;
 
     mapRef.current?.flyTo({
       center: getBranchLngLat(activeBranch),
-      zoom: Math.max(mapRef.current.getZoom(), 11),
+      zoom: Math.max(mapRef.current.getZoom(), 12),
       essential: true,
     });
   }, [activeBranch, activeBranchId]);

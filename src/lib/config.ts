@@ -21,7 +21,10 @@ export type Branch = {
   hours: string;
   /** Horario estructurado para calcular el estado abierto/cerrado en vivo */
   schedule: ScheduleRule[];
+  /** Link a la ficha de Google Maps (para ver ubicacion y como llegar) */
   mapUrl: string;
+  /** Link directo para dejar una resena en Google Maps */
+  reviewUrl?: string;
   coordinates: {
     lat: number;
     lng: number;
@@ -34,34 +37,11 @@ export type Branch = {
 
 export const BRANCHES: Branch[] = [
   {
-    id: "don-torcuato",
-    name: "Autocenter Norte",
-    shortName: "Don Torcuato",
-    address: "Av. Ángel Torcuato de Alvear 2659",
-    city: "Don Torcuato, Tigre",
-    phone: "+54 11 0000-0001",
-    whatsapp: "5491171279909",
-    hours: "Lun–Vie 8:30–18:30 | Sáb 9–14",
-    schedule: [
-      { days: [1, 2, 3, 4, 5], open: "08:30", close: "18:30" },
-      { days: [6], open: "09:00", close: "14:00" },
-    ],
-    mapUrl: "https://maps.google.com/?q=Av.+Angel+Torcuato+de+Alvear+2659+Don+Torcuato+Tigre",
-    coordinates: {
-      lat: -34.4853,
-      lng: -58.6206,
-    },
-    mapPosition: {
-      x: 56,
-      y: 36,
-    },
-  },
-  {
-    id: "cordoba",
-    name: "Neumáticos Trivium",
-    shortName: "Córdoba",
-    address: "Tte. Gral. Donato Alvarez 7954–7994",
-    city: "Córdoba Capital",
+    id: "arguello",
+    name: "Neumáticos Trivium Argüello",
+    shortName: "Argüello",
+    address: "Av. Donato Alvarez 7971",
+    city: "Córdoba",
     phone: "+54 351 000-0002",
     whatsapp: "5493510000002",
     hours: "Lun–Vie 8:00–19:00 | Sáb 9–14",
@@ -69,7 +49,8 @@ export const BRANCHES: Branch[] = [
       { days: [1, 2, 3, 4, 5], open: "08:00", close: "19:00" },
       { days: [6], open: "09:00", close: "14:00" },
     ],
-    mapUrl: "https://maps.google.com/?q=Donato+Alvarez+7954+Cordoba+Argentina",
+    mapUrl: "https://maps.app.goo.gl/tQrXVQCQ5VviAYY46",
+    reviewUrl: "https://g.page/r/CWBPMZ1uJwaREBI/review",
     coordinates: {
       lat: -31.3486,
       lng: -64.2501,
@@ -81,7 +62,7 @@ export const BRANCHES: Branch[] = [
   },
 ];
 
-export const DEFAULT_BRANCH_ID = "don-torcuato";
+export const DEFAULT_BRANCH_ID = "arguello";
 
 export const TIRE_WIDTHS = [
   155, 165, 175, 185, 195, 205, 215, 225, 235, 245, 255, 265, 275, 285,

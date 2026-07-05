@@ -10,11 +10,24 @@ const MAP_STYLE_URL = `https://api.maptiler.com/maps/streets-v4/style.json?key=$
 function createBranchPin(): HTMLElement {
   const wrapper = document.createElement("div");
   wrapper.style.cssText =
-    "width:26px;height:26px;border-radius:50% 50% 50% 0;background:#ff1e00;transform:rotate(-45deg);border:3px solid #ffffff;box-shadow:0 3px 8px rgba(10,26,48,0.35)";
-  const dot = document.createElement("div");
-  dot.style.cssText =
-    "width:8px;height:8px;border-radius:50%;background:#ffffff;position:absolute;top:6px;left:6px";
-  wrapper.appendChild(dot);
+    "display:flex;flex-direction:column;align-items:center;pointer-events:none";
+
+  const badge = document.createElement("div");
+  badge.style.cssText =
+    "display:flex;align-items:center;justify-content:center;width:56px;height:56px;padding:7px;border-radius:16px;background:#0a1a30;border:2px solid #ffffff;box-shadow:0 4px 12px rgba(10,26,48,0.4)";
+
+  const img = document.createElement("img");
+  img.src = "/pin-trivium.svg";
+  img.alt = "Neumáticos Trivium";
+  img.style.cssText = "width:100%;height:100%;object-fit:contain;display:block";
+  badge.appendChild(img);
+
+  const pointer = document.createElement("div");
+  pointer.style.cssText =
+    "width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-top:9px solid #0a1a30;margin-top:-1px";
+
+  wrapper.appendChild(badge);
+  wrapper.appendChild(pointer);
   return wrapper;
 }
 

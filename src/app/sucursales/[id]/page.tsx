@@ -50,6 +50,7 @@ function buildJsonLd(branch: Branch) {
     name: `Neumáticos Trivium ${branch.shortName}`,
     image: `${SITE_URL}/logo-neumaticos-trivium.svg`,
     url: `${SITE_URL}/sucursales/${branch.id}`,
+    hasMap: branch.mapUrl,
     telephone: branch.phone,
     address: {
       "@type": "PostalAddress",
@@ -224,6 +225,42 @@ export default async function BranchPage({ params }: Props) {
             ))}
           </div>
         </section>
+
+        {/* Resena en Google */}
+        {branch.reviewUrl && (
+          <section className="rounded-2xl border border-amber-200 bg-amber-50 p-5 text-center shadow-sm">
+            <div className="mb-2 flex items-center justify-center gap-1" aria-hidden>
+              {Array.from({ length: 5 }).map((_, i) => (
+                <svg key={i} className="h-7 w-7 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.966a1 1 0 00.95.69h4.17c.969 0 1.371 1.24.588 1.81l-3.376 2.455a1 1 0 00-.363 1.118l1.287 3.966c.3.922-.755 1.688-1.54 1.118l-3.375-2.455a1 1 0 00-1.176 0l-3.375 2.455c-.784.57-1.838-.196-1.539-1.118l1.286-3.966a1 1 0 00-.362-1.118L2.343 9.393c-.783-.57-.38-1.81.588-1.81h4.17a1 1 0 00.95-.69l1.287-3.966z" />
+                </svg>
+              ))}
+            </div>
+            <h2 className="text-lg font-black text-navy-900">¿Nos visitaste?</h2>
+            <p className="mx-auto mt-1 max-w-md text-sm text-slate-600">
+              Tu reseña nos ayuda muchísimo. Contanos cómo te fue en la sucursal {branch.shortName}.
+            </p>
+            <a
+              href={branch.reviewUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-amber-400 px-6 text-sm font-black text-navy-950 transition-transform active:scale-[0.98] hover:bg-amber-300"
+            >
+              <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.966a1 1 0 00.95.69h4.17c.969 0 1.371 1.24.588 1.81l-3.376 2.455a1 1 0 00-.363 1.118l1.287 3.966c.3.922-.755 1.688-1.54 1.118l-3.375-2.455a1 1 0 00-1.176 0l-3.375 2.455c-.784.57-1.838-.196-1.539-1.118l1.286-3.966a1 1 0 00-.362-1.118L2.343 9.393c-.783-.57-.38-1.81.588-1.81h4.17a1 1 0 00.95-.69l1.287-3.966z" />
+              </svg>
+              Dejar mi reseña en Google
+            </a>
+            <a
+              href={branch.mapUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-3 block text-xs font-bold text-navy-600 underline underline-offset-2 hover:text-navy-800"
+            >
+              Ver nuestra ficha en Google Maps
+            </a>
+          </section>
+        )}
 
         {/* Catalogo */}
         <section className="overflow-hidden rounded-2xl bg-gradient-to-br from-navy-800 to-navy-950 p-6 text-white shadow-sm">
