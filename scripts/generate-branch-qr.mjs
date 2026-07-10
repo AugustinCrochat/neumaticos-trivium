@@ -1,4 +1,6 @@
-// Genera un QR en SVG por sucursal, apuntando a su pagina en el sitio.
+// Genera QR en SVG por sucursal: uno apuntando a su pagina en el sitio
+// (sucursal-{id}.svg) y, si la sucursal tiene reviewUrl, otro que va directo
+// al link de resena de Google (resena-{id}.svg, para mostrar en el local).
 //
 // El codigo se dibuja como un unico <path>: los modulos contiguos de cada fila se
 // fusionan en un solo rectangulo y todo va en un mismo relleno, asi los cuadrados
@@ -23,9 +25,19 @@ const config = readFileSync(join(ROOT, "src/lib/config.ts"), "utf8");
 const siteUrl = config.match(/SITE_URL\s*=\s*"([^"]+)"/)?.[1];
 if (!siteUrl) throw new Error("No se encontro SITE_URL en src/lib/config.ts");
 
-const ids = [...config.matchAll(/\bid:\s*"([^"]+)"/g)].map((m) => m[1]);
-const shortNames = [...config.matchAll(/\bshortName:\s*"([^"]+)"/g)].map((m) => m[1]);
-const branches = ids.map((id, i) => ({ id, shortName: shortNames[i] ?? id }));
+// Partimos el array BRANCHES en un bloque de texto por sucursal (cada uno
+// arranca en su `id: "..."`) para poder leer shortName/reviewUrl sin que un
+// campo opcional (reviewUrl) desalinee sucursales con y sin resena.
+const idMatches = [...config.matchAll(/\bid:\s*"([^"]+)"/g)];
+const branches = idMatches.map((m, i) => {
+  const start = m.index;
+  const end = idMatches[i + 1]?.index ?? config.length;
+  const block = config.slice(start, end);
+  const id = m[1];
+  const shortName = block.match(/\bshortName:\s*"([^"]+)"/)?.[1] ?? id;
+  const reviewUrl = block.match(/\breviewUrl:\s*"([^"]+)"/)?.[1] ?? null;
+  return { id, shortName, reviewUrl };
+});
 
 // --- Parametros del QR ---
 const MODULE_PX = 20; // tamaño de cada modulo en px (grande, para impresion nitida)
@@ -67,13 +79,24 @@ function buildSvg(matrix, size) {
 const outDir = join(ROOT, "public/qr");
 mkdirSync(outDir, { recursive: true });
 
+let count = 0;
 for (const branch of branches) {
   const url = `${siteUrl}/sucursales/${branch.id}`;
   const qr = QRCode.create(url, { errorCorrectionLevel: "M" });
   const svg = buildSvg(qr.modules.data, qr.modules.size);
   const file = join(outDir, `sucursal-${branch.id}.svg`);
   writeFileSync(file, svg);
+  count++;
   console.log(`✓ ${branch.shortName.padEnd(14)} ${url}\n  → public/qr/sucursal-${branch.id}.svg (${qr.modules.size}×${qr.modules.size} módulos)`);
+
+  if (branch.reviewUrl) {
+    const reviewQr = QRCode.create(branch.reviewUrl, { errorCorrectionLevel: "M" });
+    const reviewSvg = buildSvg(reviewQr.modules.data, reviewQr.modules.size);
+    const reviewFile = join(outDir, `resena-${branch.id}.svg`);
+    writeFileSync(reviewFile, reviewSvg);
+    count++;
+    console.log(`✓ ${(branch.shortName + " (reseña)").padEnd(14)} ${branch.reviewUrl}\n  → public/qr/resena-${branch.id}.svg (${reviewQr.modules.size}×${reviewQr.modules.size} módulos)`);
+  }
 }
 
-console.log(`\n${branches.length} QR generados en public/qr/`);
+console.log(`\n${count} QR generados en public/qr/`);
