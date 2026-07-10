@@ -1,6 +1,7 @@
 import { SERVICES } from "@/lib/data";
+import Link from "next/link";
 
-const ICONS: Record<string, React.ReactNode> = {
+export const ICONS: Record<string, React.ReactNode> = {
   alignment: (
     <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
@@ -48,7 +49,11 @@ export function ServicesSection() {
 
               <div className="relative">
                 <div className="text-orange-500 mb-4">{ICONS[service.icon]}</div>
-                <h3 className="text-xl font-bold mb-3">{service.title}</h3>
+                <h3 className="text-xl font-bold mb-3">
+                  <Link href={`/servicios/${service.id}`} className="hover:text-orange-400 transition-colors">
+                    {service.title}
+                  </Link>
+                </h3>
                 <p className="text-navy-200 text-sm leading-relaxed mb-5">
                   {service.description}
                 </p>

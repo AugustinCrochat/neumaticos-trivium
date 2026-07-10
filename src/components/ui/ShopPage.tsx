@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { PRODUCTS, BRANDS } from "@/lib/data";
+import { BRANDS } from "@/lib/data";
 import { getBrandLogo } from "@/lib/brand-utils";
 import { ProductCard } from "@/components/ui/ProductCard";
 import { TireSizeSearch } from "@/components/ui/TireSizeSearch";
@@ -296,7 +296,13 @@ function FilterBar({
   );
 }
 
-export function ShopPage({ showCatalogTitle = false }: { showCatalogTitle?: boolean }) {
+export function ShopPage({
+  showCatalogTitle = false,
+  products,
+}: {
+  showCatalogTitle?: boolean;
+  products: TireProduct[];
+}) {
   const { selectedBranch, hasConfirmedBranch, openModalForAction } = useBranch();
   const searchParams = useSearchParams();
   const medida = searchParams.get("medida") ?? undefined;
@@ -317,15 +323,15 @@ export function ShopPage({ showCatalogTitle = false }: { showCatalogTitle?: bool
     };
 
     if (!parsed) {
-      return { exactResults: [], compatibleResults: [], allProducts: PRODUCTS.filter(ok) };
+      return { exactResults: [], compatibleResults: [], allProducts: products.filter(ok) };
     }
 
-    const exact = PRODUCTS.filter(p => isExactMatch(p, parsed) && ok(p))
+    const exact = products.filter(p => isExactMatch(p, parsed) && ok(p))
       .sort((a, b) => getUnitPrice(a) - getUnitPrice(b));
-    const compatible = PRODUCTS.filter(p => isCompatibleSize(p, parsed) && ok(p));
+    const compatible = products.filter(p => isCompatibleSize(p, parsed) && ok(p));
 
     return { exactResults: exact, compatibleResults: compatible, allProducts: [] };
-  }, [parsed, brandFilter, maxPrice, onlyEconomic]);
+  }, [parsed, brandFilter, maxPrice, onlyEconomic, products]);
 
   const label = parsed ? formatSizeLabel(parsed) : null;
   const searchedSize: TireSize | null =

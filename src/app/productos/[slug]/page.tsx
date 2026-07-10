@@ -2,20 +2,22 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
-import { PRODUCTS } from "@/lib/data";
+import { getProductosDesdePOS } from "@/lib/pos-api";
 import { getBrandLogo } from "@/lib/brand-utils";
 import { ProductNameWithHighlightedSize } from "@/components/ui/ProductNameWithHighlightedSize";
 import { ProductPageClient } from "./ProductPageClient";
 
+export const revalidate = 300;
+
 type Props = { params: Promise<{ slug: string }> };
 
-export async function generateStaticParams() {
-  return PRODUCTS.map((p) => ({ slug: p.slug }));
-}
+// Sin generateStaticParams: las páginas se generan on-demand (ISR) contra el
+// catálogo real del POS, no se conoce el set de slugs en build time.
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const product = PRODUCTS.find((p) => p.slug === slug);
+  const productos = await getProductosDesdePOS();
+  const product = productos.find((p) => p.slug === slug);
   if (!product) return {};
   const title = `${product.brand} ${product.model} ${product.size.width}/${product.size.profile} R${product.size.rim}`;
   return {
@@ -46,7 +48,8 @@ const TIRE_SVG = (
 
 export default async function ProductPage({ params }: Props) {
   const { slug } = await params;
-  const product = PRODUCTS.find((p) => p.slug === slug);
+  const productos = await getProductosDesdePOS();
+  const product = productos.find((p) => p.slug === slug);
   if (!product) notFound();
 
   const hasImage =

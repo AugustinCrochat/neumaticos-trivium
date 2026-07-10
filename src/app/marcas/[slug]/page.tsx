@@ -1,9 +1,12 @@
-import { BRANDS, PRODUCTS } from "@/lib/data";
+import { BRANDS } from "@/lib/data";
+import { getProductosDesdePOS } from "@/lib/pos-api";
 import { ProductCard } from "@/components/ui/ProductCard";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Metadata } from "next";
 import { getBrandLogo } from "@/lib/brand-utils";
+
+export const revalidate = 300;
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -22,7 +25,8 @@ export default async function BrandPage({ params }: Props) {
   const brand = BRANDS.find((b) => b.id === slug);
   if (!brand) notFound();
 
-  const brandProducts = PRODUCTS.filter((p) => p.brandId === brand.id);
+  const productos = await getProductosDesdePOS();
+  const brandProducts = productos.filter((p) => p.brandId === brand.id);
   const brandLogo = getBrandLogo(brand.id);
 
   return (

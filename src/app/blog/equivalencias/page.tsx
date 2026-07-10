@@ -1,12 +1,16 @@
 import Link from "next/link";
 import { EquivalenceCalculator } from "@/components/ui/EquivalenceCalculator";
+import { getProductosDesdePOS } from "@/lib/pos-api";
+
+export const revalidate = 300;
 
 export const metadata = {
   title: "Equivalencias de neumáticos: ¿Qué son y cómo funcionan? — Trivium",
   description: "Entendé cómo funcionan las medidas equivalentes, qué significa el ±3% de diferencia de diámetro y qué consideraciones tener.",
 };
 
-export default function EquivalenciasPage() {
+export default async function EquivalenciasPage() {
+  const productos = await getProductosDesdePOS();
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
@@ -21,7 +25,7 @@ export default function EquivalenciasPage() {
             </p>
 
             <div className="shadow-2xl">
-              <EquivalenceCalculator />
+              <EquivalenceCalculator products={productos} />
             </div>
           </div>
         </div>

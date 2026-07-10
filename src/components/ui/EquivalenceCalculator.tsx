@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { PRODUCTS } from "@/lib/data";
-import type { TireSize } from "@/lib/types";
+import type { TireProduct, TireSize } from "@/lib/types";
 
 function tireDiameter(size: TireSize) {
   return size.rim * 25.4 + 2 * (size.width * (size.profile / 100));
@@ -15,7 +14,7 @@ function diameterDifferencePercent(size1: TireSize, size2: TireSize) {
   return ((d2 - d1) / d1) * 100;
 }
 
-export function EquivalenceCalculator() {
+export function EquivalenceCalculator({ products }: { products: TireProduct[] }) {
   const [mode, setMode] = useState<"check" | "list">("check");
 
   // Size 1
@@ -72,7 +71,7 @@ export function EquivalenceCalculator() {
   if (s1) {
     const uniqueSizes = new Map<string, { size: TireSize; diff: number; count: number }>();
 
-    for (const product of PRODUCTS) {
+    for (const product of products) {
       if (product.size.width === s1.width && product.size.profile === s1.profile && product.size.rim === s1.rim) {
         continue; // Skip exact match
       }

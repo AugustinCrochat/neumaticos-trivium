@@ -29,6 +29,7 @@ export type TireProduct = {
   isEconomic: boolean;
   isImported: boolean;
   slug: string;
+  enStock?: boolean;
 };
 
 export type Service = {

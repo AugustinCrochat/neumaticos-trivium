@@ -1,6 +1,9 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import { ShopPage } from "@/components/ui/ShopPage";
+import { getProductosDesdePOS } from "@/lib/pos-api";
+
+export const revalidate = 300;
 
 type Props = { searchParams: Promise<{ medida?: string }> };
 
@@ -34,10 +37,11 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
   };
 }
 
-export default function BuscarPage() {
+export default async function BuscarPage() {
+  const productos = await getProductosDesdePOS();
   return (
     <Suspense>
-      <ShopPage />
+      <ShopPage products={productos} />
     </Suspense>
   );
 }
