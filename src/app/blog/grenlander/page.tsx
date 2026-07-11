@@ -38,13 +38,13 @@ export default function GrenlanderPage() {
 
           {/* Intro */}
           <p>
-            Grenlander es una marca china fundada en 2009, parte del grupo{" "}
-            <strong className="text-zinc-900">Sailun Tire</strong> —uno de los
-            diez mayores fabricantes de neumáticos del mundo—. Desde su lanzamiento
-            opera como línea de valor accesible con ambiciones técnicas serias:
-            certificaciones europeas (ECE), homologaciones de transporte pesado y
-            una gama que cubre desde autos de ciudad hasta camiones y SUVs de uso
-            intensivo.
+            Grenlander es una marca fabricada por{" "}
+            <strong className="text-zinc-900">Zodo Tyre</strong>, un grupo con
+            largas décadas de trayectoria en la industria del neumático. Desde
+            su lanzamiento opera como línea de valor accesible con ambiciones
+            técnicas serias: certificaciones europeas (ECE), homologaciones de
+            transporte pesado y una gama que cubre desde autos de ciudad hasta
+            camiones y SUVs de uso intensivo.
           </p>
           <p>
             En Argentina su presencia creció de forma notable a partir de 2022,
@@ -59,8 +59,8 @@ export default function GrenlanderPage() {
             Tecnología y fabricación
           </h2>
           <p>
-            Los neumáticos Grenlander se fabrican en plantas de Qingdao y
-            Shenyang bajo estándares ISO/TS 16949. La construcción es{" "}
+            Los neumáticos Grenlander se fabrican en plantas propias de Zodo
+            Tyre bajo estándares ISO/TS 16949. La construcción es{" "}
             <strong className="text-zinc-900">radial de acero</strong> en toda
             la gama, con compuestos de silicio en los modelos de mayor segmento
             que reducen la resistencia de rodadura y mejoran el agarre en mojado.

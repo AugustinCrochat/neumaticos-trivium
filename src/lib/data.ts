@@ -81,8 +81,8 @@ export const BRANDS: TireBrand[] = [
     id: "grenlander",
     name: "Grenlander",
     origin: "China",
-    description: "Neumáticos de alto rendimiento a precio accesible, respaldados por el grupo Sailun.",
-    fullDescription: "Grenlander es una marca china fundada en 2009, parte del grupo Sailun Tire —uno de los diez mayores fabricantes de neumáticos del mundo—. Combina tecnología de construcción radial de acero, compuestos de silicio en sus modelos de mayor segmento y certificaciones ECE y DOT, ofreciendo una relación costo-kilómetro muy competitiva para uso urbano, ruta, SUVs y vehículos de carga.",
+    description: "Neumáticos de alto rendimiento a precio accesible, respaldados por Zodo Tyre.",
+    fullDescription: "Grenlander es una marca fabricada por Zodo Tyre, un grupo con largas décadas de trayectoria en la industria del neumático. Combina tecnología de construcción radial de acero, compuestos de silicio en sus modelos de mayor segmento y certificaciones de homologación europea, ofreciendo una relación costo-kilómetro muy competitiva para uso urbano, ruta, SUVs y vehículos de carga.",
   },
 ];
 
@@ -177,6 +177,16 @@ export const BLOG_POSTS: BlogPost[] = [
     imageUrl: "/images/blog-2.webp",
     date: "2026-05-29",
     slug: "grenlander",
+    category: "Marcas",
+  },
+  {
+    id: "6",
+    title: "Marcas chinas de neumáticos: ¿cuál es la mejor?",
+    excerpt:
+      "No todos los neumáticos chinos son iguales: hay una franja baja, una intermedia y una de calidad real. Te contamos cómo diferenciarlas y por qué Grenlander lidera el ranking.",
+    imageUrl: "/images/blog-2.webp",
+    date: "2026-07-11",
+    slug: "marcas-chinas-neumaticos-comparativa",
     category: "Marcas",
   },
 ];
