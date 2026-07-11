@@ -140,16 +140,6 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "Mantenimiento",
   },
   {
-    id: "2",
-    title: "Neumáticos chinos: mitos y verdades",
-    excerpt:
-      "Muchos conductores tienen dudas sobre las marcas importadas. Acá te contamos qué certificaciones buscar y por qué son una gran opción.",
-    imageUrl: "/images/blog-2.webp",
-    date: "2025-04-10",
-    slug: "neumaticos-chinos-mitos-y-verdades",
-    category: "Guías",
-  },
-  {
     id: "3",
     title: "Cómo leer la medida de un neumático",
     excerpt:

@@ -88,8 +88,8 @@ export default function MarcasChinasComparativaPage() {
               <p className="text-sm text-amber-800 leading-relaxed">
                 Fabricantes con cierta escala y controles de calidad básicos,
                 que cumplen homologaciones (ECE o DOT) y ofrecen un producto
-                correcto para uso cotidiano. Marcas como Zmax o Firemax entran
-                acá: cumplen, rinden razonablemente y tienen buena relación
+                correcto para uso cotidiano. Marcas como Doubleking o Firemax
+                entran acá: cumplen, rinden razonablemente y tienen buena relación
                 precio-kilometraje, pero no invierten al nivel de un
                 fabricante de primera línea en compuestos ni en desarrollo de
                 banda de rodamiento.
@@ -217,7 +217,7 @@ export default function MarcasChinasComparativaPage() {
                 </tr>
                 <tr className="bg-zinc-50">
                   <td className="px-4 py-3 font-black text-zinc-400">3</td>
-                  <td className="px-4 py-3 font-bold text-zinc-900">Zmax</td>
+                  <td className="px-4 py-3 font-bold text-zinc-900">Doubleking</td>
                   <td className="px-4 py-3 text-center text-zinc-600">—</td>
                   <td className="px-4 py-3 text-center">ECE / DOT</td>
                   <td className="px-4 py-3 text-center">Variable</td>
