@@ -19,53 +19,23 @@
  * Ejemplo:
  *   node --env-file=.env.local scripts/add-tire-photo.mjs ~/Descargas/kingpro.jpg "Grenlander" "Kingpro One"
  *
+ * Para cargar varios modelos de una carpeta de una sola vez, usar
+ * scripts/add-tire-photos-batch.mjs en su lugar.
+ *
  * Requiere la variable de entorno POS_API_URL (ya está en .env.local).
  */
 
 import { existsSync, mkdirSync, writeFileSync } from "fs";
 import path from "path";
-import sharp from "sharp";
-
-const SITE_URL = "https://neumaticos.trivium.ar";
-const OUTPUT_DIR = "./public/images/products";
-const POS_API_URL = process.env.POS_API_URL;
-const SIZE = 1200;
-const PADDING = 40;
-
-function slugify(text) {
-  return text
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-}
-
-async function fetchProductos() {
-  const res = await fetch(`${POS_API_URL}/productos`);
-  if (!res.ok) throw new Error(`POS respondió ${res.status}`);
-  const data = await res.json();
-  return data.productos;
-}
-
-// Normaliza cualquier foto (bajada de internet, con distinto tamaño/proporción)
-// a un cuadrado de 1200×1200 con fondo blanco, para que el catálogo se vea parejo.
-async function compositeOnWhite(sourcePhoto) {
-  const available = SIZE - PADDING * 2;
-  const resized = await sharp(sourcePhoto)
-    .resize(available, available, { fit: "inside", withoutEnlargement: false })
-    .toBuffer({ resolveWithObject: true });
-
-  const left = PADDING + Math.floor((available - resized.info.width) / 2);
-  const top = PADDING + Math.floor((available - resized.info.height) / 2);
-
-  return sharp({
-    create: { width: SIZE, height: SIZE, channels: 3, background: { r: 255, g: 255, b: 255 } },
-  })
-    .composite([{ input: resized.data, left, top }])
-    .webp({ quality: 85 })
-    .toBuffer();
-}
+import {
+  SITE_URL,
+  OUTPUT_DIR,
+  slugify,
+  fetchProductos,
+  compositeOnWhite,
+  matchProducts,
+  groupBySize,
+} from "./lib/tire-photos.mjs";
 
 async function main() {
   const [, , sourcePhoto, marca, modelo] = process.argv;
@@ -76,27 +46,13 @@ async function main() {
     );
     process.exit(1);
   }
-  if (!POS_API_URL) {
-    console.error("Falta POS_API_URL. Corré con: node --env-file=.env.local scripts/add-tire-photo.mjs ...");
-    process.exit(1);
-  }
   if (!existsSync(sourcePhoto)) {
     console.error(`No se encontró el archivo: ${sourcePhoto}`);
     process.exit(1);
   }
 
   const productos = await fetchProductos();
-  const marcaLower = marca.toLowerCase();
-  const modeloLower = modelo.toLowerCase();
-
-  const matches = productos.filter(
-    (p) =>
-      (p.marca || "").toLowerCase().includes(marcaLower) &&
-      (p.modelo || "").toLowerCase().includes(modeloLower) &&
-      p.neumatico_ancho &&
-      p.neumatico_perfil &&
-      p.neumatico_diametro
-  );
+  const matches = matchProducts(productos, marca, modelo);
 
   if (matches.length === 0) {
     console.error(`No se encontraron productos en el POS para "${marca}" "${modelo}".`);
@@ -107,14 +63,7 @@ async function main() {
 
   const brandSlug = slugify(marca);
   const modelSlug = slugify(modelo);
-
-  // Agrupar por medida real (puede haber más de un codigo_tango con la misma medida)
-  const bySize = new Map();
-  for (const p of matches) {
-    const sizeKey = `${p.neumatico_ancho}-${p.neumatico_perfil}-${p.neumatico_diametro}`;
-    if (!bySize.has(sizeKey)) bySize.set(sizeKey, []);
-    bySize.get(sizeKey).push(p);
-  }
+  const bySize = groupBySize(matches);
 
   console.log(`Modelo: ${marca} ${modelo}`);
   console.log(`Medidas encontradas: ${bySize.size} (${matches.length} códigos Tango)\n`);

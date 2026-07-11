@@ -9,6 +9,7 @@
     "lint": "eslint",
     "fetch-images": "node scripts/fetch-images.mjs",
     "add-tire-photo": "node --env-file=.env.local scripts/add-tire-photo.mjs",
+    "add-tire-photos-batch": "node --env-file=.env.local scripts/add-tire-photos-batch.mjs",
     "composite-images": "node scripts/composite-images.mjs",
     "generate-qr": "node scripts/generate-branch-qr.mjs"
   },
