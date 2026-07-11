@@ -34,7 +34,7 @@ export function ProductNameWithHighlightedSize({
   return (
     <span className={className}>
       {before}
-      <span className={sizeClassName || "inline-flex rounded-md bg-orange-100 px-1.5 py-0.5 font-black text-orange-700"}>
+      <span className={sizeClassName || "font-black text-slate-900"}>
         {size}
       </span>
       {after}
