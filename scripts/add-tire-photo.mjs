@@ -1,8 +1,13 @@
 #!/usr/bin/env node
 /**
- * Genera las fotos de producto (una por medida, a partir de una sola foto real
- * del modelo) y arma el listado de URLs para cargar en el POS (campo
- * imagen_url de cada codigo_tango) y en el catálogo de Meta / WhatsApp Business.
+ * Genera las fotos de producto (una por medida, a partir de una sola foto del
+ * modelo bajada de internet) y arma el listado de URLs para cargar en el POS
+ * (campo imagen_url de cada codigo_tango) y en el catálogo de Meta / WhatsApp
+ * Business.
+ *
+ * La foto de origen se normaliza a un cuadrado de 1200×1200 con fondo blanco
+ * (sea cual sea su tamaño u proporción original), para que el catálogo se vea
+ * parejo aunque las fotos vengan de distintas fuentes.
  *
  * El dibujo de la banda de rodamiento es el mismo para todas las medidas de un
  * mismo modelo, así que no hace falta una foto distinta por medida: solo un
@@ -17,13 +22,15 @@
  * Requiere la variable de entorno POS_API_URL (ya está en .env.local).
  */
 
-import { existsSync, mkdirSync } from "fs";
+import { existsSync, mkdirSync, writeFileSync } from "fs";
 import path from "path";
 import sharp from "sharp";
 
 const SITE_URL = "https://neumaticos.trivium.ar";
 const OUTPUT_DIR = "./public/images/products";
 const POS_API_URL = process.env.POS_API_URL;
+const SIZE = 1200;
+const PADDING = 40;
 
 function slugify(text) {
   return text
@@ -39,6 +46,25 @@ async function fetchProductos() {
   if (!res.ok) throw new Error(`POS respondió ${res.status}`);
   const data = await res.json();
   return data.productos;
+}
+
+// Normaliza cualquier foto (bajada de internet, con distinto tamaño/proporción)
+// a un cuadrado de 1200×1200 con fondo blanco, para que el catálogo se vea parejo.
+async function compositeOnWhite(sourcePhoto) {
+  const available = SIZE - PADDING * 2;
+  const resized = await sharp(sourcePhoto)
+    .resize(available, available, { fit: "inside", withoutEnlargement: false })
+    .toBuffer({ resolveWithObject: true });
+
+  const left = PADDING + Math.floor((available - resized.info.width) / 2);
+  const top = PADDING + Math.floor((available - resized.info.height) / 2);
+
+  return sharp({
+    create: { width: SIZE, height: SIZE, channels: 3, background: { r: 255, g: 255, b: 255 } },
+  })
+    .composite([{ input: resized.data, left, top }])
+    .webp({ quality: 85 })
+    .toBuffer();
 }
 
 async function main() {
@@ -94,6 +120,7 @@ async function main() {
   console.log(`Medidas encontradas: ${bySize.size} (${matches.length} códigos Tango)\n`);
 
   const rows = [];
+  const composed = await compositeOnWhite(sourcePhoto);
 
   for (const [sizeKey, prods] of bySize) {
     const [width, profile, rim] = sizeKey.split("-");
@@ -101,10 +128,7 @@ async function main() {
     const outPath = path.join(OUTPUT_DIR, filename);
     const publicUrl = `${SITE_URL}/images/products/${filename}`;
 
-    await sharp(sourcePhoto)
-      .resize({ width: 1200, withoutEnlargement: true })
-      .webp({ quality: 82 })
-      .toFile(outPath);
+    writeFileSync(outPath, composed);
 
     for (const p of prods) {
       rows.push({
