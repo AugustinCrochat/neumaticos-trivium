@@ -1,3 +1,5 @@
+import { existsSync } from "fs";
+import path from "path";
 import type { TireProduct } from "./types";
 
 const POS_API_URL = process.env.POS_API_URL;
@@ -41,6 +43,17 @@ function fixModelName(modelo: string): string {
   return modelo.replace(/\s*cint/gi, " Cinturato").replace(/\s+/g, " ").trim();
 }
 
+// Mientras el POS no tenga imagen_url cargada, usamos la foto que ya subimos
+// nosotros a /public/images/products (ver scripts/add-tire-photo*.mjs), buscando
+// por marca+modelo+medida original del POS (sin la corrección de fixModelName).
+function localImageFallback(p: PosProducto): string | null {
+  const brandSlug = slugify(p.marca || "");
+  const modelSlug = slugify(p.modelo || "");
+  const filename = `${brandSlug}-${modelSlug}-${p.neumatico_ancho}-${p.neumatico_perfil}-r${p.neumatico_diametro}.webp`;
+  const filePath = path.join(process.cwd(), "public", "images", "products", filename);
+  return existsSync(filePath) ? `/images/products/${filename}` : null;
+}
+
 function toTireProduct(p: PosProducto): TireProduct | null {
   if (!p.neumatico_ancho || !p.neumatico_perfil || !p.neumatico_diametro) {
     // No es un neumático con medida completa — no se puede mostrar en el catálogo de la web
@@ -63,7 +76,7 @@ function toTireProduct(p: PosProducto): TireProduct | null {
     // El POS no distingue tipo de vehículo todavía — se muestra para ambos por defecto.
     vehicleType: ["auto", "camioneta"],
     price: p.precio,
-    imageUrl: p.imagen_url || PLACEHOLDER_IMAGE,
+    imageUrl: p.imagen_url || localImageFallback(p) || PLACEHOLDER_IMAGE,
     tags: [],
     isEconomic: false,
     isImported: true,
