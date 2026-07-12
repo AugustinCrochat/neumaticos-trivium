@@ -23,12 +23,19 @@ export async function fetchProductos() {
   return data.productos;
 }
 
+// Tope de agrandamiento sobre el tamaño original: evita que una foto de baja
+// resolución quede pixelada al forzarla a llenar el lienzo de 1200x1200.
+const MAX_UPSCALE = 2.5;
+
 // Normaliza cualquier foto (bajada de internet, con distinto tamaño/proporción)
 // a un cuadrado de 1200×1200 con fondo blanco, para que el catálogo se vea parejo.
 export async function compositeOnWhite(sourcePhoto) {
   const available = SIZE - PADDING * 2;
+  const meta = await sharp(sourcePhoto).metadata();
+  const sourceMax = Math.max(meta.width ?? available, meta.height ?? available);
+  const target = Math.min(available, Math.round(sourceMax * MAX_UPSCALE));
   const resized = await sharp(sourcePhoto)
-    .resize(available, available, { fit: "inside", withoutEnlargement: false })
+    .resize(target, target, { fit: "inside", withoutEnlargement: false })
     .toBuffer({ resolveWithObject: true });
 
   const left = PADDING + Math.floor((available - resized.info.width) / 2);
