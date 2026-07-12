@@ -27,14 +27,24 @@ export async function fetchProductos() {
 // resolución quede pixelada al forzarla a llenar el lienzo de 1200x1200.
 const MAX_UPSCALE = 2.5;
 
-// Normaliza cualquier foto (bajada de internet, con distinto tamaño/proporción)
-// a un cuadrado de 1200×1200 con fondo blanco, para que el catálogo se vea parejo.
+// Normaliza cualquier foto (bajada de internet, con distinto tamaño/proporción
+// y distinto margen blanco alrededor del neumático) a un cuadrado de 1200×1200
+// con fondo blanco y el mismo margen parejo, para que el catálogo se vea parejo.
 export async function compositeOnWhite(sourcePhoto) {
   const available = SIZE - PADDING * 2;
-  const meta = await sharp(sourcePhoto).metadata();
-  const sourceMax = Math.max(meta.width ?? available, meta.height ?? available);
+
+  // Recorta el margen propio de la foto original (blanco, gris o transparente,
+  // que varía según la fuente) para partir siempre del mismo punto: el
+  // neumático solo, sin borde. Sin indicar "background" sharp lo detecta solo
+  // a partir del píxel de la esquina superior izquierda (funciona tanto con
+  // fondo blanco como con PNGs de fondo transparente).
+  const trimmed = await sharp(sourcePhoto)
+    .trim({ threshold: 15 })
+    .toBuffer({ resolveWithObject: true });
+
+  const sourceMax = Math.max(trimmed.info.width, trimmed.info.height);
   const target = Math.min(available, Math.round(sourceMax * MAX_UPSCALE));
-  const resized = await sharp(sourcePhoto)
+  const resized = await sharp(trimmed.data)
     .resize(target, target, { fit: "inside", withoutEnlargement: false })
     .toBuffer({ resolveWithObject: true });
 
