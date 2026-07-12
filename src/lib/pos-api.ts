@@ -43,15 +43,26 @@ function fixModelName(modelo: string): string {
   return modelo.replace(/\s*cint/gi, " Cinturato").replace(/\s+/g, " ").trim();
 }
 
-// El Greentour A/S está cargado en el POS bajo la marca ZMAX, pero el modelo real
-// es de Grenlander (mismo fabricante, Zodo Tire Group). Se corrige solo para
-// mostrar/armar el slug; localImageFallback sigue usando la marca cruda del POS
-// porque la foto ya está guardada con el nombre de archivo "zmax-greentour-a-s".
-function fixBrandName(marca: string, modelo: string): string {
-  if (marca.trim().toUpperCase() === "ZMAX" && /greentour/i.test(modelo)) {
-    return "Grenlander";
+// Correcciones de marca/modelo mal cargados en el POS. Solo afectan lo que se
+// muestra y el slug de la URL: localImageFallback sigue usando marca+modelo
+// crudos del POS, porque las fotos ya están guardadas con esos nombres de archivo.
+function fixBrandAndModel(rawMarca: string, rawModelo: string): { marca: string; modelo: string } {
+  const marcaUpper = rawMarca.trim().toUpperCase();
+
+  // Greentour A/S está cargado bajo la marca ZMAX, pero es un modelo de
+  // Grenlander (mismo fabricante, Zodo Tire Group).
+  if (marcaUpper === "ZMAX" && /greentour/i.test(rawModelo)) {
+    return { marca: "Grenlander", modelo: fixModelName(rawModelo) };
   }
-  return marca;
+
+  // "Terra Xplorer C2 A/T" quedó cargado como si fuera la marca; en realidad
+  // es un modelo de Zmax. Los dos modelos cargados (TERRA X AT / TERRAX AT)
+  // son el mismo producto.
+  if (/terra xplorer/i.test(rawMarca)) {
+    return { marca: "Zmax", modelo: "Terra Xplorer" };
+  }
+
+  return { marca: rawMarca, modelo: fixModelName(rawModelo) };
 }
 
 // Mientras el POS no tenga imagen_url cargada, usamos la foto que ya subimos
@@ -70,8 +81,7 @@ function toTireProduct(p: PosProducto): TireProduct | null {
     // No es un neumático con medida completa — no se puede mostrar en el catálogo de la web
     return null;
   }
-  const modelo = fixModelName(p.modelo || "");
-  const marca = fixBrandName(p.marca || "", modelo);
+  const { marca, modelo } = fixBrandAndModel(p.marca || "", p.modelo || "");
   const brandId = slugify(marca) || "otras-marcas";
   const model = `${p.neumatico_ancho}/${p.neumatico_perfil} R${p.neumatico_diametro} ${marca} ${modelo}`
     .trim()
