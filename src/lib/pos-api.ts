@@ -36,18 +36,23 @@ function slugify(text: string): string {
     .replace(/^-+|-+$/g, "");
 }
 
+// Corrige la abreviatura "CINT" cargada en el POS por error: el nombre real es "Cinturato".
+function fixModelName(modelo: string): string {
+  return modelo.replace(/\s*cint/gi, " Cinturato").replace(/\s+/g, " ").trim();
+}
+
 function toTireProduct(p: PosProducto): TireProduct | null {
   if (!p.neumatico_ancho || !p.neumatico_perfil || !p.neumatico_diametro) {
     // No es un neumático con medida completa — no se puede mostrar en el catálogo de la web
     return null;
   }
   const marca = p.marca || "";
-  const modelo = p.modelo || "";
+  const modelo = fixModelName(p.modelo || "");
   const brandId = slugify(marca) || "otras-marcas";
   const model = `${p.neumatico_ancho}/${p.neumatico_perfil} R${p.neumatico_diametro} ${marca} ${modelo}`
     .trim()
     .replace(/\s+/g, " ");
-  const slug = slugify(`${marca}-${p.codigo_tango || p.id}-${p.neumatico_ancho}${p.neumatico_perfil}r${p.neumatico_diametro}`);
+  const slug = slugify(`${marca}-${modelo}-${p.neumatico_ancho}-${p.neumatico_perfil}-r${p.neumatico_diametro}`);
 
   return {
     id: p.id,
