@@ -43,6 +43,17 @@ function fixModelName(modelo: string): string {
   return modelo.replace(/\s*cint/gi, " Cinturato").replace(/\s+/g, " ").trim();
 }
 
+// El Greentour A/S está cargado en el POS bajo la marca ZMAX, pero el modelo real
+// es de Grenlander (mismo fabricante, Zodo Tire Group). Se corrige solo para
+// mostrar/armar el slug; localImageFallback sigue usando la marca cruda del POS
+// porque la foto ya está guardada con el nombre de archivo "zmax-greentour-a-s".
+function fixBrandName(marca: string, modelo: string): string {
+  if (marca.trim().toUpperCase() === "ZMAX" && /greentour/i.test(modelo)) {
+    return "Grenlander";
+  }
+  return marca;
+}
+
 // Mientras el POS no tenga imagen_url cargada, usamos la foto que ya subimos
 // nosotros a /public/images/products (ver scripts/add-tire-photo*.mjs), buscando
 // por marca+modelo+medida original del POS (sin la corrección de fixModelName).
@@ -59,8 +70,8 @@ function toTireProduct(p: PosProducto): TireProduct | null {
     // No es un neumático con medida completa — no se puede mostrar en el catálogo de la web
     return null;
   }
-  const marca = p.marca || "";
   const modelo = fixModelName(p.modelo || "");
+  const marca = fixBrandName(p.marca || "", modelo);
   const brandId = slugify(marca) || "otras-marcas";
   const model = `${p.neumatico_ancho}/${p.neumatico_perfil} R${p.neumatico_diametro} ${marca} ${modelo}`
     .trim()
