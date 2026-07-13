@@ -9,6 +9,14 @@
 			"enabled": true
 		}
 	},
+	// Definidas acá (repo privado) en vez de depender de "Variables and Secrets"
+	// del dashboard: cada deploy de Workers Builds las pisaba por no usar
+	// --keep-vars, así que quedaban vacías. Así quedan garantizadas siempre.
+	"vars": {
+		"GEMINI_MODEL": "gemini-2.0-flash-lite",
+		"POS_API_URL": "https://pos-neumaticos.vercel.app/api/public/arguello",
+		"GOOGLE_AI_KEY": "AIzaSyCwuPQrjs0L9x_QnqLOmlHJ9VIX4wyBBOM"
+	},
 	"assets": {
 		"directory": ".open-next/assets",
 		"binding": "ASSETS"
