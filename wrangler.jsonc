@@ -4,6 +4,11 @@
 	"name": "neumaticos-trivium",
 	"compatibility_date": "2026-07-12",
 	"compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+	"observability": {
+		"logs": {
+			"enabled": true
+		}
+	},
 	"assets": {
 		"directory": ".open-next/assets",
 		"binding": "ASSETS"

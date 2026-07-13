@@ -3,7 +3,9 @@ import productImagesManifest from "./product-images-manifest.json";
 
 const AVAILABLE_IMAGES = new Set(productImagesManifest);
 
-const POS_API_URL = process.env.POS_API_URL;
+// .trim() por si la variable de entorno se pegó con un espacio o salto de
+// línea de más al cargarla en el dashboard (rompe el fetch silenciosamente).
+const POS_API_URL = process.env.POS_API_URL?.trim();
 
 type PosProducto = {
   id: string;
