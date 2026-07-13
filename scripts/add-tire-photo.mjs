@@ -27,6 +27,7 @@
 
 import { existsSync, mkdirSync, writeFileSync } from "fs";
 import path from "path";
+import { generateImageManifest } from "./lib/generate-image-manifest.mjs";
 import {
   SITE_URL,
   OUTPUT_DIR,
@@ -90,6 +91,9 @@ async function main() {
 
   console.log("Pegá esta URL en el campo de foto del POS para cada código:\n");
   console.table(rows);
+
+  const manifestCount = generateImageManifest();
+  console.log(`Manifiesto de fotos actualizado (${manifestCount} archivos).`);
 
   console.log(
     `\n${bySize.size} archivo(s) generado(s) en ${OUTPUT_DIR}/. Subí este mismo archivo también en el catálogo de Meta Business Suite.`

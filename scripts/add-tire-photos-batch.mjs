@@ -13,6 +13,7 @@
 
 import { existsSync, mkdirSync, readdirSync, writeFileSync } from "fs";
 import path from "path";
+import { generateImageManifest } from "./lib/generate-image-manifest.mjs";
 import {
   SITE_URL,
   OUTPUT_DIR,
@@ -103,6 +104,9 @@ async function main() {
     console.log(`\nArchivos que no matchearon ningún modelo del POS (revisar el nombre):`);
     for (const f of noMatch) console.log(`  - ${f}`);
   }
+
+  const manifestCount = generateImageManifest();
+  console.log(`Manifiesto de fotos actualizado (${manifestCount} archivos).`);
 
   console.log(
     `\n${allRows.length} código(s) actualizados con foto. Subí las mismas fotos también al catálogo de Meta Business Suite.`

@@ -1,6 +1,7 @@
-import { existsSync } from "fs";
-import path from "path";
 import type { TireProduct } from "./types";
+import productImagesManifest from "./product-images-manifest.json";
+
+const AVAILABLE_IMAGES = new Set(productImagesManifest);
 
 const POS_API_URL = process.env.POS_API_URL;
 
@@ -67,13 +68,14 @@ function fixBrandAndModel(rawMarca: string, rawModelo: string): { marca: string;
 
 // Mientras el POS no tenga imagen_url cargada, usamos la foto que ya subimos
 // nosotros a /public/images/products (ver scripts/add-tire-photo*.mjs), buscando
-// por marca+modelo+medida original del POS (sin la corrección de fixModelName).
+// por marca+modelo+medida original del POS (sin la corrección de fixBrandAndModel).
+// El manifiesto se genera en build-time (scripts/lib/generate-image-manifest.mjs)
+// en vez de chequear con fs.existsSync en runtime, que no existe en Cloudflare Workers.
 function localImageFallback(p: PosProducto): string | null {
   const brandSlug = slugify(p.marca || "");
   const modelSlug = slugify(p.modelo || "");
   const filename = `${brandSlug}-${modelSlug}-${p.neumatico_ancho}-${p.neumatico_perfil}-r${p.neumatico_diametro}.webp`;
-  const filePath = path.join(process.cwd(), "public", "images", "products", filename);
-  return existsSync(filePath) ? `/images/products/${filename}` : null;
+  return AVAILABLE_IMAGES.has(filename) ? `/images/products/${filename}` : null;
 }
 
 function toTireProduct(p: PosProducto): TireProduct | null {
