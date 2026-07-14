@@ -24,6 +24,13 @@ export default async function EquivalenciasPage() {
               A veces no se consigue la medida original de fábrica. Ingresá tu medida en la herramienta acá abajo para verificar compatibilidades, o seguí leyendo para aprender cómo se calculan.
             </p>
 
+            <Link
+              href="/calculadora-equivalencia-neumaticos"
+              className="inline-flex mb-6 text-sm font-bold text-white underline underline-offset-4 hover:text-emerald-300"
+            >
+              Abrir la calculadora de equivalencias de neumáticos
+            </Link>
+
             <div className="shadow-2xl">
               <EquivalenceCalculator products={productos} />
             </div>

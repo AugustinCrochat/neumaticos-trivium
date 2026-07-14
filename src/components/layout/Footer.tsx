@@ -59,6 +59,7 @@ export function Footer() {
             <ul className="space-y-2">
               {[
                 { href: "/catalogo", label: "Catálogo de neumáticos" },
+                { href: "/calculadora-equivalencia-neumaticos", label: "Calculadora de equivalencias" },
                 { href: "/servicios", label: "Servicios" },
                 { href: "/blog", label: "Blog" },
                 { href: "/contacto", label: "Contacto" },

@@ -523,8 +523,8 @@ export function ShopPage({
                       </div>
                       <p className="text-slate-700 font-medium leading-relaxed">
                         Estas medidas mantienen el mismo rodado y un diámetro total dentro de ±3% de la medida {label}.{" "}
-                        <Link href="/blog/equivalencias" className="text-emerald-700 font-black underline decoration-2 underline-offset-4 hover:text-emerald-800 transition-colors">
-                          Entendé cómo funcionan.
+                        <Link href="/calculadora-equivalencia-neumaticos" className="text-emerald-700 font-black underline decoration-2 underline-offset-4 hover:text-emerald-800 transition-colors">
+                          Calculá tu equivalencia.
                         </Link>
                       </p>
                     </div>
