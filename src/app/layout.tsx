@@ -6,6 +6,8 @@ import { BranchProvider } from "@/contexts/branch-context";
 import { BranchModal } from "@/components/ui/BranchModal";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { CartProvider } from "@/contexts/cart-context";
+import { CartDrawer } from "@/components/ui/CartDrawer";
 
 const geist = Geist({
   variable: "--font-geist-sans",
@@ -32,10 +34,13 @@ export default function RootLayout({
     <html lang="es" className={`${geist.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <BranchProvider>
-          <Header />
-          <BranchModal />
-          <main className="flex-1">{children}</main>
-          <Footer />
+          <CartProvider>
+            <Header />
+            <BranchModal />
+            <CartDrawer />
+            <main className="flex-1">{children}</main>
+            <Footer />
+          </CartProvider>
         </BranchProvider>
       </body>
     </html>

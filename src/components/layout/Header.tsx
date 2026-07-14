@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useBranch } from "@/contexts/branch-context";
+import { CartButton } from "@/components/ui/CartButton";
 
 const NAV_LINKS = [
   { href: "/catalogo", label: "Neumáticos" },
@@ -74,6 +75,8 @@ export function Header() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
             </button>
+
+            <CartButton />
 
             {/* Mobile hamburger */}
             <button

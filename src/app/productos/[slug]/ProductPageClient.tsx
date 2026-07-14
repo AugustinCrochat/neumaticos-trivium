@@ -2,9 +2,11 @@
 
 import { useBranch } from "@/contexts/branch-context";
 import type { TireProduct } from "@/lib/types";
+import { useCart } from "@/contexts/cart-context";
 
 export function ProductPageClient({ product }: { product: TireProduct }) {
   const { selectedBranch } = useBranch();
+  const { addItem } = useCart();
 
   const waText = encodeURIComponent(
     `Hola, quiero consultar por el neumático ${product.brand} ${product.model} ${product.size.width}/${product.size.profile} R${product.size.rim} (SKU: ${product.id})`
@@ -12,6 +14,9 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
 
   return (
     <div className="mt-6 flex flex-col gap-3">
+      <button onClick={() => addItem(product)} disabled={!product.enStock} className="flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 disabled:bg-slate-300 text-white font-black py-3 rounded-xl text-base transition-colors">
+        {product.enStock ? "Agregar al carrito" : "Sin stock"}
+      </button>
       <a
         href={`https://wa.me/${selectedBranch.whatsapp}?text=${waText}`}
         target="_blank"
