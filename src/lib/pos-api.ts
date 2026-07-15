@@ -26,6 +26,7 @@ export type ServicioPrecio = {
   nombre: string;
   precio: number;
   grupo: string;
+  codigoTango: string | null;
 };
 
 // Sentinel usado por ProductCard/ProductPage para mostrar el ícono
@@ -155,13 +156,14 @@ export async function getServiciosPrecios(grupo?: string): Promise<ServicioPreci
       return [];
     }
     const data = (await res.json()) as {
-      servicios: { id: string; nombre: string; precio: number; servicio_grupo: string }[];
+      servicios: { id: string; nombre: string; precio: number; servicio_grupo: string; codigo_tango?: string | null }[];
     };
     const servicios = data.servicios.map((s) => ({
       id: s.id,
       nombre: s.nombre,
       precio: s.precio,
       grupo: s.servicio_grupo,
+      codigoTango: s.codigo_tango ?? null,
     }));
     return grupo ? servicios.filter((s) => s.grupo === grupo) : servicios;
   } catch (err) {

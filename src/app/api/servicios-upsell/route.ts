@@ -1,13 +1,11 @@
 import { getServiciosPrecios } from "@/lib/pos-api";
 
-export async function GET() {
-  const [alineacion, balanceo] = await Promise.all([
-    getServiciosPrecios("alineacion"),
-    getServiciosPrecios("balanceo"),
-  ]);
+// SKU (código Tango) del combo "Alineación + 4 balanceos" para auto.
+const COMBO_ALINEACION_BALANCEO_AUTO = "2010106";
 
-  return Response.json({
-    alineacion: alineacion[0] ?? null,
-    balanceo: balanceo[0] ?? null,
-  });
+export async function GET() {
+  const servicios = await getServiciosPrecios();
+  const combo = servicios.find((s) => s.codigoTango === COMBO_ALINEACION_BALANCEO_AUTO) ?? null;
+
+  return Response.json({ combo });
 }
