@@ -1,11 +1,8 @@
-import { getServiciosPrecios } from "@/lib/pos-api";
-
-// SKU (código Tango) del combo "Alineación + 4 balanceos" para auto.
-const COMBO_ALINEACION_BALANCEO_AUTO = "2010106";
+import { getServiciosPrecios, COMBO_ALINEACION_BALANCEO_AUTO } from "@/lib/pos-api";
 
 export async function GET() {
   const servicios = await getServiciosPrecios();
-  const combo = servicios.find((s) => s.codigoTango === COMBO_ALINEACION_BALANCEO_AUTO) ?? null;
+  const combo = servicios.find((s) => s.codigoTango === COMBO_ALINEACION_BALANCEO_AUTO.codigoTango) ?? COMBO_ALINEACION_BALANCEO_AUTO;
 
   return Response.json({ combo });
 }

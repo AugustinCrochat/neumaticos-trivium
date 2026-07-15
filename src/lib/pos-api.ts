@@ -29,6 +29,20 @@ export type ServicioPrecio = {
   codigoTango: string | null;
 };
 
+// TEMPORAL: el POS no expone este servicio por un bug al guardar
+// "servicio_grupo" en /admin/productos (probablemente falta política RLS de
+// UPDATE en la tabla productos — el guardado no tira error pero no persiste).
+// Hardcodeado con el id real de la tabla productos del POS, confirmado con
+// Augustin el 2026-07-15 ($60.000 el combo, $10.000 el balanceo por rueda).
+// Sacar este fallback cuando /servicios empiece a devolverlo solo.
+export const COMBO_ALINEACION_BALANCEO_AUTO: ServicioPrecio = {
+  id: "767b5aad-14c3-4d34-b318-bdc7695ed502",
+  nombre: "Alineación + 4 balanceos (auto)",
+  precio: 60000,
+  grupo: "alineacion",
+  codigoTango: "2010106",
+};
+
 // Sentinel usado por ProductCard/ProductPage para mostrar el ícono
 // genérico de neumático cuando no hay foto real (ver hasImage en esos componentes).
 const PLACEHOLDER_IMAGE = "/images/tire-placeholder.webp";

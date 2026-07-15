@@ -1,5 +1,5 @@
 import { SITE_URL } from "@/lib/config";
-import { getProductosDesdePOS, getServiciosPrecios } from "@/lib/pos-api";
+import { getProductosDesdePOS, getServiciosPrecios, COMBO_ALINEACION_BALANCEO_AUTO } from "@/lib/pos-api";
 
 type CheckoutItem = { kind?: unknown; id?: unknown; quantity?: unknown };
 
@@ -43,7 +43,8 @@ export async function POST(request: Request) {
     return Response.json({ error: "Uno o más productos ya no tienen stock. Actualizá el carrito e intentá nuevamente." }, { status: 409 });
   }
 
-  const cartServices = [...requestedServices].map(([id, quantity]) => ({ servicio: servicios.find((s) => s.id === id), quantity }));
+  const serviciosDisponibles = [...servicios, COMBO_ALINEACION_BALANCEO_AUTO];
+  const cartServices = [...requestedServices].map(([id, quantity]) => ({ servicio: serviciosDisponibles.find((s) => s.id === id), quantity }));
   if (cartServices.some(({ servicio }) => !servicio)) {
     return Response.json({ error: "Uno o más servicios ya no están disponibles. Actualizá el carrito e intentá nuevamente." }, { status: 409 });
   }
