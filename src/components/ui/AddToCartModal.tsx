@@ -8,8 +8,8 @@ export function AddToCartModal({ product, onClose }: { product: TireProduct; onC
   const { addTire } = useCart();
   const [quantity, setQuantity] = useState(2);
 
-  function confirm() {
-    addTire(product, quantity);
+  function addAndClose(qty: number) {
+    addTire(product, qty);
     onClose();
   }
 
@@ -26,10 +26,10 @@ export function AddToCartModal({ product, onClose }: { product: TireProduct; onC
           <div>
             <p className="text-sm font-bold text-slate-600 mb-2">Cantidad</p>
             <div className="flex gap-2 mb-3">
-              <button onClick={() => setQuantity(2)} className={`flex-1 rounded-xl border-2 py-2.5 font-black transition-colors ${quantity === 2 ? "border-orange-500 bg-orange-50 text-orange-600" : "border-slate-200 text-slate-600 hover:border-slate-300"}`}>
+              <button onClick={() => addAndClose(2)} className={`flex-1 rounded-xl border-2 py-2.5 font-black transition-colors ${quantity === 2 ? "border-orange-500 bg-orange-50 text-orange-600" : "border-slate-200 text-slate-600 hover:border-slate-300"}`}>
                 2
               </button>
-              <button onClick={() => setQuantity(4)} className={`flex-1 rounded-xl border-2 py-2.5 font-black transition-colors ${quantity === 4 ? "border-orange-500 bg-orange-50 text-orange-600" : "border-slate-200 text-slate-600 hover:border-slate-300"}`}>
+              <button onClick={() => addAndClose(4)} className={`flex-1 rounded-xl border-2 py-2.5 font-black transition-colors ${quantity === 4 ? "border-orange-500 bg-orange-50 text-orange-600" : "border-slate-200 text-slate-600 hover:border-slate-300"}`}>
                 4
               </button>
             </div>
@@ -47,7 +47,7 @@ export function AddToCartModal({ product, onClose }: { product: TireProduct; onC
         </div>
 
         <div className="p-5 pt-0">
-          <button onClick={confirm} className="w-full rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-black py-3.5 transition-colors">
+          <button onClick={() => addAndClose(quantity)} className="w-full rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-black py-3.5 transition-colors">
             Agregar {quantity} al carrito
           </button>
         </div>
