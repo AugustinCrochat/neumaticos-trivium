@@ -20,7 +20,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const productos = await getProductosDesdePOS();
   const product = productos.find((p) => p.slug === slug);
   if (!product) return {};
-  const title = `${product.brand} ${product.model} ${product.size.width}/${product.size.profile} R${product.size.rim}`;
+  const loadSpeed = product.loadIndex && product.speedRating ? ` ${product.loadIndex}${product.speedRating}` : "";
+  const title = `${product.model}${loadSpeed}`;
   return {
     title: `${title} — Neumáticos Trivium`,
     description: `Comprá el neumático ${title} al mejor precio. Outlet de neumáticos importados en Argentina.`,
@@ -42,6 +43,18 @@ function discount(price: number, priceOld: number) {
 // Tabla de referencia de índices de velocidad habituales en neumáticos de auto/camioneta.
 const SPEED_RATING_KMH: Record<string, number> = {
   Q: 160, R: 170, S: 180, T: 190, U: 200, H: 210, V: 240, W: 270, Y: 300,
+};
+
+// Tabla ETRTO de índice de carga -> peso máximo por neumático (kg).
+const LOAD_INDEX_KG: Record<string, number> = {
+  "60": 250, "61": 257, "62": 265, "63": 272, "64": 280, "65": 290, "66": 300, "67": 307, "68": 315, "69": 325,
+  "70": 335, "71": 345, "72": 355, "73": 365, "74": 375, "75": 387, "76": 400, "77": 412, "78": 425, "79": 437,
+  "80": 450, "81": 462, "82": 475, "83": 487, "84": 500, "85": 515, "86": 530, "87": 545, "88": 560, "89": 580,
+  "90": 600, "91": 615, "92": 630, "93": 650, "94": 670, "95": 690, "96": 710, "97": 730, "98": 750, "99": 775,
+  "100": 800, "101": 825, "102": 850, "103": 875, "104": 900, "105": 925, "106": 950, "107": 975, "108": 1000, "109": 1030,
+  "110": 1060, "111": 1090, "112": 1120, "113": 1150, "114": 1180, "115": 1215, "116": 1250, "117": 1285, "118": 1320, "119": 1360,
+  "120": 1400, "121": 1450, "122": 1500, "123": 1550, "124": 1600, "125": 1650, "126": 1700, "127": 1750, "128": 1800, "129": 1850,
+  "130": 1900,
 };
 
 function vehicleLabel(product: { vehicleType: string[] }) {
@@ -71,6 +84,8 @@ export default async function ProductPage({ params }: Props) {
   const brandLogo = getBrandLogo(product.brandId);
   const brand = BRANDS.find((b) => b.id === product.brandId);
   const speedKmh = product.speedRating ? SPEED_RATING_KMH[product.speedRating] : undefined;
+  const loadKg = product.loadIndex ? LOAD_INDEX_KG[product.loadIndex] : undefined;
+  const loadSpeed = product.loadIndex && product.speedRating ? ` ${product.loadIndex}${product.speedRating}` : "";
 
   const characteristics = [
     { label: "Ancho", value: `${product.size.width} mm` },
@@ -78,7 +93,9 @@ export default async function ProductPage({ params }: Props) {
     { label: "Rodado", value: `R${product.size.rim}` },
     { label: "Marca", value: product.brand },
     { label: "Línea", value: product.model.replace(/^\d+\/\d+ R\d+ /, "").replace(new RegExp(`^${product.brand}\\s+`, "i"), "") },
-    ...(product.loadIndex ? [{ label: "Índice de carga", value: product.loadIndex }] : []),
+    ...(product.loadIndex
+      ? [{ label: "Índice de carga", value: loadKg ? `${product.loadIndex} (${loadKg} kg)` : product.loadIndex }]
+      : []),
     ...(product.speedRating
       ? [{ label: "Índice de velocidad", value: speedKmh ? `${product.speedRating} (hasta ${speedKmh} km/h)` : product.speedRating }]
       : []),
@@ -135,11 +152,12 @@ export default async function ProductPage({ params }: Props) {
               </div>
             )}
           </Link>
-          <h1 className="text-2xl md:text-4xl font-black text-slate-900 mb-2 leading-tight">
+          <h1 className="text-2xl md:text-4xl font-normal text-slate-900 mb-2 leading-tight">
             <ProductNameWithHighlightedSize
               product={product}
-              sizeClassName="inline-flex rounded-xl bg-orange-100 px-2.5 py-1 font-black text-orange-700"
+              sizeClassName="font-bold"
             />
+            {loadSpeed}
           </h1>
 
           <div className="flex flex-wrap gap-2 mb-6">

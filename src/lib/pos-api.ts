@@ -101,7 +101,8 @@ function toTireProduct(p: PosProducto): TireProduct | null {
   const model = `${p.neumatico_ancho}/${p.neumatico_perfil} R${p.neumatico_diametro} ${marca} ${modelo}`
     .trim()
     .replace(/\s+/g, " ");
-  const slug = slugify(`${marca}-${modelo}-${p.neumatico_ancho}-${p.neumatico_perfil}-r${p.neumatico_diametro}`);
+  const loadSpeedSlug = loadIndex && speedRating ? `-${loadIndex}${speedRating}` : "";
+  const slug = slugify(`${marca}-${modelo}-${p.neumatico_ancho}-${p.neumatico_perfil}-r${p.neumatico_diametro}${loadSpeedSlug}`);
 
   return {
     id: p.id,
