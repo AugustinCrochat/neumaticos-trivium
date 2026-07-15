@@ -3,18 +3,36 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import type { TireProduct } from "@/lib/types";
 
-export type CartItem = Pick<TireProduct, "id" | "brand" | "model" | "size" | "price" | "imageUrl" | "slug"> & {
+export type TireCartItem = Pick<TireProduct, "id" | "brand" | "model" | "size" | "price" | "imageUrl" | "slug"> & {
+  kind: "tire";
   quantity: number;
 };
+
+export type ServiceCartItem = {
+  kind: "service";
+  id: string;
+  nombre: string;
+  price: number;
+  quantity: number;
+};
+
+export type CartItem = TireCartItem | ServiceCartItem;
+
+// Las claves componen kind+id porque un id de servicio del POS podría coincidir
+// con un id de neumático (son catálogos distintos).
+function itemKey(item: Pick<CartItem, "kind" | "id">) {
+  return `${item.kind}:${item.id}`;
+}
 
 type CartContextType = {
   items: CartItem[];
   count: number;
   total: number;
   isOpen: boolean;
-  addItem: (product: TireProduct) => void;
-  updateQuantity: (productId: string, quantity: number) => void;
-  removeItem: (productId: string) => void;
+  addTire: (product: TireProduct, quantity: number) => void;
+  addService: (service: { id: string; nombre: string; price: number }, quantity: number) => void;
+  updateQuantity: (key: string, quantity: number) => void;
+  removeItem: (key: string) => void;
   clearCart: () => void;
   openCart: () => void;
   closeCart: () => void;
@@ -49,34 +67,42 @@ export function CartProvider({ children }: { children: ReactNode }) {
     const count = items.reduce((sum, item) => sum + item.quantity, 0);
     const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
+    function upsert(newItem: CartItem) {
+      setItems((current) => {
+        const key = itemKey(newItem);
+        const existing = current.find((item) => itemKey(item) === key);
+        if (existing) {
+          return current.map((item) =>
+            itemKey(item) === key ? { ...item, quantity: Math.min(item.quantity + newItem.quantity, 8) } as CartItem : item
+          );
+        }
+        return [...current, newItem];
+      });
+      setIsOpen(true);
+    }
+
     return {
       items,
       count,
       total,
       isOpen,
-      addItem: (product) => {
-        setItems((current) => {
-          const existing = current.find((item) => item.id === product.id);
-          if (existing) {
-            return current.map((item) =>
-              item.id === product.id ? { ...item, quantity: Math.min(item.quantity + 1, 8) } : item
-            );
-          }
-          const { id, brand, model, size, price, imageUrl, slug } = product;
-          return [...current, { id, brand, model, size, price, imageUrl, slug, quantity: 1 }];
-        });
-        setIsOpen(true);
+      addTire: (product, quantity) => {
+        const { id, brand, model, size, price, imageUrl, slug } = product;
+        upsert({ kind: "tire", id, brand, model, size, price, imageUrl, slug, quantity: Math.min(quantity, 8) });
       },
-      updateQuantity: (productId, quantity) => {
+      addService: (service, quantity) => {
+        upsert({ kind: "service", id: service.id, nombre: service.nombre, price: service.price, quantity: Math.min(quantity, 8) });
+      },
+      updateQuantity: (key, quantity) => {
         if (quantity < 1) {
-          setItems((current) => current.filter((item) => item.id !== productId));
+          setItems((current) => current.filter((item) => itemKey(item) !== key));
           return;
         }
         setItems((current) =>
-          current.map((item) => item.id === productId ? { ...item, quantity: Math.min(quantity, 8) } : item)
+          current.map((item) => itemKey(item) === key ? { ...item, quantity: Math.min(quantity, 8) } as CartItem : item)
         );
       },
-      removeItem: (productId) => setItems((current) => current.filter((item) => item.id !== productId)),
+      removeItem: (key) => setItems((current) => current.filter((item) => itemKey(item) !== key)),
       clearCart: () => setItems([]),
       openCart: () => setIsOpen(true),
       closeCart: () => setIsOpen(false),
@@ -91,3 +117,5 @@ export function useCart() {
   if (!context) throw new Error("useCart debe usarse dentro de CartProvider");
   return context;
 }
+
+export { itemKey };

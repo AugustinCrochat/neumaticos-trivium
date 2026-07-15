@@ -16,7 +16,7 @@ export function PaymentResult({ status }: { status?: string }) {
       ? "Cuando Mercado Pago confirme la acreditación, coordinaremos la entrega."
       : "No se realizó ningún cobro. Podés volver a intentarlo cuando quieras.";
 
-  const whatsappText = encodeURIComponent(`Hola Trivium ${selectedBranch.shortName}, realicé una compra online.${items.length ? `\n\nProductos:\n${items.map((item) => `• ${item.quantity} × ${item.model}`).join("\n")}\n\nTotal: $${total.toLocaleString("es-AR")}` : ""}\n\nQuiero coordinar el retiro.`);
+  const whatsappText = encodeURIComponent(`Hola Trivium ${selectedBranch.shortName}, realicé una compra online.${items.length ? `\n\nProductos:\n${items.map((item) => `• ${item.quantity} × ${item.kind === "tire" ? item.model : item.nombre}`).join("\n")}\n\nTotal: $${total.toLocaleString("es-AR")}` : ""}\n\nQuiero coordinar el retiro.`);
 
   return (
     <div className="min-h-[60vh] flex items-center justify-center bg-slate-50 px-4 py-16">
