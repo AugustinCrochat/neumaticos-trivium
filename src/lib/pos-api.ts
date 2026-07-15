@@ -145,7 +145,10 @@ export async function getProductosDesdePOS(): Promise<TireProduct[]> {
     return [];
   }
   try {
-    const res = await fetch(`${POS_API_URL}/productos`, { next: { revalidate: 300 } });
+    // Sin timeout propio, un fetch colgado en Workers se lleva el request
+    // entero hasta que Cloudflare mata la instancia ("exceeded resource
+    // limits"). El POS a veces tarda o no responde bajo tráfico.
+    const res = await fetch(`${POS_API_URL}/productos`, { next: { revalidate: 300 }, signal: AbortSignal.timeout(8000) });
     if (!res.ok) {
       console.error(`[pos-api] Error ${res.status} al obtener productos del POS`);
       return [];
@@ -164,7 +167,7 @@ export async function getServiciosPrecios(grupo?: string): Promise<ServicioPreci
     return [];
   }
   try {
-    const res = await fetch(`${POS_API_URL}/servicios`, { next: { revalidate: 300 } });
+    const res = await fetch(`${POS_API_URL}/servicios`, { next: { revalidate: 300 }, signal: AbortSignal.timeout(8000) });
     if (!res.ok) {
       console.error(`[pos-api] Error ${res.status} al obtener servicios del POS`);
       return [];
