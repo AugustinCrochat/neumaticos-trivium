@@ -6,6 +6,7 @@ import { useState } from "react";
 import { getBrandLogo } from "@/lib/brand-utils";
 import { ProductNameWithHighlightedSize } from "@/components/ui/ProductNameWithHighlightedSize";
 import { AddToCartModal } from "@/components/ui/AddToCartModal";
+import { isLowStock, stockLabel } from "@/lib/stock";
 import type { TireProduct } from "@/lib/types";
 import type { ReactNode } from "react";
 
@@ -143,6 +144,13 @@ export function ProductCard({
               return null;
             })()}
           </div>
+
+          {typeof product.stock === "number" && product.enStock && (
+            <p className={`text-[11px] font-bold mt-1.5 flex items-center gap-1.5 ${isLowStock(product.stock) ? "text-amber-600" : "text-emerald-600"}`}>
+              <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${isLowStock(product.stock) ? "bg-amber-500" : "bg-emerald-500"}`} />
+              {stockLabel(product.stock)}
+            </p>
+          )}
 
           <button onClick={() => setShowModal(true)} disabled={!product.enStock} className="mt-3 w-full bg-navy-800 hover:bg-navy-700 disabled:bg-slate-300 text-white font-semibold py-2.5 rounded-xl text-sm transition-colors">
             {product.enStock ? "Agregar al carrito" : "Sin stock"}

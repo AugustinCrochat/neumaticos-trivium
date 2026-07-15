@@ -6,6 +6,7 @@ import { getProductosDesdePOS } from "@/lib/pos-api";
 import { getBrandLogo } from "@/lib/brand-utils";
 import { BRANDS } from "@/lib/data";
 import { SITE_URL } from "@/lib/config";
+import { isLowStock, stockLabel } from "@/lib/stock";
 import { ProductNameWithHighlightedSize } from "@/components/ui/ProductNameWithHighlightedSize";
 import { ProductPageClient } from "./ProductPageClient";
 
@@ -210,9 +211,9 @@ export default async function ProductPage({ params }: Props) {
             </span>
             <p className="text-xs text-slate-400 mt-1">Precio por unidad · IVA incluido</p>
             {typeof product.stock === "number" && product.enStock && (
-              <p className={`text-xs font-bold mt-1.5 flex items-center gap-1.5 ${product.stock <= 3 ? "text-amber-600" : "text-emerald-600"}`}>
-                <span className={`w-1.5 h-1.5 rounded-full ${product.stock <= 3 ? "bg-amber-500" : "bg-emerald-500"}`} />
-                {product.stock <= 3 ? `¡Últimas ${product.stock} unidades!` : `${product.stock} disponibles en stock`}
+              <p className={`text-xs font-bold mt-1.5 flex items-center gap-1.5 ${isLowStock(product.stock) ? "text-amber-600" : "text-emerald-600"}`}>
+                <span className={`w-1.5 h-1.5 rounded-full ${isLowStock(product.stock) ? "bg-amber-500" : "bg-emerald-500"}`} />
+                {stockLabel(product.stock)}
               </p>
             )}
 
