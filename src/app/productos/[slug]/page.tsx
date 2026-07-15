@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { getProductosDesdePOS } from "@/lib/pos-api";
 import { getBrandLogo } from "@/lib/brand-utils";
 import { BRANDS } from "@/lib/data";
+import { SITE_URL } from "@/lib/config";
 import { ProductNameWithHighlightedSize } from "@/components/ui/ProductNameWithHighlightedSize";
 import { ProductPageClient } from "./ProductPageClient";
 
@@ -23,9 +24,28 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const loadSpeed = product.loadIndex && product.speedRating ? ` ${product.loadIndex}${product.speedRating}` : "";
   const sizeRegex = new RegExp(`(${product.size.width}\\s*/\\s*${product.size.profile}\\s*R\\s*${product.size.rim})`, "i");
   const title = product.model.replace(sizeRegex, `$1${loadSpeed}`);
+  const fullTitle = `${title} — Neumáticos Trivium`;
+  const description = `Comprá el neumático ${title} al mejor precio. Outlet de neumáticos importados en Argentina.`;
+  // WhatsApp/redes necesitan una URL absoluta para mostrar la foto al compartir el link.
+  const ogImage = product.imageUrl.startsWith("http") ? product.imageUrl : `${SITE_URL}${product.imageUrl}`;
+  const pageUrl = `${SITE_URL}/productos/${product.slug}`;
   return {
-    title: `${title} — Neumáticos Trivium`,
-    description: `Comprá el neumático ${title} al mejor precio. Outlet de neumáticos importados en Argentina.`,
+    title: fullTitle,
+    description,
+    openGraph: {
+      title: fullTitle,
+      description,
+      url: pageUrl,
+      siteName: "Neumáticos Trivium",
+      images: [ogImage],
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: fullTitle,
+      description,
+      images: [ogImage],
+    },
   };
 }
 
