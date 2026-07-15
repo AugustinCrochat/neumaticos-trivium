@@ -504,7 +504,7 @@ export function ShopPage({
                   </span>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  {exactResults.slice(0, 5).map(product => (
+                  {exactResults.map(product => (
                     <ProductCard key={product.id} product={product} isCheapest={product.id === cheapestExactId} />
                   ))}
                 </div>
