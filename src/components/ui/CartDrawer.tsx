@@ -5,16 +5,23 @@ import Link from "next/link";
 import { useState } from "react";
 import { useBranch } from "@/contexts/branch-context";
 import { useCart, itemKey } from "@/contexts/cart-context";
+import { useUpsellCombo } from "@/hooks/use-upsell-combo";
+import { AlineacionBalanceoIcon } from "@/components/ui/AlineacionBalanceoIcon";
 
 function formatPrice(price: number) {
   return new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 }).format(price);
 }
 
 export function CartDrawer() {
-  const { items, total, isOpen, closeCart, removeItem, updateQuantity } = useCart();
+  const { items, total, isOpen, closeCart, removeItem, updateQuantity, addService } = useCart();
   const { selectedBranch } = useBranch();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const combo = useUpsellCombo();
+
+  const hasTires = items.some((item) => item.kind === "tire");
+  const hasCombo = items.some((item) => item.kind === "service" && item.id === combo?.id);
+  const showCartUpsell = hasTires && !hasCombo && !!combo;
 
   async function checkout() {
     setError("");
@@ -67,8 +74,8 @@ export function CartDrawer() {
                         <Image src={item.imageUrl} alt="" fill sizes="64px" className="object-contain p-1" />
                       </div>
                     ) : (
-                      <div className="w-16 h-16 bg-navy-50 rounded-lg shrink-0 flex items-center justify-center text-navy-400">
-                        <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><circle cx="12" cy="12" r="3" /></svg>
+                      <div className="w-16 h-16 bg-navy-50 rounded-lg shrink-0 flex items-center justify-center">
+                        <AlineacionBalanceoIcon size={22} />
                       </div>
                     )}
                     <div className="min-w-0 flex-1">
@@ -86,6 +93,20 @@ export function CartDrawer() {
                   </div>
                 );
               })}
+
+              {showCartUpsell && (
+                <button
+                  onClick={() => addService({ id: combo!.id, nombre: combo!.nombre, price: combo!.precio }, 1)}
+                  className="w-full flex items-center gap-3 rounded-xl border border-dashed border-orange-300 bg-orange-50 p-3 text-left hover:border-orange-400 transition-colors"
+                >
+                  <AlineacionBalanceoIcon size={28} />
+                  <span className="text-sm flex-1">
+                    <span className="font-bold text-navy-900 block">¿Sumamos {combo!.nombre.toLowerCase()}?</span>
+                    <span className="text-slate-500">+{formatPrice(combo!.precio)}</span>
+                  </span>
+                  <span className="text-xs font-black text-orange-600 shrink-0">Agregar</span>
+                </button>
+              )}
             </div>
             <div className="border-t border-slate-200 p-5 bg-slate-50">
               <div className="flex justify-between text-lg font-black text-navy-900 mb-1"><span>Total</span><span>{formatPrice(total)}</span></div>

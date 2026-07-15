@@ -1,11 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useCart } from "@/contexts/cart-context";
+import { useUpsellCombo } from "@/hooks/use-upsell-combo";
+import { AlineacionBalanceoIcon } from "@/components/ui/AlineacionBalanceoIcon";
 import type { TireProduct } from "@/lib/types";
-
-type ServicioPrecio = { id: string; nombre: string; precio: number };
-type UpsellState = { combo: ServicioPrecio | null } | null;
 
 function formatPrice(price: number) {
   return new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 }).format(price);
@@ -14,22 +13,15 @@ function formatPrice(price: number) {
 export function AddToCartModal({ product, onClose }: { product: TireProduct; onClose: () => void }) {
   const { addTire, addService } = useCart();
   const [quantity, setQuantity] = useState(2);
-  const [upsell, setUpsell] = useState<UpsellState>(null);
+  const combo = useUpsellCombo();
   const [wantsUpsell, setWantsUpsell] = useState(false);
 
-  useEffect(() => {
-    fetch("/api/servicios-upsell")
-      .then((res) => res.json())
-      .then((data: UpsellState) => setUpsell(data))
-      .catch(() => setUpsell({ combo: null }));
-  }, []);
-
-  const showUpsell = !!upsell?.combo;
+  const showUpsell = !!combo;
 
   function confirm() {
     addTire(product, quantity);
     if (showUpsell && wantsUpsell) {
-      addService({ id: upsell!.combo!.id, nombre: upsell!.combo!.nombre, price: upsell!.combo!.precio }, 1);
+      addService({ id: combo!.id, nombre: combo!.nombre, price: combo!.precio }, 1);
     }
     onClose();
   }
@@ -64,16 +56,10 @@ export function AddToCartModal({ product, onClose }: { product: TireProduct; onC
           {showUpsell && (
             <label className="flex items-center gap-3 rounded-xl border border-slate-200 p-3 cursor-pointer hover:border-navy-300">
               <input type="checkbox" checked={wantsUpsell} onChange={(e) => setWantsUpsell(e.target.checked)} className="w-4 h-4 accent-orange-500 shrink-0" />
-              <div className="flex items-center gap-1 shrink-0">
-                <img src="/icons/servicios/alineadora.svg" alt="" className="w-8 h-8" />
-                <span className="relative">
-                  <img src="/icons/servicios/balanceadora.svg" alt="" className="w-8 h-8" />
-                  <span className="absolute -top-1 -right-1 min-w-4 h-4 px-1 rounded-full bg-orange-500 text-white text-[10px] font-black leading-4 flex items-center justify-center">4</span>
-                </span>
-              </div>
+              <AlineacionBalanceoIcon />
               <span className="text-sm">
-                <span className="font-bold text-navy-900 block">{upsell!.combo!.nombre}</span>
-                <span className="text-slate-500">+{formatPrice(upsell!.combo!.precio)}</span>
+                <span className="font-bold text-navy-900 block">{combo!.nombre}</span>
+                <span className="text-slate-500">+{formatPrice(combo!.precio)}</span>
               </span>
             </label>
           )}

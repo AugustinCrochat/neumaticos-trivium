@@ -104,10 +104,10 @@ export default async function ProductPage({ params }: Props) {
   ];
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8 md:py-12">
+    <div className="max-w-5xl mx-auto px-4 py-4 md:py-6">
       <Link
         href="/catalogo"
-        className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-navy-700 mb-8 transition-colors"
+        className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-navy-700 mb-4 transition-colors"
       >
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />

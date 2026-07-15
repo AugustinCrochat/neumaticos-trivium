@@ -40,7 +40,18 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
         <div>
           <p className="font-black text-navy-900 text-sm">Retiro gratis en Sucursal {selectedBranch.shortName}</p>
           <p className="text-sm text-slate-600 mt-0.5">{selectedBranch.address}, {selectedBranch.city} · {selectedBranch.hours}</p>
-          <p className="text-sm text-slate-600 mt-1.5">Colocación y cambio de válvulas sin cargo en nuestra sucursal.</p>
+        </div>
+      </div>
+
+      <div className="flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4">
+        <div className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-navy-600 shrink-0">
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <div>
+          <p className="font-black text-navy-900 text-sm">Colocación y válvulas sin cargo</p>
+          <p className="text-sm text-slate-600 mt-0.5">Comprando en nuestra sucursal, la colocación y el cambio de válvulas no tienen costo adicional.</p>
         </div>
       </div>
     </div>
