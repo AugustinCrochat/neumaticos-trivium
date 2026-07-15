@@ -326,8 +326,11 @@ export function ShopPage({
       return { exactResults: [], compatibleResults: [], allProducts: products.filter(ok) };
     }
 
+    // Los resultados exactos se recortan a 5 más abajo, así que el stock
+    // manda antes que el precio — si no, un modelo sin stock más barato le
+    // saca el lugar a uno disponible más caro y el cliente no lo ve.
     const exact = products.filter(p => isExactMatch(p, parsed) && ok(p))
-      .sort((a, b) => getUnitPrice(a) - getUnitPrice(b));
+      .sort((a, b) => Number(!!b.enStock) - Number(!!a.enStock) || getUnitPrice(a) - getUnitPrice(b));
     const compatible = products.filter(p => isCompatibleSize(p, parsed) && ok(p));
 
     return { exactResults: exact, compatibleResults: compatible, allProducts: [] };
