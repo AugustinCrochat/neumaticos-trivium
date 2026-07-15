@@ -24,7 +24,7 @@ export function AddToCartModal({ product, onClose }: { product: TireProduct; onC
       .catch(() => setUpsell({ combo: null }));
   }, []);
 
-  const showUpsell = quantity === 4 && !!upsell?.combo;
+  const showUpsell = !!upsell?.combo;
 
   function confirm() {
     addTire(product, quantity);
@@ -70,6 +70,11 @@ export function AddToCartModal({ product, onClose }: { product: TireProduct; onC
               </span>
             </label>
           )}
+
+          <p className="text-xs text-slate-500 flex items-start gap-1.5">
+            <svg className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
+            Colocación y cambio de válvulas sin cargo en nuestra sucursal.
+          </p>
         </div>
 
         <div className="p-5 pt-0">

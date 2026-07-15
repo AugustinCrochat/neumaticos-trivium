@@ -40,6 +40,7 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
         <div>
           <p className="font-black text-navy-900 text-sm">Retiro gratis en Sucursal {selectedBranch.shortName}</p>
           <p className="text-sm text-slate-600 mt-0.5">{selectedBranch.address}, {selectedBranch.city} · {selectedBranch.hours}</p>
+          <p className="text-sm text-slate-600 mt-1.5">Colocación y cambio de válvulas sin cargo en nuestra sucursal.</p>
         </div>
       </div>
     </div>
