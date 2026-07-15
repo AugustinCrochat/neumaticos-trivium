@@ -62,8 +62,15 @@ export function AddToCartModal({ product, onClose }: { product: TireProduct; onC
           </div>
 
           {showUpsell && (
-            <label className="flex items-start gap-3 rounded-xl border border-slate-200 p-3 cursor-pointer hover:border-navy-300">
-              <input type="checkbox" checked={wantsUpsell} onChange={(e) => setWantsUpsell(e.target.checked)} className="mt-0.5 w-4 h-4 accent-orange-500" />
+            <label className="flex items-center gap-3 rounded-xl border border-slate-200 p-3 cursor-pointer hover:border-navy-300">
+              <input type="checkbox" checked={wantsUpsell} onChange={(e) => setWantsUpsell(e.target.checked)} className="w-4 h-4 accent-orange-500 shrink-0" />
+              <div className="flex items-center gap-1 shrink-0">
+                <img src="/icons/servicios/alineadora.svg" alt="" className="w-8 h-8" />
+                <span className="relative">
+                  <img src="/icons/servicios/balanceadora.svg" alt="" className="w-8 h-8" />
+                  <span className="absolute -top-1 -right-1 min-w-4 h-4 px-1 rounded-full bg-orange-500 text-white text-[10px] font-black leading-4 flex items-center justify-center">4</span>
+                </span>
+              </div>
               <span className="text-sm">
                 <span className="font-bold text-navy-900 block">{upsell!.combo!.nombre}</span>
                 <span className="text-slate-500">+{formatPrice(upsell!.combo!.precio)}</span>
