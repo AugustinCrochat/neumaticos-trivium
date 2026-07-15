@@ -2,27 +2,14 @@
 
 import { useState } from "react";
 import { useCart } from "@/contexts/cart-context";
-import { useUpsellCombo } from "@/hooks/use-upsell-combo";
-import { AlineacionBalanceoIcon } from "@/components/ui/AlineacionBalanceoIcon";
 import type { TireProduct } from "@/lib/types";
 
-function formatPrice(price: number) {
-  return new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 }).format(price);
-}
-
 export function AddToCartModal({ product, onClose }: { product: TireProduct; onClose: () => void }) {
-  const { addTire, addService } = useCart();
+  const { addTire } = useCart();
   const [quantity, setQuantity] = useState(2);
-  const combo = useUpsellCombo();
-  const [wantsUpsell, setWantsUpsell] = useState(false);
-
-  const showUpsell = !!combo;
 
   function confirm() {
     addTire(product, quantity);
-    if (showUpsell && wantsUpsell) {
-      addService({ id: combo!.id, nombre: combo!.nombre, price: combo!.precio }, 1);
-    }
     onClose();
   }
 
@@ -52,17 +39,6 @@ export function AddToCartModal({ product, onClose }: { product: TireProduct; onC
               <button onClick={() => setQuantity((q) => Math.min(8, q + 1))} className="w-9 h-9 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 font-bold" aria-label="Aumentar cantidad">+</button>
             </div>
           </div>
-
-          {showUpsell && (
-            <label className="flex items-center gap-3 rounded-xl border border-slate-200 p-3 cursor-pointer hover:border-navy-300">
-              <input type="checkbox" checked={wantsUpsell} onChange={(e) => setWantsUpsell(e.target.checked)} className="w-4 h-4 accent-orange-500 shrink-0" />
-              <AlineacionBalanceoIcon />
-              <span className="text-sm">
-                <span className="font-bold text-navy-900 block">{combo!.nombre}</span>
-                <span className="text-slate-500">+{formatPrice(combo!.precio)}</span>
-              </span>
-            </label>
-          )}
 
           <p className="text-xs text-slate-500 flex items-start gap-1.5">
             <svg className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>

@@ -110,7 +110,7 @@ export function CartDrawer() {
             </div>
             <div className="border-t border-slate-200 p-5 bg-slate-50">
               <div className="flex justify-between text-lg font-black text-navy-900 mb-1"><span>Total</span><span>{formatPrice(total)}</span></div>
-              <p className="text-xs text-slate-500 mb-4">Retirás en Sucursal {selectedBranch.shortName}. Precio sujeto a validación de stock al confirmar el pedido.</p>
+              <p className="text-xs text-slate-500 mb-4">Retirás en Sucursal {selectedBranch.shortName}. Los neumáticos tienen 1 año de garantía. Precio sujeto a validación de stock al confirmar el pedido.</p>
               {error && <p className="mb-3 rounded-lg bg-red-50 p-3 text-sm font-medium text-red-700">{error}</p>}
               <button onClick={checkout} disabled={isLoading} className="w-full flex items-center justify-center gap-2 rounded-xl bg-[#FFE600] hover:bg-[#f5dc00] disabled:opacity-60 text-navy-900 font-black py-3.5 transition-colors">
                 {isLoading ? (

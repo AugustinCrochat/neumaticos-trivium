@@ -121,6 +121,7 @@ export default async function ProductPage({ params }: Props) {
       ? [{ label: "Índice de velocidad", value: speedKmh ? `${product.speedRating} (hasta ${speedKmh} km/h)` : product.speedRating }]
       : []),
     ...(brand?.origin ? [{ label: "Origen", value: brand.origin }] : []),
+    { label: "Garantía", value: "1 año" },
   ];
 
   return (
