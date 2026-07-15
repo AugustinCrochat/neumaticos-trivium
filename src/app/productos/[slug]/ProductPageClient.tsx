@@ -31,9 +31,17 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
         Consultar en {selectedBranch.shortName}
       </a>
 
-      <p className="text-xs text-center text-slate-400">
-        Consultá disponibilidad en sucursal {selectedBranch.name}
-      </p>
+      <div className="flex items-start gap-3 rounded-xl border border-emerald-200 bg-emerald-50 p-4">
+        <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 shrink-0">
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <div>
+          <p className="font-black text-navy-900 text-sm">Retiro gratis en Sucursal {selectedBranch.shortName}</p>
+          <p className="text-sm text-slate-600 mt-0.5">{selectedBranch.address}, {selectedBranch.city} · {selectedBranch.hours}</p>
+        </div>
+      </div>
     </div>
   );
 }

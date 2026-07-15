@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { getProductosDesdePOS } from "@/lib/pos-api";
 import { getBrandLogo } from "@/lib/brand-utils";
+import { BRANDS } from "@/lib/data";
 import { ProductNameWithHighlightedSize } from "@/components/ui/ProductNameWithHighlightedSize";
 import { ProductPageClient } from "./ProductPageClient";
 
@@ -38,6 +39,19 @@ function discount(price: number, priceOld: number) {
   return Math.round(((priceOld - price) / priceOld) * 100);
 }
 
+// Tabla de referencia de índices de velocidad habituales en neumáticos de auto/camioneta.
+const SPEED_RATING_KMH: Record<string, number> = {
+  Q: 160, R: 170, S: 180, T: 190, U: 200, H: 210, V: 240, W: 270, Y: 300,
+};
+
+function vehicleLabel(product: { vehicleType: string[] }) {
+  const hasAuto = product.vehicleType.includes("auto");
+  const hasCamioneta = product.vehicleType.includes("camioneta");
+  if (hasAuto && hasCamioneta) return "autos y camionetas";
+  if (hasCamioneta) return "camionetas";
+  return "autos";
+}
+
 const TIRE_SVG = (
   <svg className="w-full h-full text-slate-300" viewBox="0 0 100 100" fill="none">
     <circle cx="50" cy="50" r="45" stroke="currentColor" strokeWidth="8" />
@@ -55,6 +69,21 @@ export default async function ProductPage({ params }: Props) {
   const hasImage =
     !!product.imageUrl && product.imageUrl !== "/images/tire-placeholder.webp";
   const brandLogo = getBrandLogo(product.brandId);
+  const brand = BRANDS.find((b) => b.id === product.brandId);
+  const speedKmh = product.speedRating ? SPEED_RATING_KMH[product.speedRating] : undefined;
+
+  const characteristics = [
+    { label: "Ancho", value: `${product.size.width} mm` },
+    { label: "Perfil", value: `${product.size.profile}%` },
+    { label: "Rodado", value: `R${product.size.rim}` },
+    { label: "Marca", value: product.brand },
+    { label: "Línea", value: product.model.replace(/^\d+\/\d+ R\d+ /, "").replace(new RegExp(`^${product.brand}\\s+`, "i"), "") },
+    ...(product.loadIndex ? [{ label: "Índice de carga", value: product.loadIndex }] : []),
+    ...(product.speedRating
+      ? [{ label: "Índice de velocidad", value: speedKmh ? `${product.speedRating} (hasta ${speedKmh} km/h)` : product.speedRating }]
+      : []),
+    ...(brand?.origin ? [{ label: "Origen", value: brand.origin }] : []),
+  ];
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-8 md:py-12">
@@ -143,6 +172,29 @@ export default async function ProductPage({ params }: Props) {
             {/* Client component handles branch-specific WhatsApp link */}
             <ProductPageClient product={product} />
           </div>
+        </div>
+      </div>
+
+      {/* Descripción + Características técnicas */}
+      <div className="grid md:grid-cols-2 gap-10 mt-14 pt-10 border-t border-slate-100">
+        <div>
+          <h2 className="text-lg font-black text-navy-900 mb-4 uppercase tracking-wide">Descripción</h2>
+          <p className="text-slate-600 leading-relaxed">
+            Neumático {product.brand} pensado para {vehicleLabel(product)}, en la medida {product.size.width}/{product.size.profile} R{product.size.rim}.{" "}
+            {brand?.fullDescription || brand?.description || `${product.brand} ofrece una relación costo-beneficio competitiva, con buen agarre y durabilidad para uso diario.`}
+          </p>
+        </div>
+
+        <div>
+          <h2 className="text-lg font-black text-navy-900 mb-4 uppercase tracking-wide">Características técnicas</h2>
+          <ul className="divide-y divide-slate-100 border border-slate-100 rounded-xl overflow-hidden">
+            {characteristics.map((c) => (
+              <li key={c.label} className="flex items-center justify-between px-4 py-3 bg-white">
+                <span className="text-sm font-semibold text-slate-500">{c.label}</span>
+                <span className="text-sm font-black text-navy-900">{c.value}</span>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </div>

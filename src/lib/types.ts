@@ -30,6 +30,10 @@ export type TireProduct = {
   isImported: boolean;
   slug: string;
   enStock?: boolean;
+  /** Ej: "91". Extraído del nombre cargado en el POS, no siempre está presente. */
+  loadIndex?: string;
+  /** Ej: "W". Extraído del nombre cargado en el POS, no siempre está presente. */
+  speedRating?: string;
 };
 
 export type Service = {

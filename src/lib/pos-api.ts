@@ -80,12 +80,23 @@ function localImageFallback(p: PosProducto): string | null {
   return AVAILABLE_IMAGES.has(filename) ? `/images/products/${filename}` : null;
 }
 
+// El nombre cargado en el POS suele terminar en "<carga><velocidad>", ej.
+// "PIRELLI POWERGY 225/45 R17 91W" -> carga 91, velocidad W. No siempre está.
+const LOAD_SPEED_SUFFIX = /(\d{2,3})([A-Z]{1,2})\s*$/;
+
+function parseLoadSpeed(nombre: string): { loadIndex?: string; speedRating?: string } {
+  const match = nombre.trim().match(LOAD_SPEED_SUFFIX);
+  if (!match) return {};
+  return { loadIndex: match[1], speedRating: match[2] };
+}
+
 function toTireProduct(p: PosProducto): TireProduct | null {
   if (!p.neumatico_ancho || !p.neumatico_perfil || !p.neumatico_diametro) {
     // No es un neumático con medida completa — no se puede mostrar en el catálogo de la web
     return null;
   }
   const { marca, modelo } = fixBrandAndModel(p.marca || "", p.modelo || "");
+  const { loadIndex, speedRating } = parseLoadSpeed(p.nombre || "");
   const brandId = slugify(marca) || "otras-marcas";
   const model = `${p.neumatico_ancho}/${p.neumatico_perfil} R${p.neumatico_diametro} ${marca} ${modelo}`
     .trim()
@@ -107,6 +118,8 @@ function toTireProduct(p: PosProducto): TireProduct | null {
     isImported: true,
     slug,
     enStock: p.en_stock,
+    loadIndex,
+    speedRating,
   };
 }
 

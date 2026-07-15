@@ -97,7 +97,7 @@ export function CartDrawer() {
                 ) : (
                   <>
                     Pagar con
-                    <Image src="/images/mercadopago-logo.svg" alt="Mercado Pago" width={110} height={45} className="h-6 w-auto" />
+                    <Image src="/images/mercadopago-logo.svg" alt="Mercado Pago" width={180} height={45} className="h-9 w-auto" />
                   </>
                 )}
               </button>

@@ -50,10 +50,10 @@ export function AddToCartModal({ product, onClose }: { product: TireProduct; onC
             <p className="text-sm font-bold text-slate-600 mb-2">Cantidad</p>
             <div className="flex gap-2 mb-3">
               <button onClick={() => setQuantity(2)} className={`flex-1 rounded-xl border-2 py-2.5 font-black transition-colors ${quantity === 2 ? "border-orange-500 bg-orange-50 text-orange-600" : "border-slate-200 text-slate-600 hover:border-slate-300"}`}>
-                2 (eje)
+                2
               </button>
               <button onClick={() => setQuantity(4)} className={`flex-1 rounded-xl border-2 py-2.5 font-black transition-colors ${quantity === 4 ? "border-orange-500 bg-orange-50 text-orange-600" : "border-slate-200 text-slate-600 hover:border-slate-300"}`}>
-                4 (juego)
+                4
               </button>
             </div>
             <div className="flex items-center justify-center gap-4">
