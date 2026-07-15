@@ -31,39 +31,36 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
         Consultar en {selectedBranch.shortName}
       </a>
 
-      <div className="flex items-start gap-3 rounded-xl border border-emerald-200 bg-emerald-50 p-4">
-        <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 shrink-0">
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-          </svg>
+      <div className="rounded-xl border border-slate-200 divide-y divide-slate-100 overflow-hidden bg-white">
+        <div className="flex items-center gap-3 p-3">
+          <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 shrink-0">
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+          </div>
+          <div className="min-w-0">
+            <p className="font-bold text-navy-900 text-sm leading-snug">Retiro gratis en Sucursal {selectedBranch.shortName}</p>
+            <p className="text-xs text-slate-500 mt-0.5 leading-snug">{selectedBranch.address}, {selectedBranch.city} · {selectedBranch.hours}</p>
+          </div>
         </div>
-        <div>
-          <p className="font-black text-navy-900 text-sm">Retiro gratis en Sucursal {selectedBranch.shortName}</p>
-          <p className="text-sm text-slate-600 mt-0.5">{selectedBranch.address}, {selectedBranch.city} · {selectedBranch.hours}</p>
-        </div>
-      </div>
 
-      <div className="flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4">
-        <div className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-navy-600 shrink-0">
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-          </svg>
+        <div className="flex items-center gap-3 p-3">
+          <div className="w-8 h-8 rounded-full bg-navy-50 flex items-center justify-center text-navy-600 shrink-0">
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
+            </svg>
+          </div>
+          <p className="font-bold text-navy-900 text-sm leading-snug">Colocación y válvulas sin cargo</p>
         </div>
-        <div>
-          <p className="font-black text-navy-900 text-sm">Colocación y válvulas sin cargo</p>
-          <p className="text-sm text-slate-600 mt-0.5">Comprando en nuestra sucursal, la colocación y el cambio de válvulas no tienen costo adicional.</p>
-        </div>
-      </div>
 
-      <div className="flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4">
-        <div className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-navy-600 shrink-0">
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
-          </svg>
-        </div>
-        <div>
-          <p className="font-black text-navy-900 text-sm">1 año de garantía</p>
-          <p className="text-sm text-slate-600 mt-0.5">Todos los neumáticos tienen 1 año de garantía del fabricante.</p>
+        <div className="flex items-center gap-3 p-3">
+          <div className="w-8 h-8 rounded-full bg-navy-50 flex items-center justify-center text-navy-600 shrink-0">
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
+            </svg>
+          </div>
+          <p className="font-bold text-navy-900 text-sm leading-snug">1 año de garantía de fábrica</p>
         </div>
       </div>
     </div>

@@ -125,10 +125,10 @@ export default async function ProductPage({ params }: Props) {
   ];
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-4 md:py-6">
+    <div className="max-w-5xl mx-auto px-4 pt-3 pb-4 md:pt-4 md:pb-6">
       <Link
         href="/catalogo"
-        className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-navy-700 mb-4 transition-colors"
+        className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-navy-700 mb-3 transition-colors"
       >
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -136,7 +136,7 @@ export default async function ProductPage({ params }: Props) {
         Volver al catálogo
       </Link>
 
-      <div className="grid md:grid-cols-2 gap-8 md:gap-12">
+      <div className="grid md:grid-cols-2 gap-4 md:gap-12">
         {/* Image */}
         <div className="bg-slate-50 rounded-2xl aspect-square flex items-center justify-center p-8 relative">
           {product.priceOld && (
@@ -162,9 +162,17 @@ export default async function ProductPage({ params }: Props) {
 
         {/* Info */}
         <div className="flex flex-col">
-          <Link href={`/marcas/${product.brandId}`} className="mb-6 group/brand inline-block">
+          <h1 className="text-2xl md:text-4xl font-normal text-slate-900 mb-3 leading-tight">
+            <ProductNameWithHighlightedSize
+              product={product}
+              sizeClassName="font-bold"
+              afterSize={loadSpeed}
+            />
+          </h1>
+
+          <Link href={`/marcas/${product.brandId}`} className="mb-4 group/brand inline-block">
             {brandLogo ? (
-              <img src={brandLogo} alt={product.brand} className="h-10 md:h-12 w-auto object-contain max-w-[180px] transition-all hover:scale-105" />
+              <img src={brandLogo} alt={product.brand} className="h-7 w-auto object-contain max-w-[140px] transition-all hover:scale-105" />
             ) : (
               <div>
                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Marca</p>
@@ -174,13 +182,6 @@ export default async function ProductPage({ params }: Props) {
               </div>
             )}
           </Link>
-          <h1 className="text-2xl md:text-4xl font-normal text-slate-900 mb-2 leading-tight">
-            <ProductNameWithHighlightedSize
-              product={product}
-              sizeClassName="font-bold"
-              afterSize={loadSpeed}
-            />
-          </h1>
 
           <div className="flex flex-wrap gap-2 mb-6">
             {product.tags.map((tag) => (
@@ -208,6 +209,12 @@ export default async function ProductPage({ params }: Props) {
               {formatPrice(product.price)}
             </span>
             <p className="text-xs text-slate-400 mt-1">Precio por unidad · IVA incluido</p>
+            {typeof product.stock === "number" && product.enStock && (
+              <p className={`text-xs font-bold mt-1.5 flex items-center gap-1.5 ${product.stock <= 3 ? "text-amber-600" : "text-emerald-600"}`}>
+                <span className={`w-1.5 h-1.5 rounded-full ${product.stock <= 3 ? "bg-amber-500" : "bg-emerald-500"}`} />
+                {product.stock <= 3 ? `¡Últimas ${product.stock} unidades!` : `${product.stock} disponibles en stock`}
+              </p>
+            )}
 
             {/* Client component handles branch-specific WhatsApp link */}
             <ProductPageClient product={product} />

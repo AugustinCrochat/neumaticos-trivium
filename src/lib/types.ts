@@ -30,6 +30,8 @@ export type TireProduct = {
   isImported: boolean;
   slug: string;
   enStock?: boolean;
+  /** Cantidad disponible en la sucursal. */
+  stock?: number;
   /** Ej: "91". Extraído del nombre cargado en el POS, no siempre está presente. */
   loadIndex?: string;
   /** Ej: "W". Extraído del nombre cargado en el POS, no siempre está presente. */

@@ -19,6 +19,7 @@ type PosProducto = {
   neumatico_diametro: number | null;
   imagen_url: string | null;
   en_stock: boolean;
+  stock?: number;
 };
 
 export type ServicioPrecio = {
@@ -134,6 +135,7 @@ function toTireProduct(p: PosProducto): TireProduct | null {
     isImported: true,
     slug,
     enStock: p.en_stock,
+    stock: p.stock,
     loadIndex,
     speedRating,
   };
