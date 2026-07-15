@@ -712,7 +712,8 @@ export function TireSizeSearch({
                 {!forceVoiceButton && hasInput ? (
                   <button type="button" onClick={executeSearch} aria-label="Buscar medida" className={searchButtonClass}>
                     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
+                      <circle cx="11" cy="11" r="7" strokeWidth={3} />
+                      <path strokeLinecap="round" strokeWidth={3} d="M21 21l-4.3-4.3" />
                     </svg>
                   </button>
                 ) : (
@@ -795,7 +796,8 @@ export function TireSizeSearch({
               {!forceVoiceButton && hasInput ? (
                 <button type="button" onClick={executeSearch} aria-label="Buscar medida" className={searchButtonClass}>
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
+                    <circle cx="11" cy="11" r="7" strokeWidth={3} />
+                    <path strokeLinecap="round" strokeWidth={3} d="M21 21l-4.3-4.3" />
                   </svg>
                 </button>
               ) : (
@@ -849,7 +851,8 @@ export function TireSizeSearch({
                 className="w-full h-[52px] bg-orange-500 hover:bg-orange-400 text-white font-black rounded-xl border border-orange-400 shadow-lg shadow-orange-500/20 transition-all flex items-center justify-center gap-2">
                 Buscar medida
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
+                  <circle cx="11" cy="11" r="7" strokeWidth={3} />
+                  <path strokeLinecap="round" strokeWidth={3} d="M21 21l-4.3-4.3" />
                 </svg>
               </button>
             ) : (
