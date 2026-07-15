@@ -21,7 +21,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const product = productos.find((p) => p.slug === slug);
   if (!product) return {};
   const loadSpeed = product.loadIndex && product.speedRating ? ` ${product.loadIndex}${product.speedRating}` : "";
-  const title = `${product.model}${loadSpeed}`;
+  const sizeRegex = new RegExp(`(${product.size.width}\\s*/\\s*${product.size.profile}\\s*R\\s*${product.size.rim})`, "i");
+  const title = product.model.replace(sizeRegex, `$1${loadSpeed}`);
   return {
     title: `${title} — Neumáticos Trivium`,
     description: `Comprá el neumático ${title} al mejor precio. Outlet de neumáticos importados en Argentina.`,
@@ -94,7 +95,7 @@ export default async function ProductPage({ params }: Props) {
     { label: "Marca", value: product.brand },
     { label: "Línea", value: product.model.replace(/^\d+\/\d+ R\d+ /, "").replace(new RegExp(`^${product.brand}\\s+`, "i"), "") },
     ...(product.loadIndex
-      ? [{ label: "Índice de carga", value: loadKg ? `${product.loadIndex} (${loadKg} kg)` : product.loadIndex }]
+      ? [{ label: "Índice de carga (por rueda)", value: loadKg ? `${product.loadIndex} (${loadKg} kg)` : product.loadIndex }]
       : []),
     ...(product.speedRating
       ? [{ label: "Índice de velocidad", value: speedKmh ? `${product.speedRating} (hasta ${speedKmh} km/h)` : product.speedRating }]
@@ -156,8 +157,8 @@ export default async function ProductPage({ params }: Props) {
             <ProductNameWithHighlightedSize
               product={product}
               sizeClassName="font-bold"
+              afterSize={loadSpeed}
             />
-            {loadSpeed}
           </h1>
 
           <div className="flex flex-wrap gap-2 mb-6">
