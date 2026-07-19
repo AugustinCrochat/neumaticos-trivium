@@ -1,5 +1,5 @@
 import { SITE_URL } from "@/lib/config";
-import { getProductosDesdePOS, getServiciosPrecios, COMBO_ALINEACION_BALANCEO_AUTO } from "@/lib/pos-api";
+import { getProductosDesdePOS, getServiciosPrecios, getAccesoriosDesdePOS, COMBO_ALINEACION_BALANCEO_AUTO } from "@/lib/pos-api";
 
 type CheckoutItem = { kind?: unknown; id?: unknown; quantity?: unknown };
 
@@ -22,20 +22,22 @@ export async function POST(request: Request) {
 
   const requestedTires = new Map<string, number>();
   const requestedServices = new Map<string, number>();
+  const requestedAccesorios = new Map<string, number>();
   for (const item of body.items) {
     const { kind, id, quantity } = item;
-    if ((kind !== "tire" && kind !== "service") || typeof id !== "string" || typeof quantity !== "number" || !Number.isInteger(quantity) || quantity < 1 || quantity > 8) {
+    if ((kind !== "tire" && kind !== "service" && kind !== "accessory") || typeof id !== "string" || typeof quantity !== "number" || !Number.isInteger(quantity) || quantity < 1 || quantity > 8) {
       return Response.json({ error: "Hay un producto inválido en el carrito." }, { status: 400 });
     }
-    const target = kind === "tire" ? requestedTires : requestedServices;
+    const target = kind === "tire" ? requestedTires : kind === "service" ? requestedServices : requestedAccesorios;
     target.set(id, (target.get(id) ?? 0) + quantity);
   }
 
-  // El precio de tires/servicios siempre se toma del POS, nunca del cliente,
-  // para que no se pueda manipular el monto a pagar.
-  const [products, servicios] = await Promise.all([
+  // El precio de tires/servicios/accesorios siempre se toma del POS, nunca del
+  // cliente, para que no se pueda manipular el monto a pagar.
+  const [products, servicios, accesorios] = await Promise.all([
     getProductosDesdePOS(),
     requestedServices.size > 0 ? getServiciosPrecios() : Promise.resolve([]),
+    requestedAccesorios.size > 0 ? getAccesoriosDesdePOS() : Promise.resolve([]),
   ]);
 
   const cartTires = [...requestedTires].map(([id, quantity]) => ({ product: products.find((p) => p.id === id), quantity }));
@@ -47,6 +49,11 @@ export async function POST(request: Request) {
   const cartServices = [...requestedServices].map(([id, quantity]) => ({ servicio: serviciosDisponibles.find((s) => s.id === id), quantity }));
   if (cartServices.some(({ servicio }) => !servicio)) {
     return Response.json({ error: "Uno o más servicios ya no están disponibles. Actualizá el carrito e intentá nuevamente." }, { status: 409 });
+  }
+
+  const cartAccesorios = [...requestedAccesorios].map(([id, quantity]) => ({ accesorio: accesorios.find((a) => a.id === id), quantity }));
+  if (cartAccesorios.some(({ accesorio }) => !accesorio || !accesorio.enStock)) {
+    return Response.json({ error: "Uno o más accesorios ya no tienen stock. Actualizá el carrito e intentá nuevamente." }, { status: 409 });
   }
 
   const externalReference = `${body.branchId}-${crypto.randomUUID()}`;
@@ -64,6 +71,13 @@ export async function POST(request: Request) {
         title: servicio!.nombre,
         quantity,
         unit_price: servicio!.precio,
+        currency_id: "ARS",
+      })),
+      ...cartAccesorios.map(({ accesorio, quantity }) => ({
+        id: accesorio!.id,
+        title: accesorio!.nombre,
+        quantity,
+        unit_price: accesorio!.price,
         currency_id: "ARS",
       })),
     ],

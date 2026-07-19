@@ -69,9 +69,9 @@ export function CartDrawer() {
                 const key = itemKey(item);
                 return (
                   <div key={key} className="flex gap-3 border-b border-slate-100 pb-4">
-                    {item.kind === "tire" ? (
+                    {item.kind === "tire" || (item.kind === "accessory" && item.imageUrl) ? (
                       <div className="relative w-16 h-16 bg-slate-50 rounded-lg shrink-0">
-                        <Image src={item.imageUrl} alt="" fill sizes="64px" className="object-contain p-1" />
+                        <Image src={item.imageUrl!} alt="" fill sizes="64px" className="object-contain p-1" />
                       </div>
                     ) : (
                       <div className="w-16 h-16 bg-navy-50 rounded-lg shrink-0 flex items-center justify-center">

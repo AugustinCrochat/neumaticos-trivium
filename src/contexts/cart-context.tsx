@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import type { TireProduct } from "@/lib/types";
+import type { Accessory, TireProduct } from "@/lib/types";
 
 export type TireCartItem = Pick<TireProduct, "id" | "brand" | "model" | "size" | "price" | "imageUrl" | "slug"> & {
   kind: "tire";
@@ -16,7 +16,12 @@ export type ServiceCartItem = {
   quantity: number;
 };
 
-export type CartItem = TireCartItem | ServiceCartItem;
+export type AccessoryCartItem = Pick<Accessory, "id" | "nombre" | "price" | "imageUrl"> & {
+  kind: "accessory";
+  quantity: number;
+};
+
+export type CartItem = TireCartItem | ServiceCartItem | AccessoryCartItem;
 
 // Las claves componen kind+id porque un id de servicio del POS podría coincidir
 // con un id de neumático (son catálogos distintos).
@@ -31,6 +36,7 @@ type CartContextType = {
   isOpen: boolean;
   addTire: (product: TireProduct, quantity: number) => void;
   addService: (service: { id: string; nombre: string; price: number }, quantity: number) => void;
+  addAccessory: (accessory: Accessory, quantity: number) => void;
   updateQuantity: (key: string, quantity: number) => void;
   removeItem: (key: string) => void;
   clearCart: () => void;
@@ -92,6 +98,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
       },
       addService: (service, quantity) => {
         upsert({ kind: "service", id: service.id, nombre: service.nombre, price: service.price, quantity: Math.min(quantity, 8) });
+      },
+      addAccessory: (accessory, quantity) => {
+        const { id, nombre, price, imageUrl } = accessory;
+        upsert({ kind: "accessory", id, nombre, price, imageUrl, quantity: Math.min(quantity, 8) });
       },
       updateQuantity: (key, quantity) => {
         if (quantity < 1) {

@@ -8,6 +8,7 @@ import { CartButton } from "@/components/ui/CartButton";
 
 const NAV_LINKS = [
   { href: "/catalogo", label: "Neumáticos" },
+  { href: "/tuercas-antirrobo", label: "Tuercas antirrobo" },
   { href: "/servicios", label: "Servicios" },
   { href: "/sucursales", label: "Sucursales" },
   { href: "/blog", label: "Blog" },

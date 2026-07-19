@@ -1,4 +1,4 @@
-import type { TireProduct } from "./types";
+import type { Accessory, TireProduct } from "./types";
 import productImagesManifest from "./product-images-manifest.json";
 
 const AVAILABLE_IMAGES = new Set(productImagesManifest);
@@ -159,6 +159,43 @@ export async function getProductosDesdePOS(): Promise<TireProduct[]> {
     return data.productos.map(toTireProduct).filter((p): p is TireProduct => p !== null);
   } catch (err) {
     console.error("[pos-api] Error de red al obtener productos del POS:", err);
+    return [];
+  }
+}
+
+type PosAccesorio = {
+  id: string;
+  codigo_tango: string | null;
+  nombre: string;
+  precio: number;
+  imagen_url: string | null;
+  en_stock: boolean;
+  stock: number;
+};
+
+export async function getAccesoriosDesdePOS(): Promise<Accessory[]> {
+  if (!POS_API_URL) {
+    console.error("[pos-api] Falta la variable de entorno POS_API_URL");
+    return [];
+  }
+  try {
+    const res = await fetch(`${POS_API_URL}/accesorios`, { next: { revalidate: 300 }, signal: AbortSignal.timeout(8000) });
+    if (!res.ok) {
+      console.error(`[pos-api] Error ${res.status} al obtener accesorios del POS`);
+      return [];
+    }
+    const data = (await res.json()) as { accesorios: PosAccesorio[] };
+    return data.accesorios.map((a) => ({
+      id: a.id,
+      codigoTango: a.codigo_tango,
+      nombre: a.nombre,
+      price: a.precio,
+      imageUrl: a.imagen_url,
+      enStock: a.en_stock,
+      stock: a.stock,
+    }));
+  } catch (err) {
+    console.error("[pos-api] Error de red al obtener accesorios del POS:", err);
     return [];
   }
 }

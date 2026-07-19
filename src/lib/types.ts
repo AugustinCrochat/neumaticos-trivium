@@ -38,6 +38,16 @@ export type TireProduct = {
   speedRating?: string;
 };
 
+export type Accessory = {
+  id: string;
+  codigoTango: string | null;
+  nombre: string;
+  price: number;
+  imageUrl: string | null;
+  enStock: boolean;
+  stock: number;
+};
+
 export type Service = {
   id: string;
   title: string;
