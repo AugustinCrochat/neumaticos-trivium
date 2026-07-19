@@ -167,6 +167,7 @@ type PosAccesorio = {
   id: string;
   codigo_tango: string | null;
   nombre: string;
+  descripcion: string | null;
   precio: number;
   imagen_url: string | null;
   en_stock: boolean;
@@ -189,10 +190,12 @@ export async function getAccesoriosDesdePOS(): Promise<Accessory[]> {
       id: a.id,
       codigoTango: a.codigo_tango,
       nombre: a.nombre,
+      descripcion: a.descripcion,
       price: a.precio,
       imageUrl: a.imagen_url,
       enStock: a.en_stock,
       stock: a.stock,
+      slug: slugify(a.nombre),
     }));
   } catch (err) {
     console.error("[pos-api] Error de red al obtener accesorios del POS:", err);

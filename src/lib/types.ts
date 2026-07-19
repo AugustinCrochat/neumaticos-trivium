@@ -42,10 +42,12 @@ export type Accessory = {
   id: string;
   codigoTango: string | null;
   nombre: string;
+  descripcion: string | null;
   price: number;
   imageUrl: string | null;
   enStock: boolean;
   stock: number;
+  slug: string;
 };
 
 export type Service = {

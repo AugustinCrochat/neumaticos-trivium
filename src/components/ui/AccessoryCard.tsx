@@ -1,9 +1,6 @@
-"use client";
-
 import Image from "next/image";
-import { useState } from "react";
-import { useCart } from "@/contexts/cart-context";
-import { isLowStock, stockLabel } from "@/lib/stock";
+import Link from "next/link";
+import { AccessoryAddToCart } from "@/components/ui/AccessoryAddToCart";
 import type { Accessory } from "@/lib/types";
 
 function formatPrice(price: number) {
@@ -27,12 +24,9 @@ const LOCK_SVG = (
 );
 
 export function AccessoryCard({ accessory }: { accessory: Accessory }) {
-  const { addAccessory } = useCart();
-  const [quantity, setQuantity] = useState(1);
-
   return (
     <article className="group bg-white rounded-2xl border border-slate-100 hover:border-navy-200 hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col">
-      <div className="relative bg-white pt-[95%] overflow-hidden">
+      <Link href={`/tuercas-antirrobo/${accessory.slug}`} className="relative bg-white pt-[95%] overflow-hidden block">
         <div className="absolute inset-0 p-4">
           {accessory.imageUrl ? (
             <div className="relative w-full h-full">
@@ -48,42 +42,18 @@ export function AccessoryCard({ accessory }: { accessory: Accessory }) {
             <div className="flex items-center justify-center w-full h-full max-h-32">{LOCK_SVG}</div>
           )}
         </div>
-      </div>
+      </Link>
 
       <div className="p-4 flex flex-col flex-1">
         <h3 className="font-semibold text-slate-800 text-sm mb-3 line-clamp-2" title={accessory.nombre}>
-          {accessory.nombre}
+          <Link href={`/tuercas-antirrobo/${accessory.slug}`} className="hover:text-navy-700 transition-colors">
+            {accessory.nombre}
+          </Link>
         </h3>
 
         <div className="mt-auto">
-          <span className="text-2xl font-black text-red-600">{formatPrice(accessory.price)}</span>
-
-          {accessory.enStock && (
-            <p className={`text-[11px] font-bold mt-1.5 flex items-center gap-1.5 ${isLowStock(accessory.stock) ? "text-amber-600" : "text-emerald-600"}`}>
-              <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${isLowStock(accessory.stock) ? "bg-amber-500" : "bg-emerald-500"}`} />
-              {stockLabel(accessory.stock)}
-            </p>
-          )}
-
-          {accessory.enStock ? (
-            <div className="mt-3 flex items-center gap-2">
-              <div className="inline-flex items-center rounded-xl border border-slate-200">
-                <button onClick={() => setQuantity((q) => Math.max(1, q - 1))} className="px-3 py-2.5 text-slate-600 hover:bg-slate-50" aria-label="Reducir cantidad">−</button>
-                <span className="w-6 text-center text-sm font-bold">{quantity}</span>
-                <button onClick={() => setQuantity((q) => Math.min(8, q + 1))} className="px-3 py-2.5 text-slate-600 hover:bg-slate-50" aria-label="Aumentar cantidad">+</button>
-              </div>
-              <button
-                onClick={() => addAccessory(accessory, quantity)}
-                className="flex-1 bg-navy-800 hover:bg-navy-700 text-white font-semibold py-2.5 rounded-xl text-sm transition-colors"
-              >
-                Agregar
-              </button>
-            </div>
-          ) : (
-            <button disabled className="mt-3 w-full bg-slate-300 text-white font-semibold py-2.5 rounded-xl text-sm">
-              Sin stock
-            </button>
-          )}
+          <span className="text-2xl font-black text-red-600 block mb-1.5">{formatPrice(accessory.price)}</span>
+          <AccessoryAddToCart accessory={accessory} />
         </div>
       </div>
     </article>
