@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useBranch } from "@/contexts/branch-context";
+import { useVehicle } from "@/contexts/vehicle-context";
 import { CartButton } from "@/components/ui/CartButton";
 
 const NAV_LINKS = [
@@ -17,6 +18,7 @@ const NAV_LINKS = [
 
 export function Header() {
   const { selectedBranch, hasConfirmedBranch, openModal } = useBranch();
+  const { selectedVehicle, openModal: openVehicleModal } = useVehicle();
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
@@ -50,10 +52,38 @@ export function Header() {
               ))}
             </div>
 
+            {/* Vehicle selector — always visible */}
+            <button
+              onClick={openVehicleModal}
+              className="hidden sm:flex items-center gap-1.5 bg-zinc-950 hover:bg-zinc-900 border border-zinc-800 hover:border-zinc-700 text-white pl-3 pr-2.5 py-2 rounded-lg text-sm font-medium transition-all group ml-auto md:ml-0"
+              title="Elegir mi vehículo"
+            >
+              <svg
+                className="w-4 h-4 text-[#e30613] flex-shrink-0"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                aria-hidden="true"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 17h14M5 17a2 2 0 01-2-2v-1.382a2 2 0 01.211-.894l1.578-3.156A2 2 0 016.618 8.5h10.764a2 2 0 011.83 1.068l1.577 3.156a2 2 0 01.211.894V15a2 2 0 01-2 2M5 17a2 2 0 002 2h1a2 2 0 002-2m9 0a2 2 0 002 2h-1a2 2 0 01-2-2m0 0H9" />
+              </svg>
+              <span className="truncate max-w-[110px] sm:max-w-none">
+                {selectedVehicle ? `${selectedVehicle.marca} ${selectedVehicle.modelo}` : "Mi auto"}
+              </span>
+              <svg
+                className="w-3.5 h-3.5 text-zinc-500 group-hover:text-zinc-200 transition-colors flex-shrink-0"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+
             {/* Branch selector — always visible */}
             <button
               onClick={openModal}
-              className="flex items-center gap-1.5 bg-zinc-950 hover:bg-zinc-900 border border-zinc-800 hover:border-zinc-700 text-white pl-3 pr-2.5 py-2 rounded-lg text-sm font-medium transition-all group ml-auto md:ml-0"
+              className="flex items-center gap-1.5 bg-zinc-950 hover:bg-zinc-900 border border-zinc-800 hover:border-zinc-700 text-white pl-3 pr-2.5 py-2 rounded-lg text-sm font-medium transition-all group md:ml-0"
               title="Cambiar sucursal"
             >
               <svg
@@ -99,6 +129,18 @@ export function Header() {
         {/* Mobile dropdown menu */}
         {menuOpen && (
           <div className="md:hidden border-t border-zinc-900 bg-black px-4 py-3 space-y-1">
+            <button
+              onClick={() => {
+                openVehicleModal();
+                setMenuOpen(false);
+              }}
+              className="sm:hidden flex items-center gap-2 w-full text-left text-zinc-200 hover:text-white hover:bg-zinc-900 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors"
+            >
+              <svg className="w-4 h-4 text-[#e30613] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 17h14M5 17a2 2 0 01-2-2v-1.382a2 2 0 01.211-.894l1.578-3.156A2 2 0 016.618 8.5h10.764a2 2 0 011.83 1.068l1.577 3.156a2 2 0 01.211.894V15a2 2 0 01-2 2M5 17a2 2 0 002 2h1a2 2 0 002-2m9 0a2 2 0 002 2h-1a2 2 0 01-2-2m0 0H9" />
+              </svg>
+              {selectedVehicle ? `${selectedVehicle.marca} ${selectedVehicle.modelo}` : "Elegir mi auto"}
+            </button>
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.href}

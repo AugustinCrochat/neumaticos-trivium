@@ -4,10 +4,13 @@ import "./globals.css";
 import { SITE_URL } from "@/lib/config";
 import { BranchProvider } from "@/contexts/branch-context";
 import { BranchModal } from "@/components/ui/BranchModal";
+import { VehicleProvider } from "@/contexts/vehicle-context";
+import { VehicleModal } from "@/components/ui/VehicleModal";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { CartProvider } from "@/contexts/cart-context";
 import { CartDrawer } from "@/components/ui/CartDrawer";
+import { getVehiculosDesdePOS } from "@/lib/pos-api";
 
 const geist = Geist({
   variable: "--font-geist-sans",
@@ -25,22 +28,26 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const vehiculos = await getVehiculosDesdePOS();
   return (
     <html lang="es" className={`${geist.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <BranchProvider>
-          <CartProvider>
-            <Header />
-            <BranchModal />
-            <CartDrawer />
-            <main className="flex-1">{children}</main>
-            <Footer />
-          </CartProvider>
+          <VehicleProvider vehiculos={vehiculos}>
+            <CartProvider>
+              <Header />
+              <BranchModal />
+              <VehicleModal />
+              <CartDrawer />
+              <main className="flex-1">{children}</main>
+              <Footer />
+            </CartProvider>
+          </VehicleProvider>
         </BranchProvider>
       </body>
     </html>

@@ -9,6 +9,7 @@ import { getBrandLogo } from "@/lib/brand-utils";
 import { ProductCard } from "@/components/ui/ProductCard";
 import { TireSizeSearch } from "@/components/ui/TireSizeSearch";
 import { useBranch } from "@/contexts/branch-context";
+import { useVehicle } from "@/contexts/vehicle-context";
 import { getCompatibleAccessory } from "@/lib/tuercas-vehiculos";
 import type { Accessory, TireProduct, TireSize, VehicleType } from "@/lib/types";
 
@@ -308,10 +309,11 @@ export function ShopPage({
   accesorios?: Accessory[];
 }) {
   const { selectedBranch, hasConfirmedBranch, openModalForAction } = useBranch();
+  const { selectedVehicle } = useVehicle();
   const searchParams = useSearchParams();
   const medida = searchParams.get("medida") ?? undefined;
-  const vehiculoMarca = searchParams.get("marca");
-  const vehiculoModelo = searchParams.get("modelo");
+  const vehiculoMarca = searchParams.get("marca") ?? selectedVehicle?.marca ?? null;
+  const vehiculoModelo = searchParams.get("modelo") ?? selectedVehicle?.modelo ?? null;
   const compatibleAccessory =
     vehiculoMarca && vehiculoModelo ? getCompatibleAccessory(vehiculoMarca, vehiculoModelo, accesorios) : null;
 
