@@ -5,7 +5,17 @@ import { TireSizeSearch } from "@/components/ui/TireSizeSearch";
 import { VehicleSizeSearch } from "@/components/ui/VehicleSizeSearch";
 import { useVehicle } from "@/contexts/vehicle-context";
 
-export function SizeOrVehicleSearch() {
+export function SizeOrVehicleSearch({
+  compact = false,
+  initialMedida,
+  forceVoiceButton = false,
+  hideLearnLink = false,
+}: {
+  compact?: boolean;
+  initialMedida?: string;
+  forceVoiceButton?: boolean;
+  hideLearnLink?: boolean;
+}) {
   const { selectedVehicle } = useVehicle();
   // null = sin elección manual: sigue el default (pestaña "Por mi auto" si ya
   // tenemos un vehículo recordado de localStorage, "Por medida" si no).
@@ -13,7 +23,7 @@ export function SizeOrVehicleSearch() {
   const mode = manualMode ?? (selectedVehicle ? "vehiculo" : "medida");
 
   return (
-    <div>
+    <div className={`bg-slate-100 rounded-2xl border border-slate-200 ${compact ? "p-4" : "p-6"} shadow-xl shadow-slate-300/40 w-full`}>
       <div className="inline-flex items-center rounded-xl border border-slate-200 bg-white p-1 mb-4">
         <button
           onClick={() => setManualMode("medida")}
@@ -29,7 +39,17 @@ export function SizeOrVehicleSearch() {
         </button>
       </div>
 
-      {mode === "medida" ? <TireSizeSearch /> : <VehicleSizeSearch />}
+      {mode === "medida" ? (
+        <TireSizeSearch
+          embedded
+          compact={compact}
+          initialMedida={initialMedida}
+          forceVoiceButton={forceVoiceButton}
+          hideLearnLink={hideLearnLink}
+        />
+      ) : (
+        <VehicleSizeSearch />
+      )}
     </div>
   );
 }

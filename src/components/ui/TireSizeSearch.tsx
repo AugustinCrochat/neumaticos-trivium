@@ -59,11 +59,14 @@ export function TireSizeSearch({
   compact = false,
   forceVoiceButton = false,
   hideLearnLink = false,
+  embedded = false,
 }: {
   initialMedida?: string;
   compact?: boolean;
   forceVoiceButton?: boolean;
   hideLearnLink?: boolean;
+  /** Sin fondo/borde/padding propios — para cuando ya está dentro de otra tarjeta (ver SizeOrVehicleSearch). */
+  embedded?: boolean;
 }) {
   const router = useRouter();
   const { selectedBranch } = useBranch();
@@ -533,7 +536,7 @@ export function TireSizeSearch({
   }
 
   return (
-    <div className={`bg-slate-100 rounded-2xl border border-slate-200 ${compact ? 'p-4' : 'p-6'} shadow-xl shadow-slate-300/40 relative group w-full`}>
+    <div className={embedded ? "relative group w-full" : `bg-slate-100 rounded-2xl border border-slate-200 ${compact ? 'p-4' : 'p-6'} shadow-xl shadow-slate-300/40 relative group w-full`}>
       <p className={`font-black text-navy-900 ${compact ? 'text-sm mb-2' : 'text-base mb-3'}`}>
         Buscar por medida
       </p>

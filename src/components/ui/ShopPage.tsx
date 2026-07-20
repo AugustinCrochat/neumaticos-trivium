@@ -7,7 +7,7 @@ import Link from "next/link";
 import { BRANDS } from "@/lib/data";
 import { getBrandLogo } from "@/lib/brand-utils";
 import { ProductCard } from "@/components/ui/ProductCard";
-import { TireSizeSearch } from "@/components/ui/TireSizeSearch";
+import { SizeOrVehicleSearch } from "@/components/ui/SizeOrVehicleSearch";
 import { useBranch } from "@/contexts/branch-context";
 import { useVehicle } from "@/contexts/vehicle-context";
 import { getCompatibleAccessory } from "@/lib/tuercas-vehiculos";
@@ -388,7 +388,7 @@ export function ShopPage({
 
           {/* Sidebar — search widget only */}
           <aside className="w-full lg:w-72 shrink-0 lg:sticky lg:top-8 lg:self-start">
-            <TireSizeSearch key={medida ?? "empty"} compact initialMedida={medida} forceVoiceButton />
+            <SizeOrVehicleSearch key={medida ?? "empty"} compact initialMedida={medida} forceVoiceButton />
           </aside>
 
           {/* Main content */}
