@@ -27,8 +27,8 @@ export function VehicleModal() {
     >
       <div className="absolute inset-0 bg-navy-950/70 backdrop-blur-sm" onClick={closeModal} />
 
-      <div className="relative z-10 w-full max-w-lg rounded-2xl bg-white shadow-2xl overflow-hidden">
-        <div className="bg-navy-800 px-6 py-5 flex items-start justify-between">
+      <div className="relative z-10 w-full max-w-lg rounded-2xl bg-white shadow-2xl">
+        <div className="bg-navy-800 rounded-t-2xl px-6 py-5 flex items-start justify-between">
           <div>
             <h2 className="text-white text-xl font-bold">Elegí tu vehículo</h2>
             <p className="text-navy-200 text-sm mt-1 leading-snug max-w-xs">
