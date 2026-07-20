@@ -52,26 +52,32 @@ export function Header() {
               ))}
             </div>
 
-            {/* Vehicle selector — always visible */}
+            {/* Vehicle selector — icon-only on narrow screens (never hidden, same
+                footprint as CartButton), expands to a labeled pill from sm up. */}
             <button
               onClick={openVehicleModal}
-              className="hidden sm:flex items-center gap-1.5 bg-zinc-950 hover:bg-zinc-900 border border-zinc-800 hover:border-zinc-700 text-white pl-3 pr-2.5 py-2 rounded-lg text-sm font-medium transition-all group ml-auto md:ml-0"
+              className="relative flex items-center gap-1.5 text-zinc-200 hover:text-white sm:bg-zinc-950 sm:hover:bg-zinc-900 sm:border sm:border-zinc-800 sm:hover:border-zinc-700 sm:text-white p-2 sm:pl-3 sm:pr-2.5 sm:py-2 rounded-lg text-sm font-medium transition-all group ml-auto md:ml-0"
               title="Elegir mi vehículo"
             >
               <svg
-                className="w-4 h-4 text-[#e30613] flex-shrink-0"
+                className="w-5 h-5 sm:w-4 sm:h-4 text-[#e30613] flex-shrink-0"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
                 aria-hidden="true"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 17h14M5 17a2 2 0 01-2-2v-1.382a2 2 0 01.211-.894l1.578-3.156A2 2 0 016.618 8.5h10.764a2 2 0 011.83 1.068l1.577 3.156a2 2 0 01.211.894V15a2 2 0 01-2 2M5 17a2 2 0 002 2h1a2 2 0 002-2m9 0a2 2 0 002 2h-1a2 2 0 01-2-2m0 0H9" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L16 11l-2.7-3.6a1 1 0 0 0-.8-.4H5.24a2 2 0 0 0-1.8 1.1l-.8 1.63A6 6 0 0 0 2 12.42V16h2" />
+                <circle cx="6.5" cy="16.5" r="2.5" />
+                <circle cx="16.5" cy="16.5" r="2.5" />
               </svg>
-              <span className="truncate max-w-[110px] sm:max-w-none">
+              {selectedVehicle && (
+                <span className="absolute top-1 right-1 sm:hidden w-2 h-2 rounded-full bg-orange-500" aria-hidden="true" />
+              )}
+              <span className="hidden sm:inline truncate max-w-none">
                 {selectedVehicle ? `${selectedVehicle.marca} ${selectedVehicle.modelo}` : "Mi auto"}
               </span>
               <svg
-                className="w-3.5 h-3.5 text-zinc-500 group-hover:text-zinc-200 transition-colors flex-shrink-0"
+                className="hidden sm:block w-3.5 h-3.5 text-zinc-500 group-hover:text-zinc-200 transition-colors flex-shrink-0"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -129,18 +135,6 @@ export function Header() {
         {/* Mobile dropdown menu */}
         {menuOpen && (
           <div className="md:hidden border-t border-zinc-900 bg-black px-4 py-3 space-y-1">
-            <button
-              onClick={() => {
-                openVehicleModal();
-                setMenuOpen(false);
-              }}
-              className="sm:hidden flex items-center gap-2 w-full text-left text-zinc-200 hover:text-white hover:bg-zinc-900 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors"
-            >
-              <svg className="w-4 h-4 text-[#e30613] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 17h14M5 17a2 2 0 01-2-2v-1.382a2 2 0 01.211-.894l1.578-3.156A2 2 0 016.618 8.5h10.764a2 2 0 011.83 1.068l1.577 3.156a2 2 0 01.211.894V15a2 2 0 01-2 2M5 17a2 2 0 002 2h1a2 2 0 002-2m9 0a2 2 0 002 2h-1a2 2 0 01-2-2m0 0H9" />
-              </svg>
-              {selectedVehicle ? `${selectedVehicle.marca} ${selectedVehicle.modelo}` : "Elegir mi auto"}
-            </button>
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.href}

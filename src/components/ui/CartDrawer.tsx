@@ -4,8 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { useBranch } from "@/contexts/branch-context";
+import { useVehicle } from "@/contexts/vehicle-context";
 import { useCart, itemKey } from "@/contexts/cart-context";
 import { useUpsellCombo } from "@/hooks/use-upsell-combo";
+import { useAccesorios } from "@/hooks/use-accesorios";
+import { getCompatibleAccessory } from "@/lib/tuercas-vehiculos";
 import { AlineacionBalanceoIcon } from "@/components/ui/AlineacionBalanceoIcon";
 
 function formatPrice(price: number) {
@@ -13,15 +16,23 @@ function formatPrice(price: number) {
 }
 
 export function CartDrawer() {
-  const { items, total, isOpen, closeCart, removeItem, updateQuantity, addService } = useCart();
+  const { items, total, isOpen, closeCart, removeItem, updateQuantity, addService, addAccessory } = useCart();
   const { selectedBranch } = useBranch();
+  const { selectedVehicle } = useVehicle();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const combo = useUpsellCombo();
+  const accesorios = useAccesorios();
 
   const hasTires = items.some((item) => item.kind === "tire");
   const hasCombo = items.some((item) => item.kind === "service" && item.id === combo?.id);
   const showCartUpsell = hasTires && !hasCombo && !!combo;
+
+  const compatibleAccessory = selectedVehicle
+    ? getCompatibleAccessory(selectedVehicle.marca, selectedVehicle.modelo, accesorios)
+    : null;
+  const hasAccessoryInCart = items.some((item) => item.kind === "accessory" && item.id === compatibleAccessory?.id);
+  const showAccessoryUpsell = hasTires && !!compatibleAccessory && !hasAccessoryInCart;
 
   async function checkout() {
     setError("");
@@ -103,6 +114,24 @@ export function CartDrawer() {
                   <span className="text-sm flex-1">
                     <span className="font-bold text-navy-900 block">¿Sumamos {combo!.nombre.toLowerCase()}?</span>
                     <span className="text-slate-500">+{formatPrice(combo!.precio)}</span>
+                  </span>
+                  <span className="text-xs font-black text-orange-600 shrink-0">Agregar</span>
+                </button>
+              )}
+
+              {showAccessoryUpsell && (
+                <button
+                  onClick={() => addAccessory(compatibleAccessory!, 1)}
+                  className="w-full flex items-center gap-3 rounded-xl border border-dashed border-orange-300 bg-orange-50 p-3 text-left hover:border-orange-400 transition-colors"
+                >
+                  <div className="relative w-7 h-7 bg-white rounded-lg shrink-0 overflow-hidden">
+                    {compatibleAccessory!.imageUrl && (
+                      <Image src={compatibleAccessory!.imageUrl} alt="" fill sizes="28px" className="object-contain p-0.5" />
+                    )}
+                  </div>
+                  <span className="text-sm flex-1">
+                    <span className="font-bold text-navy-900 block">¿Sumamos una tuerca antirrobo para tu {selectedVehicle!.marca} {selectedVehicle!.modelo}?</span>
+                    <span className="text-slate-500">+{formatPrice(compatibleAccessory!.price)}</span>
                   </span>
                   <span className="text-xs font-black text-orange-600 shrink-0">Agregar</span>
                 </button>
