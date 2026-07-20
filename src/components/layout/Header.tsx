@@ -24,13 +24,15 @@ export function Header() {
   return (
     <header className="sticky top-0 z-40 w-full">
       {/* Utility bar — vehículo + sucursal, en su propia franja para que
-          siempre entren cómodos sin pelear espacio con el logo/menú/carrito. */}
-      <div className="bg-white border-b border-slate-200">
+          siempre entren cómodos sin pelear espacio con el logo/menú/carrito.
+          Negra como la nav principal (con un divisor sutil), con los botones
+          como chips claros que se despegan del fondo. */}
+      <div className="bg-zinc-950 border-b border-zinc-800">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-end gap-2 h-11">
+          <div className="flex items-center justify-center gap-3 h-11">
             <button
               onClick={openVehicleModal}
-              className="flex items-center gap-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 hover:border-slate-300 text-slate-700 pl-2.5 pr-2 py-1.5 rounded-lg text-xs font-semibold transition-all group"
+              className="flex items-center gap-1.5 bg-white hover:bg-slate-100 text-navy-900 pl-2.5 pr-2 py-1.5 rounded-full text-xs font-bold transition-colors group shadow-sm"
               title="Elegir mi vehículo"
             >
               <svg className="w-3.5 h-3.5 text-[#e30613] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -46,9 +48,11 @@ export function Header() {
               </svg>
             </button>
 
+            <span className="w-px h-4 bg-zinc-700 shrink-0" aria-hidden="true" />
+
             <button
               onClick={openModal}
-              className="flex items-center gap-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 hover:border-slate-300 text-slate-700 pl-2.5 pr-2 py-1.5 rounded-lg text-xs font-semibold transition-all group"
+              className="flex items-center gap-1.5 bg-white hover:bg-slate-100 text-navy-900 pl-2.5 pr-2 py-1.5 rounded-full text-xs font-bold transition-colors group shadow-sm"
               title="Cambiar sucursal"
             >
               <svg className="w-3.5 h-3.5 text-[#e30613] flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
