@@ -46,27 +46,30 @@ export const VEHICLE_DB: VehicleDBEntry[] = [
   { brand: "Chevrolet", model: "Astra", sizes: [{ w: "195", p: "60", r: "15" }] },
   { brand: "Chevrolet", model: "Camaro", sizes: [{ w: "245", p: "40", r: "20", version: "Front" }, { w: "275", p: "40", r: "20", version: "Rear" }] },
   { brand: "Chevrolet", model: "Chevy", sizes: [{ w: "195", p: "70", r: "14" }] },
-  { brand: "Chevrolet", model: "Classic / Corsa", sizes: [{ w: "165", p: "70", r: "13", version: "LS (Base)" }, { w: "185", p: "60", r: "14", version: "LT / GLS" }] },
+  { brand: "Chevrolet", model: "Classic", sizes: [{ w: "165", p: "70", r: "13", version: "LS (Base)" }, { w: "185", p: "60", r: "14", version: "LT / GLS" }] },
+  { brand: "Chevrolet", model: "Corsa", sizes: [{ w: "165", p: "70", r: "13", version: "LS (Base)" }, { w: "185", p: "60", r: "14", version: "LT / GLS" }] },
   { brand: "Chevrolet", model: "Cruze", sizes: [{ w: "205", p: "60", r: "16", version: "LT" }, { w: "215", p: "50", r: "17", version: "LTZ / Premier" }] },
   { brand: "Chevrolet", model: "Equinox", sizes: [{ w: "225", p: "65", r: "17", version: "FWD" }, { w: "235", p: "50", r: "19", version: "AWD Premier" }] },
   { brand: "Chevrolet", model: "Montana", sizes: [{ w: "215", p: "60", r: "17" }] },
-  { brand: "Chevrolet", model: "Onix / Prisma", sizes: [{ w: "185", p: "70", r: "14", version: "Joy / LS" }, { w: "185", p: "65", r: "15", version: "LT" }, { w: "195", p: "55", r: "16", version: "LTZ / Premier" }] },
+  { brand: "Chevrolet", model: "Onix", sizes: [{ w: "185", p: "70", r: "14", version: "Joy / LS" }, { w: "185", p: "65", r: "15", version: "LT" }, { w: "195", p: "55", r: "16", version: "LTZ / Premier" }] },
+  { brand: "Chevrolet", model: "Prisma", sizes: [{ w: "185", p: "70", r: "14", version: "Joy / LS" }, { w: "185", p: "65", r: "15", version: "LT" }, { w: "195", p: "55", r: "16", version: "LTZ / Premier" }] },
   { brand: "Chevrolet", model: "S10", sizes: [{ w: "245", p: "70", r: "16", version: "LS" }, { w: "255", p: "65", r: "17", version: "LT" }, { w: "265", p: "60", r: "18", version: "LTZ / High Country" }] },
   { brand: "Chevrolet", model: "Spin", sizes: [{ w: "195", p: "65", r: "15" }] },
   { brand: "Chevrolet", model: "Tracker", sizes: [{ w: "205", p: "60", r: "16", version: "LT (2013-2020)" }, { w: "215", p: "55", r: "17", version: "Tracker MT / AT (2020+)" }, { w: "215", p: "55", r: "18", version: "Premier (2020+)" }] },
   { brand: "Chevrolet", model: "Trailblazer", sizes: [{ w: "265", p: "60", r: "18" }] },
 
   // Citroën
-  { brand: "Citroën", model: "Berlingo", sizes: [{ w: "175", p: "65", r: "14", version: "Furgón" }, { w: "185", p: "65", r: "15", version: "Multispace" }] },
-  { brand: "Citroën", model: "C3", sizes: [{ w: "185", p: "60", r: "15", version: "Origine / Tendance" }, { w: "195", p: "55", r: "16", version: "Exclusive" }] },
-  { brand: "Citroën", model: "C3 Aircross", sizes: [{ w: "205", p: "60", r: "16" }] },
-  { brand: "Citroën", model: "C4 / C4 Lounge", sizes: [{ w: "205", p: "55", r: "16", version: "Origine" }, { w: "225", p: "45", r: "17", version: "Tendance / Exclusive" }] },
-  { brand: "Citroën", model: "C4 Cactus", sizes: [{ w: "205", p: "55", r: "17" }] },
-  { brand: "Citroën", model: "C5 Aircross", sizes: [{ w: "225", p: "55", r: "18" }] },
+  { brand: "Citroen", model: "Berlingo", sizes: [{ w: "175", p: "65", r: "14", version: "Furgón" }, { w: "185", p: "65", r: "15", version: "Multispace" }] },
+  { brand: "Citroen", model: "C3", sizes: [{ w: "185", p: "60", r: "15", version: "Origine / Tendance" }, { w: "195", p: "55", r: "16", version: "Exclusive" }] },
+  { brand: "Citroen", model: "C3 Aircross", sizes: [{ w: "205", p: "60", r: "16" }] },
+  { brand: "Citroen", model: "C4", sizes: [{ w: "205", p: "55", r: "16", version: "Origine" }, { w: "225", p: "45", r: "17", version: "Tendance / Exclusive" }] },
+  { brand: "Citroen", model: "C4 Lounge", sizes: [{ w: "205", p: "55", r: "16", version: "Origine" }, { w: "225", p: "45", r: "17", version: "Tendance / Exclusive" }] },
+  { brand: "Citroen", model: "C4 Cactus", sizes: [{ w: "205", p: "55", r: "17" }] },
+  { brand: "Citroen", model: "C5 Aircross", sizes: [{ w: "225", p: "55", r: "18" }] },
 
   // Dodge
   { brand: "Dodge", model: "Journey", sizes: [{ w: "225", p: "65", r: "17", version: "SXT 2.4" }, { w: "225", p: "55", r: "19", version: "R/T 3.6" }] },
-  { brand: "Dodge", model: "Ram 1500", sizes: [{ w: "275", p: "60", r: "20" }] },
+  { brand: "Dodge", model: "RAM", sizes: [{ w: "275", p: "60", r: "20" }] },
 
   // Fiat
   { brand: "Fiat", model: "125", sizes: [{ w: "155", p: "80", r: "13", version: "Standard" }, { w: "175", p: "70", r: "13", version: "Mirafiori" }] },
@@ -78,20 +81,22 @@ export const VEHICLE_DB: VehicleDBEntry[] = [
   { brand: "Fiat", model: "Duna", sizes: [{ w: "165", p: "70", r: "13" }] },
   { brand: "Fiat", model: "Fiorino", sizes: [{ w: "175", p: "70", r: "14" }] },
   { brand: "Fiat", model: "Mobi", sizes: [{ w: "175", p: "65", r: "14" }] },
-  { brand: "Fiat", model: "Palio / Siena", sizes: [{ w: "175", p: "65", r: "14", version: "Attractive" }, { w: "185", p: "60", r: "15", version: "Essence" }] },
+  { brand: "Fiat", model: "Palio", sizes: [{ w: "175", p: "65", r: "14", version: "Attractive" }, { w: "185", p: "60", r: "15", version: "Essence" }] },
+  { brand: "Fiat", model: "Siena", sizes: [{ w: "175", p: "65", r: "14", version: "Attractive" }, { w: "185", p: "60", r: "15", version: "Essence" }] },
   { brand: "Fiat", model: "Pulse", sizes: [{ w: "195", p: "60", r: "16", version: "Drive 1.3" }, { w: "205", p: "50", r: "17", version: "Audace / Impetus" }] },
   { brand: "Fiat", model: "Punto", sizes: [{ w: "195", p: "55", r: "16" }] },
   { brand: "Fiat", model: "Strada", sizes: [{ w: "175", p: "70", r: "14", version: "Working / Endurance" }, { w: "205", p: "60", r: "15", version: "Trekking / Freedom" }, { w: "205", p: "55", r: "16", version: "Adventure / Volcano" }] },
   { brand: "Fiat", model: "Toro", sizes: [{ w: "215", p: "65", r: "16", version: "Freedom" }, { w: "225", p: "60", r: "18", version: "Volcano / Ranch" }] },
-  { brand: "Fiat", model: "Uno / Uno Fire", sizes: [{ w: "165", p: "70", r: "13", version: "Fire" }, { w: "175", p: "70", r: "13", version: "Way" }, { w: "175", p: "65", r: "14", version: "Novo Uno Way" }] },
+  { brand: "Fiat", model: "Uno", sizes: [{ w: "165", p: "70", r: "13", version: "Fire" }, { w: "175", p: "70", r: "13", version: "Way" }, { w: "175", p: "65", r: "14", version: "Novo Uno Way" }] },
 
   // Ford
   { brand: "Ford", model: "Bronco Sport", sizes: [{ w: "225", p: "65", r: "17", version: "Big Bend" }, { w: "225", p: "60", r: "18", version: "Wildtrak" }] },
   { brand: "Ford", model: "EcoSport", sizes: [{ w: "205", p: "65", r: "15", version: "S / SE (Gen 2)" }, { w: "205", p: "60", r: "16", version: "Freestyle" }, { w: "205", p: "50", r: "17", version: "Titanium" }] },
-  { brand: "Ford", model: "Escape / Kuga", sizes: [{ w: "235", p: "55", r: "17", version: "SE" }, { w: "235", p: "50", r: "18", version: "Titanium" }] },
+  { brand: "Ford", model: "Kuga", sizes: [{ w: "235", p: "55", r: "17", version: "SE" }, { w: "235", p: "50", r: "18", version: "Titanium" }] },
   { brand: "Ford", model: "F-150", sizes: [{ w: "275", p: "65", r: "18", version: "XLT" }, { w: "275", p: "60", r: "20", version: "Lariat / Raptor" }] },
   { brand: "Ford", model: "Falcon", sizes: [{ w: "185", p: "80", r: "14", version: "Standard" }, { w: "195", p: "70", r: "14", version: "Futura / Sprint" }] },
-  { brand: "Ford", model: "Fiesta / Fiesta Kinetic", sizes: [{ w: "185", p: "60", r: "15", version: "S / SE" }, { w: "195", p: "50", r: "16", version: "Titanium" }] },
+  { brand: "Ford", model: "Fiesta", sizes: [{ w: "185", p: "60", r: "15", version: "S / SE" }, { w: "195", p: "50", r: "16", version: "Titanium" }] },
+  { brand: "Ford", model: "Fiesta Kinetic", sizes: [{ w: "185", p: "60", r: "15", version: "S / SE" }, { w: "195", p: "50", r: "16", version: "Titanium" }] },
   { brand: "Ford", model: "Focus", sizes: [{ w: "205", p: "55", r: "16", version: "S / SE" }, { w: "215", p: "50", r: "17", version: "SE Plus / Titanium" }] },
   { brand: "Ford", model: "Ka", sizes: [{ w: "175", p: "65", r: "14", version: "S / SE" }, { w: "195", p: "55", r: "15", version: "SEL / Freestyle" }] },
   { brand: "Ford", model: "Maverick", sizes: [{ w: "225", p: "65", r: "17", version: "XLT" }, { w: "225", p: "60", r: "18", version: "Lariat" }] },
@@ -102,7 +107,8 @@ export const VEHICLE_DB: VehicleDBEntry[] = [
   { brand: "Ford", model: "Transit", sizes: [{ w: "215", p: "75", r: "16" }] },
 
   // Great Wall
-  { brand: "Great Wall", model: "Wingle 5 / 7", sizes: [{ w: "235", p: "70", r: "16", version: "Wingle 5" }, { w: "245", p: "70", r: "16", version: "Wingle 7" }] },
+  { brand: "Great Wall", model: "Wingle 5", sizes: [{ w: "235", p: "70", r: "16" }] },
+  { brand: "Great Wall", model: "Wingle 7", sizes: [{ w: "245", p: "70", r: "16" }] },
   { brand: "Great Wall", model: "Poer", sizes: [{ w: "265", p: "60", r: "18" }] },
 
   // Haval
@@ -118,13 +124,13 @@ export const VEHICLE_DB: VehicleDBEntry[] = [
 
   // Hyundai
   { brand: "Hyundai", model: "Creta", sizes: [{ w: "205", p: "65", r: "16", version: "GL" }, { w: "215", p: "60", r: "17", version: "GLS" }] },
-  { brand: "Hyundai", model: "Grand i10", sizes: [{ w: "165", p: "65", r: "14" }] },
+  { brand: "Hyundai", model: "i10", sizes: [{ w: "165", p: "65", r: "14" }] },
   { brand: "Hyundai", model: "H1", sizes: [{ w: "215", p: "70", r: "16" }] },
   { brand: "Hyundai", model: "Santa Fe", sizes: [{ w: "235", p: "65", r: "17", version: "GLS 2.4" }, { w: "235", p: "60", r: "18", version: "GLS 3.3 / Diesel" }] },
   { brand: "Hyundai", model: "Tucson", sizes: [{ w: "225", p: "60", r: "17", version: "GL" }, { w: "225", p: "55", r: "18", version: "GLS Full Premium" }] },
 
-  // IKA
-  { brand: "IKA", model: "Torino", sizes: [{ w: "185", p: "80", r: "15", version: "S / L" }, { w: "195", p: "70", r: "15", version: "TS / TSX / ZX" }] },
+  // Ika
+  { brand: "Ika", model: "Torino", sizes: [{ w: "185", p: "80", r: "15", version: "S / L" }, { w: "195", p: "70", r: "15", version: "TS / TSX / ZX" }] },
 
   // Jeep
   { brand: "Jeep", model: "Commander", sizes: [{ w: "235", p: "50", r: "19" }] },
@@ -179,7 +185,8 @@ export const VEHICLE_DB: VehicleDBEntry[] = [
   { brand: "Renault", model: "Logan", sizes: [{ w: "185", p: "65", r: "15" }] },
   { brand: "Renault", model: "Master", sizes: [{ w: "225", p: "65", r: "16" }] },
   { brand: "Renault", model: "Oroch", sizes: [{ w: "215", p: "65", r: "16" }] },
-  { brand: "Renault", model: "Sandero / Stepway", sizes: [{ w: "185", p: "65", r: "15", version: "Sandero Life/Zen/Intens" }, { w: "195", p: "55", r: "16", version: "Sandero RS / Stepway" }] },
+  { brand: "Renault", model: "Sandero", sizes: [{ w: "185", p: "65", r: "15", version: "Life/Zen/Intens" }, { w: "195", p: "55", r: "16", version: "RS" }] },
+  { brand: "Renault", model: "Stepway", sizes: [{ w: "195", p: "55", r: "16" }] },
 
   // Toyota
   { brand: "Toyota", model: "Corolla", sizes: [{ w: "205", p: "55", r: "16", version: "XLI / XEI" }, { w: "225", p: "45", r: "17", version: "SEG / GR-Sport" }] },
@@ -193,7 +200,8 @@ export const VEHICLE_DB: VehicleDBEntry[] = [
   { brand: "Volkswagen", model: "Amarok", sizes: [{ w: "245", p: "70", r: "16", version: "Trendline" }, { w: "245", p: "65", r: "17", version: "Comfortline" }, { w: "255", p: "60", r: "18", version: "Highline" }, { w: "255", p: "50", r: "20", version: "Extreme / V6" }] },
   { brand: "Volkswagen", model: "Bora", sizes: [{ w: "195", p: "65", r: "15", version: "Trendline 2.0 / 1.9 TDI" }, { w: "225", p: "45", r: "17", version: "1.8T Highline" }] },
   { brand: "Volkswagen", model: "Fox", sizes: [{ w: "195", p: "55", r: "15", version: "Comfortline" }, { w: "195", p: "50", r: "16", version: "Highline" }] },
-  { brand: "Volkswagen", model: "Gol / Gol Trend", sizes: [{ w: "175", p: "70", r: "14", version: "Trendline / Power" }, { w: "185", p: "60", r: "14", version: "Comfortline" }, { w: "195", p: "55", r: "15", version: "Highline" }] },
+  { brand: "Volkswagen", model: "Gol", sizes: [{ w: "175", p: "70", r: "14", version: "Trendline / Power" }, { w: "185", p: "60", r: "14", version: "Comfortline" }, { w: "195", p: "55", r: "15", version: "Highline" }] },
+  { brand: "Volkswagen", model: "Gol Trend", sizes: [{ w: "175", p: "70", r: "14", version: "Trendline / Power" }, { w: "185", p: "60", r: "14", version: "Comfortline" }, { w: "195", p: "55", r: "15", version: "Highline" }] },
   { brand: "Volkswagen", model: "Golf", sizes: [{ w: "195", p: "65", r: "15", version: "Trendline" }, { w: "205", p: "55", r: "16", version: "Comfortline" }, { w: "225", p: "45", r: "17", version: "Highline / GTI" }] },
   { brand: "Volkswagen", model: "Nivus", sizes: [{ w: "205", p: "60", r: "16", version: "Comfortline" }, { w: "205", p: "55", r: "17", version: "Highline" }] },
   { brand: "Volkswagen", model: "Polo", sizes: [{ w: "185", p: "65", r: "15", version: "Track / Trendline" }, { w: "195", p: "55", r: "16", version: "Comfortline" }, { w: "205", p: "50", r: "17", version: "Highline / GTS" }] },
@@ -206,3 +214,11 @@ export const VEHICLE_DB: VehicleDBEntry[] = [
   { brand: "Volkswagen", model: "Up!", sizes: [{ w: "175", p: "70", r: "14", version: "Take / Move" }, { w: "185", p: "60", r: "15", version: "High / Pepper" }] },
   { brand: "Volkswagen", model: "Vento", sizes: [{ w: "205", p: "55", r: "16", version: "Advance / Comfortline" }, { w: "225", p: "45", r: "17", version: "Highline / GLI" }] }
 ].sort((a, b) => a.brand.localeCompare(b.brand) || a.model.localeCompare(b.model));
+
+// brand/model deben coincidir exacto con pos-neumaticos/src/lib/vehiculos.json
+// (misma lista que usa el POS para cargar el vehículo de una orden de
+// trabajo), para que el lookup sea por igualdad de string sin fuzzy matching.
+export function getSizesForVehicle(brand: string, model: string): VehicleDBEntry["sizes"] | null {
+  const entry = VEHICLE_DB.find((v) => v.brand === brand && v.model === model);
+  return entry ? entry.sizes : null;
+}

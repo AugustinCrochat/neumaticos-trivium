@@ -1,6 +1,8 @@
-import { TireSizeSearch } from "@/components/ui/TireSizeSearch";
+import { SizeOrVehicleSearch } from "@/components/ui/SizeOrVehicleSearch";
+import { getVehiculosDesdePOS } from "@/lib/pos-api";
 
-export function HeroSection() {
+export async function HeroSection() {
+  const vehiculos = await getVehiculosDesdePOS();
   return (
     <section id="hero" className="bg-white border-b border-slate-100">
       <div className="max-w-7xl mx-auto px-4">
@@ -19,7 +21,7 @@ export function HeroSection() {
 
           {/* Right: search */}
           <div className="flex flex-col justify-center pt-0 pb-8 md:py-20">
-            <TireSizeSearch />
+            <SizeOrVehicleSearch vehiculos={vehiculos} />
           </div>
 
         </div>

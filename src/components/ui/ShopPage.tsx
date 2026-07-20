@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { BRANDS } from "@/lib/data";
@@ -8,7 +9,8 @@ import { getBrandLogo } from "@/lib/brand-utils";
 import { ProductCard } from "@/components/ui/ProductCard";
 import { TireSizeSearch } from "@/components/ui/TireSizeSearch";
 import { useBranch } from "@/contexts/branch-context";
-import type { TireProduct, TireSize, VehicleType } from "@/lib/types";
+import { getCompatibleAccessory } from "@/lib/tuercas-vehiculos";
+import type { Accessory, TireProduct, TireSize, VehicleType } from "@/lib/types";
 
 // Removed PRICE_RANGES in favor of a slider
 const MAX_POSSIBLE_PRICE = 6000000; // 6 million limit for the slider
@@ -299,13 +301,19 @@ function FilterBar({
 export function ShopPage({
   showCatalogTitle = false,
   products,
+  accesorios = [],
 }: {
   showCatalogTitle?: boolean;
   products: TireProduct[];
+  accesorios?: Accessory[];
 }) {
   const { selectedBranch, hasConfirmedBranch, openModalForAction } = useBranch();
   const searchParams = useSearchParams();
   const medida = searchParams.get("medida") ?? undefined;
+  const vehiculoMarca = searchParams.get("marca");
+  const vehiculoModelo = searchParams.get("modelo");
+  const compatibleAccessory =
+    vehiculoMarca && vehiculoModelo ? getCompatibleAccessory(vehiculoMarca, vehiculoModelo, accesorios) : null;
 
   const [brandFilter, setBrandFilter] = useState("todos");
   const [maxPrice, setMaxPrice] = useState(MAX_POSSIBLE_PRICE);
@@ -443,6 +451,29 @@ export function ShopPage({
               <div className="flex flex-col items-center justify-center py-24 text-center">
                 <p className="text-slate-400 text-lg font-medium">Ingresá una medida para buscar.</p>
               </div>
+            )}
+
+            {/* ── Tuerca antirrobo compatible con el vehículo elegido ── */}
+            {parsed && compatibleAccessory && (
+              <Link
+                href={`/tuercas-antirrobo/${compatibleAccessory.slug}`}
+                className="flex items-center gap-4 bg-white border border-slate-200 hover:border-navy-300 rounded-2xl p-4 mb-8 transition-colors"
+              >
+                <div className="relative w-14 h-14 bg-slate-50 rounded-xl shrink-0 overflow-hidden">
+                  {compatibleAccessory.imageUrl && (
+                    <Image src={compatibleAccessory.imageUrl} alt="" fill sizes="56px" className="object-contain p-1" />
+                  )}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs font-black text-orange-500 uppercase tracking-wide">También te puede interesar</p>
+                  <p className="text-sm font-bold text-navy-900 truncate">
+                    Tuerca antirrobo compatible con tu {vehiculoMarca} {vehiculoModelo}
+                  </p>
+                </div>
+                <svg className="w-5 h-5 text-slate-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </Link>
             )}
 
             {/* ── Search results ── */}

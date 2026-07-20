@@ -203,6 +203,27 @@ export async function getAccesoriosDesdePOS(): Promise<Accessory[]> {
   }
 }
 
+export type VehiculoOption = { marca: string; modelo: string; label: string };
+
+export async function getVehiculosDesdePOS(): Promise<VehiculoOption[]> {
+  if (!POS_API_URL) {
+    console.error("[pos-api] Falta la variable de entorno POS_API_URL");
+    return [];
+  }
+  try {
+    const res = await fetch(`${POS_API_URL}/vehiculos`, { next: { revalidate: 3600 }, signal: AbortSignal.timeout(8000) });
+    if (!res.ok) {
+      console.error(`[pos-api] Error ${res.status} al obtener vehículos del POS`);
+      return [];
+    }
+    const data = (await res.json()) as { vehiculos: VehiculoOption[] };
+    return data.vehiculos;
+  } catch (err) {
+    console.error("[pos-api] Error de red al obtener vehículos del POS:", err);
+    return [];
+  }
+}
+
 export async function getServiciosPrecios(grupo?: string): Promise<ServicioPrecio[]> {
   if (!POS_API_URL) {
     console.error("[pos-api] Falta la variable de entorno POS_API_URL");
