@@ -19,7 +19,7 @@ export function HeroSection() {
 
           {/* Right: search */}
           <div className="flex flex-col justify-center pt-0 pb-8 md:py-20">
-            <SizeOrVehicleSearch showTabs={false} />
+            <SizeOrVehicleSearch />
           </div>
 
         </div>

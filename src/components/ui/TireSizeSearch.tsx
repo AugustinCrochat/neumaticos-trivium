@@ -537,9 +537,11 @@ export function TireSizeSearch({
 
   return (
     <div className={embedded ? "relative group w-full" : `bg-slate-100 rounded-2xl border border-slate-200 ${compact ? 'p-4' : 'p-6'} shadow-xl shadow-slate-300/40 relative group w-full`}>
-      <p className={`font-black text-navy-900 ${compact ? 'text-sm mb-2' : 'text-base mb-3'}`}>
-        Buscar por medida
-      </p>
+      {!embedded && (
+        <p className={`font-black text-navy-900 ${compact ? 'text-sm mb-2' : 'text-base mb-3'}`}>
+          Buscar por medida
+        </p>
+      )}
       {!hideLearnLink && (
         <p className={`text-slate-600 ${compact ? 'text-xs mb-2' : 'text-sm mb-3'}`}>
           ¿No sabés tu medida?{" "}

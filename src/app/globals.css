@@ -53,6 +53,10 @@
 body {
   background-color: var(--color-background);
   color: var(--color-foreground);
+  /* Cualquier elemento que se pase por unos px del viewport en mobile no
+     debe agrandar toda la página — mejor recortarlo que dejar un espacio
+     vacío a la derecha. No afecta el header sticky (eso depende de overflow-y). */
+  overflow-x: hidden;
 }
 
 html {
