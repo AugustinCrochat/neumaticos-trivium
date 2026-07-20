@@ -156,7 +156,7 @@ function PriceSlider({
         />
         <div
           className="absolute w-5 h-5 bg-white border-2 border-navy-600 rounded-full shadow-lg group-hover:scale-110 transition-transform pointer-events-none"
-          style={{ left: `calc(${percent}% - 10px)` }}
+          style={{ left: `clamp(0px, calc(${percent}% - 10px), calc(100% - 20px))` }}
         />
       </div>
     </div>

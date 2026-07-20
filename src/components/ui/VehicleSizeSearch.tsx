@@ -53,9 +53,9 @@ export function VehicleSizeSearch({ initialMedida }: { initialMedida?: string })
   return (
     <div className="w-full">
       <div className="flex items-center justify-between gap-3 mb-3 rounded-xl border-2 border-orange-500 bg-orange-50 px-4 py-3">
-        <div>
+        <div className="min-w-0 flex-1">
           <p className="text-xs font-bold text-orange-600 uppercase tracking-wide">Tu vehículo</p>
-          <p className="text-base font-bold text-navy-900">{selectedVehicle.marca} {selectedVehicle.modelo}</p>
+          <p className="text-base font-bold text-navy-900 truncate">{selectedVehicle.marca} {selectedVehicle.modelo}</p>
         </div>
         <button
           onClick={clearSelectedVehicle}
