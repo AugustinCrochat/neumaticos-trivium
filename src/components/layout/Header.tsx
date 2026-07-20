@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useBranch } from "@/contexts/branch-context";
 import { useVehicle } from "@/contexts/vehicle-context";
 import { CartButton } from "@/components/ui/CartButton";
+import { SearchModal } from "@/components/ui/SearchModal";
 
 const NAV_LINKS = [
   { href: "/catalogo", label: "Neumáticos" },
@@ -20,6 +21,7 @@ export function Header() {
   const { selectedBranch, hasConfirmedBranch, openModal } = useBranch();
   const { selectedVehicle, openModal: openVehicleModal } = useVehicle();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-40 w-full">
@@ -99,6 +101,16 @@ export function Header() {
             </div>
 
             <div className="flex items-center gap-3 ml-auto md:ml-0">
+              <button
+                onClick={() => setSearchOpen(true)}
+                className="text-zinc-200 hover:text-white p-2"
+                aria-label="Buscar productos"
+              >
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z" />
+                </svg>
+              </button>
+
               <CartButton />
 
               {/* Mobile hamburger */}
@@ -135,6 +147,8 @@ export function Header() {
           </div>
         )}
       </nav>
+
+      {searchOpen && <SearchModal onClose={() => setSearchOpen(false)} />}
     </header>
   );
 }
