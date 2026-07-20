@@ -4,17 +4,27 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useBranch } from "@/contexts/branch-context";
 import { useVehicle } from "@/contexts/vehicle-context";
-import { getSizesForVehicle } from "@/lib/vehicles";
+import { getSizesForVehicle, type VehicleDBEntry } from "@/lib/vehicles";
 import { VehicleCombobox } from "@/components/ui/VehicleCombobox";
 import type { VehiculoOption } from "@/lib/pos-api";
 
-export function VehicleSizeSearch() {
+function findVersionIndex(sizes: VehicleDBEntry["sizes"] | null, initialMedida?: string): number {
+  if (!sizes || !initialMedida) return 0;
+  const parts = initialMedida.toLowerCase().split("-");
+  const w = parts[0];
+  const p = parts[1];
+  const r = parts[2]?.startsWith("r") ? parts[2].substring(1) : parts[2];
+  const idx = sizes.findIndex((s) => s.w === w && s.p === p && s.r === r);
+  return idx >= 0 ? idx : 0;
+}
+
+export function VehicleSizeSearch({ initialMedida }: { initialMedida?: string }) {
   const router = useRouter();
   const { selectedBranch } = useBranch();
   const { vehiculos, selectedVehicle, setSelectedVehicle, clearSelectedVehicle } = useVehicle();
-  const [versionIndex, setVersionIndex] = useState(0);
 
   const sizes = selectedVehicle ? getSizesForVehicle(selectedVehicle.marca, selectedVehicle.modelo) : null;
+  const [versionIndex, setVersionIndex] = useState(() => findVersionIndex(sizes, initialMedida));
   const selectedSize = sizes?.[versionIndex];
 
   function selectVehicle(vehicle: VehiculoOption) {

@@ -53,7 +53,7 @@ export function SizeOrVehicleSearch({
           hideLearnLink={hideLearnLink}
         />
       ) : (
-        <VehicleSizeSearch />
+        <VehicleSizeSearch initialMedida={initialMedida} />
       )}
     </div>
   );
