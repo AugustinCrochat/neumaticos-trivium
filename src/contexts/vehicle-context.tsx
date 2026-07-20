@@ -8,11 +8,15 @@ import {
   type ReactNode,
 } from "react";
 import type { VehiculoOption } from "@/lib/pos-api";
+import type { VehicleDBEntry } from "@/lib/vehicles";
+
+export type VehicleSize = VehicleDBEntry["sizes"][number];
+export type SelectedVehicle = VehiculoOption & { size?: VehicleSize };
 
 type VehicleContextType = {
   vehiculos: VehiculoOption[];
-  selectedVehicle: VehiculoOption | null;
-  setSelectedVehicle: (vehicle: VehiculoOption) => void;
+  selectedVehicle: SelectedVehicle | null;
+  setSelectedVehicle: (vehicle: VehiculoOption, size?: VehicleSize) => void;
   clearSelectedVehicle: () => void;
   isModalOpen: boolean;
   openModal: () => void;
@@ -30,25 +34,26 @@ export function VehicleProvider({
   vehiculos: VehiculoOption[];
   children: ReactNode;
 }) {
-  const [selectedVehicle, setSelectedVehicleState] = useState<VehiculoOption | null>(null);
+  const [selectedVehicle, setSelectedVehicleState] = useState<SelectedVehicle | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (!stored) return;
     try {
-      const { marca, modelo } = JSON.parse(stored);
+      const { marca, modelo, size } = JSON.parse(stored);
       const vehicle = vehiculos.find((v) => v.marca === marca && v.modelo === modelo);
-      if (vehicle) setSelectedVehicleState(vehicle);
+      if (vehicle) setSelectedVehicleState(size ? { ...vehicle, size } : vehicle);
     } catch {
       localStorage.removeItem(STORAGE_KEY);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const setSelectedVehicle = (vehicle: VehiculoOption) => {
-    setSelectedVehicleState(vehicle);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ marca: vehicle.marca, modelo: vehicle.modelo }));
+  const setSelectedVehicle = (vehicle: VehiculoOption, size?: VehicleSize) => {
+    const next: SelectedVehicle = size ? { ...vehicle, size } : { marca: vehicle.marca, modelo: vehicle.modelo, label: vehicle.label };
+    setSelectedVehicleState(next);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ marca: vehicle.marca, modelo: vehicle.modelo, size }));
     setIsModalOpen(false);
   };
 

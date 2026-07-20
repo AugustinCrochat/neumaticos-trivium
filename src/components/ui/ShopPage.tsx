@@ -346,6 +346,17 @@ export function ShopPage({
     return { exactResults: exact, compatibleResults: compatible, allProducts: [] };
   }, [parsed, brandFilter, maxPrice, onlyEconomic, products]);
 
+  // Catálogo sin medida en la URL: si ya sabemos la medida del auto elegido,
+  // recomendamos esos neumáticos arriba de todo, sin esperar a que busquen.
+  const recommendedProducts = useMemo(() => {
+    if (parsed || !selectedVehicle?.size) return [];
+    const size = { width: Number(selectedVehicle.size.w), profile: Number(selectedVehicle.size.p), rim: Number(selectedVehicle.size.r) };
+    return products
+      .filter((p) => isExactMatch(p, size))
+      .sort((a, b) => Number(!!b.enStock) - Number(!!a.enStock) || getUnitPrice(a) - getUnitPrice(b))
+      .slice(0, 3);
+  }, [parsed, selectedVehicle, products]);
+
   const label = parsed ? formatSizeLabel(parsed) : null;
   const searchedSize: TireSize | null =
     parsed?.width && parsed.profile && parsed.rim
@@ -422,6 +433,28 @@ export function ShopPage({
             {/* ── Catalog mode (no medida) ── */}
             {!parsed && showCatalogTitle && (
               <>
+                {selectedVehicle?.size && recommendedProducts.length > 0 && (
+                  <div className="mb-10 rounded-[2rem] border border-orange-100 bg-orange-50/50 p-6 md:p-8">
+                    <div className="flex items-center justify-between gap-3 flex-wrap mb-4">
+                      <div>
+                        <p className="text-xs font-black text-orange-600 uppercase tracking-wide mb-1">Recomendado para vos</p>
+                        <h2 className="text-xl font-black text-navy-900">Neumáticos para tu {selectedVehicle.marca} {selectedVehicle.modelo}</h2>
+                      </div>
+                      <Link
+                        href={`/buscar?medida=${selectedVehicle.size.w}-${selectedVehicle.size.p}-r${selectedVehicle.size.r}&marca=${encodeURIComponent(selectedVehicle.marca)}&modelo=${encodeURIComponent(selectedVehicle.modelo)}`}
+                        className="text-sm font-bold text-orange-700 hover:text-orange-800 underline underline-offset-4 shrink-0"
+                      >
+                        Ver medida {selectedVehicle.size.w}/{selectedVehicle.size.p} R{selectedVehicle.size.r}
+                      </Link>
+                    </div>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                      {recommendedProducts.map((product) => (
+                        <ProductCard key={product.id} product={product} />
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 <div className="mb-4">
                   <h1 className="text-3xl font-black text-navy-900 mb-1">Catálogo de Neumáticos</h1>
                   <p className="text-slate-500">

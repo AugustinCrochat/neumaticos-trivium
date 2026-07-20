@@ -8,14 +8,20 @@ import { getSizesForVehicle, type VehicleDBEntry } from "@/lib/vehicles";
 import { VehicleCombobox } from "@/components/ui/VehicleCombobox";
 import type { VehiculoOption } from "@/lib/pos-api";
 
-function findVersionIndex(sizes: VehicleDBEntry["sizes"] | null, initialMedida?: string): number {
-  if (!sizes || !initialMedida) return 0;
-  const parts = initialMedida.toLowerCase().split("-");
+type Sizes = VehicleDBEntry["sizes"];
+
+function findVersionIndexByMedida(sizes: Sizes | null, medida?: string): number {
+  if (!sizes || !medida) return -1;
+  const parts = medida.toLowerCase().split("-");
   const w = parts[0];
   const p = parts[1];
   const r = parts[2]?.startsWith("r") ? parts[2].substring(1) : parts[2];
-  const idx = sizes.findIndex((s) => s.w === w && s.p === p && s.r === r);
-  return idx >= 0 ? idx : 0;
+  return sizes.findIndex((s) => s.w === w && s.p === p && s.r === r);
+}
+
+function findVersionIndexBySize(sizes: Sizes | null, size?: Sizes[number]): number {
+  if (!sizes || !size) return -1;
+  return sizes.findIndex((s) => s.w === size.w && s.p === size.p && s.r === size.r);
 }
 
 export function VehicleSizeSearch({ initialMedida }: { initialMedida?: string }) {
@@ -24,12 +30,27 @@ export function VehicleSizeSearch({ initialMedida }: { initialMedida?: string })
   const { vehiculos, selectedVehicle, setSelectedVehicle, clearSelectedVehicle } = useVehicle();
 
   const sizes = selectedVehicle ? getSizesForVehicle(selectedVehicle.marca, selectedVehicle.modelo) : null;
-  const [versionIndex, setVersionIndex] = useState(() => findVersionIndex(sizes, initialMedida));
+
+  // Prioridad para la versión inicial: la medida de la URL actual (por si
+  // vino de un link puntual) y si no, la última versión que el usuario
+  // eligió y quedó guardada (ej. Golf Comfortline en vez de Trendline).
+  const [versionIndex, setVersionIndexState] = useState(() => {
+    const byUrl = findVersionIndexByMedida(sizes, initialMedida);
+    if (byUrl >= 0) return byUrl;
+    const bySaved = findVersionIndexBySize(sizes, selectedVehicle?.size);
+    return bySaved >= 0 ? bySaved : 0;
+  });
   const selectedSize = sizes?.[versionIndex];
 
   function selectVehicle(vehicle: VehiculoOption) {
-    setSelectedVehicle(vehicle);
-    setVersionIndex(0);
+    const newSizes = getSizesForVehicle(vehicle.marca, vehicle.modelo);
+    setSelectedVehicle(vehicle, newSizes?.[0]);
+    setVersionIndexState(0);
+  }
+
+  function changeVersion(index: number) {
+    setVersionIndexState(index);
+    if (selectedVehicle && sizes?.[index]) setSelectedVehicle(selectedVehicle, sizes[index]);
   }
 
   function verNeumaticos() {
@@ -70,7 +91,7 @@ export function VehicleSizeSearch({ initialMedida }: { initialMedida?: string })
           {sizes.length > 1 && (
             <select
               value={versionIndex}
-              onChange={(e) => setVersionIndex(Number(e.target.value))}
+              onChange={(e) => changeVersion(Number(e.target.value))}
               className="w-full mb-3 bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm font-medium text-slate-700 focus:ring-2 focus:ring-navy-500/10 outline-none"
             >
               {sizes.map((s, i) => (
