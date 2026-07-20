@@ -1,5 +1,5 @@
 import { getProductosDesdePOS, getAccesoriosDesdePOS } from "@/lib/pos-api";
-import { matchScore } from "@/lib/fuzzy-search";
+import { matchScore, CATEGORY_TAGS } from "@/lib/fuzzy-search";
 
 export type SearchResult = {
   type: "tire" | "accessory";
@@ -33,6 +33,7 @@ export async function GET(request: Request) {
       p.loadIndex,
       p.speedRating,
       ...p.tags,
+      CATEGORY_TAGS.tire,
     ].filter(Boolean).join(" ");
     const score = matchScore(query, searchable);
     if (score > 0) {
@@ -51,7 +52,7 @@ export async function GET(request: Request) {
   }
 
   for (const a of accesorios) {
-    const searchable = [a.nombre, a.descripcion, a.codigoTango].filter(Boolean).join(" ");
+    const searchable = [a.nombre, a.descripcion, a.codigoTango, CATEGORY_TAGS.accessory].filter(Boolean).join(" ");
     const score = matchScore(query, searchable);
     if (score > 0) {
       scored.push({
@@ -68,7 +69,10 @@ export async function GET(request: Request) {
     }
   }
 
-  scored.sort((a, b) => b.score - a.score);
+  // Con búsquedas de categoría ("neumatico", "tuerca") empatan un montón de
+  // items en el mismo puntaje — ahí desempata stock (como en /buscar) y
+  // después precio, en vez de quedar en el orden en que vino del POS.
+  scored.sort((a, b) => b.score - a.score || Number(b.enStock) - Number(a.enStock) || a.price - b.price);
   const results: SearchResult[] = scored.slice(0, MAX_RESULTS).map(
     ({ type, id, slug, title, subtitle, price, imageUrl, enStock }) => ({ type, id, slug, title, subtitle, price, imageUrl, enStock })
   );

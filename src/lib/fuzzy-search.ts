@@ -63,6 +63,16 @@ function bestWordScore(queryToken: string, words: string[]): number {
   return best;
 }
 
+// Sinónimos de categoría: nada en el nombre/marca/modelo de un producto dice
+// literalmente "neumático" o "tuerca", así que sin esto esas búsquedas tan
+// obvias no encontraban nada. Se agregan como texto extra al searchable de
+// cada item de esa categoría, para que matcheen como cualquier otra palabra
+// (incluido tolerando typos, vía el mismo matchScore).
+export const CATEGORY_TAGS = {
+  tire: "neumatico neumaticos cubierta cubiertas goma gomas llanta llantas rueda ruedas",
+  accessory: "tuerca tuercas antirrobo antirrobos bulon bulones birlo birlos seguro",
+};
+
 /**
  * Puntaje de match entre una búsqueda y el texto searchable de un item.
  * 0 = no matchea (algún token de la búsqueda no aparece ni parecido).
