@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import { useCart } from "@/contexts/cart-context";
 import type { TireProduct } from "@/lib/types";
 
@@ -13,7 +14,11 @@ export function AddToCartModal({ product, onClose }: { product: TireProduct; onC
     onClose();
   }
 
-  return (
+  // Portal a document.body: la card "más barata" tiene scale-[1.02], y un
+  // transform en un ancestro convierte a ESE elemento en el contenedor de
+  // los descendientes fixed — sin el portal, el modal quedaba atrapado
+  // dentro de la tarjeta en vez de cubrir toda la pantalla.
+  return createPortal(
     <div className="fixed inset-0 z-[60] flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-label="Elegir cantidad">
       <button aria-label="Cerrar" onClick={onClose} className="absolute inset-0 bg-navy-950/70 backdrop-blur-sm" />
       <div className="relative w-full max-w-sm rounded-2xl bg-white shadow-2xl overflow-hidden">
@@ -52,6 +57,7 @@ export function AddToCartModal({ product, onClose }: { product: TireProduct; onC
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
