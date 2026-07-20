@@ -1,5 +1,5 @@
 import { getProductosDesdePOS, getAccesoriosDesdePOS } from "@/lib/pos-api";
-import { matchScore, CATEGORY_TAGS } from "@/lib/fuzzy-search";
+import { searchCatalog, type ScoredMatch } from "@/lib/search-catalog";
 
 export type SearchResult = {
   type: "tire" | "accessory";
@@ -12,70 +12,26 @@ export type SearchResult = {
   enStock: boolean;
 };
 
-const MAX_RESULTS = 20;
+// El dropdown del header muestra una vista previa corta; la lista completa
+// vive en /busqueda, que llama a searchCatalog directo sin este límite.
+const PREVIEW_LIMIT = 8;
+
+function toSearchResult(match: ScoredMatch): SearchResult {
+  if (match.type === "tire") {
+    const p = match.item;
+    return { type: "tire", id: p.id, slug: p.slug, title: p.model, subtitle: p.brand, price: p.price, imageUrl: p.imageUrl, enStock: !!p.enStock };
+  }
+  const a = match.item;
+  return { type: "accessory", id: a.id, slug: a.slug, title: a.nombre, subtitle: a.descripcion ?? "Tuerca antirrobo", price: a.price, imageUrl: a.imageUrl, enStock: a.enStock };
+}
 
 export async function GET(request: Request) {
   const query = new URL(request.url).searchParams.get("q")?.trim() ?? "";
-  if (!query) return Response.json({ results: [] });
+  if (!query) return Response.json({ results: [], total: 0 });
 
   const [productos, accesorios] = await Promise.all([getProductosDesdePOS(), getAccesoriosDesdePOS()]);
+  const matches = searchCatalog(query, productos, accesorios);
+  const results = matches.slice(0, PREVIEW_LIMIT).map(toSearchResult);
 
-  const scored: (SearchResult & { score: number })[] = [];
-
-  for (const p of productos) {
-    const searchable = [
-      p.brand,
-      p.model,
-      `${p.size.width}/${p.size.profile}`,
-      `${p.size.width} ${p.size.profile}`,
-      `r${p.size.rim}`,
-      String(p.size.rim),
-      p.loadIndex,
-      p.speedRating,
-      ...p.tags,
-      CATEGORY_TAGS.tire,
-    ].filter(Boolean).join(" ");
-    const score = matchScore(query, searchable);
-    if (score > 0) {
-      scored.push({
-        type: "tire",
-        id: p.id,
-        slug: p.slug,
-        title: p.model,
-        subtitle: p.brand,
-        price: p.price,
-        imageUrl: p.imageUrl,
-        enStock: !!p.enStock,
-        score,
-      });
-    }
-  }
-
-  for (const a of accesorios) {
-    const searchable = [a.nombre, a.descripcion, a.codigoTango, CATEGORY_TAGS.accessory].filter(Boolean).join(" ");
-    const score = matchScore(query, searchable);
-    if (score > 0) {
-      scored.push({
-        type: "accessory",
-        id: a.id,
-        slug: a.slug,
-        title: a.nombre,
-        subtitle: a.descripcion ?? "Tuerca antirrobo",
-        price: a.price,
-        imageUrl: a.imageUrl,
-        enStock: a.enStock,
-        score,
-      });
-    }
-  }
-
-  // Con búsquedas de categoría ("neumatico", "tuerca") empatan un montón de
-  // items en el mismo puntaje — ahí desempata stock (como en /buscar) y
-  // después precio, en vez de quedar en el orden en que vino del POS.
-  scored.sort((a, b) => b.score - a.score || Number(b.enStock) - Number(a.enStock) || a.price - b.price);
-  const results: SearchResult[] = scored.slice(0, MAX_RESULTS).map(
-    ({ type, id, slug, title, subtitle, price, imageUrl, enStock }) => ({ type, id, slug, title, subtitle, price, imageUrl, enStock })
-  );
-
-  return Response.json({ results });
+  return Response.json({ results, total: matches.length });
 }

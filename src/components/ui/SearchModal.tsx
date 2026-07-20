@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import type { SearchResult } from "@/app/api/search/route";
@@ -14,8 +15,10 @@ function hrefFor(r: SearchResult) {
 }
 
 export function SearchModal({ onClose }: { onClose: () => void }) {
+  const router = useRouter();
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
+  const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -27,6 +30,7 @@ export function SearchModal({ onClose }: { onClose: () => void }) {
     setQuery(value);
     if (!value.trim()) {
       setResults([]);
+      setTotal(0);
       setLoading(false);
     }
   }
@@ -40,19 +44,37 @@ export function SearchModal({ onClose }: { onClose: () => void }) {
     const timeout = setTimeout(() => {
       fetch(`/api/search?q=${encodeURIComponent(query)}`)
         .then((res) => res.json())
-        .then((data: { results: SearchResult[] }) => setResults(data.results))
-        .catch(() => setResults([]))
+        .then((data: { results: SearchResult[]; total: number }) => {
+          setResults(data.results);
+          setTotal(data.total);
+        })
+        .catch(() => {
+          setResults([]);
+          setTotal(0);
+        })
         .finally(() => setLoading(false));
     }, 250);
     return () => clearTimeout(timeout);
   }, [query]);
+
+  function goToResultsPage() {
+    if (!query.trim()) return;
+    router.push(`/busqueda?q=${encodeURIComponent(query.trim())}`);
+    onClose();
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center p-4 pt-20 sm:pt-28" role="dialog" aria-modal="true" aria-label="Buscar productos">
       <button aria-label="Cerrar" onClick={onClose} className="absolute inset-0 bg-navy-950/70 backdrop-blur-sm" />
 
       <div className="relative z-10 w-full max-w-xl rounded-2xl bg-white shadow-2xl overflow-hidden flex flex-col max-h-[75vh]">
-        <div className="p-4 border-b border-slate-100 flex items-center gap-3 shrink-0">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            goToResultsPage();
+          }}
+          className="p-4 border-b border-slate-100 flex items-center gap-3 shrink-0"
+        >
           <svg className="w-5 h-5 text-slate-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z" />
           </svg>
@@ -64,12 +86,12 @@ export function SearchModal({ onClose }: { onClose: () => void }) {
             placeholder="Buscar por medida, marca, modelo, código..."
             className="flex-1 min-w-0 outline-none text-base text-navy-900 placeholder:text-slate-400"
           />
-          <button onClick={onClose} aria-label="Cerrar búsqueda" className="text-slate-400 hover:text-slate-700 shrink-0">
+          <button type="button" onClick={onClose} aria-label="Cerrar búsqueda" className="text-slate-400 hover:text-slate-700 shrink-0">
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
-        </div>
+        </form>
 
         <div className="overflow-y-auto">
           {loading && <p className="p-6 text-center text-sm text-slate-400">Buscando…</p>}
@@ -98,6 +120,15 @@ export function SearchModal({ onClose }: { onClose: () => void }) {
               </div>
             </Link>
           ))}
+
+          {!loading && total > results.length && (
+            <button
+              onClick={goToResultsPage}
+              className="w-full p-3 text-center text-sm font-bold text-orange-600 hover:bg-slate-50 transition-colors"
+            >
+              Ver los {total} resultados
+            </button>
+          )}
         </div>
       </div>
     </div>
