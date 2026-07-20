@@ -61,6 +61,10 @@ body {
 
 html {
   scroll-behavior: auto;
+  /* En iOS Safari el elemento que scrollea de verdad es <html>, no <body> —
+     hay que cortar el overflow horizontal en los dos para que valga en todos
+     los navegadores. */
+  overflow-x: hidden;
 }
 
 .trivium-user-pin {
