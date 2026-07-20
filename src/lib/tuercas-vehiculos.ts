@@ -23,6 +23,16 @@ export const TUERCAS_VEHICULOS: Record<string, TuercaVehiculo[]> = {
     { marca: "Fiat", modelo: "Stilo" },
     { marca: "Fiat", modelo: "Strada" },
   ],
+  // ANTIRROBO VW AMAROK PREMIUM Z3 (66020)
+  "4020002": [
+    { marca: "Renault", modelo: "Laguna" },
+    { marca: "Volkswagen", modelo: "Amarok" },
+    { marca: "Peugeot", modelo: "Expert" },
+  ],
+  // ANTIRROBO AMAROK LLANTA CHAPA (66021) — misma Amarok, versión para llanta de chapa original.
+  "4020003": [
+    { marca: "Volkswagen", modelo: "Amarok" },
+  ],
   // ANTIRROBO VW GOL PREMIUM Z3 (66030)
   "4020004": [
     { marca: "Volkswagen", modelo: "Gol" },
@@ -31,6 +41,13 @@ export const TUERCAS_VEHICULOS: Record<string, TuercaVehiculo[]> = {
     { marca: "Volkswagen", modelo: "Up!" },
     { marca: "BMW" },
     { marca: "Mercedes-Benz" },
+  ],
+  // ANTIRROBO RENAULT PREMIUM Z3 (66040) — la descripción también menciona
+  // "Volvo 850", pero ese modelo no existe en la lista de vehículos del POS.
+  "4020005": [
+    { marca: "Renault", modelo: "Clio" },
+    { marca: "Renault", modelo: "Megane" },
+    { marca: "Renault", modelo: "Logan" },
   ],
   // ANTIRROBO CORSA PREMIUM Z3 (66080)
   "4020006": [
@@ -66,16 +83,39 @@ export const TUERCAS_VEHICULOS: Record<string, TuercaVehiculo[]> = {
     { marca: "Fiat", modelo: "Siena" },
     { marca: "Alfa Romeo" },
   ],
+  // ANTIRROBO FIESTA/KA PREMIUM Z3 (66160)
+  "4020011": [
+    { marca: "Ford", modelo: "Fiesta" },
+    { marca: "Ford", modelo: "Ka" },
+    { marca: "Ford", modelo: "Focus" },
+    { marca: "Ford", modelo: "Mondeo" },
+  ],
   // ANTIRROBO FORD FOCUS/MONDEO Z3 LINEA PREMIUM (66170)
   "4020012": [
     { marca: "Ford", modelo: "Fiesta" },
     { marca: "Ford", modelo: "Focus" },
     { marca: "Ford", modelo: "Mondeo" },
   ],
+  // ANTIRROBO CHEV. AVEO/SPIN PREMIUM Z3 (66280) — la descripción también
+  // menciona "Sonica" (typo de Sonic) y "Spark", pero Spark no existe en la
+  // lista de vehículos del POS.
+  "4020013": [
+    { marca: "Chevrolet", modelo: "Sonic" },
+    { marca: "Chevrolet", modelo: "Cruze" },
+    { marca: "Chevrolet", modelo: "Aveo" },
+    { marca: "Chevrolet", modelo: "Spin" },
+    { marca: "Chevrolet", modelo: "Blazer" },
+    { marca: "Chevrolet", modelo: "Captiva" },
+    { marca: "Chevrolet", modelo: "Tracker" },
+  ],
   // ANTIRROBO ONIX/RANGER NVA PREMIUM Z3 (66281)
   "4020014": [
     { marca: "Ford", modelo: "Ranger" },
     { marca: "Chevrolet", modelo: "S10" },
+  ],
+  // ANTIRROBO TRACKER M/NUEVO (66282)
+  "4020015": [
+    { marca: "Chevrolet", modelo: "Tracker" },
   ],
   // ANTIRROBO VW BORA VENTO PREMIUM Z3 (66290)
   "4020016": [
@@ -93,6 +133,13 @@ export const TUERCAS_VEHICULOS: Record<string, TuercaVehiculo[]> = {
     { marca: "Audi" },
     { marca: "Seat", modelo: "Leon" },
     { marca: "Seat", modelo: "Toledo" },
+  ],
+  // ANTIRROBO JOURNEY/KIA/ PREMIUM Z3 (66300) — la descripción también
+  // menciona "Rover", pero esa marca no existe en la lista del POS.
+  "4020017": [
+    { marca: "Chery", modelo: "Tiggo" },
+    { marca: "Dodge", modelo: "Journey" },
+    { marca: "Kia" },
   ],
   // ANTIRROBO RANGER PREMIUM Z3 (66310)
   "4020018": [
