@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import type { VehiculoOption } from "@/lib/pos-api";
 
 function normalize(text: string): string {
@@ -43,7 +43,6 @@ export function VehicleCombobox({
 }) {
   const [query, setQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
 
   const matches = useMemo(() => matchVehiculos(vehiculos, query), [vehiculos, query]);
 
@@ -53,8 +52,19 @@ export function VehicleCombobox({
     setIsOpen(false);
   }
 
+  function handleChange(value: string) {
+    setQuery(value);
+    setIsOpen(true);
+    // Si ya queda un solo modelo posible (ej. "berlingo"), lo resolvemos
+    // solos en vez de obligar a tocar el resultado — pensado para mobile.
+    if (value.trim().length >= 3) {
+      const found = matchVehiculos(vehiculos, value);
+      if (found.length === 1) select(found[0]);
+    }
+  }
+
   return (
-    <div className="relative" ref={containerRef}>
+    <div className="relative">
       <div className="relative">
         <svg
           className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none"
@@ -68,15 +78,9 @@ export function VehicleCombobox({
           type="text"
           value={query}
           autoFocus={autoFocus}
-          onChange={(e) => {
-            setQuery(e.target.value);
-            setIsOpen(true);
-          }}
+          onChange={(e) => handleChange(e.target.value)}
           onFocus={() => setIsOpen(true)}
-          onBlur={() => {
-            // Delay para permitir que el click en un resultado se registre antes de cerrar.
-            setTimeout(() => setIsOpen(false), 150);
-          }}
+          onBlur={() => setIsOpen(false)}
           placeholder={placeholder}
           className="w-full bg-white border border-slate-200 rounded-xl pl-10 pr-4 py-3 text-sm font-medium text-slate-700 focus:ring-2 focus:ring-navy-500/10 outline-none"
         />
@@ -89,7 +93,13 @@ export function VehicleCombobox({
               <button
                 key={`${v.marca}-${v.modelo}`}
                 type="button"
-                onClick={() => select(v)}
+                // onMouseDown (no onClick): evita la carrera con el blur del
+                // input, que en mobile puede cerrar el dropdown antes de que
+                // el click llegue a registrarse y hace parecer que "no anda".
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  select(v);
+                }}
                 className="w-full px-4 py-2.5 text-left text-sm text-slate-700 hover:bg-slate-50 transition-colors"
               >
                 <span className="font-bold text-navy-900">{v.modelo}</span>{" "}
