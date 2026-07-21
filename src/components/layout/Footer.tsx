@@ -140,6 +140,9 @@ export function Footer() {
         <div className="max-w-7xl mx-auto px-4 py-5 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-zinc-500">
           <p>© {year} Neumáticos Trivium. Todos los derechos reservados.</p>
           <div className="flex gap-4">
+            <Link href="/politica-de-devoluciones" className="hover:text-zinc-300 transition-colors">
+              Política de devoluciones
+            </Link>
             <Link href="/privacidad" className="hover:text-zinc-300 transition-colors">
               Política de privacidad
             </Link>
