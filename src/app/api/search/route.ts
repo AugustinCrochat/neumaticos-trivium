@@ -1,4 +1,5 @@
 import { getProductosDesdePOS, getAccesoriosDesdePOS } from "@/lib/pos-api";
+import { getSelectedBranchSlug } from "@/lib/branch-server";
 import { searchCatalog, type ScoredMatch } from "@/lib/search-catalog";
 
 export type SearchResult = {
@@ -29,7 +30,8 @@ export async function GET(request: Request) {
   const query = new URL(request.url).searchParams.get("q")?.trim() ?? "";
   if (!query) return Response.json({ results: [], total: 0 });
 
-  const [productos, accesorios] = await Promise.all([getProductosDesdePOS(), getAccesoriosDesdePOS()]);
+  const sucursal = await getSelectedBranchSlug();
+  const [productos, accesorios] = await Promise.all([getProductosDesdePOS(sucursal), getAccesoriosDesdePOS(sucursal)]);
   const matches = searchCatalog(query, productos, accesorios);
   const results = matches.slice(0, PREVIEW_LIMIT).map(toSearchResult);
 

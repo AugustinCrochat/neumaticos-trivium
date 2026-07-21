@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { getProductosDesdePOS } from "@/lib/pos-api";
+import { getSelectedBranchSlug } from "@/lib/branch-server";
 import { getBrandLogo } from "@/lib/brand-utils";
 import { BRANDS } from "@/lib/data";
 import { SITE_URL } from "@/lib/config";
@@ -19,7 +20,7 @@ type Props = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const productos = await getProductosDesdePOS();
+  const productos = await getProductosDesdePOS(await getSelectedBranchSlug());
   const product = productos.find((p) => p.slug === slug);
   if (!product) return {};
   const loadSpeed = product.loadIndex && product.speedRating ? ` ${product.loadIndex}${product.speedRating}` : "";
@@ -97,7 +98,7 @@ const TIRE_SVG = (
 
 export default async function ProductPage({ params }: Props) {
   const { slug } = await params;
-  const productos = await getProductosDesdePOS();
+  const productos = await getProductosDesdePOS(await getSelectedBranchSlug());
   const product = productos.find((p) => p.slug === slug);
   if (!product) notFound();
 

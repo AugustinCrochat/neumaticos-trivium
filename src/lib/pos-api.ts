@@ -1,11 +1,15 @@
 import type { Accessory, TireProduct } from "./types";
+import { DEFAULT_BRANCH_ID } from "./config";
 import productImagesManifest from "./product-images-manifest.json";
 
 const AVAILABLE_IMAGES = new Set(productImagesManifest);
 
 // .trim() por si la variable de entorno se pegó con un espacio o salto de
 // línea de más al cargarla en el dashboard (rompe el fetch silenciosamente).
-const POS_API_URL = process.env.POS_API_URL?.trim();
+// Base sin sucursal — cada fetch arma /{sucursal}/productos, etc. (ver
+// pos-neumaticos/src/app/api/public/[sucursal]/*), para poder mostrar el
+// catálogo de la sucursal que el visitante tenga elegida en vez de una fija.
+const POS_API_BASE_URL = process.env.POS_API_BASE_URL?.trim();
 
 type PosProducto = {
   id: string;
@@ -141,16 +145,16 @@ function toTireProduct(p: PosProducto): TireProduct | null {
   };
 }
 
-export async function getProductosDesdePOS(): Promise<TireProduct[]> {
-  if (!POS_API_URL) {
-    console.error("[pos-api] Falta la variable de entorno POS_API_URL");
+export async function getProductosDesdePOS(sucursalSlug: string = DEFAULT_BRANCH_ID): Promise<TireProduct[]> {
+  if (!POS_API_BASE_URL) {
+    console.error("[pos-api] Falta la variable de entorno POS_API_BASE_URL");
     return [];
   }
   try {
     // Sin timeout propio, un fetch colgado en Workers se lleva el request
     // entero hasta que Cloudflare mata la instancia ("exceeded resource
     // limits"). El POS a veces tarda o no responde bajo tráfico.
-    const res = await fetch(`${POS_API_URL}/productos`, { next: { revalidate: 300 }, signal: AbortSignal.timeout(8000) });
+    const res = await fetch(`${POS_API_BASE_URL}/${sucursalSlug}/productos`, { next: { revalidate: 300 }, signal: AbortSignal.timeout(8000) });
     if (!res.ok) {
       console.error(`[pos-api] Error ${res.status} al obtener productos del POS`);
       return [];
@@ -174,13 +178,13 @@ type PosAccesorio = {
   stock: number;
 };
 
-export async function getAccesoriosDesdePOS(): Promise<Accessory[]> {
-  if (!POS_API_URL) {
-    console.error("[pos-api] Falta la variable de entorno POS_API_URL");
+export async function getAccesoriosDesdePOS(sucursalSlug: string = DEFAULT_BRANCH_ID): Promise<Accessory[]> {
+  if (!POS_API_BASE_URL) {
+    console.error("[pos-api] Falta la variable de entorno POS_API_BASE_URL");
     return [];
   }
   try {
-    const res = await fetch(`${POS_API_URL}/accesorios`, { next: { revalidate: 300 }, signal: AbortSignal.timeout(8000) });
+    const res = await fetch(`${POS_API_BASE_URL}/${sucursalSlug}/accesorios`, { next: { revalidate: 300 }, signal: AbortSignal.timeout(8000) });
     if (!res.ok) {
       console.error(`[pos-api] Error ${res.status} al obtener accesorios del POS`);
       return [];
@@ -205,13 +209,13 @@ export async function getAccesoriosDesdePOS(): Promise<Accessory[]> {
 
 export type VehiculoOption = { marca: string; modelo: string; label: string };
 
-export async function getVehiculosDesdePOS(): Promise<VehiculoOption[]> {
-  if (!POS_API_URL) {
-    console.error("[pos-api] Falta la variable de entorno POS_API_URL");
+export async function getVehiculosDesdePOS(sucursalSlug: string = DEFAULT_BRANCH_ID): Promise<VehiculoOption[]> {
+  if (!POS_API_BASE_URL) {
+    console.error("[pos-api] Falta la variable de entorno POS_API_BASE_URL");
     return [];
   }
   try {
-    const res = await fetch(`${POS_API_URL}/vehiculos`, { next: { revalidate: 3600 }, signal: AbortSignal.timeout(8000) });
+    const res = await fetch(`${POS_API_BASE_URL}/${sucursalSlug}/vehiculos`, { next: { revalidate: 3600 }, signal: AbortSignal.timeout(8000) });
     if (!res.ok) {
       console.error(`[pos-api] Error ${res.status} al obtener vehículos del POS`);
       return [];
@@ -224,13 +228,13 @@ export async function getVehiculosDesdePOS(): Promise<VehiculoOption[]> {
   }
 }
 
-export async function getServiciosPrecios(grupo?: string): Promise<ServicioPrecio[]> {
-  if (!POS_API_URL) {
-    console.error("[pos-api] Falta la variable de entorno POS_API_URL");
+export async function getServiciosPrecios(grupo?: string, sucursalSlug: string = DEFAULT_BRANCH_ID): Promise<ServicioPrecio[]> {
+  if (!POS_API_BASE_URL) {
+    console.error("[pos-api] Falta la variable de entorno POS_API_BASE_URL");
     return [];
   }
   try {
-    const res = await fetch(`${POS_API_URL}/servicios`, { next: { revalidate: 300 }, signal: AbortSignal.timeout(8000) });
+    const res = await fetch(`${POS_API_BASE_URL}/${sucursalSlug}/servicios`, { next: { revalidate: 300 }, signal: AbortSignal.timeout(8000) });
     if (!res.ok) {
       console.error(`[pos-api] Error ${res.status} al obtener servicios del POS`);
       return [];

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { EquivalenceCalculator } from "@/components/ui/EquivalenceCalculator";
 import { SITE_URL } from "@/lib/config";
 import { getProductosDesdePOS } from "@/lib/pos-api";
+import { getSelectedBranchSlug } from "@/lib/branch-server";
 
 export const revalidate = 300;
 
@@ -77,7 +78,7 @@ const jsonLd = {
 };
 
 export default async function CalculadoraEquivalenciaNeumaticosPage() {
-  const productos = await getProductosDesdePOS();
+  const productos = await getProductosDesdePOS(await getSelectedBranchSlug());
 
   return (
     <div className="min-h-screen bg-white">

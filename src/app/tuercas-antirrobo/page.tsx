@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { AccessoryCard } from "@/components/ui/AccessoryCard";
 import { CompatibleTuercaBanner } from "@/components/ui/CompatibleTuercaBanner";
 import { getAccesoriosDesdePOS } from "@/lib/pos-api";
+import { getSelectedBranchSlug } from "@/lib/branch-server";
 
 export const revalidate = 300;
 
@@ -11,7 +12,7 @@ export const metadata: Metadata = {
 };
 
 export default async function TuercasAntirroboPage() {
-  const accesorios = await getAccesoriosDesdePOS();
+  const accesorios = await getAccesoriosDesdePOS(await getSelectedBranchSlug());
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">

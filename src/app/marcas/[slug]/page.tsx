@@ -1,5 +1,6 @@
 import { BRANDS } from "@/lib/data";
 import { getProductosDesdePOS } from "@/lib/pos-api";
+import { getSelectedBranchSlug } from "@/lib/branch-server";
 import { ProductCard } from "@/components/ui/ProductCard";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -25,7 +26,7 @@ export default async function BrandPage({ params }: Props) {
   const brand = BRANDS.find((b) => b.id === slug);
   if (!brand) notFound();
 
-  const productos = await getProductosDesdePOS();
+  const productos = await getProductosDesdePOS(await getSelectedBranchSlug());
   const brandProducts = productos.filter((p) => p.brandId === brand.id);
   const brandLogo = getBrandLogo(brand.id);
 

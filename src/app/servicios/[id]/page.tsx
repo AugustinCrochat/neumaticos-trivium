@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { SERVICES } from "@/lib/data";
 import { ICONS } from "@/components/home/ServicesSection";
 import { getServiciosPrecios } from "@/lib/pos-api";
+import { getSelectedBranchSlug } from "@/lib/branch-server";
 
 export const revalidate = 300;
 
@@ -36,7 +37,7 @@ export default async function ServicioPage({ params }: Props) {
   const service = SERVICES.find((s) => s.id === id);
   if (!service) notFound();
 
-  const precios = await getServiciosPrecios(id);
+  const precios = await getServiciosPrecios(id, await getSelectedBranchSlug());
 
   return (
     <div className="min-h-screen bg-white">

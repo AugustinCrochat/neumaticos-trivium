@@ -1,6 +1,12 @@
 /** URL canonica del sitio en produccion (sin barra final). Usada para SEO y QR. */
 export const SITE_URL = "https://neumaticos.trivium.ar";
 
+/** Nombre de la cookie de sucursal elegida — la escribe branch-context.tsx
+    (cliente) y la lee branch-server.ts (Server Components/route handlers).
+    Vive acá, no en branch-server.ts, para que un componente cliente pueda
+    usar el nombre sin arrastrar el import de "next/headers" al bundle. */
+export const BRANCH_COOKIE = "trivium-branch";
+
 export type ScheduleRule = {
   /** Dias de la semana segun Date.getDay(): 0=Domingo ... 6=Sabado */
   days: number[];

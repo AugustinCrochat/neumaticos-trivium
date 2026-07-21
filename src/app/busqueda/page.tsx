@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getProductosDesdePOS, getAccesoriosDesdePOS } from "@/lib/pos-api";
+import { getSelectedBranchSlug } from "@/lib/branch-server";
 import { searchCatalog } from "@/lib/search-catalog";
 import { ProductCard } from "@/components/ui/ProductCard";
 import { AccessoryCard } from "@/components/ui/AccessoryCard";
@@ -26,7 +27,8 @@ export default async function BusquedaPage({ searchParams }: Props) {
     );
   }
 
-  const [productos, accesorios] = await Promise.all([getProductosDesdePOS(), getAccesoriosDesdePOS()]);
+  const sucursal = await getSelectedBranchSlug();
+  const [productos, accesorios] = await Promise.all([getProductosDesdePOS(sucursal), getAccesoriosDesdePOS(sucursal)]);
   const matches = searchCatalog(query, productos, accesorios);
 
   return (

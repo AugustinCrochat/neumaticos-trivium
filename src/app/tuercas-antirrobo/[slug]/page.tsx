@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { getAccesoriosDesdePOS } from "@/lib/pos-api";
+import { getSelectedBranchSlug } from "@/lib/branch-server";
 import { SITE_URL } from "@/lib/config";
 import { AccessoryAddToCart } from "@/components/ui/AccessoryAddToCart";
 
@@ -14,7 +15,7 @@ type Props = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const accesorios = await getAccesoriosDesdePOS();
+  const accesorios = await getAccesoriosDesdePOS(await getSelectedBranchSlug());
   const accessory = accesorios.find((a) => a.slug === slug);
   if (!accessory) return {};
   const title = `${accessory.nombre} — Neumáticos Trivium`;
@@ -49,7 +50,7 @@ const LOCK_SVG = (
 
 export default async function AccessoryPage({ params }: Props) {
   const { slug } = await params;
-  const accesorios = await getAccesoriosDesdePOS();
+  const accesorios = await getAccesoriosDesdePOS(await getSelectedBranchSlug());
   const accessory = accesorios.find((a) => a.slug === slug);
   if (!accessory) notFound();
 

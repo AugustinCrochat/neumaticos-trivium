@@ -1,4 +1,4 @@
-import { SITE_URL } from "@/lib/config";
+import { SITE_URL, BRANCHES } from "@/lib/config";
 import { getProductosDesdePOS, getServiciosPrecios, getAccesoriosDesdePOS, COMBO_ALINEACION_BALANCEO_AUTO } from "@/lib/pos-api";
 
 type CheckoutItem = { kind?: unknown; id?: unknown; quantity?: unknown };
@@ -19,6 +19,12 @@ export async function POST(request: Request) {
   if (!Array.isArray(body.items) || body.items.length === 0 || body.items.length > 20 || typeof body.branchId !== "string") {
     return Response.json({ error: "Revisá los productos de tu carrito." }, { status: 400 });
   }
+  // branchId decide contra qué sucursal se valida stock/precio — tiene que
+  // ser una sucursal real, no un string cualquiera que mande el cliente.
+  if (!BRANCHES.some((b) => b.id === body.branchId)) {
+    return Response.json({ error: "Sucursal inválida." }, { status: 400 });
+  }
+  const sucursal = body.branchId;
 
   const requestedTires = new Map<string, number>();
   const requestedServices = new Map<string, number>();
@@ -35,9 +41,9 @@ export async function POST(request: Request) {
   // El precio de tires/servicios/accesorios siempre se toma del POS, nunca del
   // cliente, para que no se pueda manipular el monto a pagar.
   const [products, servicios, accesorios] = await Promise.all([
-    getProductosDesdePOS(),
-    requestedServices.size > 0 ? getServiciosPrecios() : Promise.resolve([]),
-    requestedAccesorios.size > 0 ? getAccesoriosDesdePOS() : Promise.resolve([]),
+    getProductosDesdePOS(sucursal),
+    requestedServices.size > 0 ? getServiciosPrecios(undefined, sucursal) : Promise.resolve([]),
+    requestedAccesorios.size > 0 ? getAccesoriosDesdePOS(sucursal) : Promise.resolve([]),
   ]);
 
   const cartTires = [...requestedTires].map(([id, quantity]) => ({ product: products.find((p) => p.id === id), quantity }));

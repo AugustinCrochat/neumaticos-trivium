@@ -7,7 +7,7 @@ import {
   useEffect,
   type ReactNode,
 } from "react";
-import { BRANCHES, DEFAULT_BRANCH_ID, type Branch } from "@/lib/config";
+import { BRANCHES, DEFAULT_BRANCH_ID, BRANCH_COOKIE, type Branch } from "@/lib/config";
 
 type BranchContextType = {
   selectedBranch: Branch;
@@ -21,7 +21,17 @@ type BranchContextType = {
 
 const BranchContext = createContext<BranchContextType | null>(null);
 
-const STORAGE_KEY = "trivium-branch";
+// Cookie (no localStorage): las páginas piden el catálogo de la sucursal
+// elegida en el servidor (ver src/lib/branch-server.ts), que no tiene acceso
+// a localStorage — la cookie la lee tanto el cliente como el servidor.
+function readBranchCookie(): string | null {
+  const match = document.cookie.match(new RegExp(`(?:^|; )${BRANCH_COOKIE}=([^;]*)`));
+  return match ? decodeURIComponent(match[1]) : null;
+}
+
+function writeBranchCookie(branchId: string) {
+  document.cookie = `${BRANCH_COOKIE}=${branchId}; path=/; max-age=31536000; SameSite=Lax`;
+}
 
 export function BranchProvider({ children }: { children: ReactNode }) {
   const [selectedBranch, setSelectedBranchState] = useState<Branch>(
@@ -32,7 +42,7 @@ export function BranchProvider({ children }: { children: ReactNode }) {
   const [pendingAction, setPendingAction] = useState<((branch: Branch) => void) | null>(null);
 
   useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
+    const stored = readBranchCookie();
     if (stored) {
       const branch = BRANCHES.find((b) => b.id === stored);
       if (branch) {
@@ -44,7 +54,7 @@ export function BranchProvider({ children }: { children: ReactNode }) {
 
   const setSelectedBranch = (branch: Branch) => {
     setSelectedBranchState(branch);
-    localStorage.setItem(STORAGE_KEY, branch.id);
+    writeBranchCookie(branch.id);
     setHasConfirmedBranch(true);
     setIsModalOpen(false);
     if (pendingAction) {

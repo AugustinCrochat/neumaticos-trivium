@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { EquivalenceCalculator } from "@/components/ui/EquivalenceCalculator";
 import { getProductosDesdePOS } from "@/lib/pos-api";
+import { getSelectedBranchSlug } from "@/lib/branch-server";
 
 export const revalidate = 300;
 
@@ -10,7 +11,7 @@ export const metadata = {
 };
 
 export default async function EquivalenciasPage() {
-  const productos = await getProductosDesdePOS();
+  const productos = await getProductosDesdePOS(await getSelectedBranchSlug());
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
