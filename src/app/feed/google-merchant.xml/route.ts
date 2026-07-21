@@ -23,6 +23,14 @@ function cdata(text: string): string {
   return `<![CDATA[${text.replace(/]]>/g, "]]]]><![CDATA[>")}]]>`;
 }
 
+// No mandamos inventario por sucursal (store_code, quantity, etc.), así que
+// excluimos estos dos destinos para que Merchant Center no reclame datos de
+// "tienda física" que no estamos completando — el listado normal de Shopping
+// (Free Listings) sigue activo igual, esto solo apaga las extensiones locales.
+const EXCLUDED_DESTINATIONS = `
+      <g:excluded_destination>free_local_listings</g:excluded_destination>
+      <g:excluded_destination>local_inventory_ads</g:excluded_destination>`;
+
 function tireItem(p: TireProduct): string {
   const link = `${SITE_URL}/productos/${p.slug}`;
   const description = `Neumático ${p.model} — importación directa, outlet de neumáticos. Garantía de 1 año.`;
@@ -38,7 +46,7 @@ function tireItem(p: TireProduct): string {
       <g:price>${p.price.toFixed(2)} ARS</g:price>
       <g:brand>${cdata(p.brand)}</g:brand>
       <g:identifier_exists>no</g:identifier_exists>
-      <g:product_type>${cdata(`Neumáticos > ${p.brand}`)}</g:product_type>
+      <g:product_type>${cdata(`Neumáticos > ${p.brand}`)}</g:product_type>${EXCLUDED_DESTINATIONS}
     </item>`;
 }
 
@@ -59,7 +67,7 @@ function accessoryItem(a: Accessory & { imageUrl: string }): string {
       <g:price>${a.price.toFixed(2)} ARS</g:price>
       <g:brand>${cdata("Z3")}</g:brand>
       <g:identifier_exists>no</g:identifier_exists>
-      <g:product_type>${cdata("Tuercas Antirrobo")}</g:product_type>
+      <g:product_type>${cdata("Tuercas Antirrobo")}</g:product_type>${EXCLUDED_DESTINATIONS}
     </item>`;
 }
 
