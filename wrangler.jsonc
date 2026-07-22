@@ -14,7 +14,9 @@
 	// --keep-vars, así que quedaban vacías. Así quedan garantizadas siempre.
 	"vars": {
 		"GEMINI_MODEL": "gemini-2.0-flash-lite",
-		"POS_API_URL": "https://pos-neumaticos.vercel.app/api/public/arguello",
+		// Sin sucursal al final (antes terminaba en "/arguello") — cada fetch en
+		// pos-api.ts arma /{sucursal}/productos, etc. según la sucursal elegida.
+		"POS_API_BASE_URL": "https://pos-neumaticos.vercel.app/api/public",
 		"GOOGLE_AI_KEY": "AIzaSyCwuPQrjs0L9x_QnqLOmlHJ9VIX4wyBBOM",
 		"MERCADOPAGO_ACCESS_TOKEN": "APP_USR-6323540170330488-071417-4413e75117545308b4946db2d376bbf4-3541709725"
 	},
