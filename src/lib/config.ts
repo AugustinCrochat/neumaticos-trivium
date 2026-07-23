@@ -39,6 +39,11 @@ export type Branch = {
     x: number;
     y: number;
   };
+  /** Store code de esta sucursal en Google Business Profile / Merchant Center
+      (Perfiles de empresa vinculados) — usado por el feed de inventario
+      local (/feed/google-local-inventory.xml). Sin esto, esa sucursal no
+      puede tener fichas locales sin coste ni anuncios de inventario local. */
+  googleStoreCode?: string;
 };
 
 export const BRANCHES: Branch[] = [
@@ -62,6 +67,7 @@ export const BRANCHES: Branch[] = [
       x: 31,
       y: 22,
     },
+    googleStoreCode: "14523860207436626950",
   },
 ];
 
