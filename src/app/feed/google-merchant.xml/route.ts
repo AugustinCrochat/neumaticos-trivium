@@ -28,8 +28,8 @@ function cdata(text: string): string {
 // "tienda física" que no estamos completando — el listado normal de Shopping
 // (Free Listings) sigue activo igual, esto solo apaga las extensiones locales.
 const EXCLUDED_DESTINATIONS = `
-      <g:excluded_destination>free_local_listings</g:excluded_destination>
-      <g:excluded_destination>local_inventory_ads</g:excluded_destination>`;
+      <g:excluded_destination>Free_local_listings</g:excluded_destination>
+      <g:excluded_destination>Local_inventory_ads</g:excluded_destination>`;
 
 function tireItem(p: TireProduct): string {
   const link = `${SITE_URL}/productos/${p.slug}`;
