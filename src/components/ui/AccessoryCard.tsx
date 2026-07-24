@@ -52,7 +52,7 @@ export function AccessoryCard({ accessory }: { accessory: Accessory }) {
         </h3>
 
         <div className="mt-auto">
-          <span className="text-2xl font-black text-red-600 block mb-1.5">{formatPrice(accessory.price)}</span>
+          <span className="text-2xl font-black text-red-600 block mb-1.5 break-words">{formatPrice(accessory.price)}</span>
           <AccessoryAddToCart accessory={accessory} />
         </div>
       </div>

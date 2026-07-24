@@ -121,12 +121,12 @@ export function ProductCard({
         {/* Price */}
         <div className="mt-auto">
           {product.priceOld && (
-            <span className="text-slate-400 line-through text-xs block">
+            <span className="text-slate-400 line-through text-xs block break-words">
               {formatPrice(product.priceOld)}
             </span>
           )}
           <div className="flex flex-col items-start gap-0.5">
-            <span className="text-2xl font-black text-red-600">
+            <span className="text-2xl font-black text-red-600 break-words">
               {formatPrice(product.price)}
             </span>
             {product.tags.find(t => t.toLowerCase().startsWith('pack')) && (() => {
