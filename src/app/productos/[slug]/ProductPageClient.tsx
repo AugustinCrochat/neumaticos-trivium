@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import { useBranch } from "@/contexts/branch-context";
 import type { TireProduct } from "@/lib/types";
@@ -16,7 +17,14 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
   return (
     <div className="mt-6 flex flex-col gap-3">
       <button onClick={() => setShowModal(true)} disabled={!product.enStock} className="flex items-center justify-center gap-2 bg-[#FFE600] hover:bg-[#f5dc00] disabled:bg-slate-300 disabled:text-white text-navy-900 font-black py-3 rounded-xl text-base transition-colors">
-        {product.enStock ? "Comprar ahora" : "Sin stock"}
+        {product.enStock ? (
+          <>
+            Comprar ahora
+            <Image src="/images/mercadopago-logo.svg" alt="Mercado Pago" width={180} height={45} className="h-6 w-auto" />
+          </>
+        ) : (
+          "Sin stock"
+        )}
       </button>
       {showModal && <AddToCartModal product={product} onClose={() => setShowModal(false)} />}
       <a
