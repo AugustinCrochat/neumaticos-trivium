@@ -24,7 +24,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const product = productos.find((p) => p.slug === slug);
   if (!product) return {};
   const loadSpeed = product.loadIndex && product.speedRating ? ` ${product.loadIndex}${product.speedRating}` : "";
-  const sizeRegex = new RegExp(`(${product.size.width}\\s*/\\s*${product.size.profile}\\s*R\\s*${product.size.rim})`, "i");
+  // El [A-Z]* al final agarra la "C" de los neumáticos de carga (ej. "R15C")
+  // — sin esto, el loadSpeed se insertaba entre el rodado y la "C" (ver
+  // ProductNameWithHighlightedSize, que ya maneja este mismo caso).
+  const sizeRegex = new RegExp(`(${product.size.width}\\s*/\\s*${product.size.profile}\\s*R\\s*${product.size.rim}[A-Z]*)`, "i");
   const title = product.model.replace(sizeRegex, `$1${loadSpeed}`);
   const fullTitle = `${title} — Neumáticos Trivium`;
   const description = `Comprá el neumático ${title} al mejor precio. Outlet de neumáticos importados en Argentina.`;
@@ -115,7 +118,7 @@ export default async function ProductPage({ params }: Props) {
     { label: "Perfil", value: `${product.size.profile}%` },
     { label: "Rodado", value: `R${product.size.rim}` },
     { label: "Marca", value: product.brand },
-    { label: "Línea", value: product.model.replace(/^\d+\/\d+ R\d+ /, "").replace(new RegExp(`^${product.brand}\\s+`, "i"), "") },
+    { label: "Línea", value: product.model.replace(/^\d+\/\d+ R\d+[A-Z]* /, "").replace(new RegExp(`^${product.brand}\\s+`, "i"), "") },
     ...(product.loadIndex
       ? [{ label: "Índice de carga (por rueda)", value: loadKg ? `${product.loadIndex} (${loadKg} kg)` : product.loadIndex }]
       : []),

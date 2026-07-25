@@ -128,7 +128,7 @@ function toTireProduct(p: PosProducto): TireProduct | null {
   const { loadIndex, speedRating } = parseLoadSpeed(p.nombre || "");
   const brandId = slugify(marca) || "otras-marcas";
   const medida = formatMedida(p.neumatico_ancho, p.neumatico_perfil, p.neumatico_diametro, p.es_carga);
-  const model = `${medida} ${marca} ${modelo}`.trim().replace(/\s+/g, " ");
+  const model = `${medida} ${marca} ${modelo}${p.es_carga ? " De Carga" : ""}`.trim().replace(/\s+/g, " ");
   const loadSpeedSlug = loadIndex && speedRating ? `-${loadIndex}${speedRating}` : "";
   // La "r{diametro}c" tiene que coincidir con el slug que arma buildProductLink
   // en pos-neumaticos/src/lib/whatsapp-catalog-sync.ts — si se toca acá, tocar allá.
