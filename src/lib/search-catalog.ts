@@ -19,6 +19,7 @@ export function searchCatalog(query: string, productos: TireProduct[], accesorio
       String(p.size.rim),
       p.loadIndex,
       p.speedRating,
+      p.isCarga ? "carga" : null,
       ...p.tags,
       CATEGORY_TAGS.tire,
     ].filter(Boolean).join(" ");

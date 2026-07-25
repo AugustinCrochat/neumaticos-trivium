@@ -28,6 +28,8 @@ export type TireProduct = {
   tags: string[];
   isEconomic: boolean;
   isImported: boolean;
+  /** Neumático de carga/comercial (lleva "C" después del rodado, ej. R15C). */
+  isCarga?: boolean;
   slug: string;
   enStock?: boolean;
   /** Cantidad disponible en la sucursal. */

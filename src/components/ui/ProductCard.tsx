@@ -63,6 +63,11 @@ export function ProductCard({
               {discount(product.price, product.priceOld)}% OFF
             </span>
           )}
+          {product.isCarga && (
+            <span className="bg-orange-600 text-white text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-md shadow-md">
+              Carga
+            </span>
+          )}
         </div>
         <div className="absolute inset-0 p-1">
           {hasImage ? (

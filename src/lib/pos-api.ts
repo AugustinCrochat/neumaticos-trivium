@@ -21,6 +21,7 @@ type PosProducto = {
   neumatico_ancho: number | null;
   neumatico_perfil: number | null;
   neumatico_diametro: number | null;
+  es_carga: boolean;
   imagen_url: string | null;
   en_stock: boolean;
   stock?: number;
@@ -51,6 +52,14 @@ export const COMBO_ALINEACION_BALANCEO_AUTO: ServicioPrecio = {
 // Sentinel usado por ProductCard/ProductPage para mostrar el ícono
 // genérico de neumático cuando no hay foto real (ver hasImage en esos componentes).
 const PLACEHOLDER_IMAGE = "/images/tire-placeholder.webp";
+
+// Arma el texto de medida con la "C" (norma ETRTO "Commercial") después del
+// rodado para neumáticos de carga — ej. "205/70 R15C" vs "205/70 R15".
+// Réplica de pos-neumaticos/src/lib/tire.ts (formatMedida) — si se toca acá,
+// tocar allá también.
+function formatMedida(ancho: number, perfil: number, diametro: number, esCarga: boolean): string {
+  return `${ancho}/${perfil} R${diametro}${esCarga ? "C" : ""}`;
+}
 
 function slugify(text: string): string {
   return text
@@ -118,11 +127,13 @@ function toTireProduct(p: PosProducto): TireProduct | null {
   const { marca, modelo } = fixBrandAndModel(p.marca || "", p.modelo || "");
   const { loadIndex, speedRating } = parseLoadSpeed(p.nombre || "");
   const brandId = slugify(marca) || "otras-marcas";
-  const model = `${p.neumatico_ancho}/${p.neumatico_perfil} R${p.neumatico_diametro} ${marca} ${modelo}`
-    .trim()
-    .replace(/\s+/g, " ");
+  const medida = formatMedida(p.neumatico_ancho, p.neumatico_perfil, p.neumatico_diametro, p.es_carga);
+  const model = `${medida} ${marca} ${modelo}`.trim().replace(/\s+/g, " ");
   const loadSpeedSlug = loadIndex && speedRating ? `-${loadIndex}${speedRating}` : "";
-  const slug = slugify(`${marca}-${modelo}-${p.neumatico_ancho}-${p.neumatico_perfil}-r${p.neumatico_diametro}${loadSpeedSlug}`);
+  // La "r{diametro}c" tiene que coincidir con el slug que arma buildProductLink
+  // en pos-neumaticos/src/lib/whatsapp-catalog-sync.ts — si se toca acá, tocar allá.
+  const rodadoSlug = `r${p.neumatico_diametro}${p.es_carga ? "c" : ""}`;
+  const slug = slugify(`${marca}-${modelo}-${p.neumatico_ancho}-${p.neumatico_perfil}-${rodadoSlug}${loadSpeedSlug}`);
 
   return {
     id: p.id,
@@ -137,6 +148,7 @@ function toTireProduct(p: PosProducto): TireProduct | null {
     tags: [],
     isEconomic: false,
     isImported: true,
+    isCarga: p.es_carga,
     slug,
     enStock: p.en_stock,
     stock: p.stock,
