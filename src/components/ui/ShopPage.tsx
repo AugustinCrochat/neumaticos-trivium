@@ -395,7 +395,7 @@ export function ShopPage({
   return (
     <div className="min-h-screen bg-white">
       <div className="max-w-7xl mx-auto px-4 pt-4 pb-8">
-        <div className="flex flex-col lg:flex-row gap-8 items-start">
+        <div className="flex flex-col lg:flex-row gap-8 items-stretch lg:items-start">
 
           {/* Sidebar — search widget only */}
           <aside className="w-full lg:w-72 shrink-0 lg:sticky lg:top-8 lg:self-start">
