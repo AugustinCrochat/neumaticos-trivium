@@ -100,7 +100,7 @@ const TIRE_SVG = (
 );
 
 function buildProductJsonLd(product: {
-  slug: string; brand: string; model: string; imageUrl: string; price: number; enStock?: boolean;
+  id: string; slug: string; brand: string; model: string; imageUrl: string; price: number; enStock?: boolean;
 }) {
   const url = `${SITE_URL}/productos/${product.slug}`;
   const image = product.imageUrl.startsWith("http") ? product.imageUrl : `${SITE_URL}${product.imageUrl}`;
@@ -109,6 +109,11 @@ function buildProductJsonLd(product: {
     "@type": "Product",
     name: `${product.brand} ${product.model}`,
     image,
+    // sku tiene que ser el mismo id que <g:id> en google-merchant.xml y
+    // google-local-inventory.xml — sin esto Merchant Center no puede matchear
+    // el structured data de la pagina con el item del feed ("missing
+    // required parameter id" en Diagnostics de productos).
+    sku: product.id,
     brand: { "@type": "Brand", name: product.brand },
     url,
     offers: {
