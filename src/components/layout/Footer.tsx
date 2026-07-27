@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { BRANCHES, LEGAL_NAME, CUIT, CONTACT_EMAIL, INSTAGRAM_URL, FACEBOOK_URL, AFIP_DATA_FISCAL_QR } from "@/lib/config";
+import { GoogleRatingBadge } from "@/components/ui/GoogleRatingBadge";
 
 export function Footer() {
   const year = new Date().getFullYear();
@@ -25,6 +26,7 @@ export function Footer() {
               El outlet del neumático. Importación directa desde China con la mejor
               relación calidad-precio del mercado argentino.
             </p>
+            <GoogleRatingBadge className="text-zinc-300 mb-4" />
             <div className="flex gap-3">
               <a
                 href={INSTAGRAM_URL}

@@ -60,6 +60,13 @@ const organizationJsonLd = {
     areaServed: "AR",
     availableLanguage: "Spanish",
   },
+  ...(BRANCHES[0].googleRating && {
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: BRANCHES[0].googleRating.value,
+      reviewCount: BRANCHES[0].googleRating.count,
+    },
+  }),
 };
 
 export default async function RootLayout({

@@ -69,6 +69,13 @@ function buildJsonLd(branch: Branch) {
       opens: rule.open,
       closes: rule.close,
     })),
+    ...(branch.googleRating && {
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: branch.googleRating.value,
+        reviewCount: branch.googleRating.count,
+      },
+    }),
   };
 }
 

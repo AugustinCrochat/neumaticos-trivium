@@ -1,4 +1,5 @@
 import { SizeOrVehicleSearch } from "@/components/ui/SizeOrVehicleSearch";
+import { GoogleRatingBadge } from "@/components/ui/GoogleRatingBadge";
 
 export function HeroSection() {
   return (
@@ -15,6 +16,7 @@ export function HeroSection() {
               El outlet del{" "}
               <span className="text-orange-500">neumático</span>
             </h1>
+            <GoogleRatingBadge className="text-slate-700 mt-5" />
           </div>
 
           {/* Right: search */}

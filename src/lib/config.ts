@@ -44,6 +44,11 @@ export type Branch = {
   mapUrl: string;
   /** Link directo para dejar una resena en Google Maps */
   reviewUrl?: string;
+  /** Rating y cantidad de resenas en Google Maps de esta sucursal — se
+      muestra como badge de confianza en el sitio (pedido explicito de la
+      politica de Misrepresentation de Merchant Center: "promote your online
+      reputation by showing reviews"). Actualizar a mano cuando cambien. */
+  googleRating?: { value: number; count: number };
   coordinates: {
     lat: number;
     lng: number;
@@ -72,6 +77,7 @@ export const BRANCHES: Branch[] = [
     schedule: [{ days: [1, 2, 3, 4, 5, 6], open: "09:00", close: "19:00" }],
     mapUrl: "https://maps.app.goo.gl/tQrXVQCQ5VviAYY46",
     reviewUrl: "https://g.page/r/CWBPMZ1uJwaREBI/review",
+    googleRating: { value: 5, count: 2 },
     coordinates: {
       lat: -31.3302015,
       lng: -64.2650135,
