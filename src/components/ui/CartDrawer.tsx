@@ -63,9 +63,16 @@ export function CartDrawer() {
       <aside className="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl flex flex-col">
         <div className="flex items-center justify-between p-5 border-b border-slate-200">
           <h2 className="text-xl font-black text-navy-900">Tu carrito</h2>
-          <button onClick={closeCart} className="p-2 text-slate-500 hover:text-slate-900" aria-label="Cerrar">
-            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18 18 6M6 6l12 12" /></svg>
-          </button>
+          <div className="flex items-center gap-4">
+            {items.length > 0 && (
+              <Link href="/carrito" onClick={closeCart} className="text-xs font-bold text-navy-600 hover:text-navy-800 underline underline-offset-4">
+                Ver página completa
+              </Link>
+            )}
+            <button onClick={closeCart} className="p-2 text-slate-500 hover:text-slate-900" aria-label="Cerrar">
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18 18 6M6 6l12 12" /></svg>
+            </button>
+          </div>
         </div>
 
         {items.length === 0 ? (
