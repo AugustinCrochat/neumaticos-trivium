@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { BRANCHES } from "@/lib/config";
+import { BRANCHES, LEGAL_NAME, CUIT, CONTACT_EMAIL, INSTAGRAM_URL, FACEBOOK_URL, AFIP_DATA_FISCAL_QR } from "@/lib/config";
 
 export function Footer() {
   const year = new Date().getFullYear();
@@ -27,7 +27,7 @@ export function Footer() {
             </p>
             <div className="flex gap-3">
               <a
-                href="https://instagram.com"
+                href={INSTAGRAM_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-9 h-9 bg-zinc-900 hover:bg-[#e30613] rounded-lg flex items-center justify-center transition-colors"
@@ -38,7 +38,7 @@ export function Footer() {
                 </svg>
               </a>
               <a
-                href="https://facebook.com"
+                href={FACEBOOK_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-9 h-9 bg-zinc-900 hover:bg-[#e30613] rounded-lg flex items-center justify-center transition-colors"
@@ -135,11 +135,34 @@ export function Footer() {
         </div>
       </div>
 
+      {/* Identidad legal + Data Fiscal */}
+      <div className="border-t border-zinc-900">
+        <div className="max-w-7xl mx-auto px-4 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-500">
+          <div className="text-center sm:text-left space-y-0.5">
+            <p>
+              Neumáticos Trivium es una marca comercial de <strong className="text-zinc-300">{LEGAL_NAME}</strong> — CUIT {CUIT}.
+            </p>
+            <p>
+              Contacto:{" "}
+              <a href={`mailto:${CONTACT_EMAIL}`} className="hover:text-zinc-300 transition-colors underline underline-offset-2">
+                {CONTACT_EMAIL}
+              </a>
+            </p>
+          </div>
+          <a href={AFIP_DATA_FISCAL_QR} target="_F960AFIPInfo" rel="noopener noreferrer" className="shrink-0">
+            <img src="https://www.afip.gob.ar/images/f960/DATAWEB.jpg" alt="Data Fiscal AFIP" width={110} height={70} className="opacity-90 hover:opacity-100 transition-opacity" />
+          </a>
+        </div>
+      </div>
+
       {/* Bottom bar */}
       <div className="border-t border-zinc-900">
         <div className="max-w-7xl mx-auto px-4 py-5 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-zinc-500">
           <p>© {year} Neumáticos Trivium. Todos los derechos reservados.</p>
-          <div className="flex gap-4">
+          <div className="flex flex-wrap justify-center gap-4">
+            <Link href="/arrepentimiento" className="font-bold text-white hover:text-zinc-300 transition-colors">
+              Botón de Arrepentimiento
+            </Link>
             <Link href="/politica-de-devoluciones" className="hover:text-zinc-300 transition-colors">
               Política de devoluciones
             </Link>

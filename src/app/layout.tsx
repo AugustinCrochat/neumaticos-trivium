@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import "./globals.css";
-import { SITE_URL } from "@/lib/config";
+import { SITE_URL, LEGAL_NAME, CUIT, CONTACT_EMAIL, INSTAGRAM_URL, FACEBOOK_URL, BRANCHES } from "@/lib/config";
 import { BranchProvider } from "@/contexts/branch-context";
 import { BranchModal } from "@/components/ui/BranchModal";
 import { VehicleProvider } from "@/contexts/vehicle-context";
@@ -30,6 +30,33 @@ export const metadata: Metadata = {
   },
 };
 
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": `${SITE_URL}/#organization`,
+  name: "Neumáticos Trivium",
+  legalName: LEGAL_NAME,
+  taxID: CUIT,
+  url: SITE_URL,
+  logo: `${SITE_URL}/logo-neumaticos-trivium.svg`,
+  email: CONTACT_EMAIL,
+  sameAs: [INSTAGRAM_URL, FACEBOOK_URL],
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: BRANCHES[0].address,
+    addressLocality: BRANCHES[0].city,
+    addressCountry: "AR",
+  },
+  contactPoint: {
+    "@type": "ContactPoint",
+    contactType: "customer service",
+    email: CONTACT_EMAIL,
+    telephone: BRANCHES[0].phone,
+    areaServed: "AR",
+    availableLanguage: "Spanish",
+  },
+};
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -39,6 +66,10 @@ export default async function RootLayout({
   return (
     <html lang="es" className={`${geist.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-background text-foreground">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
         <BranchProvider>
           <VehicleProvider vehiculos={vehiculos}>
             <CartProvider>

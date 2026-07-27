@@ -99,6 +99,30 @@ const TIRE_SVG = (
   </svg>
 );
 
+function buildProductJsonLd(product: {
+  slug: string; brand: string; model: string; imageUrl: string; price: number; enStock?: boolean;
+}) {
+  const url = `${SITE_URL}/productos/${product.slug}`;
+  const image = product.imageUrl.startsWith("http") ? product.imageUrl : `${SITE_URL}${product.imageUrl}`;
+  return {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: `${product.brand} ${product.model}`,
+    image,
+    brand: { "@type": "Brand", name: product.brand },
+    url,
+    offers: {
+      "@type": "Offer",
+      url,
+      priceCurrency: "ARS",
+      price: product.price,
+      availability: product.enStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+      itemCondition: "https://schema.org/NewCondition",
+      seller: { "@type": "Organization", name: "Neumáticos Trivium" },
+    },
+  };
+}
+
 export default async function ProductPage({ params }: Props) {
   const { slug } = await params;
   const productos = await getProductosDesdePOS(await getSelectedBranchSlug());
@@ -131,6 +155,10 @@ export default async function ProductPage({ params }: Props) {
 
   return (
     <div className="max-w-5xl mx-auto px-4 pt-3 pb-4 md:pt-4 md:pb-6">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(buildProductJsonLd(product)) }}
+      />
       <Link
         href="/catalogo"
         className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-navy-700 mb-3 transition-colors"
@@ -144,11 +172,18 @@ export default async function ProductPage({ params }: Props) {
       <div className="grid md:grid-cols-2 gap-4 md:gap-12">
         {/* Image */}
         <div className="bg-slate-50 rounded-2xl aspect-square flex items-center justify-center p-8 relative">
-          {product.priceOld && (
-            <span className="absolute top-4 left-4 z-10 bg-red-600 text-white text-xs font-black px-3 py-1.5 rounded-md shadow-lg uppercase tracking-tighter">
-              {discount(product.price, product.priceOld)}% OFF
-            </span>
-          )}
+          <div className="absolute top-4 left-4 z-10 flex flex-col gap-2 items-start">
+            {product.priceOld && (
+              <span className="bg-red-600 text-white text-xs font-black px-3 py-1.5 rounded-md shadow-lg uppercase tracking-tighter">
+                {discount(product.price, product.priceOld)}% OFF
+              </span>
+            )}
+            {product.isCarga && (
+              <span className="bg-orange-600 text-white text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-md shadow-md">
+                Carga
+              </span>
+            )}
+          </div>
           {hasImage ? (
             <div className="relative w-full h-full">
               <Image

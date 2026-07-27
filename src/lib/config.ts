@@ -1,6 +1,19 @@
 /** URL canonica del sitio en produccion (sin barra final). Usada para SEO y QR. */
 export const SITE_URL = "https://neumaticos.trivium.ar";
 
+/** Identidad legal de la empresa que opera el sitio — requerida por Google
+    Merchant Center (política de Misrepresentation) y por defensa del
+    consumidor en Argentina, para que la razón social detrás de la marca de
+    fantasía "Neumáticos Trivium" sea verificable. */
+export const LEGAL_NAME = "TRIVIUM CENTER S.A.";
+export const CUIT = "30-71212718-6";
+export const CONTACT_EMAIL = "info@trivium.ar";
+export const INSTAGRAM_URL = "https://www.instagram.com/neumaticos.trivium/";
+export const FACEBOOK_URL = "https://www.facebook.com/profile.php?id=61589579136727";
+/** Link de Data Fiscal AFIP (RG 4291) — badge de verificación fiscal
+    obligatorio en el sitio, generado desde el portal de AFIP para este CUIT. */
+export const AFIP_DATA_FISCAL_QR = "http://qr.afip.gob.ar/?qr=TQSpqR8zs2JCASa4zM5M3A,,";
+
 /** Nombre de la cookie de sucursal elegida — la escribe branch-context.tsx
     (cliente) y la lee branch-server.ts (Server Components/route handlers).
     Vive acá, no en branch-server.ts, para que un componente cliente pueda

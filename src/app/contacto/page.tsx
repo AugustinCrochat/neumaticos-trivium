@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { BRANCHES } from "@/lib/config";
+import { BRANCHES, LEGAL_NAME, CUIT, CONTACT_EMAIL } from "@/lib/config";
 
 export const metadata: Metadata = {
   title: "Contacto — Neumáticos Trivium",
@@ -29,6 +29,21 @@ export default function ContactoPage() {
       </div>
 
       <div className="max-w-5xl mx-auto px-4 py-10">
+        <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div>
+            <p className="text-navy-900 font-bold text-sm">{LEGAL_NAME}</p>
+            <p className="text-slate-500 text-xs">CUIT {CUIT}</p>
+          </div>
+          <a
+            href={`mailto:${CONTACT_EMAIL}`}
+            className="inline-flex items-center gap-2 text-navy-700 hover:text-navy-900 font-semibold text-sm transition-colors"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+            {CONTACT_EMAIL}
+          </a>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {BRANCHES.map((branch) => (
             <div key={branch.id} className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
