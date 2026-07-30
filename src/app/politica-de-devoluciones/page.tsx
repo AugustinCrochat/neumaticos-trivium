@@ -10,73 +10,38 @@ export const metadata: Metadata = {
 export default function PoliticaDevolucionesPage() {
   const branch = BRANCHES[0];
 
-  const policyRows: { label: string; value: string; isLink?: boolean }[] = [
-    { label: "País", value: "Argentina" },
-    {
-      label: "URL de la política",
-      value: "https://neumaticos.trivium.ar/politica-de-devoluciones",
-      isLink: true,
-    },
-    {
-      label: "Devoluciones",
-      value: "Se aceptan devoluciones de productos defectuosos y no defectuosos",
-    },
-    { label: "Cambios", value: "Se aceptan cambios" },
-    { label: "Estado del producto", value: "Solo nuevos (sin uso)" },
-    { label: "Plazo", value: "10 días desde la recepción del producto" },
-    { label: "Método", value: "En tienda · Por correo" },
-    { label: "Etiqueta de devolución", value: "A cargo del cliente" },
-    { label: "Tarifas de aprovisionamiento", value: "Sin costo" },
-    { label: "Tiempo de procesamiento del reembolso", value: "7 días hábiles" },
-  ];
-
   return (
     <LegalPage
       title="Política de Devoluciones"
       subtitle="Cambios, devoluciones y garantía en Neumáticos Trivium."
       updated="julio de 2026"
     >
-      {/* Resumen estructurado de la política */}
-      <LegalSection title="Resumen de la política">
-        <div className="overflow-x-auto rounded-xl border border-gray-200">
-          <table className="w-full text-sm text-left">
-            <tbody>
-              {policyRows.map((row, i) => (
-                <tr key={i} className={i % 2 === 0 ? "bg-white" : "bg-gray-50"}>
-                  <td className="px-4 py-3 font-semibold text-gray-700 w-56 align-top border-b border-gray-100">
-                    {row.label}
-                  </td>
-                  <td className="px-4 py-3 text-gray-600 border-b border-gray-100">
-                    {row.isLink ? (
-                      <a
-                        href={row.value}
-                        className="text-blue-600 underline break-all"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {row.value}
-                      </a>
-                    ) : (
-                      row.value
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </LegalSection>
-
       <LegalSection title="Derecho de arrepentimiento (compras online)">
         <p>
           Conforme a la Ley de Defensa del Consumidor (Ley 24.240), si compraste a través de este
-          sitio tenés <strong>10 días hábiles</strong> desde que recibís el producto para arrepentirte
-          de la compra, sin necesidad de justificar el motivo.
+          sitio tenés <strong>10 días</strong> desde que recibís el producto para arrepentirte de la
+          compra, sin necesidad de justificar el motivo. Aceptamos devoluciones tanto de{" "}
+          <strong>productos defectuosos como no defectuosos</strong>, siempre que sean artículos nuevos
+          y sin uso.
         </p>
         <p>
-          Para ejercer este derecho, el producto tiene que estar sin uso, en su embalaje original y
-          con todos sus accesorios. El reintegro se hace por el mismo medio de pago utilizado en la
-          compra, una vez que verificamos el estado del producto devuelto.
+          El producto tiene que estar sin uso, en su embalaje original y con todos sus accesorios.
+          Podés hacer la devolución <strong>en cualquiera de nuestras sucursales</strong> o{" "}
+          <strong>por correo</strong> — en ese caso, el costo del envío corre por cuenta del cliente.
+          No cobramos tarifas de aprovisionamiento.
+        </p>
+        <p>
+          Una vez que recibimos y verificamos el estado del producto, el reintegro se procesa en un
+          plazo de <strong>7 días hábiles</strong> por el mismo medio de pago utilizado en la compra.
+        </p>
+      </LegalSection>
+
+      <LegalSection title="Cambios">
+        <p>
+          También aceptamos cambios dentro de los <strong>10 días</strong> de recibido el producto.
+          El artículo tiene que estar en estado nuevo, sin uso y con su embalaje original. Para
+          coordinar un cambio, podés acercarte a nuestras sucursales o enviarnos el producto por
+          correo (flete a cargo del cliente).
         </p>
       </LegalSection>
 
@@ -95,7 +60,7 @@ export default function PoliticaDevolucionesPage() {
 
       <LegalSection title="Tuercas antirrobo y accesorios">
         <p>
-          Se pueden cambiar o devolver sin usar, dentro de los 10 días hábiles de la compra. Una vez
+          Se pueden cambiar o devolver sin usar, dentro de los 10 días de la compra. Una vez
           colocadas en el vehículo, solo aplica cambio por falla de fabricación.
         </p>
       </LegalSection>
