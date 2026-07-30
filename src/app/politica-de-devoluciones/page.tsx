@@ -10,12 +10,63 @@ export const metadata: Metadata = {
 export default function PoliticaDevolucionesPage() {
   const branch = BRANCHES[0];
 
+  const policyRows: { label: string; value: string; isLink?: boolean }[] = [
+    { label: "País", value: "Argentina" },
+    {
+      label: "URL de la política",
+      value: "https://neumaticos.trivium.ar/politica-de-devoluciones",
+      isLink: true,
+    },
+    {
+      label: "Devoluciones",
+      value: "Se aceptan devoluciones de productos defectuosos y no defectuosos",
+    },
+    { label: "Cambios", value: "Se aceptan cambios" },
+    { label: "Estado del producto", value: "Solo nuevos (sin uso)" },
+    { label: "Plazo", value: "10 días desde la recepción del producto" },
+    { label: "Método", value: "En tienda · Por correo" },
+    { label: "Etiqueta de devolución", value: "A cargo del cliente" },
+    { label: "Tarifas de aprovisionamiento", value: "Sin costo" },
+    { label: "Tiempo de procesamiento del reembolso", value: "7 días hábiles" },
+  ];
+
   return (
     <LegalPage
       title="Política de Devoluciones"
       subtitle="Cambios, devoluciones y garantía en Neumáticos Trivium."
       updated="julio de 2026"
     >
+      {/* Resumen estructurado de la política */}
+      <LegalSection title="Resumen de la política">
+        <div className="overflow-x-auto rounded-xl border border-gray-200">
+          <table className="w-full text-sm text-left">
+            <tbody>
+              {policyRows.map((row, i) => (
+                <tr key={i} className={i % 2 === 0 ? "bg-white" : "bg-gray-50"}>
+                  <td className="px-4 py-3 font-semibold text-gray-700 w-56 align-top border-b border-gray-100">
+                    {row.label}
+                  </td>
+                  <td className="px-4 py-3 text-gray-600 border-b border-gray-100">
+                    {row.isLink ? (
+                      <a
+                        href={row.value}
+                        className="text-blue-600 underline break-all"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {row.value}
+                      </a>
+                    ) : (
+                      row.value
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </LegalSection>
+
       <LegalSection title="Derecho de arrepentimiento (compras online)">
         <p>
           Conforme a la Ley de Defensa del Consumidor (Ley 24.240), si compraste a través de este
