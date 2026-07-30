@@ -29,6 +29,48 @@ function compatibilityBenefit(original: TireSize, alternative: TireSize): string
   return "Diámetro equivalente al original.";
 }
 
+type CompatibleAlternative = { size: TireSize; diff: number; count: number };
+
+function CompatibleAlternativesList({ original, alternatives }: { original: TireSize; alternatives: CompatibleAlternative[] }) {
+  if (alternatives.length === 0) {
+    return (
+      <p className="text-slate-500 bg-slate-50 p-4 rounded-xl border border-slate-100">
+        No encontramos alternativas equivalentes en stock para esta medida actualmente.
+      </p>
+    );
+  }
+
+  return (
+    <div className="grid gap-3">
+      {alternatives.map(({ size, diff, count }) => (
+        <Link
+          key={`${size.width}-${size.profile}-r${size.rim}`}
+          href={`/buscar?medida=${size.width}-${size.profile}-r${size.rim}`}
+          className="flex items-center justify-between p-4 bg-slate-50 hover:bg-emerald-50 border border-slate-100 hover:border-emerald-200 rounded-xl transition-colors group"
+        >
+          <div>
+            <span className="font-black text-lg text-navy-900 group-hover:text-emerald-900 transition-colors">
+              {size.width}/{size.profile} R{size.rim}
+            </span>
+            <span className="ml-3 text-sm font-semibold px-2 py-1 rounded-md bg-emerald-100 text-emerald-800">
+              {diff > 0 ? '+' : ''}{diff.toFixed(2)}%
+            </span>
+            <p className="text-xs text-emerald-700 font-semibold mt-1">
+              {compatibilityBenefit(original, size)}
+            </p>
+          </div>
+          <div className="flex items-center gap-3">
+            <span className="text-sm text-slate-500">{count} producto{count !== 1 ? 's' : ''}</span>
+            <svg className="w-5 h-5 text-slate-400 group-hover:text-emerald-600 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
+        </Link>
+      ))}
+    </div>
+  );
+}
+
 export function EquivalenceCalculator({ products }: { products: TireProduct[] }) {
   const [mode, setMode] = useState<"check" | "list">("check");
 
@@ -247,7 +289,7 @@ export function EquivalenceCalculator({ products }: { products: TireProduct[] })
                 <p className="text-sm text-red-700 mt-1">Atención: El rodado (llanta) es diferente.</p>
               )}
               {isCheckCompatible && (
-                <Link 
+                <Link
                   href={`/buscar?medida=${s2.width}-${s2.profile}-r${s2.rim}`}
                   className="inline-block mt-3 text-sm font-bold text-emerald-700 hover:text-emerald-900 underline underline-offset-2"
                 >
@@ -257,48 +299,27 @@ export function EquivalenceCalculator({ products }: { products: TireProduct[] })
               <div>{shareButton}</div>
             </div>
           </div>
+
+          {!isCheckCompatible && (
+            <div className="mt-5 pt-5 border-t border-red-100">
+              <p className="text-sm font-bold text-slate-700 mb-3">
+                Estas medidas sí están en stock y son compatibles con tu {s1.width}/{s1.profile} R{s1.rim}:
+              </p>
+              <CompatibleAlternativesList original={s1} alternatives={compatibleInStock} />
+            </div>
+          )}
         </div>
       )}
 
       {mode === "list" && (
         <div className="mt-8 bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
           <h4 className="font-black text-slate-900 mb-4 text-lg">Alternativas disponibles en stock</h4>
-          
-          {!s1 && <p className="text-slate-500">Ingresá una medida original válida arriba.</p>}
-          
-          {s1 && compatibleInStock.length === 0 && (
-            <p className="text-slate-500 bg-slate-50 p-4 rounded-xl border border-slate-100">
-              No encontramos alternativas equivalentes en stock para esta medida actualmente.
-            </p>
-          )}
 
-          {s1 && compatibleInStock.length > 0 && (
-            <div className="grid gap-3">
-              {compatibleInStock.map(({ size, diff, count }) => (
-                <Link
-                  key={`${size.width}-${size.profile}-r${size.rim}`}
-                  href={`/buscar?medida=${size.width}-${size.profile}-r${size.rim}`}
-                  className="flex items-center justify-between p-4 bg-slate-50 hover:bg-emerald-50 border border-slate-100 hover:border-emerald-200 rounded-xl transition-colors group"
-                >
-                  <div>
-                    <span className="font-black text-lg text-navy-900 group-hover:text-emerald-900 transition-colors">
-                      {size.width}/{size.profile} R{size.rim}
-                    </span>
-                    <span className="ml-3 text-sm font-semibold px-2 py-1 rounded-md bg-emerald-100 text-emerald-800">
-                      {diff > 0 ? '+' : ''}{diff.toFixed(2)}%
-                    </span>
-                    <p className="text-xs text-emerald-700 font-semibold mt-1">
-                      {compatibilityBenefit(s1!, size)}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <span className="text-sm text-slate-500">{count} producto{count !== 1 ? 's' : ''}</span>
-                    <svg className="w-5 h-5 text-slate-400 group-hover:text-emerald-600 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </div>
-                </Link>
-              ))}
+          {!s1 && <p className="text-slate-500">Ingresá una medida original válida arriba.</p>}
+
+          {s1 && (
+            <div className="mb-4">
+              <CompatibleAlternativesList original={s1} alternatives={compatibleInStock} />
             </div>
           )}
 
