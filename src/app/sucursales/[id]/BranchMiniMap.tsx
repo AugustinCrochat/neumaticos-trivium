@@ -36,7 +36,7 @@ export function BranchMiniMap({ branch }: { branch: Branch }) {
   const mapRef = useRef<Map | null>(null);
 
   useEffect(() => {
-    if (!containerRef.current || mapRef.current) return;
+    if (!containerRef.current || mapRef.current || branch.googleMapsEmbedUrl) return;
     const center: [number, number] = [branch.coordinates.lng, branch.coordinates.lat];
 
     const map = new maplibregl.Map({
@@ -71,6 +71,22 @@ export function BranchMiniMap({ branch }: { branch: Branch }) {
       mapRef.current = null;
     };
   }, [branch]);
+
+  if (branch.googleMapsEmbedUrl) {
+    return (
+      <div className="relative h-[280px] w-full overflow-hidden rounded-2xl border border-slate-200 bg-slate-200 shadow-sm md:h-[340px]">
+        <iframe
+          src={branch.googleMapsEmbedUrl}
+          title={`Mapa de ${branch.name}`}
+          className="absolute inset-0 h-full w-full"
+          style={{ border: 0 }}
+          loading="lazy"
+          allowFullScreen
+          referrerPolicy="strict-origin-when-cross-origin"
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="relative h-[280px] w-full overflow-hidden rounded-2xl border border-slate-200 bg-slate-200 shadow-sm md:h-[340px]">

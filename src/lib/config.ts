@@ -44,6 +44,12 @@ export type Branch = {
   mapUrl: string;
   /** Link directo para dejar una resena en Google Maps */
   reviewUrl?: string;
+  /** URL de embed de Google Maps (Compartir > Insertar un mapa) para el mapa
+      estatico de la ficha de esta sucursal — trae la ficha real de Google
+      (nombre, fotos, resenas) en vez de solo el pin. El mapa de pines con
+      todas las sucursales (BranchesMap) sigue en MapLibre/OSM porque ese si
+      necesita marcadores y estilo personalizados. */
+  googleMapsEmbedUrl?: string;
   /** Rating y cantidad de resenas en Google Maps de esta sucursal — se
       muestra como badge de confianza en el sitio (pedido explicito de la
       politica de Misrepresentation de Merchant Center: "promote your online
@@ -77,6 +83,8 @@ export const BRANCHES: Branch[] = [
     schedule: [{ days: [1, 2, 3, 4, 5, 6], open: "09:00", close: "19:00" }],
     mapUrl: "https://maps.app.goo.gl/tQrXVQCQ5VviAYY46",
     reviewUrl: "https://g.page/r/CWBPMZ1uJwaREBI/review",
+    googleMapsEmbedUrl:
+      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3408.039257943254!2d-64.2649636!3d-31.3302889!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94329d0062c9b4d7%3A0x9106276e9d314f60!2sNeum%C3%A1ticos%20Trivium%20-%20El%20Outlet%20del%20Neum%C3%A1tico!5e0!3m2!1ses!2sar!4v1785420975436!5m2!1ses!2sar",
     googleRating: { value: 5, count: 2 },
     coordinates: {
       lat: -31.3302015,
