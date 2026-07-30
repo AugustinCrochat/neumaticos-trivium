@@ -14,6 +14,21 @@ function diameterDifferencePercent(size1: TireSize, size2: TireSize) {
   return ((d2 - d1) / d1) * 100;
 }
 
+// Mismo rodado siempre en las alternativas que evalúa esta calculadora, así
+// que lo que cambia entre la medida original y la equivalente es ancho y/o
+// perfil — de ahí sale el beneficio real para el conductor (agarre vs.
+// eficiencia/confort).
+function compatibilityBenefit(original: TireSize, alternative: TireSize): string {
+  const widthDiff = alternative.width - original.width;
+  if (widthDiff > 0) return "Más ancha: mayor superficie de contacto y agarre en curvas.";
+  if (widthDiff < 0) return "Más angosta: menor resistencia a la rodadura y consumo.";
+
+  const profileDiff = alternative.profile - original.profile;
+  if (profileDiff > 0) return "Perfil más alto: mayor confort de manejo.";
+  if (profileDiff < 0) return "Perfil más bajo: manejo más preciso.";
+  return "Diámetro equivalente al original.";
+}
+
 export function EquivalenceCalculator({ products }: { products: TireProduct[] }) {
   const [mode, setMode] = useState<"check" | "list">("check");
 
@@ -223,6 +238,11 @@ export function EquivalenceCalculator({ products }: { products: TireProduct[] })
               <p className={isCheckCompatible ? 'text-emerald-800' : 'text-red-800'}>
                 Diferencia de diámetro: <strong>{checkDiff > 0 ? '+' : ''}{checkDiff.toFixed(2)}%</strong>
               </p>
+              {isCheckCompatible && (
+                <p className="text-sm text-emerald-700 font-semibold mt-1">
+                  {compatibilityBenefit(s1, s2)}
+                </p>
+              )}
               {!isCheckCompatible && s1.rim !== s2.rim && (
                 <p className="text-sm text-red-700 mt-1">Atención: El rodado (llanta) es diferente.</p>
               )}
@@ -255,7 +275,7 @@ export function EquivalenceCalculator({ products }: { products: TireProduct[] })
           {s1 && compatibleInStock.length > 0 && (
             <div className="grid gap-3">
               {compatibleInStock.map(({ size, diff, count }) => (
-                <Link 
+                <Link
                   key={`${size.width}-${size.profile}-r${size.rim}`}
                   href={`/buscar?medida=${size.width}-${size.profile}-r${size.rim}`}
                   className="flex items-center justify-between p-4 bg-slate-50 hover:bg-emerald-50 border border-slate-100 hover:border-emerald-200 rounded-xl transition-colors group"
@@ -267,6 +287,9 @@ export function EquivalenceCalculator({ products }: { products: TireProduct[] })
                     <span className="ml-3 text-sm font-semibold px-2 py-1 rounded-md bg-emerald-100 text-emerald-800">
                       {diff > 0 ? '+' : ''}{diff.toFixed(2)}%
                     </span>
+                    <p className="text-xs text-emerald-700 font-semibold mt-1">
+                      {compatibilityBenefit(s1!, size)}
+                    </p>
                   </div>
                   <div className="flex items-center gap-3">
                     <span className="text-sm text-slate-500">{count} producto{count !== 1 ? 's' : ''}</span>
