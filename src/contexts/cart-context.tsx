@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import type { Accessory, TireProduct } from "@/lib/types";
+import { SHIPPING_FLAT_RATE } from "@/lib/config";
 
 export type TireCartItem = Pick<TireProduct, "id" | "brand" | "model" | "size" | "price" | "imageUrl" | "slug"> & {
   kind: "tire";
@@ -23,6 +24,17 @@ export type AccessoryCartItem = Pick<Accessory, "id" | "nombre" | "price" | "ima
 
 export type CartItem = TireCartItem | ServiceCartItem | AccessoryCartItem;
 
+export type DeliveryMethod = "pickup" | "shipping";
+
+export type ShippingAddress = {
+  fullName: string;
+  phone: string;
+  address: string;
+  city: string;
+  province: string;
+  postalCode: string;
+};
+
 // Las claves componen kind+id porque un id de servicio del POS podría coincidir
 // con un id de neumático (son catálogos distintos).
 function itemKey(item: Pick<CartItem, "kind" | "id">) {
@@ -32,8 +44,12 @@ function itemKey(item: Pick<CartItem, "kind" | "id">) {
 type CartContextType = {
   items: CartItem[];
   count: number;
+  itemsTotal: number;
+  shippingCost: number;
   total: number;
   isOpen: boolean;
+  deliveryMethod: DeliveryMethod;
+  shippingAddress: ShippingAddress | null;
   addTire: (product: TireProduct, quantity: number) => void;
   addService: (service: { id: string; nombre: string; price: number }, quantity: number) => void;
   addAccessory: (accessory: Accessory, quantity: number) => void;
@@ -42,15 +58,20 @@ type CartContextType = {
   clearCart: () => void;
   openCart: () => void;
   closeCart: () => void;
+  setDeliveryMethod: (method: DeliveryMethod) => void;
+  setShippingAddress: (address: ShippingAddress) => void;
 };
 
 const CartContext = createContext<CartContextType | null>(null);
 const STORAGE_KEY = "trivium-cart";
+const DELIVERY_STORAGE_KEY = "trivium-delivery";
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [hasLoadedCart, setHasLoadedCart] = useState(false);
+  const [deliveryMethod, setDeliveryMethodState] = useState<DeliveryMethod>("pickup");
+  const [shippingAddress, setShippingAddressState] = useState<ShippingAddress | null>(null);
 
   useEffect(() => {
     try {
@@ -61,6 +82,18 @@ export function CartProvider({ children }: { children: ReactNode }) {
     } catch {
       localStorage.removeItem(STORAGE_KEY);
     }
+    try {
+      const storedDelivery = localStorage.getItem(DELIVERY_STORAGE_KEY);
+      if (storedDelivery) {
+        const parsed = JSON.parse(storedDelivery) as { deliveryMethod?: DeliveryMethod; shippingAddress?: ShippingAddress };
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        if (parsed.deliveryMethod) setDeliveryMethodState(parsed.deliveryMethod);
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        if (parsed.shippingAddress) setShippingAddressState(parsed.shippingAddress);
+      }
+    } catch {
+      localStorage.removeItem(DELIVERY_STORAGE_KEY);
+    }
     setHasLoadedCart(true);
   }, []);
 
@@ -69,9 +102,16 @@ export function CartProvider({ children }: { children: ReactNode }) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
   }, [hasLoadedCart, items]);
 
+  useEffect(() => {
+    if (!hasLoadedCart) return;
+    localStorage.setItem(DELIVERY_STORAGE_KEY, JSON.stringify({ deliveryMethod, shippingAddress }));
+  }, [hasLoadedCart, deliveryMethod, shippingAddress]);
+
   const value = useMemo<CartContextType>(() => {
     const count = items.reduce((sum, item) => sum + item.quantity, 0);
-    const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const itemsTotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const shippingCost = deliveryMethod === "shipping" ? SHIPPING_FLAT_RATE : 0;
+    const total = itemsTotal + shippingCost;
 
     function upsert(newItem: CartItem) {
       setItems((current) => {
@@ -90,8 +130,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
     return {
       items,
       count,
+      itemsTotal,
+      shippingCost,
       total,
       isOpen,
+      deliveryMethod,
+      shippingAddress,
       addTire: (product, quantity) => {
         const { id, brand, model, size, price, imageUrl, slug } = product;
         upsert({ kind: "tire", id, brand, model, size, price, imageUrl, slug, quantity: Math.min(quantity, 8) });
@@ -116,8 +160,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
       clearCart: () => setItems([]),
       openCart: () => setIsOpen(true),
       closeCart: () => setIsOpen(false),
+      setDeliveryMethod: (method) => setDeliveryMethodState(method),
+      setShippingAddress: (address) => setShippingAddressState(address),
     };
-  }, [isOpen, items]);
+  }, [isOpen, items, deliveryMethod, shippingAddress]);
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }

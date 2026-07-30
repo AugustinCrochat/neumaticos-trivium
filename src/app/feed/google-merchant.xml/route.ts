@@ -1,6 +1,16 @@
 import { getProductosDesdePOS, getAccesoriosDesdePOS } from "@/lib/pos-api";
-import { SITE_URL } from "@/lib/config";
+import { SITE_URL, SHIPPING_FLAT_RATE } from "@/lib/config";
 import type { TireProduct, Accessory } from "@/lib/types";
+
+// Tarifa unica a todo el pais (alternativa al retiro gratis en sucursal, que
+// para Merchant Center simplemente no se declara como shipping — es gratis
+// por definicion al no cobrar envio).
+const SHIPPING_BLOCK = `
+      <g:shipping>
+        <g:country>AR</g:country>
+        <g:service>Standard</g:service>
+        <g:price>${SHIPPING_FLAT_RATE.toFixed(2)} ARS</g:price>
+      </g:shipping>`;
 
 // Feed de productos para Google Merchant Center (scheduled fetch): configurar
 // esta URL una sola vez en Merchant Center y Google la vuelve a leer solo,
@@ -38,7 +48,7 @@ function tireItem(p: TireProduct): string {
       <g:price>${p.price.toFixed(2)} ARS</g:price>
       <g:brand>${cdata(p.brand)}</g:brand>
       <g:identifier_exists>no</g:identifier_exists>
-      <g:product_type>${cdata(`Neumáticos > ${p.brand}`)}</g:product_type>
+      <g:product_type>${cdata(`Neumáticos > ${p.brand}`)}</g:product_type>${SHIPPING_BLOCK}
     </item>`;
 }
 
@@ -59,7 +69,7 @@ function accessoryItem(a: Accessory & { imageUrl: string }): string {
       <g:price>${a.price.toFixed(2)} ARS</g:price>
       <g:brand>${cdata("Z3")}</g:brand>
       <g:identifier_exists>no</g:identifier_exists>
-      <g:product_type>${cdata("Tuercas Antirrobo")}</g:product_type>
+      <g:product_type>${cdata("Tuercas Antirrobo")}</g:product_type>${SHIPPING_BLOCK}
     </item>`;
 }
 

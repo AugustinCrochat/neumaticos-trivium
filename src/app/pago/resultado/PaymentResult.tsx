@@ -5,18 +5,24 @@ import { useBranch } from "@/contexts/branch-context";
 import { useCart } from "@/contexts/cart-context";
 
 export function PaymentResult({ status }: { status?: string }) {
-  const { items, total, clearCart } = useCart();
+  const { items, total, clearCart, deliveryMethod, shippingAddress } = useCart();
   const { selectedBranch } = useBranch();
   const approved = status === "aprobado";
   const pending = status === "pendiente";
+  const isShipping = deliveryMethod === "shipping";
   const title = approved ? "¡Pago recibido!" : pending ? "Tu pago está pendiente" : "No se completó el pago";
   const message = approved
-    ? "Para coordinar el retiro, envianos el detalle de tu compra por WhatsApp. Confirmaremos el stock antes de la entrega."
+    ? isShipping
+      ? "Para coordinar el envío, envianos el detalle de tu compra por WhatsApp. Confirmaremos el stock antes de despachar."
+      : "Para coordinar el retiro, envianos el detalle de tu compra por WhatsApp. Confirmaremos el stock antes de la entrega."
     : pending
       ? "Cuando Mercado Pago confirme la acreditación, coordinaremos la entrega."
       : "No se realizó ningún cobro. Podés volver a intentarlo cuando quieras.";
 
-  const whatsappText = encodeURIComponent(`Hola Trivium ${selectedBranch.shortName}, realicé una compra online.${items.length ? `\n\nProductos:\n${items.map((item) => `• ${item.quantity} × ${item.kind === "tire" ? item.model : item.nombre}`).join("\n")}\n\nTotal: $${total.toLocaleString("es-AR")}` : ""}\n\nQuiero coordinar el retiro.`);
+  const direccionText = isShipping && shippingAddress
+    ? `\n\nEnvío a: ${shippingAddress.fullName}\n${shippingAddress.address}, ${shippingAddress.city}, ${shippingAddress.province} (CP ${shippingAddress.postalCode})\nTel: ${shippingAddress.phone}`
+    : "";
+  const whatsappText = encodeURIComponent(`Hola Trivium ${selectedBranch.shortName}, realicé una compra online.${items.length ? `\n\nProductos:\n${items.map((item) => `• ${item.quantity} × ${item.kind === "tire" ? item.model : item.nombre}`).join("\n")}\n\nTotal: $${total.toLocaleString("es-AR")}` : ""}${direccionText}\n\nQuiero coordinar ${isShipping ? "el envío" : "el retiro"}.`);
 
   return (
     <div className="min-h-[60vh] flex items-center justify-center bg-slate-50 px-4 py-16">
@@ -28,7 +34,7 @@ export function PaymentResult({ status }: { status?: string }) {
         <p className="mt-3 text-slate-600 leading-relaxed">{message}</p>
         {approved && (
           <a href={`https://wa.me/${selectedBranch.whatsapp}?text=${whatsappText}`} target="_blank" rel="noopener noreferrer" onClick={clearCart} className="mt-6 inline-flex w-full justify-center rounded-xl bg-[#25d366] px-5 py-3.5 font-black text-white hover:bg-[#1fbd59]">
-            Coordinar retiro por WhatsApp
+            Coordinar {isShipping ? "envío" : "retiro"} por WhatsApp
           </a>
         )}
         <Link href="/catalogo" className="mt-4 inline-flex font-bold text-navy-700 underline underline-offset-4">Volver al catálogo</Link>

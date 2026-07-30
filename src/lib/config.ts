@@ -14,6 +14,10 @@ export const FACEBOOK_URL = "https://www.facebook.com/profile.php?id=61589579136
     obligatorio en el sitio, generado desde el portal de AFIP para este CUIT. */
 export const AFIP_DATA_FISCAL_QR = "http://qr.afip.gob.ar/?qr=TQSpqR8zs2JCASa4zM5M3A,,";
 
+/** Costo fijo de envío a domicilio a todo el país (ARS). Alternativa al
+    retiro gratis en sucursal. */
+export const SHIPPING_FLAT_RATE = 30000;
+
 /** Nombre de la cookie de sucursal elegida — la escribe branch-context.tsx
     (cliente) y la lee branch-server.ts (Server Components/route handlers).
     Vive acá, no en branch-server.ts, para que un componente cliente pueda

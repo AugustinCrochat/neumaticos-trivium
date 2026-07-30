@@ -1,7 +1,10 @@
-import { SITE_URL, BRANCHES } from "@/lib/config";
+import { SITE_URL, BRANCHES, SHIPPING_FLAT_RATE } from "@/lib/config";
 import { getProductosDesdePOS, getServiciosPrecios, getAccesoriosDesdePOS, COMBO_ALINEACION_BALANCEO_AUTO } from "@/lib/pos-api";
 
 type CheckoutItem = { kind?: unknown; id?: unknown; quantity?: unknown };
+type ShippingAddressInput = {
+  fullName?: unknown; phone?: unknown; address?: unknown; city?: unknown; province?: unknown; postalCode?: unknown;
+};
 
 export async function POST(request: Request) {
   const accessToken = process.env.MERCADOPAGO_ACCESS_TOKEN?.trim();
@@ -9,9 +12,9 @@ export async function POST(request: Request) {
     return Response.json({ error: "Los pagos online todavía no están configurados." }, { status: 503 });
   }
 
-  let body: { items?: CheckoutItem[]; branchId?: unknown };
+  let body: { items?: CheckoutItem[]; branchId?: unknown; deliveryMethod?: unknown; shippingAddress?: ShippingAddressInput };
   try {
-    body = await request.json() as { items?: CheckoutItem[]; branchId?: unknown };
+    body = await request.json() as typeof body;
   } catch {
     return Response.json({ error: "El carrito recibido no es válido." }, { status: 400 });
   }
@@ -25,6 +28,18 @@ export async function POST(request: Request) {
     return Response.json({ error: "Sucursal inválida." }, { status: 400 });
   }
   const sucursal = body.branchId;
+
+  const deliveryMethod = body.deliveryMethod === "shipping" ? "shipping" : "pickup";
+  let shippingAddress: Required<{ [K in keyof ShippingAddressInput]: string }> | null = null;
+  if (deliveryMethod === "shipping") {
+    const a = body.shippingAddress ?? {};
+    const fields = { fullName: a.fullName, phone: a.phone, address: a.address, city: a.city, province: a.province, postalCode: a.postalCode };
+    const allStrings = Object.values(fields).every((v) => typeof v === "string" && v.trim().length > 0);
+    if (!allStrings) {
+      return Response.json({ error: "Completá la dirección de envío." }, { status: 400 });
+    }
+    shippingAddress = fields as Required<{ [K in keyof ShippingAddressInput]: string }>;
+  }
 
   const requestedTires = new Map<string, number>();
   const requestedServices = new Map<string, number>();
@@ -86,8 +101,15 @@ export async function POST(request: Request) {
         unit_price: accesorio!.price,
         currency_id: "ARS",
       })),
+      ...(deliveryMethod === "shipping"
+        ? [{ id: "envio", title: "Envío a domicilio", quantity: 1, unit_price: SHIPPING_FLAT_RATE, currency_id: "ARS" }]
+        : []),
     ],
     external_reference: externalReference,
+    // El pedido se coordina despues por WhatsApp (no hay base de datos de
+    // ordenes); metadata queda guardado en el pago de Mercado Pago para que
+    // la sucursal pueda ver ahi el metodo de entrega y la direccion.
+    metadata: { delivery_method: deliveryMethod, shipping_address: shippingAddress },
     back_urls: {
       success: `${SITE_URL}/pago/resultado?estado=aprobado`,
       failure: `${SITE_URL}/pago/resultado?estado=fallido`,

@@ -10,19 +10,21 @@ import { useUpsellCombo } from "@/hooks/use-upsell-combo";
 import { useAccesorios } from "@/hooks/use-accesorios";
 import { getCompatibleAccessory } from "@/lib/tuercas-vehiculos";
 import { AlineacionBalanceoIcon } from "@/components/ui/AlineacionBalanceoIcon";
+import { DeliveryMethodSelector, isShippingAddressComplete } from "@/components/ui/DeliveryMethodSelector";
 
 function formatPrice(price: number) {
   return new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 }).format(price);
 }
 
 export function CartDrawer() {
-  const { items, total, isOpen, closeCart, removeItem, updateQuantity, addService, addAccessory } = useCart();
+  const { items, itemsTotal, shippingCost, total, isOpen, closeCart, removeItem, updateQuantity, addService, addAccessory, deliveryMethod, shippingAddress } = useCart();
   const { selectedBranch } = useBranch();
   const { selectedVehicle } = useVehicle();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const combo = useUpsellCombo();
   const accesorios = useAccesorios();
+  const shippingIncomplete = deliveryMethod === "shipping" && !isShippingAddressComplete(shippingAddress);
 
   const hasTires = items.some((item) => item.kind === "tire");
   const hasCombo = items.some((item) => item.kind === "service" && item.id === combo?.id);
@@ -44,6 +46,8 @@ export function CartDrawer() {
         body: JSON.stringify({
           branchId: selectedBranch.id,
           items: items.map(({ kind, id, quantity }) => ({ kind, id, quantity })),
+          deliveryMethod,
+          shippingAddress: deliveryMethod === "shipping" ? shippingAddress : undefined,
         }),
       });
       const data = await response.json() as { initPoint?: string; error?: string };
@@ -145,12 +149,23 @@ export function CartDrawer() {
               )}
             </div>
             <div className="border-t border-slate-200 p-5 bg-slate-50">
+              <div className="mb-4">
+                <DeliveryMethodSelector />
+              </div>
+              {shippingCost > 0 && (
+                <div className="flex justify-between text-sm text-slate-600 mb-1"><span>Subtotal</span><span>{formatPrice(itemsTotal)}</span></div>
+              )}
+              {shippingCost > 0 && (
+                <div className="flex justify-between text-sm text-slate-600 mb-1"><span>Envío</span><span>{formatPrice(shippingCost)}</span></div>
+              )}
               <div className="flex justify-between text-lg font-black text-navy-900 mb-1"><span>Total</span><span>{formatPrice(total)}</span></div>
-              <p className="text-xs text-slate-500 mb-4">Retirás en Sucursal {selectedBranch.shortName}. Los neumáticos tienen 1 año de garantía. Precio sujeto a validación de stock al confirmar el pedido.</p>
+              <p className="text-xs text-slate-500 mb-4">Los neumáticos tienen 1 año de garantía. Precio sujeto a validación de stock al confirmar el pedido.</p>
               {error && <p className="mb-3 rounded-lg bg-red-50 p-3 text-sm font-medium text-red-700">{error}</p>}
-              <button onClick={checkout} disabled={isLoading} className="w-full flex items-center justify-center gap-2 rounded-xl bg-[#FFE600] hover:bg-[#f5dc00] disabled:opacity-60 text-navy-900 font-black py-3.5 transition-colors">
+              <button onClick={checkout} disabled={isLoading || shippingIncomplete} className="w-full flex items-center justify-center gap-2 rounded-xl bg-[#FFE600] hover:bg-[#f5dc00] disabled:opacity-60 text-navy-900 font-black py-3.5 transition-colors">
                 {isLoading ? (
                   "Redirigiendo al pago…"
+                ) : shippingIncomplete ? (
+                  "Completá la dirección de envío"
                 ) : (
                   <>
                     Pagar con

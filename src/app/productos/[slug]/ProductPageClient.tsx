@@ -5,6 +5,11 @@ import { useState } from "react";
 import { useBranch } from "@/contexts/branch-context";
 import type { TireProduct } from "@/lib/types";
 import { AddToCartModal } from "@/components/ui/AddToCartModal";
+import { SHIPPING_FLAT_RATE } from "@/lib/config";
+
+function formatPrice(price: number) {
+  return new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 }).format(price);
+}
 
 export function ProductPageClient({ product }: { product: TireProduct }) {
   const { selectedBranch } = useBranch();
@@ -50,6 +55,18 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
           <div className="min-w-0">
             <p className="font-bold text-navy-900 text-sm leading-snug">Retiro gratis en Sucursal {selectedBranch.shortName}</p>
             <p className="text-xs text-slate-500 mt-0.5 leading-snug">{selectedBranch.address}, {selectedBranch.city} · {selectedBranch.hours}</p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-3 p-3">
+          <div className="w-8 h-8 rounded-full bg-navy-50 flex items-center justify-center text-navy-600 shrink-0">
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0zM13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10h1m9 0h4m-4 0H7m9 0V9h4l3 4v3h-2m-9-6h6" />
+            </svg>
+          </div>
+          <div className="min-w-0">
+            <p className="font-bold text-navy-900 text-sm leading-snug">Envío a todo el país</p>
+            <p className="text-xs text-slate-500 mt-0.5 leading-snug">Tarifa única de {formatPrice(SHIPPING_FLAT_RATE)}</p>
           </div>
         </div>
 
