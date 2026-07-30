@@ -206,6 +206,20 @@ function diameterDifferencePercent(productSize: TireSize, searchedSize: TireSize
   return ((tireDiameter(productSize) - d) / d) * 100;
 }
 
+// Mismo rodado siempre (isCompatibleSize lo exige), así que lo que cambia
+// entre la medida buscada y la compatible es ancho y/o perfil — de ahí sale
+// el beneficio real para el conductor (más agarre vs. más eficiencia/confort).
+function compatibilityBenefit(searchedSize: TireSize, productSize: TireSize): string {
+  const widthDiff = productSize.width - searchedSize.width;
+  if (widthDiff > 0) return "Más ancho: mayor superficie de contacto y agarre en curvas.";
+  if (widthDiff < 0) return "Más angosto: menor resistencia a la rodadura y consumo.";
+
+  const profileDiff = productSize.profile - searchedSize.profile;
+  if (profileDiff > 0) return "Perfil más alto: mayor confort de manejo.";
+  if (profileDiff < 0) return "Perfil más bajo: manejo más preciso.";
+  return "Diámetro equivalente al original.";
+}
+
 function getUnitPrice(product: TireProduct) {
   const packTag = product.tags.find(t => t.toLowerCase().startsWith("pack"));
   if (packTag) {
@@ -641,10 +655,12 @@ export function ShopPage({
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-8">
                   {compatibleResults.slice(0, 5).map(product => {
                     const diff = searchedSize ? diameterDifferencePercent(product.size, searchedSize) : null;
+                    const benefit = searchedSize ? compatibilityBenefit(searchedSize, product.size) : null;
                     return (
                       <ProductCard
                         key={product.id}
                         product={product}
+                        note={benefit}
                         imageFooter={
                           <span className="inline-flex max-w-full items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-1.5 text-[11px] font-black uppercase tracking-wide text-white shadow-lg shadow-emerald-900/20">
                             <span>Compatible</span>

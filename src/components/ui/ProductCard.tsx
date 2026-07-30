@@ -38,10 +38,12 @@ export function ProductCard({
   product,
   imageFooter,
   isCheapest,
+  note,
 }: {
   product: TireProduct;
   imageFooter?: ReactNode;
   isCheapest?: boolean;
+  note?: ReactNode;
 }) {
   const [showModal, setShowModal] = useState(false);
   const hasImage =
@@ -122,6 +124,12 @@ export function ProductCard({
             <ProductNameWithHighlightedSize product={product} />
           </Link>
         </h3>
+
+        {note && (
+          <p className="text-xs text-emerald-700 font-semibold leading-snug mb-2">
+            {note}
+          </p>
+        )}
 
         {/* Price */}
         <div className="mt-auto">
