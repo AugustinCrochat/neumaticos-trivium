@@ -9,33 +9,79 @@ export const revalidate = 300;
 
 const pageUrl = `${SITE_URL}/calculadora-equivalencia-neumaticos`;
 
-export const metadata: Metadata = {
-  title: "Calculadora de equivalencias de neumáticos | Trivium",
-  description:
-    "Calculá medidas compatibles y equivalencias de neumáticos. Compará ancho, perfil y rodado, verificá la diferencia de diámetro y encontrá alternativas en stock.",
-  keywords: [
-    "calculadora equivalencia neumaticos",
-    "equivalencias de neumaticos",
-    "medidas compatibles neumaticos",
-    "medidas equivalentes cubiertas",
-    "neumaticos compatibles",
-  ],
-  alternates: { canonical: pageUrl },
-  openGraph: {
+type Props = { searchParams: Promise<{ modo?: string; original?: string; equivalente?: string }> };
+
+function parseSize(value?: string) {
+  if (!value) return null;
+  const m = value.match(/^(\d+)-(\d+)-(\d+)$/);
+  return m ? { width: m[1], profile: m[2], rim: m[3] } : null;
+}
+
+export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
+  const { modo, original, equivalente } = await searchParams;
+  const s1 = parseSize(original);
+  const s2 = modo === "check" ? parseSize(equivalente) : null;
+
+  // Con las dos medidas de un link compartido armamos un título/thumbnail
+  // puntual ("de 195/65 R15 a 205/60 R15") en vez del genérico de la
+  // calculadora, para que el preview al compartir muestre el cambio real.
+  if (s1 && s2) {
+    const from = `${s1.width}/${s1.profile} R${s1.rim}`;
+    const to = `${s2.width}/${s2.profile} R${s2.rim}`;
+    const title = `¿${from} es compatible con ${to}? | Trivium`;
+    const description = `Verificamos la equivalencia de diámetro entre ${from} y ${to}. Mirá el resultado y buscá stock disponible en Trivium.`;
+    const ogImage = `${SITE_URL}/api/og/equivalencia?original=${original}&equivalente=${equivalente}`;
+    const pageUrlWithParams = `${pageUrl}?modo=check&original=${original}&equivalente=${equivalente}`;
+
+    return {
+      title,
+      description,
+      alternates: { canonical: pageUrlWithParams },
+      openGraph: {
+        title,
+        description,
+        url: pageUrlWithParams,
+        locale: "es_AR",
+        type: "website",
+        images: [{ url: ogImage, width: 1200, height: 630, alt: `${from} → ${to}` }],
+      },
+      twitter: {
+        card: "summary_large_image",
+        title,
+        description,
+        images: [ogImage],
+      },
+    };
+  }
+
+  return {
     title: "Calculadora de equivalencias de neumáticos | Trivium",
     description:
-      "Verificá si dos medidas de neumáticos son compatibles y buscá alternativas disponibles.",
-    url: pageUrl,
-    locale: "es_AR",
-    type: "website",
-  },
-  twitter: {
-    card: "summary",
-    title: "Calculadora de equivalencias de neumáticos | Trivium",
-    description:
-      "Verificá medidas compatibles de neumáticos y alternativas en stock.",
-  },
-};
+      "Calculá medidas compatibles y equivalencias de neumáticos. Compará ancho, perfil y rodado, verificá la diferencia de diámetro y encontrá alternativas en stock.",
+    keywords: [
+      "calculadora equivalencia neumaticos",
+      "equivalencias de neumaticos",
+      "medidas compatibles neumaticos",
+      "medidas equivalentes cubiertas",
+      "neumaticos compatibles",
+    ],
+    alternates: { canonical: pageUrl },
+    openGraph: {
+      title: "Calculadora de equivalencias de neumáticos | Trivium",
+      description:
+        "Verificá si dos medidas de neumáticos son compatibles y buscá alternativas disponibles.",
+      url: pageUrl,
+      locale: "es_AR",
+      type: "website",
+    },
+    twitter: {
+      card: "summary",
+      title: "Calculadora de equivalencias de neumáticos | Trivium",
+      description:
+        "Verificá medidas compatibles de neumáticos y alternativas en stock.",
+    },
+  };
+}
 
 const faqs = [
   {
