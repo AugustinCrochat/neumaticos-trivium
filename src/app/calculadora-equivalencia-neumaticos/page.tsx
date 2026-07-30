@@ -123,8 +123,13 @@ const jsonLd = {
   ],
 };
 
-export default async function CalculadoraEquivalenciaNeumaticosPage() {
+export default async function CalculadoraEquivalenciaNeumaticosPage({ searchParams }: Props) {
   const productos = await getProductosDesdePOS(await getSelectedBranchSlug());
+  const { modo, original, equivalente } = await searchParams;
+  const s1 = parseSize(original);
+  const s2 = modo === "check" ? parseSize(equivalente) : null;
+  const from = s1 ? `${s1.width}/${s1.profile} R${s1.rim}` : null;
+  const to = s2 ? `${s2.width}/${s2.profile} R${s2.rim}` : null;
 
   return (
     <div className="min-h-screen bg-white">
@@ -139,14 +144,27 @@ export default async function CalculadoraEquivalenciaNeumaticosPage() {
         <div className="max-w-5xl mx-auto px-4">
           <div className="max-w-3xl">
             <p className="text-orange-400 text-sm font-bold uppercase tracking-widest mb-3">
-              Herramienta gratuita
+              {from && to ? "Equivalencia compartida" : "Herramienta gratuita"}
             </p>
-            <h1 className="text-3xl md:text-5xl font-black text-white mb-5">
-              Calculadora de equivalencias de neumáticos
-            </h1>
-            <p className="text-navy-100 text-lg leading-relaxed mb-9">
-              Ingresá la medida original de tu neumático para comprobar si otra medida es compatible o para ver alternativas disponibles en stock.
-            </p>
+            {from && to ? (
+              <>
+                <h1 className="text-3xl md:text-5xl font-black text-white mb-5">
+                  ¿{from} es compatible con {to}?
+                </h1>
+                <p className="text-navy-100 text-lg leading-relaxed mb-9">
+                  Te compartieron esta comparación de medidas. Mirá el resultado abajo y, si son compatibles, buscá stock disponible de {to}.
+                </p>
+              </>
+            ) : (
+              <>
+                <h1 className="text-3xl md:text-5xl font-black text-white mb-5">
+                  Calculadora de equivalencias de neumáticos
+                </h1>
+                <p className="text-navy-100 text-lg leading-relaxed mb-9">
+                  Ingresá la medida original de tu neumático para comprobar si otra medida es compatible o para ver alternativas disponibles en stock.
+                </p>
+              </>
+            )}
             <div className="shadow-2xl">
               <EquivalenceCalculator products={productos} />
             </div>
