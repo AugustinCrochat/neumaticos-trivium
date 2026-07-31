@@ -300,33 +300,10 @@ export default async function BranchPage({ params }: Props) {
           </div>
         </section>
 
-        {/* Zonas atendidas — enlaza la ficha con las landings locales, que son
-            las que capturan las búsquedas por localidad. */}
-        {zonas.length > 0 && (
-          <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-            <h2 className="mb-1 text-lg font-black text-navy-900">
-              Zonas que atiende esta sucursal
-            </h2>
-            <p className="mb-4 text-sm text-slate-500">
-              Clientes de todo el corredor norte de Córdoba y Sierras Chicas.
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {zonas.map((localidad) => (
-                <Link
-                  key={localidad.slug}
-                  href={`/neumaticos-en/${localidad.slug}`}
-                  className="rounded-xl bg-slate-50 px-4 py-2.5 text-sm font-bold text-navy-900 transition-colors hover:bg-slate-100"
-                >
-                  {localidad.name}
-                  <span className="ml-1.5 text-xs font-medium text-slate-400">
-                    {localidad.minutosHastaSucursal} min
-                  </span>
-                </Link>
-              ))}
-            </div>
-          </section>
-        )}
-
+        {/* Las zonas atendidas se mencionan en prosa dentro de las preguntas
+            frecuentes, no como botonera de accesos directos. La señal local la
+            da el texto y el areaServed del schema; las landings de
+            /neumaticos-en se descubren por el footer y el sitemap. */}
         <FaqSection faqs={buildFaqs(branch)} />
       </main>
     </div>

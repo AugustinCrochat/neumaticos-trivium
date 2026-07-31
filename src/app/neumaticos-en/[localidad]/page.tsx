@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { DEFAULT_BRANCH_ID, SHIPPING_FLAT_RATE } from "@/lib/config";
-import { getProductosDesdePOS } from "@/lib/pos-api";
+import { SHIPPING_FLAT_RATE } from "@/lib/config";
 import { SERVICES } from "@/lib/data";
 import {
   LOCALIDADES,
@@ -13,8 +12,7 @@ import {
 import { canonical, SITE_NAME, type Faq } from "@/lib/seo";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { FaqSection } from "@/components/seo/FaqSection";
-import { ProductCard } from "@/components/ui/ProductCard";
-import { formatSize, sizeSlug, sizesFromCatalog } from "@/lib/tire-sizes";
+import { MEDIDAS_PRIORITARIAS, formatSize, sizeSlug } from "@/lib/tire-sizes";
 
 /**
  * Landings de SEO local: "neumáticos en Villa Allende", "gomería en Saldán".
@@ -29,8 +27,13 @@ import { formatSize, sizeSlug, sizesFromCatalog } from "@/lib/tire-sizes";
  * terminan diciendo lo mismo con el nombre cambiado, Google las clasifica como
  * doorway pages y puede desindexar todo el conjunto: el contenido propio no es
  * decorativo acá, es lo que sostiene la estrategia.
+ *
+ * No consultan el catálogo: son estáticas puras. Con el caché incremental sin
+ * R2 (ver open-next.config.ts), cualquier fetch acá haría que cada isolate frío
+ * de Cloudflare espere a la red antes de responder. El stock y los precios
+ * viven en las landings de medida, a un clic de acá.
  */
-export const revalidate = 3600;
+export const dynamic = "force-static";
 
 type Props = { params: Promise<{ localidad: string }> };
 
@@ -114,10 +117,7 @@ export default async function LocalidadPage({ params }: Props) {
   if (!localidad) notFound();
 
   const branch = getBranchForLocalidad(localidad);
-  const productos = await getProductosDesdePOS(DEFAULT_BRANCH_ID);
-  const enStock = productos.filter((p) => p.enStock);
-  const destacados = [...enStock].sort((a, b) => a.price - b.price).slice(0, 8);
-  const medidas = sizesFromCatalog(enStock).slice(0, 12);
+  const medidas = MEDIDAS_PRIORITARIAS.slice(0, 12);
   const otras = LOCALIDADES.filter((l) => l.slug !== localidad.slug);
 
   const waLink = `https://wa.me/${branch.whatsapp}?text=${encodeURIComponent(
@@ -245,44 +245,37 @@ export default async function LocalidadPage({ params }: Props) {
       </section>
 
       {/* Medidas más pedidas — enlaza el cluster nacional desde el local */}
-      {medidas.length > 0 && (
-        <section className="mb-12">
-          <h2 className="mb-5 text-2xl font-black text-navy-900">Medidas con stock disponible</h2>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-            {medidas.map(({ size, count }) => (
-              <Link
-                key={sizeSlug(size)}
-                href={`/neumaticos/${sizeSlug(size)}`}
-                className="rounded-xl border border-slate-200 bg-white p-4 text-center transition-colors hover:border-orange-400"
-              >
-                <span className="block font-black text-navy-900">{formatSize(size)}</span>
-                <span className="mt-1 block text-xs font-bold text-slate-500">
-                  {count} {count === 1 ? "modelo" : "modelos"}
-                </span>
-              </Link>
-            ))}
-          </div>
-        </section>
-      )}
+      <section className="mb-12">
+        <h2 className="mb-2 text-2xl font-black text-navy-900">Medidas más pedidas</h2>
+        <p className="mb-5 max-w-3xl leading-relaxed text-slate-600">
+          Entrá a tu medida para ver los modelos disponibles con precio y stock actualizado.
+        </p>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+          {medidas.map((size) => (
+            <Link
+              key={sizeSlug(size)}
+              href={`/neumaticos/${sizeSlug(size)}`}
+              className="rounded-xl border border-slate-200 bg-white p-4 text-center transition-colors hover:border-orange-400"
+            >
+              <span className="block font-black text-navy-900">{formatSize(size)}</span>
+              <span className="mt-1 block text-xs font-bold text-slate-500">Ver precios</span>
+            </Link>
+          ))}
+        </div>
+      </section>
 
-      {destacados.length > 0 && (
-        <section className="mb-12">
-          <h2 className="mb-5 text-2xl font-black text-navy-900">
-            Neumáticos en stock ahora mismo
-          </h2>
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 md:gap-6">
-            {destacados.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
-          <Link
-            href="/catalogo"
-            className="mt-6 inline-flex min-h-12 items-center justify-center rounded-xl border border-slate-300 bg-white px-6 text-sm font-black text-navy-900 transition-colors hover:border-navy-400"
-          >
-            Ver el catálogo completo
-          </Link>
-        </section>
-      )}
+      <section className="mb-12 rounded-2xl border border-slate-200 bg-slate-50 p-6">
+        <h2 className="text-xl font-black text-navy-900">Mirá todo el catálogo</h2>
+        <p className="mt-2 max-w-2xl leading-relaxed text-slate-600">
+          Todas las marcas y medidas con precio y stock actualizado al momento.
+        </p>
+        <Link
+          href="/catalogo"
+          className="mt-5 inline-flex min-h-12 items-center justify-center rounded-xl bg-navy-900 px-6 text-sm font-black text-white transition-transform active:scale-[0.98]"
+        >
+          Ver el catálogo completo
+        </Link>
+      </section>
 
       <FaqSection
         faqs={buildFaqs(localidad, branch)}

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import { HeroSection } from "@/components/home/HeroSection";
 import { ValueSection } from "@/components/home/ValueSection";
 import { ArrepentimientoBanner } from "@/components/home/ArrepentimientoBanner";
@@ -10,7 +9,10 @@ import { FaqSection } from "@/components/seo/FaqSection";
 import { SHIPPING_FLAT_RATE } from "@/lib/config";
 import { canonical } from "@/lib/seo";
 
-export const revalidate = 900;
+// La home no consulta el POS ni ninguna otra fuente de datos: es estática de
+// punta a punta y se sirve desde el asset, sin render. Es deliberado — ver el
+// comentario de PopularSizesSection.
+export const dynamic = "force-static";
 
 export const metadata: Metadata = {
   // Título propio en vez de heredar el default del layout: la home compite por
@@ -61,11 +63,7 @@ export default function HomePage() {
     <>
       <HeroSection />
       <ArrepentimientoBanner />
-      {/* La grilla consulta el catálogo, así que va en Suspense para no
-          bloquear el hero — que es el LCP de la home. */}
-      <Suspense fallback={<div className="h-64 bg-slate-50" />}>
-        <PopularSizesSection />
-      </Suspense>
+      <PopularSizesSection />
       <ValueSection />
       <AboutSection />
       <LocalSection />

@@ -1,37 +1,25 @@
 import Link from "next/link";
-import { DEFAULT_BRANCH_ID, TIRE_RIMS } from "@/lib/config";
-import { getProductosDesdePOS } from "@/lib/pos-api";
-import {
-  MEDIDAS_PRIORITARIAS,
-  formatSize,
-  rimSlug,
-  sizeSlug,
-  sizesFromCatalog,
-} from "@/lib/tire-sizes";
+import { TIRE_RIMS } from "@/lib/config";
+import { MEDIDAS_PRIORITARIAS, formatSize, rimSlug, sizeSlug } from "@/lib/tire-sizes";
 
 /**
  * Grilla de medidas en la home.
  *
- * Cumple dos funciones a la vez: le da al visitante un atajo a su medida sin
- * tener que tipear, y le da al crawler enlaces directos desde la página de más
- * autoridad del sitio hacia las landings de medida, que son las que tienen que
- * rankear. Sin esta grilla, esas páginas cuelgan sólo del hub y del footer.
+ * Le da al visitante un atajo a su medida sin tipear, y al crawler enlaces
+ * directos desde la página de más autoridad del sitio hacia las landings de
+ * medida. Sin esta grilla, esas páginas cuelgan sólo del hub y del footer.
+ *
+ * NO consulta el catálogo, a propósito. Una versión anterior mostraba acá la
+ * cantidad de modelos en stock por medida, lo que obligaba a un fetch al POS
+ * para renderizar la home. Como el caché incremental de OpenNext está sin R2
+ * (ver open-next.config.ts), la revalidación no persiste entre isolates: cada
+ * isolate frío de Cloudflare rehacía el render y esperaba la red, y el primer
+ * visitante después de un rato de calma se comía 3 segundos. El dato de stock
+ * no valía ese costo en la página más visitada del sitio: quien entra a la
+ * medida lo ve ahí, ya con el precio al lado.
  */
-export async function PopularSizesSection() {
-  const productos = await getProductosDesdePOS(DEFAULT_BRANCH_ID);
-  const enStock = productos.filter((p) => p.enStock);
-
-  // Las que tienen stock primero, completadas con prioritarias hasta 18. Así la
-  // grilla nunca se ve vacía aunque el catálogo esté bajo.
-  const conStock = sizesFromCatalog(enStock);
-  const yaListadas = new Set(conStock.map((s) => sizeSlug(s.size)));
-  const medidas = [
-    ...conStock.map((s) => ({ size: s.size, count: s.count })),
-    ...MEDIDAS_PRIORITARIAS.filter((s) => !yaListadas.has(sizeSlug(s))).map((size) => ({
-      size,
-      count: 0,
-    })),
-  ].slice(0, 18);
+export function PopularSizesSection() {
+  const medidas = MEDIDAS_PRIORITARIAS.slice(0, 18);
 
   return (
     <section className="border-b border-slate-100 bg-slate-50 py-16">
@@ -46,20 +34,14 @@ export async function PopularSizesSection() {
         </div>
 
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-          {medidas.map(({ size, count }) => (
+          {medidas.map((size) => (
             <Link
               key={sizeSlug(size)}
               href={`/neumaticos/${sizeSlug(size)}`}
-              className={`rounded-xl border p-4 text-center transition-colors ${
-                count > 0
-                  ? "border-slate-200 bg-white hover:border-orange-400"
-                  : "border-dashed border-slate-200 bg-white/60 hover:border-navy-300"
-              }`}
+              className="rounded-xl border border-slate-200 bg-white p-4 text-center transition-colors hover:border-orange-400"
             >
               <span className="block font-black text-navy-900">{formatSize(size)}</span>
-              <span className="mt-1 block text-xs font-bold text-slate-500">
-                {count > 0 ? `${count} ${count === 1 ? "modelo" : "modelos"}` : "a pedido"}
-              </span>
+              <span className="mt-1 block text-xs font-bold text-slate-500">Ver precios</span>
             </Link>
           ))}
         </div>

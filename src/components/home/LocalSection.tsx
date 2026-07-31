@@ -2,6 +2,12 @@ import Link from "next/link";
 import { BRANCHES } from "@/lib/config";
 import { LOCALIDADES } from "@/lib/localidades";
 
+/** "Córdoba, Argüello, Villa Allende y Saldán" — lista en prosa, con "y" final. */
+const ZONAS_EN_PROSA = LOCALIDADES.map((l) => l.name).reduce((acc, name, i, arr) => {
+  if (i === 0) return name;
+  return i === arr.length - 1 ? `${acc} y ${name}` : `${acc}, ${name}`;
+}, "");
+
 /**
  * Bloque local de la home.
  *
@@ -64,27 +70,19 @@ export function LocalSection() {
             </div>
           </div>
 
+          {/* Las localidades se nombran en prosa, no como grilla de accesos
+              directos: la señal geográfica para el pack local la da el texto,
+              y una botonera de ocho zonas en la home competía con el CTA real
+              sin que nadie la usara para navegar. Las landings de
+              /neumaticos-en siguen enlazadas desde el footer y el sitemap. */}
           <div>
             <h3 className="text-xl font-black">Zonas donde vendemos</h3>
             <p className="mt-2 leading-relaxed text-navy-200">
-              Atendemos Córdoba Capital y todo el corredor de Sierras Chicas. En cada página vas a
-              encontrar cómo llegar desde tu localidad y cuánto tardás.
+              Atendemos Córdoba Capital y todo el corredor de Sierras Chicas:{" "}
+              {ZONAS_EN_PROSA}. Si estás en cualquiera de esas zonas, el retiro en el local no tiene
+              costo y la colocación va incluida.
             </p>
-            <div className="mt-5 flex flex-wrap gap-2">
-              {LOCALIDADES.map((localidad) => (
-                <Link
-                  key={localidad.slug}
-                  href={`/neumaticos-en/${localidad.slug}`}
-                  className="rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-bold transition-colors hover:bg-white/10"
-                >
-                  {localidad.name}
-                  <span className="ml-1.5 text-xs font-medium text-navy-300">
-                    {localidad.minutosHastaSucursal} min
-                  </span>
-                </Link>
-              ))}
-            </div>
-            <p className="mt-6 text-sm leading-relaxed text-navy-300">
+            <p className="mt-4 text-sm leading-relaxed text-navy-300">
               ¿Estás en otra provincia? Enviamos a todo el país con costo fijo.{" "}
               <Link href="/neumaticos" className="font-bold text-white underline underline-offset-2">
                 Buscá tu medida
