@@ -6,7 +6,15 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Metadata } from "next";
 import { getBrandLogo } from "@/lib/brand-utils";
+import { DEFAULT_BRANCH_ID } from "@/lib/config";
+import { canonical, itemListJsonLd, SITE_NAME } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { breadcrumbJsonLd } from "@/lib/seo";
 
+// Sin generateStaticParams: la página lee la cookie de sucursal para mostrar el
+// stock correcto, así que se renderiza por request. Las landings de SEO puro
+// (/neumaticos/*, /neumaticos-en/*) sí se prerenderizan porque no dependen de
+// la sucursal elegida.
 export const revalidate = 300;
 
 type Props = { params: Promise<{ slug: string }> };
@@ -15,9 +23,25 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const brand = BRANDS.find((b) => b.id === slug);
   if (!brand) return { title: "Marca no encontrada" };
+
+  // El precio "desde" en la descripción es lo que más mueve el CTR en consultas
+  // de marca, donde el usuario ya decidió qué quiere y está comparando dónde.
+  const productos = await getProductosDesdePOS(DEFAULT_BRANCH_ID);
+  const enStock = productos.filter((p) => p.brandId === brand.id && p.enStock);
+  const desde = enStock.length ? Math.min(...enStock.map((p) => p.price)) : null;
+
+  const description = desde
+    ? `Neumáticos ${brand.name} desde $${desde.toLocaleString("es-AR")} con stock disponible. ${brand.description ?? `Cubiertas ${brand.name} de importación directa`} Envío a todo el país o retiro sin cargo en Córdoba.`
+    : `Catálogo de neumáticos ${brand.name}: medidas, precios y disponibilidad. ${brand.description ?? ""} Importación directa con garantía de 1 año.`;
+
   return {
-    title: `Neumáticos ${brand.name} — Trivium`,
-    description: brand.description || `Explorá el catálogo completo de neumáticos ${brand.name}.`,
+    title: `Neumáticos ${brand.name} — precios y medidas`,
+    description: description.replace(/\s+/g, " ").slice(0, 300),
+    alternates: canonical(`/marcas/${brand.id}`),
+    openGraph: {
+      title: `Neumáticos ${brand.name} — ${SITE_NAME}`,
+      url: `/marcas/${brand.id}`,
+    },
   };
 }
 
@@ -32,6 +56,23 @@ export default async function BrandPage({ params }: Props) {
 
   return (
     <div className="min-h-screen bg-white">
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Inicio", path: "/" },
+          { name: "Marcas", path: "/marcas" },
+          { name: brand.name, path: `/marcas/${brand.id}` },
+        ])}
+      />
+      {brandProducts.length > 0 && (
+        <JsonLd
+          data={itemListJsonLd(
+            brandProducts.map((p) => ({
+              name: `${p.brand} ${p.model}`,
+              path: `/productos/${p.slug}`,
+            }))
+          )}
+        />
+      )}
       {/* Brand Header */}
       <header className="bg-slate-50 border-b border-slate-100 pt-12 md:pt-20 pb-12 md:pb-16">
         <div className="max-w-7xl mx-auto px-4">
@@ -49,7 +90,7 @@ export default async function BrandPage({ params }: Props) {
               <nav className="flex items-center justify-center md:justify-start gap-2 mb-6 text-sm font-bold text-slate-400">
                 <Link href="/" className="hover:text-navy-600 transition-colors">Inicio</Link>
                 <span>/</span>
-                <Link href="/catalogo" className="hover:text-navy-600 transition-colors">Marcas</Link>
+                <Link href="/marcas" className="hover:text-navy-600 transition-colors">Marcas</Link>
                 <span>/</span>
                 <span className="text-navy-900">{brand.name}</span>
               </nav>

@@ -1,10 +1,13 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { BRANCHES, LEGAL_NAME, CUIT, CONTACT_EMAIL } from "@/lib/config";
+import { canonical } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Contacto — Neumáticos Trivium",
-  description: "Contactate con Neumáticos Trivium. Elegí sucursal, llamá, escribinos por WhatsApp o abrí el mapa.",
+  title: "Contacto — WhatsApp, teléfono y ubicación",
+  description:
+    "Escribinos por WhatsApp, llamanos o pasá por el local. Te asesoramos con la medida, el stock y el precio antes de que hagas el viaje.",
+  alternates: canonical("/contacto"),
 };
 
 export default function ContactoPage() {

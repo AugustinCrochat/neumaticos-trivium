@@ -16,6 +16,15 @@ export function HeroSection() {
               El outlet del{" "}
               <span className="text-orange-500">neumático</span>
             </h1>
+            {/* El H1 es la marca; este párrafo es el que nombra el rubro como
+                lo busca la gente ("cubiertas", "auto y camioneta", el envío y
+                la ciudad). Sin él, la home no tenía ni una frase indexable
+                debajo del título. */}
+            <p className="mt-4 max-w-lg text-lg leading-relaxed text-slate-600">
+              Cubiertas para auto y camioneta de importación directa, con stock real y precio
+              publicado. Envío a todo el país o retiro sin cargo en nuestro local de Córdoba, con
+              colocación incluida.
+            </p>
             <GoogleRatingBadge className="text-slate-700 mt-5" />
           </div>
 

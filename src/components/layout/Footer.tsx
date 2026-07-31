@@ -2,6 +2,13 @@ import Link from "next/link";
 import Image from "next/image";
 import { BRANCHES, LEGAL_NAME, CUIT, CONTACT_EMAIL, INSTAGRAM_URL, FACEBOOK_URL, AFIP_DATA_FISCAL_QR } from "@/lib/config";
 import { GoogleRatingBadge } from "@/components/ui/GoogleRatingBadge";
+import { LOCALIDADES } from "@/lib/localidades";
+import { MEDIDAS_PRIORITARIAS, formatSize, sizeSlug } from "@/lib/tire-sizes";
+
+// Un subconjunto de las medidas prioritarias: enlazar las 22 en el footer de
+// cada página sería un link farm, y estas doce cubren el grueso del parque
+// automotor argentino.
+const MEDIDAS_FOOTER = MEDIDAS_PRIORITARIAS.slice(0, 12);
 
 export function Footer() {
   const year = new Date().getFullYear();
@@ -60,7 +67,10 @@ export function Footer() {
             </h4>
             <ul className="space-y-2">
               {[
+                { href: "/neumaticos", label: "Neumáticos por medida" },
                 { href: "/catalogo", label: "Catálogo de neumáticos" },
+                { href: "/marcas", label: "Marcas" },
+                { href: "/tuercas-antirrobo", label: "Tuercas antirrobo" },
                 { href: "/calculadora-equivalencia-neumaticos", label: "Calculadora de equivalencias" },
                 { href: "/servicios", label: "Servicios" },
                 { href: "/blog", label: "Blog" },
@@ -133,6 +143,47 @@ export function Footer() {
                 </div>
               ))}
             </div>
+          </div>
+        </div>
+
+        {/* Enlaces al cluster de medidas y de zonas.
+            Van en el footer para que cada landing quede a un clic de cualquier
+            página del sitio: sin esto, /neumaticos/175-65-r14 sólo se alcanza
+            desde el hub y el crawler la visita mucho menos seguido. */}
+        <div className="mt-12 grid gap-8 border-t border-zinc-900 pt-10 md:grid-cols-2">
+          <div>
+            <h4 className="mb-4 text-sm font-bold uppercase tracking-wide text-white">
+              Medidas más buscadas
+            </h4>
+            <ul className="flex flex-wrap gap-x-4 gap-y-2">
+              {MEDIDAS_FOOTER.map((size) => (
+                <li key={sizeSlug(size)}>
+                  <Link
+                    href={`/neumaticos/${sizeSlug(size)}`}
+                    className="text-sm text-zinc-400 transition-colors hover:text-white"
+                  >
+                    {formatSize(size)}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <h4 className="mb-4 text-sm font-bold uppercase tracking-wide text-white">
+              Zonas que atendemos
+            </h4>
+            <ul className="flex flex-wrap gap-x-4 gap-y-2">
+              {LOCALIDADES.map((localidad) => (
+                <li key={localidad.slug}>
+                  <Link
+                    href={`/neumaticos-en/${localidad.slug}`}
+                    className="text-sm text-zinc-400 transition-colors hover:text-white"
+                  >
+                    Neumáticos en {localidad.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </div>

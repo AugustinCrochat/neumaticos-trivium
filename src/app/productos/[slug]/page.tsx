@@ -6,7 +6,10 @@ import { getProductosDesdePOS } from "@/lib/pos-api";
 import { getSelectedBranchSlug } from "@/lib/branch-server";
 import { getBrandLogo } from "@/lib/brand-utils";
 import { BRANDS } from "@/lib/data";
-import { SITE_URL } from "@/lib/config";
+import { SHIPPING_FLAT_RATE, SITE_URL } from "@/lib/config";
+import { ORGANIZATION_ID, breadcrumbJsonLd, canonical } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { formatSize, rimSlug, sizeSlug } from "@/lib/tire-sizes";
 import { isLowStock, stockLabel } from "@/lib/stock";
 import { ProductNameWithHighlightedSize } from "@/components/ui/ProductNameWithHighlightedSize";
 import { ProductPageClient } from "./ProductPageClient";
@@ -37,6 +40,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: fullTitle,
     description,
+    alternates: canonical(`/productos/${product.slug}`),
     openGraph: {
       title: fullTitle,
       description,
@@ -101,29 +105,90 @@ const TIRE_SVG = (
 
 function buildProductJsonLd(product: {
   id: string; slug: string; brand: string; model: string; imageUrl: string; price: number; enStock?: boolean;
+  size: { width: number; profile: number; rim: number }; loadIndex?: string; speedRating?: string;
 }) {
   const url = `${SITE_URL}/productos/${product.slug}`;
   const image = product.imageUrl.startsWith("http") ? product.imageUrl : `${SITE_URL}${product.imageUrl}`;
+  // Google exige priceValidUntil para mostrar el precio en rich results. Con
+  // precios que se mueven por inflación y tipo de cambio, 30 días es un
+  // compromiso razonable: no promete un precio viejo ni obliga a rearmar el
+  // schema todos los días.
+  const priceValidUntil = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+    .toISOString()
+    .slice(0, 10);
+
   return {
     "@context": "https://schema.org",
     "@type": "Product",
-    name: `${product.brand} ${product.model}`,
+    // product.model ya viene armado como "<medida> <marca> <modelo>", así que
+    // anteponerle la marca la repetía ("PIRELLI 225/45 R17 PIRELLI POWERGY").
+    // Además tiene que coincidir con el <title> del feed de Merchant Center,
+    // que usa este mismo campo: si no coinciden, Diagnostics marca el ítem.
+    name: product.model,
+    description:
+      `Neumático ${product.brand} en medida ${product.size.width}/${product.size.profile} R${product.size.rim}` +
+      `${product.loadIndex && product.speedRating ? ` ${product.loadIndex}${product.speedRating}` : ""}. ` +
+      `Importación directa con garantía de 1 año, colocación sin cargo en el local.`,
     image,
     // sku tiene que ser el mismo id que <g:id> en google-merchant.xml y
     // google-local-inventory.xml — sin esto Merchant Center no puede matchear
     // el structured data de la pagina con el item del feed ("missing
     // required parameter id" en Diagnostics de productos).
     sku: product.id,
+    mpn: product.id,
     brand: { "@type": "Brand", name: product.brand },
     url,
+    // Los atributos de medida como propiedades estructuradas: es lo que permite
+    // que Google entienda la ficha como un neumático de una medida concreta y
+    // no como un texto suelto.
+    additionalProperty: [
+      { "@type": "PropertyValue", name: "Ancho de sección", value: `${product.size.width} mm` },
+      { "@type": "PropertyValue", name: "Perfil", value: `${product.size.profile}` },
+      { "@type": "PropertyValue", name: "Rodado", value: `R${product.size.rim}` },
+      ...(product.loadIndex
+        ? [{ "@type": "PropertyValue", name: "Índice de carga", value: product.loadIndex }]
+        : []),
+      ...(product.speedRating
+        ? [{ "@type": "PropertyValue", name: "Índice de velocidad", value: product.speedRating }]
+        : []),
+    ],
     offers: {
       "@type": "Offer",
       url,
       priceCurrency: "ARS",
       price: product.price,
+      priceValidUntil,
       availability: product.enStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
       itemCondition: "https://schema.org/NewCondition",
-      seller: { "@type": "Organization", name: "Neumáticos Trivium" },
+      seller: { "@id": ORGANIZATION_ID },
+      // Envío y devoluciones declarados en el schema: Merchant Center los pide
+      // para las fichas gratuitas, y en la SERP se muestran junto al precio.
+      shippingDetails: {
+        "@type": "OfferShippingDetails",
+        shippingRate: {
+          "@type": "MonetaryAmount",
+          value: SHIPPING_FLAT_RATE,
+          currency: "ARS",
+        },
+        shippingDestination: {
+          "@type": "DefinedRegion",
+          addressCountry: "AR",
+        },
+        deliveryTime: {
+          "@type": "ShippingDeliveryTime",
+          handlingTime: { "@type": "QuantitativeValue", minValue: 1, maxValue: 2, unitCode: "DAY" },
+          transitTime: { "@type": "QuantitativeValue", minValue: 2, maxValue: 7, unitCode: "DAY" },
+        },
+      },
+      hasMerchantReturnPolicy: {
+        "@type": "MerchantReturnPolicy",
+        applicableCountry: "AR",
+        // Derecho de arrepentimiento de la Ley 24.240: 10 días corridos.
+        returnPolicyCategory: "https://schema.org/MerchantReturnFiniteReturnWindow",
+        merchantReturnDays: 10,
+        returnMethod: "https://schema.org/ReturnByMail",
+        returnFees: "https://schema.org/FreeReturn",
+      },
     },
   };
 }
@@ -160,19 +225,46 @@ export default async function ProductPage({ params }: Props) {
 
   return (
     <div className="max-w-5xl mx-auto px-4 pt-3 pb-4 md:pt-4 md:pb-6">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(buildProductJsonLd(product)) }}
+      <JsonLd data={buildProductJsonLd(product)} />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Inicio", path: "/" },
+          { name: "Neumáticos", path: "/neumaticos" },
+          { name: `Rodado ${product.size.rim}`, path: `/neumaticos/${rimSlug(product.size.rim)}` },
+          { name: formatSize(product.size), path: `/neumaticos/${sizeSlug(product.size)}` },
+          { name: `${product.brand} ${product.model}`, path: `/productos/${product.slug}` },
+        ])}
       />
-      <Link
-        href="/catalogo"
-        className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-navy-700 mb-3 transition-colors"
-      >
-        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-        </svg>
-        Volver al catálogo
-      </Link>
+      {/* Migas visibles: además de acompañar al JSON-LD, son el enlace interno
+          que conecta cada ficha con su página de medida, que es la que rankea
+          para "neumáticos 205/55 R16". */}
+      <nav aria-label="Migas de pan" className="mb-3 text-sm">
+        <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 text-slate-500">
+          <li className="flex items-center gap-2">
+            <Link href="/neumaticos" className="transition-colors hover:text-navy-700">
+              Neumáticos
+            </Link>
+            <span aria-hidden className="text-slate-300">/</span>
+          </li>
+          <li className="flex items-center gap-2">
+            <Link
+              href={`/neumaticos/${rimSlug(product.size.rim)}`}
+              className="transition-colors hover:text-navy-700"
+            >
+              Rodado {product.size.rim}
+            </Link>
+            <span aria-hidden className="text-slate-300">/</span>
+          </li>
+          <li className="flex items-center gap-2">
+            <Link
+              href={`/neumaticos/${sizeSlug(product.size)}`}
+              className="font-semibold text-navy-700 transition-colors hover:text-navy-900"
+            >
+              {formatSize(product.size)}
+            </Link>
+          </li>
+        </ol>
+      </nav>
 
       <div className="grid md:grid-cols-2 gap-4 md:gap-12">
         {/* Image */}

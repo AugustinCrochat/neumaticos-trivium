@@ -1,10 +1,13 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { BLOG_POSTS } from "@/lib/data";
+import { canonical } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Blog y Guías — Neumáticos Trivium",
-  description: "Guías de mantenimiento, consejos sobre neumáticos importados, y todo lo que necesitás saber antes de comprar.",
+  title: "Guías de neumáticos — mantenimiento, medidas y marcas",
+  description:
+    "Cómo leer la medida, cada cuánto cambiar las cubiertas, qué marcas convienen y cómo funcionan las equivalencias. Guías escritas por quienes venden y montan neumáticos todos los días.",
+  alternates: canonical("/blog"),
 };
 
 function formatDate(dateStr: string) {

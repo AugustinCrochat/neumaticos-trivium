@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import "./globals.css";
-import { SITE_URL, LEGAL_NAME, CUIT, CONTACT_EMAIL, INSTAGRAM_URL, FACEBOOK_URL, BRANCHES } from "@/lib/config";
+import { SITE_URL } from "@/lib/config";
+import { SITE_NAME, siteGraphJsonLd } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { BranchProvider } from "@/contexts/branch-context";
 import { BranchModal } from "@/components/ui/BranchModal";
 import { VehicleProvider } from "@/contexts/vehicle-context";
@@ -19,10 +21,40 @@ const geist = Geist({
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "Neumáticos Trivium — El outlet del neumático",
+  title: {
+    // Cada página define su título propio y hereda el sufijo de marca; sin el
+    // template había que repetir "— Neumáticos Trivium" a mano en cada archivo
+    // (y varias páginas se lo olvidaban).
+    default: "Neumáticos y cubiertas al mejor precio — Neumáticos Trivium",
+    template: `%s — ${SITE_NAME}`,
+  },
   description:
-    "Neumáticos de importación directa a precios outlet.",
-  keywords: ["neumáticos", "cubiertas", "outlet", "importación", "china", "baratos", "Argentina"],
+    "Outlet de neumáticos con importación directa: comprá cubiertas para auto y camioneta con stock real, precio publicado y envío a todo el país. Local y taller propio en Córdoba.",
+  applicationName: SITE_NAME,
+  authors: [{ name: SITE_NAME, url: SITE_URL }],
+  creator: SITE_NAME,
+  publisher: SITE_NAME,
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    siteName: SITE_NAME,
+    locale: "es_AR",
+    url: SITE_URL,
+  },
+  twitter: { card: "summary_large_image" },
+  robots: {
+    index: true,
+    follow: true,
+    // max-image-preview:large habilita la miniatura grande en resultados de
+    // Google Imágenes y Discover; sin esto se sirve una miniatura chica.
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
   verification: {
     // Códigos de verificación: Search Console, Merchant Center (dominio) y
     // Merchant Center (esta URL puntual) — Next.js renderiza un
@@ -35,40 +67,6 @@ export const metadata: Metadata = {
   },
 };
 
-const organizationJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "@id": `${SITE_URL}/#organization`,
-  name: "Neumáticos Trivium",
-  legalName: LEGAL_NAME,
-  taxID: CUIT,
-  url: SITE_URL,
-  logo: `${SITE_URL}/logo-neumaticos-trivium.svg`,
-  email: CONTACT_EMAIL,
-  sameAs: [INSTAGRAM_URL, FACEBOOK_URL],
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: BRANCHES[0].address,
-    addressLocality: BRANCHES[0].city,
-    addressCountry: "AR",
-  },
-  contactPoint: {
-    "@type": "ContactPoint",
-    contactType: "customer service",
-    email: CONTACT_EMAIL,
-    telephone: BRANCHES[0].phone,
-    areaServed: "AR",
-    availableLanguage: "Spanish",
-  },
-  ...(BRANCHES[0].googleRating && {
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: BRANCHES[0].googleRating.value,
-      reviewCount: BRANCHES[0].googleRating.count,
-    },
-  }),
-};
-
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -78,10 +76,7 @@ export default async function RootLayout({
   return (
     <html lang="es" className={`${geist.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-background text-foreground">
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
-        />
+        <JsonLd data={siteGraphJsonLd()} />
         <BranchProvider>
           <VehicleProvider vehiculos={vehiculos}>
             <CartProvider>

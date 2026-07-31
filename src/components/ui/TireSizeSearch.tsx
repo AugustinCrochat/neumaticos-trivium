@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useBranch } from "@/contexts/branch-context";
+import { sizeSearchHref } from "@/lib/size-href";
 import { TireDiagram } from "./TireDiagram";
 
 type FullscreenDocumentElement = HTMLElement & {
@@ -195,10 +196,9 @@ export function TireSizeSearch({
     if (shouldClearInitialOnEdit) return; // values came from the initialMedida prop
     if (width.length !== 3 || profile.length !== 2 || rim.length !== 2) return;
     const t = setTimeout(() => {
-      const medida = `${width}-${profile}-r${rim}`;
       if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
       setShowPopular(false);
-      router.push(`/buscar?medida=${medida}`);
+      router.push(sizeSearchHref(width, profile, rim));
     }, 300);
     return () => clearTimeout(t);
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -206,12 +206,11 @@ export function TireSizeSearch({
 
   const performSearch = (w: string, p: string, rVal: string) => {
     if (!w && !p && !rVal) return;
-    const medida = `${w}-${p}-r${rVal}`;
     if (document.activeElement instanceof HTMLElement) {
       document.activeElement.blur();
     }
     setShowPopular(false); // Ocultar dropdown después de búsqueda
-    router.push(`/buscar?medida=${medida}`);
+    router.push(sizeSearchHref(w, p, rVal));
   };
 
   function executeSearch() {
@@ -488,7 +487,7 @@ export function TireSizeSearch({
       if (!w || !p || !rVal) return;
       hasNavigated = true;
       if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
-      router.push(`/buscar?medida=${w}-${p}-r${rVal}`);
+      router.push(sizeSearchHref(w, p, rVal));
     };
 
     r.onresult = (ev) => {

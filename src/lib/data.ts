@@ -5,6 +5,20 @@ export const BRANDS: TireBrand[] = [
     id: "zmax",
     name: "Zmax",
     origin: "China",
+    description: "Gama urbana del grupo Zodo, la relación precio-kilómetro más accesible del catálogo.",
+    fullDescription:
+      "Zmax pertenece al mismo grupo fabricante que Grenlander (Zodo Tyre) y ocupa el escalón de entrada de su oferta. Está pensada para uso urbano y periurbano, donde el kilometraje anual es moderado y lo que se busca es una cubierta homologada, con carcasa radial de acero y comportamiento previsible, al precio más bajo posible. Es la opción que recomendamos para un segundo auto, un vehículo que hace pocos kilómetros al año o cuando hay que resolver el cambio de las cuatro cubiertas con un presupuesto ajustado.",
+  },
+  {
+    // El POS carga esta marca como "ARIVO PREMIO", así que el brandId derivado
+    // es "arivo-premio". La entrada tiene que usar ese id o la ficha de marca
+    // queda en 404 y los productos enlazan a una página inexistente.
+    id: "arivo-premio",
+    name: "Arivo Premio",
+    origin: "China",
+    description: "Línea de neumáticos urbanos con buen comportamiento en mojado para su segmento.",
+    fullDescription:
+      "Arivo es una marca de origen chino cuya línea Premio apunta al uso urbano y de ruta liviana. Sus modelos combinan un dibujo asimétrico con canales de evacuación amplios, que es lo que más se nota en piso mojado dentro de esta franja de precio. Trabaja bien en autos chicos y medianos con uso mixto de ciudad y ruta, y es una alternativa intermedia entre la gama de entrada y las marcas premium tradicionales.",
   },
   {
     id: "michelin",
@@ -38,6 +52,9 @@ export const BRANDS: TireBrand[] = [
     id: "firemax",
     name: "Firemax",
     origin: "China",
+    description: "Cubiertas de uso general con presencia fuerte en medidas de camioneta y carga.",
+    fullDescription:
+      "Firemax es una marca china de volumen, con un catálogo amplio que cubre desde medidas de auto chico hasta neumáticos de carga con marcado C para utilitarios. Su fuerte está en las medidas de trabajo, donde la carcasa reforzada y el índice de carga alto son lo que realmente importa. Para uso comercial —reparto, flota liviana, camioneta cargada a diario— suele ser la opción con mejor costo por kilómetro del catálogo.",
   },
   {
     id: "goodyear",
@@ -128,6 +145,9 @@ export const SERVICES: Service[] = [
   },
 ];
 
+// El orden importa: el listado del blog los muestra en este orden y las notas
+// relacionadas al pie de cada artículo toman las tres primeras que no sean la
+// actual. Las más útiles para alguien que está por comprar van arriba.
 export const BLOG_POSTS: BlogPost[] = [
   {
     id: "1",
@@ -138,6 +158,46 @@ export const BLOG_POSTS: BlogPost[] = [
     date: "2025-04-20",
     slug: "cada-cuantos-km-cambiar-neumaticos",
     category: "Mantenimiento",
+  },
+  {
+    id: "7",
+    title: "¿Cuánto sale un neumático en Argentina?",
+    excerpt:
+      "Qué compone el precio de una cubierta, por qué varía tanto entre negocios y cuánto cuesta hoy cada rodado, con precios reales de nuestro stock.",
+    imageUrl: "/images/blog-2.webp",
+    date: "2026-07-31",
+    slug: "precio-neumaticos-argentina",
+    category: "Guías",
+  },
+  {
+    id: "8",
+    title: "Presión de neumáticos: cuánto inflar y cada cuánto revisarla",
+    excerpt:
+      "La presión correcta no está escrita en el neumático sino en la puerta de tu auto. Dónde mirarla, cómo medirla bien y qué pasa cuando está mal.",
+    imageUrl: "/images/blog-1.webp",
+    date: "2026-07-31",
+    slug: "presion-de-neumaticos",
+    category: "Mantenimiento",
+  },
+  {
+    id: "9",
+    title: "Alineación y balanceo: qué es cada cosa y cada cuánto se hacen",
+    excerpt:
+      "Se nombran juntos pero resuelven problemas distintos: uno corrige hacia dónde apuntan las ruedas y el otro cómo giran. La diferencia en criollo.",
+    imageUrl: "/images/blog-3.webp",
+    date: "2026-07-31",
+    slug: "alineacion-y-balanceo",
+    category: "Servicios",
+  },
+  {
+    id: "10",
+    title: "Índice de carga y velocidad: qué significan el 91 y la V",
+    excerpt:
+      "Los dos códigos que van después de la medida definen cuánto peso aguanta y a qué velocidad puede rodar tu neumático. Con las tablas completas.",
+    imageUrl: "/images/blog-2.webp",
+    date: "2026-07-31",
+    slug: "indice-de-carga-y-velocidad",
+    category: "Guías",
   },
   {
     id: "3",

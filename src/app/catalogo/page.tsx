@@ -3,12 +3,15 @@ import type { Metadata } from "next";
 import { ShopPage } from "@/components/ui/ShopPage";
 import { getProductosDesdePOS, getAccesoriosDesdePOS } from "@/lib/pos-api";
 import { getSelectedBranchSlug } from "@/lib/branch-server";
+import { canonical } from "@/lib/seo";
 
 export const revalidate = 300;
 
 export const metadata: Metadata = {
-  title: "Catálogo de Neumáticos — Trivium",
-  description: "Explorá todo el catálogo de neumáticos importados a precios outlet. Filtrá por marca, medida, tipo de vehículo y precio.",
+  title: "Catálogo de neumáticos y cubiertas",
+  description:
+    "Todo el catálogo de neumáticos importados a precio outlet: filtrá por marca, medida, tipo de vehículo y precio. Stock real y envío a todo el país.",
+  alternates: canonical("/catalogo"),
 };
 
 export default async function CatalogoPage() {

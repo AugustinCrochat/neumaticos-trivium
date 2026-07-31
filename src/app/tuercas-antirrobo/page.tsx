@@ -3,12 +3,15 @@ import { AccessoryCard } from "@/components/ui/AccessoryCard";
 import { CompatibleTuercaBanner } from "@/components/ui/CompatibleTuercaBanner";
 import { getAccesoriosDesdePOS } from "@/lib/pos-api";
 import { getSelectedBranchSlug } from "@/lib/branch-server";
+import { canonical } from "@/lib/seo";
 
 export const revalidate = 300;
 
 export const metadata: Metadata = {
-  title: "Tuercas Antirrobo — Trivium",
-  description: "Tuercas antirrobo para tu auto o camioneta, colocación incluida en nuestra sucursal.",
+  title: "Tuercas antirrobo para llantas — auto y camioneta",
+  description:
+    "Tuercas antirrobo para auto y camioneta, con juego de llave codificada. Colocación sin cargo en el local de Córdoba y envío a todo el país.",
+  alternates: canonical("/tuercas-antirrobo"),
 };
 
 export default async function TuercasAntirroboPage() {

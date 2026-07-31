@@ -39,6 +39,18 @@ export type Branch = {
   shortName: string;
   address: string;
   city: string;
+  /** Provincia — `addressRegion` en el schema local. Google lo usa para
+      desambiguar ciudades homónimas (hay Córdoba en varios países). */
+  province: string;
+  /** Código postal (CPA). Otro campo que refuerza la ficha local. */
+  postalCode?: string;
+  /** Barrio/zona puntual donde está el local. Se usa en los títulos locales
+      ("gomería en Argüello") y como `containedInPlace` conceptual. */
+  neighborhood?: string;
+  /** Localidades que atiende esta sucursal — alimenta `areaServed` del schema
+      y las páginas de /neumaticos-en. Los nombres tienen que coincidir con el
+      `name` de las entradas de localidades.ts. */
+  areaServed: string[];
   phone: string;
   whatsapp: string;
   hours: string;
@@ -81,6 +93,22 @@ export const BRANCHES: Branch[] = [
     shortName: "Argüello",
     address: "Av. Donato Alvarez 7971",
     city: "Córdoba",
+    province: "Córdoba",
+    // CPA de Argüello (Córdoba Capital). Verificar contra la factura antes de
+    // cargarlo también en Google Business Profile.
+    postalCode: "X5147",
+    neighborhood: "Argüello",
+    areaServed: [
+      "Argüello",
+      "Córdoba",
+      "Villa Allende",
+      "Saldán",
+      "La Calera",
+      "Mendiolaza",
+      "Unquillo",
+      "Río Ceballos",
+      "Villa Warcalde",
+    ],
     phone: "+54 9 3517 57-0422",
     whatsapp: "5493517570422",
     hours: "Lun–Sáb 9–19h (de corrido)",

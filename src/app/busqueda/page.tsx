@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getProductosDesdePOS, getAccesoriosDesdePOS } from "@/lib/pos-api";
 import { getSelectedBranchSlug } from "@/lib/branch-server";
 import { searchCatalog } from "@/lib/search-catalog";
+import { NOINDEX } from "@/lib/seo";
 import { ProductCard } from "@/components/ui/ProductCard";
 import { AccessoryCard } from "@/components/ui/AccessoryCard";
 
@@ -12,7 +13,13 @@ type Props = { searchParams: Promise<{ q?: string }> };
 export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
   const { q } = await searchParams;
   const query = q?.trim();
-  return { title: query ? `Resultados para "${query}" — Trivium` : "Buscar — Trivium" };
+  // Las páginas de resultados de búsqueda interna no se indexan nunca: son
+  // infinitas, se solapan con el catálogo y Google las trata como contenido
+  // de baja calidad ("soft 404" cuando no hay resultados).
+  return {
+    title: query ? `Resultados para "${query}"` : "Buscar",
+    ...NOINDEX,
+  };
 }
 
 export default async function BusquedaPage({ searchParams }: Props) {

@@ -2,11 +2,13 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { BRANCHES } from "@/lib/config";
 import { BranchesMap } from "./BranchesMap";
+import { canonical } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Sucursales - Neumaticos Trivium",
+  title: "Sucursales — dónde estamos",
   description:
-    "Conoce las sucursales de Neumaticos Trivium, consulta horarios, contacto y como llegar.",
+    "Dirección, horarios, teléfono y cómo llegar a las sucursales de Neumáticos Trivium. Local con stock propio y taller de alineación y balanceo en Córdoba.",
+  alternates: canonical("/sucursales"),
 };
 
 export default function SucursalesPage() {

@@ -1,8 +1,12 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { BRANCHES, SITE_URL, type Branch } from "@/lib/config";
+import { BRANCHES, SHIPPING_FLAT_RATE, SITE_URL, type Branch } from "@/lib/config";
 import { SERVICES } from "@/lib/data";
+import { canonical, SITE_NAME, type Faq } from "@/lib/seo";
+import { localidadesDeSucursal } from "@/lib/localidades";
+import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
+import { FaqSection } from "@/components/seo/FaqSection";
 import { BranchStatusBadge } from "./BranchStatusBadge";
 import { BranchMiniMap } from "./BranchMiniMap";
 import { SetActiveBranch } from "./SetActiveBranch";
@@ -19,64 +23,68 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const branch = BRANCHES.find((b) => b.id === id);
   if (!branch) return { title: "Sucursal no encontrada" };
 
-  const title = `Neumáticos Trivium ${branch.shortName} — ${branch.city}`;
-  const description = `Sucursal Neumáticos Trivium en ${branch.address}, ${branch.city}. WhatsApp, ubicación, cómo llegar, horarios y catálogo de neumáticos a precio outlet.`;
-  const url = `${SITE_URL}/sucursales/${branch.id}`;
+  // El título lleva "gomería" además de la marca: es como se busca el rubro en
+  // Argentina, y la ficha de sucursal es la página que tiene que capturarlo.
+  const title = `Gomería y neumáticos en ${branch.neighborhood ?? branch.city} — ${branch.address}`;
+  const description = `${SITE_NAME} ${branch.shortName}: venta de neumáticos con stock propio, alineación y balanceo en ${branch.address}, ${branch.city}. ${branch.hours}. Atención por orden de llegada, sin turno.`;
 
   return {
     title,
     description,
-    alternates: { canonical: url },
+    alternates: canonical(`/sucursales/${branch.id}`),
     openGraph: {
       type: "website",
-      title,
+      title: `${title} — ${SITE_NAME}`,
       description,
-      url,
-      siteName: "Neumáticos Trivium",
+      url: `${SITE_URL}/sucursales/${branch.id}`,
+      siteName: SITE_NAME,
       locale: "es_AR",
     },
   };
 }
 
-const SCHEMA_DAYS = [
-  "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday",
-];
-
-function buildJsonLd(branch: Branch) {
-  return {
-    "@context": "https://schema.org",
-    "@type": "AutoRepair",
-    "@id": `${SITE_URL}/sucursales/${branch.id}`,
-    name: `Neumáticos Trivium ${branch.shortName}`,
-    image: `${SITE_URL}/logo-neumaticos-trivium.svg`,
-    url: `${SITE_URL}/sucursales/${branch.id}`,
-    hasMap: branch.mapUrl,
-    telephone: branch.phone,
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: branch.address,
-      addressLocality: branch.city,
-      addressCountry: "AR",
+/**
+ * La ficha local (TireShop, con horarios, geo y rating) ya se emite para todas
+ * las sucursales desde el grafo del layout raíz, así que acá no se repite:
+ * duplicar el mismo @id en la página sólo agrega ruido al parser. Lo que sí es
+ * propio de esta página son las migas y las preguntas frecuentes.
+ */
+function buildFaqs(branch: Branch): Faq[] {
+  const zonas = localidadesDeSucursal(branch.id).map((l) => l.name);
+  return [
+    {
+      question: "¿Necesito turno para cambiar los neumáticos?",
+      answer:
+        `No. Atendemos por orden de llegada, ${branch.hours.toLowerCase()}. Si querés estimar la espera, escribinos por ` +
+        `WhatsApp al ${branch.phone} antes de venir y te contamos cómo está el taller en ese momento.`,
     },
-    geo: {
-      "@type": "GeoCoordinates",
-      latitude: branch.coordinates.lat,
-      longitude: branch.coordinates.lng,
+    {
+      question: "¿La colocación tiene costo?",
+      answer:
+        "Comprando el neumático en el local, el arme, el desarme y el cambio de válvulas van sin cargo. La alineación y el " +
+        "balanceo se cobran aparte, porque son servicios de taller con equipo propio, y conviene hacerlos junto con el cambio.",
     },
-    openingHoursSpecification: branch.schedule.map((rule) => ({
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: rule.days.map((d) => SCHEMA_DAYS[d]),
-      opens: rule.open,
-      closes: rule.close,
-    })),
-    ...(branch.googleRating && {
-      aggregateRating: {
-        "@type": "AggregateRating",
-        ratingValue: branch.googleRating.value,
-        reviewCount: branch.googleRating.count,
-      },
-    }),
-  };
+    {
+      question: "¿Qué formas de pago aceptan?",
+      answer:
+        "Efectivo, débito, crédito, transferencia y Mercado Pago. También podés cerrar la compra online desde la web y " +
+        "retirar el pedido ya pago en el local, sin hacer cola.",
+    },
+    {
+      question: `¿Desde qué zonas viene la gente a ${branch.shortName}?`,
+      answer: zonas.length
+        ? `Atendemos principalmente ${zonas.join(", ")}. Estamos sobre ${branch.address}, que es una avenida de acceso ` +
+          `directo desde todo el corredor norte, así que llegar es simple incluso en hora pico.`
+        : `Estamos en ${branch.address}, ${branch.city}, con acceso directo desde las principales avenidas de la zona.`,
+    },
+    {
+      question: "¿Puedo comprar por internet y retirar en el local?",
+      answer:
+        `Sí, y es la opción más conveniente: el retiro no tiene costo, mientras que el envío a domicilio son ` +
+        `$${SHIPPING_FLAT_RATE.toLocaleString("es-AR")} fijos. Comprás en la web, te confirmamos por WhatsApp que está listo ` +
+        `y venís a buscarlo cuando te quede cómodo.`,
+    },
+  ];
 }
 
 export default async function BranchPage({ params }: Props) {
@@ -89,14 +97,11 @@ export default async function BranchPage({ params }: Props) {
   );
   const waLink = `https://wa.me/${branch.whatsapp}?text=${waMessage}`;
   const telLink = `tel:${branch.phone.replace(/[^\d+]/g, "")}`;
+  const zonas = localidadesDeSucursal(branch.id);
 
   return (
     <div className="min-h-screen bg-slate-50">
       <SetActiveBranch branchId={branch.id} />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(buildJsonLd(branch)) }}
-      />
 
       {/* Hero */}
       <header className="bg-navy-900 pb-8 pt-8 md:pb-12 md:pt-12">
@@ -115,8 +120,11 @@ export default async function BranchPage({ params }: Props) {
             Sucursal {branch.shortName}
           </p>
           <h1 className="text-3xl font-black leading-tight text-white md:text-4xl">
-            Neumáticos Trivium {branch.shortName}
+            Neumáticos y gomería en {branch.neighborhood ?? branch.city}
           </h1>
+          <p className="mt-3 text-lg font-bold text-navy-200">
+            Neumáticos Trivium {branch.shortName}
+          </p>
           <p className="mt-3 flex items-start gap-2 text-base leading-relaxed text-navy-200">
             <svg className="mt-0.5 h-5 w-5 flex-shrink-0 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -135,6 +143,14 @@ export default async function BranchPage({ params }: Props) {
       </header>
 
       <main className="mx-auto max-w-3xl space-y-6 px-4 py-8">
+        <Breadcrumbs
+          crumbs={[
+            { name: "Inicio", path: "/" },
+            { name: "Sucursales", path: "/sucursales" },
+            { name: branch.shortName, path: `/sucursales/${branch.id}` },
+          ]}
+        />
+
         {/* Acciones principales */}
         <section className="grid grid-cols-2 gap-3">
           <a
@@ -276,13 +292,42 @@ export default async function BranchPage({ params }: Props) {
               Ver catálogo y precios
             </Link>
             <Link
-              href="/buscar"
+              href="/neumaticos"
               className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/5 px-4 text-sm font-black text-white transition-colors hover:bg-white/10"
             >
               Buscar por medida
             </Link>
           </div>
         </section>
+
+        {/* Zonas atendidas — enlaza la ficha con las landings locales, que son
+            las que capturan las búsquedas por localidad. */}
+        {zonas.length > 0 && (
+          <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+            <h2 className="mb-1 text-lg font-black text-navy-900">
+              Zonas que atiende esta sucursal
+            </h2>
+            <p className="mb-4 text-sm text-slate-500">
+              Clientes de todo el corredor norte de Córdoba y Sierras Chicas.
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {zonas.map((localidad) => (
+                <Link
+                  key={localidad.slug}
+                  href={`/neumaticos-en/${localidad.slug}`}
+                  className="rounded-xl bg-slate-50 px-4 py-2.5 text-sm font-bold text-navy-900 transition-colors hover:bg-slate-100"
+                >
+                  {localidad.name}
+                  <span className="ml-1.5 text-xs font-medium text-slate-400">
+                    {localidad.minutosHastaSucursal} min
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+
+        <FaqSection faqs={buildFaqs(branch)} />
       </main>
     </div>
   );

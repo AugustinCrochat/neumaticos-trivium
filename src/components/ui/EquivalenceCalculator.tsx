@@ -45,7 +45,7 @@ function CompatibleAlternativesList({ original, alternatives }: { original: Tire
       {alternatives.map(({ size, diff, count }) => (
         <Link
           key={`${size.width}-${size.profile}-r${size.rim}`}
-          href={`/buscar?medida=${size.width}-${size.profile}-r${size.rim}`}
+          href={`/neumaticos/${size.width}-${size.profile}-r${size.rim}`}
           className="flex items-center justify-between p-4 bg-slate-50 hover:bg-emerald-50 border border-slate-100 hover:border-emerald-200 rounded-xl transition-colors group"
         >
           <div>
@@ -290,7 +290,7 @@ export function EquivalenceCalculator({ products }: { products: TireProduct[] })
               )}
               {isCheckCompatible && (
                 <Link
-                  href={`/buscar?medida=${s2.width}-${s2.profile}-r${s2.rim}`}
+                  href={`/neumaticos/${s2.width}-${s2.profile}-r${s2.rim}`}
                   className="inline-block mt-3 text-sm font-bold text-emerald-700 hover:text-emerald-900 underline underline-offset-2"
                 >
                   Buscar stock de {s2.width}/{s2.profile} R{s2.rim}

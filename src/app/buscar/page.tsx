@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { ShopPage } from "@/components/ui/ShopPage";
 import { getProductosDesdePOS, getAccesoriosDesdePOS } from "@/lib/pos-api";
 import { getSelectedBranchSlug } from "@/lib/branch-server";
+import { NOINDEX, canonical } from "@/lib/seo";
 
 export const revalidate = 300;
 
@@ -26,15 +27,48 @@ function formatSizeLabel(size: { width: number | null; profile: number | null; r
   return label || null;
 }
 
+/**
+ * /buscar es el buscador interactivo, no una página de aterrizaje.
+ *
+ * Filtra en el cliente con useSearchParams, así que el HTML que recibe un
+ * crawler no tiene ni H1 ni productos: es una cáscara. Por eso el contenido
+ * indexable de cada medida vive en /neumaticos/[medida], renderizado en el
+ * servidor.
+ *
+ * - Medida completa en la URL -> canonical apuntando a esa landing, para que
+ *   cualquier enlace o posición histórica de /buscar?medida=... se consolide
+ *   ahí en vez de competir contra ella.
+ * - Medida parcial o ausente -> noindex, follow. No hay nada que indexar, pero
+ *   el crawler sigue los enlaces internos hacia el catálogo.
+ */
 export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
   const { medida } = await searchParams;
-  if (!medida) return { title: "Buscar neumáticos — Trivium" };
-  const parsed = parseMedida(medida);
-  if (!parsed) return { title: "Buscar neumáticos — Trivium" };
+  const parsed = medida ? parseMedida(medida) : null;
+
+  if (!parsed) {
+    return {
+      title: "Buscar neumáticos por medida",
+      description: "Buscá neumáticos por ancho, perfil y rodado y mirá stock y precio al instante.",
+      ...NOINDEX,
+    };
+  }
+
   const label = formatSizeLabel(parsed);
+  const esCompleta = parsed.width !== null && parsed.profile !== null && parsed.rim !== null;
+
+  if (esCompleta) {
+    const slug = `${parsed.width}-${parsed.profile}-r${parsed.rim}`;
+    return {
+      title: `Neumáticos ${label}`,
+      description: `Encontrá neumáticos en medida ${label} al mejor precio. Outlet de neumáticos importados.`,
+      alternates: canonical(`/neumaticos/${slug}`),
+    };
+  }
+
   return {
-    title: `Neumáticos ${label} — Trivium`,
-    description: `Encontrá neumáticos en medida ${label} al mejor precio. Outlet de neumáticos importados.`,
+    title: `Neumáticos ${label}`,
+    description: `Neumáticos que coinciden con ${label}. Outlet de neumáticos importados.`,
+    ...NOINDEX,
   };
 }
 
