@@ -99,13 +99,12 @@ export function tireShopJsonLd(branch: Branch) {
       name,
     })),
     ...(branch.mapUrl ? { sameAs: [branch.mapUrl] } : {}),
-    ...(branch.googleRating && {
-      aggregateRating: {
-        "@type": "AggregateRating",
-        ratingValue: branch.googleRating.value,
-        reviewCount: branch.googleRating.count,
-      },
-    }),
+    // Sin aggregateRating a propósito. El puntaje que tenemos es de Google Maps,
+    // y las guías de review snippets prohíben publicar como propio un rating
+    // recolectado por un tercero: es motivo de acción manual. Además no aporta
+    // nada, porque para una ficha local Google ya muestra sus propias estrellas
+    // desde el Business Profile. El puntaje se sigue mostrando en el sitio como
+    // badge visual (GoogleRatingBadge), que sí es un uso legítimo.
   };
 }
 

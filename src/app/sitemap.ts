@@ -19,13 +19,28 @@ export const revalidate = 3600;
 
 type Entry = MetadataRoute.Sitemap[number];
 
+/**
+ * Una URL del sitemap.
+ *
+ * `lastModified` es opcional y se omite salvo que sepamos la fecha real de
+ * modificación. Antes se ponía `new Date()` por defecto, con lo cual cada
+ * regeneración declaraba que las 178 URLs habían cambiado en ese instante.
+ * Google compara ese valor contra lo que ve al rastrear y, si no coincide,
+ * deja de creerle al lastmod de todo el sitemap — justo la señal que sirve
+ * para pedir un recrawl. Mejor no decir nada que mentir.
+ */
 function url(
   path: string,
   priority: number,
   changeFrequency: Entry["changeFrequency"],
-  lastModified: Date | string = new Date()
+  lastModified?: Date | string
 ): Entry {
-  return { url: `${SITE_URL}${path}`, lastModified, changeFrequency, priority };
+  return {
+    url: `${SITE_URL}${path}`,
+    ...(lastModified ? { lastModified } : {}),
+    changeFrequency,
+    priority,
+  };
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
