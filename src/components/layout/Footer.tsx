@@ -192,8 +192,18 @@ export function Footer() {
       <div className="border-t border-zinc-900">
         <div className="max-w-7xl mx-auto px-4 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-500">
           <div className="text-center sm:text-left space-y-0.5">
+            {/* La razón social enlaza al sitio del grupo. Es el lugar honesto
+                para el enlace: describe una relación societaria real, no es un
+                link puesto para pasar autoridad. */}
             <p>
-              Neumáticos Trivium es una marca comercial de <strong className="text-zinc-300">{LEGAL_NAME}</strong> — CUIT {CUIT}.
+              Neumáticos Trivium es una marca comercial de{" "}
+              <a
+                href="https://trivium.ar/"
+                className="font-bold text-zinc-300 underline underline-offset-2 transition-colors hover:text-white"
+              >
+                {LEGAL_NAME}
+              </a>{" "}
+              — CUIT {CUIT}, equipamiento para talleres y gomerías.
             </p>
             <p>
               Contacto:{" "}
