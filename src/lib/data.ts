@@ -98,6 +98,7 @@ export const BRANDS: TireBrand[] = [
     id: "grenlander",
     name: "Grenlander",
     origin: "China",
+    logoUrl: "/brands/grenlander.svg",
     description: "Neumáticos de alto rendimiento a precio accesible, respaldados por Zodo Tyre.",
     fullDescription: "Grenlander es una marca fabricada por Zodo Tyre, un grupo con largas décadas de trayectoria en la industria del neumático. Combina tecnología de construcción radial de acero, compuestos de silicio en sus modelos de mayor segmento y certificaciones de homologación europea, ofreciendo una relación costo-kilómetro muy competitiva para uso urbano, ruta, SUVs y vehículos de carga.",
   },
