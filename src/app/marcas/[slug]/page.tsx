@@ -79,7 +79,17 @@ export default async function BrandPage({ params }: Props) {
           <div className="flex flex-col md:flex-row items-center md:items-start gap-10 md:gap-16">
             <div className="shrink-0 flex items-center justify-center py-4">
               {brandLogo ? (
-                <img src={brandLogo} alt={brand.name} className="h-20 md:h-32 w-auto object-contain" />
+                // Se acota por alto Y por ancho: con `w-auto` solo, el ancho
+                // sale de la proporción del SVG, y los wordmarks alargados se
+                // desbordan. Grenlander tiene una relación de 7,65 contra 3,83
+                // de Pirelli, así que a la misma altura ocupaba casi el doble.
+                // Con las dos cotas, `object-contain` escala por la dimensión
+                // que primero toca el límite y cualquier logo entra parejo.
+                <img
+                  src={brandLogo}
+                  alt={brand.name}
+                  className="h-16 md:h-24 w-auto max-w-[260px] md:max-w-[380px] object-contain"
+                />
               ) : (
                 <div className="py-4">
                   <h2 className="text-4xl md:text-6xl font-black text-navy-900 tracking-tighter uppercase">{brand.name}</h2>
