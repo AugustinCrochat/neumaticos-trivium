@@ -31,16 +31,5 @@
 			"binding": "WORKER_SELF_REFERENCE",
 			"service": "neumaticos-trivium"
 		}
-	],
-	// Almacenamiento del caché incremental (ver open-next.config.ts). Sin esto,
-	// la revalidación no persiste entre isolates y cada isolate frío rehace el
-	// render y el fetch al POS. El nombre del binding lo fija OpenNext y no se
-	// puede cambiar. El bucket tiene que existir antes de deployar, o wrangler
-	// falla con "The specified bucket does not exist".
-	"r2_buckets": [
-		{
-			"binding": "NEXT_INC_CACHE_R2_BUCKET",
-			"bucket_name": "neumaticos-trivium-cache"
-		}
 	]
 }
