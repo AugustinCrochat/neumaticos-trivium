@@ -1,5 +1,5 @@
 import { getProductosDesdePOS, getAccesoriosDesdePOS } from "@/lib/pos-api";
-import { BRANCHES, type Branch } from "@/lib/config";
+import { BRANCHES, SITE_URL, type Branch } from "@/lib/config";
 import type { TireProduct, Accessory } from "@/lib/types";
 
 // Feed de inventario local para Google Merchant Center ("Añadir inventario
@@ -20,6 +20,7 @@ function tireItem(p: TireProduct, storeCode: string): string {
   return `
     <item>
       <g:id>${p.id}</g:id>
+      <g:item_id>${p.id}</g:item_id>
       <g:store_code>${cdata(storeCode)}</g:store_code>
       <g:availability>${p.enStock ? "in_stock" : "out_of_stock"}</g:availability>
       <g:price>${p.price.toFixed(2)} ARS</g:price>
@@ -31,6 +32,7 @@ function accessoryItem(a: Accessory, storeCode: string): string {
   return `
     <item>
       <g:id>${a.id}</g:id>
+      <g:item_id>${a.id}</g:item_id>
       <g:store_code>${cdata(storeCode)}</g:store_code>
       <g:availability>${a.enStock ? "in_stock" : "out_of_stock"}</g:availability>
       <g:price>${a.price.toFixed(2)} ARS</g:price>
@@ -58,6 +60,8 @@ export async function GET() {
 <rss version="2.0" xmlns:g="http://base.google.com/ns/1.0">
 <channel>
 <title>Neumáticos Trivium — Inventario local</title>
+<link>${SITE_URL}</link>
+<description>Stock por sucursal para fichas locales sin coste y anuncios de inventario local.</description>
 ${itemsPorSucursal.flat().join("\n")}
 </channel>
 </rss>`;
