@@ -33,6 +33,19 @@ function cdata(text: string): string {
   return `<![CDATA[${text.replace(/]]>/g, "]]]]><![CDATA[>")}]]>`;
 }
 
+/**
+ * Valor de `availability` en el formato que documenta Google hoy: con guión
+ * bajo. Antes acá se escribía "in stock" / "out of stock" con espacios, que es
+ * la forma legacy, mientras que el feed de inventario local
+ * (google-local-inventory.xml) ya usaba guión bajo. Que los dos feeds
+ * describieran el mismo producto con sintaxis distinta es justo el tipo de
+ * inconsistencia que complica el diagnóstico cuando Merchant Center reclama
+ * datos de inventario local.
+ */
+function availability(enStock: boolean | undefined): "in_stock" | "out_of_stock" {
+  return enStock ? "in_stock" : "out_of_stock";
+}
+
 function tireItem(p: TireProduct): string {
   const link = `${SITE_URL}/productos/${p.slug}`;
   const description = `Neumático ${p.model} — importación directa, outlet de neumáticos. Garantía de 1 año.`;
@@ -44,7 +57,7 @@ function tireItem(p: TireProduct): string {
       <link>${escapeXml(link)}</link>
       <g:image_link>${escapeXml(p.imageUrl)}</g:image_link>
       <g:condition>new</g:condition>
-      <g:availability>${p.enStock ? "in stock" : "out of stock"}</g:availability>
+      <g:availability>${availability(p.enStock)}</g:availability>
       <g:price>${p.price.toFixed(2)} ARS</g:price>
       <g:brand>${cdata(p.brand)}</g:brand>
       <g:identifier_exists>no</g:identifier_exists>
@@ -65,7 +78,7 @@ function accessoryItem(a: Accessory & { imageUrl: string }): string {
       <link>${escapeXml(link)}</link>
       <g:image_link>${escapeXml(a.imageUrl)}</g:image_link>
       <g:condition>new</g:condition>
-      <g:availability>${a.enStock ? "in stock" : "out of stock"}</g:availability>
+      <g:availability>${availability(a.enStock)}</g:availability>
       <g:price>${a.price.toFixed(2)} ARS</g:price>
       <g:brand>${cdata("Z3")}</g:brand>
       <g:identifier_exists>no</g:identifier_exists>
