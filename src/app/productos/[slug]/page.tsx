@@ -309,7 +309,7 @@ export default async function ProductPage({ params }: Props) {
 
           <Link href={`/marcas/${product.brandId}`} className="mb-4 group/brand inline-block">
             {brandLogo ? (
-              <img src={brandLogo} alt={product.brand} className="h-7 w-auto object-contain max-w-[140px] transition-all hover:scale-105" />
+              <img src={brandLogo} alt={product.brand} className="h-7 w-auto max-w-[140px] rounded object-contain transition-all hover:scale-105" />
             ) : (
               <div>
                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Marca</p>
