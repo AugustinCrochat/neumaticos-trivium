@@ -6,8 +6,8 @@ import { getProductosDesdePOS } from "@/lib/pos-api";
 import { getSelectedBranchSlug } from "@/lib/branch-server";
 import { getBrandLogo } from "@/lib/brand-utils";
 import { BRANDS } from "@/lib/data";
-import { SHIPPING_FLAT_RATE, SITE_URL } from "@/lib/config";
-import { ORGANIZATION_ID, breadcrumbJsonLd, canonical } from "@/lib/seo";
+import { BRANCHES, DEFAULT_BRANCH_ID, SHIPPING_FLAT_RATE, SITE_URL } from "@/lib/config";
+import { ORGANIZATION_ID, branchNodeId, breadcrumbJsonLd, canonical } from "@/lib/seo";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { formatSize, rimSlug, sizeSlug } from "@/lib/tire-sizes";
 import { isLowStock, stockLabel } from "@/lib/stock";
@@ -161,6 +161,11 @@ function buildProductJsonLd(product: {
       availability: product.enStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
       itemCondition: "https://schema.org/NewCondition",
       seller: { "@id": ORGANIZATION_ID },
+      // Requerido por el complemento de fichas locales/anuncios de inventario
+      // local: liga esta oferta a la sucursal física (nodo TireShop que ya se
+      // emite en el layout via siteGraphJsonLd) en vez de solo declarar un
+      // vendedor genérico.
+      availableAtOrFrom: { "@id": branchNodeId(BRANCHES.find((b) => b.id === DEFAULT_BRANCH_ID) ?? BRANCHES[0]) },
       // Envío y devoluciones declarados en el schema: Merchant Center los pide
       // para las fichas gratuitas, y en la SERP se muestran junto al precio.
       shippingDetails: {

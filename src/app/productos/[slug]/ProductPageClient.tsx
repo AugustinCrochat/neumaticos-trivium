@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useBranch } from "@/contexts/branch-context";
 import type { TireProduct } from "@/lib/types";
 import { AddToCartModal } from "@/components/ui/AddToCartModal";
+import { StoreAvailabilityCheck } from "@/components/ui/StoreAvailabilityCheck";
 import { SHIPPING_FLAT_RATE } from "@/lib/config";
 
 function formatPrice(price: number) {
@@ -32,6 +33,7 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
         )}
       </button>
       {showModal && <AddToCartModal product={product} onClose={() => setShowModal(false)} />}
+      <StoreAvailabilityCheck branch={selectedBranch} enStock={product.enStock} />
       <a
         href={`https://wa.me/${selectedBranch.whatsapp}?text=${waText}`}
         target="_blank"
