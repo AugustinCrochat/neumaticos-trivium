@@ -23,35 +23,46 @@ export default async function Image() {
           height: "100%",
           display: "flex",
           flexDirection: "column",
+          alignItems: "center",
           justifyContent: "center",
-          padding: "0 90px",
-          background: "linear-gradient(135deg, #0b1533 0%, #16255c 100%)",
+          textAlign: "center",
+          // Navy de marca (mismo que --color-navy-950/900 en globals.css), no un
+          // navy inventado aparte — así la miniatura combina con el resto del
+          // sitio en vez de quedar como un color suelto.
+          background: "linear-gradient(135deg, #06111f 0%, #0a1a30 60%, #0f2444 100%)",
         }}
       >
+        {/* Todo el contenido va centrado y con un ancho máximo angosto: WhatsApp,
+            Twitter y Facebook a veces recortan esta imagen de 1200x630 a un
+            formato más cuadrado centrado en vez de mostrarla completa. Con el
+            texto pegado al borde izquierdo (como estaba antes) ese recorte se
+            comía la primera letra de cada línea larga. Centrado + ancho acotado
+            garantiza que el recorte más agresivo siga mostrando todo el texto. */}
         <div
           style={{
             display: "flex",
-            fontSize: 26,
+            fontSize: 24,
             fontWeight: 700,
-            color: "#fb923c",
+            color: "#ff4d33",
             textTransform: "uppercase",
-            letterSpacing: 4,
-            marginBottom: 24,
+            letterSpacing: 3,
+            marginBottom: 26,
           }}
         >
           Importación directa · Precios outlet
         </div>
-        <div style={{ display: "flex", fontSize: 92, fontWeight: 900, color: "white", lineHeight: 1.05 }}>
+        <div style={{ display: "flex", fontSize: 76, fontWeight: 900, color: "white", lineHeight: 1.1 }}>
           El outlet del
         </div>
-        <div style={{ display: "flex", fontSize: 92, fontWeight: 900, color: "#f97316", lineHeight: 1.05 }}>
+        <div style={{ display: "flex", fontSize: 76, fontWeight: 900, color: "#ff4d33", lineHeight: 1.1, marginBottom: 30 }}>
           neumático
         </div>
-        <div style={{ display: "flex", fontSize: 30, color: "#c7d2fe", marginTop: 34 }}>
-          Cubiertas para auto y camioneta · Envío a todo el país
+        <div style={{ display: "flex", flexDirection: "column", fontSize: 28, color: "#a8c8ec" }}>
+          <div style={{ display: "flex" }}>Cubiertas para auto y camioneta</div>
+          <div style={{ display: "flex", marginTop: 6 }}>Envío a todo el país</div>
         </div>
-        <div style={{ display: "flex", fontSize: 26, color: "#8fa3d8", marginTop: 12 }}>
-          neumaticos.trivium.ar · Av. Donato Álvarez 7971, Córdoba
+        <div style={{ display: "flex", fontSize: 24, color: "#6ba0d8", marginTop: 28 }}>
+          neumaticos.trivium.ar
         </div>
       </div>
     ),
