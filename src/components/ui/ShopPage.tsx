@@ -234,6 +234,7 @@ function FilterBar({
   maxPrice, setMaxPrice,
   onlyEconomic, setOnlyEconomic,
   onlyCarga, setOnlyCarga,
+  onlyAT, setOnlyAT,
   hasActiveFilters, clearFilters,
   layout,
 }: {
@@ -245,6 +246,8 @@ function FilterBar({
   setOnlyEconomic: (v: boolean) => void;
   onlyCarga: boolean;
   setOnlyCarga: (v: boolean) => void;
+  onlyAT: boolean;
+  setOnlyAT: (v: boolean) => void;
   hasActiveFilters: boolean;
   clearFilters: () => void;
   layout: "horizontal" | "vertical";
@@ -284,6 +287,16 @@ function FilterBar({
             <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow-md transition-transform duration-300 ${onlyCarga ? "translate-x-5" : "translate-x-0.5"}`} />
           </div>
           <span className="text-sm font-bold text-slate-700 group-hover:text-navy-900 transition-colors">Solo de carga</span>
+        </label>
+
+        <label className="flex items-center gap-3 cursor-pointer group">
+          <div
+            onClick={() => setOnlyAT(!onlyAT)}
+            className={`w-10 h-5 rounded-full relative transition-all duration-300 ${onlyAT ? "bg-emerald-700 shadow-inner" : "bg-slate-200"}`}
+          >
+            <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow-md transition-transform duration-300 ${onlyAT ? "translate-x-5" : "translate-x-0.5"}`} />
+          </div>
+          <span className="text-sm font-bold text-slate-700 group-hover:text-navy-900 transition-colors">Solo A/T</span>
         </label>
 
         {hasActiveFilters && (
@@ -327,6 +340,16 @@ function FilterBar({
         </label>
       </div>
 
+      <div className="pt-6 border-t border-slate-100">
+        <label className="flex items-center gap-4 cursor-pointer group">
+          <div onClick={() => setOnlyAT(!onlyAT)}
+            className={`w-12 h-6 rounded-full transition-all duration-300 relative ${onlyAT ? "bg-emerald-700 shadow-inner" : "bg-slate-200"}`}>
+            <div className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow-md transition-transform duration-300 ${onlyAT ? "translate-x-7" : "translate-x-1"}`} />
+          </div>
+          <span className="text-sm font-bold text-slate-700 group-hover:text-navy-900 transition-colors">Solo A/T</span>
+        </label>
+      </div>
+
       {hasActiveFilters && (
         <button onClick={clearFilters} className="text-sm text-navy-600 hover:text-navy-800 font-bold w-full text-center py-3 bg-navy-50 rounded-xl transition-all">
           ✕ Limpiar filtros
@@ -358,6 +381,7 @@ export function ShopPage({
   const [maxPrice, setMaxPrice] = useState(MAX_POSSIBLE_PRICE);
   const [onlyEconomic, setOnlyEconomic] = useState(false);
   const [onlyCarga, setOnlyCarga] = useState(false);
+  const [onlyAT, setOnlyAT] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
 
   const parsed = useMemo(() => (medida ? parseMedida(medida) : null), [medida]);
@@ -368,6 +392,7 @@ export function ShopPage({
       if (p.price > maxPrice) return false;
       if (onlyEconomic && !p.isEconomic) return false;
       if (onlyCarga && !p.isCarga) return false;
+      if (onlyAT && !p.isAT) return false;
       return true;
     };
 
@@ -383,7 +408,7 @@ export function ShopPage({
     const compatible = products.filter(p => isCompatibleSize(p, parsed) && ok(p));
 
     return { exactResults: exact, compatibleResults: compatible, allProducts: [] };
-  }, [parsed, brandFilter, maxPrice, onlyEconomic, onlyCarga, products]);
+  }, [parsed, brandFilter, maxPrice, onlyEconomic, onlyCarga, onlyAT, products]);
 
   // Catálogo sin medida en la URL: si ya sabemos la medida del auto elegido,
   // recomendamos esos neumáticos arriba de todo, sin esperar a que busquen.
@@ -403,7 +428,7 @@ export function ShopPage({
       : null;
   const cheapestExactId = exactResults[0]?.id ?? null;
   const hasActiveFilters =
-    brandFilter !== "todos" || maxPrice < MAX_POSSIBLE_PRICE || onlyEconomic || onlyCarga;
+    brandFilter !== "todos" || maxPrice < MAX_POSSIBLE_PRICE || onlyEconomic || onlyCarga || onlyAT;
 
   const handleWhatsApp = (waLabel: string | null) => {
     const waUrl = (branch: typeof selectedBranch) =>
@@ -424,12 +449,14 @@ export function ShopPage({
     maxPrice, setMaxPrice,
     onlyEconomic, setOnlyEconomic,
     onlyCarga, setOnlyCarga,
+    onlyAT, setOnlyAT,
     hasActiveFilters,
     clearFilters() {
       setBrandFilter("todos");
       setMaxPrice(MAX_POSSIBLE_PRICE);
       setOnlyEconomic(false);
       setOnlyCarga(false);
+      setOnlyAT(false);
     },
   };
 

@@ -22,6 +22,7 @@ type PosProducto = {
   neumatico_perfil: number | null;
   neumatico_diametro: number | null;
   es_carga: boolean;
+  es_at: boolean;
   imagen_url: string | null;
   en_stock: boolean;
   stock?: number;
@@ -128,7 +129,11 @@ function toTireProduct(p: PosProducto): TireProduct | null {
   const { loadIndex, speedRating } = parseLoadSpeed(p.nombre || "");
   const brandId = slugify(marca) || "otras-marcas";
   const medida = formatMedida(p.neumatico_ancho, p.neumatico_perfil, p.neumatico_diametro, p.es_carga);
-  const model = `${medida} ${marca} ${modelo}${p.es_carga ? " De Carga" : ""}`.trim().replace(/\s+/g, " ");
+  // "A/T" en el nombre solo si marca+modelo no lo traen ya — fixBrandAndModel
+  // le saca el "A/T" al modelo "Terra Xplorer" (ver arriba), así que sin esto
+  // esos productos mostrarían un nombre que no dice que son todo terreno.
+  const atSuffix = p.es_at && !/\bA\/T\b|\bAT\b/i.test(`${marca} ${modelo}`) ? " A/T" : "";
+  const model = `${medida} ${marca} ${modelo}${p.es_carga ? " De Carga" : ""}${atSuffix}`.trim().replace(/\s+/g, " ");
   const loadSpeedSlug = loadIndex && speedRating ? `-${loadIndex}${speedRating}` : "";
   // La "r{diametro}c" tiene que coincidir con el slug que arma buildProductLink
   // en pos-neumaticos/src/lib/whatsapp-catalog-sync.ts — si se toca acá, tocar allá.
@@ -149,6 +154,7 @@ function toTireProduct(p: PosProducto): TireProduct | null {
     isEconomic: false,
     isImported: true,
     isCarga: p.es_carga,
+    isAT: p.es_at,
     slug,
     enStock: p.en_stock,
     stock: p.stock,

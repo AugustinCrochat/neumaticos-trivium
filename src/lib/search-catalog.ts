@@ -20,6 +20,7 @@ export function searchCatalog(query: string, productos: TireProduct[], accesorio
       p.loadIndex,
       p.speedRating,
       p.isCarga ? "carga" : null,
+      p.isAT ? "a/t at todo terreno" : null,
       ...p.tags,
       CATEGORY_TAGS.tire,
     ].filter(Boolean).join(" ");

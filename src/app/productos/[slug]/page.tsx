@@ -285,6 +285,11 @@ export default async function ProductPage({ params }: Props) {
                 Carga
               </span>
             )}
+            {product.isAT && (
+              <span className="bg-emerald-700 text-white text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-md shadow-md">
+                A/T
+              </span>
+            )}
           </div>
           {hasImage ? (
             <div className="relative w-full h-full">
