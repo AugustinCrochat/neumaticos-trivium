@@ -6,7 +6,6 @@ import { useBranch } from "@/contexts/branch-context";
 import { useVehicle } from "@/contexts/vehicle-context";
 import type { TireProduct } from "@/lib/types";
 import { AddToCartModal } from "@/components/ui/AddToCartModal";
-import { StoreAvailabilityCheck } from "@/components/ui/StoreAvailabilityCheck";
 import { SHIPPING_FLAT_RATE } from "@/lib/config";
 
 function formatPrice(price: number) {
@@ -33,7 +32,7 @@ function formatSize(size: { width: number; profile: number; rim: number }): stri
 
 export function ProductPageClient({ product }: { product: TireProduct }) {
   const { selectedBranch } = useBranch();
-  const { selectedVehicle, openModal } = useVehicle();
+  const { selectedVehicle } = useVehicle();
   const [showModal, setShowModal] = useState(false);
 
   const waText = encodeURIComponent(
@@ -95,27 +94,12 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
 
   return (
     <div className="mt-6 flex flex-col gap-3">
-      {/* Módulo interactivo de Compatibilidad */}
+      {/* Módulo interactivo de Compatibilidad: solo se muestra si ya hay un
+          vehículo elegido (persistido de una visita anterior); no invita a
+          elegir uno acá. */}
+      {selectedVehicle && (
       <div className="mb-2">
-        {!selectedVehicle ? (
-          <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 transition-all hover:bg-slate-100/70">
-            <p className="text-sm font-bold text-navy-950 flex items-center gap-1.5">
-              <svg className="w-4 h-4 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8v4" />
-              </svg>
-              ¿Querés saber si esta medida le sirve a tu auto?
-            </p>
-            <p className="text-xs text-slate-500 mt-1">
-              Verificá compatibilidad y compará con tu medida de fábrica al instante.
-            </p>
-            <button
-              onClick={openModal}
-              className="mt-2.5 inline-flex items-center gap-1 text-xs font-black text-orange-600 hover:text-orange-700 transition-colors uppercase tracking-wider cursor-pointer"
-            >
-              Seleccionar Vehículo →
-            </button>
-          </div>
-        ) : isExactMatch ? (
+        {isExactMatch ? (
           <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 flex items-start gap-3">
             <div className="w-5 h-5 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 shrink-0 mt-0.5">
               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -183,6 +167,7 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
           </div>
         )}
       </div>
+      )}
 
       <button onClick={() => setShowModal(true)} disabled={!product.enStock} className="flex items-center justify-center gap-2 bg-[#FFE600] hover:bg-[#f5dc00] disabled:bg-slate-300 disabled:text-white text-navy-900 font-black py-3 rounded-xl text-base transition-colors cursor-pointer">
         {product.enStock ? (
@@ -195,7 +180,6 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
         )}
       </button>
       {showModal && <AddToCartModal product={product} onClose={() => setShowModal(false)} />}
-      <StoreAvailabilityCheck branch={selectedBranch} enStock={product.enStock} />
       <a
         href={`https://wa.me/${selectedBranch.whatsapp}?text=${waText}`}
         target="_blank"

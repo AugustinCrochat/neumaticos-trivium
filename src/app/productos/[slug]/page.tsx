@@ -339,7 +339,10 @@ export default async function ProductPage({ params }: Props) {
 
           {popularPreview && (
             <p className="text-xs text-slate-500 mb-4 leading-normal">
-              Usado en: <span className="font-semibold text-slate-700">{popularPreview}</span> y más.
+              Usado en: <span className="font-semibold text-slate-700">{popularPreview}</span>{" "}
+              <Link href="#vehiculos-compatibles" className="font-semibold text-navy-700 underline decoration-navy-300 hover:decoration-navy-900 transition-colors">
+                y más.
+              </Link>
             </p>
           )}
 
@@ -359,7 +362,7 @@ export default async function ProductPage({ params }: Props) {
           </div>
 
           {/* Price */}
-          <div className="border-t border-slate-100 pt-6 mt-auto">
+          <div className="border-t border-slate-100 pt-6 mt-6">
             {product.priceOld && (
               <span className="text-slate-400 line-through text-sm block mb-1">
                 {formatPrice(product.priceOld)}
@@ -407,7 +410,7 @@ export default async function ProductPage({ params }: Props) {
 
       {/* Modelos de autos compatibles con esta medida */}
       {vehiculos.length > 0 && (
-        <div className="mt-14 pt-10 border-t border-slate-100">
+        <div id="vehiculos-compatibles" className="mt-14 pt-10 border-t border-slate-100 scroll-mt-20">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
             <div>
               <h2 className="text-lg font-black text-navy-900 uppercase tracking-wide flex items-center gap-2">
