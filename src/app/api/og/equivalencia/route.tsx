@@ -11,29 +11,6 @@ function tireDiameter(size: { width: number; profile: number; rim: number }) {
   return size.rim * 25.4 + 2 * (size.width * (size.profile / 100));
 }
 
-function SizeCard({ width, profile, rim, label }: { width: number; profile: number; rim: number; label: string }) {
-  return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        background: "white",
-        borderRadius: 28,
-        padding: "36px 48px",
-        boxShadow: "0 20px 40px rgba(0,0,0,0.25)",
-      }}
-    >
-      <div style={{ display: "flex", fontSize: 22, fontWeight: 700, color: "#f97316", textTransform: "uppercase", letterSpacing: 2, marginBottom: 14 }}>
-        {label}
-      </div>
-      <div style={{ display: "flex", fontSize: 56, fontWeight: 900, color: "#0f1b3d" }}>
-        {width}/{profile} R{rim}
-      </div>
-    </div>
-  );
-}
-
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const original = parseSize(searchParams.get("original"));
@@ -54,58 +31,111 @@ export async function GET(request: Request) {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          background: "linear-gradient(135deg, #0f1b3d 0%, #16255c 100%)",
-          padding: 60,
+          // Navy de marca (mismo que --color-navy-950/900 en globals.css)
+          background: "linear-gradient(135deg, #06111f 0%, #0a1a30 60%, #0f2444 100%)",
+          padding: 40,
         }}
       >
-        <div style={{ display: "flex", fontSize: 26, fontWeight: 800, color: "#fb923c", textTransform: "uppercase", letterSpacing: 3, marginBottom: 36 }}>
-          Calculadora de equivalencias · Trivium
-        </div>
+        <div
+          style={{
+            width: 580,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            background: "rgba(255, 255, 255, 0.03)",
+            border: "2px solid rgba(255, 255, 255, 0.08)",
+            borderRadius: 32,
+            padding: "36px 40px",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              fontSize: 15,
+              fontWeight: 900,
+              color: "#ff4d33", // naranja/rojo de marca
+              letterSpacing: 3,
+              textTransform: "uppercase",
+              marginBottom: 24,
+            }}
+          >
+            Calculadora de Equivalencias
+          </div>
 
-        <div style={{ display: "flex", alignItems: "center", gap: 40 }}>
-          {original ? (
-            <SizeCard width={original.width} profile={original.profile} rim={original.rim} label="Original" />
-          ) : (
-            <div style={{ display: "flex", fontSize: 48, color: "white" }}>Neumáticos Trivium</div>
-          )}
-
-          {original && equivalente && (
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-              <div
-                style={{
-                  display: "flex",
-                  width: 64,
-                  height: 64,
-                  borderRadius: 32,
-                  background: "#34d399",
-                  color: "#0f1b3d",
-                  fontSize: 36,
-                  fontWeight: 900,
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                {">"}
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%" }}>
+            {/* Original */}
+            {original && (
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                <span style={{ fontSize: 11, fontWeight: 800, color: "#6ba0d8", letterSpacing: 1.5, marginBottom: 4 }}>MEDIDA ORIGINAL</span>
+                <span style={{ fontSize: 56, fontWeight: 900, color: "white", lineHeight: 1 }}>
+                  {original.width}/{original.profile} R{original.rim}
+                </span>
               </div>
-              {diff !== null && (
-                <div style={{ display: "flex", marginTop: 14, fontSize: 22, fontWeight: 800, color: "#34d399" }}>
-                  {diff >= 0 ? "+" : ""}
-                  {diff.toFixed(1)}%
-                </div>
-              )}
-            </div>
-          )}
+            )}
 
-          {equivalente && (
-            <SizeCard width={equivalente.width} profile={equivalente.profile} rim={equivalente.rim} label="Equivalente" />
-          )}
+            {/* Connection / Arrow / Diff Pill */}
+            {original && equivalente && diff !== null && (
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", margin: "20px 0" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 8,
+                    padding: "6px 14px",
+                    borderRadius: 9999,
+                    background: Math.abs(diff) <= 3 ? "rgba(52, 211, 153, 0.1)" : "rgba(239, 68, 68, 0.1)",
+                    border: Math.abs(diff) <= 3 ? "1px solid rgba(52, 211, 153, 0.2)" : "1px solid rgba(239, 68, 68, 0.2)",
+                  }}
+                >
+                  <span
+                    style={{
+                      fontSize: 12,
+                      fontWeight: 900,
+                      color: Math.abs(diff) <= 3 ? "#34d399" : "#ef4444",
+                      letterSpacing: 1.5,
+                    }}
+                  >
+                    {Math.abs(diff) <= 3 ? "COMPATIBLE" : "NO RECOMENDADO"} · {diff >= 0 ? "+" : ""}{diff.toFixed(1)}%
+                  </span>
+                </div>
+              </div>
+            )}
+
+            {/* Equivalente */}
+            {equivalente && (
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                <span style={{ fontSize: 11, fontWeight: 800, color: "#6ba0d8", letterSpacing: 1.5, marginBottom: 4 }}>MEDIDA EQUIVALENTE</span>
+                <span style={{ fontSize: 56, fontWeight: 900, color: "white", lineHeight: 1 }}>
+                  {equivalente.width}/{equivalente.profile} R{equivalente.rim}
+                </span>
+              </div>
+            )}
+
+            {/* Fallback if no sizes are defined */}
+            {!original && !equivalente && (
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", margin: "30px 0" }}>
+                <span style={{ fontSize: 32, fontWeight: 900, color: "white", textAlign: "center" }}>
+                  Compará la medida de tus neumáticos
+                </span>
+                <span style={{ fontSize: 18, color: "#6ba0d8", marginTop: 12, textAlign: "center" }}>
+                  Calculá tolerancias y diámetros en segundos
+                </span>
+              </div>
+            )}
+          </div>
         </div>
 
-        <div style={{ display: "flex", marginTop: 48, fontSize: 22, color: "#94a3b8" }}>
+        <div style={{ display: "flex", marginTop: 24, fontSize: 18, fontWeight: 700, color: "#6ba0d8", letterSpacing: 1.5 }}>
           neumaticos.trivium.ar
         </div>
       </div>
     ),
-    { width: 1200, height: 630 }
+    {
+      width: 1200,
+      height: 630,
+      headers: {
+        "Cache-Control": "public, max-age=31536000, s-maxage=31536000, stale-while-revalidate=60, immutable",
+      },
+    }
   );
 }

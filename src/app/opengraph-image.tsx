@@ -66,6 +66,11 @@ export default async function Image() {
         </div>
       </div>
     ),
-    size
+    {
+      ...size,
+      headers: {
+        "Cache-Control": "public, max-age=31536000, s-maxage=31536000, stale-while-revalidate=60, immutable",
+      },
+    }
   );
 }
