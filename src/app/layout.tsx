@@ -85,10 +85,17 @@ export default async function RootLayout({
                 if (target && (target.tagName === 'LINK' || target.tagName === 'SCRIPT')) {
                   var src = target.src || target.href;
                   if (src && src.indexOf('_next/static') !== -1) {
-                    window.location.reload();
+                    var key = 'trivium-chunk-reload';
+                    if (!sessionStorage.getItem(key)) {
+                      sessionStorage.setItem(key, '1');
+                      window.location.reload();
+                    }
                   }
                 }
               }, true);
+              window.addEventListener('load', function() {
+                setTimeout(function() { sessionStorage.removeItem('trivium-chunk-reload'); }, 10000);
+              });
             `
           }}
         />

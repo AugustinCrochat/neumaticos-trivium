@@ -5,6 +5,7 @@ import {
   useContext,
   useState,
   useEffect,
+  useLayoutEffect,
   type ReactNode,
 } from "react";
 import type { VehiculoOption } from "@/lib/pos-api";
@@ -27,6 +28,10 @@ const VehicleContext = createContext<VehicleContextType | null>(null);
 
 const STORAGE_KEY = "trivium-vehicle";
 
+// En el cliente corre antes del primer paint (evita el flash "Por medida" ->
+// "Por mi auto"); en SSR cae a useEffect porque useLayoutEffect no existe ahí.
+const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
+
 export function VehicleProvider({
   vehiculos,
   children,
@@ -37,7 +42,7 @@ export function VehicleProvider({
   const [selectedVehicle, setSelectedVehicleState] = useState<SelectedVehicle | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (!stored) return;
     try {

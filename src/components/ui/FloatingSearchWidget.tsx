@@ -35,7 +35,7 @@ export function FloatingSearchWidget() {
         type="button"
         onClick={() => setIsOpen(true)}
         aria-label="Abrir buscador de neumáticos"
-        className="fixed bottom-5 right-5 z-40 sm:bottom-6 sm:right-6 group flex items-center gap-2.5 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-black px-4 py-3 sm:px-5 sm:py-3.5 rounded-full shadow-2xl shadow-orange-500/40 border-2 border-white/90 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
+        className="fixed bottom-5 right-5 z-40 sm:bottom-6 sm:right-6 group flex items-center gap-2.5 bg-orange-500 hover:bg-orange-600 text-white font-black px-4 py-3 sm:px-5 sm:py-3.5 rounded-full shadow-xl shadow-navy-900/30 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
       >
         <div className="relative flex items-center justify-center">
           <svg
@@ -67,27 +67,27 @@ export function FloatingSearchWidget() {
           aria-label="Buscador de neumáticos por medida o modelo de auto"
         >
           <div
-            className="absolute inset-0 bg-navy-950/80 backdrop-blur-md transition-opacity"
+            className="absolute inset-0 bg-navy-950/70 backdrop-blur-sm transition-opacity"
             onClick={() => setIsOpen(false)}
           />
 
           <div className="relative z-10 w-full max-w-xl rounded-2xl bg-white shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
-            <div className="bg-navy-900 px-6 py-4 flex items-center justify-between border-b border-navy-800 shrink-0">
+            <div className="bg-navy-800 px-6 py-5 flex items-start justify-between shrink-0">
               <div>
                 <h2 className="text-white text-lg sm:text-xl font-bold flex items-center gap-2">
-                  <svg className="w-5 h-5 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="w-5 h-5 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z" />
                   </svg>
                   Buscador de Neumáticos
                 </h2>
-                <p className="text-navy-300 text-xs mt-0.5">
+                <p className="text-navy-200 text-sm mt-1 leading-snug">
                   Buscá por las medidas de tu cubierta o por el modelo de tu auto
                 </p>
               </div>
               <button
                 type="button"
                 onClick={() => setIsOpen(false)}
-                className="text-navy-300 hover:text-white p-1 rounded-lg transition-colors shrink-0"
+                className="text-navy-300 hover:text-white p-1 mt-0.5 rounded-lg transition-colors shrink-0"
                 aria-label="Cerrar buscador"
               >
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
