@@ -220,8 +220,11 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
 
         <div className="flex items-center gap-3 p-3">
           <div className="w-8 h-8 rounded-full bg-navy-50 flex items-center justify-center text-navy-600 shrink-0">
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
+            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 512 512">
+              <circle cx="328" cy="424" r="8" />
+              <circle cx="296" cy="424" r="8" />
+              <circle cx="264" cy="424" r="8" />
+              <path d="m 496,432 h -96 v -64 h 16 v -48 h -24 c 0,-5.826 -1.573,-11.289 -4.305,-16 H 400 c 13.233,0 24,-10.767 24,-24 v -9.376 c 9.311,-3.303 16,-12.195 16,-22.624 v -32 c 0,-13.234 -10.766,-24 -24,-24 H 304 c -13.234,0 -24,10.766 -24,24 v 32 c 0,10.429 6.689,19.321 16,22.624 V 280 c 0,13.233 10.767,24 24,24 h 12.305 C 329.573,308.711 328,314.174 328,320 H 219.314 L 144,244.687 V 208 h 32 v -64 h -32 v -32 h 192 v 16 h -16 v 48 h 80 V 128 H 384 V 80 h 16 V 32 H 384 V 0 H 336 V 32 H 288 V 48 H 144 V 32 H 128 V 0 H 80 V 32 H 64 V 272 H 40 C 17.944,272 0,289.944 0,312 v 48 c 0,22.056 17.944,40 40,40 h 24 v 96 h 336 v -16 h 96 z M 416,256 h -12.686 l -16,-16 H 424 v 8 c 0,4.411 -3.589,8 -8,8 z m -112,0 c -4.411,0 -8,-3.589 -8,-8 v -8 h 20.686 l 16,16 z m 35.314,-32 16,-16 h 25.373 l -16,16 z m 16,32 -16,-16 h 25.372 l 16,16 z M 424,216 v 8 h -36.686 l 16,-16 H 416 c 4.411,0 8,3.589 8,8 z m -120,-8 h 28.686 l -16,16 H 296 v -8 c 0,-4.411 3.589,-8 8,-8 z m 8,72 v -8 h 96 v 8 c 0,4.411 -3.589,8 -8,8 h -80 c -4.411,0 -8,-3.589 -8,-8 z m 48,24 c 8.822,0 16,7.178 16,16 h -32 c 0,-8.822 7.178,-16 16,-16 z m 40,32 v 16 H 64 v -16 z m -288,32 h 240 v 80 H 112 Z m 84.686,-48 H 144 V 267.314 Z M 160,160 v 32 h -16 v -32 z m 224,0 h -48 v -16 h 48 z M 368,128 H 352 V 80 h 16 z M 352,16 h 16 v 16 h -16 z m -48,32 h 80 v 16 h -80 z m -16,16 v 16 h 48 V 96 H 144 V 64 Z M 96,16 h 16 V 32 H 96 Z M 80,48 h 48 V 320 H 80 V 288 H 96 V 272 H 80 Z M 40,384 C 26.767,384 16,373.233 16,360 v -48 c 0,-13.233 10.767,-24 24,-24 h 24 v 32 H 48 v 48 h 16 v 16 z m 40,96 V 368 h 16 v 96 h 272 v -96 h 16 v 112 z m 400,-16 h -80 v -16 h 80 z" />
             </svg>
           </div>
           <p className="font-bold text-navy-900 text-sm leading-snug">Colocación y válvulas sin cargo</p>
