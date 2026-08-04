@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import { useBranch } from "@/contexts/branch-context";
+import { useVehicle } from "@/contexts/vehicle-context";
 import type { TireProduct } from "@/lib/types";
 import { AddToCartModal } from "@/components/ui/AddToCartModal";
 import { StoreAvailabilityCheck } from "@/components/ui/StoreAvailabilityCheck";
@@ -12,17 +13,178 @@ function formatPrice(price: number) {
   return new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 }).format(price);
 }
 
+// Diámetro en mm: rodado en pulgadas * 25.4 + 2 * (ancho * perfil / 100)
+function outerDiameterMm(size: { width: number; profile: number; rim: number }): number {
+  return size.rim * 25.4 + 2 * (size.width * (size.profile / 100));
+}
+
+function diameterDiffPercent(
+  a: { width: number; profile: number; rim: number },
+  b: { width: number; profile: number; rim: number }
+): number {
+  const da = outerDiameterMm(a);
+  const db = outerDiameterMm(b);
+  return ((da - db) / db) * 100;
+}
+
+function formatSize(size: { width: number; profile: number; rim: number }): string {
+  return `${size.width}/${size.profile} R${size.rim}`;
+}
+
 export function ProductPageClient({ product }: { product: TireProduct }) {
   const { selectedBranch } = useBranch();
+  const { selectedVehicle, openModal } = useVehicle();
   const [showModal, setShowModal] = useState(false);
 
   const waText = encodeURIComponent(
     `Hola, quiero consultar por el neumático ${product.brand} ${product.model} ${product.size.width}/${product.size.profile} R${product.size.rim} (SKU: ${product.id})`
   );
 
+  // Convertimos la medida del vehículo a tipo TireSize
+  const vehicleSize = selectedVehicle?.size ? {
+    width: Number(selectedVehicle.size.w),
+    profile: Number(selectedVehicle.size.p),
+    rim: Number(selectedVehicle.size.r),
+  } : null;
+
+  const isExactMatch = vehicleSize && 
+    vehicleSize.width === product.size.width &&
+    vehicleSize.profile === product.size.profile &&
+    vehicleSize.rim === product.size.rim;
+
+  const diffPercent = vehicleSize ? diameterDiffPercent(product.size, vehicleSize) : 0;
+  const isCompatible = vehicleSize && Math.abs(diffPercent) <= 3;
+
+  const getBenefits = () => {
+    if (!vehicleSize) return [];
+    const benefits: string[] = [];
+
+    // Ancho
+    if (product.size.width > vehicleSize.width) {
+      benefits.push(
+        `Al ser más ancho (${product.size.width} mm vs ${vehicleSize.width} mm), ofrece mejor adherencia al asfalto, mayor estabilidad lateral y menor distancia de frenado.`
+      );
+    } else if (product.size.width < vehicleSize.width) {
+      benefits.push(
+        `Al ser más angosto (${product.size.width} mm vs ${vehicleSize.width} mm), reduce el coeficiente de fricción (ahorrando combustible) y disminuye el riesgo de aquaplaning en lluvia.`
+      );
+    }
+
+    // Perfil
+    if (product.size.profile < vehicleSize.profile) {
+      benefits.push(
+        `Con un perfil más bajo (${product.size.profile}% vs ${vehicleSize.profile}%), la dirección se siente más deportiva, firme y directa en curvas.`
+      );
+    } else if (product.size.profile > vehicleSize.profile) {
+      benefits.push(
+        `Con un perfil más alto (${product.size.profile}% vs ${vehicleSize.profile}%), la cubierta tiene mayor capacidad de amortiguación, haciendo el andar más suave frente a baches.`
+      );
+    }
+
+    // Rodado
+    if (product.size.rim !== vehicleSize.rim) {
+      benefits.push(
+        `Ten en cuenta que esta medida requiere llantas rodado R${product.size.rim} (tu llanta original es rodado R${vehicleSize.rim}).`
+      );
+    }
+
+    return benefits;
+  };
+
+  const benefits = getBenefits();
+
   return (
     <div className="mt-6 flex flex-col gap-3">
-      <button onClick={() => setShowModal(true)} disabled={!product.enStock} className="flex items-center justify-center gap-2 bg-[#FFE600] hover:bg-[#f5dc00] disabled:bg-slate-300 disabled:text-white text-navy-900 font-black py-3 rounded-xl text-base transition-colors">
+      {/* Módulo interactivo de Compatibilidad */}
+      <div className="mb-2">
+        {!selectedVehicle ? (
+          <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 transition-all hover:bg-slate-100/70">
+            <p className="text-sm font-bold text-navy-950 flex items-center gap-1.5">
+              <svg className="w-4 h-4 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8v4" />
+              </svg>
+              ¿Querés saber si esta medida le sirve a tu auto?
+            </p>
+            <p className="text-xs text-slate-500 mt-1">
+              Verificá compatibilidad y compará con tu medida de fábrica al instante.
+            </p>
+            <button
+              onClick={openModal}
+              className="mt-2.5 inline-flex items-center gap-1 text-xs font-black text-orange-600 hover:text-orange-700 transition-colors uppercase tracking-wider cursor-pointer"
+            >
+              Seleccionar Vehículo →
+            </button>
+          </div>
+        ) : isExactMatch ? (
+          <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 flex items-start gap-3">
+            <div className="w-5 h-5 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 shrink-0 mt-0.5">
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <div>
+              <p className="text-sm font-black text-emerald-950 leading-none">¡Medida Original Confirmada!</p>
+              <p className="text-xs text-emerald-800 mt-1.5 leading-relaxed">
+                Este neumático es en la medida recomendada de fábrica para tu <span className="font-bold">{selectedVehicle.marca} {selectedVehicle.modelo}</span>{selectedVehicle.size?.version ? ` (${selectedVehicle.size.version})` : ""}.
+              </p>
+            </div>
+          </div>
+        ) : isCompatible ? (
+          <div className="bg-orange-50 border border-orange-200 rounded-2xl p-4 flex flex-col gap-3">
+            <div className="flex items-start gap-3">
+              <div className="w-5 h-5 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 shrink-0 mt-0.5">
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-black text-orange-950 leading-none">Medida Equivalente Compatible</p>
+                <p className="text-xs text-orange-850 mt-1.5 leading-relaxed">
+                  Es una alternativa segura para tu <span className="font-bold">{selectedVehicle.marca} {selectedVehicle.modelo}</span> (original: {formatSize(vehicleSize!)}).
+                </p>
+                <p className="text-[10px] text-orange-700 font-medium mt-1">
+                  Variación de diámetro: {diffPercent > 0 ? "+" : ""}{diffPercent.toFixed(1)}% (el límite tolerado es ±3%).
+                </p>
+              </div>
+            </div>
+            {benefits.length > 0 && (
+              <div className="pt-2.5 border-t border-orange-200/50">
+                <p className="text-[10px] font-black text-orange-900 uppercase tracking-wider mb-2">Efectos de esta medida en tu auto:</p>
+                <ul className="space-y-1.5">
+                  {benefits.map((b, idx) => (
+                    <li key={idx} className="text-xs text-orange-800 flex items-start gap-1.5 leading-normal">
+                      <span className="text-orange-500 shrink-0 mt-1">•</span>
+                      <span>{b}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="bg-red-50 border border-red-200 rounded-2xl p-4 flex items-start gap-3">
+            <div className="w-5 h-5 rounded-full bg-red-100 flex items-center justify-center text-red-600 shrink-0 mt-0.5">
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </div>
+            <div>
+              <p className="text-sm font-black text-red-950 leading-none">Medida No Recomendada</p>
+              <p className="text-xs text-red-800 mt-1.5 leading-relaxed">
+                Esta medida difiere demasiado de la original para tu <span className="font-bold">{selectedVehicle.marca} {selectedVehicle.modelo}</span> (original: {formatSize(vehicleSize!)}).
+              </p>
+              <p className="text-[10px] text-red-700 font-medium mt-1">
+                Variación de diámetro: {diffPercent > 0 ? "+" : ""}{diffPercent.toFixed(1)}% (excede el estándar máximo de seguridad de ±3%).
+              </p>
+              <p className="text-xs text-red-850 font-bold mt-2">
+                * No se aconseja su colocación por seguridad (puede descalibrar el velocímetro, ABS y control de estabilidad).
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <button onClick={() => setShowModal(true)} disabled={!product.enStock} className="flex items-center justify-center gap-2 bg-[#FFE600] hover:bg-[#f5dc00] disabled:bg-slate-300 disabled:text-white text-navy-900 font-black py-3 rounded-xl text-base transition-colors cursor-pointer">
         {product.enStock ? (
           <>
             Comprar ahora

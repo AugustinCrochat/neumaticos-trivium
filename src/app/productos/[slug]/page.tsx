@@ -212,6 +212,9 @@ export default async function ProductPage({ params }: Props) {
   const loadKg = product.loadIndex ? LOAD_INDEX_KG[product.loadIndex] : undefined;
   const loadSpeed = product.loadIndex && product.speedRating ? ` ${product.loadIndex}${product.speedRating}` : "";
   const vehiculos = vehiclesUsingSize(product.size);
+  const popularPreview = Array.from(new Set(vehiculos.map((v) => `${v.brand} ${v.model}`)))
+    .slice(0, 5)
+    .join(", ");
 
   const characteristics = [
     { label: "Ancho", value: `${product.size.width} mm` },
@@ -333,6 +336,12 @@ export default async function ProductPage({ params }: Props) {
               </div>
             )}
           </Link>
+
+          {popularPreview && (
+            <p className="text-xs text-slate-500 mb-4 leading-normal">
+              Usado en: <span className="font-semibold text-slate-700">{popularPreview}</span> y más.
+            </p>
+          )}
 
           <div className="flex flex-wrap gap-2 mb-6">
             {product.tags.map((tag) => (
