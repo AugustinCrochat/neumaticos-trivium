@@ -94,9 +94,13 @@ export function VehicleSizeSearch({ initialMedida }: { initialMedida?: string })
               onChange={(e) => changeVersion(Number(e.target.value))}
               className="w-full mb-3 bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm font-medium text-slate-700 focus:ring-2 focus:ring-navy-500/10 outline-none"
             >
-              {sizes.map((s, i) => (
-                <option key={i} value={i}>{s.version || `${s.w}/${s.p} R${s.r}`}</option>
-              ))}
+              {sizes.map((s, i) => {
+                const gen = [s.generation, s.years && `(${s.years})`].filter(Boolean).join(" ");
+                const label = [gen, s.version].filter(Boolean).join(" — ") || `${s.w}/${s.p} R${s.r}`;
+                return (
+                  <option key={i} value={i}>{label}</option>
+                );
+              })}
             </select>
           )}
           <button

@@ -431,13 +431,17 @@ export default async function ProductPage({ params }: Props) {
           <ul className="flex flex-wrap gap-2">
             {vehiculos.map((v) => (
               <li
-                key={`${v.brand}-${v.model}-${v.version ?? ""}`}
+                key={`${v.brand}-${v.model}-${v.generation ?? ""}-${v.version ?? ""}`}
                 className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-200 bg-slate-50 text-sm"
               >
                 <span className="font-bold text-navy-900">
                   {v.brand} {v.model}
                 </span>
-                {v.version && <span className="text-slate-500 font-normal text-xs">({v.version})</span>}
+                {(v.generation || v.version) && (
+                  <span className="text-slate-500 font-normal text-xs">
+                    ({[v.generation, v.years && `${v.years}`, v.version].filter(Boolean).join(" · ")})
+                  </span>
+                )}
               </li>
             ))}
           </ul>

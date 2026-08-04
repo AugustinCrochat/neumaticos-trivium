@@ -125,7 +125,7 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
             <div>
               <p className="text-sm font-black text-emerald-950 leading-none">¡Medida Original Confirmada!</p>
               <p className="text-xs text-emerald-800 mt-1.5 leading-relaxed">
-                Este neumático es en la medida recomendada de fábrica para tu <span className="font-bold">{selectedVehicle.marca} {selectedVehicle.modelo}</span>{selectedVehicle.size?.version ? ` (${selectedVehicle.size.version})` : ""}.
+                Este neumático es en la medida recomendada de fábrica para tu <span className="font-bold">{selectedVehicle.marca} {selectedVehicle.modelo}</span>{[selectedVehicle.size?.generation, selectedVehicle.size?.version].filter(Boolean).length > 0 ? ` (${[selectedVehicle.size?.generation, selectedVehicle.size?.version].filter(Boolean).join(" — ")})` : ""}.
               </p>
             </div>
           </div>

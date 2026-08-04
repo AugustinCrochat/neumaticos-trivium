@@ -115,7 +115,7 @@ export function equivalentSizes(size: TireSize, tolerance = 3): TireSize[] {
   );
 }
 
-export type VehicleUsingSize = { brand: string; model: string; version?: string };
+export type VehicleUsingSize = { brand: string; model: string; version?: string; generation?: string; years?: string };
 
 /**
  * Autos que vienen de fábrica con esta medida, sacados de VEHICLE_DB.
@@ -133,7 +133,7 @@ export function vehiclesUsingSize(size: TireSize): VehicleUsingSize[] {
         Number(s.p) === size.profile &&
         Number(s.r) === size.rim
       ) {
-        result.push({ brand: entry.brand, model: entry.model, version: s.version });
+        result.push({ brand: entry.brand, model: entry.model, version: s.version, generation: s.generation, years: s.years });
       }
     }
   }
