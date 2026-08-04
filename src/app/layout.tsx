@@ -12,6 +12,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { CartProvider } from "@/contexts/cart-context";
 import { CartDrawer } from "@/components/ui/CartDrawer";
+import { FloatingSearchWidget } from "@/components/ui/FloatingSearchWidget";
 import { getVehiculosDesdePOS } from "@/lib/pos-api";
 
 const geist = Geist({
@@ -101,6 +102,7 @@ export default async function RootLayout({
               <BranchModal />
               <VehicleModal />
               <CartDrawer />
+              <FloatingSearchWidget />
               <main className="flex-1">{children}</main>
               <Footer />
             </CartProvider>

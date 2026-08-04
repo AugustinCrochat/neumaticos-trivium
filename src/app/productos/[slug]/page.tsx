@@ -9,7 +9,7 @@ import { BRANDS } from "@/lib/data";
 import { BRANCHES, DEFAULT_BRANCH_ID, SHIPPING_FLAT_RATE, SITE_URL } from "@/lib/config";
 import { ORGANIZATION_ID, branchNodeId, breadcrumbJsonLd, canonical } from "@/lib/seo";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { formatSize, rimSlug, sizeSlug } from "@/lib/tire-sizes";
+import { formatSize, rimSlug, sizeSlug, vehiclesUsingSize } from "@/lib/tire-sizes";
 import { isLowStock, stockLabel } from "@/lib/stock";
 import { ProductNameWithHighlightedSize } from "@/components/ui/ProductNameWithHighlightedSize";
 import { ProductPageClient } from "./ProductPageClient";
@@ -211,6 +211,7 @@ export default async function ProductPage({ params }: Props) {
   const speedKmh = product.speedRating ? SPEED_RATING_KMH[product.speedRating] : undefined;
   const loadKg = product.loadIndex ? LOAD_INDEX_KG[product.loadIndex] : undefined;
   const loadSpeed = product.loadIndex && product.speedRating ? ` ${product.loadIndex}${product.speedRating}` : "";
+  const vehiculos = vehiclesUsingSize(product.size);
 
   const characteristics = [
     { label: "Ancho", value: `${product.size.width} mm` },
@@ -223,6 +224,9 @@ export default async function ProductPage({ params }: Props) {
       : []),
     ...(product.speedRating
       ? [{ label: "Índice de velocidad", value: speedKmh ? `${product.speedRating} (hasta ${speedKmh} km/h)` : product.speedRating }]
+      : []),
+    ...(vehiculos.length > 0
+      ? [{ label: "Vehículos compatibles", value: `${vehiculos.length} modelos` }]
       : []),
     ...(brand?.origin ? [{ label: "Origen", value: brand.origin }] : []),
     { label: "Garantía", value: "1 año" },
@@ -391,6 +395,48 @@ export default async function ProductPage({ params }: Props) {
           </ul>
         </div>
       </div>
+
+      {/* Modelos de autos compatibles con esta medida */}
+      {vehiculos.length > 0 && (
+        <div className="mt-14 pt-10 border-t border-slate-100">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+            <div>
+              <h2 className="text-lg font-black text-navy-900 uppercase tracking-wide flex items-center gap-2">
+                <svg className="w-5 h-5 text-navy-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                </svg>
+                Modelos de auto compatibles ({formatSize(product.size)})
+              </h2>
+              <p className="text-sm text-slate-600 mt-1">
+                Modelos que utilizan neumáticos {formatSize(product.size)} de fábrica en alguna de sus versiones:
+              </p>
+            </div>
+            <Link
+              href={`/neumaticos/${sizeSlug(product.size)}`}
+              className="text-xs font-bold text-navy-700 hover:text-navy-900 underline decoration-navy-300 hover:decoration-navy-900 whitespace-nowrap self-start sm:self-center transition-colors"
+            >
+              Ver todos en {formatSize(product.size)} →
+            </Link>
+          </div>
+
+          <ul className="flex flex-wrap gap-2">
+            {vehiculos.map((v) => (
+              <li
+                key={`${v.brand}-${v.model}-${v.version ?? ""}`}
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-200 bg-slate-50 text-sm"
+              >
+                <span className="font-bold text-navy-900">
+                  {v.brand} {v.model}
+                </span>
+                {v.version && <span className="text-slate-500 font-normal text-xs">({v.version})</span>}
+              </li>
+            ))}
+          </ul>
+          <p className="text-xs text-slate-400 mt-4 leading-relaxed">
+            * Te recomendamos verificar la medida grabada en el lateral de tus neumáticos actuales o en el parante de la puerta antes de realizar la compra.
+          </p>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,8 +1,24 @@
 import type { Accessory, TireProduct } from "./types";
 import { DEFAULT_BRANCH_ID } from "./config";
 import productImagesManifest from "./product-images-manifest.json";
+import { getAllVehicleOptions } from "./vehicles";
 
 const AVAILABLE_IMAGES = new Set(productImagesManifest);
+
+// Cache en memoria a nivel de Worker/Instancia para evitar exceder límites de CPU
+const memoryCache = {
+  productos: new Map<string, { data: TireProduct[]; expires: number }>(),
+  accesorios: new Map<string, { data: Accessory[]; expires: number }>(),
+  vehiculos: new Map<string, { data: VehiculoOption[]; expires: number }>(),
+  servicios: new Map<string, { data: ServicioPrecio[]; expires: number }>(),
+};
+
+const CACHE_TTLS = {
+  productos: 300 * 1000,   // 5 minutos
+  accesorios: 300 * 1000,  // 5 minutos
+  vehiculos: 1800 * 1000,  // 30 minutos
+  servicios: 300 * 1000,   // 5 minutos
+};
 
 // .trim() por si la variable de entorno se pegó con un espacio o salto de
 // línea de más al cargarla en el dashboard (rompe el fetch silenciosamente).
@@ -164,24 +180,34 @@ function toTireProduct(p: PosProducto): TireProduct | null {
 }
 
 export async function getProductosDesdePOS(sucursalSlug: string = DEFAULT_BRANCH_ID): Promise<TireProduct[]> {
+  const cacheKey = sucursalSlug;
+  const now = Date.now();
+  const cached = memoryCache.productos.get(cacheKey);
+  if (cached && cached.expires > now) {
+    return cached.data;
+  }
+
   if (!POS_API_BASE_URL) {
     console.error("[pos-api] Falta la variable de entorno POS_API_BASE_URL");
-    return [];
+    return cached ? cached.data : [];
   }
   try {
-    // Sin timeout propio, un fetch colgado en Workers se lleva el request
-    // entero hasta que Cloudflare mata la instancia ("exceeded resource
-    // limits"). El POS a veces tarda o no responde bajo tráfico.
     const res = await fetch(`${POS_API_BASE_URL}/${sucursalSlug}/productos`, { next: { revalidate: 300 }, signal: AbortSignal.timeout(8000) });
     if (!res.ok) {
       console.error(`[pos-api] Error ${res.status} al obtener productos del POS`);
-      return [];
+      return cached ? cached.data : [];
     }
     const data = (await res.json()) as { productos: PosProducto[] };
-    return data.productos.map(toTireProduct).filter((p): p is TireProduct => p !== null);
+    const mapped = data.productos.map(toTireProduct).filter((p): p is TireProduct => p !== null);
+    
+    memoryCache.productos.set(cacheKey, {
+      data: mapped,
+      expires: now + CACHE_TTLS.productos,
+    });
+    return mapped;
   } catch (err) {
     console.error("[pos-api] Error de red al obtener productos del POS:", err);
-    return [];
+    return cached ? cached.data : [];
   }
 }
 
@@ -197,18 +223,25 @@ type PosAccesorio = {
 };
 
 export async function getAccesoriosDesdePOS(sucursalSlug: string = DEFAULT_BRANCH_ID): Promise<Accessory[]> {
+  const cacheKey = sucursalSlug;
+  const now = Date.now();
+  const cached = memoryCache.accesorios.get(cacheKey);
+  if (cached && cached.expires > now) {
+    return cached.data;
+  }
+
   if (!POS_API_BASE_URL) {
     console.error("[pos-api] Falta la variable de entorno POS_API_BASE_URL");
-    return [];
+    return cached ? cached.data : [];
   }
   try {
     const res = await fetch(`${POS_API_BASE_URL}/${sucursalSlug}/accesorios`, { next: { revalidate: 300 }, signal: AbortSignal.timeout(8000) });
     if (!res.ok) {
       console.error(`[pos-api] Error ${res.status} al obtener accesorios del POS`);
-      return [];
+      return cached ? cached.data : [];
     }
     const data = (await res.json()) as { accesorios: PosAccesorio[] };
-    return data.accesorios.map((a) => ({
+    const mapped = data.accesorios.map((a) => ({
       id: a.id,
       codigoTango: a.codigo_tango,
       nombre: a.nombre,
@@ -219,43 +252,87 @@ export async function getAccesoriosDesdePOS(sucursalSlug: string = DEFAULT_BRANC
       stock: a.stock,
       slug: slugify(a.nombre),
     }));
+
+    memoryCache.accesorios.set(cacheKey, {
+      data: mapped,
+      expires: now + CACHE_TTLS.accesorios,
+    });
+    return mapped;
   } catch (err) {
     console.error("[pos-api] Error de red al obtener accesorios del POS:", err);
-    return [];
+    return cached ? cached.data : [];
   }
 }
 
 export type VehiculoOption = { marca: string; modelo: string; label: string };
 
 export async function getVehiculosDesdePOS(sucursalSlug: string = DEFAULT_BRANCH_ID): Promise<VehiculoOption[]> {
+  const cacheKey = sucursalSlug;
+  const now = Date.now();
+  const cached = memoryCache.vehiculos.get(cacheKey);
+  if (cached && cached.expires > now) {
+    return cached.data;
+  }
+
+  const staticVehicles = getAllVehicleOptions();
   if (!POS_API_BASE_URL) {
-    console.error("[pos-api] Falta la variable de entorno POS_API_BASE_URL");
-    return [];
+    return staticVehicles;
   }
   try {
     const res = await fetch(`${POS_API_BASE_URL}/${sucursalSlug}/vehiculos`, { next: { revalidate: 3600 }, signal: AbortSignal.timeout(8000) });
     if (!res.ok) {
-      console.error(`[pos-api] Error ${res.status} al obtener vehículos del POS`);
-      return [];
+      console.error(`[pos-api] Error ${res.status} al obtener vehículos del POS, usando base local`);
+      return cached ? cached.data : staticVehicles;
     }
     const data = (await res.json()) as { vehiculos: VehiculoOption[] };
-    return data.vehiculos;
+    const posVehiculos = data.vehiculos || [];
+
+    const mergedMap = new Map<string, VehiculoOption>();
+    for (const v of staticVehicles) {
+      mergedMap.set(`${v.marca.toLowerCase()}-${v.modelo.toLowerCase()}`, v);
+    }
+    for (const v of posVehiculos) {
+      const key = `${v.marca.toLowerCase()}-${v.modelo.toLowerCase()}`;
+      if (!mergedMap.has(key)) {
+        mergedMap.set(key, v);
+      }
+    }
+
+    // Optimización: ordenamiento rápido con string compare directo
+    const sorted = Array.from(mergedMap.values()).sort((a, b) => {
+      const la = a.label;
+      const lb = b.label;
+      return la > lb ? 1 : la < lb ? -1 : 0;
+    });
+
+    memoryCache.vehiculos.set(cacheKey, {
+      data: sorted,
+      expires: now + CACHE_TTLS.vehiculos,
+    });
+    return sorted;
   } catch (err) {
-    console.error("[pos-api] Error de red al obtener vehículos del POS:", err);
-    return [];
+    console.error("[pos-api] Error de red al obtener vehículos del POS, usando base local:", err);
+    return cached ? cached.data : staticVehicles;
   }
 }
 
 export async function getServiciosPrecios(grupo?: string, sucursalSlug: string = DEFAULT_BRANCH_ID): Promise<ServicioPrecio[]> {
+  const cacheKey = `${sucursalSlug}-${grupo || "all"}`;
+  const now = Date.now();
+  const cached = memoryCache.servicios.get(cacheKey);
+  if (cached && cached.expires > now) {
+    return cached.data;
+  }
+
   if (!POS_API_BASE_URL) {
     console.error("[pos-api] Falta la variable de entorno POS_API_BASE_URL");
-    return [];
+    return cached ? cached.data : [];
   }
   try {
     const res = await fetch(`${POS_API_BASE_URL}/${sucursalSlug}/servicios`, { next: { revalidate: 300 }, signal: AbortSignal.timeout(8000) });
     if (!res.ok) {
       console.error(`[pos-api] Error ${res.status} al obtener servicios del POS`);
-      return [];
+      return cached ? cached.data : [];
     }
     const data = (await res.json()) as {
       servicios: { id: string; nombre: string; precio: number; servicio_grupo: string; codigo_tango?: string | null }[];
@@ -267,9 +344,16 @@ export async function getServiciosPrecios(grupo?: string, sucursalSlug: string =
       grupo: s.servicio_grupo,
       codigoTango: s.codigo_tango ?? null,
     }));
-    return grupo ? servicios.filter((s) => s.grupo === grupo) : servicios;
+    
+    const result = grupo ? servicios.filter((s) => s.grupo === grupo) : servicios;
+    
+    memoryCache.servicios.set(cacheKey, {
+      data: result,
+      expires: now + CACHE_TTLS.servicios,
+    });
+    return result;
   } catch (err) {
     console.error("[pos-api] Error de red al obtener servicios del POS:", err);
-    return [];
+    return cached ? cached.data : [];
   }
 }

@@ -20,20 +20,21 @@ function matchVehiculos(vehiculos: VehiculoOption[], query: string): VehiculoOpt
   for (const v of vehiculos) {
     const modelo = normalize(v.modelo);
     const label = normalize(v.label);
-    if (modelo.startsWith(q) || label.startsWith(q)) {
+    const marca = normalize(v.marca);
+    if (modelo.startsWith(q) || label.startsWith(q) || marca.startsWith(q)) {
       starts.push(v);
-    } else if (modelo.includes(q) || label.includes(q)) {
+    } else if (modelo.includes(q) || label.includes(q) || marca.includes(q)) {
       includes.push(v);
     }
   }
 
-  return [...starts, ...includes].slice(0, 8);
+  return [...starts, ...includes].slice(0, 10);
 }
 
 export function VehicleCombobox({
   vehiculos,
   onSelect,
-  placeholder = "Ej: Sandero, Corolla, Amarok...",
+  placeholder = "Ej: Sandero, Corolla, Amarok, 208...",
   autoFocus = false,
 }: {
   vehiculos: VehiculoOption[];
@@ -43,6 +44,7 @@ export function VehicleCombobox({
 }) {
   const [query, setQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
   const matches = useMemo(() => matchVehiculos(vehiculos, query), [vehiculos, query]);
 
@@ -54,12 +56,25 @@ export function VehicleCombobox({
 
   function handleChange(value: string) {
     setQuery(value);
+    setSelectedIndex(0);
     setIsOpen(true);
-    // Si ya queda un solo modelo posible (ej. "berlingo"), lo resolvemos
-    // solos en vez de obligar a tocar el resultado — pensado para mobile.
-    if (value.trim().length >= 3) {
-      const found = matchVehiculos(vehiculos, value);
-      if (found.length === 1) select(found[0]);
+  }
+
+  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (!isOpen || matches.length === 0) return;
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setSelectedIndex((prev) => (prev + 1) % matches.length);
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setSelectedIndex((prev) => (prev - 1 + matches.length) % matches.length);
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      const target = matches[selectedIndex] || matches[0];
+      if (target) select(target);
+    } else if (e.key === "Escape") {
+      setIsOpen(false);
     }
   }
 
@@ -79,6 +94,7 @@ export function VehicleCombobox({
           value={query}
           autoFocus={autoFocus}
           onChange={(e) => handleChange(e.target.value)}
+          onKeyDown={handleKeyDown}
           onFocus={() => setIsOpen(true)}
           onBlur={() => setIsOpen(false)}
           placeholder={placeholder}
@@ -89,25 +105,24 @@ export function VehicleCombobox({
       {isOpen && query.trim().length > 0 && (
         <div className="absolute top-full left-0 right-0 mt-2 z-50 bg-white border border-slate-100 rounded-xl shadow-2xl overflow-hidden py-1 max-h-72 overflow-y-auto">
           {matches.length > 0 ? (
-            matches.map((v) => (
+            matches.map((v, idx) => (
               <button
                 key={`${v.marca}-${v.modelo}`}
                 type="button"
-                // onMouseDown (no onClick): evita la carrera con el blur del
-                // input, que en mobile puede cerrar el dropdown antes de que
-                // el click llegue a registrarse y hace parecer que "no anda".
                 onMouseDown={(e) => {
                   e.preventDefault();
                   select(v);
                 }}
-                className="w-full px-4 py-2.5 text-left text-sm text-slate-700 hover:bg-slate-50 transition-colors"
+                className={`w-full px-4 py-2.5 text-left text-sm transition-colors ${
+                  idx === selectedIndex ? "bg-orange-50 text-navy-900 font-bold" : "text-slate-700 hover:bg-slate-50"
+                }`}
               >
                 <span className="font-bold text-navy-900">{v.modelo}</span>{" "}
-                <span className="text-slate-400">{v.marca}</span>
+                <span className="text-slate-400">({v.marca})</span>
               </button>
             ))
           ) : (
-            <p className="px-4 py-3 text-sm text-slate-400">No encontramos ese modelo.</p>
+            <p className="px-4 py-3 text-sm text-slate-400">No encontramos ese modelo. Podés buscar por la medida grabada en tu neumático.</p>
           )}
         </div>
       )}
