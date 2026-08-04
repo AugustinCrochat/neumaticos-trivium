@@ -1,10 +1,23 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { SizeOrVehicleSearch } from "@/components/ui/SizeOrVehicleSearch";
 
 export function FloatingSearchWidget() {
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
+
+  // Cualquier navegación interna (buscar por medida, por auto, o un link como
+  // "¿Qué es esto?" dentro del modal) debe cerrarlo — si no, la navegación
+  // client-side de Next deja el modal montado tapando la página nueva, y se
+  // ve como si hubiera quedado colgado cargando. usePathname (no
+  // useSearchParams) a propósito: cambia igual para toda navegación real de
+  // búsqueda (/neumaticos/[medida], /buscar) sin forzar un boundary Suspense.
+  useEffect(() => {
+    setIsOpen(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
 
   useEffect(() => {
     if (isOpen) {
