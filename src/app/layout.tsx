@@ -75,6 +75,23 @@ export default async function RootLayout({
   const vehiculos = await getVehiculosDesdePOS();
   return (
     <html lang="es" className={`${geist.variable} h-full antialiased`}>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.addEventListener('error', function(e) {
+                var target = e.target;
+                if (target && (target.tagName === 'LINK' || target.tagName === 'SCRIPT')) {
+                  var src = target.src || target.href;
+                  if (src && src.indexOf('_next/static') !== -1) {
+                    window.location.reload();
+                  }
+                }
+              }, true);
+            `
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <JsonLd data={siteGraphJsonLd()} />
         <BranchProvider>
