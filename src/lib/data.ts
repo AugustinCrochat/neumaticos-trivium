@@ -120,15 +120,15 @@ export const SERVICES: Service[] = [
   },
   {
     id: "balanceo",
-    title: "Balanceo",
+    title: "Balanceo y Rotación",
     description:
-      "Balanceo dinámico computarizado de cada rueda para eliminar las vibraciones en el volante y evitar el desgaste prematuro de los neumáticos.",
+      "Balanceo dinámico computarizado y rotación periódica de las ruedas para eliminar vibraciones en el volante y garantizar un desgaste uniforme de la banda de rodadura.",
     icon: "rubber",
     features: [
       "Balanceo dinámico computarizado",
-      "Contrapesos de precisión",
-      "Eliminación de vibraciones",
-      "Control de presión post-balanceo",
+      "Rotación sistemática (delanteros / traseros)",
+      "Contrapesos de precisión de plomo/adhesivos",
+      "Eliminación de vibraciones y control de presión",
     ],
   },
   {
