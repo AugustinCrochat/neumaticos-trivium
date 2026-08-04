@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { TireProduct, TireSize } from "@/lib/types";
 import { BRANCHES, SHIPPING_FLAT_RATE } from "@/lib/config";
+import { esRangoFlotation, formatFlotationEquivalent, metricToFlotation } from "@/lib/flotation";
 import { ProductCard } from "@/components/ui/ProductCard";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { FaqSection } from "@/components/seo/FaqSection";
@@ -260,6 +261,16 @@ export function SizeLanding({
             </div>
           ))}
         </dl>
+        {esRangoFlotation(size.width) && (
+          <p className="mt-5 max-w-3xl leading-relaxed text-slate-600">
+            En camionetas y 4x4, esta medida también se puede encontrar marcada en el sistema{" "}
+            <Link href="/blog/medidas-flotation-camionetas" className="font-bold text-navy-900 underline underline-offset-2">
+              flotation
+            </Link>
+            , en pulgadas, como <strong className="text-navy-900">{formatFlotationEquivalent(metricToFlotation(size))}</strong>.
+            Es el mismo neumático — la diferencia está solo en cómo se escribe la medida en el flanco.
+          </p>
+        )}
       </section>
 
       {/* Autos que usan la medida */}

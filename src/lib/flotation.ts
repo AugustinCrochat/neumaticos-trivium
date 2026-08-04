@@ -36,3 +36,36 @@ export function formatFlotationLabel(f: FlotationSize): string {
   const widthStr = f.widthIn.toFixed(2).replace(/0$/, '');
   return `${f.diameterIn}x${widthStr}R${f.rim}`;
 }
+
+/**
+ * El cálculo inverso de flotationToMetric: dado un ancho/perfil/rodado
+ * métrico, el diámetro y ancho equivalentes en pulgadas, redondeados a los
+ * medios pasos habituales del sistema flotation (31, 31.5, 32... / 10, 10.5,
+ * 11...). Solo tiene sentido mostrarlo para medidas de camioneta (LT/A-T/M-T)
+ * — ver `esRangoFlotation`.
+ */
+export function metricToFlotation(size: { width: number; profile: number; rim: number }): FlotationSize {
+  const sidewallMm = size.width * (size.profile / 100);
+  const diameterIn = (size.rim * 25.4 + 2 * sidewallMm) / 25.4;
+  const widthIn = size.width / 25.4;
+  return {
+    diameterIn: Math.round(diameterIn * 2) / 2,
+    widthIn: Math.round(widthIn * 2) / 2,
+    rim: size.rim,
+  };
+}
+
+/** "31x10.5R15" — sin el cero final que arrastra formatFlotationLabel. */
+export function formatFlotationEquivalent(f: FlotationSize): string {
+  const fmt = (n: number) => (Number.isInteger(n) ? String(n) : n.toFixed(1));
+  return `${fmt(f.diameterIn)}x${fmt(f.widthIn)}R${f.rim}`;
+}
+
+/**
+ * El formato flotation es el estándar de fábrica solo en neumáticos LT
+ * (Light Truck) de camionetas/4x4 — anchos de auto de pasajeros no se
+ * comercializan así y mostrar la conversión ahí sería ruido, no dato útil.
+ */
+export function esRangoFlotation(width: number): boolean {
+  return width >= 215;
+}
