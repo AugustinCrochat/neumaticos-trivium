@@ -18,57 +18,57 @@ export type VehicleDBEntry = {
 
 export const VEHICLE_DB: VehicleDBEntry[] = [
   // Alfa Romeo
-  { brand: "Alfa Romeo", model: "147", sizes: [{ w: "195", p: "60", r: "15", version: "Distinctive" }, { w: "205", p: "55", r: "16", version: "Selespeed" }] },
-  { brand: "Alfa Romeo", model: "156", sizes: [{ w: "205", p: "55", r: "16" }] },
-  { brand: "Alfa Romeo", model: "Giulia", sizes: [{ w: "225", p: "50", r: "17" }, { w: "225", p: "45", r: "18" }] },
-  { brand: "Alfa Romeo", model: "Giulietta", sizes: [{ w: "225", p: "45", r: "17", version: "Distinctive" }, { w: "225", p: "40", r: "18", version: "Quadrifoglio Verde" }] },
-  { brand: "Alfa Romeo", model: "Mito", sizes: [{ w: "215", p: "45", r: "17" }] },
-  { brand: "Alfa Romeo", model: "Stelvio", sizes: [{ w: "235", p: "60", r: "18" }, { w: "235", p: "55", r: "19" }] },
+  { brand: "Alfa Romeo", model: "147", sizes: [{ w: "195", p: "60", r: "15", version: "1.6/1.9 base", generation: "147", years: "2001-2010" }, { w: "205", p: "55", r: "16", version: "2.0 TS / Selespeed", generation: "147", years: "2001-2010" }] },
+  { brand: "Alfa Romeo", model: "156", sizes: [{ w: "205", p: "60", r: "15", version: "2.0 TS base", generation: "156", years: "1999-2005" }, { w: "205", p: "55", r: "16", version: "2.5 V6 Sport", generation: "156", years: "1999-2005" }] },
+  { brand: "Alfa Romeo", model: "Giulia", sizes: [{ w: "225", p: "50", r: "17", version: "2.0T 200", generation: "Giulia", years: "2018-2023" }, { w: "245", p: "35", r: "19", version: "Quadrifoglio - Delantero", generation: "Giulia", years: "2018-2023" }, { w: "285", p: "30", r: "19", version: "Quadrifoglio - Trasero", generation: "Giulia", years: "2018-2023" }] },
+  { brand: "Alfa Romeo", model: "Giulietta", sizes: [{ w: "225", p: "45", r: "17", version: "Distinctive", generation: "Giulietta", years: "2011-2020" }, { w: "225", p: "40", r: "18", version: "Quadrifoglio Verde", generation: "Giulietta", years: "2011-2020" }] },
+  { brand: "Alfa Romeo", model: "Mito", sizes: [{ w: "195", p: "55", r: "16", version: "1.4 Progression", generation: "Mito", years: "2010-2016" }, { w: "215", p: "40", r: "18", version: "T-Jet QV", generation: "Mito", years: "2010-2016" }] },
+  { brand: "Alfa Romeo", model: "Stelvio", sizes: [{ w: "235", p: "60", r: "18", version: "2.0T 200", generation: "Stelvio", years: "2018-2024" }, { w: "255", p: "45", r: "20", version: "Quadrifoglio - Delantero", generation: "Stelvio", years: "2018-2024" }, { w: "285", p: "40", r: "20", version: "Quadrifoglio - Trasero", generation: "Stelvio", years: "2018-2024" }] },
 
   // Audi
-  { brand: "Audi", model: "A1", sizes: [{ w: "215", p: "45", r: "16", version: "Attraction" }, { w: "215", p: "40", r: "17", version: "S-Line / 1.4 TFSI" }] },
-  { brand: "Audi", model: "A3", sizes: [{ w: "205", p: "55", r: "16", version: "Base" }, { w: "225", p: "45", r: "17", version: "S-Line" }, { w: "225", p: "40", r: "18", version: "S3 / RS3" }] },
-  { brand: "Audi", model: "A4", sizes: [{ w: "225", p: "50", r: "17", version: "Base" }, { w: "245", p: "40", r: "18", version: "S-Line" }] },
-  { brand: "Audi", model: "A5", sizes: [{ w: "225", p: "50", r: "17" }, { w: "245", p: "40", r: "18" }] },
-  { brand: "Audi", model: "A6", sizes: [{ w: "225", p: "55", r: "17" }, { w: "245", p: "45", r: "18" }] },
-  { brand: "Audi", model: "Q2", sizes: [{ w: "215", p: "55", r: "17" }] },
-  { brand: "Audi", model: "Q3", sizes: [{ w: "235", p: "55", r: "17", version: "Base" }, { w: "235", p: "50", r: "18", version: "Sport" }] },
-  { brand: "Audi", model: "Q5", sizes: [{ w: "235", p: "60", r: "18", version: "Base" }, { w: "235", p: "55", r: "19", version: "S-Line" }] },
-  { brand: "Audi", model: "Q7", sizes: [{ w: "255", p: "55", r: "19" }, { w: "285", p: "45", r: "20" }] },
-  { brand: "Audi", model: "Q8", sizes: [{ w: "275", p: "50", r: "20" }, { w: "285", p: "45", r: "21" }] },
-  { brand: "Audi", model: "TT", sizes: [{ w: "225", p: "50", r: "17" }, { w: "245", p: "40", r: "18" }] },
+  { brand: "Audi", model: "A1", sizes: [{ w: "215", p: "45", r: "16", version: "Attraction", generation: "A1 8X", years: "2011-2018" }, { w: "215", p: "40", r: "17", version: "S-Line / 1.4 TFSI", generation: "A1 8X", years: "2011-2018" }] },
+  { brand: "Audi", model: "A3", sizes: [{ w: "205", p: "55", r: "16", version: "Base", generation: "A3 8V/8Y", years: "2013-2024" }, { w: "225", p: "45", r: "17", version: "S-Line", generation: "A3 8V/8Y", years: "2013-2024" }, { w: "225", p: "40", r: "18", version: "S3 / RS3" }] },
+  { brand: "Audi", model: "A4", sizes: [{ w: "225", p: "55", r: "16", version: "Base", generation: "A4 B8", years: "2009-2016" }, { w: "225", p: "50", r: "17", version: "S-Line", generation: "A4 B8", years: "2009-2016" }, { w: "245", p: "40", r: "18", version: "45 TFSI S-Line", generation: "A4 B9", years: "2017-2024" }] },
+  { brand: "Audi", model: "A5", sizes: [{ w: "225", p: "50", r: "17", version: "Base", generation: "A5 B9", years: "2018-2024" }, { w: "255", p: "35", r: "19", version: "45 TFSI S-Line", generation: "A5 B9", years: "2018-2024" }] },
+  { brand: "Audi", model: "A6", sizes: [{ w: "225", p: "55", r: "17", version: "Base", generation: "A6 C7/C8", years: "2012-2024" }, { w: "245", p: "45", r: "19", version: "55 TFSI S-Line", generation: "A6 C8", years: "2019-2024" }] },
+  { brand: "Audi", model: "Q2", sizes: [{ w: "215", p: "55", r: "17", version: "Base / S-Tronic", generation: "Q2", years: "2017-2022" }] },
+  { brand: "Audi", model: "Q3", sizes: [{ w: "235", p: "55", r: "18", version: "Base 35 TFSI", generation: "Q3 F3", years: "2020-2024" }, { w: "235", p: "50", r: "19", version: "40 Quattro S-Line", generation: "Q3 F3", years: "2020-2024" }] },
+  { brand: "Audi", model: "Q5", sizes: [{ w: "235", p: "65", r: "17", version: "2.0 TFSI base", generation: "Q5 8R", years: "2009-2017" }, { w: "235", p: "60", r: "18", version: "45 TFSI S-Line", generation: "Q5 FY", years: "2018-2024" }] },
+  { brand: "Audi", model: "Q7", sizes: [{ w: "235", p: "60", r: "18", version: "3.0 TDI base", generation: "Q7 4L", years: "2007-2015" }, { w: "285", p: "45", r: "20", version: "55 TFSI S-Line", generation: "Q7 4M", years: "2016-2024" }] },
+  { brand: "Audi", model: "Q8", sizes: [{ w: "285", p: "45", r: "21", version: "55 TFSI Quattro", generation: "Q8", years: "2019-2024" }] },
+  { brand: "Audi", model: "TT", sizes: [{ w: "245", p: "40", r: "18", version: "2.0 TFSI Coupe", generation: "TT 8J", years: "2009-2016" }] },
 
   // BAIC
   { brand: "BAIC", model: "BJ40", sizes: [{ w: "265", p: "65", r: "17" }] },
   { brand: "BAIC", model: "X35", sizes: [{ w: "215", p: "50", r: "17" }] },
-  { brand: "BAIC", model: "X55", sizes: [{ w: "225", p: "55", r: "19" }] },
+  { brand: "BAIC", model: "X55", sizes: [{ w: "215", p: "50", r: "17", generation: "X55 (1ra gen)", years: "2018-2023" }, { w: "225", p: "55", r: "19", generation: "X55 II", years: "2024-presente" }] },
 
   // BMW
-  { brand: "BMW", model: "Serie 1", sizes: [{ w: "205", p: "55", r: "16", version: "118i" }, { w: "225", p: "45", r: "17", version: "120i M Sport" }] },
-  { brand: "BMW", model: "Serie 2", sizes: [{ w: "205", p: "55", r: "16" }, { w: "225", p: "45", r: "17" }] },
-  { brand: "BMW", model: "Serie 3", sizes: [{ w: "225", p: "50", r: "17", version: "320i" }, { w: "225", p: "45", r: "18", version: "330i M Sport" }] },
-  { brand: "BMW", model: "Serie 4", sizes: [{ w: "225", p: "45", r: "18" }, { w: "255", p: "40", r: "18" }] },
-  { brand: "BMW", model: "Serie 5", sizes: [{ w: "225", p: "55", r: "17" }, { w: "245", p: "45", r: "18" }] },
-  { brand: "BMW", model: "Serie 7", sizes: [{ w: "245", p: "50", r: "18" }] },
+  { brand: "BMW", model: "Serie 1", sizes: [{ w: "225", p: "45", r: "17", version: "118i Advantage" }, { w: "205", p: "60", r: "15", version: "120i (E87)" }] },
+  { brand: "BMW", model: "Serie 2", sizes: [{ w: "205", p: "60", r: "16", version: "220i Active Tourer" }, { w: "225", p: "40", r: "18", version: "220i Coupe M Sport" }] },
+  { brand: "BMW", model: "Serie 3", sizes: [{ w: "225", p: "50", r: "17", version: "320i", generation: "Serie 3 F30/G20", years: "2012-2024" }, { w: "225", p: "45", r: "18", version: "330i M Sport - Delantero", generation: "Serie 3 G20", years: "2019-2024" }, { w: "255", p: "40", r: "18", version: "330i M Sport - Trasero", generation: "Serie 3 G20", years: "2019-2024" }] },
+  { brand: "BMW", model: "Serie 4", sizes: [{ w: "225", p: "50", r: "17", version: "430i Coupe" }, { w: "225", p: "45", r: "18", version: "440i Gran Coupe" }] },
+  { brand: "BMW", model: "Serie 5", sizes: [{ w: "245", p: "50", r: "18", version: "530i Sportline" }, { w: "245", p: "40", r: "19", version: "540i M Sport - Delantero" }, { w: "275", p: "35", r: "19", version: "540i M Sport - Trasero" }] },
+  { brand: "BMW", model: "Serie 7", sizes: [{ w: "245", p: "55", r: "17", version: "730d" }, { w: "245", p: "40", r: "20", version: "750i M Sport - Delantero" }, { w: "275", p: "35", r: "20", version: "750i M Sport - Trasero" }] },
   { brand: "BMW", model: "X1", sizes: [{ w: "225", p: "55", r: "17", version: "sDrive20i" }, { w: "225", p: "50", r: "18", version: "xDrive25i" }] },
-  { brand: "BMW", model: "X2", sizes: [{ w: "225", p: "55", r: "17" }, { w: "225", p: "50", r: "18" }] },
-  { brand: "BMW", model: "X3", sizes: [{ w: "225", p: "60", r: "17" }, { w: "245", p: "50", r: "19" }] },
-  { brand: "BMW", model: "X4", sizes: [{ w: "245", p: "50", r: "19" }] },
-  { brand: "BMW", model: "X5", sizes: [{ w: "255", p: "55", r: "18" }, { w: "275", p: "45", r: "20" }] },
-  { brand: "BMW", model: "X6", sizes: [{ w: "275", p: "45", r: "20" }, { w: "315", p: "35", r: "20" }] },
-  { brand: "BMW", model: "Z4", sizes: [{ w: "225", p: "45", r: "17" }, { w: "225", p: "40", r: "18" }] },
+  { brand: "BMW", model: "X2", sizes: [{ w: "225", p: "55", r: "17", version: "sDrive20i" }, { w: "225", p: "40", r: "20", version: "xDrive M35i" }] },
+  { brand: "BMW", model: "X3", sizes: [{ w: "245", p: "55", r: "17", version: "xDrive20i" }, { w: "245", p: "45", r: "20", version: "M40i - Delantero" }, { w: "275", p: "40", r: "20", version: "M40i - Trasero" }] },
+  { brand: "BMW", model: "X4", sizes: [{ w: "245", p: "50", r: "18", version: "xDrive28i X Line" }, { w: "245", p: "45", r: "20", version: "M40i - Delantero" }, { w: "275", p: "40", r: "20", version: "M40i - Trasero" }] },
+  { brand: "BMW", model: "X5", sizes: [{ w: "255", p: "50", r: "19", version: "xDrive30d" }, { w: "275", p: "45", r: "20", version: "xDrive40i M Sport - Delantero" }, { w: "305", p: "40", r: "20", version: "xDrive40i M Sport - Trasero" }] },
+  { brand: "BMW", model: "X6", sizes: [{ w: "275", p: "45", r: "20", version: "40i M Sport - Delantero" }, { w: "315", p: "35", r: "21", version: "40i M Sport - Trasero" }] },
+  { brand: "BMW", model: "Z4", sizes: [{ w: "225", p: "45", r: "17", version: "sDrive30i" }] },
 
   // BYD
-  { brand: "BYD", model: "Dolphin", sizes: [{ w: "195", p: "60", r: "16" }] },
-  { brand: "BYD", model: "Song Plus", sizes: [{ w: "235", p: "50", r: "19" }] },
+  { brand: "BYD", model: "Dolphin", sizes: [{ w: "185", p: "55", r: "16" }] },
+  { brand: "BYD", model: "Song Plus", sizes: [{ w: "225", p: "60", r: "18" }] },
   { brand: "BYD", model: "Tang", sizes: [{ w: "265", p: "45", r: "21" }] },
-  { brand: "BYD", model: "Yuan Plus", sizes: [{ w: "215", p: "55", r: "18" }] },
+  { brand: "BYD", model: "Yuan Plus", sizes: [{ w: "215", p: "60", r: "17" }] },
 
   // Changan
   { brand: "Changan", model: "CS15", sizes: [{ w: "205", p: "55", r: "16" }] },
   { brand: "Changan", model: "CS35", sizes: [{ w: "215", p: "55", r: "17" }] },
   { brand: "Changan", model: "CS35 Plus", sizes: [{ w: "215", p: "55", r: "17" }] },
-  { brand: "Changan", model: "CS55", sizes: [{ w: "225", p: "55", r: "18" }] },
+  { brand: "Changan", model: "CS55", sizes: [{ w: "225", p: "50", r: "19" }] },
   { brand: "Changan", model: "CS75", sizes: [{ w: "225", p: "60", r: "18" }] },
   { brand: "Changan", model: "MD201", sizes: [{ w: "175", p: "70", r: "14" }] },
 
@@ -77,12 +77,12 @@ export const VEHICLE_DB: VehicleDBEntry[] = [
   { brand: "Chery", model: "Face", sizes: [{ w: "175", p: "60", r: "14" }] },
   { brand: "Chery", model: "QQ", sizes: [{ w: "155", p: "65", r: "13", version: "Light / Basic" }, { w: "155", p: "65", r: "14", version: "Confort" }] },
   { brand: "Chery", model: "Skin", sizes: [{ w: "195", p: "55", r: "15" }] },
-  { brand: "Chery", model: "Tiggo", sizes: [{ w: "215", p: "65", r: "16" }] },
+  { brand: "Chery", model: "Tiggo", sizes: [{ w: "215", p: "60", r: "17" }] },
   { brand: "Chery", model: "Tiggo 2", sizes: [{ w: "205", p: "55", r: "16" }] },
-  { brand: "Chery", model: "Tiggo 3", sizes: [{ w: "215", p: "60", r: "17" }] },
+  { brand: "Chery", model: "Tiggo 3", sizes: [{ w: "215", p: "65", r: "16" }] },
   { brand: "Chery", model: "Tiggo 4", sizes: [{ w: "215", p: "60", r: "17" }] },
   { brand: "Chery", model: "Tiggo 4 Pro", sizes: [{ w: "215", p: "60", r: "17", version: "Comfort" }, { w: "215", p: "55", r: "18", version: "Luxury" }] },
-  { brand: "Chery", model: "Tiggo 5", sizes: [{ w: "225", p: "60", r: "17" }] },
+  { brand: "Chery", model: "Tiggo 5", sizes: [{ w: "225", p: "65", r: "17" }] },
   { brand: "Chery", model: "Tiggo 7 Pro", sizes: [{ w: "225", p: "60", r: "18" }] },
   { brand: "Chery", model: "Tiggo 8", sizes: [{ w: "235", p: "55", r: "18" }] },
 
@@ -143,7 +143,7 @@ export const VEHICLE_DB: VehicleDBEntry[] = [
   // DS Automobiles
   { brand: "DS Automobiles", model: "DS 3", sizes: [{ w: "205", p: "45", r: "17" }] },
   { brand: "DS Automobiles", model: "DS 3 Crossback", sizes: [{ w: "215", p: "60", r: "17" }, { w: "215", p: "55", r: "18" }] },
-  { brand: "DS Automobiles", model: "DS 4", sizes: [{ w: "205", p: "55", r: "19" }] },
+  { brand: "DS Automobiles", model: "DS 4", sizes: [{ w: "225", p: "45", r: "19" }] },
   { brand: "DS Automobiles", model: "DS 7 Crossback", sizes: [{ w: "235", p: "50", r: "19" }, { w: "235", p: "45", r: "20" }] },
 
   // FAW
@@ -201,7 +201,7 @@ export const VEHICLE_DB: VehicleDBEntry[] = [
 
   // Foton
   { brand: "Foton", model: "Gratour", sizes: [{ w: "175", p: "70", r: "14" }] },
-  { brand: "Foton", model: "Tunland", sizes: [{ w: "265", p: "70", r: "16" }, { w: "265", p: "65", r: "17" }] },
+  { brand: "Foton", model: "Tunland", sizes: [{ w: "265", p: "70", r: "16" }, { w: "265", p: "65", r: "17" }, { w: "265", p: "60", r: "18", version: "G7" }] },
 
   // Geely
   { brand: "Geely", model: "515", sizes: [{ w: "185", p: "60", r: "15" }] },
@@ -222,7 +222,7 @@ export const VEHICLE_DB: VehicleDBEntry[] = [
   { brand: "Haval", model: "H1", sizes: [{ w: "205", p: "60", r: "16" }] },
   { brand: "Haval", model: "H2", sizes: [{ w: "235", p: "55", r: "18" }] },
   { brand: "Haval", model: "H6", sizes: [{ w: "235", p: "55", r: "19" }] },
-  { brand: "Haval", model: "Jolion", sizes: [{ w: "215", p: "60", r: "17" }, { w: "225", p: "55", r: "18" }] },
+  { brand: "Haval", model: "Jolion", sizes: [{ w: "215", p: "60", r: "17", version: "Deluxe" }, { w: "225", p: "55", r: "18", version: "Supreme" }] },
 
   // Honda
   { brand: "Honda", model: "Accord", sizes: [{ w: "225", p: "50", r: "17", version: "EXL", generation: "9na Gen (CR)", years: "2013-2015" }, { w: "235", p: "45", r: "18", version: "Advanced Hybrid", generation: "11va Gen", years: "2024-presente" }] },
@@ -256,24 +256,24 @@ export const VEHICLE_DB: VehicleDBEntry[] = [
 
   // JAC
   { brand: "JAC", model: "J4", sizes: [{ w: "185", p: "65", r: "15" }] },
-  { brand: "JAC", model: "S2", sizes: [{ w: "205", p: "55", r: "16" }] },
+  { brand: "JAC", model: "S2", sizes: [{ w: "195", p: "60", r: "16" }] },
   { brand: "JAC", model: "S3", sizes: [{ w: "205", p: "55", r: "16" }] },
   { brand: "JAC", model: "S5", sizes: [{ w: "225", p: "60", r: "17" }] },
   { brand: "JAC", model: "T6", sizes: [{ w: "245", p: "70", r: "16" }] },
   { brand: "JAC", model: "T8", sizes: [{ w: "265", p: "60", r: "18" }] },
 
   // Jaguar
-  { brand: "Jaguar", model: "F-Pace", sizes: [{ w: "255", p: "55", r: "19" }, { w: "255", p: "50", r: "20" }] },
-  { brand: "Jaguar", model: "XE", sizes: [{ w: "225", p: "50", r: "17" }, { w: "225", p: "45", r: "18" }] },
-  { brand: "Jaguar", model: "XF", sizes: [{ w: "225", p: "55", r: "17" }, { w: "245", p: "45", r: "18" }] },
+  { brand: "Jaguar", model: "F-Pace", sizes: [{ w: "255", p: "55", r: "19", version: "2.0 TDI Prestige" }, { w: "255", p: "50", r: "20", version: "3.0 Supercharged R-Sport" }] },
+  { brand: "Jaguar", model: "XE", sizes: [{ w: "225", p: "50", r: "17", version: "2.0T Pure" }, { w: "225", p: "40", r: "19", version: "2.0T R-Sport - Delantero" }, { w: "255", p: "35", r: "19", version: "2.0T R-Sport - Trasero" }] },
+  { brand: "Jaguar", model: "XF", sizes: [{ w: "245", p: "45", r: "18", version: "2.0 Prestige" }, { w: "255", p: "35", r: "20", version: "3.0 S" }] },
 
   // Jeep
-  { brand: "Jeep", model: "Cherokee", sizes: [{ w: "225", p: "75", r: "15" }, { w: "235", p: "70", r: "16" }] },
+  { brand: "Jeep", model: "Cherokee", sizes: [{ w: "225", p: "60", r: "17", generation: "Cherokee KL", years: "2014-2018" }, { w: "225", p: "60", r: "18", version: "Limited / Trailhawk", generation: "Cherokee KL", years: "2014-2018" }] },
   { brand: "Jeep", model: "Commander", sizes: [{ w: "235", p: "50", r: "19" }] },
-  { brand: "Jeep", model: "Compass", sizes: [{ w: "225", p: "55", r: "18", version: "Sport / Longitude" }, { w: "235", p: "45", r: "19", version: "Limited" }] },
+  { brand: "Jeep", model: "Compass", sizes: [{ w: "215", p: "60", r: "17", version: "Sport", generation: "Compass MP (facelift)", years: "2021-presente" }, { w: "225", p: "55", r: "18", version: "Longitude", generation: "Compass MP (facelift)", years: "2021-presente" }, { w: "235", p: "45", r: "19", version: "Limited / Serie-S / Blackhawk", generation: "Compass MP (facelift)", years: "2021-presente" }, { w: "215", p: "65", r: "17", version: "Trailhawk (diesel 4x4)", generation: "Compass MP (facelift)", years: "2021-presente" }, { w: "215", p: "65", r: "17", version: "Sport / Longitude", generation: "Compass MP", years: "2017-2021" }, { w: "225", p: "55", r: "18", version: "Limited / Trailhawk", generation: "Compass MP", years: "2017-2021" }] },
   { brand: "Jeep", model: "Gladiator", sizes: [{ w: "255", p: "70", r: "18" }, { w: "285", p: "70", r: "17" }] },
-  { brand: "Jeep", model: "Grand Cherokee", sizes: [{ w: "265", p: "60", r: "18", version: "Laredo" }, { w: "265", p: "50", r: "20", version: "Limited / Overland" }] },
-  { brand: "Jeep", model: "Renegade", sizes: [{ w: "215", p: "65", r: "16", version: "Sport" }, { w: "215", p: "60", r: "17", version: "Trailhawk" }, { w: "225", p: "55", r: "18", version: "Longitude / Limited" }] },
+  { brand: "Jeep", model: "Grand Cherokee", sizes: [{ w: "265", p: "60", r: "18", version: "Laredo / Altitude" }, { w: "265", p: "50", r: "20", version: "Limited / Overland / Summit" }] },
+  { brand: "Jeep", model: "Renegade", sizes: [{ w: "225", p: "55", r: "18", version: "Longitude / Sahara", generation: "Renegade BU (facelift)", years: "2022-presente" }, { w: "225", p: "60", r: "17", version: "Willys / Altitude", generation: "Renegade BU (facelift)", years: "2022-presente" }, { w: "215", p: "65", r: "16", version: "Sport", generation: "Renegade BU", years: "2015-2021" }, { w: "215", p: "60", r: "17", version: "Trailhawk", generation: "Renegade BU", years: "2015-2021" }, { w: "225", p: "55", r: "18", version: "Longitude / Limited", generation: "Renegade BU", years: "2015-2021" }] },
   { brand: "Jeep", model: "Wrangler", sizes: [{ w: "245", p: "75", r: "17", version: "Sport" }, { w: "255", p: "70", r: "18", version: "Sahara" }, { w: "285", p: "70", r: "17", version: "Rubicon" }] },
 
   // Jetour
@@ -298,18 +298,18 @@ export const VEHICLE_DB: VehicleDBEntry[] = [
   { brand: "KyC", model: "Mamut", sizes: [{ w: "185", p: "70", r: "14" }] },
 
   // Land Rover
-  { brand: "Land Rover", model: "Defender", sizes: [{ w: "255", p: "70", r: "18" }, { w: "255", p: "60", r: "20" }] },
-  { brand: "Land Rover", model: "Discovery", sizes: [{ w: "255", p: "55", r: "19" }, { w: "255", p: "50", r: "20" }] },
-  { brand: "Land Rover", model: "Discovery Sport", sizes: [{ w: "235", p: "60", r: "18" }, { w: "235", p: "55", r: "19" }] },
-  { brand: "Land Rover", model: "Range Rover Evoque", sizes: [{ w: "235", p: "60", r: "18" }, { w: "235", p: "55", r: "19" }] },
-  { brand: "Land Rover", model: "Range Rover Velar", sizes: [{ w: "255", p: "55", r: "19" }, { w: "255", p: "50", r: "20" }] },
+  { brand: "Land Rover", model: "Defender", sizes: [{ w: "255", p: "60", r: "20", version: "P400e HSE X-Dynamic", generation: "Defender (2020+)", years: "2020-2024" }] },
+  { brand: "Land Rover", model: "Discovery", sizes: [{ w: "255", p: "55", r: "18", version: "4.0 V8 ES Auto" }] },
+  { brand: "Land Rover", model: "Discovery Sport", sizes: [{ w: "235", p: "60", r: "18", version: "Si4 SE" }, { w: "235", p: "55", r: "19", version: "Si4 HSE" }] },
+  { brand: "Land Rover", model: "Range Rover Evoque", sizes: [{ w: "235", p: "55", r: "19", version: "Si4 Dynamic", generation: "Evoque (2012-2018)", years: "2012-2018" }, { w: "235", p: "50", r: "20", version: "MHEV SE", generation: "Evoque (2019+)", years: "2019-2024" }] },
+  { brand: "Land Rover", model: "Range Rover Velar", sizes: [{ w: "255", p: "50", r: "20", version: "2.0 S" }, { w: "265", p: "40", r: "22", version: "3.0 R-Dynamic" }] },
 
   // Lexus
-  { brand: "Lexus", model: "ES", sizes: [{ w: "215", p: "55", r: "17" }, { w: "235", p: "45", r: "18" }] },
-  { brand: "Lexus", model: "IS", sizes: [{ w: "225", p: "45", r: "17" }, { w: "225", p: "40", r: "18" }] },
-  { brand: "Lexus", model: "NX", sizes: [{ w: "225", p: "60", r: "18" }, { w: "235", p: "50", r: "20" }] },
-  { brand: "Lexus", model: "RX", sizes: [{ w: "235", p: "65", r: "18" }, { w: "235", p: "55", r: "20" }] },
-  { brand: "Lexus", model: "UX", sizes: [{ w: "215", p: "60", r: "17" }, { w: "225", p: "50", r: "18" }] },
+  { brand: "Lexus", model: "ES", sizes: [{ w: "235", p: "45", r: "18", version: "300h Luxury" }] },
+  { brand: "Lexus", model: "IS", sizes: [{ w: "235", p: "40", r: "19", version: "300 F-Sport - Delantero" }, { w: "265", p: "35", r: "19", version: "300 F-Sport - Trasero" }] },
+  { brand: "Lexus", model: "NX", sizes: [{ w: "235", p: "50", r: "20", version: "350 F-Sport" }] },
+  { brand: "Lexus", model: "RX", sizes: [{ w: "235", p: "50", r: "21", version: "350 F-Sport" }] },
+  { brand: "Lexus", model: "UX", sizes: [{ w: "225", p: "50", r: "18", version: "250h" }] },
 
   // Lifan
   { brand: "Lifan", model: "Foison", sizes: [{ w: "175", p: "70", r: "14" }] },
@@ -319,27 +319,27 @@ export const VEHICLE_DB: VehicleDBEntry[] = [
   { brand: "Lifan", model: "X70", sizes: [{ w: "215", p: "60", r: "17" }] },
 
   // Mercedes-Benz
-  { brand: "Mercedes-Benz", model: "Clase A", sizes: [{ w: "205", p: "55", r: "16", version: "A200 Style" }, { w: "225", p: "45", r: "17", version: "A200 Urban" }] },
-  { brand: "Mercedes-Benz", model: "Clase B", sizes: [{ w: "205", p: "55", r: "16" }] },
-  { brand: "Mercedes-Benz", model: "Clase C", sizes: [{ w: "225", p: "50", r: "17", version: "C200" }, { w: "225", p: "45", r: "18", version: "C250 / C300" }] },
-  { brand: "Mercedes-Benz", model: "Clase E", sizes: [{ w: "225", p: "55", r: "17" }, { w: "245", p: "45", r: "18" }] },
-  { brand: "Mercedes-Benz", model: "CLA", sizes: [{ w: "225", p: "45", r: "17" }, { w: "225", p: "40", r: "18" }] },
-  { brand: "Mercedes-Benz", model: "GLA", sizes: [{ w: "235", p: "50", r: "18" }] },
-  { brand: "Mercedes-Benz", model: "GLB", sizes: [{ w: "215", p: "65", r: "17" }, { w: "235", p: "55", r: "18" }] },
-  { brand: "Mercedes-Benz", model: "GLC", sizes: [{ w: "235", p: "60", r: "18" }] },
-  { brand: "Mercedes-Benz", model: "GLE", sizes: [{ w: "255", p: "50", r: "19" }, { w: "275", p: "45", r: "20" }] },
+  { brand: "Mercedes-Benz", model: "Clase A", sizes: [{ w: "205", p: "60", r: "16", version: "A200 Style" }, { w: "225", p: "45", r: "18", version: "A250 AMG Line" }] },
+  { brand: "Mercedes-Benz", model: "Clase B", sizes: [{ w: "205", p: "60", r: "16", version: "B200 Style" }] },
+  { brand: "Mercedes-Benz", model: "Clase C", sizes: [{ w: "225", p: "50", r: "17", version: "C200 Avantgarde" }, { w: "225", p: "45", r: "18", version: "C300 AMG-Line - Delantero" }, { w: "245", p: "40", r: "18", version: "C300 AMG-Line - Trasero" }] },
+  { brand: "Mercedes-Benz", model: "Clase E", sizes: [{ w: "245", p: "45", r: "17", version: "E350 Elegance (generación anterior)" }, { w: "245", p: "40", r: "19", version: "E400 4Matic AMG Line - Delantero" }, { w: "275", p: "35", r: "19", version: "E400 4Matic AMG Line - Trasero" }] },
+  { brand: "Mercedes-Benz", model: "CLA", sizes: [{ w: "225", p: "45", r: "17", version: "CLA200" }, { w: "225", p: "40", r: "18", version: "CLA250" }] },
+  { brand: "Mercedes-Benz", model: "GLA", sizes: [{ w: "235", p: "55", r: "18", version: "GLA200 Urban" }] },
+  { brand: "Mercedes-Benz", model: "GLB", sizes: [{ w: "215", p: "65", r: "17", version: "GLB200 Advance" }] },
+  { brand: "Mercedes-Benz", model: "GLC", sizes: [{ w: "235", p: "55", r: "19", version: "GLC300 4Matic - Delantero" }, { w: "255", p: "50", r: "19", version: "GLC300 4Matic - Trasero" }] },
+  { brand: "Mercedes-Benz", model: "GLE", sizes: [{ w: "275", p: "50", r: "20", version: "GLE450 4Matic AMG-Line" }] },
   { brand: "Mercedes-Benz", model: "Sprinter", sizes: [{ w: "225", p: "75", r: "16" }] },
   { brand: "Mercedes-Benz", model: "Vito", sizes: [{ w: "205", p: "65", r: "16", version: "Furgón" }, { w: "225", p: "55", r: "17", version: "Tourer" }] },
 
   // MG
-  { brand: "MG", model: "GT", sizes: [{ w: "215", p: "50", r: "17" }] },
+  { brand: "MG", model: "GT", sizes: [{ w: "205", p: "55", r: "16" }, { w: "215", p: "50", r: "17" }] },
   { brand: "MG", model: "HS", sizes: [{ w: "235", p: "50", r: "18" }] },
-  { brand: "MG", model: "ZS", sizes: [{ w: "215", p: "50", r: "17" }] },
+  { brand: "MG", model: "ZS", sizes: [{ w: "215", p: "60", r: "16" }, { w: "215", p: "55", r: "17" }, { w: "215", p: "50", r: "18" }] },
 
   // Mini
-  { brand: "Mini", model: "Clubman", sizes: [{ w: "205", p: "55", r: "16" }, { w: "225", p: "45", r: "17" }] },
-  { brand: "Mini", model: "Cooper", sizes: [{ w: "175", p: "65", r: "15" }, { w: "195", p: "55", r: "16" }, { w: "205", p: "45", r: "17" }] },
-  { brand: "Mini", model: "Countryman", sizes: [{ w: "205", p: "65", r: "16" }, { w: "225", p: "55", r: "17" }] },
+  { brand: "Mini", model: "Clubman", sizes: [{ w: "205", p: "55", r: "16", version: "Pepper" }, { w: "225", p: "40", r: "18", version: "Chili S" }] },
+  { brand: "Mini", model: "Cooper", sizes: [{ w: "195", p: "55", r: "16", version: "Classic" }, { w: "205", p: "40", r: "18", version: "JCW" }] },
+  { brand: "Mini", model: "Countryman", sizes: [{ w: "205", p: "55", r: "16", version: "1.6 Auto (1ra gen)" }, { w: "245", p: "45", r: "19", version: "S All4 Favoured (2da/3ra gen)" }] },
 
   // Mitsubishi
   { brand: "Mitsubishi", model: "L200", sizes: [{ w: "245", p: "70", r: "16" }, { w: "265", p: "65", r: "17" }] },
@@ -381,17 +381,17 @@ export const VEHICLE_DB: VehicleDBEntry[] = [
   { brand: "Peugeot", model: "Partner", sizes: [{ w: "175", p: "65", r: "14", version: "Confort" }, { w: "185", p: "65", r: "15", version: "Patagónica" }] },
 
   // Porsche
-  { brand: "Porsche", model: "911", sizes: [{ w: "235", p: "40", r: "19", version: "Front" }, { w: "295", p: "35", r: "20", version: "Rear" }] },
-  { brand: "Porsche", model: "Boxster", sizes: [{ w: "235", p: "45", r: "18" }, { w: "265", p: "45", r: "18" }] },
-  { brand: "Porsche", model: "Cayenne", sizes: [{ w: "255", p: "55", r: "19" }, { w: "275", p: "45", r: "20" }] },
-  { brand: "Porsche", model: "Cayman", sizes: [{ w: "235", p: "45", r: "18" }, { w: "265", p: "45", r: "18" }] },
-  { brand: "Porsche", model: "Macan", sizes: [{ w: "235", p: "60", r: "18" }, { w: "255", p: "55", r: "19" }] },
-  { brand: "Porsche", model: "Panamera", sizes: [{ w: "245", p: "50", r: "18" }, { w: "275", p: "45", r: "18" }] },
+  { brand: "Porsche", model: "911", sizes: [{ w: "235", p: "40", r: "19", version: "Carrera - Delantero" }, { w: "295", p: "35", r: "20", version: "Carrera - Trasero" }, { w: "245", p: "35", r: "20", version: "Carrera S - Delantero" }, { w: "305", p: "30", r: "20", version: "Carrera S - Trasero" }] },
+  { brand: "Porsche", model: "Boxster", sizes: [{ w: "205", p: "55", r: "16", version: "2.7 - Delantero (base)" }, { w: "225", p: "50", r: "16", version: "2.7 - Trasero (base)" }, { w: "235", p: "40", r: "18", version: "S Cabriolet - Delantero" }, { w: "265", p: "40", r: "18", version: "S Cabriolet - Trasero" }] },
+  { brand: "Porsche", model: "Cayenne", sizes: [{ w: "255", p: "55", r: "18", version: "3.6 V6 base" }, { w: "285", p: "40", r: "21", version: "4.0 V8 Turbo - Delantero" }, { w: "315", p: "35", r: "21", version: "4.0 V8 Turbo - Trasero" }] },
+  { brand: "Porsche", model: "Cayman", sizes: [{ w: "235", p: "40", r: "18", version: "2.7 - Delantero" }, { w: "265", p: "40", r: "18", version: "2.7 - Trasero" }] },
+  { brand: "Porsche", model: "Macan", sizes: [{ w: "265", p: "45", r: "20", version: "2.0 T - Delantero" }, { w: "295", p: "40", r: "20", version: "2.0 T - Trasero" }, { w: "265", p: "40", r: "21", version: "3.6 Turbo - Delantero" }, { w: "295", p: "35", r: "21", version: "3.6 Turbo - Trasero" }] },
+  { brand: "Porsche", model: "Panamera", sizes: [{ w: "265", p: "45", r: "19", version: "2.9 V6 - Delantero" }, { w: "295", p: "40", r: "19", version: "2.9 V6 - Trasero" }, { w: "275", p: "35", r: "21", version: "4.0 V8 Turbo - Delantero" }, { w: "315", p: "30", r: "21", version: "4.0 V8 Turbo - Trasero" }] },
 
   // RAM
-  { brand: "RAM", model: "RAM 1500", sizes: [{ w: "275", p: "60", r: "20" }] },
+  { brand: "RAM", model: "RAM 1500", sizes: [{ w: "275", p: "60", r: "20", version: "Laramie / Limited" }, { w: "275", p: "70", r: "18", version: "Rebel" }] },
   { brand: "RAM", model: "RAM 2500", sizes: [{ w: "275", p: "70", r: "18" }] },
-  { brand: "RAM", model: "Rampage", sizes: [{ w: "235", p: "60", r: "17", version: "Rebel" }, { w: "235", p: "55", r: "18", version: "Laramie / R/T" }] },
+  { brand: "RAM", model: "Rampage", sizes: [{ w: "235", p: "65", r: "17", version: "Rebel" }, { w: "235", p: "60", r: "18", version: "Laramie / Laramie Night Edition" }, { w: "235", p: "55", r: "19", version: "R/T" }] },
 
   // Renault
   { brand: "Renault", model: "Alaskan", sizes: [{ w: "245", p: "70", r: "16", version: "Zen" }, { w: "255", p: "60", r: "18", version: "Intens / Iconic" }] },
@@ -436,10 +436,10 @@ export const VEHICLE_DB: VehicleDBEntry[] = [
 
   // Suzuki
   { brand: "Suzuki", model: "Fun", sizes: [{ w: "165", p: "70", r: "13", version: "Base" }, { w: "175", p: "65", r: "14" }] },
-  { brand: "Suzuki", model: "Grand Vitara", sizes: [{ w: "235", p: "60", r: "16" }, { w: "225", p: "65", r: "17" }] },
-  { brand: "Suzuki", model: "Jimny", sizes: [{ w: "195", p: "80", r: "15" }, { w: "205", p: "70", r: "15" }] },
-  { brand: "Suzuki", model: "Swift", sizes: [{ w: "185", p: "55", r: "16" }] },
-  { brand: "Suzuki", model: "Vitara", sizes: [{ w: "215", p: "55", r: "17" }] },
+  { brand: "Suzuki", model: "Grand Vitara", sizes: [{ w: "215", p: "60", r: "17", generation: "Grand Vitara JIII", years: "2024-presente" }, { w: "235", p: "60", r: "16", generation: "Grand Vitara JT/JB", years: "2006-2015" }, { w: "225", p: "65", r: "17", generation: "Grand Vitara JT/JB", years: "2006-2015" }] },
+  { brand: "Suzuki", model: "Jimny", sizes: [{ w: "195", p: "80", r: "15", generation: "Jimny (JB74/JB64)", years: "2019-presente" }, { w: "205", p: "70", r: "15", generation: "Jimny JB43", years: "2005-2011" }] },
+  { brand: "Suzuki", model: "Swift", sizes: [{ w: "175", p: "65", r: "14", version: "GL" }, { w: "185", p: "55", r: "16", version: "GLX" }] },
+  { brand: "Suzuki", model: "Vitara", sizes: [{ w: "215", p: "60", r: "16" }, { w: "215", p: "55", r: "17" }] },
 
   // Toyota
   { brand: "Toyota", model: "Camry", sizes: [{ w: "215", p: "60", r: "16" }, { w: "215", p: "55", r: "17" }] },
@@ -482,12 +482,12 @@ export const VEHICLE_DB: VehicleDBEntry[] = [
   { brand: "Volkswagen", model: "Voyage", sizes: [{ w: "175", p: "70", r: "14", version: "Trendline (G4-based)", generation: "Voyage I", years: "2008-2012" }, { w: "175", p: "70", r: "14", version: "Trendline", generation: "Voyage II", years: "2012-2019" }, { w: "185", p: "65", r: "14", version: "Comfortline", generation: "Voyage II", years: "2012-2019" }, { w: "195", p: "55", r: "15", version: "Highline", generation: "Voyage II", years: "2012-2019" }] },
 
   // Volvo
-  { brand: "Volvo", model: "C30", sizes: [{ w: "205", p: "55", r: "16" }, { w: "205", p: "50", r: "17" }] },
-  { brand: "Volvo", model: "S60", sizes: [{ w: "215", p: "55", r: "16" }, { w: "225", p: "50", r: "17" }] },
-  { brand: "Volvo", model: "V40", sizes: [{ w: "205", p: "55", r: "16" }, { w: "225", p: "45", r: "17" }] },
-  { brand: "Volvo", model: "XC40", sizes: [{ w: "235", p: "55", r: "18" }, { w: "235", p: "50", r: "19" }] },
-  { brand: "Volvo", model: "XC60", sizes: [{ w: "235", p: "60", r: "18" }, { w: "235", p: "55", r: "19" }] },
-  { brand: "Volvo", model: "XC90", sizes: [{ w: "235", p: "60", r: "18" }, { w: "275", p: "45", r: "20" }] },
+  { brand: "Volvo", model: "C30", sizes: [{ w: "205", p: "55", r: "16", version: "2.4i" }, { w: "205", p: "50", r: "17", version: "2.5 Turbo T5" }] },
+  { brand: "Volvo", model: "S60", sizes: [{ w: "215", p: "55", r: "16", version: "2.4D (1ra gen)" }, { w: "215", p: "50", r: "17", version: "T6 Momentum (2da gen)" }] },
+  { brand: "Volvo", model: "V40", sizes: [{ w: "205", p: "50", r: "17", version: "T4 Momentum" }] },
+  { brand: "Volvo", model: "XC40", sizes: [{ w: "235", p: "55", r: "18", version: "T4 Kinetic" }, { w: "245", p: "45", r: "20", version: "T5 AWD R-Design" }] },
+  { brand: "Volvo", model: "XC60", sizes: [{ w: "235", p: "60", r: "18", version: "T5 Momentum" }, { w: "255", p: "45", r: "20", version: "T6 Inscription" }] },
+  { brand: "Volvo", model: "XC90", sizes: [{ w: "275", p: "45", r: "20", version: "T6 Momentum" }] },
 
   // Zotye
   { brand: "Zotye", model: "Z100", sizes: [{ w: "165", p: "60", r: "14" }] }
