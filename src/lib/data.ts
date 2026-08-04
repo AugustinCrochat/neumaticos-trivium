@@ -151,6 +151,16 @@ export const SERVICES: Service[] = [
 // actual. Las más útiles para alguien que está por comprar van arriba.
 export const BLOG_POSTS: BlogPost[] = [
   {
+    id: "11",
+    title: "Medidas flotation: qué significa 31x10.5R15 y cómo pasarlo a métrico",
+    excerpt:
+      "Los neumáticos LT, A/T y M/T de camioneta a veces vienen marcados en pulgadas en vez de en milímetros. Formato, fórmula de conversión y tabla de equivalencias.",
+    imageUrl: "/images/blog-3.webp",
+    date: "2026-08-04",
+    slug: "medidas-flotation-camionetas",
+    category: "Guías",
+  },
+  {
     id: "1",
     title: "¿Cada cuántos kilómetros cambiar los neumáticos?",
     excerpt:
