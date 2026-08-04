@@ -1,12 +1,5 @@
 import { ImageResponse } from "next/og";
-import { DEFAULT_BRANCH_ID } from "@/lib/config";
-import { getProductosDesdePOS } from "@/lib/pos-api";
-import {
-  formatSize,
-  parseRimSlug,
-  parseSizeSlug,
-  sizesEqual,
-} from "@/lib/tire-sizes";
+import { formatSize, parseRimSlug, parseSizeSlug } from "@/lib/tire-sizes";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
@@ -17,9 +10,8 @@ export default async function Image({ params }: { params: Promise<{ medida: stri
   const rim = parseRimSlug(medida);
   let title = "Neumáticos Trivium";
   let subtitle = "";
-  let priceText = "";
   let typeLabel = "NEUMÁTICOS";
-  let footerExtra = "Importación directa · Precios outlet";
+  const footerExtra = "Importación directa · Precios outlet";
 
   if (rim !== null) {
     typeLabel = `RODADO R${rim}`;
@@ -30,21 +22,7 @@ export default async function Image({ params }: { params: Promise<{ medida: stri
     if (tireSize) {
       typeLabel = "MEDIDA";
       title = formatSize(tireSize);
-      
-      try {
-        const productos = await getProductosDesdePOS(DEFAULT_BRANCH_ID);
-        const enStock = productos.filter((p) => sizesEqual(p.size, tireSize) && p.enStock);
-        const desde = enStock.length ? Math.min(...enStock.map((p) => p.price)) : null;
-        if (desde) {
-          priceText = `Desde $${desde.toLocaleString("es-AR")}`;
-          subtitle = "Stock disponible";
-        } else {
-          subtitle = "Precios y equivalencias";
-        }
-      } catch (err) {
-        console.error("Error fetching POS prices for OG image", err);
-        subtitle = "Precios y equivalencias";
-      }
+      subtitle = "Precios y equivalencias";
     }
   }
 
@@ -97,12 +75,6 @@ export default async function Image({ params }: { params: Promise<{ medida: stri
             <span style={{ fontSize: 64, fontWeight: 900, color: "white", lineHeight: 1, textAlign: "center" }}>
               {title}
             </span>
-
-            {priceText && (
-              <span style={{ fontSize: 36, fontWeight: 900, color: "#34d399", marginTop: 16, lineHeight: 1 }}>
-                {priceText}
-              </span>
-            )}
 
             {subtitle && (
               <span style={{ fontSize: 18, color: "#a8c8ec", marginTop: 16, fontWeight: 600, textAlign: "center" }}>
