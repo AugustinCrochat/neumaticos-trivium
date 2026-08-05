@@ -33,14 +33,26 @@ const STORAGE_KEY = "trivium-vehicle";
 const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
 export function VehicleProvider({
-  vehiculos,
+  vehiculos: initialVehiculos,
   children,
 }: {
   vehiculos: VehiculoOption[];
   children: ReactNode;
 }) {
+  const [vehiculos, setVehiculos] = useState(initialVehiculos);
   const [selectedVehicle, setSelectedVehicleState] = useState<SelectedVehicle | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // El layout raíz pasa la lista estática (sin red) para no bloquear el
+  // render de todo el sitio; acá se completa con el listado en vivo del POS.
+  useEffect(() => {
+    fetch("/api/vehiculos")
+      .then((res) => res.json())
+      .then((data: { vehiculos: VehiculoOption[] }) => {
+        if (data.vehiculos?.length) setVehiculos(data.vehiculos);
+      })
+      .catch(() => {});
+  }, []);
 
   useIsomorphicLayoutEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY);

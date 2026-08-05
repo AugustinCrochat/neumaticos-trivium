@@ -13,7 +13,7 @@ import { Footer } from "@/components/layout/Footer";
 import { CartProvider } from "@/contexts/cart-context";
 import { CartDrawer } from "@/components/ui/CartDrawer";
 import { FloatingSearchWidget } from "@/components/ui/FloatingSearchWidget";
-import { getVehiculosDesdePOS } from "@/lib/pos-api";
+import { getAllVehicleOptions } from "@/lib/vehicles";
 
 const geist = Geist({
   variable: "--font-geist-sans",
@@ -68,12 +68,16 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const vehiculos = await getVehiculosDesdePOS();
+  // Lista estática, sin red: el listado completo del POS se carga desde el
+  // cliente (VehicleProvider hace fetch a /api/vehiculos) para no bloquear
+  // el render de todas las páginas del sitio con un fetch al POS en el
+  // layout raíz — ver memoria cache-incremental-sin-r2 y el error 1102.
+  const vehiculos = getAllVehicleOptions();
   return (
     <html lang="es" className={`${geist.variable} h-full antialiased`}>
       <head>
