@@ -110,6 +110,15 @@ function fixBrandAndModel(rawMarca: string, rawModelo: string): { marca: string;
   if (/terra xplorer/i.test(rawMarca)) {
     return { marca: "Zmax", modelo: "Terra Xplorer" };
   }
+  
+  if (marcaUpper === "ZMAX") {
+    if (/terra xplorer/i.test(rawModelo)) {
+      return { marca: "Zmax", modelo: "Terra Xplorer" };
+    }
+    if (/landgema/i.test(rawModelo)) {
+      return { marca: "Zmax", modelo: "Landgema" };
+    }
+  }
 
   return { marca: rawMarca, modelo: fixModelName(rawModelo) };
 }
