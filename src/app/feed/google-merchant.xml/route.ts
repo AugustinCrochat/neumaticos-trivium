@@ -62,6 +62,8 @@ function tireItem(p: TireProduct): string {
       <g:brand>${cdata(p.brand)}</g:brand>
       <g:identifier_exists>no</g:identifier_exists>
       <g:product_type>${cdata(`Neumáticos > ${p.brand}`)}</g:product_type>${SHIPPING_BLOCK}
+      <g:excluded_destination>free_local_listings</g:excluded_destination>
+      <g:excluded_destination>local_inventory_ads</g:excluded_destination>
     </item>`;
 }
 
@@ -83,6 +85,8 @@ function accessoryItem(a: Accessory & { imageUrl: string }): string {
       <g:brand>${cdata("Z3")}</g:brand>
       <g:identifier_exists>no</g:identifier_exists>
       <g:product_type>${cdata("Tuercas Antirrobo")}</g:product_type>${SHIPPING_BLOCK}
+      <g:excluded_destination>free_local_listings</g:excluded_destination>
+      <g:excluded_destination>local_inventory_ads</g:excluded_destination>
     </item>`;
 }
 
