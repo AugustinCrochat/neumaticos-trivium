@@ -145,27 +145,7 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
               </div>
             )}
           </div>
-        ) : (
-          <div className="bg-red-50 border border-red-200 rounded-2xl p-4 flex items-start gap-3">
-            <div className="w-5 h-5 rounded-full bg-red-100 flex items-center justify-center text-red-600 shrink-0 mt-0.5">
-              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </div>
-            <div>
-              <p className="text-sm font-black text-red-950 leading-none">Medida No Recomendada</p>
-              <p className="text-xs text-red-800 mt-1.5 leading-relaxed">
-                Esta medida difiere demasiado de la original para tu <span className="font-bold">{selectedVehicle.marca} {selectedVehicle.modelo}</span> (original: {formatSize(vehicleSize!)}).
-              </p>
-              <p className="text-[10px] text-red-700 font-medium mt-1">
-                Variación de diámetro: {diffPercent > 0 ? "+" : ""}{diffPercent.toFixed(1)}% (excede el estándar máximo de seguridad de ±3%).
-              </p>
-              <p className="text-xs text-red-850 font-bold mt-2">
-                * No se aconseja su colocación por seguridad (puede descalibrar el velocímetro, ABS y control de estabilidad).
-              </p>
-            </div>
-          </div>
-        )}
+        ) : null}
       </div>
       )}
 
