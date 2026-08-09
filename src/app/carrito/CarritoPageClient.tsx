@@ -158,7 +158,7 @@ export function CarritoPageClient() {
             {error && <p className="mb-3 rounded-lg bg-red-50 p-3 text-sm font-medium text-red-700">{error}</p>}
             <button
               onClick={() => checkout("mercadopago")}
-              disabled={isLoading || shippingIncomplete}
+              disabled={!!isLoading || shippingIncomplete}
               className="w-full flex items-center justify-center gap-2 rounded-xl bg-[#FFE600] hover:bg-[#f5dc00] disabled:opacity-60 text-navy-900 font-black py-3.5 transition-colors mb-3"
             >
               {isLoading === "mercadopago" ? (
@@ -174,7 +174,7 @@ export function CarritoPageClient() {
             </button>
             <button
               onClick={() => checkout("gocuotas")}
-              disabled={isLoading || shippingIncomplete}
+              disabled={!!isLoading || shippingIncomplete}
               className="w-full flex items-center justify-center gap-2 rounded-xl bg-[#001D4A] hover:bg-[#002766] text-white disabled:opacity-60 font-black py-3.5 transition-colors"
             >
               {isLoading === "gocuotas" ? (
