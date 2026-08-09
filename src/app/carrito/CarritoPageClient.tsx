@@ -20,7 +20,7 @@ export function CarritoPageClient() {
   const { items, itemsTotal, shippingCost, total, removeItem, updateQuantity, addService, addAccessory, deliveryMethod, shippingAddress } = useCart();
   const { selectedBranch } = useBranch();
   const { selectedVehicle } = useVehicle();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<false | "mercadopago" | "gocuotas">(false);
   const [error, setError] = useState("");
   const combo = useUpsellCombo();
   const accesorios = useAccesorios();
@@ -36,11 +36,12 @@ export function CarritoPageClient() {
   const hasAccessoryInCart = items.some((item) => item.kind === "accessory" && item.id === compatibleAccessory?.id);
   const showAccessoryUpsell = hasTires && !!compatibleAccessory && !hasAccessoryInCart;
 
-  async function checkout() {
+  async function checkout(gateway: "mercadopago" | "gocuotas") {
     setError("");
-    setIsLoading(true);
+    setIsLoading(gateway);
     try {
-      const response = await fetch("/api/checkout", {
+      const endpoint = gateway === "gocuotas" ? "/api/checkout-gocuotas" : "/api/checkout";
+      const response = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -156,11 +157,11 @@ export function CarritoPageClient() {
             </p>
             {error && <p className="mb-3 rounded-lg bg-red-50 p-3 text-sm font-medium text-red-700">{error}</p>}
             <button
-              onClick={checkout}
+              onClick={() => checkout("mercadopago")}
               disabled={isLoading || shippingIncomplete}
-              className="w-full flex items-center justify-center gap-2 rounded-xl bg-[#FFE600] hover:bg-[#f5dc00] disabled:opacity-60 text-navy-900 font-black py-3.5 transition-colors"
+              className="w-full flex items-center justify-center gap-2 rounded-xl bg-[#FFE600] hover:bg-[#f5dc00] disabled:opacity-60 text-navy-900 font-black py-3.5 transition-colors mb-3"
             >
-              {isLoading ? (
+              {isLoading === "mercadopago" ? (
                 "Redirigiendo al pago…"
               ) : shippingIncomplete ? (
                 "Completá la dirección de envío"
@@ -171,7 +172,20 @@ export function CarritoPageClient() {
                 </>
               )}
             </button>
-            <Link href="/catalogo" className="block text-center mt-3 text-sm font-bold text-navy-700 hover:text-navy-900 transition-colors">
+            <button
+              onClick={() => checkout("gocuotas")}
+              disabled={isLoading || shippingIncomplete}
+              className="w-full flex items-center justify-center gap-2 rounded-xl bg-[#001D4A] hover:bg-[#002766] text-white disabled:opacity-60 font-black py-3.5 transition-colors"
+            >
+              {isLoading === "gocuotas" ? (
+                "Redirigiendo a GOcuotas…"
+              ) : shippingIncomplete ? (
+                "Completá la dirección de envío"
+              ) : (
+                "Pagar con GOcuotas (Débito en Cuotas)"
+              )}
+            </button>
+            <Link href="/catalogo" className="block text-center mt-4 text-sm font-bold text-navy-700 hover:text-navy-900 transition-colors">
               Seguir comprando
             </Link>
           </div>
