@@ -18,9 +18,7 @@
 		// pos-api.ts arma /{sucursal}/productos, etc. según la sucursal elegida.
 		"POS_API_BASE_URL": "https://pos-neumaticos.vercel.app/api/public",
 		"GOOGLE_AI_KEY": "AIzaSyCwuPQrjs0L9x_QnqLOmlHJ9VIX4wyBBOM",
-		"MERCADOPAGO_ACCESS_TOKEN": "APP_USR-6323540170330488-071417-4413e75117545308b4946db2d376bbf4-3541709725",
-		"GOCUOTAS_EMAIL": "etienne.crochat@trivium.ar",
-		"GOCUOTAS_PASSWORD": "_TriviumLoise1815"
+		"MERCADOPAGO_ACCESS_TOKEN": "APP_USR-6323540170330488-071417-4413e75117545308b4946db2d376bbf4-3541709725"
 	},
 	"assets": {
 		"directory": ".open-next/assets",
