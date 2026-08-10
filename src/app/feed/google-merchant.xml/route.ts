@@ -49,13 +49,14 @@ function availability(enStock: boolean | undefined): "in_stock" | "out_of_stock"
 function tireItem(p: TireProduct): string {
   const link = `${SITE_URL}/productos/${p.slug}`;
   const description = `Neumático ${p.model} — importación directa, outlet de neumáticos. Garantía de 1 año.`;
+  const imageUrl = p.imageUrl.startsWith("/") ? `${SITE_URL}${p.imageUrl}` : p.imageUrl;
   return `
     <item>
       <g:id>${escapeXml(p.id)}</g:id>
       <title>${cdata(p.model)}</title>
       <description>${cdata(description)}</description>
       <link>${escapeXml(link)}</link>
-      <g:image_link>${escapeXml(p.imageUrl)}</g:image_link>
+      <g:image_link>${escapeXml(imageUrl)}</g:image_link>
       <g:condition>new</g:condition>
       <g:availability>${availability(p.enStock)}</g:availability>
       <g:price>${p.price.toFixed(2)} ARS</g:price>
@@ -72,13 +73,14 @@ function accessoryItem(a: Accessory & { imageUrl: string }): string {
   const description = a.descripcion
     ? `Tuerca antirrobo para ruedas — compatible con ${a.descripcion}. Colocación sin cargo en nuestra sucursal.`
     : "Tuerca antirrobo para ruedas. Colocación sin cargo en nuestra sucursal.";
+  const imageUrl = a.imageUrl.startsWith("/") ? `${SITE_URL}${a.imageUrl}` : a.imageUrl;
   return `
     <item>
       <g:id>${escapeXml(a.id)}</g:id>
       <title>${cdata(a.nombre)}</title>
       <description>${cdata(description)}</description>
       <link>${escapeXml(link)}</link>
-      <g:image_link>${escapeXml(a.imageUrl)}</g:image_link>
+      <g:image_link>${escapeXml(imageUrl)}</g:image_link>
       <g:condition>new</g:condition>
       <g:availability>${availability(a.enStock)}</g:availability>
       <g:price>${a.price.toFixed(2)} ARS</g:price>
