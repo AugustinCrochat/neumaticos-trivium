@@ -132,9 +132,14 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
               </div>
             </div>
             {benefits.length > 0 && (
-              <div className="pt-2.5 border-t border-orange-200/50">
-                <p className="text-[10px] font-black text-orange-900 uppercase tracking-wider mb-2">Efectos de esta medida en tu auto:</p>
-                <ul className="space-y-1.5">
+              <details className="pt-2.5 border-t border-orange-200/50 group">
+                <summary className="text-[10px] font-black text-orange-900 uppercase tracking-wider cursor-pointer list-none [&::-webkit-details-marker]:hidden flex items-center justify-between">
+                  Efectos de esta medida en tu auto
+                  <svg className="w-3.5 h-3.5 text-orange-600 transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </summary>
+                <ul className="space-y-1.5 mt-3">
                   {benefits.map((b, idx) => (
                     <li key={idx} className="text-xs text-orange-800 flex items-start gap-1.5 leading-normal">
                       <span className="text-orange-500 shrink-0 mt-1">•</span>
@@ -142,7 +147,7 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
                     </li>
                   ))}
                 </ul>
-              </div>
+              </details>
             )}
           </div>
         ) : null}
