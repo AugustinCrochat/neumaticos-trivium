@@ -20,11 +20,12 @@ function tireItem(p: TireProduct, storeCode: string): string {
   return `
     <item>
       <g:id>${p.id}</g:id>
-      <g:item_id>${p.id}</g:item_id>
       <g:store_code>${cdata(storeCode)}</g:store_code>
       <g:availability>${p.enStock ? "in_stock" : "out_of_stock"}</g:availability>
       <g:price>${p.price.toFixed(2)} ARS</g:price>
       <g:quantity>${p.stock ?? 0}</g:quantity>
+      <g:pickup_method>buy</g:pickup_method>
+      <g:pickup_sla>same_day</g:pickup_sla>
     </item>`;
 }
 
@@ -32,11 +33,12 @@ function accessoryItem(a: Accessory, storeCode: string): string {
   return `
     <item>
       <g:id>${a.id}</g:id>
-      <g:item_id>${a.id}</g:item_id>
       <g:store_code>${cdata(storeCode)}</g:store_code>
       <g:availability>${a.enStock ? "in_stock" : "out_of_stock"}</g:availability>
       <g:price>${a.price.toFixed(2)} ARS</g:price>
       <g:quantity>${a.stock}</g:quantity>
+      <g:pickup_method>buy</g:pickup_method>
+      <g:pickup_sla>same_day</g:pickup_sla>
     </item>`;
 }
 
