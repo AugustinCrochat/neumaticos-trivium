@@ -498,7 +498,11 @@ export function getSizesForVehicle(brand: string, model: string): VehicleDBEntry
   return entry ? entry.sizes : null;
 }
 
+let cachedOptions: { marca: string; modelo: string; label: string }[] | null = null;
+
 export function getAllVehicleOptions(): { marca: string; modelo: string; label: string }[] {
+  if (cachedOptions) return cachedOptions;
+
   const mergedMap = new Map<string, { marca: string; modelo: string; label: string }>();
 
   // Agregar primero los vehículos con medidas mapeadas (VEHICLE_DB)
@@ -523,9 +527,11 @@ export function getAllVehicleOptions(): { marca: string; modelo: string; label: 
     }
   }
 
-  return Array.from(mergedMap.values()).sort((a, b) => {
+  cachedOptions = Array.from(mergedMap.values()).sort((a, b) => {
     const la = a.label;
     const lb = b.label;
     return la > lb ? 1 : la < lb ? -1 : 0;
   });
+
+  return cachedOptions;
 }

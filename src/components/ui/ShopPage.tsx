@@ -383,6 +383,7 @@ export function ShopPage({
   const [onlyCarga, setOnlyCarga] = useState(false);
   const [onlyAT, setOnlyAT] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(24);
 
   const parsed = useMemo(() => (medida ? parseMedida(medida) : null), [medida]);
 
@@ -540,11 +541,23 @@ export function ShopPage({
                     </button>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                    {allProducts.map(product => (
-                      <ProductCard key={product.id} product={product} />
-                    ))}
-                  </div>
+                  <>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                      {allProducts.slice(0, visibleCount).map(product => (
+                        <ProductCard key={product.id} product={product} />
+                      ))}
+                    </div>
+                    {visibleCount < allProducts.length && (
+                      <div className="mt-8 flex justify-center">
+                        <button
+                          onClick={() => setVisibleCount(prev => prev + 24)}
+                          className="bg-white border-2 border-slate-200 hover:border-navy-600 text-navy-800 hover:text-navy-900 font-bold py-3 px-8 rounded-xl transition-all shadow-sm"
+                        >
+                          Ver más neumáticos
+                        </button>
+                      </div>
+                    )}
+                  </>
                 )}
               </>
             )}
