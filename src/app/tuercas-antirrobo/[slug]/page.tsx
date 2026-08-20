@@ -4,14 +4,20 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { getAccesoriosDesdePOS } from "@/lib/pos-api";
 import { getSelectedBranchSlug } from "@/lib/branch-server";
-import { SITE_URL } from "@/lib/config";
+import { DEFAULT_BRANCH_ID, SITE_URL } from "@/lib/config";
 import { AccessoryAddToCart } from "@/components/ui/AccessoryAddToCart";
 
 export const revalidate = 300;
 
 type Props = { params: Promise<{ slug: string }> };
 
-// Sin generateStaticParams: se genera on-demand (ISR) contra el catálogo real del POS.
+// Mismo caso que /productos/[slug]: con generateStaticParams las tuercas que
+// ya están en el POS salen prerenderizadas y las nuevas se generan on-demand,
+// pero cacheadas. Sin esto la ruta era totalmente dinámica.
+export async function generateStaticParams() {
+  const accesorios = await getAccesoriosDesdePOS(DEFAULT_BRANCH_ID);
+  return accesorios.map((a) => ({ slug: a.slug }));
+}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;

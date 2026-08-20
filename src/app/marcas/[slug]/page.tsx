@@ -11,10 +11,14 @@ import { canonical, itemListJsonLd, SITE_NAME } from "@/lib/seo";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbJsonLd } from "@/lib/seo";
 
-// Sin generateStaticParams: se genera on-demand (ISR) contra el catálogo real
-// del POS, igual que /productos/[slug]. Ya no lee la cookie de sucursal — ver
-// src/lib/branch-server.ts.
 export const revalidate = 300;
+
+// El set de marcas se conoce en build time (BRANDS es estático). Sin esto la
+// ruta sale con `no-cache, no-store` y el `revalidate` de arriba no aplica —
+// ver el comentario largo en /productos/[slug]/page.tsx.
+export function generateStaticParams() {
+  return BRANDS.map((b) => ({ slug: b.id }));
+}
 
 type Props = { params: Promise<{ slug: string }> };
 

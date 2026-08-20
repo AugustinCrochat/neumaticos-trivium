@@ -18,8 +18,19 @@ export const revalidate = 300;
 
 type Props = { params: Promise<{ slug: string }> };
 
-// Sin generateStaticParams: las páginas se generan on-demand (ISR) contra el
-// catálogo real del POS, no se conoce el set de slugs en build time.
+// Con generateStaticParams + dynamicParams (el default): los productos que
+// existen en el POS al buildear salen prerenderizados, y los que se agreguen
+// después se generan on-demand y quedan cacheados igual.
+//
+// No alcanza con `revalidate`: una ruta dinámica SIN generateStaticParams
+// Next la trata como totalmente dinámica (sale con `no-cache, no-store`) y el
+// `revalidate` de arriba no se aplica nunca. Estas son las páginas más
+// visitadas del sitio (Merchant Center, el bot de WhatsApp), así que estaban
+// haciendo SSR completo en el Worker en cada visita.
+export async function generateStaticParams() {
+  const productos = await getProductosDesdePOS(DEFAULT_BRANCH_ID);
+  return productos.map((p) => ({ slug: p.slug }));
+}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
