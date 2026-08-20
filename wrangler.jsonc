@@ -32,6 +32,25 @@
 			"bucket_name": "neumaticos-trivium-cache"
 		}
 	],
+	// Cola de revalidación ISR de OpenNext (ver open-next.config.ts). El nombre
+	// del binding lo exige el override do-queue — no cambiarlo.
+	"durable_objects": {
+		"bindings": [
+			{
+				"name": "NEXT_CACHE_DO_QUEUE",
+				"class_name": "DOQueueHandler"
+			}
+		]
+	},
+	// SQLite y no key-value: DOQueueHandler usa ctx.storage.sql para su tabla
+	// de sincronización, y las clases nuevas con SQLite son las únicas que
+	// andan fuera del plan pago de Durable Objects.
+	"migrations": [
+		{
+			"tag": "v1",
+			"new_sqlite_classes": ["DOQueueHandler"]
+		}
+	],
 	"services": [
 		{
 			// Self-reference: necesario para el cache interno de OpenNext.

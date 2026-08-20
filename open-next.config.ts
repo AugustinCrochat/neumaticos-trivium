@@ -12,26 +12,37 @@
 import { defineCloudflareConfig } from "@opennextjs/cloudflare";
 import r2IncrementalCache from "@opennextjs/cloudflare/overrides/incremental-cache/r2-incremental-cache";
 import { withRegionalCache } from "@opennextjs/cloudflare/overrides/incremental-cache/regional-cache";
-import memoryQueue from "@opennextjs/cloudflare/overrides/queue/memory-queue";
+import doQueue from "@opennextjs/cloudflare/overrides/queue/do-queue";
+import withCachedQueue from "@opennextjs/cloudflare/overrides/queue/queue-cache";
 
 export default defineCloudflareConfig({
   incrementalCache: withRegionalCache(r2IncrementalCache, { mode: "long-lived" }),
   // Sin tagCache a propósito: el sitio no usa revalidateTag ni revalidatePath
   // (todo revalida por tiempo), así que sumar D1/KV solo agregaría latencia.
   //
-  // Cola de revalidación ISR. Sin esto OpenNext usa la "dummy queue", que
-  // tira `FatalError: Dummy queue is not implemented` apenas una entrada del
-  // caché se pone stale y hay que revalidarla en background: la request
-  // moría con 500 en vez de servir el HTML viejo. Se comió /catalogo,
-  // /marcas, /neumaticos/*, /servicios/*, /blog/* y /tuercas-antirrobo,
-  // cada una al vencer su `revalidate`.
+  // Cola de revalidación ISR. Sin `queue` OpenNext usa la dummy queue, que
+  // tira `FatalError: Dummy queue is not implemented` apenas vence un
+  // `revalidate` — eso tiraba el sitio entero con 500.
   //
-  // memory-queue alcanza y no suma infra: usa el service binding
-  // WORKER_SELF_REFERENCE que ya está en wrangler.jsonc y hace un HEAD a la
-  // propia ruta. El dedupe es por isolate (no global como el do-queue), lo
-  // que a lo sumo dispara alguna revalidación de más — barato al lado de
-  // agregar un Durable Object.
-  queue: memoryQueue,
+  // Tiene que ser el queue de Durable Object, NO memory-queue. OpenNext hace
+  // `await queue.send(...)` DENTRO de la request del usuario (ver
+  // cacheInterceptor). memory-queue resuelve ese send haciendo un fetch a la
+  // propia ruta y esperándolo, así que el render completo de la página se
+  // paga en la request que lo disparó: probado en producción, daba
+  // `exceededCpu` / error 1102 y hasta 503 en la home.
+  //
+  // DOQueueHandler.revalidate() en cambio agenda el trabajo con
+  // `ctx.waitUntil` del propio Durable Object y devuelve enseguida: el render
+  // corre fuera de la request y con el presupuesto de CPU del DO. Además
+  // dedupea entre isolates (memory-queue solo dentro de uno) y reintenta con
+  // backoff si falla.
+  //
+  // El wrapper `withCachedQueue` suma dos cosas: no vuelve a encolar la misma
+  // ruta durante 30s (menos llamadas al DO), y atrapa cualquier excepción del
+  // send. Eso último es el seguro de vida: si la revalidación falla, la
+  // request sirve el HTML viejo (que es lo que stale-while-revalidate
+  // promete) en vez de devolver 500.
+  queue: withCachedQueue(doQueue, { regionalCacheTtlSec: 30 }),
   // Sirve el HTML cacheado antes de arrancar el server de Next — es el que
   // evita el render completo en el Worker. No usamos PPR, así que es seguro.
   enableCacheInterception: true,
