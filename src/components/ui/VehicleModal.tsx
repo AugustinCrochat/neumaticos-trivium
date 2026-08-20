@@ -5,7 +5,13 @@ import { useVehicle } from "@/contexts/vehicle-context";
 import { VehicleCombobox } from "@/components/ui/VehicleCombobox";
 
 export function VehicleModal() {
-  const { vehiculos, selectedVehicle, setSelectedVehicle, clearSelectedVehicle, isModalOpen, closeModal } = useVehicle();
+  const { vehiculos, loadVehiculos, selectedVehicle, setSelectedVehicle, clearSelectedVehicle, isModalOpen, closeModal } = useVehicle();
+
+  // El listado completo del POS se pide recién al abrir el modal (ver
+  // vehicle-context): antes salía en cada carga de página del sitio.
+  useEffect(() => {
+    if (isModalOpen) loadVehiculos();
+  }, [isModalOpen, loadVehiculos]);
 
   useEffect(() => {
     if (isModalOpen) {

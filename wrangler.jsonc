@@ -24,6 +24,14 @@
 		"directory": ".open-next/assets",
 		"binding": "ASSETS"
 	},
+	// Backend del caché incremental de OpenNext (ISR/SSG). El nombre del
+	// binding lo exige el override r2IncrementalCache — no cambiarlo.
+	"r2_buckets": [
+		{
+			"binding": "NEXT_INC_CACHE_R2_BUCKET",
+			"bucket_name": "neumaticos-trivium-cache"
+		}
+	],
 	"services": [
 		{
 			// Self-reference: necesario para el cache interno de OpenNext.

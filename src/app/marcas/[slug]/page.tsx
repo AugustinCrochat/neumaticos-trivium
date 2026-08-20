@@ -11,10 +11,9 @@ import { canonical, itemListJsonLd, SITE_NAME } from "@/lib/seo";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbJsonLd } from "@/lib/seo";
 
-// Sin generateStaticParams: la página lee la cookie de sucursal para mostrar el
-// stock correcto, así que se renderiza por request. Las landings de SEO puro
-// (/neumaticos/*, /neumaticos-en/*) sí se prerenderizan porque no dependen de
-// la sucursal elegida.
+// Sin generateStaticParams: se genera on-demand (ISR) contra el catálogo real
+// del POS, igual que /productos/[slug]. Ya no lee la cookie de sucursal — ver
+// src/lib/branch-server.ts.
 export const revalidate = 300;
 
 type Props = { params: Promise<{ slug: string }> };

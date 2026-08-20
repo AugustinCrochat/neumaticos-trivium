@@ -84,22 +84,35 @@ export default function RootLayout({
         <script
           dangerouslySetInnerHTML={{
             __html: `
+              /* Cada deploy borra los _next/static/* del build anterior, así que
+                 quien tenga HTML viejo pide chunks que ya no existen. Una recarga
+                 trae HTML nuevo y lo arregla.
+
+                 La versión anterior de esto borraba el guard 10s después del load,
+                 o sea que no recargaba una vez: recargaba una vez cada 10s, para
+                 siempre. Con un chunk que falla de verdad (deploy nuevo + HTML
+                 viejo, o red mala) eso es un bucle de recargas, que es lo que
+                 Chrome termina cortando con "This page couldn't load".
+
+                 Ahora el guard persiste: máximo 2 recargas por sesión y nunca dos
+                 seguidas en menos de 30s. Si a la tercera sigue roto, no es un
+                 chunk viejo y recargar no lo va a arreglar. */
               window.addEventListener('error', function(e) {
                 var target = e.target;
-                if (target && (target.tagName === 'LINK' || target.tagName === 'SCRIPT')) {
-                  var src = target.src || target.href;
-                  if (src && src.indexOf('_next/static') !== -1) {
-                    var key = 'trivium-chunk-reload';
-                    if (!sessionStorage.getItem(key)) {
-                      sessionStorage.setItem(key, '1');
-                      window.location.reload();
-                    }
-                  }
-                }
+                if (!target || (target.tagName !== 'LINK' && target.tagName !== 'SCRIPT')) return;
+                var src = target.src || target.href;
+                if (!src || src.indexOf('_next/static') === -1) return;
+
+                var key = 'trivium-chunk-reload';
+                var state = { n: 0, t: 0 };
+                try { state = JSON.parse(sessionStorage.getItem(key)) || state; } catch (err) {}
+
+                var now = Date.now();
+                if (state.n >= 2 || now - state.t < 30000) return;
+
+                try { sessionStorage.setItem(key, JSON.stringify({ n: state.n + 1, t: now })); } catch (err) {}
+                window.location.reload();
               }, true);
-              window.addEventListener('load', function() {
-                setTimeout(function() { sessionStorage.removeItem('trivium-chunk-reload'); }, 10000);
-              });
             `
           }}
         />
