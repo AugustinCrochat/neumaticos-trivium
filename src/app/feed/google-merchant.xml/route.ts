@@ -18,7 +18,7 @@ const SHIPPING_BLOCK = `
 // antirrobo) — los servicios (alineación, balanceo, etc.) quedan afuera:
 // el feed estándar de Merchant Center es para bienes, no servicios, y
 // listarlos ahí arriesga que Google rechace/​suspenda la cuenta por política.
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 function escapeXml(text: string): string {
   return text
@@ -97,6 +97,10 @@ export async function GET() {
       .filter((a): a is Accessory & { imageUrl: string } => !!a.imageUrl)
       .map(accessoryItem),
   ];
+
+  if (items.length === 0) {
+    return new Response("No se encontraron productos en el POS. Evitando generar un feed vacío.", { status: 500 });
+  }
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:g="http://base.google.com/ns/1.0">

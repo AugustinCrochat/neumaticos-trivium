@@ -10,7 +10,7 @@ import type { TireProduct, Accessory } from "@/lib/types";
 // g:id tiene que ser idéntico al id que usa ESE producto en el feed
 // principal — mismo p.id/a.id en los dos, así que no hace falta duplicar
 // nada a mano.
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 function cdata(text: string): string {
   return `<![CDATA[${text.replace(/]]>/g, "]]]]><![CDATA[>")}]]>`;
@@ -58,13 +58,18 @@ export async function GET() {
     })
   );
 
+  const flatItems = itemsPorSucursal.flat();
+  if (flatItems.length === 0) {
+    return new Response("No se encontraron productos en el POS. Evitando generar un feed vacío.", { status: 500 });
+  }
+
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:g="http://base.google.com/ns/1.0">
 <channel>
 <title>Neumáticos Trivium — Inventario local</title>
 <link>${SITE_URL}</link>
 <description>Stock por sucursal para fichas locales sin coste y anuncios de inventario local.</description>
-${itemsPorSucursal.flat().join("\n")}
+${flatItems.join("\n")}
 </channel>
 </rss>`;
 
