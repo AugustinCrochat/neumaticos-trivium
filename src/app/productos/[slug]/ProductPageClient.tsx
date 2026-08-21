@@ -31,7 +31,7 @@ function formatSize(size: { width: number; profile: number; rim: number }): stri
 }
 
 export function ProductPageClient({ product }: { product: TireProduct }) {
-  const { selectedBranch } = useBranch();
+  const { selectedBranch, openModal } = useBranch();
   const { selectedVehicle } = useVehicle();
   const [showModal, setShowModal] = useState(false);
 
@@ -178,16 +178,27 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
       </a>
 
       <div className="rounded-xl border border-slate-200 divide-y divide-slate-100 overflow-hidden bg-white">
-        <div className="flex items-center gap-3 p-3">
+        <div className="flex items-start gap-3 p-3">
           <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 shrink-0">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
           </div>
-          <div className="min-w-0">
+          <div className="min-w-0 flex-1">
             <p className="font-bold text-navy-900 text-sm leading-snug">Retiro gratis en Sucursal {selectedBranch.shortName}</p>
+            {product.enStock ? (
+              <p className="text-xs font-bold text-emerald-600 mt-0.5">Retiro el mismo día</p>
+            ) : (
+              <p className="text-xs font-bold text-red-600 mt-0.5">Sin stock para retiro</p>
+            )}
             <p className="text-xs text-slate-500 mt-0.5 leading-snug">{selectedBranch.address}, {selectedBranch.city} · {selectedBranch.hours}</p>
+            <button
+              onClick={() => openModal()}
+              className="text-xs text-navy-600 hover:text-navy-900 font-semibold underline mt-1.5 inline-block"
+            >
+              Consultar disponibilidad en otras sucursales
+            </button>
           </div>
         </div>
 

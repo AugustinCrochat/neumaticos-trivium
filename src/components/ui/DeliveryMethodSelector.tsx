@@ -56,7 +56,7 @@ export function DeliveryMethodSelector() {
 
       {deliveryMethod === "pickup" && (
         <p className="text-xs text-slate-500">
-          Retirás en Sucursal {selectedBranch.shortName}, {selectedBranch.address}.
+          Retiro el mismo día en Sucursal {selectedBranch.shortName}, {selectedBranch.address}.
         </p>
       )}
 
