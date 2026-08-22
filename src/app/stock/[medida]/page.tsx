@@ -74,10 +74,13 @@ function waHref(branch: Branch, texto: string) {
   return `https://wa.me/${branch.whatsapp}?text=${encodeURIComponent(texto)}`;
 }
 
+/** `model` ya viene del POS como "205/55 R16 MARCA MODELO [De Carga] [A/T]"
+    (ver `toTireProduct` en pos-api.ts), así que anteponerle `brand` repetía la
+    marca y volvía a decir la medida que el h1 de esta página ya encabeza — en
+    el WhatsApp prellenado salía dos veces. Le sacamos el prefijo de medida y
+    dejamos el resto tal cual: los sufijos de carga y A/T ya están adentro. */
 function nombreProducto(p: TireProduct) {
-  const carga = p.isCarga ? " C" : "";
-  const at = p.isAT ? " A/T" : "";
-  return `${p.brand} ${p.model}${carga}${at}`;
+  return p.model.replace(/^\d+\/\d+\s*R\d+C?\s*/i, "").trim() || p.model;
 }
 
 function FilaProducto({
