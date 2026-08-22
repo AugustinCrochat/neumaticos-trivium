@@ -1,0 +1,71 @@
+# Deploy a Cloudflare Workers en cada push a main.
+#
+# Antes esto era a mano (`opennextjs-cloudflare deploy` desde la notebook), así
+# que pushear a main NO publicaba nada y producción podía quedar días atrás sin
+# que se notara. Ver la memoria del proyecto: la página /stock estuvo commiteada
+# y en 404 en producción por eso.
+#
+# Requiere UN secret en el repo (Settings → Secrets and variables → Actions):
+#
+#   CLOUDFLARE_API_TOKEN — API token de cuenta con:
+#                            · Workers Scripts    : Edit
+#                            · Workers R2 Storage : Edit
+#
+# El permiso de R2 no es opcional aunque parezca que no tiene nada que ver con
+# publicar: `opennextjs-cloudflare deploy` puebla el caché incremental en R2
+# ANTES de subir el worker, y sin ese permiso falla todo el deploy. El OAuth de
+# `wrangler login` no sirve acá porque su flow ni siquiera ofrece el scope r2.
+#
+# El account ID no es un secreto (aparece en la URL del dashboard) y el repo es
+# privado, así que va en claro para que el workflow se lea solo.
+
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Un deploy a la vez. Si entran dos pushes seguidos, el segundo espera en vez de
+# pisar al primero a mitad de la subida de assets; no cancelamos el que ya
+# arrancó porque un deploy abortado deja el worker y el caché desincronizados.
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # `next build` ya chequea tipos, pero tarda minutos en llegar ahí. Esto
+      # falla en segundos y deja el error de TS arriba de todo en el log.
+      - run: npx tsc --noEmit
+
+      - run: npx opennextjs-cloudflare build
+
+      - run: npx opennextjs-cloudflare deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: e4d02bb31d68ca3eda5db67bc73994a7
+
+      # Verificación mínima de que lo que quedó arriba responde. Si esto falla,
+      # el run sale en rojo y te enterás por mail en vez de por un cliente.
+      - name: Verificar producción
+        run: |
+          for url in "https://neumaticos.trivium.ar/" \
+                     "https://neumaticos.trivium.ar/catalogo" \
+                     "https://neumaticos.trivium.ar/stock/205-55-r16?sucursal=arguello"; do
+            code=$(curl -s -o /dev/null -w "%{http_code}" --retry 3 --retry-delay 5 "$url")
+            echo "$code  $url"
+            [ "$code" = "200" ] || exit 1
+          done
