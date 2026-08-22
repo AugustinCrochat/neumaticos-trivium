@@ -188,11 +188,21 @@ function toTireProduct(p: PosProducto): TireProduct | null {
   };
 }
 
-export async function getProductosDesdePOS(sucursalSlug: string = DEFAULT_BRANCH_ID): Promise<TireProduct[]> {
+/**
+ * `fresh: true` saltea las dos capas de caché (la de memoria del Worker y la
+ * del fetch) para las páginas cuyo único valor es que el número de unidades
+ * esté al día — hoy /stock/[medida], que es la que le mandamos al cliente por
+ * WhatsApp. En el resto de las páginas NO usarlo: son las que se sirven
+ * cacheadas y el catálogo entero son cientos de productos.
+ */
+export async function getProductosDesdePOS(
+  sucursalSlug: string = DEFAULT_BRANCH_ID,
+  opciones: { fresh?: boolean } = {}
+): Promise<TireProduct[]> {
   const cacheKey = sucursalSlug;
   const now = Date.now();
   const cached = memoryCache.productos.get(cacheKey);
-  if (cached && cached.expires > now) {
+  if (cached && cached.expires > now && !opciones.fresh) {
     return cached.data;
   }
 
@@ -201,7 +211,10 @@ export async function getProductosDesdePOS(sucursalSlug: string = DEFAULT_BRANCH
     return cached ? cached.data : [];
   }
   try {
-    const res = await fetch(`${POS_API_BASE_URL}/${sucursalSlug}/productos`, { next: { revalidate: 300 }, signal: AbortSignal.timeout(8000) });
+    const res = await fetch(`${POS_API_BASE_URL}/${sucursalSlug}/productos`, {
+      ...(opciones.fresh ? { cache: "no-store" as const } : { next: { revalidate: 300 } }),
+      signal: AbortSignal.timeout(8000),
+    });
     if (!res.ok) {
       console.error(`[pos-api] Error ${res.status} al obtener productos del POS`);
       return cached ? cached.data : [];
