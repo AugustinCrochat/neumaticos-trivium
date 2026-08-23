@@ -25,7 +25,13 @@ const CACHE_TTLS = {
 // Base sin sucursal — cada fetch arma /{sucursal}/productos, etc. (ver
 // pos-neumaticos/src/app/api/public/[sucursal]/*), para poder mostrar el
 // catálogo de la sucursal que el visitante tenga elegida en vez de una fija.
-const POS_API_BASE_URL = process.env.POS_API_BASE_URL?.trim();
+// Esta URL es pública y también debe existir durante `next build`: las
+// variables de `wrangler.jsonc` se inyectan al Worker en runtime, pero no al
+// prerender de Workers Builds. Sin el fallback, las rutas ISR se construyen
+// con listas vacías y para evitarlo habría que volverlas dinámicas (demasiado
+// costoso para el límite de CPU del plan Free).
+const POS_API_BASE_URL =
+  process.env.POS_API_BASE_URL?.trim() || "https://pos-neumaticos.vercel.app/api/public";
 
 type PosProducto = {
   id: string;
