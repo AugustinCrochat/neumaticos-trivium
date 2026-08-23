@@ -6,6 +6,10 @@ import { getSelectedBranchSlug } from "@/lib/branch-server";
 import { canonical } from "@/lib/seo";
 
 export const revalidate = 300;
+// El Worker recibe POS_API_BASE_URL en runtime. Si esta ruta se prerenderiza
+// durante el build, la variable todavía no está disponible y se termina
+// publicando un catálogo vacío hasta la próxima revalidación.
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Catálogo de neumáticos y cubiertas",
