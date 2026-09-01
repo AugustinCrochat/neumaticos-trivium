@@ -5,8 +5,6 @@ import { SITE_URL } from "@/lib/config";
 import { getProductosDesdePOS } from "@/lib/pos-api";
 import { getSelectedBranchSlug } from "@/lib/branch-server";
 
-export const revalidate = 300;
-
 const pageUrl = `${SITE_URL}/calculadora-equivalencia-neumaticos`;
 
 type Props = { searchParams: Promise<{ modo?: string; original?: string; equivalente?: string }> };

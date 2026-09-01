@@ -30,7 +30,6 @@ import { RimLanding } from "./RimLanding";
  * de cero en cada request, y estas son justamente las que más veces va a pedir
  * el crawler.
  */
-export const revalidate = 900;
 
 type Props = { params: Promise<{ medida: string }> };
 

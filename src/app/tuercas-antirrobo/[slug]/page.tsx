@@ -7,8 +7,6 @@ import { getSelectedBranchSlug } from "@/lib/branch-server";
 import { DEFAULT_BRANCH_ID, SITE_URL } from "@/lib/config";
 import { AccessoryAddToCart } from "@/components/ui/AccessoryAddToCart";
 
-export const revalidate = 300;
-
 type Props = { params: Promise<{ slug: string }> };
 
 // Mismo caso que /productos/[slug]: con generateStaticParams las tuercas que

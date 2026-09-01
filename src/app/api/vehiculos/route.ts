@@ -9,7 +9,11 @@ import { getVehiculosDesdePOS } from "@/lib/pos-api";
 // una invocación dinámica extra del Worker por pageview, sin cachear, ~1s.
 // Ahora lo pide solo quien abre el buscador por auto (ver vehicle-context) y
 // además la respuesta se cachea, así que la mayoría ni llega al Worker.
-export const revalidate = 3600;
+//
+// force-static y no `revalidate`: la lista se congela en el build y se
+// refresca con el redeploy programado — el revalidate necesitaba la cola ISR
+// con Durable Object que agotaba el free tier de Cloudflare.
+export const dynamic = "force-static";
 
 export async function GET() {
   const vehiculos = await getVehiculosDesdePOS();

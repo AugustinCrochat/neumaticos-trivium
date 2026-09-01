@@ -217,8 +217,13 @@ export async function getProductosDesdePOS(
     return cached ? cached.data : [];
   }
   try {
+    // "force-cache" sin revalidate, acá y en los demás fetches al POS: los
+    // datos se congelan en el build y se refrescan con el redeploy programado
+    // (ver .github/workflows/deploy.yml). No volver a next.revalidate — un solo
+    // fetch con revalidate reactiva la cola ISR de OpenNext, que necesita el
+    // Durable Object que agotaba el límite gratuito de Cloudflare.
     const res = await fetch(`${POS_API_BASE_URL}/${sucursalSlug}/productos`, {
-      ...(opciones.fresh ? { cache: "no-store" as const } : { next: { revalidate: 300 } }),
+      ...(opciones.fresh ? { cache: "no-store" as const } : { cache: "force-cache" as const }),
       signal: AbortSignal.timeout(8000),
     });
     if (!res.ok) {
@@ -263,7 +268,7 @@ export async function getAccesoriosDesdePOS(sucursalSlug: string = DEFAULT_BRANC
     return cached ? cached.data : [];
   }
   try {
-    const res = await fetch(`${POS_API_BASE_URL}/${sucursalSlug}/accesorios`, { next: { revalidate: 300 }, signal: AbortSignal.timeout(8000) });
+    const res = await fetch(`${POS_API_BASE_URL}/${sucursalSlug}/accesorios`, { cache: "force-cache", signal: AbortSignal.timeout(8000) });
     if (!res.ok) {
       console.error(`[pos-api] Error ${res.status} al obtener accesorios del POS`);
       return cached ? cached.data : [];
@@ -307,7 +312,7 @@ export async function getVehiculosDesdePOS(sucursalSlug: string = DEFAULT_BRANCH
     return staticVehicles;
   }
   try {
-    const res = await fetch(`${POS_API_BASE_URL}/${sucursalSlug}/vehiculos`, { next: { revalidate: 3600 }, signal: AbortSignal.timeout(8000) });
+    const res = await fetch(`${POS_API_BASE_URL}/${sucursalSlug}/vehiculos`, { cache: "force-cache", signal: AbortSignal.timeout(8000) });
     if (!res.ok) {
       console.error(`[pos-api] Error ${res.status} al obtener vehículos del POS, usando base local`);
       return cached ? cached.data : staticVehicles;
@@ -357,7 +362,7 @@ export async function getServiciosPrecios(grupo?: string, sucursalSlug: string =
     return cached ? cached.data : [];
   }
   try {
-    const res = await fetch(`${POS_API_BASE_URL}/${sucursalSlug}/servicios`, { next: { revalidate: 300 }, signal: AbortSignal.timeout(8000) });
+    const res = await fetch(`${POS_API_BASE_URL}/${sucursalSlug}/servicios`, { cache: "force-cache", signal: AbortSignal.timeout(8000) });
     if (!res.ok) {
       console.error(`[pos-api] Error ${res.status} al obtener servicios del POS`);
       return cached ? cached.data : [];

@@ -5,8 +5,6 @@ import { getAccesoriosDesdePOS } from "@/lib/pos-api";
 import { getSelectedBranchSlug } from "@/lib/branch-server";
 import { canonical } from "@/lib/seo";
 
-export const revalidate = 300;
-
 export const metadata: Metadata = {
   title: "Tuercas antirrobo para llantas — auto y camioneta",
   description:

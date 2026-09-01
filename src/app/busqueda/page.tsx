@@ -6,8 +6,6 @@ import { NOINDEX } from "@/lib/seo";
 import { ProductCard } from "@/components/ui/ProductCard";
 import { AccessoryCard } from "@/components/ui/AccessoryCard";
 
-export const revalidate = 300;
-
 type Props = { searchParams: Promise<{ q?: string }> };
 
 export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {

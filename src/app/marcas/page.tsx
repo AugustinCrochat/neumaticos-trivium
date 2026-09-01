@@ -8,8 +8,6 @@ import { canonical, SITE_NAME } from "@/lib/seo";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { FaqSection } from "@/components/seo/FaqSection";
 
-export const revalidate = 900;
-
 export const metadata: Metadata = {
   title: "Marcas de neumáticos que trabajamos",
   description:

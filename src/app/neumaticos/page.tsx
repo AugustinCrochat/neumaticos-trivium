@@ -15,8 +15,6 @@ import {
 } from "@/lib/tire-sizes";
 import type { TireSize } from "@/lib/types";
 
-export const revalidate = 900;
-
 export const metadata: Metadata = {
   title: "Neumáticos por medida — todas las medidas y precios",
   description:

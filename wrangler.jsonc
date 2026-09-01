@@ -13,11 +13,9 @@
 	// del dashboard: cada deploy de Workers Builds las pisaba por no usar
 	// --keep-vars, así que quedaban vacías. Así quedan garantizadas siempre.
 	"vars": {
-		"GEMINI_MODEL": "gemini-2.0-flash-lite",
 		// Sin sucursal al final (antes terminaba en "/arguello") — cada fetch en
 		// pos-api.ts arma /{sucursal}/productos, etc. según la sucursal elegida.
 		"POS_API_BASE_URL": "https://pos-neumaticos.vercel.app/api/public",
-		"GOOGLE_AI_KEY": "AIzaSyCwuPQrjs0L9x_QnqLOmlHJ9VIX4wyBBOM",
 		"MERCADOPAGO_ACCESS_TOKEN": "APP_USR-6323540170330488-071417-4413e75117545308b4946db2d376bbf4-3541709725"
 	},
 	"assets": {
@@ -32,23 +30,19 @@
 			"bucket_name": "neumaticos-trivium-cache"
 		}
 	],
-	// Cola de revalidación ISR de OpenNext (ver open-next.config.ts). El nombre
-	// del binding lo exige el override do-queue — no cambiarlo.
-	"durable_objects": {
-		"bindings": [
-			{
-				"name": "NEXT_CACHE_DO_QUEUE",
-				"class_name": "DOQueueHandler"
-			}
-		]
-	},
-	// SQLite y no key-value: DOQueueHandler usa ctx.storage.sql para su tabla
-	// de sincronización, y las clases nuevas con SQLite son las únicas que
-	// andan fuera del plan pago de Durable Objects.
+	// v1 creó el DOQueueHandler (cola ISR de OpenNext); v2 lo borra, con sus
+	// objetos y alarmas pendientes: la cola vivía despierta casi todo el día y
+	// agotaba el límite gratuito de duración de Durable Objects (bloqueo de
+	// cuenta del 2026-08-31). El sitio ahora es 100% estático y se refresca por
+	// redeploy programado — ver open-next.config.ts y deploy.yml.
 	"migrations": [
 		{
 			"tag": "v1",
 			"new_sqlite_classes": ["DOQueueHandler"]
+		},
+		{
+			"tag": "v2",
+			"deleted_classes": ["DOQueueHandler"]
 		}
 	],
 	"services": [

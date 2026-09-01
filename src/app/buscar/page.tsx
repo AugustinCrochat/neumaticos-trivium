@@ -5,8 +5,6 @@ import { getProductosDesdePOS, getAccesoriosDesdePOS } from "@/lib/pos-api";
 import { getSelectedBranchSlug } from "@/lib/branch-server";
 import { NOINDEX, canonical } from "@/lib/seo";
 
-export const revalidate = 300;
-
 type Props = { searchParams: Promise<{ medida?: string }> };
 
 function parseMedida(medida: string) {

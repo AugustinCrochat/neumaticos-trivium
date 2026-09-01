@@ -6,8 +6,6 @@ import { ICONS } from "@/components/home/ServicesSection";
 import { getServiciosPrecios } from "@/lib/pos-api";
 import { getSelectedBranchSlug } from "@/lib/branch-server";
 
-export const revalidate = 300;
-
 type Props = { params: Promise<{ id: string }> };
 
 export async function generateStaticParams() {

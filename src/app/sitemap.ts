@@ -10,12 +10,10 @@ import {
   sizesFromCatalog,
 } from "@/lib/tire-sizes";
 
-/**
- * El sitemap se regenera cada hora. Es un Route Handler cacheado, así que sin
- * este revalidate quedaría congelado con el catálogo del build y los productos
- * nuevos no se descubrirían hasta el próximo deploy.
- */
-export const revalidate = 3600;
+// El sitemap sale congelado con el catálogo del build: los productos nuevos se
+// descubren en el próximo deploy (hay uno programado cada 2 horas hábiles, ver
+// .github/workflows/deploy.yml). Antes tenía `revalidate = 3600`, pero eso
+// necesitaba la cola ISR con Durable Object que agotaba el free tier.
 
 type Entry = MetadataRoute.Sitemap[number];
 

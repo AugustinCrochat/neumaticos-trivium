@@ -13,8 +13,6 @@ const SUBTITLE =
 
 // Los precios se leen del catálogo en vivo: una nota de precios con números
 // escritos a mano queda desactualizada en semanas y termina siendo un pasivo.
-export const revalidate = 3600;
-
 export const metadata: Metadata = {
   title: TITLE,
   description:

@@ -19,8 +19,6 @@ import { JsonLd } from "@/components/seo/JsonLd";
  * local → Páginas de producto → "URL de disponibilidad en tienda"):
  *   https://neumaticos.trivium.ar/disponibilidad-en-tienda?id={id}&store_code={store_code}
  */
-export const revalidate = 300;
-
 type Props = { searchParams: Promise<{ id?: string; store_code?: string }> };
 
 async function findItem(id: string, sucursalSlug: string) {

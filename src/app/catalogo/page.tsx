@@ -5,8 +5,6 @@ import { getProductosDesdePOS, getAccesoriosDesdePOS } from "@/lib/pos-api";
 import { getSelectedBranchSlug } from "@/lib/branch-server";
 import { canonical } from "@/lib/seo";
 
-export const revalidate = 300;
-
 export const metadata: Metadata = {
   title: "Catálogo de neumáticos y cubiertas",
   description:
