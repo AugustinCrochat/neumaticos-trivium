@@ -28,12 +28,12 @@ on:
   # Redeploy programado: el sitio es 100% estático (sin ISR — la cola con
   # Durable Object agotaba el free tier de Cloudflare y bloqueó la cuenta el
   # 2026-08-31), así que precios y stock del POS solo se refrescan buildeando
-  # de nuevo. Cada 2 horas de 8 a 22 ART (11–01 UTC), que es cuando se mueven
-  # los precios; ~8 builds/día × ~5 min entra holgado en los 2000 min/mes
-  # gratis de Actions. Si hiciera falta más frecuencia, achicar el paso acá.
+  # de nuevo. Lunes a sábado 9–19 ART (12–22 UTC, Argentina no tiene horario de
+  # verano), que es cuando el local está abierto y se puede mover un precio;
+  # ~36 builds/semana × ~5 min entra holgado en los 2000 min/mes gratis de
+  # Actions.
   schedule:
-    - cron: "0 11-23/2 * * *"
-    - cron: "0 1 * * *"
+    - cron: "0 12-22/2 * * 1-6"
 
 # Un deploy a la vez. Si entran dos pushes seguidos, el segundo espera en vez de
 # pisar al primero a mitad de la subida de assets; no cancelamos el que ya
