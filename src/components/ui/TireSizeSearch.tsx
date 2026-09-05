@@ -3,26 +3,9 @@
 import { useState, useRef, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useBranch } from "@/contexts/branch-context";
 import { sizeSearchHref } from "@/lib/size-href";
 import { flotationToMetric, formatFlotationLabel } from "@/lib/flotation";
 import { TireDiagram } from "./TireDiagram";
-
-type FullscreenDocumentElement = HTMLElement & {
-  webkitRequestFullscreen?: () => Promise<void> | void;
-};
-
-type TorchMediaTrackCapabilities = MediaTrackCapabilities & {
-  torch?: boolean;
-};
-
-type ScanTireResponse = {
-  found?: boolean;
-  width?: string | number;
-  profile?: string | number;
-  rim?: string | number;
-  message?: string;
-};
 
 type SpeechRecognitionResultEvent = Event & {
   results: {
@@ -71,7 +54,6 @@ export function TireSizeSearch({
   embedded?: boolean;
 }) {
   const router = useRouter();
-  const { selectedBranch } = useBranch();
 
   function parseInitial(medida?: string) {
     if (!medida) return { w: "", p: "", r: "" };
@@ -180,18 +162,6 @@ export function TireSizeSearch({
     }
     return null;
   }, [width, profile, rim]);
-
-  const [showScanner, setShowScanner] = useState(false);
-  const [isScanning, setIsScanning] = useState(false);
-  const [scanProgress, setScanProgress] = useState("");
-  const [scanError, setScanError] = useState<string | null>(null);
-
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const streamRef = useRef<MediaStream | null>(null);
-  const lightSampleCanvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [hasTorch, setHasTorch] = useState(false);
-  const [torchOn, setTorchOn] = useState(false);
-  const [lowLight, setLowLight] = useState(false);
 
   const widthRef = useRef<HTMLInputElement | null>(null);
   const profileRef = useRef<HTMLInputElement | null>(null);
@@ -380,119 +350,6 @@ export function TireSizeSearch({
       focusDiagramSegment(nextSegment(activeSegment));
     }
   };
-
-  useEffect(() => {
-    if (!showScanner) return;
-
-    function sampleLight() {
-      const video = videoRef.current;
-      if (!video || video.readyState < 2 || !video.videoWidth || !video.videoHeight) return;
-
-      const canvas = lightSampleCanvasRef.current ?? document.createElement("canvas");
-      lightSampleCanvasRef.current = canvas;
-      canvas.width = 24;
-      canvas.height = 24;
-
-      const ctx = canvas.getContext("2d", { willReadFrequently: true });
-      if (!ctx) return;
-
-      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-      const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
-      let totalLuma = 0;
-
-      for (let i = 0; i < pixels.length; i += 4) {
-        totalLuma += 0.2126 * pixels[i] + 0.7152 * pixels[i + 1] + 0.0722 * pixels[i + 2];
-      }
-
-      const averageLuma = totalLuma / (pixels.length / 4);
-      setLowLight(averageLuma < 58);
-    }
-
-    const firstSample = window.setTimeout(sampleLight, 600);
-    const interval = window.setInterval(sampleLight, 800);
-    return () => {
-      window.clearTimeout(firstSample);
-      window.clearInterval(interval);
-    };
-  }, [showScanner]);
-
-  async function startCamera() {
-    setShowScanner(true); setScanError(null); setLowLight(false);
-    try {
-      const el = document.documentElement as FullscreenDocumentElement;
-      if (el.requestFullscreen) await el.requestFullscreen();
-      else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
-    } catch { }
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
-      streamRef.current = stream;
-      if (videoRef.current) videoRef.current.srcObject = stream;
-      const track = stream.getVideoTracks()[0];
-      const capabilities = track.getCapabilities() as TorchMediaTrackCapabilities;
-      if (capabilities.torch) setHasTorch(true);
-    } catch { setScanError("No pudimos acceder a tu cámara."); setShowScanner(false); }
-  }
-
-  function stopCamera() {
-    if (streamRef.current) { streamRef.current.getTracks().forEach(track => track.stop()); streamRef.current = null; }
-    try { if (document.fullscreenElement) document.exitFullscreen(); } catch { }
-    setShowScanner(false); setHasTorch(false); setTorchOn(false); setLowLight(false);
-  }
-
-  async function toggleTorch() {
-    if (!streamRef.current) return;
-    const track = streamRef.current.getVideoTracks()[0];
-    const torchConstraint = { torch: !torchOn } as MediaTrackConstraintSet;
-    try { await track.applyConstraints({ advanced: [torchConstraint] }); setTorchOn(t => !t); } catch { }
-  }
-
-  function captureFrame(): { original: string; processed: string } {
-    const video = videoRef.current!;
-    const natW = video.videoWidth; const natH = video.videoHeight;
-    const shortSide = Math.min(natW, natH);
-    const cropSize = Math.round(shortSide * 0.98);
-    const cropX = Math.round((natW - cropSize) / 2);
-    const cropY = Math.round((natH - cropSize) / 2);
-    const TARGET_SIZE = 1024;
-    const canvas1 = document.createElement("canvas"); canvas1.width = TARGET_SIZE; canvas1.height = TARGET_SIZE;
-    const ctx1 = canvas1.getContext("2d")!;
-    ctx1.drawImage(video, cropX, cropY, cropSize, cropSize, 0, 0, TARGET_SIZE, TARGET_SIZE);
-    const original = canvas1.toDataURL("image/jpeg", 0.85);
-    const canvas2 = document.createElement("canvas"); canvas2.width = TARGET_SIZE; canvas2.height = TARGET_SIZE;
-    const ctx2 = canvas2.getContext("2d")!;
-    ctx2.filter = "contrast(2.0) brightness(1.05) saturate(0)";
-    ctx2.drawImage(video, cropX, cropY, cropSize, cropSize, 0, 0, TARGET_SIZE, TARGET_SIZE);
-    const processed = canvas2.toDataURL("image/jpeg", 0.85);
-    return { original, processed };
-  }
-
-  async function tryScan(images: { original: string; processed: string }) {
-    const controller = new AbortController(); const timeout = setTimeout(() => controller.abort(), 25000);
-    try {
-      const res = await fetch("/api/scan-tire", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ base64Image: images.original, base64Processed: images.processed }), signal: controller.signal });
-      return res.json() as Promise<ScanTireResponse>;
-    } finally { clearTimeout(timeout); }
-  }
-
-  async function captureAndScan() {
-    if (!videoRef.current || isScanning) return;
-    setIsScanning(true); setScanError(null); setScanProgress("Analizando...");
-    try {
-      const images = captureFrame();
-      const data = await tryScan(images);
-      if (data.found && data.width) {
-        setWidth(String(data.width)); setProfile(String(data.profile)); setRim(String(data.rim));
-        stopCamera();
-      } else { 
-        setScanError(data.message || "No pudimos detectar la medida automáticamente."); 
-        stopCamera();
-      }
-    } catch { 
-      setScanError("La IA tardó demasiado."); 
-      stopCamera();
-    }
-    finally { setIsScanning(false); setScanProgress(""); }
-  }
 
   const measureInputClass = "w-full min-w-0 bg-white border-2 border-slate-300 rounded-xl px-2 sm:px-3 py-3 text-navy-950 font-black text-center shadow-sm transition-all outline-none placeholder:text-slate-600 focus:bg-white focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20 focus:shadow-lg focus:shadow-orange-500/10";
   const measureSeparatorClass = "flex h-[52px] items-center justify-center text-lg font-black text-slate-500";
@@ -707,82 +564,6 @@ export function TireSizeSearch({
               <path strokeLinecap="round" strokeWidth={3} d="M21 21l-4.3-4.3" />
             </svg>
           </button>
-        </div>
-      )}
-
-      {showScanner && (
-        <div className="fixed inset-0 z-50 bg-black flex flex-col">
-          <div className="absolute top-0 left-0 right-0 p-4 z-20 flex justify-between items-center bg-gradient-to-b from-black/80 to-transparent">
-            <button onClick={stopCamera} className="bg-white/20 text-white px-4 py-2 rounded-full font-bold text-sm">Cancelar</button>
-            {hasTorch && (
-              <button 
-                onClick={toggleTorch} 
-                className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-black text-xs sm:text-sm transition-all shadow-lg border-2 ${
-                  torchOn 
-                    ? 'bg-yellow-400 text-black border-yellow-300 shadow-yellow-400/50 scale-105' 
-                    : 'bg-black/40 text-yellow-400 border-yellow-400/50 backdrop-blur-md'
-                }`}
-              >
-                <svg className="w-4 h-4" fill={torchOn ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-                {torchOn ? 'FLASH ENCENDIDO' : 'ACTIVAR FLASH'}
-              </button>
-            )}
-          </div>
-
-          {lowLight && !isScanning && (
-            <div className="absolute top-20 left-4 right-4 z-20 flex justify-center">
-              {hasTorch && !torchOn ? (
-                <button
-                  type="button"
-                  onClick={toggleTorch}
-                  className="inline-flex items-center gap-2 rounded-full border border-yellow-300/60 bg-yellow-400 px-4 py-2 text-xs font-black uppercase tracking-wide text-black shadow-lg shadow-yellow-500/30"
-                >
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                  Poca luz · Activar flash
-                </button>
-              ) : (
-                <span className="inline-flex items-center rounded-full border border-yellow-300/40 bg-black/70 px-4 py-2 text-xs font-black uppercase tracking-wide text-yellow-300 shadow-lg backdrop-blur-md">
-                  Hay poca luz
-                </span>
-              )}
-            </div>
-          )}
-
-          <div className="flex-1 flex items-center justify-center bg-black">
-            <div className="relative rounded-full overflow-hidden" style={{ width: '90vmin', height: '90vmin', boxShadow: '0 0 0 9999px #000' }}>
-              <video ref={videoRef} autoPlay playsInline muted className="absolute inset-0 w-full h-full object-cover" />
-              <div className="absolute inset-0 rounded-full border-4 border-orange-500 border-dashed animate-[spin_20s_linear_infinite] pointer-events-none" />
-            </div>
-            <div className="absolute pointer-events-none flex items-center justify-center top-1/2 -translate-y-1/2">
-              <span className="text-white font-black text-sm tracking-widest uppercase bg-black/70 px-6 py-3 rounded-full backdrop-blur-md border border-white/10 shadow-xl whitespace-nowrap">
-                Centrá el neumático
-              </span>
-            </div>
-          </div>
-
-          <div className="absolute bottom-0 left-0 right-0 pb-12 pt-8 z-20 flex flex-col items-center gap-6 bg-gradient-to-t from-black/90 via-black/40 to-transparent">
-            {isScanning ? (
-              <span className="text-white/90 text-sm font-bold tracking-widest uppercase animate-pulse">{scanProgress}</span>
-            ) : (
-              <span className="text-white text-sm sm:text-base font-black uppercase tracking-[0.2em] animate-pulse bg-black/60 px-6 py-3 rounded-full backdrop-blur-md border border-white/20 whitespace-nowrap shadow-2xl">
-                Presioná para escanear
-              </span>
-            )}
-            <button onClick={captureAndScan} disabled={isScanning} className="w-20 h-20 rounded-full border-4 border-white/60 flex items-center justify-center active:scale-90 transition-transform disabled:opacity-40 shadow-2xl">
-              {isScanning ? (
-                <svg className="w-10 h-10 text-white animate-spin" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                </svg>
-              ) : (
-                <div className="w-16 h-16 rounded-full bg-white shadow-[0_0_20px_rgba(255,255,255,0.5)]" />
-              )}
-            </button>
-          </div>
         </div>
       )}
 
@@ -1021,47 +802,6 @@ export function TireSizeSearch({
             </svg>
             {sizeWarning}
           </p>
-        )}
-
-        <button
-          type="button"
-          onClick={startCamera}
-          className="w-full bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 disabled:opacity-50 text-white font-black py-4 rounded-xl border border-red-300/30 transition-all flex items-center justify-center gap-2 shadow-lg shadow-red-900/30 active:scale-[0.98] lg:hidden"
-        >
-          <svg className="w-5 h-5 shrink-0" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-            <path d="M15 12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h1.172a3 3 0 0 0 2.12-.879l.83-.828A1 1 0 0 1 6.827 3h2.344a1 1 0 0 1 .707.293l.828.828A3 3 0 0 0 12.828 5H14a1 1 0 0 1 1 1v6zM2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4H2z" />
-            <path d="M8 11a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5zm0 1a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM3 6.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z" />
-          </svg>
-          <span>Reconocer medida con IA</span>
-          <span className="relative -ml-0.5 inline-flex w-5 h-5 items-center justify-center">
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 2l2.4 5.6L20 10l-5.6 2.4L12 18l-2.4-5.6L4 10l5.6-2.4L12 2z" />
-            </svg>
-            <svg className="absolute -bottom-0.5 -right-0.5 w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 2l2 4.8L19 9l-5 2.2L12 16l-2-4.8L5 9l5-2.2L12 2z" />
-            </svg>
-          </span>
-        </button>
-
-        {scanError && (
-          <div className="bg-white p-5 rounded-xl border border-orange-200 flex flex-col gap-4 animate-in fade-in zoom-in duration-300 mt-2">
-            <div>
-              <p className="text-orange-700 font-bold text-sm">No pudimos leer la medida.</p>
-              <p className="text-slate-600 text-xs leading-relaxed mt-1">
-                {scanError}
-              </p>
-            </div>
-            <button
-              onClick={() => {
-                const waText = encodeURIComponent(`Hola Trivium ${selectedBranch.shortName}! Estoy intentando buscar mis neumáticos pero el escáner no los detecta. ¿Me ayudan por favor? Ahora saco una foto nueva y se las envío por WhatsApp.`);
-                window.open(`https://wa.me/${selectedBranch.whatsapp}?text=${waText}`, "_blank");
-              }}
-              type="button"
-              className="w-full bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#25D366] font-bold py-3 rounded-lg flex items-center justify-center gap-2 transition-colors text-sm border border-[#25D366]/30"
-            >
-              Consultar por WhatsApp
-            </button>
-          </div>
         )}
 
       </div>

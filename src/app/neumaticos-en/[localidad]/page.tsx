@@ -42,9 +42,11 @@ export function generateStaticParams() {
 }
 
 function tituloLocal(localidad: Localidad): string {
+  // "Baratos" es el modificador de precio con más volumen de búsqueda junto a
+  // "neumáticos", y no aparecía en ningún título de esta serie de landings.
   return localidad.esCabecera
-    ? `Neumáticos en ${localidad.name} — outlet con stock y local propio`
-    : `Neumáticos en ${localidad.name} — precios de outlet a ${localidad.minutosHastaSucursal} min`;
+    ? `Neumáticos baratos en ${localidad.name} — outlet con stock y local propio`
+    : `Neumáticos baratos en ${localidad.name} — precios de outlet a ${localidad.minutosHastaSucursal} min`;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -55,8 +57,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const branch = getBranchForLocalidad(localidad);
   const title = tituloLocal(localidad);
   const description =
-    `Comprá neumáticos y cubiertas en ${localidad.name}, ${localidad.province}, a precio de importación directa. ` +
-    `Stock real, colocación sin cargo y taller de alineación y balanceo en ${branch.address}, a ` +
+    `Comprá neumáticos baratos en ${localidad.name}, ${localidad.province}, a precio de importación directa. ` +
+    `Cubiertas con stock real, colocación sin cargo y gomería con taller de alineación y balanceo en ${branch.address}, a ` +
     `${localidad.minutosHastaSucursal} minutos de ${localidad.name}.`;
 
   return {
@@ -74,7 +76,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 function buildFaqs(localidad: Localidad, branch: ReturnType<typeof getBranchForLocalidad>): Faq[] {
   return [
     {
-      question: `¿Dónde comprar neumáticos en ${localidad.name}?`,
+      question: `¿Dónde comprar neumáticos baratos en ${localidad.name}?`,
       answer:
         `Trivium atiende ${localidad.name} desde su local de ${branch.address}, ${branch.city}, a unos ` +
         `${localidad.minutosHastaSucursal} minutos en auto. ${localidad.comoLlegar} Trabajamos con importación directa, ` +
@@ -139,7 +141,7 @@ export default async function LocalidadPage({ params }: Props) {
           {localidad.name}, {localidad.province}
         </p>
         <h1 className="text-3xl font-black leading-tight text-navy-900 md:text-5xl">
-          Neumáticos en {localidad.name}
+          Neumáticos baratos en {localidad.name}
         </h1>
         <p className="mt-5 max-w-3xl text-lg leading-relaxed text-slate-600">{localidad.intro}</p>
         <p className="mt-4 max-w-3xl leading-relaxed text-slate-600">{localidad.porQue}</p>
@@ -224,7 +226,7 @@ export default async function LocalidadPage({ params }: Props) {
       {/* Servicios */}
       <section className="mb-12">
         <h2 className="mb-2 text-2xl font-black text-navy-900">
-          Servicios para clientes de {localidad.name}
+          Gomería y taller para clientes de {localidad.name}
         </h2>
         <p className="mb-5 max-w-3xl leading-relaxed text-slate-600">
           Taller propio en el mismo local: cambiás las cubiertas y salís con todo listo, sin tener

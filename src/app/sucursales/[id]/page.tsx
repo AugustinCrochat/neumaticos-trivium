@@ -25,8 +25,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   // El título lleva "gomería" además de la marca: es como se busca el rubro en
   // Argentina, y la ficha de sucursal es la página que tiene que capturarlo.
-  const title = `Gomería y neumáticos en ${branch.neighborhood ?? branch.city} — ${branch.address}`;
-  const description = `${SITE_NAME} ${branch.shortName}: venta de neumáticos con stock propio, alineación y balanceo en ${branch.address}, ${branch.city}. ${branch.hours}. Atención por orden de llegada, sin turno.`;
+  const title = `Gomería y neumáticos baratos en ${branch.neighborhood ?? branch.city} — ${branch.address}`;
+  const description = `${SITE_NAME} ${branch.shortName}: neumáticos económicos con stock propio, alineación y balanceo en ${branch.address}, ${branch.city}. ${branch.hours}. Atención por orden de llegada, sin turno.`;
 
   return {
     title,
@@ -120,7 +120,7 @@ export default async function BranchPage({ params }: Props) {
             Sucursal {branch.shortName}
           </p>
           <h1 className="text-3xl font-black leading-tight text-white md:text-4xl">
-            Neumáticos y gomería en {branch.neighborhood ?? branch.city}
+            Gomería y neumáticos baratos en {branch.neighborhood ?? branch.city}
           </h1>
           <p className="mt-3 text-lg font-bold text-navy-200">
             Neumáticos Trivium {branch.shortName}

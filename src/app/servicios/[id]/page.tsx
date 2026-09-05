@@ -5,6 +5,8 @@ import { SERVICES } from "@/lib/data";
 import { ICONS } from "@/components/home/ServicesSection";
 import { getServiciosPrecios } from "@/lib/pos-api";
 import { getSelectedBranchSlug } from "@/lib/branch-server";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { breadcrumbJsonLd, canonical, serviceJsonLd } from "@/lib/seo";
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -19,6 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${service.title} — Neumáticos Trivium`,
     description: service.description,
+    alternates: canonical(`/servicios/${service.id}`),
   };
 }
 
@@ -39,6 +42,14 @@ export default async function ServicioPage({ params }: Props) {
 
   return (
     <div className="min-h-screen bg-white">
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Inicio", path: "/" },
+          { name: "Servicios", path: "/servicios" },
+          { name: service.title, path: `/servicios/${service.id}` },
+        ])}
+      />
+      <JsonLd data={serviceJsonLd(service)} />
       <div className="bg-navy-900 py-12 md:py-16">
         <div className="max-w-3xl mx-auto px-4">
           <Link

@@ -1,15 +1,25 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { breadcrumbJsonLd, canonical } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
 
 export const metadata: Metadata = {
   title: "Grenlander: ¿Son buenos los neumáticos? Análisis y comparativa — Trivium",
   description:
-    "Analizamos la marca Grenlander en profundidad: calidad, tecnología, comparación con Zmax, Pirelli y BFGoodrich, y cuándo conviene elegirlos.",
+    "Analizamos la marca Grenlander en profundidad: homologación europea, agarre en curvas, evacuación de agua, tecnología, comparación con Zmax, Pirelli y BFGoodrich, y cuándo conviene elegirlos.",
+  alternates: canonical("/blog/grenlander"),
 };
 
 export default function GrenlanderPage() {
   return (
     <div className="min-h-screen bg-white">
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Inicio", path: "/" },
+          { name: "Blog", path: "/blog" },
+          { name: "Grenlander", path: "/blog/grenlander" },
+        ])}
+      />
       {/* Header */}
       <div className="bg-zinc-950 py-12 md:py-16">
         <div className="max-w-4xl mx-auto px-4">
@@ -94,6 +104,74 @@ export default function GrenlanderPage() {
               que las marcas premium.
             </p>
           </div>
+
+          {/* Section — Seguridad */}
+          <h2 className="text-2xl font-black text-zinc-900 pt-4 flex items-center gap-3">
+            <span className="w-8 h-1 bg-red-600 rounded-full flex-shrink-0" />
+            Seguridad: homologación, agarre en curvas y evacuación de agua
+          </h2>
+          <p>
+            Un neumático barato no sirve de nada si falla justo donde más importa: frenando en
+            mojado o sosteniendo el auto en una curva cerrada. Estos son los tres puntos donde
+            Grenlander respalda con certificaciones y diseño de banda, no solo con precio.
+          </p>
+
+          <h3 className="text-xl font-black text-zinc-900 pt-2">Homologación europea (ECE R30)</h3>
+          <p>
+            Toda la gama Grenlander que se vende en Argentina cumple la norma <strong
+            className="text-zinc-900">ECE R30</strong>, la homologación europea que exige superar
+            ensayos estandarizados de resistencia estructural del neumático (que la carcasa no
+            falle bajo carga), velocidad máxima sostenida según el índice marcado en el flanco, y
+            frenado. No es un sello decorativo: es el mismo tipo de ensayo que exigen las marcas
+            premium, y sin él un neumático no puede circular legalmente en la Unión Europea.
+          </p>
+
+          <h3 className="text-xl font-black text-zinc-900 pt-2">Evacuación de agua y aquaplaning</h3>
+          <p>
+            El riesgo real en piso mojado no es la falta de agarre estático sino el
+            <strong className="text-zinc-900"> aquaplaning</strong>: a cierta velocidad, el
+            neumático deja de tocar el asfalto porque no llega a evacuar el agua que tiene debajo.
+            La línea Passenger (COLO H02, KINGPRO ONE) usa un dibujo de banda asimétrico con
+            canales anchos pensados justamente para eso: cortar la película de agua y mantener el
+            contacto con el piso en vez de flotar sobre ella. Es la razón por la que en la ficha de
+            cada modelo vas a leer &quot;buena evacuación de agua&quot; como característica propia y
+            no como frase genérica.
+          </p>
+
+          <h3 className="text-xl font-black text-zinc-900 pt-2">Agarre en curvas</h3>
+          <p>
+            Acá la gama se divide según el modelo, y conviene ser preciso en vez de vender lo mismo
+            para todo. La línea de turismo (COLO H02, KINGPRO ONE) prioriza durabilidad y bajo
+            ruido sobre respuesta deportiva. El modelo <strong className="text-zinc-900">L-ZEAL56
+            </strong>, en cambio, tiene perfil de banda más rígido en los hombros específicamente
+            para sostener mejor el auto en curva a costa de un poco de confort — es la opción
+            correcta si buscás una SUV con más carácter al volante, no la de turismo si lo que
+            priorizás es rodar cómodo en ciudad.
+          </p>
+
+          <h3 className="text-xl font-black text-zinc-900 pt-2">Otras características de seguridad</h3>
+          <ul className="list-disc pl-6 space-y-2 text-zinc-600">
+            <li>
+              <strong className="text-zinc-900">Carcasa radial de acero</strong> en toda la gama:
+              es la construcción que sostiene la forma del neumático bajo carga y calor, en vez de
+              una carcasa textil que se deforma antes.
+            </li>
+            <li>
+              <strong className="text-zinc-900">Compuestos de silicio</strong> en los modelos de
+              mayor segmento: mejoran el agarre en mojado sin sacrificar tanta resistencia de
+              rodadura como un compuesto genérico.
+            </li>
+            <li>
+              <strong className="text-zinc-900">Talón reforzado</strong> en la línea SUV/4×4
+              (MAHO, EXPLORER): sostiene mejor el peso extra y la presión de trabajo de un vehículo
+              más pesado, sin deformarse en la llanta.
+            </li>
+            <li>
+              <strong className="text-zinc-900">Certificación M+S</strong> en los modelos
+              All-Terrain (MAGA A/T TWO): tacos y compuesto pensados para mantener tracción en
+              barro y nieve liviana, no solo en asfalto.
+            </li>
+          </ul>
 
           {/* Section 2 */}
           <h2 className="text-2xl font-black text-zinc-900 pt-4 flex items-center gap-3">

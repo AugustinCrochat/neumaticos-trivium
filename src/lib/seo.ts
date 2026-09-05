@@ -188,6 +188,29 @@ export function breadcrumbJsonLd(crumbs: Crumb[]) {
   };
 }
 
+/** Ficha de un servicio de taller (alineación, balanceo, montaje) como
+    `Service` de schema.org, colgado del `TireShop` que lo presta. Sin esto,
+    "gomería" y los servicios de taller no tenían ningún nodo propio en el
+    grafo — sólo texto suelto en la página. */
+export function serviceJsonLd(service: {
+  id: string;
+  title: string;
+  description: string;
+}) {
+  const branch = BRANCHES[0];
+  return {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "@id": `${SITE_URL}/servicios/${service.id}#servicio`,
+    name: service.title,
+    description: service.description,
+    url: absoluteUrl(`/servicios/${service.id}`),
+    serviceType: service.title,
+    provider: { "@id": branchNodeId(branch) },
+    areaServed: branch.areaServed.map((name) => ({ "@type": "City", name })),
+  };
+}
+
 export type Faq = { question: string; answer: string };
 
 export function faqJsonLd(faqs: Faq[]) {

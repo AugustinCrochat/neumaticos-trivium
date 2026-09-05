@@ -47,7 +47,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const rim = parseRimSlug(medida);
   if (rim !== null) {
-    const title = `Neumáticos rodado ${rim} — precios y medidas R${rim}`;
+    const title = `Neumáticos baratos rodado ${rim} — precios y medidas R${rim}`;
     return {
       title,
       description: `Todas las medidas de neumáticos rodado ${rim} con stock y precio actualizado. Cubiertas R${rim} de importación directa para auto y camioneta, con envío a todo el país.`,

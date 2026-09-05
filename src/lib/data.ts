@@ -172,7 +172,7 @@ export const BLOG_POSTS: BlogPost[] = [
   },
   {
     id: "7",
-    title: "¿Cuánto sale un neumático en Argentina?",
+    title: "Neumáticos baratos en Argentina: cuánto sale cada rodado",
     excerpt:
       "Qué compone el precio de una cubierta, por qué varía tanto entre negocios y cuánto cuesta hoy cada rodado, con precios reales de nuestro stock.",
     imageUrl: "/images/blog-2.webp",

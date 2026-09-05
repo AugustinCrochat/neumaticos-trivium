@@ -6,9 +6,9 @@ import { getSelectedBranchSlug } from "@/lib/branch-server";
 import { canonical } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Catálogo de neumáticos y cubiertas",
+  title: "Catálogo de neumáticos baratos",
   description:
-    "Todo el catálogo de neumáticos importados a precio outlet: filtrá por marca, medida, tipo de vehículo y precio. Stock real y envío a todo el país.",
+    "Todo el catálogo de neumáticos importados a precio outlet: filtrá por marca, medida, tipo de vehículo y precio. Cubiertas para auto y camioneta con stock real y envío a todo el país.",
   alternates: canonical("/catalogo"),
 };
 

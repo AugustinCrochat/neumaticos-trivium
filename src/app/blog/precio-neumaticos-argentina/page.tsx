@@ -7,7 +7,13 @@ import { getProductosDesdePOS } from "@/lib/pos-api";
 import { formatSize, sizeSlug } from "@/lib/tire-sizes";
 
 const SLUG = "precio-neumaticos-argentina";
-const TITLE = "¿Cuánto sale un neumático en Argentina?";
+// El título original ("¿Cuánto sale un neumático en Argentina?") es correcto
+// mas no incluye el término con más volumen de búsqueda para esta intención
+// ("neumáticos baratos") pese a que el contenido ya está armado alrededor de
+// eso — la tabla en vivo, "por qué vendemos más barato", el ranking de
+// opciones más económicas. Retitulado para que el título refleje lo que la
+// nota ya hace.
+const TITLE = "Neumáticos baratos en Argentina: cuánto sale cada rodado";
 const SUBTITLE =
   "Qué compone el precio de una cubierta, por qué varía tanto entre negocios y cuánto cuesta hoy cada rodado. Con precios reales de nuestro stock, actualizados automáticamente.";
 
@@ -16,7 +22,7 @@ const SUBTITLE =
 export const metadata: Metadata = {
   title: TITLE,
   description:
-    "Cuánto cuesta un neumático en Argentina según rodado y marca, qué hace que el precio varíe entre negocios y cómo comparar sin que te vendan humo. Con precios reales actualizados.",
+    "Cuánto sale un neumático barato o económico en Argentina según rodado y marca, qué hace que el precio varíe entre negocios y cómo comparar sin que te vendan humo. Con precios reales actualizados.",
   alternates: canonical(`/blog/${SLUG}`),
 };
 
@@ -40,6 +46,11 @@ const FAQS = [
     question: "¿Es más barato comprar los cuatro juntos?",
     answer:
       "El precio por unidad es el mismo, pero comprar los cuatro juntos rinde más: el desgaste queda parejo, el auto se comporta de forma previsible y hacés una sola vez la mano de obra de montaje. Además, si el juego se cambia de a dos con años de diferencia, terminás pagando dos veces el traslado y el balanceo.",
+  },
+  {
+    question: "¿Dónde comprar neumáticos baratos en Córdoba?",
+    answer:
+      "En nuestro local de Argüello, con stock real y taller propio, o desde acá mismo si preferís envío a domicilio. También atendemos Villa Allende, Saldán, La Calera, Mendiolaza, Unquillo y Río Ceballos, con la misma gomería como referencia.",
   },
 ];
 

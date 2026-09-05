@@ -13,6 +13,7 @@ import { Footer } from "@/components/layout/Footer";
 import { CartProvider } from "@/contexts/cart-context";
 import { CartDrawer } from "@/components/ui/CartDrawer";
 import { FloatingSearchWidget } from "@/components/ui/FloatingSearchWidget";
+import { GoogleReviewsBadge } from "@/components/ui/GoogleReviewsBadge";
 import { getAllVehicleOptions } from "@/lib/vehicles";
 
 const geist = Geist({
@@ -26,7 +27,12 @@ export const metadata: Metadata = {
     // Cada página define su título propio y hereda el sufijo de marca; sin el
     // template había que repetir "— Neumáticos Trivium" a mano en cada archivo
     // (y varias páginas se lo olvidaban).
-    default: "Neumáticos y cubiertas al mejor precio — Neumáticos Trivium",
+    // "Neumáticos" y "cubiertas" significan lo mismo — juntarlos con "y" en el
+    // mismo título no suma alcance, diluye la frase exacta "neumáticos
+    // baratos" (que sí tiene volumen de búsqueda propio) y no ayuda a
+    // aparecer para quien busca sólo "cubiertas". Van por separado: éste dice
+    // "neumáticos", la descripción de abajo dice "cubiertas".
+    default: "Neumáticos baratos al mejor precio — Neumáticos Trivium",
     template: `%s — ${SITE_NAME}`,
   },
   description:
@@ -127,6 +133,7 @@ export default function RootLayout({
               <VehicleModal />
               <CartDrawer />
               <FloatingSearchWidget />
+              <GoogleReviewsBadge />
               <main className="flex-1">{children}</main>
               <Footer />
             </CartProvider>

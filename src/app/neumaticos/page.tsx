@@ -16,12 +16,12 @@ import {
 import type { TireSize } from "@/lib/types";
 
 export const metadata: Metadata = {
-  title: "Neumáticos por medida — todas las medidas y precios",
+  title: "Neumáticos baratos por medida — todas las medidas y precios",
   description:
-    "Buscá tu medida de neumático y mirá precio y stock al instante. Cubiertas para auto y camioneta de importación directa, rodado 13 al 20, con envío a todo el país.",
+    "Buscá tu medida de neumático barato y mirá precio y stock al instante. Cubiertas para auto y camioneta de importación directa, rodado 13 al 20, con envío a todo el país.",
   alternates: canonical("/neumaticos"),
   openGraph: {
-    title: `Neumáticos por medida — ${SITE_NAME}`,
+    title: `Neumáticos baratos por medida — ${SITE_NAME}`,
     url: "/neumaticos",
   },
 };

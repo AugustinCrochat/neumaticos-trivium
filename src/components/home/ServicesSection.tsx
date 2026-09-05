@@ -70,10 +70,10 @@ export function ServicesSection() {
             Nuestros servicios
           </span>
           <h2 className="text-3xl font-black text-navy-900 mb-3">
-            No solo vendemos neumáticos
+            Gomería y taller propio, no solo venta de neumáticos
           </h2>
           <p className="text-slate-500 text-lg max-w-xl mx-auto">
-            Taller propio con equipos de última generación. Atención por orden de llegada, sin esperas.
+            Equipos de última generación y colocación incluida al comprar. Atención por orden de llegada, sin esperas.
           </p>
         </div>
 

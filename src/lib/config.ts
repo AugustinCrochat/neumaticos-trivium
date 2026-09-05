@@ -8,6 +8,9 @@ export const SITE_URL = "https://neumaticos.trivium.ar";
 export const LEGAL_NAME = "TRIVIUM CENTER S.A.";
 export const CUIT = "30-71212718-6";
 export const CONTACT_EMAIL = "info@trivium.ar";
+/** ID de la cuenta de Google Merchant Center — lo usa el módulo de aceptación
+    de Reseñas de Clientes en Google en la página de confirmación de pago. */
+export const GOOGLE_MERCHANT_ID = 5832097672;
 export const INSTAGRAM_URL = "https://www.instagram.com/neumaticos.trivium/";
 export const FACEBOOK_URL = "https://www.facebook.com/profile.php?id=61589579136727";
 /** Link de Data Fiscal AFIP (RG 4291) — badge de verificación fiscal

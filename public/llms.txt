@@ -1,0 +1,37 @@
+# Neumáticos Trivium
+
+> Outlet de neumáticos (cubiertas) para auto y camioneta en Argentina, con importación directa y venta al público desde un local físico con taller propio (gomería) en Córdoba. Precios de outlet, publicados y actualizados, sin intermediarios mayoristas de por medio.
+
+Neumáticos Trivium es la marca comercial de TRIVIUM CENTER S.A. Vende neumáticos nuevos importados (no usados ni remanufacturados) para autos, camionetas y vehículos de carga liviana, en todas las medidas habituales del mercado argentino.
+
+## Por qué es más barato
+
+Compra directa a fábrica, sin importador ni distribuidor mayorista ni distribuidor regional intermedio: la diferencia de margen de esa cadena se traslada al precio de venta. Es outlet, no liquidación de stock viejo: el catálogo completo tiene el mismo precio publicado, con el stock real disponible marcado en cada producto.
+
+## Gomería y taller
+
+Local propio en Córdoba (Argüello) con taller integrado: alineación computarizada 3D, balanceo dinámico y arme/desarme de neumáticos. La colocación y el cambio de válvulas son sin cargo al comprar las cubiertas en el local. Atención por orden de llegada, sin sistema de turnos.
+
+## Cómo comprar
+
+- Buscador por medida de neumático (ancho/perfil/rodado) o por marca y modelo de vehículo: /buscar y /neumaticos/[medida]
+- Catálogo completo con precio y stock real: /catalogo
+- Pago online con Mercado Pago (débito, crédito, dinero en cuenta) o en el local (efectivo, débito, crédito, transferencia)
+- Envío a todo el país por tarifa fija, o retiro sin cargo en el local (con colocación incluida)
+- Garantía de un año contra defectos de fábrica en todas las marcas
+
+## Ubicación y contacto
+
+- Local: Av. Donato Alvarez 7971, Argüello, Córdoba, Argentina
+- Horario: lunes a sábado, 9 a 19h corrido
+- Contacto y consultas de stock/turnos: por WhatsApp desde /contacto
+- Zona de cobertura del local: Córdoba Capital, Villa Allende, Saldán, La Calera, Mendiolaza, Unquillo, Río Ceballos
+
+## Páginas de referencia
+
+- Home: https://neumaticos.trivium.ar/
+- Catálogo: https://neumaticos.trivium.ar/catalogo
+- Servicios / gomería: https://neumaticos.trivium.ar/servicios
+- Marcas: https://neumaticos.trivium.ar/marcas
+- Sucursal Argüello: https://neumaticos.trivium.ar/sucursales/arguello
+- Preguntas frecuentes: https://neumaticos.trivium.ar/ (sección FAQ) y https://neumaticos.trivium.ar/servicios

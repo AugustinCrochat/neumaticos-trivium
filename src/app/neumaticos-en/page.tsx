@@ -6,9 +6,9 @@ import { canonical, SITE_NAME } from "@/lib/seo";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 
 export const metadata: Metadata = {
-  title: "Zonas donde atendemos — neumáticos en Córdoba y Sierras Chicas",
+  title: "Zonas donde atendemos — neumáticos baratos en Córdoba y Sierras Chicas",
   description:
-    "Vendemos neumáticos en Córdoba Capital, Argüello, Villa Allende, Saldán, La Calera, Mendiolaza, Unquillo y Río Ceballos, con local propio y taller de alineación y balanceo.",
+    "Vendemos neumáticos baratos y económicos en Córdoba Capital, Argüello, Villa Allende, Saldán, La Calera, Mendiolaza, Unquillo y Río Ceballos, con gomería propia y taller de alineación y balanceo.",
   alternates: canonical("/neumaticos-en"),
   openGraph: { title: `Zonas donde atendemos — ${SITE_NAME}`, url: "/neumaticos-en" },
 };

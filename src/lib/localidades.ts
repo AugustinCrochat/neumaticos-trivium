@@ -70,7 +70,7 @@ export const LOCALIDADES: Localidad[] = [
     intro:
       "El local de Trivium está en Argüello, sobre Av. Donato Álvarez al 7971. Es nuestra casa: acá está el depósito, el taller de alineación y balanceo, y la atención al público. Para alguien del barrio significa que no hay que bajar al centro ni pedir el neumático a un distribuidor — está en el mostrador.",
     porQue:
-      "Ser el negocio del barrio nos obliga a otra cosa: los clientes de Argüello vuelven, nos cruzan en el supermercado y nos recomiendan entre vecinos. Por eso trabajamos por orden de llegada sin turno, avisamos por WhatsApp cuánta espera hay, y si algo sale mal lo resolvemos en el mismo local. La garantía de un año se hace efectiva acá, no por formulario.",
+      "Ser la gomería del barrio nos obliga a otra cosa: los clientes de Argüello vuelven, nos cruzan en el supermercado y nos recomiendan entre vecinos. Por eso trabajamos por orden de llegada sin turno, avisamos por WhatsApp cuánta espera hay, y si algo sale mal lo resolvemos en el mismo local. La garantía de un año se hace efectiva acá, no por formulario.",
     incluye: ["Villa Warcalde", "Argüello Norte", "Los Carolinos", "Quintas de Argüello"],
   },
   {
@@ -96,7 +96,7 @@ export const LOCALIDADES: Localidad[] = [
     comoLlegar:
       "Salís de Saldán por Av. San Martín hacia el este y empalmás con Av. Donato Álvarez a la altura de Argüello. Son unos 12 minutos sin tráfico.",
     intro:
-      "Saldán no tiene un outlet de neumáticos, así que el que necesita cambiar las cuatro cubiertas termina yendo a Córdoba o a Villa Allende igual. Estamos a mitad de camino, sobre la avenida por la que ya pasás.",
+      "Saldán tiene gomerías para arreglar una pinchadura, pero ninguna con depósito propio de neumáticos importados: el que necesita cambiar las cuatro cubiertas termina yendo a Córdoba o a Villa Allende igual. Estamos a mitad de camino, sobre la avenida por la que ya pasás.",
     porQue:
       "Los caminos de Saldán y la subida hacia las sierras castigan bastante los neumáticos: el desgaste irregular y las vibraciones aparecen antes que en uso puramente urbano. Por eso conviene hacer alineación y balanceo junto con el cambio, y no sólo poner las gomas nuevas. Lo hacemos en el mismo local, en la misma visita.",
   },
@@ -111,7 +111,7 @@ export const LOCALIDADES: Localidad[] = [
     intro:
       "Desde La Calera hasta el local hay un cuarto de hora por la E-55. Es la misma distancia que hasta el centro de Córdoba, pero sin meterse en el tránsito céntrico ni pagar estacionamiento.",
     porQue:
-      "El tramo de ripio y los accesos de La Calera son duros con los flancos del neumático. Si vivís ahí, te conviene mirar índices de carga y no sólo el precio — te asesoramos con eso antes de venderte nada. Tenemos medidas de camioneta y neumáticos de carga (R15C, R16C) en stock, que es justamente lo que más se pincha en esa zona.",
+      "Las gomerías de La Calera resuelven bien una pinchadura, pero para un neumático de camioneta nuevo suelen terminar pidiéndolo a un distribuidor de Córdoba igual. El tramo de ripio y los accesos son duros con los flancos: si vivís ahí, te conviene mirar índices de carga y no sólo el precio — te asesoramos con eso antes de venderte nada. Tenemos medidas de camioneta y neumáticos de carga (R15C, R16C) en stock, que es justamente lo que más se pincha en esa zona.",
   },
   {
     slug: "mendiolaza",
@@ -124,7 +124,7 @@ export const LOCALIDADES: Localidad[] = [
     intro:
       "Mendiolaza está sobre el corredor de la E-53, el mismo por el que bajan a Córdoba miles de personas todos los días. Estamos justo sobre ese recorrido, así que el cambio de neumáticos no te obliga a un viaje aparte.",
     porQue:
-      "Si hacés la E-53 a diario, tus neumáticos acumulan muchos más kilómetros de ruta que de ciudad, y el desgaste es distinto: se van los hombros antes que el centro. Vale la pena elegir una banda de rodamiento pensada para ruta y revisar la alineación cada 10.000 km. Podemos asesorarte según cuántos kilómetros hacés por semana.",
+      "La gomería más cercana en Mendiolaza resuelve bien el día a día (pinchaduras, balanceo), pero no maneja el volumen de stock importado que tenemos nosotros, así que para un juego completo conviene bajar directo. Si hacés la E-53 a diario, tus neumáticos acumulan muchos más kilómetros de ruta que de ciudad, y el desgaste es distinto: se van los hombros antes que el centro. Vale la pena elegir una banda de rodamiento pensada para ruta y revisar la alineación cada 10.000 km. Podemos asesorarte según cuántos kilómetros hacés por semana.",
   },
   {
     slug: "unquillo",
@@ -137,7 +137,7 @@ export const LOCALIDADES: Localidad[] = [
     intro:
       "Unquillo queda a veinte minutos por la E-53. Los que bajan a Córdoba a trabajar pasan por la puerta todos los días, y suelen dejar el auto a la mañana y pasarlo a buscar a la vuelta.",
     porQue:
-      "Trabajar por orden de llegada, sin turno, y con el taller en el mismo local hace que puedas resolverlo en una parada del recorrido que ya hacés. Escribinos por WhatsApp cuando salgas y te decimos si hay cola, así no perdés el viaje.",
+      "En Unquillo hay gomerías de barrio para el service rápido, pero ninguna con el stock de neumáticos importados que manejamos nosotros. Trabajar por orden de llegada, sin turno, y con el taller en el mismo local hace que puedas resolverlo en una parada del recorrido que ya hacés. Escribinos por WhatsApp cuando salgas y te decimos si hay cola, así no perdés el viaje.",
   },
   {
     slug: "rio-ceballos",
@@ -150,7 +150,7 @@ export const LOCALIDADES: Localidad[] = [
     intro:
       "Río Ceballos es el punto más lejano del corredor de las Sierras Chicas que atendemos. Son 25 minutos de bajada por la E-53, y aun así compensa: la diferencia de precio en un juego de cuatro suele ser mayor que el costo del viaje.",
     porQue:
-      "Manejar en Sierras Chicas implica pendientes, frenadas largas y curvas cerradas, todo lo que más exige a un neumático. Ahí la profundidad de dibujo y el índice de velocidad correcto no son un detalle. Te mostramos las opciones que hay en tu medida y te explicamos la diferencia real entre una y otra, sin empujarte a la más cara.",
+      "Las gomerías de Río Ceballos resuelven el service del día a día, pero para neumáticos importados en la medida exacta que necesitás, conviene bajar hasta el outlet. Manejar en Sierras Chicas implica pendientes, frenadas largas y curvas cerradas, todo lo que más exige a un neumático. Ahí la profundidad de dibujo y el índice de velocidad correcto no son un detalle. Te mostramos las opciones que hay en tu medida y te explicamos la diferencia real entre una y otra, sin empujarte a la más cara.",
   },
 ];
 
