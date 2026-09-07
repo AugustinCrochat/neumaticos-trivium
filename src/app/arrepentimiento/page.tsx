@@ -18,9 +18,10 @@ export default function ArrepentimientoPage() {
     >
       <LegalSection title="Tu derecho">
         <p>
-          Si compraste un producto en neumaticos.trivium.ar, tenés <strong>10 días hábiles</strong> desde
-          que lo recibís para arrepentirte de la compra, sin costo y sin necesidad de justificar el
-          motivo, conforme al artículo 34 de la Ley de Defensa del Consumidor (Ley 24.240).
+          La Ley de Defensa del Consumidor (Ley 24.240, artículo 34) te da un mínimo de{" "}
+          <strong>10 días hábiles</strong> desde que recibís el producto para arrepentirte de la
+          compra, sin costo y sin necesidad de justificar el motivo. En neumaticos.trivium.ar
+          extendemos ese plazo a <strong>60 días corridos</strong> desde la recepción.
         </p>
       </LegalSection>
 

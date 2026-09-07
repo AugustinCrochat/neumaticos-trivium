@@ -1,4 +1,4 @@
-import { SITE_URL, BRANCHES, SHIPPING_FLAT_RATE } from "@/lib/config";
+import { SITE_URL, BRANCHES, SHIPPING_FLAT_RATE, FREE_SHIPPING_THRESHOLD } from "@/lib/config";
 import { getProductosDesdePOS, getServiciosPrecios, getAccesoriosDesdePOS, COMBO_ALINEACION_BALANCEO_AUTO } from "@/lib/pos-api";
 
 type CheckoutItem = { kind?: unknown; id?: unknown; quantity?: unknown };
@@ -77,6 +77,15 @@ export async function POST(request: Request) {
     return Response.json({ error: "Uno o más accesorios ya no tienen stock. Actualizá el carrito e intentá nuevamente." }, { status: 409 });
   }
 
+  // El envío sale gratis a partir de FREE_SHIPPING_THRESHOLD de subtotal —
+  // sin contar el envío mismo, calculado siempre acá con precios del POS,
+  // nunca con lo que mande el cliente.
+  const subtotal =
+    cartTires.reduce((sum, { product, quantity }) => sum + product!.price * quantity, 0) +
+    cartServices.reduce((sum, { servicio, quantity }) => sum + servicio!.precio * quantity, 0) +
+    cartAccesorios.reduce((sum, { accesorio, quantity }) => sum + accesorio!.price * quantity, 0);
+  const shippingCost = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_FLAT_RATE;
+
   const externalReference = `${body.branchId}-${crypto.randomUUID()}`;
   const preference = {
     items: [
@@ -101,8 +110,8 @@ export async function POST(request: Request) {
         unit_price: accesorio!.price,
         currency_id: "ARS",
       })),
-      ...(deliveryMethod === "shipping"
-        ? [{ id: "envio", title: "Envío a domicilio", quantity: 1, unit_price: SHIPPING_FLAT_RATE, currency_id: "ARS" }]
+      ...(deliveryMethod === "shipping" && shippingCost > 0
+        ? [{ id: "envio", title: "Envío a domicilio", quantity: 1, unit_price: shippingCost, currency_id: "ARS" }]
         : []),
     ],
     external_reference: externalReference,

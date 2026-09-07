@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { canonical } from "@/lib/seo";
-import { DEFAULT_BRANCH_ID, SHIPPING_FLAT_RATE } from "@/lib/config";
+import { DEFAULT_BRANCH_ID, FREE_SHIPPING_THRESHOLD, SHIPPING_FLAT_RATE } from "@/lib/config";
 import { getProductosDesdePOS } from "@/lib/pos-api";
 import { formatSize, sizeSlug } from "@/lib/tire-sizes";
 
@@ -249,9 +249,10 @@ export default async function Page() {
 
       <h2>El costo total, no sólo el del neumático</h2>
       <p>
-        Para que el cálculo cierre, sumá lo que va alrededor de la compra: si te lo enviamos, son $
-        {SHIPPING_FLAT_RATE.toLocaleString("es-AR")} fijos a cualquier punto del país, sin importar
-        la cantidad. Si retirás en el local, el retiro no tiene costo y la colocación va incluida.
+        Para que el cálculo cierre, sumá lo que va alrededor de la compra: si te lo enviamos, es
+        gratis desde ${FREE_SHIPPING_THRESHOLD.toLocaleString("es-AR")} de compra, o $
+        {SHIPPING_FLAT_RATE.toLocaleString("es-AR")} fijos por debajo de eso, a cualquier punto del
+        país. Si retirás en el local, el retiro no tiene costo y la colocación va incluida.
         A eso sumale el balanceo, y la alineación si hace falta —{" "}
         <Link href="/blog/alineacion-y-balanceo">acá explicamos cuándo hace falta cada uno</Link>.
       </p>

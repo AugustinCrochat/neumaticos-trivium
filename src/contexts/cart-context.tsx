@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import type { Accessory, TireProduct } from "@/lib/types";
-import { SHIPPING_FLAT_RATE } from "@/lib/config";
+import { FREE_SHIPPING_THRESHOLD, SHIPPING_FLAT_RATE } from "@/lib/config";
 
 export type TireCartItem = Pick<TireProduct, "id" | "brand" | "model" | "size" | "price" | "imageUrl" | "slug"> & {
   kind: "tire";
@@ -110,7 +110,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const value = useMemo<CartContextType>(() => {
     const count = items.reduce((sum, item) => sum + item.quantity, 0);
     const itemsTotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    const shippingCost = deliveryMethod === "shipping" ? SHIPPING_FLAT_RATE : 0;
+    const shippingCost =
+      deliveryMethod === "shipping" && itemsTotal < FREE_SHIPPING_THRESHOLD ? SHIPPING_FLAT_RATE : 0;
     const total = itemsTotal + shippingCost;
 
     function upsert(newItem: CartItem) {

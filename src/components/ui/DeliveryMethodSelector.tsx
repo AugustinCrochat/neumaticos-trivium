@@ -2,7 +2,7 @@
 
 import { useCart, type ShippingAddress } from "@/contexts/cart-context";
 import { useBranch } from "@/contexts/branch-context";
-import { SHIPPING_FLAT_RATE } from "@/lib/config";
+import { FREE_SHIPPING_THRESHOLD, SHIPPING_FLAT_RATE } from "@/lib/config";
 
 function formatPrice(price: number) {
   return new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 }).format(price);
@@ -17,8 +17,9 @@ const inputClass =
   "w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm text-navy-900 outline-none focus:border-navy-400 focus:ring-2 focus:ring-navy-500/10";
 
 export function DeliveryMethodSelector() {
-  const { deliveryMethod, setDeliveryMethod, shippingAddress, setShippingAddress } = useCart();
+  const { deliveryMethod, setDeliveryMethod, shippingAddress, setShippingAddress, itemsTotal } = useCart();
   const { selectedBranch } = useBranch();
+  const envioGratis = itemsTotal >= FREE_SHIPPING_THRESHOLD;
 
   function updateAddress(field: keyof ShippingAddress, value: string) {
     setShippingAddress({
@@ -50,7 +51,9 @@ export function DeliveryMethodSelector() {
           className={`rounded-xl border-2 p-3 text-left transition-colors ${deliveryMethod === "shipping" ? "border-orange-500 bg-orange-50" : "border-slate-200 hover:border-slate-300"}`}
         >
           <span className="block text-sm font-black text-navy-900">Envío a domicilio</span>
-          <span className="block text-xs font-bold text-slate-500 mt-0.5">{formatPrice(SHIPPING_FLAT_RATE)} · todo el país</span>
+          <span className={`block text-xs font-bold mt-0.5 ${envioGratis ? "text-emerald-600" : "text-slate-500"}`}>
+            {envioGratis ? "Gratis" : `${formatPrice(SHIPPING_FLAT_RATE)}`} · todo el país
+          </span>
         </button>
       </div>
 

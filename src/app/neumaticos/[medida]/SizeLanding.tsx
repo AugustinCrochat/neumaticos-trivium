@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { TireProduct, TireSize } from "@/lib/types";
-import { BRANCHES, SHIPPING_FLAT_RATE } from "@/lib/config";
+import { BRANCHES, FREE_SHIPPING_THRESHOLD, SHIPPING_FLAT_RATE } from "@/lib/config";
 import { esRangoFlotation, formatFlotationEquivalent, metricToFlotation } from "@/lib/flotation";
 import { ProductCard } from "@/components/ui/ProductCard";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
@@ -70,8 +70,8 @@ function buildFaqs(size: TireSize, productos: TireProduct[], desde: number | nul
     {
       question: `¿Puedo comprar neumáticos ${label} online y recibirlos en casa?`,
       answer:
-        `Sí. Podés comprar por la web y elegir envío a domicilio a cualquier punto del país por ${formatPrice(SHIPPING_FLAT_RATE)} ` +
-        `fijos, sin importar la cantidad ni la provincia. La otra opción es retirar sin cargo en el local de ${branch.address}, ` +
+        `Sí. Podés comprar por la web y elegir envío a domicilio a cualquier punto del país: gratis desde ${formatPrice(FREE_SHIPPING_THRESHOLD)} ` +
+        `de compra, o ${formatPrice(SHIPPING_FLAT_RATE)} fijos por debajo de eso, sin importar la provincia. La otra opción es retirar sin cargo en el local de ${branch.address}, ` +
         `${branch.city}, donde además hacemos la colocación y el balanceo.`,
     },
     {
@@ -381,8 +381,9 @@ export function SizeLanding({
       <section className="mt-14 overflow-hidden rounded-2xl bg-gradient-to-br from-navy-800 to-navy-950 p-8 text-white">
         <h2 className="text-2xl font-black">Dónde comprar neumáticos {label}</h2>
         <p className="mt-3 max-w-2xl leading-relaxed text-navy-200">
-          Podés comprar online y recibirlo en tu casa en cualquier punto del país por{" "}
-          {formatPrice(SHIPPING_FLAT_RATE)} fijos, o retirarlo sin cargo en {branch.address},{" "}
+          Podés comprar online y recibirlo en tu casa en cualquier punto del país: gratis desde{" "}
+          {formatPrice(FREE_SHIPPING_THRESHOLD)} de compra, o {formatPrice(SHIPPING_FLAT_RATE)} fijos
+          por debajo de eso. También podés retirarlo sin cargo en {branch.address},{" "}
           {branch.city}. Si retirás, la colocación y el cambio de válvulas van sin cargo, y tenés
           alineación y balanceo en el mismo local para dejar el auto listo en una sola visita.
         </p>

@@ -6,7 +6,7 @@ import { useBranch } from "@/contexts/branch-context";
 import { useVehicle } from "@/contexts/vehicle-context";
 import type { TireProduct } from "@/lib/types";
 import { AddToCartModal } from "@/components/ui/AddToCartModal";
-import { SHIPPING_FLAT_RATE } from "@/lib/config";
+import { FREE_SHIPPING_THRESHOLD, SHIPPING_FLAT_RATE } from "@/lib/config";
 
 function formatPrice(price: number) {
   return new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 }).format(price);
@@ -210,7 +210,9 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
           </div>
           <div className="min-w-0">
             <p className="font-bold text-navy-900 text-sm leading-snug">Envío a todo el país</p>
-            <p className="text-xs text-slate-500 mt-0.5 leading-snug">Tarifa única de {formatPrice(SHIPPING_FLAT_RATE)}</p>
+            <p className="text-xs text-slate-500 mt-0.5 leading-snug">
+              Gratis desde {formatPrice(FREE_SHIPPING_THRESHOLD)} de compra, o {formatPrice(SHIPPING_FLAT_RATE)} fijos
+            </p>
           </div>
         </div>
 

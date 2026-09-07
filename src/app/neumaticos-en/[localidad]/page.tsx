@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { SHIPPING_FLAT_RATE } from "@/lib/config";
+import { FREE_SHIPPING_THRESHOLD, SHIPPING_FLAT_RATE } from "@/lib/config";
 import { SERVICES } from "@/lib/data";
 import {
   LOCALIDADES,
@@ -92,8 +92,8 @@ function buildFaqs(localidad: Localidad, branch: ReturnType<typeof getBranchForL
     {
       question: `¿Hacen envíos a ${localidad.name}?`,
       answer:
-        `Sí. Podés comprar por la web y recibirlo en ${localidad.name} por $${SHIPPING_FLAT_RATE.toLocaleString("es-AR")} ` +
-        `fijos. Ahora bien, si podés acercarte al local te conviene: el retiro es sin cargo y la colocación va incluida, ` +
+        `Sí. Podés comprar por la web y recibirlo en ${localidad.name}: gratis en compras desde $${FREE_SHIPPING_THRESHOLD.toLocaleString("es-AR")}, ` +
+        `o $${SHIPPING_FLAT_RATE.toLocaleString("es-AR")} fijos por debajo de eso. Ahora bien, si podés acercarte al local te conviene: el retiro es sin cargo y la colocación va incluida, ` +
         `así que te ahorrás el envío y además salís con las ruedas puestas y balanceadas.`,
     },
     {

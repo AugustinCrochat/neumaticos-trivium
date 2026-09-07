@@ -6,7 +6,7 @@ import { PopularSizesSection } from "@/components/home/PopularSizesSection";
 import { AboutSection } from "@/components/home/AboutSection";
 import { LocalSection } from "@/components/home/LocalSection";
 import { FaqSection } from "@/components/seo/FaqSection";
-import { SHIPPING_FLAT_RATE } from "@/lib/config";
+import { FREE_SHIPPING_THRESHOLD, SHIPPING_FLAT_RATE } from "@/lib/config";
 import { canonical } from "@/lib/seo";
 
 // La home no consulta el POS ni ninguna otra fuente de datos: es estática de
@@ -49,7 +49,7 @@ const FAQS = [
   {
     question: "¿Hacen envíos a todo el país?",
     answer:
-      `Sí, a cualquier punto de Argentina por $${SHIPPING_FLAT_RATE.toLocaleString("es-AR")} fijos, sin importar la cantidad de neumáticos ni la provincia de destino. La alternativa es retirar sin cargo en el local de Córdoba, donde además la colocación va incluida.`,
+      `Sí, a cualquier punto de Argentina. Es gratis en compras desde $${FREE_SHIPPING_THRESHOLD.toLocaleString("es-AR")}; por debajo de eso, $${SHIPPING_FLAT_RATE.toLocaleString("es-AR")} fijos, sin importar la provincia de destino. La alternativa es retirar sin cargo en el local de Córdoba, donde además la colocación va incluida.`,
   },
   {
     question: "¿Puedo pagar online?",

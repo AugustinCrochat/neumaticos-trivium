@@ -18,11 +18,11 @@ export default function PoliticaDevolucionesPage() {
     >
       <LegalSection title="Derecho de arrepentimiento (compras online)">
         <p>
-          Conforme a la Ley de Defensa del Consumidor (Ley 24.240), si compraste a través de este
-          sitio tenés <strong>10 días</strong> desde que recibís el producto para arrepentirte de la
-          compra, sin necesidad de justificar el motivo. Aceptamos devoluciones tanto de{" "}
-          <strong>productos defectuosos como no defectuosos</strong>, siempre que sean artículos nuevos
-          y sin uso.
+          La Ley de Defensa del Consumidor (Ley 24.240) te da un mínimo de <strong>10 días</strong>{" "}
+          desde que recibís el producto para arrepentirte de la compra, sin necesidad de justificar el
+          motivo. En neumaticos.trivium.ar extendemos ese plazo a <strong>60 días</strong>. Aceptamos
+          devoluciones tanto de <strong>productos defectuosos como no defectuosos</strong>, siempre que
+          sean artículos nuevos y sin uso.
         </p>
         <p>
           El producto tiene que estar sin uso, en su embalaje original y con todos sus accesorios.
@@ -38,7 +38,7 @@ export default function PoliticaDevolucionesPage() {
 
       <LegalSection title="Cambios">
         <p>
-          También aceptamos cambios dentro de los <strong>10 días</strong> de recibido el producto.
+          También aceptamos cambios dentro de los <strong>60 días</strong> de recibido el producto.
           El artículo tiene que estar en estado nuevo, sin uso y con su embalaje original. Para
           coordinar un cambio, podés acercarte a nuestras sucursales o enviarnos el producto por
           correo (flete a cargo del cliente).
@@ -60,7 +60,7 @@ export default function PoliticaDevolucionesPage() {
 
       <LegalSection title="Tuercas antirrobo y accesorios">
         <p>
-          Se pueden cambiar o devolver sin usar, dentro de los 10 días de la compra. Una vez
+          Se pueden cambiar o devolver sin usar, dentro de los 60 días de la compra. Una vez
           colocadas en el vehículo, solo aplica cambio por falla de fabricación.
         </p>
       </LegalSection>

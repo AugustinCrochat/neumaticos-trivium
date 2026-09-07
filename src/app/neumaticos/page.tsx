@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { DEFAULT_BRANCH_ID, SHIPPING_FLAT_RATE } from "@/lib/config";
+import { DEFAULT_BRANCH_ID, FREE_SHIPPING_THRESHOLD, SHIPPING_FLAT_RATE } from "@/lib/config";
 import { getProductosDesdePOS } from "@/lib/pos-api";
 import { BRANDS } from "@/lib/data";
 import { canonical, SITE_NAME } from "@/lib/seo";
@@ -50,7 +50,7 @@ const FAQS = [
   {
     question: "¿Hacen envíos a todo el país?",
     answer:
-      `Sí, a cualquier punto de Argentina por $${SHIPPING_FLAT_RATE.toLocaleString("es-AR")} fijos, sin importar la cantidad de neumáticos ni la provincia. También podés retirar sin cargo en el local de Córdoba, donde la colocación va incluida.`,
+      `Sí, a cualquier punto de Argentina. Gratis en compras desde $${FREE_SHIPPING_THRESHOLD.toLocaleString("es-AR")}; por debajo, $${SHIPPING_FLAT_RATE.toLocaleString("es-AR")} fijos, sin importar la provincia. También podés retirar sin cargo en el local de Córdoba, donde la colocación va incluida.`,
   },
 ];
 
@@ -109,7 +109,8 @@ export default async function NeumaticosPage() {
           Elegí tu medida y vas a ver, en la misma página, qué modelos hay, a qué precio y si están
           en stock ahora. Trabajamos con importación directa: compramos en fábrica y vendemos al
           público sin distribuidor en el medio, que es de dónde sale la diferencia de precio.
-          Enviamos a todo el país por ${SHIPPING_FLAT_RATE.toLocaleString("es-AR")} fijos o podés
+          Enviamos a todo el país gratis desde ${FREE_SHIPPING_THRESHOLD.toLocaleString("es-AR")} de
+          compra (o ${SHIPPING_FLAT_RATE.toLocaleString("es-AR")} fijos por debajo), o podés
           retirar sin cargo en Córdoba.
         </p>
         <p className="mt-3 max-w-3xl leading-relaxed text-slate-500">

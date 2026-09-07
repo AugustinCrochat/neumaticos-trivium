@@ -186,9 +186,12 @@ function buildProductJsonLd(product: {
       hasMerchantReturnPolicy: {
         "@type": "MerchantReturnPolicy",
         applicableCountry: "AR",
-        // Derecho de arrepentimiento de la Ley 24.240: 10 días corridos.
+        // La Ley 24.240 exige un mínimo de 10 días corridos de arrepentimiento;
+        // acá se declara el plazo real de la política de la tienda (más
+        // generoso que el mínimo legal), que es lo que Merchant Center puntúa
+        // en "Experiencia de devolución" — ver /politica-de-devoluciones.
         returnPolicyCategory: "https://schema.org/MerchantReturnFiniteReturnWindow",
-        merchantReturnDays: 10,
+        merchantReturnDays: 60,
         returnMethod: "https://schema.org/ReturnByMail",
         returnFees: "https://schema.org/FreeReturn",
       },

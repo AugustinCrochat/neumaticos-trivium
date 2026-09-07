@@ -18,8 +18,14 @@ export const FACEBOOK_URL = "https://www.facebook.com/profile.php?id=61589579136
 export const AFIP_DATA_FISCAL_QR = "http://qr.afip.gob.ar/?qr=TQSpqR8zs2JCASa4zM5M3A,,";
 
 /** Costo fijo de envío a domicilio a todo el país (ARS). Alternativa al
-    retiro gratis en sucursal. */
+    retiro gratis en sucursal. Se cobra sólo por debajo de
+    FREE_SHIPPING_THRESHOLD — ver ahí. */
 export const SHIPPING_FLAT_RATE = 30000;
+
+/** Monto de subtotal (ARS, productos + servicios + accesorios, sin contar el
+    envío) a partir del cual el envío a domicilio sale gratis. Por debajo se
+    cobra SHIPPING_FLAT_RATE. */
+export const FREE_SHIPPING_THRESHOLD = 120000;
 
 /** Nombre de la cookie de sucursal elegida — la escribe branch-context.tsx
     (cliente) y la lee branch-server.ts (Server Components/route handlers).

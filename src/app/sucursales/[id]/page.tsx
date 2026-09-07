@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { BRANCHES, SHIPPING_FLAT_RATE, SITE_URL, type Branch } from "@/lib/config";
+import { BRANCHES, FREE_SHIPPING_THRESHOLD, SHIPPING_FLAT_RATE, SITE_URL, type Branch } from "@/lib/config";
 import { SERVICES } from "@/lib/data";
 import { canonical, SITE_NAME, type Faq } from "@/lib/seo";
 import { localidadesDeSucursal } from "@/lib/localidades";
@@ -80,8 +80,8 @@ function buildFaqs(branch: Branch): Faq[] {
     {
       question: "¿Puedo comprar por internet y retirar en el local?",
       answer:
-        `Sí, y es la opción más conveniente: el retiro no tiene costo, mientras que el envío a domicilio son ` +
-        `$${SHIPPING_FLAT_RATE.toLocaleString("es-AR")} fijos. Comprás en la web, te confirmamos por WhatsApp que está listo ` +
+        `Sí, y es la opción más conveniente: el retiro no tiene costo, mientras que el envío a domicilio es gratis desde ` +
+        `$${FREE_SHIPPING_THRESHOLD.toLocaleString("es-AR")} de compra, o $${SHIPPING_FLAT_RATE.toLocaleString("es-AR")} fijos por debajo. Comprás en la web, te confirmamos por WhatsApp que está listo ` +
         `y venís a buscarlo cuando te quede cómodo.`,
     },
   ];
