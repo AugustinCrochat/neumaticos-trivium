@@ -14,6 +14,7 @@ import {
   sizesFromCatalog,
   vehiclesUsingSize,
 } from "@/lib/tire-sizes";
+import { sortVehiclesByPopularity } from "@/lib/vehicles";
 import { SizeLanding } from "./SizeLanding";
 import { RimLanding } from "./RimLanding";
 
@@ -74,7 +75,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       : `Neumáticos ${label}: precios, equivalencias y disponibilidad.`,
     "Cubiertas de importación directa con garantía de 1 año.",
     vehiculos.length
-      ? `Medida original de ${vehiculos.slice(0, 3).map((v) => `${v.brand} ${v.model}`).join(", ")} y otros.`
+      ? `Medida original de ${sortVehiclesByPopularity(vehiculos).slice(0, 3).map((v) => `${v.brand} ${v.model}`).join(", ")} y otros.`
       : "",
     "Envío a todo el país o retiro sin cargo en Córdoba.",
   ].filter(Boolean);

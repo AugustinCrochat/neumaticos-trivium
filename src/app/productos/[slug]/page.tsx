@@ -10,6 +10,7 @@ import { BRANCHES, DEFAULT_BRANCH_ID, SHIPPING_FLAT_RATE, SITE_URL } from "@/lib
 import { ORGANIZATION_ID, branchNodeId, breadcrumbJsonLd, canonical } from "@/lib/seo";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { formatSize, rimSlug, sizeSlug, vehiclesUsingSize } from "@/lib/tire-sizes";
+import { sortVehiclesByPopularity } from "@/lib/vehicles";
 import { isLowStock, stockLabel } from "@/lib/stock";
 import { ProductNameWithHighlightedSize } from "@/components/ui/ProductNameWithHighlightedSize";
 import { ProductPageClient } from "./ProductPageClient";
@@ -220,7 +221,9 @@ export default async function ProductPage({ params }: Props) {
   const loadKg = product.loadIndex ? LOAD_INDEX_KG[product.loadIndex] : undefined;
   const loadSpeed = product.loadIndex && product.speedRating ? ` ${product.loadIndex}${product.speedRating}` : "";
   const vehiculos = vehiclesUsingSize(product.size);
-  const popularPreview = Array.from(new Set(vehiculos.map((v) => `${v.brand} ${v.model}`)))
+  const popularPreview = Array.from(
+    new Set(sortVehiclesByPopularity(vehiculos).map((v) => `${v.brand} ${v.model}`))
+  )
     .slice(0, 5)
     .join(", ");
 

@@ -16,6 +16,67 @@ export type VehicleDBEntry = {
   }[];
 };
 
+/**
+ * Orden de popularidad para los resúmenes truncados ("Usado en: ...", la
+ * descripción meta de una medida): sin esto, `vehiclesUsingSize` devuelve
+ * alfabético y el resumen de 3-5 autos podía mostrar una marca rara antes que
+ * el Hilux o el Amarok, que es lo que la mayoría de la gente reconoce de un
+ * vistazo.
+ *
+ * Es una lista curada a mano en base al mercado argentino en general (patrón
+ * más o menos estable de los rankings de patentamiento de ACARA), no un dato
+ * en vivo — no hay fuente de ventas reales en este repo. Si en el local se ve
+ * que otro modelo se pregunta más seguido, mover esa entrada más arriba.
+ * `"Marca Modelo"` tiene que coincidir exacto con `brand`+`model` en
+ * VEHICLE_DB de más abajo.
+ */
+const ORDEN_POPULARIDAD = [
+  "Toyota Hilux",
+  "Volkswagen Amarok",
+  "Ford Ranger",
+  "Chevrolet Onix",
+  "Chevrolet Onix Plus",
+  "Fiat Cronos",
+  "Peugeot 208",
+  "Renault Sandero",
+  "Renault Sandero Stepway",
+  "Volkswagen Gol Trend",
+  "Volkswagen Gol",
+  "Volkswagen Polo",
+  "Fiat Toro",
+  "Toyota Corolla Cross",
+  "Toyota Corolla",
+  "Chevrolet Tracker",
+  "Nissan Frontier",
+  "Nissan Kicks",
+  "Renault Kangoo",
+  "Fiat Argo",
+  "Citroen C3",
+  "Peugeot 2008",
+  "Renault Logan",
+  "Volkswagen T-Cross",
+  "Volkswagen Nivus",
+  "Jeep Compass",
+  "Jeep Renegade",
+  "Ford EcoSport",
+];
+
+/** Reordena una lista de `VehicleUsingSize` poniendo primero los modelos de
+    `ORDEN_POPULARIDAD`, en ese orden, y dejando el resto como venían (ver
+    `vehiclesUsingSize`, que ya los entrega alfabético). Pensada para
+    resúmenes truncados; el listado completo de una medida sigue alfabético
+    porque ahí lo que importa es que alguien encuentre su auto rápido, no que
+    los primeros sean los más comunes. */
+export function sortVehiclesByPopularity<T extends { brand: string; model: string }>(
+  vehiculos: T[]
+): T[] {
+  const rango = (v: T) => {
+    const i = ORDEN_POPULARIDAD.indexOf(`${v.brand} ${v.model}`);
+    return i === -1 ? ORDEN_POPULARIDAD.length : i;
+  };
+  return [...vehiculos].sort((a, b) => rango(a) - rango(b));
+}
+
 export const VEHICLE_DB: VehicleDBEntry[] = [
   // Alfa Romeo
   { brand: "Alfa Romeo", model: "147", sizes: [{ w: "195", p: "60", r: "15", version: "1.6/1.9 base", generation: "147", years: "2001-2010" }, { w: "205", p: "55", r: "16", version: "2.0 TS / Selespeed", generation: "147", years: "2001-2010" }] },
