@@ -1,5 +1,30 @@
 import type { TireSize, TireProduct } from "./types";
-import { VEHICLE_DB } from "./vehicles";
+import { VEHICLE_DB, sortVehiclesByPopularity } from "./vehicles";
+
+// Tabla de referencia de índices de velocidad habituales en neumáticos de auto/camioneta.
+export const SPEED_RATING_KMH: Record<string, number> = {
+  Q: 160, R: 170, S: 180, T: 190, U: 200, H: 210, V: 240, W: 270, Y: 300,
+};
+
+// Tabla ETRTO de índice de carga -> peso máximo por neumático (kg).
+export const LOAD_INDEX_KG: Record<string, number> = {
+  "60": 250, "61": 257, "62": 265, "63": 272, "64": 280, "65": 290, "66": 300, "67": 307, "68": 315, "69": 325,
+  "70": 335, "71": 345, "72": 355, "73": 365, "74": 375, "75": 387, "76": 400, "77": 412, "78": 425, "79": 437,
+  "80": 450, "81": 462, "82": 475, "83": 487, "84": 500, "85": 515, "86": 530, "87": 545, "88": 560, "89": 580,
+  "90": 600, "91": 615, "92": 630, "93": 650, "94": 670, "95": 690, "96": 710, "97": 730, "98": 750, "99": 775,
+  "100": 800, "101": 825, "102": 850, "103": 875, "104": 900, "105": 925, "106": 950, "107": 975, "108": 1000, "109": 1030,
+  "110": 1060, "111": 1090, "112": 1120, "113": 1150, "114": 1180, "115": 1215, "116": 1250, "117": 1285, "118": 1320, "119": 1360,
+  "120": 1400, "121": 1450, "122": 1500, "123": 1550, "124": 1600, "125": 1650, "126": 1700, "127": 1750, "128": 1800, "129": 1850,
+  "130": 1900,
+};
+
+export function vehicleTypeLabel(vehicleType: string[]): string {
+  const hasAuto = vehicleType.includes("auto");
+  const hasCamioneta = vehicleType.includes("camioneta");
+  if (hasAuto && hasCamioneta) return "auto y camioneta";
+  if (hasCamioneta) return "camioneta";
+  return "auto";
+}
 
 /**
  * Medidas de neumático como entidad de URL: parseo, formato y datos derivados
@@ -142,6 +167,50 @@ export function vehiclesUsingSize(size: TireSize): VehicleUsingSize[] {
     const lb = `${b.brand} ${b.model}`;
     return la > lb ? 1 : la < lb ? -1 : 0;
   });
+}
+
+/**
+ * Descripción larga de un neumático para el feed de Merchant Center y el
+ * JSON-LD de producto — un único generador para que las dos no diverjan (y
+ * Diagnostics no marque inconsistencia entre lo que dice la página y lo que
+ * dice el feed).
+ *
+ * Google marcó las descripciones anteriores ("Neumático X — importación
+ * directa, outlet de neumáticos. Garantía de 1 año.") como demasiado
+ * genéricas: no decían nada que no estuviera ya en el título. Ésta agrega
+ * sólo datos reales del producto — nada inventado ni copy de venta —, que es
+ * justo lo que alguien busca al elegir un neumático: para qué tipo de
+ * vehículo es, cuánto peso y velocidad soporta, y si es la medida de fábrica
+ * de algún auto conocido.
+ */
+export function buildTireDescription(product: {
+  model: string;
+  size: TireSize;
+  vehicleType: string[];
+  loadIndex?: string;
+  speedRating?: string;
+}): string {
+  const tipo = vehicleTypeLabel(product.vehicleType);
+  const loadKg = product.loadIndex ? LOAD_INDEX_KG[product.loadIndex] : undefined;
+  const speedKmh = product.speedRating ? SPEED_RATING_KMH[product.speedRating] : undefined;
+
+  const partes = [`Neumático ${product.model} para ${tipo}, de importación directa.`];
+
+  if (loadKg && speedKmh) {
+    partes.push(
+      `Índice de carga ${product.loadIndex} (hasta ${loadKg} kg por rueda) y velocidad ${product.speedRating} (hasta ${speedKmh} km/h).`
+    );
+  }
+
+  const vehiculos = sortVehiclesByPopularity(vehiclesUsingSize(product.size));
+  if (vehiculos.length > 0) {
+    const nombres = Array.from(new Set(vehiculos.map((v) => `${v.brand} ${v.model}`))).slice(0, 3);
+    partes.push(`Medida original de ${nombres.join(", ")}${vehiculos.length > nombres.length ? " y otros" : ""}.`);
+  }
+
+  partes.push("Outlet de neumáticos con garantía de 1 año y colocación sin cargo en el local.");
+
+  return partes.join(" ");
 }
 
 /**

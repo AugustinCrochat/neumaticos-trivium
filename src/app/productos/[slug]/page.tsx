@@ -9,7 +9,15 @@ import { BRANDS } from "@/lib/data";
 import { BRANCHES, DEFAULT_BRANCH_ID, SHIPPING_FLAT_RATE, SITE_URL } from "@/lib/config";
 import { ORGANIZATION_ID, branchNodeId, breadcrumbJsonLd, canonical } from "@/lib/seo";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { formatSize, rimSlug, sizeSlug, vehiclesUsingSize } from "@/lib/tire-sizes";
+import {
+  buildTireDescription,
+  formatSize,
+  LOAD_INDEX_KG,
+  rimSlug,
+  SPEED_RATING_KMH,
+  sizeSlug,
+  vehiclesUsingSize,
+} from "@/lib/tire-sizes";
 import { sortVehiclesByPopularity } from "@/lib/vehicles";
 import { isLowStock, stockLabel } from "@/lib/stock";
 import { ProductNameWithHighlightedSize } from "@/components/ui/ProductNameWithHighlightedSize";
@@ -79,23 +87,6 @@ function discount(price: number, priceOld: number) {
   return Math.round(((priceOld - price) / priceOld) * 100);
 }
 
-// Tabla de referencia de índices de velocidad habituales en neumáticos de auto/camioneta.
-const SPEED_RATING_KMH: Record<string, number> = {
-  Q: 160, R: 170, S: 180, T: 190, U: 200, H: 210, V: 240, W: 270, Y: 300,
-};
-
-// Tabla ETRTO de índice de carga -> peso máximo por neumático (kg).
-const LOAD_INDEX_KG: Record<string, number> = {
-  "60": 250, "61": 257, "62": 265, "63": 272, "64": 280, "65": 290, "66": 300, "67": 307, "68": 315, "69": 325,
-  "70": 335, "71": 345, "72": 355, "73": 365, "74": 375, "75": 387, "76": 400, "77": 412, "78": 425, "79": 437,
-  "80": 450, "81": 462, "82": 475, "83": 487, "84": 500, "85": 515, "86": 530, "87": 545, "88": 560, "89": 580,
-  "90": 600, "91": 615, "92": 630, "93": 650, "94": 670, "95": 690, "96": 710, "97": 730, "98": 750, "99": 775,
-  "100": 800, "101": 825, "102": 850, "103": 875, "104": 900, "105": 925, "106": 950, "107": 975, "108": 1000, "109": 1030,
-  "110": 1060, "111": 1090, "112": 1120, "113": 1150, "114": 1180, "115": 1215, "116": 1250, "117": 1285, "118": 1320, "119": 1360,
-  "120": 1400, "121": 1450, "122": 1500, "123": 1550, "124": 1600, "125": 1650, "126": 1700, "127": 1750, "128": 1800, "129": 1850,
-  "130": 1900,
-};
-
 function vehicleLabel(product: { vehicleType: string[] }) {
   const hasAuto = product.vehicleType.includes("auto");
   const hasCamioneta = product.vehicleType.includes("camioneta");
@@ -115,6 +106,7 @@ const TIRE_SVG = (
 function buildProductJsonLd(product: {
   id: string; slug: string; brand: string; model: string; imageUrl: string; price: number; enStock?: boolean;
   size: { width: number; profile: number; rim: number }; loadIndex?: string; speedRating?: string;
+  vehicleType: string[];
 }) {
   const url = `${SITE_URL}/productos/${product.slug}`;
   const image = product.imageUrl.startsWith("http") ? product.imageUrl : `${SITE_URL}${product.imageUrl}`;
@@ -134,10 +126,7 @@ function buildProductJsonLd(product: {
     // Además tiene que coincidir con el <title> del feed de Merchant Center,
     // que usa este mismo campo: si no coinciden, Diagnostics marca el ítem.
     name: product.model,
-    description:
-      `Neumático ${product.brand} en medida ${product.size.width}/${product.size.profile} R${product.size.rim}` +
-      `${product.loadIndex && product.speedRating ? ` ${product.loadIndex}${product.speedRating}` : ""}. ` +
-      `Importación directa con garantía de 1 año, colocación sin cargo en el local.`,
+    description: buildTireDescription(product),
     image,
     // sku tiene que ser el mismo id que <g:id> en google-merchant.xml y
     // google-local-inventory.xml — sin esto Merchant Center no puede matchear

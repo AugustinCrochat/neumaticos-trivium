@@ -1,5 +1,6 @@
 import { getProductosDesdePOS, getAccesoriosDesdePOS } from "@/lib/pos-api";
 import { SITE_URL, SHIPPING_FLAT_RATE } from "@/lib/config";
+import { buildTireDescription } from "@/lib/tire-sizes";
 import type { TireProduct, Accessory } from "@/lib/types";
 
 // Tarifa unica a todo el pais (alternativa al retiro gratis en sucursal, que
@@ -48,7 +49,7 @@ function availability(enStock: boolean | undefined): "in_stock" | "out_of_stock"
 
 function tireItem(p: TireProduct): string {
   const link = `${SITE_URL}/productos/${p.slug}`;
-  const description = `Neumático ${p.model} — importación directa, outlet de neumáticos. Garantía de 1 año.`;
+  const description = buildTireDescription(p);
   const imageUrl = p.imageUrl.startsWith("/") ? `${SITE_URL}${p.imageUrl}` : p.imageUrl;
   return `
     <item>
