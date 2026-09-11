@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { getBrandWordmarkDataUri } from "@/lib/og-assets";
 
 function parseSize(value: string | null) {
   if (!value) return null;
@@ -21,6 +22,8 @@ export async function GET(request: Request) {
       ? ((tireDiameter(equivalente) - tireDiameter(original)) / tireDiameter(original)) * 100
       : null;
 
+  const wordmark = await getBrandWordmarkDataUri();
+
   return new ImageResponse(
     (
       <div
@@ -36,25 +39,30 @@ export async function GET(request: Request) {
           padding: 40,
         }}
       >
+        <div style={{ display: "flex", position: "absolute", top: 0, left: 0, right: 0, height: 6, background: "#ff1e00" }} />
+
         <div
           style={{
-            width: 580,
+            width: 620,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            background: "rgba(255, 255, 255, 0.03)",
-            border: "2px solid rgba(255, 255, 255, 0.08)",
+            background: "rgba(255, 255, 255, 0.04)",
+            border: "2px solid rgba(255, 255, 255, 0.1)",
             borderRadius: 32,
             padding: "36px 40px",
           }}
         >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={wordmark} width={200} height={50} alt="" style={{ marginBottom: 20 }} />
+
           <div
             style={{
               display: "flex",
-              fontSize: 15,
-              fontWeight: 900,
-              color: "#ff4d33", // naranja/rojo de marca
-              letterSpacing: 3,
+              fontSize: 14,
+              fontWeight: 800,
+              color: "#ff8066",
+              letterSpacing: 2,
               textTransform: "uppercase",
               marginBottom: 24,
             }}
@@ -66,7 +74,7 @@ export async function GET(request: Request) {
             {/* Original */}
             {original && (
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                <span style={{ fontSize: 11, fontWeight: 800, color: "#6ba0d8", letterSpacing: 1.5, marginBottom: 4 }}>MEDIDA ORIGINAL</span>
+                <span style={{ fontSize: 12, fontWeight: 800, color: "#dceaf8", letterSpacing: 1.5, marginBottom: 4 }}>MEDIDA ORIGINAL</span>
                 <span style={{ fontSize: 56, fontWeight: 900, color: "white", lineHeight: 1 }}>
                   {original.width}/{original.profile} R{original.rim}
                 </span>
@@ -104,7 +112,7 @@ export async function GET(request: Request) {
             {/* Equivalente */}
             {equivalente && (
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                <span style={{ fontSize: 11, fontWeight: 800, color: "#6ba0d8", letterSpacing: 1.5, marginBottom: 4 }}>MEDIDA EQUIVALENTE</span>
+                <span style={{ fontSize: 12, fontWeight: 800, color: "#dceaf8", letterSpacing: 1.5, marginBottom: 4 }}>MEDIDA EQUIVALENTE</span>
                 <span style={{ fontSize: 56, fontWeight: 900, color: "white", lineHeight: 1 }}>
                   {equivalente.width}/{equivalente.profile} R{equivalente.rim}
                 </span>
@@ -117,7 +125,7 @@ export async function GET(request: Request) {
                 <span style={{ fontSize: 32, fontWeight: 900, color: "white", textAlign: "center" }}>
                   Compará la medida de tus neumáticos
                 </span>
-                <span style={{ fontSize: 18, color: "#6ba0d8", marginTop: 12, textAlign: "center" }}>
+                <span style={{ fontSize: 18, fontWeight: 600, color: "#dceaf8", marginTop: 12, textAlign: "center" }}>
                   Calculá tolerancias y diámetros en segundos
                 </span>
               </div>
@@ -125,7 +133,7 @@ export async function GET(request: Request) {
           </div>
         </div>
 
-        <div style={{ display: "flex", marginTop: 24, fontSize: 18, fontWeight: 700, color: "#6ba0d8", letterSpacing: 1.5 }}>
+        <div style={{ display: "flex", marginTop: 24, fontSize: 18, fontWeight: 700, color: "#a8c8ec", letterSpacing: 1.5 }}>
           neumaticos.trivium.ar
         </div>
       </div>

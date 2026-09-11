@@ -51,9 +51,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const title = product.model.replace(sizeRegex, `$1${loadSpeed}`);
   const fullTitle = `${title} — Neumáticos Trivium`;
   const description = `Comprá el neumático ${title} al mejor precio. Outlet de neumáticos importados en Argentina.`;
-  // WhatsApp/redes necesitan una URL absoluta para mostrar la foto al compartir el link.
-  const ogImage = product.imageUrl.startsWith("http") ? product.imageUrl : `${SITE_URL}${product.imageUrl}`;
   const pageUrl = `${SITE_URL}/productos/${product.slug}`;
+  // La imagen de OG/Twitter la arma opengraph-image.tsx en esta misma carpeta
+  // (compone la foto del producto sobre el fondo de marca en vez de compartir
+  // la foto cruda del POS, que tiene relaciones de aspecto variadas y quedaba
+  // recortada al compartir el link).
   return {
     title: fullTitle,
     description,
@@ -63,14 +65,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description,
       url: pageUrl,
       siteName: "Neumáticos Trivium",
-      images: [ogImage],
       type: "website",
     },
     twitter: {
       card: "summary_large_image",
       title: fullTitle,
       description,
-      images: [ogImage],
     },
   };
 }
