@@ -176,6 +176,7 @@ function toTireProduct(p: PosProducto): TireProduct | null {
     brand: marca,
     brandId,
     model,
+    modeloBase: modelo,
     size: { width: p.neumatico_ancho, profile: p.neumatico_perfil, rim: p.neumatico_diametro },
     // El POS no distingue tipo de vehículo todavía — se muestra para ambos por defecto.
     vehicleType: ["auto", "camioneta"],

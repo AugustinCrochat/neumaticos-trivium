@@ -20,6 +20,8 @@ export type TireProduct = {
   brand: string;
   brandId: string;
   model: string;
+  /** Modelo sin marca ni medida (ej. "Colo H02"), tal como lo normaliza fixBrandAndModel. Para cruzar contra tire-labels.ts. */
+  modeloBase: string;
   size: TireSize;
   vehicleType: VehicleType[];
   price: number;

@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation";
-import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { getProductosDesdePOS } from "@/lib/pos-api";
@@ -20,7 +19,9 @@ import {
 } from "@/lib/tire-sizes";
 import { sortVehiclesByPopularity } from "@/lib/vehicles";
 import { isLowStock, stockLabel } from "@/lib/stock";
+import { getTireLabel } from "@/lib/tire-labels";
 import { ProductNameWithHighlightedSize } from "@/components/ui/ProductNameWithHighlightedSize";
+import { ProductImageGallery } from "@/components/ui/ProductImageGallery";
 import { ProductPageClient } from "./ProductPageClient";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -83,10 +84,6 @@ function formatPrice(price: number) {
   }).format(price);
 }
 
-function discount(price: number, priceOld: number) {
-  return Math.round(((priceOld - price) / priceOld) * 100);
-}
-
 function vehicleLabel(product: { vehicleType: string[] }) {
   const hasAuto = product.vehicleType.includes("auto");
   const hasCamioneta = product.vehicleType.includes("camioneta");
@@ -94,14 +91,6 @@ function vehicleLabel(product: { vehicleType: string[] }) {
   if (hasCamioneta) return "camionetas";
   return "autos";
 }
-
-const TIRE_SVG = (
-  <svg className="w-full h-full text-slate-300" viewBox="0 0 100 100" fill="none">
-    <circle cx="50" cy="50" r="45" stroke="currentColor" strokeWidth="8" />
-    <circle cx="50" cy="50" r="28" stroke="currentColor" strokeWidth="4" />
-    <circle cx="50" cy="50" r="10" fill="currentColor" />
-  </svg>
-);
 
 function buildProductJsonLd(product: {
   id: string; slug: string; brand: string; model: string; imageUrl: string; price: number; enStock?: boolean;
@@ -205,8 +194,7 @@ export default async function ProductPage({ params }: Props) {
   const product = productos.find((p) => p.slug === slug);
   if (!product) notFound();
 
-  const hasImage =
-    !!product.imageUrl && product.imageUrl !== "/images/tire-placeholder.webp";
+  const tireLabel = getTireLabel(product.brandId, product.modeloBase, product.size);
   const brandLogo = getBrandLogo(product.brandId);
   const brand = BRANDS.find((b) => b.id === product.brandId);
   const speedKmh = product.speedRating ? SPEED_RATING_KMH[product.speedRating] : undefined;
@@ -283,39 +271,7 @@ export default async function ProductPage({ params }: Props) {
 
       <div className="grid md:grid-cols-2 gap-4 md:gap-12">
         {/* Image */}
-        <div className="bg-slate-50 rounded-2xl aspect-square flex items-center justify-center p-8 relative">
-          <div className="absolute top-4 left-4 z-10 flex flex-col gap-2 items-start">
-            {product.priceOld && (
-              <span className="bg-red-600 text-white text-xs font-black px-3 py-1.5 rounded-md shadow-lg uppercase tracking-tighter">
-                {discount(product.price, product.priceOld)}% OFF
-              </span>
-            )}
-            {product.isCarga && (
-              <span className="bg-orange-600 text-white text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-md shadow-md">
-                Carga
-              </span>
-            )}
-            {product.isAT && (
-              <span className="bg-emerald-700 text-white text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-md shadow-md">
-                A/T
-              </span>
-            )}
-          </div>
-          {hasImage ? (
-            <div className="relative w-full h-full">
-              <Image
-                src={product.imageUrl}
-                alt={`${product.brand} ${product.model}`}
-                fill
-                className="object-contain"
-                sizes="(max-width: 768px) 100vw, 50vw"
-                priority
-              />
-            </div>
-          ) : (
-            <div className="w-48 h-48">{TIRE_SVG}</div>
-          )}
-        </div>
+        <ProductImageGallery product={product} label={tireLabel} />
 
         {/* Info */}
         <div className="flex flex-col">
