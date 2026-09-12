@@ -349,20 +349,22 @@ export default async function ProductPage({ params }: Props) {
             </p>
           )}
 
-          <div className="flex flex-wrap gap-2 mb-6">
-            {product.tags.map((tag) => (
-              <span
-                key={tag}
-                className={`text-[10px] font-black px-3 py-1.5 rounded-md uppercase tracking-wider shadow-sm ${
-                  tag.toLowerCase().includes('pack') 
-                    ? 'bg-navy-900 text-white' 
-                    : 'bg-slate-200 text-slate-700'
-                }`}
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
+          {product.tags.length > 0 && (
+            <div className="flex flex-wrap gap-2 mb-6">
+              {product.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className={`text-[10px] font-black px-3 py-1.5 rounded-md uppercase tracking-wider shadow-sm ${
+                    tag.toLowerCase().includes('pack')
+                      ? 'bg-navy-900 text-white'
+                      : 'bg-slate-200 text-slate-700'
+                  }`}
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
 
           {/* Price */}
           <div className="border-t border-slate-100 pt-6 mt-6">
