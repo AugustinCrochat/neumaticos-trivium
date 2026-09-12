@@ -11,6 +11,10 @@ function formatPrice(price: number) {
   }).format(price);
 }
 
+function discount(price: number, priceOld: number) {
+  return Math.round(((priceOld - price) / priceOld) * 100);
+}
+
 const LOCK_SVG = (
   <svg
     className="w-full h-full text-slate-300 group-hover:text-slate-400 transition-colors"
@@ -23,10 +27,17 @@ const LOCK_SVG = (
   </svg>
 );
 
-export function AccessoryCard({ accessory }: { accessory: Accessory }) {
+export function AccessoryCard({ accessory, priceOld }: { accessory: Accessory; priceOld?: number }) {
   return (
     <article className="group bg-white rounded-2xl border border-slate-100 hover:border-navy-200 hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col">
       <Link href={`/tuercas-antirrobo/${accessory.slug}`} className="relative bg-white pt-[95%] overflow-hidden block">
+        {priceOld && (
+          <div className="absolute top-3 left-3 z-10">
+            <span className="bg-orange-600 text-white text-[10px] font-black px-2.5 py-1 rounded-md shadow-lg uppercase tracking-tighter">
+              {discount(accessory.price, priceOld)}% OFF
+            </span>
+          </div>
+        )}
         <div className="absolute inset-0 p-4">
           {accessory.imageUrl ? (
             <div className="relative w-full h-full">
@@ -52,6 +63,9 @@ export function AccessoryCard({ accessory }: { accessory: Accessory }) {
         </h3>
 
         <div className="mt-auto">
+          {priceOld && (
+            <span className="text-slate-400 line-through text-xs block break-words">{formatPrice(priceOld)}</span>
+          )}
           <span className="text-2xl font-black text-red-600 block mb-1.5 break-words">{formatPrice(accessory.price)}</span>
           <AccessoryAddToCart accessory={accessory} />
         </div>

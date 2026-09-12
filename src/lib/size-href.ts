@@ -1,17 +1,16 @@
 /**
- * A dónde mandar una búsqueda por medida.
+ * A dónde mandar una búsqueda por medida hecha desde el buscador interactivo
+ * (TireSizeSearch): siempre a /buscar, que muestra los resultados de catálogo
+ * (precio, stock, agregar al carrito) para esa medida, sea completa o parcial.
  *
- * Con los tres valores completos va a la landing estática /neumaticos/205-55-r16:
- * está renderizada en el servidor, es indexable y tiene equivalencias, autos
- * compatibles y FAQ. Con una medida parcial (sólo ancho, o ancho y perfil) sigue
- * yendo a /buscar, que es el buscador interactivo y sabe filtrar por coincidencia
- * parcial.
+ * Las landings /neumaticos/205-55-r16 siguen existiendo para SEO (crawlers,
+ * links internos del footer/sitemap), pero quien está buscando activamente en
+ * la web espera ver el catálogo, no una ficha informativa — antes las medidas
+ * completas mandaban ahí y parecía que "el buscador no andaba".
  *
  * Vive en su propio módulo, sin imports, porque lo usan componentes cliente:
  * si estuviera en tire-sizes.ts arrastraría VEHICLE_DB entero al bundle.
  */
 export function sizeSearchHref(width: string, profile: string, rim: string): string {
-  const completa = width.length === 3 && profile.length === 2 && rim.length === 2;
-  const medida = `${width}-${profile}-r${rim}`;
-  return completa ? `/neumaticos/${medida}` : `/buscar?medida=${medida}`;
+  return `/buscar?medida=${width}-${profile}-r${rim}`;
 }

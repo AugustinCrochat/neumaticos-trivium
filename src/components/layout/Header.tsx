@@ -9,6 +9,7 @@ import { CartButton } from "@/components/ui/CartButton";
 import { SearchModal } from "@/components/ui/SearchModal";
 
 const NAV_LINKS = [
+  { href: "/ofertas", label: "Ofertas" },
   { href: "/catalogo", label: "Neumáticos" },
   { href: "/tuercas-antirrobo", label: "Tuercas antirrobo" },
   { href: "/servicios", label: "Servicios" },
@@ -93,7 +94,11 @@ export function Header() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-zinc-200 hover:text-white hover:bg-zinc-900 px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                  className={
+                    link.href === "/ofertas"
+                      ? "text-orange-400 hover:text-orange-300 hover:bg-zinc-900 px-4 py-2 rounded-lg text-sm font-black transition-colors"
+                      : "text-zinc-200 hover:text-white hover:bg-zinc-900 px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                  }
                 >
                   {link.label}
                 </Link>
@@ -138,7 +143,11 @@ export function Header() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="block text-zinc-200 hover:text-white hover:bg-zinc-900 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors"
+                className={
+                  link.href === "/ofertas"
+                    ? "block text-orange-400 hover:text-orange-300 hover:bg-zinc-900 px-4 py-2.5 rounded-lg text-sm font-black transition-colors"
+                    : "block text-zinc-200 hover:text-white hover:bg-zinc-900 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors"
+                }
                 onClick={() => setMenuOpen(false)}
               >
                 {link.label}

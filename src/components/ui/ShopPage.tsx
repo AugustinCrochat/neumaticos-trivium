@@ -398,7 +398,12 @@ export function ShopPage({
     };
 
     if (!parsed) {
-      return { exactResults: [], compatibleResults: [], allProducts: products.filter(ok) };
+      // El catálogo de "explorar" sin medida no muestra productos sin stock —
+      // ver antes que nada no vender es peor que no verlo. Pero siguen siendo
+      // encontrables buscando por medida o entrando por marca (ver
+      // isExactMatch/isCompatibleSize más abajo y /marcas/[slug], que no
+      // filtran por stock).
+      return { exactResults: [], compatibleResults: [], allProducts: products.filter(ok).filter((p) => p.enStock) };
     }
 
     // Los resultados exactos se recortan a 5 más abajo, así que el stock
@@ -417,8 +422,8 @@ export function ShopPage({
     if (parsed || !selectedVehicle?.size) return [];
     const size = { width: Number(selectedVehicle.size.w), profile: Number(selectedVehicle.size.p), rim: Number(selectedVehicle.size.r) };
     return products
-      .filter((p) => isExactMatch(p, size))
-      .sort((a, b) => Number(!!b.enStock) - Number(!!a.enStock) || getUnitPrice(a) - getUnitPrice(b))
+      .filter((p) => isExactMatch(p, size) && p.enStock)
+      .sort((a, b) => getUnitPrice(a) - getUnitPrice(b))
       .slice(0, 3);
   }, [parsed, selectedVehicle, products]);
 
