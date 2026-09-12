@@ -1,12 +1,28 @@
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 import { ImageResponse } from "next/og";
-import sharp from "sharp";
 import { getProductosDesdePOS } from "@/lib/pos-api";
-import { DEFAULT_BRANCH_ID, SITE_URL } from "@/lib/config";
+import { DEFAULT_BRANCH_ID } from "@/lib/config";
 import { getBrandWordmarkDataUri } from "@/lib/og-assets";
 
 export const alt = "Neumáticos Trivium";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
+
+// Esta imagen usa sharp (ver getImageDataUri más abajo) para reconvertir las
+// fotos .webp del POS a PNG, porque next/og no sabe decodificar webp. sharp
+// es un binario nativo de Node: no corre en el Worker de Cloudflare donde
+// vive el sitio en producción. generateStaticParams + dynamicParams=false
+// obligan a que esta ruta se resuelva ENTERA en build time (Node.js normal,
+// mismo runner que ya usa sharp en scripts/), así que nunca termina en el
+// bundle del Worker. Un producto nuevo que todavía no pasó por un build no
+// tiene OG image hasta el próximo deploy (varias veces por día) — el
+// <title>/<meta description> de la página sigue funcionando igual.
+export async function generateStaticParams() {
+  const productos = await getProductosDesdePOS(DEFAULT_BRANCH_ID);
+  return productos.map((p) => ({ slug: p.slug }));
+}
+export const dynamicParams = false;
 
 function formatPrice(price: number) {
   return new Intl.NumberFormat("es-AR", {
@@ -24,15 +40,17 @@ function formatPrice(price: number) {
 //
 // Casi todas las fotos son .webp, y el motor que usa ImageResponse (satori +
 // resvg) no sabe decodificar webp embebido — el <img> se rompía en seco
-// ("u2 is not iterable"). Por eso se reconvierte a PNG con sharp antes de
-// pasarlo como data URI.
-async function getImageDataUri(url: string): Promise<string | null> {
+// ("u2 is not iterable"). Por eso se lee la versión PNG que
+// scripts/generate-og-product-photos.mjs genera antes del build (ver ese
+// script para el motivo de por qué la conversión no puede vivir acá: sharp
+// rompe el bundle del Worker de Cloudflare). Sólo cubre fotos locales
+// (/images/products/*.webp, que hoy son el 100% del catálogo) — una URL
+// externa se ignora y la tarjeta queda sin foto en vez de romper el render.
+async function getImageDataUri(imageUrl: string): Promise<string | null> {
+  const match = imageUrl.match(/\/images\/products\/([^/?#]+)\.webp$/i);
+  if (!match) return null;
   try {
-    const absolute = url.startsWith("http") ? url : `${SITE_URL}${url}`;
-    const res = await fetch(absolute);
-    if (!res.ok) return null;
-    const buffer = Buffer.from(await res.arrayBuffer());
-    const png = await sharp(buffer).png().toBuffer();
+    const png = await readFile(join(process.cwd(), "public", "og-cache", "products", `${match[1]}.png`));
     return `data:image/png;base64,${png.toString("base64")}`;
   } catch {
     return null;

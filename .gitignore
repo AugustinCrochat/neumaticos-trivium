@@ -17,6 +17,9 @@
 /.next/
 /out/
 
+# generado por scripts/generate-og-product-photos.mjs antes de cada build
+/public/og-cache/
+
 # production
 /build
 

@@ -60,6 +60,12 @@ jobs:
       # falla en segundos y deja el error de TS arriba de todo en el log.
       - run: npx tsc --noEmit
 
+      # Convierte las fotos de producto a PNG para las opengraph-image de
+      # /productos/[slug] (ver ese script: sharp no puede vivir en el bundle
+      # del Worker). `opennextjs-cloudflare build` no pasa por el script
+      # "prebuild" de npm, así que hay que llamarlo explícito acá.
+      - run: npm run prebuild
+
       - run: npx opennextjs-cloudflare build
 
       - run: npx opennextjs-cloudflare deploy
