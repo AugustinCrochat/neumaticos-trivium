@@ -15,11 +15,17 @@
   --color-navy-100: #dceaf8;
   --color-navy-50: #f0f6fc;
 
-  /* Brand accent — rojo Trivium #ff1e00 */
+  /* Brand accent — rojo Trivium #ff1e00. Escala completa 50-900: antes
+     faltaban 200/700/800/900, así que esos matices caían al naranja de
+     Tailwind por defecto (más amarillo/quemado) en vez del rojo de marca. */
+  --color-orange-900: #4d0a00;
+  --color-orange-800: #731000;
+  --color-orange-700: #991200;
   --color-orange-600: #cc1800;
   --color-orange-500: #ff1e00;
   --color-orange-400: #ff4d33;
   --color-orange-300: #ff8066;
+  --color-orange-200: #ffb2a3;
   --color-orange-100: #ffe5e0;
   --color-orange-50: #fff5f5;
 

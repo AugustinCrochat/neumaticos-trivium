@@ -177,7 +177,7 @@ export default async function BranchPage({ params }: Props) {
             lat={branch.coordinates.lat}
             lng={branch.coordinates.lng}
             label={`Neumáticos Trivium ${branch.shortName}`}
-            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-black text-navy-900 shadow-sm transition-colors hover:border-orange-400 hover:text-orange-700"
+            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-black text-navy-900 shadow-sm transition-colors hover:border-orange-400 hover:text-orange-600"
           >
             <svg className="h-5 w-5 text-orange-500" fill="currentColor" viewBox="0 0 24 24">
               <path d="M21.71 11.29l-9-9a1 1 0 00-1.42 0l-9 9a1 1 0 000 1.42l9 9a1 1 0 001.42 0l9-9a1 1 0 000-1.42zM14 14.5V12h-4v3H8v-4a1 1 0 011-1h5V7.5l3.5 3.5z" />
@@ -243,10 +243,10 @@ export default async function BranchPage({ params }: Props) {
 
         {/* Resena en Google */}
         {branch.reviewUrl && (
-          <section className="rounded-2xl border border-amber-200 bg-amber-50 p-5 text-center shadow-sm">
+          <section className="rounded-2xl border border-orange-100 bg-orange-50 p-5 text-center shadow-sm">
             <div className="mb-2 flex items-center justify-center gap-1" aria-hidden>
               {Array.from({ length: 5 }).map((_, i) => (
-                <svg key={i} className="h-7 w-7 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+                <svg key={i} className="h-7 w-7 text-orange-500" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.966a1 1 0 00.95.69h4.17c.969 0 1.371 1.24.588 1.81l-3.376 2.455a1 1 0 00-.363 1.118l1.287 3.966c.3.922-.755 1.688-1.54 1.118l-3.375-2.455a1 1 0 00-1.176 0l-3.375 2.455c-.784.57-1.838-.196-1.539-1.118l1.286-3.966a1 1 0 00-.362-1.118L2.343 9.393c-.783-.57-.38-1.81.588-1.81h4.17a1 1 0 00.95-.69l1.287-3.966z" />
                 </svg>
               ))}
@@ -259,7 +259,7 @@ export default async function BranchPage({ params }: Props) {
               href={branch.reviewUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-4 inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-amber-400 px-6 text-sm font-black text-navy-950 transition-transform active:scale-[0.98] hover:bg-amber-300"
+              className="mt-4 inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-orange-500 px-6 text-sm font-black text-white transition-transform active:scale-[0.98] hover:bg-orange-600"
             >
               <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.966a1 1 0 00.95.69h4.17c.969 0 1.371 1.24.588 1.81l-3.376 2.455a1 1 0 00-.363 1.118l1.287 3.966c.3.922-.755 1.688-1.54 1.118l-3.375-2.455a1 1 0 00-1.176 0l-3.375 2.455c-.784.57-1.838-.196-1.539-1.118l1.286-3.966a1 1 0 00-.362-1.118L2.343 9.393c-.783-.57-.38-1.81.588-1.81h4.17a1 1 0 00.95-.69l1.287-3.966z" />
