@@ -98,12 +98,24 @@ function BranchSummary({
 }: BranchSummaryProps) {
   return (
     <article
-      className={`rounded-2xl border bg-white p-5 shadow-sm transition-all ${
+      className={`overflow-hidden rounded-2xl border bg-white shadow-sm transition-all ${
         isActive
           ? "border-orange-500 shadow-xl shadow-orange-500/10"
           : "border-slate-200 hover:border-navy-200"
       }`}
     >
+      {branch.facadePhoto && (
+        <div className="relative h-36 w-full">
+          <Image
+            src={branch.facadePhoto}
+            alt={`Fachada del local de Neumáticos Trivium ${branch.shortName}`}
+            fill
+            className="object-cover"
+            sizes="(max-width: 1024px) 100vw, 512px"
+          />
+        </div>
+      )}
+      <div className="p-5">
       <button
         type="button"
         onClick={() => onSelectBranch(branch)}
@@ -169,6 +181,7 @@ function BranchSummary({
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
         </svg>
       </Link>
+      </div>
     </article>
   );
 }

@@ -1,18 +1,30 @@
 #!/usr/bin/env node
 /**
- * Fotos adicionales (otros ángulos) de los modelos Grenlander, bajadas del
- * sitio oficial del fabricante (Zodo Tire Group — el mismo grupo que fabrica
- * Grenlander, ver src/lib/data.ts) en es.zodotiregroup.com/zodo-pcr/grenlander.html.
+ * Fotos adicionales (otros ángulos) de modelos puntuales del catálogo,
+ * bajadas de sitios de terceros a falta de una fuente propia con galería:
  *
- * Se corrió una sola vez a mano (no es parte del build): se identificaron a
- * ojo las fotos de flanco/banda de cada modelo en su página de detalle
- * (ids numéricos de Zodo) y se llevaron acá con la URL en tamaño 1600x1200
- * (el CDN de Zodo permite pedir ese tamaño cambiando el sufijo _WxH de la URL
- * del thumbnail 800x600 que trae la página).
+ * - Grenlander: sitio oficial del fabricante (Zodo Tire Group — el mismo
+ *   grupo que fabrica Grenlander, ver src/lib/data.ts) en
+ *   es.zodotiregroup.com/zodo-pcr/grenlander.html. Maga A/T Two y
+ *   Greentour A/S no estaban ahí, se bajaron de grenlander.ca (Shopify).
+ * - Pirelli: pirelli.com sólo expone una foto de estudio por modelo (sin
+ *   galería pública), así que estas se bajaron de neumaticosmartin.com.ar
+ *   (revendedor con fichas de producto completas para Cinturato P1/P7,
+ *   Powergy y Scorpion).
+ *
+ * Se corrió a mano (no es parte del build): se identificaron a ojo las
+ * fotos de flanco/banda de cada modelo en su página de detalle y se
+ * llevaron acá con la URL en la mayor resolución que el sitio ofrece.
  *
  * Usa la misma normalización que las fotos principales (compositeOnWhite:
  * recorte + cuadrado 1200x1200 con fondo blanco) para que se vean parejas en
  * la galería junto a la foto que ya carga el POS.
+ *
+ * La key es "<brandId>-<modeloBase normalizado>": para Pirelli, distintas
+ * variantes de homologación del mismo modelo físico (P1CINT (KS), (KA), RT,
+ * etc.) se pliegan a la misma key en normalizeModelKey() más abajo, porque
+ * son la misma foto — a diferencia de la etiqueta UE, que sí cambia por
+ * medida exacta.
  */
 import { writeFileSync, mkdirSync } from "node:fs";
 import path from "node:path";
@@ -55,7 +67,27 @@ const SOURCES = {
     { url: "https://grenlander.ca/cdn/shop/files/GREENTOR_AS_0_-_Edited.png?v=1749756684&width=1200", angulo: "flanco" },
     { url: "https://grenlander.ca/cdn/shop/files/GREENTOR_AS_90_-_Edited.png?v=1749756684&width=1200", angulo: "banda" },
   ],
+
+  "pirelli-p1-cinturato": [
+    { url: "https://neumaticosmartin.com.ar/tienda/wp-content/uploads/2020/09/cinturato-p1-img-2.jpg", angulo: "flanco" },
+    { url: "https://neumaticosmartin.com.ar/tienda/wp-content/uploads/2020/09/cinturato-p1-img-3.jpg", angulo: "banda" },
+  ],
+  "pirelli-p7-cinturato": [
+    { url: "https://neumaticosmartin.com.ar/tienda/wp-content/uploads/2020/09/cinturato-p7-img-2.jpg", angulo: "flanco" },
+  ],
+  "pirelli-powergy": [
+    { url: "https://neumaticosmartin.com.ar/tienda/wp-content/uploads/2023/11/powergy-img-2.jpg", angulo: "flanco" },
+  ],
+  "pirelli-scorpion": [
+    { url: "https://neumaticosmartin.com.ar/tienda/wp-content/uploads/2022/06/scorpion-img-2.jpg", angulo: "flanco" },
+  ],
 };
+
+// Las keys de SOURCES ya están escritas en su forma normalizada final (ej.
+// "pirelli-p1-cinturato", sin el sufijo de homologación). El que hace el
+// pliegue de variantes (XL, paréntesis, RT/R) al leer product.modeloBase en
+// runtime es normalizeModelKey() en src/lib/product-extra-photos.ts — tocar
+// la lógica ahí, no acá, si aparece un caso nuevo.
 
 async function main() {
   mkdirSync(OUT_DIR, { recursive: true });

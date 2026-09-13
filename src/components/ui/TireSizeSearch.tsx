@@ -72,18 +72,6 @@ export function TireSizeSearch({
   const [shouldClearInitialOnEdit, setShouldClearInitialOnEdit] = useState(Boolean(initialMedida));
   const [placeholderIndex, setPlaceholderIndex] = useState(0);
 
-  // Modo "flotation" (LT/A-T/M-T de camioneta, en pulgadas — ej. "31x10.5R15")
-  // — misma búsqueda de siempre, solo que los tres campos se leen distinto y
-  // se convierten a métrico antes de navegar, así el resto del sitio
-  // (landing de medida, filtros, ShopPage) no necesita saber que existe.
-  const [flotationMode, setFlotationMode] = useState(false);
-  const [flotDiameter, setFlotDiameter] = useState("");
-  const [flotWidth, setFlotWidth] = useState("");
-  const [flotRim, setFlotRim] = useState("");
-  const flotDiameterRef = useRef<HTMLInputElement | null>(null);
-  const flotWidthRef = useRef<HTMLInputElement | null>(null);
-  const flotRimRef = useRef<HTMLInputElement | null>(null);
-
   const [showPopular, setShowPopular] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -140,7 +128,20 @@ export function TireSizeSearch({
   const hasInput = width.trim() !== "" || profile.trim() !== "" || rim.trim() !== "";
   const placeholderSize = POPULAR_SIZES[placeholderIndex];
 
+  // Adivinamos el formato por la cantidad de dígitos del primer campo: un
+  // ancho métrico real siempre tiene 3 cifras (125 a 355 mm), un diámetro
+  // flotation siempre tiene 2 (24 a 40 pulgadas) — no hay superposición
+  // posible, así que no hace falta que el usuario elija el modo a mano.
+  const isFlotation = width.length === 2;
+
   const sizeWarning = useMemo(() => {
+    if (isFlotation) {
+      const d = Number(width);
+      if (d < 24 || d > 40) {
+        return `Diámetro no estándar. Los diámetros flotation van de 24" a 40" (ej: 28, 31, 33)`;
+      }
+      return null;
+    }
     // Validate against standard tire size ranges
     if (width.length >= 3) {
       const w = Number(width);
@@ -161,7 +162,7 @@ export function TireSizeSearch({
       }
     }
     return null;
-  }, [width, profile, rim]);
+  }, [isFlotation, width, profile, rim]);
 
   const widthRef = useRef<HTMLInputElement | null>(null);
   const profileRef = useRef<HTMLInputElement | null>(null);
@@ -174,45 +175,32 @@ export function TireSizeSearch({
   const [focused, setFocused] = useState<MeasureSegment | null>(null);
   const [listening, setListening] = useState(false);
 
-  // Auto-search when all three fields are complete
+  // Equivalente métrico cuando adivinamos flotation (ancho = diámetro en
+  // pulgadas, perfil = ancho de sección en pulgadas con decimal, rodado
+  // igual en los dos formatos).
+  const flotWidthNum = parseFloat(profile.replace(",", "."));
+  const flotationComplete = isFlotation && rim.length === 2 && profile.trim() !== "" && !Number.isNaN(flotWidthNum);
+  const flotationEquivalent = flotationComplete
+    ? flotationToMetric({ diameterIn: Number(width), widthIn: flotWidthNum, rim: Number(rim) })
+    : null;
+
+  // Auto-search cuando los tres campos están completos, adivinando el
+  // formato por la cantidad de dígitos del primero (ver isFlotation).
   useEffect(() => {
     if (shouldClearInitialOnEdit) return; // values came from the initialMedida prop
-    if (width.length !== 3 || profile.length !== 2 || rim.length !== 2) return;
+    const metricComplete = width.length === 3 && profile.length === 2 && rim.length === 2;
+    if (!metricComplete && !flotationEquivalent) return;
     const t = setTimeout(() => {
       if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
       setShowPopular(false);
-      router.push(sizeSearchHref(width, profile, rim));
+      const href = flotationEquivalent
+        ? sizeSearchHref(String(flotationEquivalent.width), String(flotationEquivalent.profile), String(flotationEquivalent.rim))
+        : sizeSearchHref(width, profile, rim);
+      router.push(href);
     }, 300);
     return () => clearTimeout(t);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [width, profile, rim]);
-
-  const flotWidthNum = parseFloat(flotWidth.replace(",", "."));
-  const flotationComplete =
-    flotDiameter.length === 2 && flotRim.length === 2 && flotWidth.trim() !== "" && !Number.isNaN(flotWidthNum);
-  const flotationEquivalent = flotationComplete
-    ? flotationToMetric({ diameterIn: Number(flotDiameter), widthIn: flotWidthNum, rim: Number(flotRim) })
-    : null;
-
-  const performFlotationSearch = () => {
-    if (!flotationEquivalent) return;
-    if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
-    router.push(
-      sizeSearchHref(String(flotationEquivalent.width), String(flotationEquivalent.profile), String(flotationEquivalent.rim))
-    );
-  };
-
-  // Auto-buscar en cuanto los tres campos flotation están completos, igual
-  // que el modo métrico.
-  useEffect(() => {
-    if (!flotationMode || !flotationEquivalent) return;
-    const t = setTimeout(() => {
-      if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
-      performFlotationSearch();
-    }, 400);
-    return () => clearTimeout(t);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [flotationMode, flotDiameter, flotWidth, flotRim]);
+  }, [width, profile, rim, flotationEquivalent]);
 
   const performSearch = (w: string, p: string, rVal: string) => {
     if (!w && !p && !rVal) return;
@@ -224,7 +212,11 @@ export function TireSizeSearch({
   };
 
   function executeSearch() {
-    performSearch(width, profile, rim);
+    if (flotationEquivalent) {
+      performSearch(String(flotationEquivalent.width), String(flotationEquivalent.profile), String(flotationEquivalent.rim));
+    } else {
+      performSearch(width, profile, rim);
+    }
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -447,127 +439,34 @@ export function TireSizeSearch({
         </p>
       )}
 
-      <div className={`mb-3 inline-flex items-center rounded-lg border border-slate-200 bg-white p-0.5 ${compact ? 'text-xs' : 'text-sm'}`}>
-        <button
-          type="button"
-          onClick={() => setFlotationMode(false)}
-          className={`px-3 py-1.5 rounded-md font-bold transition-colors ${!flotationMode ? "bg-black text-white" : "text-slate-500 hover:text-slate-800"}`}
-        >
-          Métrico
-        </button>
-        <button
-          type="button"
-          onClick={() => setFlotationMode(true)}
-          className={`px-3 py-1.5 rounded-md font-bold transition-colors ${flotationMode ? "bg-black text-white" : "text-slate-500 hover:text-slate-800"}`}
-        >
-          Flotation (LT/A-T)
-        </button>
+      <p className={`text-slate-600 ${compact ? 'text-xs mb-2' : 'text-sm mb-3'}`}>
+        Escribí la medida como viene en el flanco (ej. <strong>205/55 R16</strong>) o, si es de
+        camioneta, en formato flotation (ej. <strong>31x10.5 R15</strong>) — la detectamos sola.
+      </p>
+
+      <div
+        ref={tireEditorRef}
+        tabIndex={0}
+        role="group"
+        aria-label="Editar medida desde el neumático"
+        onFocus={(e) => {
+          if (e.target === e.currentTarget && !focused) focusDiagramSegment('width');
+        }}
+        onBlur={() => setFocused(null)}
+        onKeyDown={handleDiagramKeyDown}
+        className="rounded-xl outline-none focus-visible:ring-4 focus-visible:ring-orange-500/20"
+      >
+        <TireDiagram
+          width={width}
+          aspect={profile}
+          rim={rim}
+          placeholderSize={placeholderSize}
+          focused={focused}
+          compact={compact}
+          onSegmentSelect={focusDiagramSegment}
+        />
       </div>
 
-      {!flotationMode && (
-        <div
-          ref={tireEditorRef}
-          tabIndex={0}
-          role="group"
-          aria-label="Editar medida desde el neumático"
-          onFocus={(e) => {
-            if (e.target === e.currentTarget && !focused) focusDiagramSegment('width');
-          }}
-          onBlur={() => setFocused(null)}
-          onKeyDown={handleDiagramKeyDown}
-          className="rounded-xl outline-none focus-visible:ring-4 focus-visible:ring-orange-500/20"
-        >
-          <TireDiagram
-            width={width}
-            aspect={profile}
-            rim={rim}
-            placeholderSize={placeholderSize}
-            focused={focused}
-            compact={compact}
-            onSegmentSelect={focusDiagramSegment}
-          />
-        </div>
-      )}
-
-      {flotationMode && (
-        <div className="flex flex-col gap-3">
-          <p className={`text-slate-600 ${compact ? 'text-xs' : 'text-sm'}`}>
-            Formato en pulgadas de camionetas LT/A-T/M-T — ej. <strong>31x10.5R15</strong>.{" "}
-            <Link href="/blog/medidas-flotation-camionetas" className="font-bold text-red-600 underline underline-offset-2 hover:text-red-700">
-              ¿Qué es esto?
-            </Link>
-          </p>
-          <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)_auto_minmax(0,1fr)] gap-2 sm:gap-3 items-center">
-            <input
-              ref={flotDiameterRef}
-              type="text"
-              inputMode="numeric"
-              autoComplete="off"
-              value={flotDiameter}
-              onChange={(e) => {
-                const v = e.target.value.replace(/[^0-9]/g, '').slice(0, 2);
-                setFlotDiameter(v);
-                if (v.length >= 2) flotWidthRef.current?.focus();
-              }}
-              onKeyDown={(e) => { if (e.key === "Enter") performFlotationSearch(); }}
-              placeholder="31"
-              aria-label="Diámetro total en pulgadas"
-              className={measureInputClass}
-            />
-            <span aria-hidden="true" className={measureSeparatorClass}>x</span>
-            <input
-              ref={flotWidthRef}
-              type="text"
-              inputMode="decimal"
-              autoComplete="off"
-              value={flotWidth}
-              onChange={(e) => {
-                const v = e.target.value.replace(/[^0-9.,]/g, '').slice(0, 5);
-                setFlotWidth(v);
-              }}
-              onKeyDown={(e) => { if (e.key === "Enter") { flotRimRef.current?.focus(); } }}
-              placeholder="10.5"
-              aria-label="Ancho de sección en pulgadas"
-              className={measureInputClass}
-            />
-            <span aria-hidden="true" className={measureSeparatorClass}>R</span>
-            <input
-              ref={flotRimRef}
-              type="text"
-              inputMode="numeric"
-              autoComplete="off"
-              value={flotRim}
-              onChange={(e) => setFlotRim(e.target.value.replace(/[^0-9]/g, '').slice(0, 2))}
-              onKeyDown={(e) => { if (e.key === "Enter") performFlotationSearch(); }}
-              placeholder="15"
-              aria-label="Rodado en pulgadas"
-              className={measureInputClass}
-            />
-          </div>
-
-          {flotationEquivalent && (
-            <p className={`font-bold text-navy-900 ${compact ? 'text-xs' : 'text-sm'}`}>
-              {formatFlotationLabel({ diameterIn: Number(flotDiameter), widthIn: flotWidthNum, rim: Number(flotRim) })}
-              {" "}≈ equivalente métrico {flotationEquivalent.width}/{flotationEquivalent.profile} R{flotationEquivalent.rim}
-            </p>
-          )}
-
-          <button
-            type="button"
-            onClick={performFlotationSearch}
-            disabled={!flotationEquivalent}
-            className="w-full h-[52px] bg-orange-500 hover:bg-orange-400 disabled:opacity-40 disabled:hover:bg-orange-500 text-white font-black rounded-xl border border-orange-400 shadow-lg shadow-orange-500/20 transition-all flex items-center justify-center gap-2"
-          >
-            Buscar medida
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <circle cx="11" cy="11" r="7" strokeWidth={3} />
-              <path strokeLinecap="round" strokeWidth={3} d="M21 21l-4.3-4.3" />
-            </svg>
-          </button>
-        </div>
-      )}
-
-      {!flotationMode && (
       <div className="flex flex-col gap-3">
         <div ref={containerRef} className="relative">
           {compact ? (
@@ -605,9 +504,12 @@ export function TireSizeSearch({
                 onBlur={() => setFocused(null)}
                 onClick={(e) => { selectInputText(e); setShowPopular(true); }}
                 onChange={(e) => {
-                  const v = e.target.value.replace(/[^0-9]/g, '').slice(0,2);
+                  // Sin punto: perfil métrico normal, 2 cifras, avanza solo.
+                  // Con punto: ancho de sección flotation (ej. "10.5"), el
+                  // usuario pasa al rodado a mano (Enter/Tab/click).
+                  const v = e.target.value.replace(/[^0-9.,]/g, '').replace(',', '.').slice(0, 5);
                   setProfile(v);
-                  if (v.length >= 2 && rimRef.current) { autoAdvancingRef.current = true; rimRef.current.focus(); }
+                  if (!v.includes('.') && v.length >= 2 && rimRef.current) { autoAdvancingRef.current = true; rimRef.current.focus(); }
                 }}
                 onKeyDown={handleKeyDown}
                 placeholder="perfil"
@@ -795,6 +697,13 @@ export function TireSizeSearch({
           </div>
         )}
 
+        {isFlotation && flotationEquivalent && (
+          <p className={`font-bold text-navy-900 ${compact ? 'text-xs' : 'text-sm'}`}>
+            {formatFlotationLabel({ diameterIn: Number(width), widthIn: flotWidthNum, rim: Number(rim) })}
+            {" "}≈ equivalente métrico {flotationEquivalent.width}/{flotationEquivalent.profile} R{flotationEquivalent.rim}
+          </p>
+        )}
+
         {sizeWarning && (
           <p className="flex items-start gap-1.5 text-orange-700 text-[11px] font-medium leading-snug">
             <svg className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
@@ -805,7 +714,6 @@ export function TireSizeSearch({
         )}
 
       </div>
-      )}
     </div>
   );
 }

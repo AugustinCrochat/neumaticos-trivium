@@ -253,9 +253,6 @@ export function ServicesSection() {
               )}
 
               <div className="relative p-7">
-                <div className="absolute -top-6 -right-6 w-32 h-32 bg-orange-500/10 rounded-full" />
-                <div className="absolute -bottom-8 -left-4 w-24 h-24 bg-neutral-700/40 rounded-full" />
-
                 <div className="relative">
                 <div className="text-orange-500 mb-4">{ICONS[service.icon]}</div>
                 <h3 className="text-xl font-bold mb-3">
