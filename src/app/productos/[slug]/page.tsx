@@ -20,6 +20,7 @@ import {
 import { sortVehiclesByPopularity } from "@/lib/vehicles";
 import { isLowStock, stockLabel } from "@/lib/stock";
 import { getTireLabel } from "@/lib/tire-labels";
+import { getExtraPhotos } from "@/lib/product-extra-photos";
 import { ProductNameWithHighlightedSize } from "@/components/ui/ProductNameWithHighlightedSize";
 import { ProductImageGallery } from "@/components/ui/ProductImageGallery";
 import { ProductPageClient } from "./ProductPageClient";
@@ -195,6 +196,7 @@ export default async function ProductPage({ params }: Props) {
   if (!product) notFound();
 
   const tireLabel = getTireLabel(product.slug);
+  const extraPhotos = getExtraPhotos(product.brandId, product.modeloBase);
   const brandLogo = getBrandLogo(product.brandId);
   const brand = BRANDS.find((b) => b.id === product.brandId);
   const speedKmh = product.speedRating ? SPEED_RATING_KMH[product.speedRating] : undefined;
@@ -271,7 +273,25 @@ export default async function ProductPage({ params }: Props) {
 
       <div className="grid md:grid-cols-2 gap-4 md:gap-12">
         {/* Image */}
-        <ProductImageGallery product={product} label={tireLabel} />
+        <div>
+          <ProductImageGallery product={product} extraPhotos={extraPhotos} label={tireLabel} />
+          {tireLabel && (
+            <p className="mt-3 rounded-xl bg-slate-50 px-4 py-3 text-xs leading-relaxed text-slate-500">
+              <strong className="text-slate-700">Certificado en la UE:</strong> eficiencia de
+              combustible {tireLabel.energyClass}, frenado en mojado {tireLabel.wetGripClass} y{" "}
+              {tireLabel.noiseDb} dB de ruido externo, con registro público verificable en{" "}
+              <a
+                href={`https://eprel.ec.europa.eu/screen/product/tyres/${tireLabel.eprelId}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-bold text-navy-700 underline decoration-navy-300 hover:decoration-navy-900"
+              >
+                EPREL
+              </a>
+              . <Link href="/blog/etiqueta-europea-neumaticos" className="font-bold text-navy-700 underline decoration-navy-300 hover:decoration-navy-900">Qué significa cada dato.</Link>
+            </p>
+          )}
+        </div>
 
         {/* Info */}
         <div className="flex flex-col">

@@ -250,4 +250,14 @@ export const BLOG_POSTS: BlogPost[] = [
     slug: "marcas-chinas-neumaticos-comparativa",
     category: "Marcas",
   },
+  {
+    id: "12",
+    title: "Etiqueta europea de neumáticos: qué significan las letras y colores",
+    excerpt:
+      "Eficiencia de combustible, frenado en mojado y ruido: la etiqueta que trae cada neumático homologado en Europa, explicada letra por letra.",
+    imageUrl: "/images/blog-1.webp",
+    date: "2026-09-14",
+    slug: "etiqueta-europea-neumaticos",
+    category: "Guías",
+  },
 ];
