@@ -179,8 +179,8 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
 
       <div className="rounded-xl border border-slate-200 divide-y divide-slate-100 overflow-hidden bg-white">
         <div className="flex items-start gap-3 p-3">
-          <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 shrink-0">
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 shrink-0">
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
@@ -203,8 +203,8 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
         </div>
 
         <div className="flex items-center gap-3 p-3">
-          <div className="w-8 h-8 rounded-full bg-navy-50 flex items-center justify-center text-navy-600 shrink-0">
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="w-10 h-10 rounded-full bg-navy-50 flex items-center justify-center text-navy-600 shrink-0">
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
             </svg>
           </div>
@@ -217,8 +217,8 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
         </div>
 
         <div className="flex items-center gap-3 p-3">
-          <div className="w-8 h-8 rounded-full bg-navy-50 flex items-center justify-center text-navy-600 shrink-0">
-            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 512 512">
+          <div className="w-10 h-10 rounded-full bg-navy-50 flex items-center justify-center text-navy-600 shrink-0">
+            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 512 512">
               <circle cx="328" cy="424" r="8" />
               <circle cx="296" cy="424" r="8" />
               <circle cx="264" cy="424" r="8" />
@@ -229,8 +229,8 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
         </div>
 
         <div className="flex items-center gap-3 p-3">
-          <div className="w-8 h-8 rounded-full bg-navy-50 flex items-center justify-center text-navy-600 shrink-0">
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="w-10 h-10 rounded-full bg-navy-50 flex items-center justify-center text-navy-600 shrink-0">
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
             </svg>
           </div>

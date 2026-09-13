@@ -7,7 +7,7 @@
     "noiseClass": "B",
     "tyreDesignation": "LT245/70R16 113/110 S"
   },
-  "grenlander-estrella-88-225-45-r17": {
+  "grenlander-estrella-88-225-45-r17-94w": {
     "eprelId": "2519611",
     "energyClass": "C",
     "wetGripClass": "B",
@@ -23,7 +23,7 @@
     "noiseClass": "B",
     "tyreDesignation": "195/55R15 85 V"
   },
-  "grenlander-kingpro-one-195-50-r16": {
+  "grenlander-kingpro-one-195-50-r16-88v": {
     "eprelId": "2236651",
     "energyClass": "C",
     "wetGripClass": "B",
@@ -47,7 +47,7 @@
     "noiseClass": "A",
     "tyreDesignation": "195/55R15 85 V"
   },
-  "pirelli-p1-cinturato-ks-175-65-r14-82t": {
+  "pirelli-p1-cinturato-175-65-r14-82t": {
     "eprelId": "1522817",
     "energyClass": "C",
     "wetGripClass": "B",
@@ -55,7 +55,7 @@
     "noiseClass": "B",
     "tyreDesignation": "175/65 R14 82 T"
   },
-  "pirelli-p1-cinturato-ka-195-55-r16-91v": {
+  "pirelli-p1-cinturato-195-55-r16-91v": {
     "eprelId": "1429179",
     "energyClass": "C",
     "wetGripClass": "B",
@@ -103,7 +103,7 @@
     "noiseClass": "B",
     "tyreDesignation": "175/65R14 82 T"
   },
-  "pirelli-p1-cinturato-ks-175-70-r14-84t": {
+  "pirelli-p1-cinturato-175-70-r14-84t": {
     "eprelId": "595609",
     "energyClass": "D",
     "wetGripClass": "B",
@@ -111,7 +111,7 @@
     "noiseClass": "B",
     "tyreDesignation": "175/70R14 84 H"
   },
-  "grenlander-estrella-88-205-45-r17": {
+  "grenlander-estrella-88-205-45-r17-88w": {
     "eprelId": "2518906",
     "energyClass": "C",
     "wetGripClass": "B",
@@ -167,7 +167,7 @@
     "noiseClass": "B",
     "tyreDesignation": "205/65R15 94 V"
   },
-  "arivo-premio-xl-eco-6-175-65-r14-86t": {
+  "arivo-premio-eco-6-175-65-r14-86t": {
     "eprelId": "2580257",
     "energyClass": "C",
     "wetGripClass": "A",
@@ -415,7 +415,7 @@
     "noiseClass": "B",
     "tyreDesignation": "175/70R13 82 T"
   },
-  "grenlander-colo-h02-195-55-r16": {
+  "grenlander-colo-h02-195-55-r16-91v": {
     "eprelId": "597327",
     "energyClass": "C",
     "wetGripClass": "C",
@@ -503,7 +503,7 @@
     "noiseClass": "B",
     "tyreDesignation": "205/60R16 92 H"
   },
-  "pirelli-p1-cinturato-ks-185-65-r14-86t": {
+  "pirelli-p1-cinturato-185-65-r14-86t": {
     "eprelId": "594719",
     "energyClass": "C",
     "wetGripClass": "B",
@@ -622,5 +622,29 @@
     "noiseDb": 68,
     "noiseClass": "A",
     "tyreDesignation": "195/65R15 95 T XL"
+  },
+  "pirelli-p1-cinturato-185-60-r15-88h": {
+    "eprelId": "1079620",
+    "energyClass": "B",
+    "wetGripClass": "D",
+    "noiseDb": 69,
+    "noiseClass": "B",
+    "tyreDesignation": "185/60R15 88 H XL"
+  },
+  "pirelli-p1-cinturato-185-65-r15-92h": {
+    "eprelId": "595275",
+    "energyClass": "C",
+    "wetGripClass": "B",
+    "noiseDb": 70,
+    "noiseClass": "B",
+    "tyreDesignation": "185/65R15 92 H XL"
+  },
+  "pirelli-pwrgy-205-55-r16-91v": {
+    "eprelId": "847708",
+    "energyClass": "C",
+    "wetGripClass": "A",
+    "noiseDb": 69,
+    "noiseClass": "B",
+    "tyreDesignation": "205/55R16 91 V"
   }
 }

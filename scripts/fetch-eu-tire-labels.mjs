@@ -75,7 +75,13 @@ function fixBrandAndModel(rawMarca, rawModelo) {
 }
 
 function fixModelName(modelo) {
-  return modelo.replace(/\s*cint/gi, " Cinturato").replace(/\s+/g, " ").trim();
+  return modelo
+    .replace(/\s*cint\b/gi, " Cinturato")
+    .replace(/\s*\([A-Z]{1,3}\d?\)\s*/gi, " ")
+    .replace(/\s+(RT|R)$/i, "")
+    .replace(/^XL\s+/i, "")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 // Candidatos alternativos de nombre comercial para reintentar cuando la
@@ -167,7 +173,8 @@ async function main() {
     if (vistos.has(key)) continue;
     vistos.add(key);
 
-    const loadSpeedMatch = (p.nombre || "").match(/(\d{2,3})([A-Z]{1,2})\s*$/);
+    const sinXL = (p.nombre || "").trim().replace(/\s*XL\s*$/i, "");
+    const loadSpeedMatch = sinXL.match(/(\d{2,3})([A-Z]{1,2})\s*$/);
     const loadIndex = loadSpeedMatch?.[1];
     const speedRating = loadSpeedMatch?.[2];
 
