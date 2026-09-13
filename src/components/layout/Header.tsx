@@ -31,7 +31,7 @@ export function Header() {
         href="/servicios"
         className="block bg-orange-500 px-4 py-1.5 text-center text-xs font-bold text-white transition-colors hover:bg-orange-600 md:text-sm"
       >
-        🔧 Colocación y cambio de válvulas sin cargo comprando en el local
+        Colocación y cambio de válvulas sin cargo comprando en el local
       </Link>
 
       {/* Utility bar — vehículo + sucursal, en su propia franja para que

@@ -439,11 +439,6 @@ export function TireSizeSearch({
         </p>
       )}
 
-      <p className={`text-slate-600 ${compact ? 'text-xs mb-2' : 'text-sm mb-3'}`}>
-        Escribí la medida como viene en el flanco (ej. <strong>205/55 R16</strong>) o, si es de
-        camioneta, en formato flotation (ej. <strong>31x10.5 R15</strong>) — la detectamos sola.
-      </p>
-
       <div
         ref={tireEditorRef}
         tabIndex={0}
