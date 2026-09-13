@@ -135,13 +135,13 @@ export const SERVICES: Service[] = [
     id: "montaje",
     title: "Arme y Desarme",
     description:
-      "Arme y desarme de neumáticos con desmontadora automática, sin riesgo de daño a llantas ni cubiertas. Comprando el neumático en nuestro local, la colocación y el cambio de válvulas son sin cargo.",
+      "Arme y desarme de neumáticos con desmontadora automática, sin riesgo de daño a llantas ni cubiertas. Si compraste las cubiertas en Neumáticos Trivium, la colocación y el cambio de válvulas son sin cargo; si las trajiste de otro lado, el arme y desarme se cobra por rueda.",
     icon: "wrench",
     features: [
       "Desmontadora automática",
       "Lubricación con pastallantas",
-      "Colocación sin cargo comprando en el local",
-      "Cambio de válvulas sin cargo",
+      "Sin cargo si compraste las cubiertas en Neumáticos Trivium",
+      "Con cargo por rueda si las cubiertas son de otro lugar",
     ],
   },
 ];

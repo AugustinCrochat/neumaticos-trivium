@@ -499,12 +499,12 @@ export function TireSizeSearch({
                 onBlur={() => setFocused(null)}
                 onClick={(e) => { selectInputText(e); setShowPopular(true); }}
                 onChange={(e) => {
-                  // Sin punto: perfil métrico normal, 2 cifras, avanza solo.
-                  // Con punto: ancho de sección flotation (ej. "10.5"), el
-                  // usuario pasa al rodado a mano (Enter/Tab/click).
+                  // En flotation el ancho de sección es decimal (ej. "10.5"): avanzar
+                  // al llegar a 2 cifras le comía la chance de escribir el punto. Solo
+                  // avanzamos solo en modo métrico (perfil entero de 2 cifras).
                   const v = e.target.value.replace(/[^0-9.,]/g, '').replace(',', '.').slice(0, 5);
                   setProfile(v);
-                  if (!v.includes('.') && v.length >= 2 && rimRef.current) { autoAdvancingRef.current = true; rimRef.current.focus(); }
+                  if (!isFlotation && v.length >= 2 && rimRef.current) { autoAdvancingRef.current = true; rimRef.current.focus(); }
                 }}
                 onKeyDown={handleKeyDown}
                 placeholder="perfil"
@@ -584,9 +584,12 @@ export function TireSizeSearch({
                   onBlur={() => setFocused(null)}
                   onClick={(e) => { selectInputText(e); setShowPopular(true); }}
                   onChange={(e) => {
-                    const v = e.target.value.replace(/[^0-9]/g, '').slice(0,2);
+                    // En flotation el ancho de sección es decimal (ej. "10.5"): avanzar
+                    // al llegar a 2 cifras le comía la chance de escribir el punto. Solo
+                    // avanzamos solo en modo métrico (perfil entero de 2 cifras).
+                    const v = e.target.value.replace(/[^0-9.,]/g, '').replace(',', '.').slice(0, 5);
                     setProfile(v);
-                    if (v.length >= 2 && rimRef.current) { autoAdvancingRef.current = true; rimRef.current.focus(); }
+                    if (!isFlotation && v.length >= 2 && rimRef.current) { autoAdvancingRef.current = true; rimRef.current.focus(); }
                   }}
                   onKeyDown={handleKeyDown}
                   placeholder="perfil"

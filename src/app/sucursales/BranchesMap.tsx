@@ -105,12 +105,14 @@ function BranchSummary({
       }`}
     >
       {branch.facadePhoto && (
-        <div className="relative h-36 w-full">
+        <div className="relative h-44 w-full">
           <Image
             src={branch.facadePhoto}
             alt={`Fachada del local de Neumáticos Trivium ${branch.shortName}`}
             fill
-            className="object-cover"
+            // object-top: el cartel con el logo queda en el tercio superior de
+            // la foto — con la posición default (center) el recorte se lo comía.
+            className="object-cover object-top"
             sizes="(max-width: 1024px) 100vw, 512px"
           />
         </div>

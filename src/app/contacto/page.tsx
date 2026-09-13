@@ -50,7 +50,7 @@ export default function ContactoPage() {
                     src={branch.facadePhoto}
                     alt={`Fachada del local de Neumáticos Trivium ${branch.shortName}`}
                     fill
-                    className="object-cover"
+                    className="object-cover object-top"
                     sizes="(max-width: 768px) 100vw, 1024px"
                   />
                 </div>
