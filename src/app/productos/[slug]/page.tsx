@@ -181,7 +181,7 @@ function buildProductJsonLd(product: {
         // generoso que el mínimo legal), que es lo que Merchant Center puntúa
         // en "Experiencia de devolución" — ver /politica-de-devoluciones.
         returnPolicyCategory: "https://schema.org/MerchantReturnFiniteReturnWindow",
-        merchantReturnDays: 60,
+        merchantReturnDays: 30,
         returnMethod: "https://schema.org/ReturnByMail",
         returnFees: "https://schema.org/FreeReturn",
       },

@@ -1,6 +1,8 @@
 import { getProductosDesdePOS, getAccesoriosDesdePOS } from "@/lib/pos-api";
 import { SITE_URL, SHIPPING_FLAT_RATE } from "@/lib/config";
 import { buildTireDescription } from "@/lib/tire-sizes";
+import { getExtraPhotos } from "@/lib/product-extra-photos";
+import { getTireLabel } from "@/lib/tire-labels";
 import type { TireProduct, Accessory } from "@/lib/types";
 
 // Tarifa unica a todo el pais (alternativa al retiro gratis en sucursal, que
@@ -47,17 +49,31 @@ function availability(enStock: boolean | undefined): "in_stock" | "out_of_stock"
   return enStock ? "in_stock" : "out_of_stock";
 }
 
+// Google acepta hasta 10 <g:additional_image_link> por item. Sumamos las
+// fotos de otros ángulos (banda/flanco/llanta, ver product-extra-photos.ts)
+// y la etiqueta UE oficial cuando existe — antes esta función no las mandaba
+// y por eso nunca aparecían como fotos secundarias en Merchant Center, más
+// allá de que ya estuvieran en la galería del sitio.
+function additionalImageLinks(urls: string[]): string {
+  return urls
+    .slice(0, 10)
+    .map((url) => `\n      <g:additional_image_link>${escapeXml(url.startsWith("/") ? `${SITE_URL}${url}` : url)}</g:additional_image_link>`)
+    .join("");
+}
+
 function tireItem(p: TireProduct): string {
   const link = `${SITE_URL}/productos/${p.slug}`;
   const description = buildTireDescription(p);
   const imageUrl = p.imageUrl.startsWith("/") ? `${SITE_URL}${p.imageUrl}` : p.imageUrl;
+  const label = getTireLabel(p.slug);
+  const extraImages = [...getExtraPhotos(p.brandId, p.modeloBase), ...(label ? [label.imagePath] : [])];
   return `
     <item>
       <g:id>${escapeXml(p.id)}</g:id>
       <title>${cdata(p.model)}</title>
       <description>${cdata(description)}</description>
       <link>${escapeXml(link)}</link>
-      <g:image_link>${escapeXml(imageUrl)}</g:image_link>
+      <g:image_link>${escapeXml(imageUrl)}</g:image_link>${additionalImageLinks(extraImages)}
       <g:condition>new</g:condition>
       <g:availability>${availability(p.enStock)}</g:availability>
       <g:price>${p.price.toFixed(2)} ARS</g:price>
