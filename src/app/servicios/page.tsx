@@ -20,7 +20,7 @@ const FAQS = [
   {
     question: "¿Cuánto sale el service en una gomería?",
     answer:
-      "En nuestro taller la colocación, el balanceo y el cambio de válvulas no tienen cargo si comprás las cubiertas en el local. La alineación computarizada 3D se cotiza aparte y el precio se confirma en el momento por WhatsApp o en el mostrador, según el vehículo.",
+      "En nuestro taller la colocación y el cambio de válvulas no tienen cargo si comprás las cubiertas en el local. El balanceo y la alineación computarizada 3D se cotizan aparte, y el precio se confirma en el momento por WhatsApp o en el mostrador, según el vehículo.",
   },
   {
     question: "¿La gomería tiene stock de todas las medidas?",

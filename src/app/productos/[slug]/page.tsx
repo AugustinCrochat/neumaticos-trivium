@@ -194,7 +194,7 @@ export default async function ProductPage({ params }: Props) {
   const product = productos.find((p) => p.slug === slug);
   if (!product) notFound();
 
-  const tireLabel = getTireLabel(product.brandId, product.modeloBase, product.size);
+  const tireLabel = getTireLabel(product.slug);
   const brandLogo = getBrandLogo(product.brandId);
   const brand = BRANDS.find((b) => b.id === product.brandId);
   const speedKmh = product.speedRating ? SPEED_RATING_KMH[product.speedRating] : undefined;

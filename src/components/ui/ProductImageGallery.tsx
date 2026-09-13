@@ -4,7 +4,6 @@ import { useState } from "react";
 import Image from "next/image";
 import type { TireProduct } from "@/lib/types";
 import type { TireLabel } from "@/lib/tire-labels";
-import { TireLabelCard } from "@/components/ui/TireLabelCard";
 
 function discount(price: number, priceOld: number) {
   return Math.round(((priceOld - price) / priceOld) * 100);
@@ -62,7 +61,17 @@ export function ProductImageGallery({ product, label }: { product: TireProduct; 
             <div className="w-48 h-48">{TIRE_SVG}</div>
           )
         ) : (
-          label && <TireLabelCard product={product} label={label} />
+          label && (
+            <div className="relative h-full w-full p-4">
+              <Image
+                src={label.imagePath}
+                alt={`Etiqueta de eficiencia energética UE — ${product.brand} ${product.modeloBase}, ${label.tyreDesignation}`}
+                fill
+                className="object-contain"
+                sizes="(max-width: 768px) 100vw, 50vw"
+              />
+            </div>
+          )
         )}
       </div>
 
@@ -83,15 +92,12 @@ export function ProductImageGallery({ product, label }: { product: TireProduct; 
           </button>
           <button
             onClick={() => setSelected("etiqueta")}
-            className={`flex h-16 w-16 shrink-0 flex-col items-center justify-center gap-1 rounded-xl border-2 bg-white text-center transition-colors ${
-              selected === "etiqueta" ? "border-navy-700" : "border-slate-200 hover:border-slate-300"
+            className={`relative h-16 w-16 shrink-0 overflow-hidden rounded-xl border-2 bg-white transition-colors ${
+              selected === "etiqueta" ? "border-navy-700" : "border-transparent hover:border-slate-200"
             }`}
-            aria-label="Ver ficha técnica y etiqueta de eficiencia"
+            aria-label="Ver etiqueta de eficiencia energética UE"
           >
-            <span className="text-[9px] font-black uppercase leading-tight text-slate-500">Ficha
-              <br />
-              técnica
-            </span>
+            <Image src={label.thumbPath} alt="" fill className="object-contain p-1" sizes="64px" />
           </button>
         </div>
       )}
