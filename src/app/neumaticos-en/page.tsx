@@ -64,7 +64,7 @@ export default function ZonasPage() {
         </section>
       )}
 
-      <section className="rounded-2xl bg-gradient-to-br from-navy-800 to-navy-950 p-8 text-white">
+      <section className="rounded-2xl bg-gradient-to-br from-navy-950 to-black p-8 text-white">
         <h2 className="text-2xl font-black">¿Estás fuera de estas zonas?</h2>
         <p className="mt-3 max-w-2xl leading-relaxed text-navy-200">
           No hay problema: enviamos neumáticos a todo el país con un costo fijo, sin importar la

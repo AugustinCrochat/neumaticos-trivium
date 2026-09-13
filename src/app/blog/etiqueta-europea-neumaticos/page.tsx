@@ -109,6 +109,24 @@ export default function Page() {
         insonorización de la carrocería.
       </p>
 
+      <h2>Un ejemplo real: 175/65 R14</h2>
+      <p>
+        Para no quedarnos sólo en la teoría, así se lee la etiqueta de un neumático concreto que
+        tenemos en stock: la <strong>Grenlander Colo H02 175/65 R14</strong>, una de las medidas más
+        pedidas para autos chicos. Su registro en EPREL marca <strong>C</strong> en eficiencia de
+        combustible, <strong>C</strong> en frenado en mojado y <strong>67 dB</strong> de ruido
+        externo, clase B. Son valores razonables para un neumático de uso urbano en esta franja de
+        precio: sin ser lo más eficiente del mercado, tampoco está en el fondo de la tabla en
+        ninguna de las dos escalas.
+      </p>
+      <p>
+        Podés ver la etiqueta oficial completa, tal como figura en EPREL, en{" "}
+        <Link href="/productos/grenlander-colo-h02-175-65-r14-86t">
+          la ficha de este producto
+        </Link>
+        .
+      </p>
+
       <h2>El QR y el registro EPREL: por qué importa</h2>
       <p>
         Desde 2021 la etiqueta incluye un código QR. Apunta a la ficha pública de ese neumático

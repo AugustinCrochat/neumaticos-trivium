@@ -47,7 +47,7 @@ export default async function OfertasPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero */}
-      <header className="relative overflow-hidden bg-gradient-to-br from-navy-950 via-navy-900 to-navy-800 py-14 md:py-20">
+      <header className="relative overflow-hidden bg-gradient-to-br from-black via-navy-950 to-navy-900 py-14 md:py-20">
         <div
           className="pointer-events-none absolute inset-0 opacity-20"
           style={{

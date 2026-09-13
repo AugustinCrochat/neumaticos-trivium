@@ -278,7 +278,7 @@ export default async function BranchPage({ params }: Props) {
         )}
 
         {/* Catalogo */}
-        <section className="overflow-hidden rounded-2xl bg-gradient-to-br from-navy-800 to-navy-950 p-6 text-white shadow-sm">
+        <section className="overflow-hidden rounded-2xl bg-gradient-to-br from-navy-950 to-black p-6 text-white shadow-sm">
           <h2 className="text-xl font-black">Catálogo de neumáticos</h2>
           <p className="mt-2 text-sm leading-relaxed text-navy-200">
             Mirá todas las marcas y medidas disponibles a precio outlet. Consultá stock y precio

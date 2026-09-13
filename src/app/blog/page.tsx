@@ -39,7 +39,7 @@ export default function BlogPage() {
               key={post.id}
               className="group bg-white rounded-2xl overflow-hidden border border-slate-100 hover:border-navy-200 hover:shadow-lg transition-all duration-200 flex flex-col"
             >
-              <div className="bg-gradient-to-br from-navy-700 to-navy-900 h-44 flex items-center justify-center relative overflow-hidden">
+              <div className="bg-gradient-to-br from-navy-950 to-black h-44 flex items-center justify-center relative overflow-hidden">
                 <div className="absolute inset-0 opacity-20">
                   <div
                     style={{

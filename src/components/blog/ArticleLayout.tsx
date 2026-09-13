@@ -115,7 +115,7 @@ export function ArticleLayout({
 
         {/* Cierre comercial: la nota atrae la visita informativa, este bloque
             la conecta con la página que vende. */}
-        <aside className="mt-14 rounded-2xl bg-gradient-to-br from-navy-800 to-navy-950 p-7 text-white">
+        <aside className="mt-14 rounded-2xl bg-gradient-to-br from-navy-950 to-black p-7 text-white">
           <h2 className="!mt-0 text-2xl font-black !text-white">
             ¿Te toca cambiar los neumáticos?
           </h2>

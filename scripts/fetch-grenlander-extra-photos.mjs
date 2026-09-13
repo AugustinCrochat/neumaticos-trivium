@@ -44,6 +44,17 @@ const SOURCES = {
     { url: "https://aliyun-hk02-cdn.hcwebsite.com/76d1771ca63008b45f0948968cc4f09f/data/thumb/res/en/20230307/c8eb5c4df0c85578.jpg_20230307141151_1600x1200.jpeg", angulo: "banda" },
     { url: "https://aliyun-hk02-cdn.hcwebsite.com/76d1771ca63008b45f0948968cc4f09f/data/thumb/res/en/20230307/d105d640531e176b.jpg_20230307141154_1600x1200.jpeg", angulo: "llanta" },
   ],
+  // Maga A/T Two y Greentour A/S no estaban en el sitio de Zodo — se bajaron
+  // del sitio propio de Grenlander (grenlander.ca), que tiene su ficha de
+  // producto en Shopify con 3 fotos de estudio a 0°/22.5°/90°.
+  "grenlander-maga-a-t-two": [
+    { url: "https://grenlander.ca/cdn/shop/files/MAGA_AT_TWO_0_-_Edited.png?v=1749756684&width=1200", angulo: "flanco" },
+    { url: "https://grenlander.ca/cdn/shop/files/MAGA_AT_TWO_90_-_Edited.png?v=1749756684&width=1200", angulo: "banda" },
+  ],
+  "grenlander-greentour-a-s": [
+    { url: "https://grenlander.ca/cdn/shop/files/GREENTOR_AS_0_-_Edited.png?v=1749756684&width=1200", angulo: "flanco" },
+    { url: "https://grenlander.ca/cdn/shop/files/GREENTOR_AS_90_-_Edited.png?v=1749756684&width=1200", angulo: "banda" },
+  ],
 };
 
 async function main() {

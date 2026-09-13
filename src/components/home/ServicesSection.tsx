@@ -82,7 +82,7 @@ export function ServicesSection() {
           {SERVICES.map((service) => (
             <div
               key={service.id}
-              className="group relative bg-gradient-to-br from-navy-800 to-navy-900 rounded-2xl p-7 text-white overflow-hidden"
+              className="group relative bg-gradient-to-br from-navy-950 to-black rounded-2xl p-7 text-white overflow-hidden"
             >
               <div className="absolute -top-6 -right-6 w-32 h-32 bg-orange-500/10 rounded-full" />
               <div className="absolute -bottom-8 -left-4 w-24 h-24 bg-navy-600/40 rounded-full" />

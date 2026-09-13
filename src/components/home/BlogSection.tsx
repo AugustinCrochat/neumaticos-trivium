@@ -42,7 +42,7 @@ export function BlogSection() {
               }`}
             >
               {/* Image placeholder */}
-              <div className="bg-gradient-to-br from-navy-700 to-navy-900 h-44 flex items-center justify-center relative overflow-hidden">
+              <div className="bg-gradient-to-br from-navy-950 to-black h-44 flex items-center justify-center relative overflow-hidden">
                 <div className="absolute inset-0 opacity-20">
                   <div
                     style={{
