@@ -85,6 +85,10 @@ function formatPrice(price: number) {
   }).format(price);
 }
 
+function discount(price: number, priceOld: number) {
+  return Math.round(((priceOld - price) / priceOld) * 100);
+}
+
 function vehicleLabel(product: { vehicleType: string[] }) {
   const hasAuto = product.vehicleType.includes("auto");
   const hasCamioneta = product.vehicleType.includes("camioneta");
@@ -345,9 +349,14 @@ export default async function ProductPage({ params }: Props) {
           {/* Price */}
           <div className="border-t border-slate-100 pt-6 mt-6">
             {product.priceOld && (
-              <span className="text-slate-400 line-through text-sm block mb-1">
-                {formatPrice(product.priceOld)}
-              </span>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-slate-400 line-through text-sm">
+                  {formatPrice(product.priceOld)}
+                </span>
+                <span className="bg-orange-600 text-white text-[10px] font-black px-2 py-0.5 rounded-md uppercase tracking-tighter">
+                  {discount(product.price, product.priceOld)}% OFF
+                </span>
+              </div>
             )}
             <span className="text-4xl font-black text-red-600">
               {formatPrice(product.price)}

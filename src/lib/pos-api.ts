@@ -2,6 +2,7 @@ import type { Accessory, TireProduct } from "./types";
 import { DEFAULT_BRANCH_ID } from "./config";
 import productImagesManifest from "./product-images-manifest.json";
 import { getAllVehicleOptions } from "./vehicles";
+import { OFFER_TIRE_SLUGS, OFFER_ACCESSORY_SLUGS, withOfferPrice } from "./offers";
 
 const AVAILABLE_IMAGES = new Set(productImagesManifest);
 
@@ -208,6 +209,7 @@ function toTireProduct(p: PosProducto): TireProduct | null {
     stock: p.stock,
     loadIndex,
     speedRating,
+    priceOld: OFFER_TIRE_SLUGS.includes(slug) ? withOfferPrice(p.precio) : undefined,
   };
 }
 
@@ -297,6 +299,7 @@ export async function getAccesoriosDesdePOS(sucursalSlug: string = DEFAULT_BRANC
       nombre: a.nombre,
       descripcion: a.descripcion,
       price: a.precio,
+      priceOld: OFFER_ACCESSORY_SLUGS.includes(slugify(a.nombre)) ? withOfferPrice(a.precio) : undefined,
       imageUrl: a.imagen_url,
       enStock: a.en_stock,
       stock: a.stock,

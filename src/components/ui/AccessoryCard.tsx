@@ -27,7 +27,7 @@ const LOCK_SVG = (
   </svg>
 );
 
-export function AccessoryCard({ accessory, priceOld }: { accessory: Accessory; priceOld?: number }) {
+export function AccessoryCard({ accessory, priceOld = accessory.priceOld }: { accessory: Accessory; priceOld?: number }) {
   return (
     <article className="group bg-white rounded-2xl border border-slate-100 hover:border-navy-200 hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col">
       <Link href={`/tuercas-antirrobo/${accessory.slug}`} className="relative bg-white pt-[95%] overflow-hidden block">

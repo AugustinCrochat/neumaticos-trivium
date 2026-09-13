@@ -50,6 +50,7 @@ export type Accessory = {
   nombre: string;
   descripcion: string | null;
   price: number;
+  priceOld?: number;
   imageUrl: string | null;
   enStock: boolean;
   stock: number;
