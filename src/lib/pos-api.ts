@@ -95,7 +95,18 @@ function slugify(text: string): string {
 
 // Corrige la abreviatura "CINT" cargada en el POS por error: el nombre real es "Cinturato".
 function fixModelName(modelo: string): string {
-  return modelo.replace(/\s*cint/gi, " Cinturato").replace(/\s+/g, " ").trim();
+  return modelo
+    .replace(/\s*cint\b/gi, " Cinturato")
+    // Pirelli carga códigos de homologación con automotrices (ej. "(KS)",
+    // "(KA)RT") que no dicen nada al cliente y hacen que varias fichas del
+    // mismo modelo físico (P1 Cinturato) se vean como productos distintos.
+    // Se sacan del nombre mostrado; normalizeModelKey() en
+    // product-extra-photos.ts ya no necesita plegarlos porque quedan iguales.
+    .replace(/\s*\([A-Z]{1,3}\d?\)\s*/gi, " ")
+    .replace(/\s+(RT|R)$/i, "")
+    .replace(/^XL\s+/i, "")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 // Correcciones de marca/modelo mal cargados en el POS. Solo afectan lo que se
@@ -143,10 +154,15 @@ function localImageFallback(p: PosProducto): string | null {
 
 // El nombre cargado en el POS suele terminar en "<carga><velocidad>", ej.
 // "PIRELLI POWERGY 225/45 R17 91W" -> carga 91, velocidad W. No siempre está.
+// A veces el refuerzo "XL" viene pegado sin espacio ("94WXL"), lo que hacía
+// que la regla no matchee nada (ninguna combinación de dígitos+1-2 letras
+// termina justo en "WXL") y el producto se quedara sin índice de carga ni
+// velocidad — se saca el "XL" antes de leer carga/velocidad.
 const LOAD_SPEED_SUFFIX = /(\d{2,3})([A-Z]{1,2})\s*$/;
 
 function parseLoadSpeed(nombre: string): { loadIndex?: string; speedRating?: string } {
-  const match = nombre.trim().match(LOAD_SPEED_SUFFIX);
+  const sinXL = nombre.trim().replace(/\s*XL\s*$/i, "");
+  const match = sinXL.match(LOAD_SPEED_SUFFIX);
   if (!match) return {};
   return { loadIndex: match[1], speedRating: match[2] };
 }
