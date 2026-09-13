@@ -184,6 +184,32 @@ export function TireSizeSearch({
     ? flotationToMetric({ diameterIn: Number(width), widthIn: flotWidthNum, rim: Number(rim) })
     : null;
 
+  // Le avisa a la landing /neumaticos/[medida] que la búsqueda que la trajo
+  // fue en flotation, para que muestre esa medida como protagonista y el
+  // equivalente métrico como aclaración — no al revés. No usamos un query
+  // param porque esa ruta es 100% estática (sin leer cookies/searchParams)
+  // para poder prerenderizarse e ir por CDN; sessionStorage es la forma de
+  // pasarle el dato sin volverla dinámica. Se guarda el label tal como lo
+  // escribió el usuario (no se reconstruye desde el métrico al llegar,
+  // porque el redondeo de flotationToMetric/metricToFlotation no siempre es
+  // reversible — 31x10.5R15 puede volver como 30.5x10.5R15).
+  function rememberFlotationOrigin() {
+    if (!flotationEquivalent) return;
+    try {
+      sessionStorage.setItem(
+        "trivium:flotation-origin",
+        JSON.stringify({
+          label: formatFlotationLabel({ diameterIn: Number(width), widthIn: flotWidthNum, rim: Number(rim) }),
+          width: flotationEquivalent.width,
+          profile: flotationEquivalent.profile,
+          rim: flotationEquivalent.rim,
+        })
+      );
+    } catch {
+      // Safari en modo privado puede tirar QuotaExceededError — no es crítico.
+    }
+  }
+
   // Auto-search cuando los tres campos están completos, adivinando el
   // formato por la cantidad de dígitos del primero (ver isFlotation).
   useEffect(() => {
@@ -193,6 +219,7 @@ export function TireSizeSearch({
     const t = setTimeout(() => {
       if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
       setShowPopular(false);
+      if (flotationEquivalent) rememberFlotationOrigin();
       const href = flotationEquivalent
         ? sizeSearchHref(String(flotationEquivalent.width), String(flotationEquivalent.profile), String(flotationEquivalent.rim))
         : sizeSearchHref(width, profile, rim);
@@ -213,6 +240,7 @@ export function TireSizeSearch({
 
   function executeSearch() {
     if (flotationEquivalent) {
+      rememberFlotationOrigin();
       performSearch(String(flotationEquivalent.width), String(flotationEquivalent.profile), String(flotationEquivalent.rim));
     } else {
       performSearch(width, profile, rim);

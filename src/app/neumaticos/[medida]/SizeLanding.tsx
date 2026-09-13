@@ -3,6 +3,7 @@ import type { TireProduct, TireSize } from "@/lib/types";
 import { BRANCHES, FREE_SHIPPING_THRESHOLD, SHIPPING_FLAT_RATE } from "@/lib/config";
 import { esRangoFlotation, formatFlotationEquivalent, metricToFlotation } from "@/lib/flotation";
 import { ProductCard } from "@/components/ui/ProductCard";
+import { SizeHeader } from "./SizeHeader";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { FaqSection } from "@/components/seo/FaqSection";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -150,35 +151,13 @@ export function SizeLanding({
         />
       )}
 
-      <header className="mb-8">
-        <h1 className="text-3xl font-black leading-tight text-navy-900 md:text-5xl">
-          Neumáticos {label}
-        </h1>
-        <p className="mt-4 max-w-3xl text-lg leading-relaxed text-slate-600">
-          {enStock.length > 0 ? (
-            <>
-              Tenemos <strong className="text-navy-900">{enStock.length}</strong>{" "}
-              {enStock.length === 1 ? "modelo disponible" : "modelos disponibles"} en medida {label}
-              {desde && (
-                <>
-                  {" "}
-                  desde <strong className="text-navy-900">{formatPrice(desde)}</strong> por unidad
-                </>
-              )}
-              . Son cubiertas de importación directa, con stock físico en el local de {branch.city} y
-              envío a todo el país. El precio que ves es el que pagás: sin sorpresas al llegar al
-              mostrador.
-            </>
-          ) : (
-            <>
-              Ahora mismo no tenemos stock en medida {label}, pero recibimos mercadería todas las
-              semanas. Abajo vas a encontrar las medidas equivalentes que sí están disponibles y el
-              detalle técnico de {label} para chequear cuál te sirve. También podés escribirnos por
-              WhatsApp y te avisamos apenas ingrese.
-            </>
-          )}
-        </p>
-      </header>
+      <SizeHeader
+        size={size}
+        label={label}
+        enStockCount={enStock.length}
+        desde={desde}
+        branchCity={branch.city}
+      />
 
       {ordenados.length > 0 ? (
         <section className="mb-14">
