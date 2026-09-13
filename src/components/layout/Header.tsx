@@ -11,10 +11,8 @@ import { SearchModal } from "@/components/ui/SearchModal";
 const NAV_LINKS = [
   { href: "/ofertas", label: "Ofertas" },
   { href: "/catalogo", label: "Neumáticos" },
-  { href: "/tuercas-antirrobo", label: "Tuercas antirrobo" },
   { href: "/servicios", label: "Servicios" },
   { href: "/sucursales", label: "Sucursales" },
-  { href: "/blog", label: "Blog" },
   { href: "/contacto", label: "Contacto" },
 ];
 
@@ -26,6 +24,16 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-40 w-full">
+      {/* Franja de colocación sin cargo: lo primero que se ve al entrar,
+          antes que el selector de auto/sucursal, porque es un diferencial
+          frente a comprar en otro lado sin taller propio. */}
+      <Link
+        href="/servicios"
+        className="block bg-orange-500 px-4 py-1.5 text-center text-xs font-bold text-white transition-colors hover:bg-orange-600 md:text-sm"
+      >
+        🔧 Colocación y cambio de válvulas sin cargo comprando en el local
+      </Link>
+
       {/* Utility bar — vehículo + sucursal, en su propia franja para que
           siempre entren cómodos sin pelear espacio con el logo/menú/carrito.
           Negra como la nav principal (con un divisor sutil), con los botones
