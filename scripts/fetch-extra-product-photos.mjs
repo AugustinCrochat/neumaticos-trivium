@@ -81,6 +81,13 @@ const SOURCES = {
   "pirelli-scorpion": [
     { url: "https://neumaticosmartin.com.ar/tienda/wp-content/uploads/2022/06/scorpion-img-2.jpg", angulo: "flanco" },
   ],
+  // S/A/T+ y S-I S-ATR (all-terrain/highway, 1 SKU cada uno) no están en el
+  // catálogo de neumaticosmartin.com.ar ni encontramos otro revendedor con
+  // ficha propia — quedan sin fotos extra por ahora.
+  "pirelli-p400ev": [
+    { url: "https://neumaticosmartin.com.ar/tienda/wp-content/uploads/2022/06/p400-evo-img-2.jpg", angulo: "flanco" },
+    { url: "https://neumaticosmartin.com.ar/tienda/wp-content/uploads/2022/06/p400-evo-img-3.jpg", angulo: "banda" },
+  ],
 };
 
 // Las keys de SOURCES ya están escritas en su forma normalizada final (ej.
