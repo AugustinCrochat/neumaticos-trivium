@@ -332,7 +332,7 @@ export default async function ProductPage({ params }: Props) {
                   key={tag}
                   className={`text-[10px] font-black px-3 py-1.5 rounded-md uppercase tracking-wider shadow-sm ${
                     tag.toLowerCase().includes('pack')
-                      ? 'bg-navy-900 text-white'
+                      ? 'bg-black text-white'
                       : 'bg-slate-200 text-slate-700'
                   }`}
                 >

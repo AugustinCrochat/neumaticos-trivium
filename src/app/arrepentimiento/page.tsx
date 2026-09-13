@@ -42,7 +42,7 @@ export default function ArrepentimientoPage() {
           </a>
           <a
             href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("Derecho de arrepentimiento")}`}
-            className="inline-flex items-center justify-center gap-2 bg-navy-900 hover:bg-navy-800 text-white font-bold text-sm px-5 py-3 rounded-xl transition-colors"
+            className="inline-flex items-center justify-center gap-2 bg-black hover:bg-black text-white font-bold text-sm px-5 py-3 rounded-xl transition-colors"
           >
             Reclamar por email
           </a>

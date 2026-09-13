@@ -113,7 +113,7 @@ export default async function BrandPage({ params }: Props) {
               
               <div className="flex flex-col md:flex-row items-center md:items-baseline gap-3 md:gap-4 mb-6">
                 <h1 className="text-4xl md:text-6xl font-black text-navy-950 tracking-tight">{brand.name}</h1>
-                <span className="bg-navy-900 text-white text-[10px] md:text-xs font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-lg shadow-navy-900/20">
+                <span className="bg-black text-white text-[10px] md:text-xs font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-lg shadow-navy-900/20">
                   {brand.origin}
                 </span>
               </div>
@@ -175,7 +175,7 @@ export default async function BrandPage({ params }: Props) {
             <p className="text-slate-500 max-w-md mb-8">
               Actualmente no tenemos neumáticos {brand.name} en stock, pero recibimos mercadería semanalmente.
             </p>
-            <Link href="/contacto" className="bg-navy-900 text-white font-black px-8 py-4 rounded-2xl shadow-xl shadow-navy-900/20 hover:scale-105 transition-transform active:scale-95">
+            <Link href="/contacto" className="bg-black text-white font-black px-8 py-4 rounded-2xl shadow-xl shadow-navy-900/20 hover:scale-105 transition-transform active:scale-95">
               Consultar ingresos
             </Link>
           </div>
@@ -183,7 +183,7 @@ export default async function BrandPage({ params }: Props) {
       </main>
 
       {/* Brand Footer CTA */}
-      <section className="bg-navy-950 py-20 overflow-hidden relative">
+      <section className="bg-black py-20 overflow-hidden relative">
         <div className="absolute top-0 right-0 w-1/2 h-full opacity-10 pointer-events-none">
            {brandLogo && <img src={brandLogo} alt="" className="w-full h-full object-contain grayscale invert scale-150 translate-x-1/4" />}
         </div>
@@ -191,7 +191,7 @@ export default async function BrandPage({ params }: Props) {
            <div className="md:flex items-center justify-between gap-12">
               <div className="mb-10 md:mb-0 max-w-2xl">
                  <h2 className="text-3xl md:text-5xl font-black text-white mb-6 leading-tight">¿No encontrás la medida que buscás?</h2>
-                 <p className="text-navy-200 text-lg md:text-xl font-medium">
+                 <p className="text-slate-300 text-lg md:text-xl font-medium">
                     Nuestro equipo técnico puede asesorarte sobre las mejores alternativas y equivalencias para tu vehículo en la marca {brand.name}.
                  </p>
               </div>

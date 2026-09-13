@@ -65,7 +65,7 @@ export function SearchModal({ onClose }: { onClose: () => void }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center p-4 pt-20 sm:pt-28" role="dialog" aria-modal="true" aria-label="Buscar productos">
-      <button aria-label="Cerrar" onClick={onClose} className="absolute inset-0 bg-navy-950/70 backdrop-blur-sm" />
+      <button aria-label="Cerrar" onClick={onClose} className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
 
       <div className="relative z-10 w-full max-w-xl rounded-2xl bg-white shadow-2xl overflow-hidden flex flex-col max-h-[75vh]">
         <form

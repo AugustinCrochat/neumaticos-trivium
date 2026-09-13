@@ -31,20 +31,20 @@ export function VehicleModal() {
       aria-modal="true"
       aria-label="Seleccionar vehículo"
     >
-      <div className="absolute inset-0 bg-navy-950/70 backdrop-blur-sm" onClick={closeModal} />
+      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={closeModal} />
 
       <div className="relative z-10 w-full max-w-lg rounded-2xl bg-white shadow-2xl">
-        <div className="bg-navy-800 rounded-t-2xl px-6 py-5 flex items-start justify-between">
+        <div className="bg-black rounded-t-2xl px-6 py-5 flex items-start justify-between">
           <div>
             <h2 className="text-white text-xl font-bold">Elegí tu vehículo</h2>
-            <p className="text-navy-200 text-sm mt-1 leading-snug max-w-xs">
+            <p className="text-slate-300 text-sm mt-1 leading-snug max-w-xs">
               Lo vamos a recordar para sugerirte la medida y los accesorios
               compatibles con tu auto.
             </p>
           </div>
           <button
             onClick={closeModal}
-            className="text-navy-300 hover:text-white transition-colors p-1 mt-0.5 flex-shrink-0"
+            className="text-slate-400 hover:text-white transition-colors p-1 mt-0.5 flex-shrink-0"
             aria-label="Cerrar"
           >
             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">

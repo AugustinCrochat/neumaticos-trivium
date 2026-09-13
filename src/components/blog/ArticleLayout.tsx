@@ -119,7 +119,7 @@ export function ArticleLayout({
           <h2 className="!mt-0 text-2xl font-black !text-white">
             ¿Te toca cambiar los neumáticos?
           </h2>
-          <p className="!text-navy-200">
+          <p className="!text-slate-300">
             Buscá tu medida y mirá precio y stock al instante. Importamos directo de fábrica, así
             que el precio no arrastra el margen de tres intermediarios. Envío a todo el país o
             retiro sin cargo en {branch.address}, {branch.city}.

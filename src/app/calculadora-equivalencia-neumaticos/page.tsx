@@ -138,7 +138,7 @@ export default async function CalculadoraEquivalenciaNeumaticosPage({ searchPara
         }}
       />
 
-      <section className="bg-navy-900 py-12 md:py-16">
+      <section className="bg-black py-12 md:py-16">
         <div className="max-w-5xl mx-auto px-4">
           <div className="max-w-3xl">
             <p className="text-orange-400 text-sm font-bold uppercase tracking-widest mb-3">
@@ -149,7 +149,7 @@ export default async function CalculadoraEquivalenciaNeumaticosPage({ searchPara
                 <h1 className="text-3xl md:text-5xl font-black text-white mb-5">
                   ¿{from} es compatible con {to}?
                 </h1>
-                <p className="text-navy-100 text-lg leading-relaxed mb-9">
+                <p className="text-slate-300 text-lg leading-relaxed mb-9">
                   Te compartieron esta comparación de medidas. Mirá el resultado abajo y, si son compatibles, buscá stock disponible de {to}.
                 </p>
               </>
@@ -158,7 +158,7 @@ export default async function CalculadoraEquivalenciaNeumaticosPage({ searchPara
                 <h1 className="text-3xl md:text-5xl font-black text-white mb-5">
                   Calculadora de equivalencias de neumáticos
                 </h1>
-                <p className="text-navy-100 text-lg leading-relaxed mb-9">
+                <p className="text-slate-300 text-lg leading-relaxed mb-9">
                   Ingresá la medida original de tu neumático para comprobar si otra medida es compatible o para ver alternativas disponibles en stock.
                 </p>
               </>

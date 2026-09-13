@@ -89,7 +89,7 @@ export default function ComoLeerMedidaPage() {
         <h2 className="text-2xl font-black text-navy-900 mb-6">¿Ya encontraste tu medida?</h2>
         <Link
           href="/catalogo"
-          className="inline-flex items-center gap-2 bg-navy-900 hover:bg-orange-500 text-white font-black py-4 px-10 rounded-2xl transition-all shadow-xl hover:shadow-orange-500/20 active:scale-95"
+          className="inline-flex items-center gap-2 bg-black hover:bg-orange-500 text-white font-black py-4 px-10 rounded-2xl transition-all shadow-xl hover:shadow-orange-500/20 active:scale-95"
         >
           Explorar todo el catálogo
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

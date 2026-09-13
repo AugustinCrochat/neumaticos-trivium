@@ -116,7 +116,7 @@ export function ProductCard({
           {product.tags[0] && (
             <span className={`text-[10px] font-black px-2.5 py-1 rounded-md uppercase tracking-wider whitespace-nowrap shadow-sm ${
               product.tags[0].toLowerCase().includes('pack') 
-                ? 'bg-navy-900 text-white' 
+                ? 'bg-black text-white' 
                 : 'bg-slate-200 text-slate-700'
             }`}>
               {product.tags[0]}
@@ -170,7 +170,7 @@ export function ProductCard({
             </p>
           )}
 
-          <button onClick={() => setShowModal(true)} disabled={!product.enStock} className="mt-3 w-full bg-navy-800 hover:bg-navy-700 disabled:bg-slate-300 text-white font-semibold py-2.5 rounded-xl text-sm transition-colors">
+          <button onClick={() => setShowModal(true)} disabled={!product.enStock} className="mt-3 w-full bg-black hover:bg-neutral-800 disabled:bg-slate-300 text-white font-semibold py-2.5 rounded-xl text-sm transition-colors">
             {product.enStock ? "Agregar al carrito" : "Sin stock"}
           </button>
         </div>

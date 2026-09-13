@@ -135,7 +135,7 @@ function FilaProducto({
           href={waHref(branch, texto)}
           target="_blank"
           rel="noopener noreferrer"
-          className="rounded-lg bg-navy-900 px-3 py-1.5 text-sm font-bold text-white transition-opacity hover:opacity-90"
+          className="rounded-lg bg-black px-3 py-1.5 text-sm font-bold text-white transition-opacity hover:opacity-90"
         >
           {stock > 0 ? "Reservar" : "Consultar"}
         </a>

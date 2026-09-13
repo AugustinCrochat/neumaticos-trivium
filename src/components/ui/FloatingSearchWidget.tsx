@@ -64,7 +64,7 @@ export function FloatingSearchWidget() {
               d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"
             />
           </svg>
-          <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-navy-900 animate-ping" />
+          <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-black animate-ping" />
         </div>
         <span className="text-xs sm:text-sm uppercase tracking-wider font-extrabold">
           Buscar neumáticos
@@ -80,12 +80,12 @@ export function FloatingSearchWidget() {
           aria-label="Buscador de neumáticos por medida o modelo de auto"
         >
           <div
-            className="absolute inset-0 bg-navy-950/70 backdrop-blur-sm transition-opacity"
+            className="absolute inset-0 bg-black/70 backdrop-blur-sm transition-opacity"
             onClick={() => setIsOpen(false)}
           />
 
           <div className="relative z-10 w-full max-w-xl rounded-2xl bg-white shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
-            <div className="bg-navy-800 px-6 py-5 flex items-start justify-between shrink-0">
+            <div className="bg-black px-6 py-5 flex items-start justify-between shrink-0">
               <div>
                 <h2 className="text-white text-lg sm:text-xl font-bold flex items-center gap-2">
                   <svg className="w-5 h-5 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -93,14 +93,14 @@ export function FloatingSearchWidget() {
                   </svg>
                   Buscador de Neumáticos
                 </h2>
-                <p className="text-navy-200 text-sm mt-1 leading-snug">
+                <p className="text-slate-300 text-sm mt-1 leading-snug">
                   Buscá por las medidas de tu cubierta o por el modelo de tu auto
                 </p>
               </div>
               <button
                 type="button"
                 onClick={() => setIsOpen(false)}
-                className="text-navy-300 hover:text-white p-1 mt-0.5 rounded-lg transition-colors shrink-0"
+                className="text-slate-400 hover:text-white p-1 mt-0.5 rounded-lg transition-colors shrink-0"
                 aria-label="Cerrar buscador"
               >
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">

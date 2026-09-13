@@ -451,14 +451,14 @@ export function TireSizeSearch({
         <button
           type="button"
           onClick={() => setFlotationMode(false)}
-          className={`px-3 py-1.5 rounded-md font-bold transition-colors ${!flotationMode ? "bg-navy-900 text-white" : "text-slate-500 hover:text-slate-800"}`}
+          className={`px-3 py-1.5 rounded-md font-bold transition-colors ${!flotationMode ? "bg-black text-white" : "text-slate-500 hover:text-slate-800"}`}
         >
           Métrico
         </button>
         <button
           type="button"
           onClick={() => setFlotationMode(true)}
-          className={`px-3 py-1.5 rounded-md font-bold transition-colors ${flotationMode ? "bg-navy-900 text-white" : "text-slate-500 hover:text-slate-800"}`}
+          className={`px-3 py-1.5 rounded-md font-bold transition-colors ${flotationMode ? "bg-black text-white" : "text-slate-500 hover:text-slate-800"}`}
         >
           Flotation (LT/A-T)
         </button>

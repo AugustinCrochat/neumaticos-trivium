@@ -13,13 +13,13 @@ export default async function EquivalenciasPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
-      <div className="bg-navy-900 py-12 md:py-16">
+      <div className="bg-black py-12 md:py-16">
         <div className="max-w-4xl mx-auto px-4">
           <div className="max-w-3xl">
             <h1 className="text-3xl md:text-4xl font-black text-white mb-4">
               ¿Qué es una medida equivalente?
             </h1>
-            <p className="text-navy-200 text-lg mb-10">
+            <p className="text-slate-300 text-lg mb-10">
               A veces no se consigue la medida original de fábrica. Ingresá tu medida en la herramienta acá abajo para verificar compatibilidades, o seguí leyendo para aprender cómo se calculan.
             </p>
 
@@ -90,7 +90,7 @@ export default async function EquivalenciasPage() {
         <h2 className="text-2xl font-black text-navy-900 mb-6">¿Buscás alternativas para tu auto?</h2>
         <Link
           href="/catalogo"
-          className="inline-flex items-center gap-2 bg-navy-900 hover:bg-emerald-600 text-white font-black py-4 px-10 rounded-2xl transition-all shadow-xl hover:shadow-emerald-600/20 active:scale-95"
+          className="inline-flex items-center gap-2 bg-black hover:bg-emerald-600 text-white font-black py-4 px-10 rounded-2xl transition-all shadow-xl hover:shadow-emerald-600/20 active:scale-95"
         >
           Explorar el catálogo
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

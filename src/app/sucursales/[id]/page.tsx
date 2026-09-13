@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { BRANCHES, FREE_SHIPPING_THRESHOLD, SHIPPING_FLAT_RATE, SITE_URL, type Branch } from "@/lib/config";
@@ -104,11 +105,11 @@ export default async function BranchPage({ params }: Props) {
       <SetActiveBranch branchId={branch.id} />
 
       {/* Hero */}
-      <header className="bg-navy-900 pb-8 pt-8 md:pb-12 md:pt-12">
+      <header className="bg-black pb-8 pt-8 md:pb-12 md:pt-12">
         <div className="mx-auto max-w-3xl px-4">
           <Link
             href="/sucursales"
-            className="mb-6 inline-flex items-center gap-1.5 text-sm text-navy-300 transition-colors hover:text-white"
+            className="mb-6 inline-flex items-center gap-1.5 text-sm text-slate-400 transition-colors hover:text-white"
           >
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -122,10 +123,10 @@ export default async function BranchPage({ params }: Props) {
           <h1 className="text-3xl font-black leading-tight text-white md:text-4xl">
             Gomería y neumáticos baratos en {branch.neighborhood ?? branch.city}
           </h1>
-          <p className="mt-3 text-lg font-bold text-navy-200">
+          <p className="mt-3 text-lg font-bold text-slate-300">
             Neumáticos Trivium {branch.shortName}
           </p>
-          <p className="mt-3 flex items-start gap-2 text-base leading-relaxed text-navy-200">
+          <p className="mt-3 flex items-start gap-2 text-base leading-relaxed text-slate-300">
             <svg className="mt-0.5 h-5 w-5 flex-shrink-0 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -150,6 +151,19 @@ export default async function BranchPage({ params }: Props) {
             { name: branch.shortName, path: `/sucursales/${branch.id}` },
           ]}
         />
+
+        {branch.facadePhoto && (
+          <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl sm:aspect-video">
+            <Image
+              src={branch.facadePhoto}
+              alt={`Fachada del local de Neumáticos Trivium ${branch.shortName}`}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 768px"
+              priority
+            />
+          </div>
+        )}
 
         {/* Acciones principales */}
         <section className="grid grid-cols-2 gap-3">
@@ -218,7 +232,7 @@ export default async function BranchPage({ params }: Props) {
             lat={branch.coordinates.lat}
             lng={branch.coordinates.lng}
             label={`Neumáticos Trivium ${branch.shortName}`}
-            className="mt-4 inline-flex w-full min-h-12 items-center justify-center gap-2 rounded-xl bg-navy-900 px-4 text-sm font-black text-white transition-transform active:scale-[0.98]"
+            className="mt-4 inline-flex w-full min-h-12 items-center justify-center gap-2 rounded-xl bg-black px-4 text-sm font-black text-white transition-transform active:scale-[0.98]"
           >
             <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
               <path d="M21.71 11.29l-9-9a1 1 0 00-1.42 0l-9 9a1 1 0 000 1.42l9 9a1 1 0 001.42 0l9-9a1 1 0 000-1.42zM14 14.5V12h-4v3H8v-4a1 1 0 011-1h5V7.5l3.5 3.5z" />
@@ -280,7 +294,7 @@ export default async function BranchPage({ params }: Props) {
         {/* Catalogo */}
         <section className="overflow-hidden rounded-2xl bg-gradient-to-br from-navy-950 to-black p-6 text-white shadow-sm">
           <h2 className="text-xl font-black">Catálogo de neumáticos</h2>
-          <p className="mt-2 text-sm leading-relaxed text-navy-200">
+          <p className="mt-2 text-sm leading-relaxed text-slate-300">
             Mirá todas las marcas y medidas disponibles a precio outlet. Consultá stock y precio
             directo por WhatsApp con la sucursal {branch.shortName}.
           </p>

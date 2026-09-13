@@ -50,11 +50,11 @@ export default async function ServicioPage({ params }: Props) {
         ])}
       />
       <JsonLd data={serviceJsonLd(service)} />
-      <div className="bg-navy-900 py-12 md:py-16">
+      <div className="bg-black py-12 md:py-16">
         <div className="max-w-3xl mx-auto px-4">
           <Link
             href="/servicios"
-            className="inline-flex items-center gap-1.5 text-sm text-navy-300 hover:text-white mb-8 transition-colors"
+            className="inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-white mb-8 transition-colors"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -63,7 +63,7 @@ export default async function ServicioPage({ params }: Props) {
           </Link>
           <div className="text-orange-500 mb-4">{ICONS[service.icon]}</div>
           <h1 className="text-3xl md:text-4xl font-black text-white mb-4">{service.title}</h1>
-          <p className="text-navy-200 text-lg max-w-xl leading-relaxed">{service.description}</p>
+          <p className="text-slate-300 text-lg max-w-xl leading-relaxed">{service.description}</p>
         </div>
       </div>
 

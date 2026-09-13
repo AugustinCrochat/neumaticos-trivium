@@ -66,7 +66,7 @@ export default function ZonasPage() {
 
       <section className="rounded-2xl bg-gradient-to-br from-navy-950 to-black p-8 text-white">
         <h2 className="text-2xl font-black">¿Estás fuera de estas zonas?</h2>
-        <p className="mt-3 max-w-2xl leading-relaxed text-navy-200">
+        <p className="mt-3 max-w-2xl leading-relaxed text-slate-300">
           No hay problema: enviamos neumáticos a todo el país con un costo fijo, sin importar la
           provincia ni la cantidad. Comprás por la web, te llega a tu casa y lo colocás en la gomería
           de tu barrio.

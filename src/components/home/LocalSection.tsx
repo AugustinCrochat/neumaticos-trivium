@@ -20,7 +20,7 @@ export function LocalSection() {
   const branch = BRANCHES[0];
 
   return (
-    <section className="border-b border-slate-100 bg-navy-950 py-16 text-white">
+    <section className="border-b border-slate-100 bg-black py-16 text-white">
       <div className="mx-auto max-w-7xl px-4">
         <div className="grid gap-10 md:grid-cols-2">
           <div>
@@ -30,13 +30,13 @@ export function LocalSection() {
             <h2 className="text-3xl font-black leading-tight">
               Local a la calle en {branch.neighborhood ?? branch.city}
             </h2>
-            <p className="mt-4 text-lg leading-relaxed text-navy-200">
+            <p className="mt-4 text-lg leading-relaxed text-slate-300">
               No somos sólo una web: tenemos un local con depósito y taller propio en{" "}
               {branch.address}, sobre una avenida de acceso directo desde todo el corredor norte de
               Córdoba. Podés venir a ver el neumático antes de comprarlo, hacer la colocación en el
               momento y resolver cualquier tema de garantía en persona.
             </p>
-            <dl className="mt-6 space-y-2 text-navy-200">
+            <dl className="mt-6 space-y-2 text-slate-300">
               <div className="flex gap-2">
                 <dt className="font-bold text-white">Dirección:</dt>
                 <dd>
@@ -77,12 +77,12 @@ export function LocalSection() {
               /neumaticos-en siguen enlazadas desde el footer y el sitemap. */}
           <div>
             <h3 className="text-xl font-black">Zonas donde vendemos</h3>
-            <p className="mt-2 leading-relaxed text-navy-200">
+            <p className="mt-2 leading-relaxed text-slate-300">
               Atendemos Córdoba Capital y todo el corredor de Sierras Chicas:{" "}
               {ZONAS_EN_PROSA}. Si estás en cualquiera de esas zonas, el retiro en el local no tiene
               costo y la colocación va incluida.
             </p>
-            <p className="mt-4 text-sm leading-relaxed text-navy-300">
+            <p className="mt-4 text-sm leading-relaxed text-slate-400">
               ¿Estás en otra provincia? Enviamos a todo el país con costo fijo.{" "}
               <Link href="/neumaticos" className="font-bold text-white underline underline-offset-2">
                 Buscá tu medida

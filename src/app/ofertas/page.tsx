@@ -62,7 +62,7 @@ export default async function OfertasPage() {
           <h1 className="mt-5 text-4xl font-black leading-tight text-white md:text-6xl">
             Ofertas <span className="text-orange-400">Trivium</span>
           </h1>
-          <p className="mx-auto mt-4 max-w-2xl text-lg font-medium text-navy-200">
+          <p className="mx-auto mt-4 max-w-2xl text-lg font-medium text-slate-300">
             Precios especiales en medidas seleccionadas, hasta agotar stock. Importación directa,
             garantía de 1 año.
           </p>

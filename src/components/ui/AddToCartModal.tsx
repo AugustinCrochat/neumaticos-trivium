@@ -20,7 +20,7 @@ export function AddToCartModal({ product, onClose }: { product: TireProduct; onC
   // dentro de la tarjeta en vez de cubrir toda la pantalla.
   return createPortal(
     <div className="fixed inset-0 z-[60] flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-label="Elegir cantidad">
-      <button aria-label="Cerrar" onClick={onClose} className="absolute inset-0 bg-navy-950/70 backdrop-blur-sm" />
+      <button aria-label="Cerrar" onClick={onClose} className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
       <div className="relative w-full max-w-sm rounded-2xl bg-white shadow-2xl overflow-hidden">
         <div className="p-5 border-b border-slate-100">
           <p className="text-xs font-bold text-slate-400 uppercase tracking-wide">Agregar al carrito</p>

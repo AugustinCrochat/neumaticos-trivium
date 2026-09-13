@@ -14,7 +14,7 @@ function createBranchPin(): HTMLElement {
 
   const badge = document.createElement("div");
   badge.style.cssText =
-    "display:flex;align-items:center;justify-content:center;width:54px;height:54px;padding:8px;border-radius:16px;background:#ffffff;border:2px solid #0a1a30;box-shadow:0 4px 12px rgba(10,26,48,0.35)";
+    "display:flex;align-items:center;justify-content:center;width:54px;height:54px;padding:8px;border-radius:16px;background:#ffffff;border:2px solid #000000;box-shadow:0 4px 12px rgba(10,26,48,0.35)";
 
   const img = document.createElement("img");
   img.src = "/pin-trivium.png";
@@ -24,7 +24,7 @@ function createBranchPin(): HTMLElement {
 
   const pointer = document.createElement("div");
   pointer.style.cssText =
-    "width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-top:9px solid #0a1a30;margin-top:-1px";
+    "width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-top:9px solid #000000;margin-top:-1px";
 
   wrapper.appendChild(badge);
   wrapper.appendChild(pointer);

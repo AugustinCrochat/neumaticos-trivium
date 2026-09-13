@@ -52,7 +52,7 @@ function createBranchMarkerElement(shortName: string) {
   const badge = document.createElement("div");
   badge.dataset.role = "badge";
   badge.style.cssText =
-    "display:flex;align-items:center;justify-content:center;width:52px;height:52px;padding:8px;border-radius:15px;background:#ffffff;border:2px solid #0a1a30;box-shadow:0 4px 12px rgba(10,26,48,0.35);transition:transform .15s ease,border-color .15s ease";
+    "display:flex;align-items:center;justify-content:center;width:52px;height:52px;padding:8px;border-radius:15px;background:#ffffff;border:2px solid #000000;box-shadow:0 4px 12px rgba(10,26,48,0.35);transition:transform .15s ease,border-color .15s ease";
 
   const img = document.createElement("img");
   img.src = "/pin-trivium.png";
@@ -63,12 +63,12 @@ function createBranchMarkerElement(shortName: string) {
   const pointer = document.createElement("div");
   pointer.dataset.role = "pointer";
   pointer.style.cssText =
-    "width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:8px solid #0a1a30;margin-top:-1px";
+    "width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:8px solid #000000;margin-top:-1px";
 
   const label = document.createElement("div");
   label.textContent = shortName;
   label.style.cssText =
-    "margin-top:3px;font-weight:800;font-size:12px;color:#0a1a30;white-space:nowrap;text-shadow:0 0 2px #fff,0 0 2px #fff,0 0 2px #fff,0 0 2px #fff";
+    "margin-top:3px;font-weight:800;font-size:12px;color:#000000;white-space:nowrap;text-shadow:0 0 2px #fff,0 0 2px #fff,0 0 2px #fff,0 0 2px #fff";
 
   wrapper.appendChild(badge);
   wrapper.appendChild(pointer);
@@ -162,7 +162,7 @@ function BranchSummary({
 
       <Link
         href={`/sucursales/${branch.id}`}
-        className="mt-2 inline-flex w-full min-h-11 items-center justify-center gap-1.5 rounded-xl bg-navy-900 px-4 py-2.5 text-sm font-black text-white transition-colors hover:bg-navy-800"
+        className="mt-2 inline-flex w-full min-h-11 items-center justify-center gap-1.5 rounded-xl bg-black px-4 py-2.5 text-sm font-black text-white transition-colors hover:bg-black"
       >
         Ver información de la sucursal
         <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -261,9 +261,9 @@ export function BranchesMap({ branches }: BranchesMapProps) {
   useEffect(() => {
     for (const [id, { badge, pointer }] of Object.entries(branchMarkersRef.current)) {
       const isActive = id === activeBranch.id;
-      badge.style.borderColor = isActive ? "#ff1e00" : "#0a1a30";
+      badge.style.borderColor = isActive ? "#ff1e00" : "#000000";
       badge.style.transform = isActive ? "scale(1.12)" : "scale(1)";
-      pointer.style.borderTopColor = isActive ? "#ff1e00" : "#0a1a30";
+      pointer.style.borderTopColor = isActive ? "#ff1e00" : "#000000";
     }
   }, [activeBranch.id]);
 

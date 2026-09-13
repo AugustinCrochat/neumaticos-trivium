@@ -27,7 +27,7 @@ export function AccessoryAddToCart({ accessory }: { accessory: Accessory }) {
           </div>
           <button
             onClick={() => addAccessory(accessory, quantity)}
-            className="flex-1 bg-navy-800 hover:bg-navy-700 text-white font-semibold py-2.5 rounded-xl text-sm transition-colors"
+            className="flex-1 bg-black hover:bg-neutral-800 text-white font-semibold py-2.5 rounded-xl text-sm transition-colors"
           >
             Agregar
           </button>

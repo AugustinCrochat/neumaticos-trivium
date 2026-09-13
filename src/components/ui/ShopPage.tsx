@@ -142,7 +142,7 @@ function PriceSlider({
       <div className="relative h-6 flex items-center group">
         <div className="absolute h-1.5 w-full bg-slate-100 rounded-full" />
         <div
-          className="absolute h-1.5 bg-navy-600 rounded-full"
+          className="absolute h-1.5 bg-neutral-700 rounded-full"
           style={{ width: `${percent}%` }}
         />
         <input
@@ -272,7 +272,7 @@ function FilterBar({
         <label className="flex items-center gap-3 cursor-pointer group">
           <div
             onClick={() => setOnlyEconomic(!onlyEconomic)}
-            className={`w-10 h-5 rounded-full relative transition-all duration-300 ${onlyEconomic ? "bg-navy-700 shadow-inner" : "bg-slate-200"}`}
+            className={`w-10 h-5 rounded-full relative transition-all duration-300 ${onlyEconomic ? "bg-neutral-800 shadow-inner" : "bg-slate-200"}`}
           >
             <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow-md transition-transform duration-300 ${onlyEconomic ? "translate-x-5" : "translate-x-0.5"}`} />
           </div>
@@ -323,7 +323,7 @@ function FilterBar({
       <div className="pt-6 border-t border-slate-100">
         <label className="flex items-center gap-4 cursor-pointer group">
           <div onClick={() => setOnlyEconomic(!onlyEconomic)}
-            className={`w-12 h-6 rounded-full transition-all duration-300 relative ${onlyEconomic ? "bg-navy-700 shadow-inner" : "bg-slate-200"}`}>
+            className={`w-12 h-6 rounded-full transition-all duration-300 relative ${onlyEconomic ? "bg-neutral-800 shadow-inner" : "bg-slate-200"}`}>
             <div className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow-md transition-transform duration-300 ${onlyEconomic ? "translate-x-7" : "translate-x-1"}`} />
           </div>
           <span className="text-sm font-bold text-slate-700 group-hover:text-navy-900 transition-colors">Solo económicos</span>

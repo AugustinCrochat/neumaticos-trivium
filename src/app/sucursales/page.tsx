@@ -14,11 +14,11 @@ export const metadata: Metadata = {
 export default function SucursalesPage() {
   return (
     <div className="min-h-screen bg-slate-50">
-      <div className="bg-navy-900 py-10 md:py-14">
+      <div className="bg-black py-10 md:py-14">
         <div className="max-w-7xl mx-auto px-4">
           <Link
             href="/"
-            className="mb-6 inline-flex items-center gap-1.5 text-sm text-navy-300 transition-colors hover:text-white"
+            className="mb-6 inline-flex items-center gap-1.5 text-sm text-slate-400 transition-colors hover:text-white"
           >
             <svg
               className="h-4 w-4"
@@ -43,7 +43,7 @@ export default function SucursalesPage() {
             <h1 className="text-3xl font-black text-white md:text-5xl">
               Sucursales Neumaticos Trivium
             </h1>
-            <p className="mt-4 text-base leading-relaxed text-navy-200 md:text-lg">
+            <p className="mt-4 text-base leading-relaxed text-slate-300 md:text-lg">
               Elegi la sucursal mas cercana, revisa horarios y abri las
               indicaciones para llegar directo desde tu ubicacion.
             </p>

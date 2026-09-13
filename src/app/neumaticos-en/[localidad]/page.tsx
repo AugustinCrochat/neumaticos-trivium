@@ -157,7 +157,7 @@ export default async function LocalidadPage({ params }: Props) {
           </a>
           <Link
             href={`/sucursales/${branch.id}`}
-            className="inline-flex min-h-12 items-center justify-center rounded-xl bg-navy-900 px-6 text-sm font-black text-white transition-transform active:scale-[0.98]"
+            className="inline-flex min-h-12 items-center justify-center rounded-xl bg-black px-6 text-sm font-black text-white transition-transform active:scale-[0.98]"
           >
             Cómo llegar al local
           </Link>
@@ -273,7 +273,7 @@ export default async function LocalidadPage({ params }: Props) {
         </p>
         <Link
           href="/catalogo"
-          className="mt-5 inline-flex min-h-12 items-center justify-center rounded-xl bg-navy-900 px-6 text-sm font-black text-white transition-transform active:scale-[0.98]"
+          className="mt-5 inline-flex min-h-12 items-center justify-center rounded-xl bg-black px-6 text-sm font-black text-white transition-transform active:scale-[0.98]"
         >
           Ver el catálogo completo
         </Link>

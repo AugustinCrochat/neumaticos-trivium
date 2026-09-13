@@ -79,24 +79,24 @@ export function BranchModal() {
     >
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-navy-950/70 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/70 backdrop-blur-sm"
         onClick={closeModal}
       />
 
       {/* Panel */}
       <div className="relative z-10 w-full max-w-lg rounded-2xl bg-white shadow-2xl overflow-hidden">
         {/* Header */}
-        <div className="bg-navy-800 px-6 py-5 flex items-start justify-between">
+        <div className="bg-black px-6 py-5 flex items-start justify-between">
           <div>
             <h2 className="text-white text-xl font-bold">Elegí tu sucursal</h2>
-            <p className="text-navy-200 text-sm mt-1 leading-snug max-w-xs">
+            <p className="text-slate-300 text-sm mt-1 leading-snug max-w-xs">
               Seleccioná la sucursal más cercana para ver el stock y el
               número de WhatsApp correspondiente.
             </p>
           </div>
           <button
             onClick={closeModal}
-            className="text-navy-300 hover:text-white transition-colors p-1 mt-0.5 flex-shrink-0"
+            className="text-slate-400 hover:text-white transition-colors p-1 mt-0.5 flex-shrink-0"
             aria-label="Cerrar"
           >
             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -179,7 +179,7 @@ export function BranchModal() {
                         </span>
                       )}
                       {isNearest && !isActive && (
-                        <span className="bg-navy-700 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                        <span className="bg-neutral-800 text-white text-xs font-bold px-2 py-0.5 rounded-full">
                           Más cercana
                         </span>
                       )}

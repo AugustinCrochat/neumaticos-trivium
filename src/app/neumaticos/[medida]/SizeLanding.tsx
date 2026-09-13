@@ -250,7 +250,7 @@ export function SizeLanding({
             },
           ].map((item) => (
             <div key={item.title} className="rounded-2xl border border-slate-200 bg-white p-5">
-              <div className="mb-2 inline-flex rounded-lg bg-navy-900 px-2.5 py-1 font-mono text-sm font-black text-white">
+              <div className="mb-2 inline-flex rounded-lg bg-black px-2.5 py-1 font-mono text-sm font-black text-white">
                 {item.label}
               </div>
               <dt className="text-xs font-black uppercase tracking-widest text-slate-400">
@@ -380,7 +380,7 @@ export function SizeLanding({
       {/* Cierre: dónde comprar */}
       <section className="mt-14 overflow-hidden rounded-2xl bg-gradient-to-br from-navy-950 to-black p-8 text-white">
         <h2 className="text-2xl font-black">Dónde comprar neumáticos {label}</h2>
-        <p className="mt-3 max-w-2xl leading-relaxed text-navy-200">
+        <p className="mt-3 max-w-2xl leading-relaxed text-slate-300">
           Podés comprar online y recibirlo en tu casa en cualquier punto del país: gratis desde{" "}
           {formatPrice(FREE_SHIPPING_THRESHOLD)} de compra, o {formatPrice(SHIPPING_FLAT_RATE)} fijos
           por debajo de eso. También podés retirarlo sin cargo en {branch.address},{" "}
