@@ -1,0 +1,24 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "neumaticos-trivium-cron-redeploy-trigger",
+	"main": "src/index.ts",
+	"compatibility_date": "2026-07-12",
+	// Respaldo del cron de GitHub Actions (.github/workflows/deploy.yml): el
+	// scheduler de GitHub es "best-effort" y puede no dispararse (confirmado
+	// el 2026-09-14: no corrió ni a las 12:00 ni a las 14:00 UTC un lunes,
+	// sin ningún error visible). El de Cloudflare Cron Triggers es mucho más
+	// confiable, así que este worker no hace el build/deploy — solo llama a
+	// la API de GitHub para forzar el mismo workflow. Mismo horario que el
+	// cron de GitHub a propósito: si GitHub sí corrió, esto dispara una
+	// segunda corrida que la cola (concurrency en deploy.yml) simplemente
+	// encola después sin romper nada, solo consume un poco más de minutos
+	// gratis de Actions.
+	"triggers": {
+		"crons": ["0 12-22/2 * * 1-6"]
+	},
+	"observability": {
+		"logs": {
+			"enabled": true
+		}
+	}
+}

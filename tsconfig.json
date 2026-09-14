@@ -30,5 +30,9 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules"]
+  // cron-redeploy-trigger es un Worker aparte con su propio tsconfig (usa
+  // los tipos globales de @cloudflare/workers-types, que este proyecto no
+  // tiene como dependencia) — si no se excluye acá, "**/*.ts" lo agarra y
+  // rompe el chequeo de tipos del sitio por variables globales no declaradas.
+  "exclude": ["node_modules", "cron-redeploy-trigger"]
 }
