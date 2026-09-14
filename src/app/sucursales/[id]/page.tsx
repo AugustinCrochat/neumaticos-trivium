@@ -153,12 +153,15 @@ export default async function BranchPage({ params }: Props) {
         />
 
         {branch.facadePhoto && (
-          <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl sm:aspect-video">
+          // aspect-[4/3] en todos los tamaños: es la proporción real de la
+          // foto — a partir de sm pasaba a aspect-video (16:9) y se comía
+          // buena parte de la imagen.
+          <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl">
             <Image
               src={branch.facadePhoto}
               alt={`Fachada del local de Neumáticos Trivium ${branch.shortName}`}
               fill
-              className="object-cover object-top"
+              className="object-cover"
               sizes="(max-width: 768px) 100vw, 768px"
               priority
             />

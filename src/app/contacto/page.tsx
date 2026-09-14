@@ -45,12 +45,14 @@ export default function ContactoPage() {
           return (
             <section key={branch.id} className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
               {branch.facadePhoto && (
-                <div className="relative h-48 w-full sm:h-64">
+                // aspect-[4/3]: proporción real de la foto — con una altura fija
+                // se recortaba de más.
+                <div className="relative aspect-[4/3] w-full">
                   <Image
                     src={branch.facadePhoto}
                     alt={`Fachada del local de Neumáticos Trivium ${branch.shortName}`}
                     fill
-                    className="object-cover object-top"
+                    className="object-cover"
                     sizes="(max-width: 768px) 100vw, 1024px"
                   />
                 </div>

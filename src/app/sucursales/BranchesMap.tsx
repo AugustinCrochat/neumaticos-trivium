@@ -105,14 +105,14 @@ function BranchSummary({
       }`}
     >
       {branch.facadePhoto && (
-        <div className="relative h-44 w-full">
+        // aspect-[4/3]: es la proporción real de la foto — con una altura fija
+        // (antes h-44) se recortaba de más según el ancho de la tarjeta.
+        <div className="relative aspect-[4/3] w-full">
           <Image
             src={branch.facadePhoto}
             alt={`Fachada del local de Neumáticos Trivium ${branch.shortName}`}
             fill
-            // object-top: el cartel con el logo queda en el tercio superior de
-            // la foto — con la posición default (center) el recorte se lo comía.
-            className="object-cover object-top"
+            className="object-cover"
             sizes="(max-width: 1024px) 100vw, 512px"
           />
         </div>
@@ -380,6 +380,29 @@ export function BranchesMap({ branches }: BranchesMapProps) {
             >
               {geoStatus === "loading" ? "Buscando..." : "Sucursal mas cercana"}
             </button>
+            {/* Mobile: popup compacto con "Cómo llegar" a mano apenas se toca un
+                pin — antes solo existía la tarjeta completa de abajo (hidden
+                lg:block), así que en el celular había que bajar a buscarla. */}
+            <div className="pointer-events-auto absolute inset-x-4 bottom-4 z-10 lg:hidden">
+              <div className="flex items-center gap-3 rounded-2xl border border-orange-500 bg-white p-3 shadow-xl shadow-orange-500/10">
+                <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-navy-50">
+                  <Image src="/icon.svg" alt="" width={28} height={28} className="h-7 w-7 object-contain" />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-black text-navy-900">{activeBranch.name}</p>
+                  <p className="truncate text-xs text-slate-500">{activeBranch.address}</p>
+                </div>
+                <a
+                  href={activeBranch.mapUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex min-h-11 shrink-0 items-center justify-center rounded-xl bg-black px-3.5 text-xs font-black text-white transition-colors hover:bg-neutral-800"
+                >
+                  Cómo llegar
+                </a>
+              </div>
+            </div>
+
             <div className="pointer-events-auto absolute bottom-5 right-5 z-10 hidden w-[min(390px,calc(100%-40px))] lg:block">
               <BranchSummary
                 branch={activeBranch}
