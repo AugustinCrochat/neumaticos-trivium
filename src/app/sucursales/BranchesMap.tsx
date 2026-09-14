@@ -17,7 +17,7 @@ type UserLocation = {
 };
 
 const MAPTILER_KEY = "rZs55HHnOgNdmSMB2Jkn";
-const MAP_STYLE_URL = `https://api.maptiler.com/maps/streets-v4/style.json?key=${MAPTILER_KEY}`;
+const MAP_STYLE_URL = `https://api.maptiler.com/maps/dataviz/style.json?key=${MAPTILER_KEY}`;
 const ARGENTINA_MIN_ZOOM = 3.5;
 const MAP_LOCALE = {
   "CooperativeGesturesHandler.WindowsHelpText": "Usa Ctrl + scroll para acercar o alejar el mapa",
