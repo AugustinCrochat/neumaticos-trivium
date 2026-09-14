@@ -389,15 +389,19 @@ export function BranchesMap({ branches }: BranchesMapProps) {
                   <Image src="/icon.svg" alt="" width={28} height={28} className="h-7 w-7 object-contain" />
                 </span>
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-black text-navy-900">{activeBranch.name}</p>
+                  <p className="truncate text-sm font-black text-navy-900">{activeBranch.shortName}</p>
                   <p className="truncate text-xs text-slate-500">{activeBranch.address}</p>
                 </div>
                 <a
                   href={activeBranch.mapUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex min-h-11 shrink-0 items-center justify-center rounded-xl bg-black px-3.5 text-xs font-black text-white transition-colors hover:bg-neutral-800"
+                  aria-label="Cómo llegar"
+                  className="inline-flex min-h-11 shrink-0 items-center justify-center gap-1.5 rounded-xl bg-orange-500 px-3.5 text-xs font-black text-white transition-colors hover:bg-orange-600"
                 >
+                  <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M21.71 11.29l-9-9a.996.996 0 00-1.41 0l-9 9a.996.996 0 000 1.41l9 9c.39.39 1.02.39 1.41 0l9-9a.996.996 0 000-1.41zM14 14.5V12h-4v3H8v-4c0-.55.45-1 1-1h5V7.5l3.5 3.5-3.5 3.5z" />
+                  </svg>
                   Cómo llegar
                 </a>
               </div>
