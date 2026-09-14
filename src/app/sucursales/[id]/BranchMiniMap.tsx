@@ -5,7 +5,7 @@ import maplibregl, { type Map } from "maplibre-gl";
 import type { Branch } from "@/lib/config";
 
 const MAPTILER_KEY = "rZs55HHnOgNdmSMB2Jkn";
-const MAP_STYLE_URL = `https://api.maptiler.com/maps/dataviz/style.json?key=${MAPTILER_KEY}`;
+const MAP_STYLE_URL = `https://api.maptiler.com/maps/streets-v2/style.json?key=${MAPTILER_KEY}`;
 
 function createBranchPin(): HTMLElement {
   const wrapper = document.createElement("div");
