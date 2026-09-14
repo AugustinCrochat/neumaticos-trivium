@@ -47,7 +47,7 @@
     "noiseClass": "A",
     "tyreDesignation": "195/55R15 85 V"
   },
-  "pirelli-p1-cinturato-175-65-r14-82t": {
+  "pirelli-cinturato-p1-175-65-r14-82t": {
     "eprelId": "1522817",
     "energyClass": "C",
     "wetGripClass": "B",
@@ -55,7 +55,7 @@
     "noiseClass": "B",
     "tyreDesignation": "175/65 R14 82 T"
   },
-  "pirelli-p1-cinturato-195-55-r16-91v": {
+  "pirelli-cinturato-p1-195-55-r16-91v": {
     "eprelId": "1429179",
     "energyClass": "C",
     "wetGripClass": "B",
@@ -103,7 +103,7 @@
     "noiseClass": "B",
     "tyreDesignation": "175/65R14 82 T"
   },
-  "pirelli-p1-cinturato-175-70-r14-84t": {
+  "pirelli-cinturato-p1-175-70-r14-84t": {
     "eprelId": "595609",
     "energyClass": "D",
     "wetGripClass": "B",
@@ -151,7 +151,7 @@
     "noiseClass": "A",
     "tyreDesignation": "215/65R16 98 H"
   },
-  "pirelli-p1-cinturato-195-60-r16-89h": {
+  "pirelli-cinturato-p1-195-60-r16-89h": {
     "eprelId": "774415",
     "energyClass": "B",
     "wetGripClass": "C",
@@ -239,7 +239,7 @@
     "noiseClass": "B",
     "tyreDesignation": "195/70R15C 104/102 R"
   },
-  "pirelli-p7-cinturato-195-50-r16-84v": {
+  "pirelli-cinturato-p7-195-50-r16-84v": {
     "eprelId": "659472",
     "energyClass": "D",
     "wetGripClass": "C",
@@ -463,7 +463,7 @@
     "noiseClass": "B",
     "tyreDesignation": "215/65R16 98 H"
   },
-  "pirelli-p7-cinturato-215-50-r17-91w": {
+  "pirelli-cinturato-p7-215-50-r17-91w": {
     "eprelId": "581080",
     "energyClass": "D",
     "wetGripClass": "B",
@@ -503,7 +503,7 @@
     "noiseClass": "B",
     "tyreDesignation": "205/60R16 92 H"
   },
-  "pirelli-p1-cinturato-185-65-r14-86t": {
+  "pirelli-cinturato-p1-185-65-r14-86t": {
     "eprelId": "594719",
     "energyClass": "C",
     "wetGripClass": "B",
@@ -623,7 +623,7 @@
     "noiseClass": "A",
     "tyreDesignation": "195/65R15 95 T XL"
   },
-  "pirelli-p1-cinturato-185-60-r15-88h": {
+  "pirelli-cinturato-p1-185-60-r15-88h": {
     "eprelId": "1079620",
     "energyClass": "B",
     "wetGripClass": "D",
@@ -631,7 +631,7 @@
     "noiseClass": "B",
     "tyreDesignation": "185/60R15 88 H XL"
   },
-  "pirelli-p1-cinturato-185-65-r15-92h": {
+  "pirelli-cinturato-p1-185-65-r15-92h": {
     "eprelId": "595275",
     "energyClass": "C",
     "wetGripClass": "B",

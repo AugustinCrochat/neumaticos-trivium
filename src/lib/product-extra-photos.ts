@@ -12,7 +12,14 @@ const MAP = extraPhotos as Record<string, string[]>;
 // Misma normalización que normalizeModelKey() en el script: pliega variantes
 // de homologación del mismo modelo físico (ej. "XL P1 Cinturato (KS)R" y
 // "P1 Cinturato (KA)") a una sola key, porque son la misma foto.
-const MODEL_ALIASES: Record<string, string> = { pwrgy: "powergy" };
+// "cinturato-p1"/"cinturato-p7": el POS renombró el modelo de "P1/P7 Cinturato"
+// a "Cinturato P1/P7" (14/09/26, ver commit 5c9965d) — mismo modelo físico,
+// mismas fotos, sin reprocesar imágenes por un cambio de orden de palabras.
+const MODEL_ALIASES: Record<string, string> = {
+  pwrgy: "powergy",
+  "cinturato-p1": "p1-cinturato",
+  "cinturato-p7": "p7-cinturato",
+};
 
 function slugify(value: string): string {
   return value
