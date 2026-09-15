@@ -13,6 +13,7 @@ export const CONTACT_EMAIL = "info@trivium.ar";
 export const GOOGLE_MERCHANT_ID = 5832097672;
 export const INSTAGRAM_URL = "https://www.instagram.com/neumaticos.trivium/";
 export const FACEBOOK_URL = "https://www.facebook.com/profile.php?id=61589579136727";
+export const YOUTUBE_URL = "https://www.youtube.com/@neumaticos-trivium";
 /** Link de Data Fiscal AFIP (RG 4291) — badge de verificación fiscal
     obligatorio en el sitio, generado desde el portal de AFIP para este CUIT. */
 export const AFIP_DATA_FISCAL_QR = "http://qr.afip.gob.ar/?qr=TQSpqR8zs2JCASa4zM5M3A,,";
