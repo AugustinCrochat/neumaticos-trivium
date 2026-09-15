@@ -45,9 +45,18 @@ function getBranchLngLat(branch: Branch): [number, number] {
 // Marcador HTML con el logo de Trivium sobre una insignia navy (para que el
 // logo blanco se lea sobre el mapa claro) y una etiqueta con el nombre corto.
 function createBranchMarkerElement(shortName: string) {
+  // anchor:"bottom" del Marker pinea el borde inferior de ESTE div al punto
+  // geográfico exacto — tiene que ser la puntita del "pointer", no el fondo
+  // del texto de abajo. Antes el label estaba en el flujo normal debajo del
+  // pointer, así que el borde inferior real era el fondo del texto: un
+  // desfasaje fijo en píxeles que de cerca no se nota (representa pocos
+  // metros) pero de lejos, con el mismo mapa mostrando kilómetros por
+  // pantalla, hace que el pin quede visiblemente corrido de la ubicación
+  // real. El label ahora es absolute (fuera del flujo) para que no cuente en
+  // la caja del wrapper.
   const wrapper = document.createElement("div");
   wrapper.style.cssText =
-    "display:flex;flex-direction:column;align-items:center;cursor:pointer;user-select:none";
+    "position:relative;display:flex;flex-direction:column;align-items:center;cursor:pointer;user-select:none";
 
   const badge = document.createElement("div");
   badge.dataset.role = "badge";
@@ -68,7 +77,7 @@ function createBranchMarkerElement(shortName: string) {
   const label = document.createElement("div");
   label.textContent = shortName;
   label.style.cssText =
-    "margin-top:3px;font-weight:800;font-size:12px;color:#000000;white-space:nowrap;text-shadow:0 0 2px #fff,0 0 2px #fff,0 0 2px #fff,0 0 2px #fff";
+    "position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:3px;font-weight:800;font-size:12px;color:#000000;white-space:nowrap;text-shadow:0 0 2px #fff,0 0 2px #fff,0 0 2px #fff,0 0 2px #fff";
 
   wrapper.appendChild(badge);
   wrapper.appendChild(pointer);
