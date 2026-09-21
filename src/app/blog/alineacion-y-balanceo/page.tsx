@@ -210,7 +210,12 @@ export default function Page() {
         <strong>computarizada 3D</strong>, que mide los tres ángulos en las cuatro ruedas contra la
         ficha del fabricante de tu modelo, y el balanceo es dinámico, que corrige el desbalance en
         los dos planos y no sólo en uno.{" "}
-        <Link href="/servicios">Podés ver el detalle de los dos servicios acá</Link>.
+        <Link href="/servicios">Podés ver el detalle de los dos servicios acá</Link>. Los equipos que
+        usamos son la alineadora 3D Hofmann Geoliner 630 y la balanceadora Hofmann Geodyna 7800P —{" "}
+        <Link href="/blog/geoliner-630-geodyna-7800p-alineacion-balanceo">
+          acá contamos qué diferencia hacen
+        </Link>
+        .
       </p>
       <p>
         Si comprás los neumáticos en el local, el arme, el desarme y el cambio de válvulas van sin

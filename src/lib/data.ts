@@ -151,6 +151,16 @@ export const SERVICES: Service[] = [
 // actual. Las más útiles para alguien que está por comprar van arriba.
 export const BLOG_POSTS: BlogPost[] = [
   {
+    id: "14",
+    title: "Alineación con Geoliner 630 y balanceo con Geodyna 7800P: el equipo hace la diferencia",
+    excerpt:
+      "Cómo funcionan la alineadora 3D y la balanceadora Hofmann que usamos en el taller, y qué diferencia hacen en la duración de los neumáticos y las vibraciones.",
+    imageUrl: "/images/blog/geoliner-630-alineadora-trivium.webp",
+    date: "2026-09-21",
+    slug: "geoliner-630-geodyna-7800p-alineacion-balanceo",
+    category: "Servicios",
+  },
+  {
     id: "13",
     title: "Carga simple y dual en neumáticos C: qué significa el 90/88 del flanco",
     excerpt:
