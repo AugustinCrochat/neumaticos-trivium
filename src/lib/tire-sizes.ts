@@ -188,15 +188,21 @@ export function buildTireDescription(product: {
   size: TireSize;
   vehicleType: string[];
   loadIndex?: string;
+  loadIndexDual?: string;
   speedRating?: string;
 }): string {
   const tipo = vehicleTypeLabel(product.vehicleType);
   const loadKg = product.loadIndex ? LOAD_INDEX_KG[product.loadIndex] : undefined;
+  const loadDualKg = product.loadIndexDual ? LOAD_INDEX_KG[product.loadIndexDual] : undefined;
   const speedKmh = product.speedRating ? SPEED_RATING_KMH[product.speedRating] : undefined;
 
   const partes = [`Neumático ${product.model} para ${tipo}, de importación directa.`];
 
-  if (loadKg && speedKmh) {
+  if (loadKg && loadDualKg && speedKmh) {
+    partes.push(
+      `Índice de carga ${product.loadIndex}/${product.loadIndexDual} (hasta ${loadKg} kg en montaje simple, ${loadDualKg} kg en rodado dual) y velocidad ${product.speedRating} (hasta ${speedKmh} km/h).`
+    );
+  } else if (loadKg && speedKmh) {
     partes.push(
       `Índice de carga ${product.loadIndex} (hasta ${loadKg} kg por rueda) y velocidad ${product.speedRating} (hasta ${speedKmh} km/h).`
     );

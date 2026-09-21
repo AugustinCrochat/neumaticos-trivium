@@ -151,6 +151,16 @@ export const SERVICES: Service[] = [
 // actual. Las más útiles para alguien que está por comprar van arriba.
 export const BLOG_POSTS: BlogPost[] = [
   {
+    id: "13",
+    title: "Carga simple y dual en neumáticos C: qué significa el 90/88 del flanco",
+    excerpt:
+      "Los neumáticos C traen dos índices de carga, no uno: uno para montaje simple y otro para rodado dual. Cuál te corresponde y tabla de conversión a kilos.",
+    imageUrl: "/images/blog-1.webp",
+    date: "2026-09-21",
+    slug: "carga-simple-y-dual-neumaticos-c",
+    category: "Guías",
+  },
+  {
     id: "11",
     title: "Medidas flotation: qué significa 31x10.5R15 y cómo pasarlo a métrico",
     excerpt:

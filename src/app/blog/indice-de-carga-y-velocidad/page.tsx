@@ -192,6 +192,11 @@ export default function Page() {
         &quot;104/102&quot;: el primero es para montaje simple y el segundo para rodado doble, donde
         cada neumático carga algo menos porque comparte el eje. Si tu utilitario vino con C de
         fábrica, no lo reemplaces por uno sin C aunque la medida coincida: no es el mismo producto.
+        La nota sobre{" "}
+        <Link href="/blog/carga-simple-y-dual-neumaticos-c">
+          carga simple y dual en neumáticos C
+        </Link>{" "}
+        entra en el detalle de por qué son dos números y cuál te corresponde.
       </p>
 
       <h2>Cómo leer un flanco completo</h2>

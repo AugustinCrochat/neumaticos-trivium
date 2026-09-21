@@ -205,6 +205,7 @@ export default async function ProductPage({ params }: Props) {
   const brand = BRANDS.find((b) => b.id === product.brandId);
   const speedKmh = product.speedRating ? SPEED_RATING_KMH[product.speedRating] : undefined;
   const loadKg = product.loadIndex ? LOAD_INDEX_KG[product.loadIndex] : undefined;
+  const loadDualKg = product.loadIndexDual ? LOAD_INDEX_KG[product.loadIndexDual] : undefined;
   const loadSpeed = product.loadIndex && product.speedRating ? ` ${product.loadIndex}${product.speedRating}` : "";
   const vehiculos = vehiclesUsingSize(product.size);
   const popularPreview = Array.from(
@@ -219,9 +220,20 @@ export default async function ProductPage({ params }: Props) {
     { label: "Rodado", value: `R${product.size.rim}` },
     { label: "Marca", value: product.brand },
     { label: "Línea", value: product.model.replace(/^\d+\/\d+ R\d+[A-Z]* /, "").replace(new RegExp(`^${product.brand}\\s+`, "i"), "") },
-    ...(product.loadIndex
-      ? [{ label: "Índice de carga (por rueda)", value: loadKg ? `${product.loadIndex} (${loadKg} kg)` : product.loadIndex }]
-      : []),
+    ...(product.loadIndex && product.loadIndexDual
+      ? [
+          {
+            label: "Índice de carga (montaje simple)",
+            value: loadKg ? `${product.loadIndex} (${loadKg} kg)` : product.loadIndex,
+          },
+          {
+            label: "Índice de carga (rodado dual)",
+            value: loadDualKg ? `${product.loadIndexDual} (${loadDualKg} kg)` : product.loadIndexDual,
+          },
+        ]
+      : product.loadIndex
+        ? [{ label: "Índice de carga (por rueda)", value: loadKg ? `${product.loadIndex} (${loadKg} kg)` : product.loadIndex }]
+        : []),
     ...(product.speedRating
       ? [{ label: "Índice de velocidad", value: speedKmh ? `${product.speedRating} (hasta ${speedKmh} km/h)` : product.speedRating }]
       : []),
@@ -395,6 +407,18 @@ export default async function ProductPage({ params }: Props) {
               </li>
             ))}
           </ul>
+          {product.loadIndexDual && (
+            <p className="mt-3 text-xs text-slate-500">
+              ¿Por qué trae dos índices de carga?{" "}
+              <Link
+                href="/blog/carga-simple-y-dual-neumaticos-c"
+                className="font-bold text-navy-700 underline underline-offset-2"
+              >
+                Te lo explicamos acá
+              </Link>
+              .
+            </p>
+          )}
         </div>
       </div>
 

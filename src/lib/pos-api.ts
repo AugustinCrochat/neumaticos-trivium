@@ -161,8 +161,22 @@ function localImageFallback(p: PosProducto): string | null {
 // velocidad — se saca el "XL" antes de leer carga/velocidad.
 const LOAD_SPEED_SUFFIX = /(\d{2,3})([A-Z]{1,2})\s*$/;
 
-function parseLoadSpeed(nombre: string): { loadIndex?: string; speedRating?: string } {
+// Los neumáticos de carga (C) suelen traer DOS índices de carga separados por
+// una barra — simple/dual, ej. "90/88" — antes de la letra de velocidad. El
+// patrón simple de arriba no matchea esto porque hay un "/" en el medio, así
+// que se prueba primero (ver blog "carga-simple-y-dual-neumaticos-c").
+const LOAD_SPEED_DUAL_SUFFIX = /(\d{2,3})\/(\d{2,3})([A-Z]{1,2})\s*$/;
+
+function parseLoadSpeed(nombre: string): {
+  loadIndex?: string;
+  loadIndexDual?: string;
+  speedRating?: string;
+} {
   const sinXL = nombre.trim().replace(/\s*XL\s*$/i, "");
+  const dualMatch = sinXL.match(LOAD_SPEED_DUAL_SUFFIX);
+  if (dualMatch) {
+    return { loadIndex: dualMatch[1], loadIndexDual: dualMatch[2], speedRating: dualMatch[3] };
+  }
   const match = sinXL.match(LOAD_SPEED_SUFFIX);
   if (!match) return {};
   return { loadIndex: match[1], speedRating: match[2] };
@@ -174,7 +188,7 @@ function toTireProduct(p: PosProducto): TireProduct | null {
     return null;
   }
   const { marca, modelo } = fixBrandAndModel(p.marca || "", p.modelo || "");
-  const { loadIndex, speedRating } = parseLoadSpeed(p.nombre || "");
+  const { loadIndex, loadIndexDual, speedRating } = parseLoadSpeed(p.nombre || "");
   const brandId = slugify(marca) || "otras-marcas";
   const medida = formatMedida(p.neumatico_ancho, p.neumatico_perfil, p.neumatico_diametro, p.es_carga);
   // "A/T" en el nombre solo si marca+modelo no lo traen ya — fixBrandAndModel
@@ -208,6 +222,7 @@ function toTireProduct(p: PosProducto): TireProduct | null {
     enStock: p.en_stock,
     stock: p.stock,
     loadIndex,
+    loadIndexDual,
     speedRating,
     priceOld: OFFER_TIRE_SLUGS.includes(slug) ? withOfferPrice(p.precio) : undefined,
   };
