@@ -18,7 +18,6 @@ import {
   vehiclesUsingSize,
 } from "@/lib/tire-sizes";
 import { sortVehiclesByPopularity } from "@/lib/vehicles";
-import { isLowStock, stockLabel } from "@/lib/stock";
 import { getTireLabel } from "@/lib/tire-labels";
 import { getExtraPhotos } from "@/lib/product-extra-photos";
 import { ProductNameWithHighlightedSize } from "@/components/ui/ProductNameWithHighlightedSize";
@@ -371,12 +370,6 @@ export default async function ProductPage({ params }: Props) {
               {formatPrice(product.price)}
             </span>
             <p className="text-xs text-slate-400 mt-1">Precio por unidad · IVA incluido</p>
-            {typeof product.stock === "number" && product.enStock && (
-              <p className={`text-xs font-bold mt-1.5 flex items-center gap-1.5 ${isLowStock(product.stock) ? "text-amber-600" : "text-emerald-600"}`}>
-                <span className={`w-1.5 h-1.5 rounded-full ${isLowStock(product.stock) ? "bg-amber-500" : "bg-emerald-500"}`} />
-                {stockLabel(product.stock)}
-              </p>
-            )}
 
             {/* Client component handles branch-specific WhatsApp link */}
             <ProductPageClient product={product} />

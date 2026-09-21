@@ -7,6 +7,7 @@ import { useVehicle } from "@/contexts/vehicle-context";
 import type { TireProduct } from "@/lib/types";
 import { AddToCartModal } from "@/components/ui/AddToCartModal";
 import { FREE_SHIPPING_THRESHOLD, SHIPPING_FLAT_RATE } from "@/lib/config";
+import { isLowStock, stockLabel } from "@/lib/stock";
 
 function formatPrice(price: number) {
   return new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 }).format(price);
@@ -41,12 +42,15 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
   // del POS sin tener que volver dinámica toda la ficha. Si el fetch falla
   // (offline, edge caído) se queda con el valor estático en vez de romper.
   const [enStock, setEnStock] = useState(product.enStock ?? false);
+  const [stock, setStock] = useState(product.stock ?? 0);
   useEffect(() => {
     let cancelado = false;
     fetch(`/api/stock/${product.id}?sucursal=${selectedBranch.id}`, { cache: "no-store" })
       .then((res) => (res.ok ? res.json() : null))
-      .then((data: { enStock?: boolean } | null) => {
-        if (!cancelado && data && typeof data.enStock === "boolean") setEnStock(data.enStock);
+      .then((data: { enStock?: boolean; stock?: number } | null) => {
+        if (cancelado || !data) return;
+        if (typeof data.enStock === "boolean") setEnStock(data.enStock);
+        if (typeof data.stock === "number") setStock(data.stock);
       })
       .catch(() => {});
     return () => {
@@ -113,6 +117,13 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
 
   return (
     <div className="mt-6 flex flex-col gap-3">
+      {enStock && stock > 0 && (
+        <p className={`text-xs font-bold flex items-center gap-1.5 ${isLowStock(stock) ? "text-amber-600" : "text-emerald-600"}`}>
+          <span className={`w-1.5 h-1.5 rounded-full ${isLowStock(stock) ? "bg-amber-500" : "bg-emerald-500"}`} />
+          {stockLabel(stock)}
+        </p>
+      )}
+
       {/* Módulo interactivo de Compatibilidad: solo se muestra si ya hay un
           vehículo elegido (persistido de una visita anterior); no invita a
           elegir uno acá. */}
