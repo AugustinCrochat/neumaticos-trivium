@@ -90,9 +90,10 @@ export default function Page() {
       <p>
         El sistema <strong>VODI</strong> (indicador de orientación con luces LED rojas y verdes)
         guía al técnico durante toda la medición, así que el margen de error humano —tocar el punto
-        equivocado, moverse antes de tiempo— baja. Y la función <strong>EZ-Toe</strong> facilita
-        llegar a los puntos de ajuste de convergencia que en algunos autos quedan escondidos y mal
-        accesibles, donde un ajuste apurado suele dejar el auto &quot;casi&quot; bien alineado.
+        equivocado, moverse antes de tiempo— baja. Y la función <strong>EZ-Toe</strong>{" "}
+        facilita llegar a los puntos de ajuste de convergencia que en algunos autos quedan
+        escondidos y mal accesibles, donde un ajuste apurado suele dejar el auto &quot;casi&quot;
+        bien alineado.
       </p>
       <p>Algunos datos concretos del equipo, para quien quiera compararlo con otro:</p>
       <table>
