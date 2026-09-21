@@ -42,6 +42,11 @@ const FAQS = [
     answer:
       "Sí. La Geoliner 630 mide rodados de 12 a 24 pulgadas y vías de hasta 244 cm, y la Geodyna 7800P balancea ruedas de hasta 42 pulgadas de diámetro total y 70 kg, el rango que cubre desde un auto chico hasta una pickup con llanta alta.",
   },
+  {
+    question: "¿Neumáticos Trivium vende esta clase de equipos a otros talleres?",
+    answer:
+      "Sí, a través de Trivium Pro, nuestra unidad de negocio dedicada al equipamiento profesional para talleres, gomerías y concesionarias: alineadoras 3D Hofmann, balanceadoras, elevadores, desarmadoras y herramientas neumáticas, con instalación y service oficial en todo el país. El catálogo completo está en pro.trivium.ar.",
+  },
 ];
 
 export default function Page() {
@@ -188,6 +193,23 @@ export default function Page() {
           de ambos equipos cubre rodados grandes y ruedas pesadas sin perder precisión.
         </li>
       </ul>
+
+      <h2>Si sos dueño de un taller: estos equipos también los vendemos</h2>
+      <p>
+        La Geoliner 630 y la Geodyna 7800P no son solo el equipo que usamos puertas adentro: las
+        importamos y las vendemos a otros talleres, gomerías y concesionarias a través de{" "}
+        <strong>Trivium Pro</strong>, nuestra unidad de negocio dedicada al equipamiento
+        profesional. Si estás por equipar o renovar tu taller —alineadoras, balanceadoras,
+        elevadores, desarmadoras, herramientas neumáticas—{" "}
+        <a
+          href="https://pro.trivium.ar"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          conocé el catálogo completo en pro.trivium.ar
+        </a>
+        , con asesoramiento técnico, instalación e service oficial en todo el país.
+      </p>
 
       <p>
         Si notás que el auto tira hacia un lado, que el volante vibra en ruta o que un neumático se
