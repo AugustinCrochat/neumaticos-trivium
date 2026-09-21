@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useBranch } from "@/contexts/branch-context";
 import { useVehicle } from "@/contexts/vehicle-context";
 import type { TireProduct } from "@/lib/types";
@@ -34,6 +34,25 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
   const { selectedBranch, openModal } = useBranch();
   const { selectedVehicle } = useVehicle();
   const [showModal, setShowModal] = useState(false);
+
+  // El stock de `product` viene horneado en el HTML del último build (el
+  // sitio es 100% estático, sin ISR — ver memoria del proyecto), así que
+  // puede tener hasta 2h de atraso. Al montar, se corrige con el valor real
+  // del POS sin tener que volver dinámica toda la ficha. Si el fetch falla
+  // (offline, edge caído) se queda con el valor estático en vez de romper.
+  const [enStock, setEnStock] = useState(product.enStock ?? false);
+  useEffect(() => {
+    let cancelado = false;
+    fetch(`/api/stock/${product.id}?sucursal=${selectedBranch.id}`, { cache: "no-store" })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: { enStock?: boolean } | null) => {
+        if (!cancelado && data && typeof data.enStock === "boolean") setEnStock(data.enStock);
+      })
+      .catch(() => {});
+    return () => {
+      cancelado = true;
+    };
+  }, [product.id, selectedBranch.id]);
 
   const waText = encodeURIComponent(
     `Hola, quiero consultar por el neumático ${product.brand} ${product.model} ${product.size.width}/${product.size.profile} R${product.size.rim} (SKU: ${product.id})`
@@ -154,8 +173,8 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
       </div>
       )}
 
-      <button onClick={() => setShowModal(true)} disabled={!product.enStock} className="flex items-center justify-center gap-2 bg-[#FFE600] hover:bg-[#f5dc00] disabled:bg-slate-300 disabled:text-white text-navy-900 font-black py-3 rounded-xl text-base transition-colors cursor-pointer">
-        {product.enStock ? (
+      <button onClick={() => setShowModal(true)} disabled={!enStock} className="flex items-center justify-center gap-2 bg-[#FFE600] hover:bg-[#f5dc00] disabled:bg-slate-300 disabled:text-white text-navy-900 font-black py-3 rounded-xl text-base transition-colors cursor-pointer">
+        {enStock ? (
           <>
             Comprar ahora
             <Image src="/images/mercadopago-logo.svg" alt="Mercado Pago" width={180} height={45} className="h-6 w-auto" />
@@ -187,7 +206,7 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
           </div>
           <div className="min-w-0 flex-1">
             <p className="font-bold text-navy-900 text-sm leading-snug">Retiro gratis en Sucursal {selectedBranch.shortName}</p>
-            {product.enStock ? (
+            {enStock ? (
               <p className="text-xs font-bold text-emerald-600 mt-0.5">Retiro el mismo día</p>
             ) : (
               <p className="text-xs font-bold text-red-600 mt-0.5">Sin stock para retiro</p>
