@@ -195,7 +195,17 @@ function toTireProduct(p: PosProducto): TireProduct | null {
   // le saca el "A/T" al modelo "Terra Xplorer" (ver arriba), así que sin esto
   // esos productos mostrarían un nombre que no dice que son todo terreno.
   const atSuffix = p.es_at && !/\bA\/T\b|\bAT\b/i.test(`${marca} ${modelo}`) ? " A/T" : "";
-  const model = `${medida} ${marca} ${modelo}${p.es_carga ? " De Carga" : ""}${atSuffix}`.trim().replace(/\s+/g, " ");
+  // Se muestra pegado a la medida, como en el flanco: "R14C 90/88R" si es
+  // carga con doble índice, "R17 91W" si es un solo índice. Todo lo que lee
+  // product.model (título de la ficha, tarjetas de listado, JSON-LD, feed de
+  // Merchant Center, WhatsApp) sale de acá — no hace falta insertarlo aparte
+  // en cada lugar.
+  const loadSpeedLabel = loadIndex
+    ? ` ${loadIndex}${loadIndexDual ? `/${loadIndexDual}` : ""}${speedRating ?? ""}`
+    : "";
+  const model = `${medida}${loadSpeedLabel} ${marca} ${modelo}${p.es_carga ? " De Carga" : ""}${atSuffix}`
+    .trim()
+    .replace(/\s+/g, " ");
   const loadSpeedSlug = loadIndex && speedRating ? `-${loadIndex}${speedRating}` : "";
   // La "r{diametro}c" tiene que coincidir con el slug que arma buildProductLink
   // en pos-neumaticos/src/lib/whatsapp-catalog-sync.ts — si se toca acá, tocar allá.

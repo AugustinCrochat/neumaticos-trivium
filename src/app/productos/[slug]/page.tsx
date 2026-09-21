@@ -45,14 +45,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const productos = await getProductosDesdePOS(await getSelectedBranchSlug());
   const product = productos.find((p) => p.slug === slug);
   if (!product) return {};
-  const loadSpeed = product.loadIndex && product.speedRating ? ` ${product.loadIndex}${product.speedRating}` : "";
-  // El [A-Z]* al final agarra la "C" de los neumáticos de carga (ej. "R15C")
-  // — sin esto, el loadSpeed se insertaba entre el rodado y la "C" (ver
-  // ProductNameWithHighlightedSize, que ya maneja este mismo caso).
-  const sizeRegex = new RegExp(`(${product.size.width}\\s*/\\s*${product.size.profile}\\s*R\\s*${product.size.rim}[A-Z]*)`, "i");
-  const title = product.model.replace(sizeRegex, `$1${loadSpeed}`);
-  const fullTitle = `${title} — Neumáticos Trivium`;
-  const description = `Comprá el neumático ${title} al mejor precio. Outlet de neumáticos importados en Argentina.`;
+  // product.model ya trae el índice de carga/velocidad pegado a la medida
+  // (ver toTireProduct en pos-api.ts) — no hace falta insertarlo acá.
+  const fullTitle = `${product.model} — Neumáticos Trivium`;
+  const description = `Comprá el neumático ${product.model} al mejor precio. Outlet de neumáticos importados en Argentina.`;
   const pageUrl = `${SITE_URL}/productos/${product.slug}`;
   // La imagen de OG/Twitter la arma opengraph-image.tsx en esta misma carpeta
   // (compone la foto del producto sobre el fondo de marca en vez de compartir
@@ -99,7 +95,7 @@ function vehicleLabel(product: { vehicleType: string[] }) {
 
 function buildProductJsonLd(product: {
   id: string; slug: string; brand: string; model: string; imageUrl: string; price: number; enStock?: boolean;
-  size: { width: number; profile: number; rim: number }; loadIndex?: string; speedRating?: string;
+  size: { width: number; profile: number; rim: number }; loadIndex?: string; loadIndexDual?: string; speedRating?: string;
   vehicleType: string[];
 }) {
   const url = `${SITE_URL}/productos/${product.slug}`;
@@ -138,7 +134,13 @@ function buildProductJsonLd(product: {
       { "@type": "PropertyValue", name: "Perfil", value: `${product.size.profile}` },
       { "@type": "PropertyValue", name: "Rodado", value: `R${product.size.rim}` },
       ...(product.loadIndex
-        ? [{ "@type": "PropertyValue", name: "Índice de carga", value: product.loadIndex }]
+        ? [
+            {
+              "@type": "PropertyValue",
+              name: "Índice de carga",
+              value: product.loadIndexDual ? `${product.loadIndex}/${product.loadIndexDual}` : product.loadIndex,
+            },
+          ]
         : []),
       ...(product.speedRating
         ? [{ "@type": "PropertyValue", name: "Índice de velocidad", value: product.speedRating }]
@@ -206,7 +208,6 @@ export default async function ProductPage({ params }: Props) {
   const speedKmh = product.speedRating ? SPEED_RATING_KMH[product.speedRating] : undefined;
   const loadKg = product.loadIndex ? LOAD_INDEX_KG[product.loadIndex] : undefined;
   const loadDualKg = product.loadIndexDual ? LOAD_INDEX_KG[product.loadIndexDual] : undefined;
-  const loadSpeed = product.loadIndex && product.speedRating ? ` ${product.loadIndex}${product.speedRating}` : "";
   const vehiculos = vehiclesUsingSize(product.size);
   const popularPreview = Array.from(
     new Set(sortVehiclesByPopularity(vehiculos).map((v) => `${v.brand} ${v.model}`))
@@ -312,11 +313,7 @@ export default async function ProductPage({ params }: Props) {
         {/* Info */}
         <div className="flex flex-col">
           <h1 className="text-2xl md:text-4xl font-normal text-slate-900 mb-3 leading-tight">
-            <ProductNameWithHighlightedSize
-              product={product}
-              sizeClassName="font-bold"
-              afterSize={loadSpeed}
-            />
+            <ProductNameWithHighlightedSize product={product} sizeClassName="font-bold" />
           </h1>
 
           <Link href={`/marcas/${product.brandId}`} className="mb-4 group/brand inline-block">
