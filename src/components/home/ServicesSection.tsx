@@ -1,6 +1,9 @@
 import { SERVICES } from "@/lib/data";
 import Link from "next/link";
 import Image from "next/image";
+import { getServiciosPrecios } from "@/lib/pos-api";
+import { getSelectedBranchSlug } from "@/lib/branch-server";
+import { formatPrecio, splitAutoCamioneta } from "@/lib/servicios";
 
 // Fotos del taller real, todas recortadas a la misma proporción (4:3) para
 // que las tarjetas queden parejas.
@@ -216,7 +219,43 @@ export const ICONS: Record<string, React.ReactNode> = {
   ),
 };
 
-export function ServicesSection() {
+/** Precio auto/camioneta de un servicio, o "Consultanos" si el POS todavía
+    no lo tiene cargado con ese grupo. */
+function PriceTag({
+  auto,
+  camioneta,
+  priceNote,
+}: {
+  auto?: { precio: number };
+  camioneta?: { precio: number };
+  priceNote?: string;
+}) {
+  if (!auto && !camioneta) {
+    return <p className="text-sm text-slate-400 mb-5">Consultanos el precio actualizado.</p>;
+  }
+  return (
+    <div className="flex flex-wrap items-end gap-x-5 gap-y-1 mb-5">
+      {auto && (
+        <div>
+          <span className="block text-[10px] font-bold uppercase tracking-widest text-slate-400">Auto</span>
+          <span className="text-lg font-black text-orange-400">{formatPrecio(auto.precio)}</span>
+        </div>
+      )}
+      {camioneta && (
+        <div>
+          <span className="block text-[10px] font-bold uppercase tracking-widest text-slate-400">Camioneta</span>
+          <span className="text-lg font-black text-orange-400">{formatPrecio(camioneta.precio)}</span>
+        </div>
+      )}
+      {priceNote && <span className="text-xs text-slate-400 mb-0.5">{priceNote}</span>}
+    </div>
+  );
+}
+
+export async function ServicesSection() {
+  const precios = await getServiciosPrecios(undefined, await getSelectedBranchSlug());
+  const combo = splitAutoCamioneta(precios.filter((p) => p.grupo === "combo"));
+
   return (
     <section id="servicios" className="py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4">
@@ -234,50 +273,93 @@ export function ServicesSection() {
         </div>
 
         {/* Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          {SERVICES.map((service) => (
-            <div
-              key={service.id}
-              className="group relative bg-gradient-to-br from-navy-950 to-black rounded-2xl text-white overflow-hidden"
-            >
-              {PHOTOS[service.id] && (
-                <div className="relative aspect-[4/3] w-full">
-                  <Image
-                    src={PHOTOS[service.id]}
-                    alt={`${service.title} en el taller de Neumáticos Trivium`}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                  />
-                </div>
-              )}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+          {SERVICES.map((service) => {
+            const { auto, camioneta } = splitAutoCamioneta(precios.filter((p) => p.grupo === service.id));
+            return (
+              <div
+                key={service.id}
+                className="group relative bg-gradient-to-br from-navy-950 to-black rounded-2xl text-white overflow-hidden"
+              >
+                {PHOTOS[service.id] && (
+                  <div className="relative aspect-[4/3] w-full">
+                    <Image
+                      src={PHOTOS[service.id]}
+                      alt={`${service.title} en el taller de Neumáticos Trivium`}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                    />
+                  </div>
+                )}
 
-              <div className="relative p-7">
-                <div className="relative">
-                <div className="text-orange-500 mb-4">{ICONS[service.icon]}</div>
-                <h3 className="text-xl font-bold mb-3">
-                  <Link href={`/servicios/${service.id}`} className="hover:text-orange-400 transition-colors">
-                    {service.title}
-                  </Link>
-                </h3>
-                <p className="text-slate-300 text-sm leading-relaxed mb-5">
-                  {service.description}
-                </p>
-                <ul className="space-y-2">
-                  {service.features.map((feat) => (
-                    <li key={feat} className="flex items-center gap-2 text-sm text-slate-300">
-                      <svg className="w-4 h-4 text-orange-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                      </svg>
-                      {feat}
-                    </li>
-                  ))}
-                </ul>
+                <div className="relative p-7">
+                  <div className="relative">
+                  <div className="text-orange-500 mb-4">{ICONS[service.icon]}</div>
+                  <h3 className="text-xl font-bold mb-3">
+                    <Link href={`/servicios/${service.id}`} className="hover:text-orange-400 transition-colors">
+                      {service.title}
+                    </Link>
+                  </h3>
+                  <p className="text-slate-300 text-sm leading-relaxed mb-5">
+                    {service.description}
+                  </p>
+                  <PriceTag auto={auto} camioneta={camioneta} priceNote={service.priceNote} />
+                  <ul className="space-y-2">
+                    {service.features.map((feat) => (
+                      <li key={feat} className="flex items-center gap-2 text-sm text-slate-300">
+                        <svg className="w-4 h-4 text-orange-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                        </svg>
+                        {feat}
+                      </li>
+                    ))}
+                  </ul>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
+
+        {/* Combo alineación + balanceo: se arma con los mismos íconos de las
+            dos cards de arriba (alineadora + balanceadora), porque es
+            literalmente la suma de esos dos servicios. */}
+        {(combo.auto || combo.camioneta) && (
+          <div className="mb-12 rounded-2xl border border-orange-200 bg-orange-50 p-7 md:p-8">
+            <div className="flex flex-col md:flex-row md:items-center gap-6">
+              <div className="flex items-center gap-3 text-orange-500 shrink-0">
+                {ICONS.alignment}
+                <span className="text-2xl font-black text-orange-300">+</span>
+                {ICONS.rubber}
+              </div>
+              <div className="flex-1">
+                <h3 className="text-xl font-black text-navy-900 mb-1.5">
+                  Combo: alineación + 4 balanceos con rotación incluida
+                </h3>
+                <p className="text-slate-600 text-sm leading-relaxed">
+                  Las cuatro ruedas alineadas y balanceadas en la misma visita, con rotación
+                  incluida — el paquete completo para que el auto ruede derecho y sin vibraciones,
+                  más barato que los servicios sueltos.
+                </p>
+              </div>
+              <div className="flex gap-6 md:pl-6 md:border-l md:border-orange-200 shrink-0">
+                {combo.auto && (
+                  <div>
+                    <span className="block text-[10px] font-bold uppercase tracking-widest text-orange-500">Auto</span>
+                    <span className="text-2xl font-black text-navy-900">{formatPrecio(combo.auto.precio)}</span>
+                  </div>
+                )}
+                {combo.camioneta && (
+                  <div>
+                    <span className="block text-[10px] font-bold uppercase tracking-widest text-orange-500">Camioneta</span>
+                    <span className="text-2xl font-black text-navy-900">{formatPrecio(combo.camioneta.precio)}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Info banner */}
         <div className="bg-orange-50 border border-orange-100 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-4">

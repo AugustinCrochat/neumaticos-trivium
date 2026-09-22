@@ -5,6 +5,7 @@ import { SERVICES } from "@/lib/data";
 import { ICONS } from "@/components/home/ServicesSection";
 import { getServiciosPrecios } from "@/lib/pos-api";
 import { getSelectedBranchSlug } from "@/lib/branch-server";
+import { formatPrecio, splitAutoCamioneta } from "@/lib/servicios";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbJsonLd, canonical, serviceJsonLd } from "@/lib/seo";
 
@@ -25,20 +26,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-function formatPrice(price: number) {
-  return new Intl.NumberFormat("es-AR", {
-    style: "currency",
-    currency: "ARS",
-    maximumFractionDigits: 0,
-  }).format(price);
-}
-
 export default async function ServicioPage({ params }: Props) {
   const { id } = await params;
   const service = SERVICES.find((s) => s.id === id);
   if (!service) notFound();
 
   const precios = await getServiciosPrecios(id, await getSelectedBranchSlug());
+  const { auto, camioneta } = splitAutoCamioneta(precios);
 
   return (
     <div className="min-h-screen bg-white">
@@ -84,24 +78,38 @@ export default async function ServicioPage({ params }: Props) {
             </ul>
           </div>
 
-          {/* Price list — no es una grilla de productos, es una lista simple */}
+          {/* Price list — separado por auto/camioneta en vez de la lista cruda
+              del POS, que trae los dos ítems con nombres tipo "ALINEACION AUTO". */}
           <div>
             <h2 className="text-lg font-black text-navy-900 mb-4 uppercase tracking-wide">Precios</h2>
-            {precios.length === 0 ? (
+            {!auto && !camioneta ? (
               <p className="text-slate-500 bg-slate-50 border border-slate-100 rounded-xl p-4 text-sm">
                 Consultanos el precio actualizado por WhatsApp.
               </p>
             ) : (
-              <ul className="divide-y divide-slate-100 border border-slate-100 rounded-xl overflow-hidden">
-                {precios.map((p) => (
-                  <li key={p.id} className="flex items-center justify-between px-4 py-3 bg-white">
-                    <span className="text-sm font-semibold text-slate-700">{p.nombre}</span>
-                    <span className="text-sm font-black text-navy-900 whitespace-nowrap ml-4">
-                      {formatPrice(p.precio)}
-                    </span>
-                  </li>
-                ))}
-              </ul>
+              <>
+                <ul className="divide-y divide-slate-100 border border-slate-100 rounded-xl overflow-hidden">
+                  {auto && (
+                    <li className="flex items-center justify-between px-4 py-3 bg-white">
+                      <span className="text-sm font-semibold text-slate-700">Auto</span>
+                      <span className="text-sm font-black text-navy-900 whitespace-nowrap ml-4">
+                        {formatPrecio(auto.precio)}
+                      </span>
+                    </li>
+                  )}
+                  {camioneta && (
+                    <li className="flex items-center justify-between px-4 py-3 bg-white">
+                      <span className="text-sm font-semibold text-slate-700">Camioneta</span>
+                      <span className="text-sm font-black text-navy-900 whitespace-nowrap ml-4">
+                        {formatPrecio(camioneta.precio)}
+                      </span>
+                    </li>
+                  )}
+                </ul>
+                {service.priceNote && (
+                  <p className="text-xs text-slate-400 mt-2">{service.priceNote}</p>
+                )}
+              </>
             )}
           </div>
         </div>

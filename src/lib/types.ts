@@ -65,6 +65,8 @@ export type Service = {
   description: string;
   icon: string;
   features: string[];
+  /** Aclaración corta sobre cómo se cotiza el precio, ej. "por rueda". */
+  priceNote?: string;
 };
 
 export type BlogPost = {

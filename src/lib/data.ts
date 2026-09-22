@@ -130,6 +130,7 @@ export const SERVICES: Service[] = [
       "Contrapesos de precisión de plomo/adhesivos",
       "Eliminación de vibraciones y control de presión",
     ],
+    priceNote: "por rueda",
   },
   {
     id: "montaje",
@@ -143,6 +144,7 @@ export const SERVICES: Service[] = [
       "Sin cargo si compraste las cubiertas en Neumáticos Trivium",
       "Con cargo por rueda si las cubiertas son de otro lugar",
     ],
+    priceNote: "por rueda si la cubierta no es nuestra",
   },
 ];
 
