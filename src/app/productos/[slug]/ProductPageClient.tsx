@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useBranch } from "@/contexts/branch-context";
 import { useVehicle } from "@/contexts/vehicle-context";
 import type { TireProduct } from "@/lib/types";
+import { SITE_URL } from "@/lib/config";
 import { isLowStock, stockLabel } from "@/lib/stock";
 
 // Diámetro en mm: rodado en pulgadas * 25.4 + 2 * (ancho * perfil / 100)
@@ -51,7 +52,7 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
   }, [product.id, selectedBranch.id]);
 
   const waText = encodeURIComponent(
-    `Hola, quiero consultar por el neumático ${product.brand} ${product.model} ${product.size.width}/${product.size.profile} R${product.size.rim} (SKU: ${product.id})`
+    `Hola, quiero consultar por el neumático ${product.model}\n${SITE_URL}/productos/${product.slug}`
   );
 
   // Convertimos la medida del vehículo a tipo TireSize
