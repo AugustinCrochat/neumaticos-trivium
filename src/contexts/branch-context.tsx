@@ -42,6 +42,18 @@ export function BranchProvider({ children }: { children: ReactNode }) {
   const [pendingAction, setPendingAction] = useState<((branch: Branch) => void) | null>(null);
 
   useEffect(() => {
+    // ?sucursal=<id> en la URL (para links de campañas, ej. Google Ads local)
+    // pisa la cookie: es una elección explícita del link que llevó a la
+    // visita, y evita el paso de fricción de elegir sucursal en el modal.
+    const fromQuery = new URLSearchParams(window.location.search).get("sucursal");
+    const queryBranch = fromQuery ? BRANCHES.find((b) => b.id === fromQuery) : undefined;
+    if (queryBranch) {
+      setSelectedBranchState(queryBranch);
+      writeBranchCookie(queryBranch.id);
+      setHasConfirmedBranch(true);
+      return;
+    }
+
     const stored = readBranchCookie();
     if (stored) {
       const branch = BRANCHES.find((b) => b.id === stored);
