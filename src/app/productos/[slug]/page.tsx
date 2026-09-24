@@ -335,7 +335,9 @@ export default async function ProductPage({ params }: Props) {
             <span className="text-4xl font-black text-red-600">
               {formatPrice(product.price)}
             </span>
-            <p className="text-xs text-slate-400 mt-1">Precio por unidad · IVA incluido</p>
+            <p className="text-xs text-slate-400 mt-1">
+              Precio por unidad · Precio sin impuestos nacionales: {formatPrice(product.price / 1.21)}
+            </p>
 
             {/* Client component handles branch-specific WhatsApp link */}
             <ProductPageClient product={product} />
