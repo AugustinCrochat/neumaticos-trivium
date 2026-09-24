@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import { AccessoryAddToCart } from "@/components/ui/AccessoryAddToCart";
 import type { Accessory } from "@/lib/types";
 
 function formatPrice(price: number) {
@@ -67,7 +66,12 @@ export function AccessoryCard({ accessory, priceOld = accessory.priceOld }: { ac
             <span className="text-slate-400 line-through text-xs block break-words">{formatPrice(priceOld)}</span>
           )}
           <span className="text-2xl font-black text-red-600 block mb-1.5 break-words">{formatPrice(accessory.price)}</span>
-          <AccessoryAddToCart accessory={accessory} />
+          <Link
+            href={`/tuercas-antirrobo/${accessory.slug}`}
+            className="block w-full text-center bg-black hover:bg-neutral-800 text-white font-semibold py-2.5 rounded-xl text-sm transition-colors"
+          >
+            Ver detalle
+          </Link>
         </div>
       </div>
     </article>

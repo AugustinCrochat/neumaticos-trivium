@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 import { getAccesoriosDesdePOS } from "@/lib/pos-api";
 import { getSelectedBranchSlug } from "@/lib/branch-server";
 import { DEFAULT_BRANCH_ID, SITE_URL } from "@/lib/config";
-import { AccessoryAddToCart } from "@/components/ui/AccessoryAddToCart";
+import { AccessoryConsult } from "@/components/ui/AccessoryConsult";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -94,7 +94,7 @@ export default async function AccessoryPage({ params }: Props) {
           <div className="border-t border-slate-100 pt-6 mt-auto">
             <span className="text-4xl font-black text-red-600">{formatPrice(accessory.price)}</span>
             <p className="text-xs text-slate-400 mt-1 mb-4">Precio por juego · IVA incluido</p>
-            <AccessoryAddToCart accessory={accessory} />
+            <AccessoryConsult accessory={accessory} />
           </div>
         </div>
       </div>

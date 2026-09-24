@@ -2,10 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
 import { getBrandLogo } from "@/lib/brand-utils";
 import { ProductNameWithHighlightedSize } from "@/components/ui/ProductNameWithHighlightedSize";
-import { AddToCartModal } from "@/components/ui/AddToCartModal";
 import { isLowStock, stockLabel } from "@/lib/stock";
 import type { TireProduct } from "@/lib/types";
 import type { ReactNode } from "react";
@@ -45,7 +43,6 @@ export function ProductCard({
   isCheapest?: boolean;
   note?: ReactNode;
 }) {
-  const [showModal, setShowModal] = useState(false);
   const hasImage =
     !!product.imageUrl && product.imageUrl !== "/images/tire-placeholder.webp";
   const brandLogo = getBrandLogo(product.brandId);
@@ -170,12 +167,18 @@ export function ProductCard({
             </p>
           )}
 
-          <button onClick={() => setShowModal(true)} disabled={!product.enStock} className="mt-3 w-full bg-black hover:bg-neutral-800 disabled:bg-slate-300 text-white font-semibold py-2.5 rounded-xl text-sm transition-colors">
-            {product.enStock ? "Agregar al carrito" : "Sin stock"}
-          </button>
+          <Link
+            href={`/productos/${product.slug}`}
+            className={`mt-3 block w-full text-center font-semibold py-2.5 rounded-xl text-sm transition-colors ${
+              product.enStock
+                ? "bg-black hover:bg-neutral-800 text-white"
+                : "bg-slate-300 text-white pointer-events-none"
+            }`}
+          >
+            {product.enStock ? "Ver detalle" : "Sin stock"}
+          </Link>
         </div>
       </div>
-      {showModal && <AddToCartModal product={product} onClose={() => setShowModal(false)} />}
     </article>
   );
 }

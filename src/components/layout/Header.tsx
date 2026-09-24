@@ -5,7 +5,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { useBranch } from "@/contexts/branch-context";
 import { useVehicle } from "@/contexts/vehicle-context";
-import { CartButton } from "@/components/ui/CartButton";
 import { SearchModal } from "@/components/ui/SearchModal";
 
 const NAV_LINKS = [
@@ -123,8 +122,6 @@ export function Header() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z" />
                 </svg>
               </button>
-
-              <CartButton />
 
               {/* Mobile hamburger */}
               <button

@@ -285,22 +285,6 @@ export default async function ProductPage({ params }: Props) {
         {/* Image */}
         <div>
           <ProductImageGallery product={product} extraPhotos={extraPhotos} label={tireLabel} />
-          {tireLabel && (
-            <p className="mt-3 rounded-xl bg-slate-50 px-4 py-3 text-xs leading-relaxed text-slate-500">
-              <strong className="text-slate-700">Certificado en la UE:</strong> eficiencia de
-              combustible {tireLabel.energyClass}, frenado en mojado {tireLabel.wetGripClass} y{" "}
-              {tireLabel.noiseDb} dB de ruido externo, con registro público verificable en{" "}
-              <a
-                href={`https://eprel.ec.europa.eu/screen/product/tyres/${tireLabel.eprelId}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-bold text-navy-700 underline decoration-navy-300 hover:decoration-navy-900"
-              >
-                EPREL
-              </a>
-              . <Link href="/blog/etiqueta-europea-neumaticos" className="font-bold text-navy-700 underline decoration-navy-300 hover:decoration-navy-900">Qué significa cada dato.</Link>
-            </p>
-          )}
         </div>
 
         {/* Info */}
@@ -367,6 +351,22 @@ export default async function ProductPage({ params }: Props) {
             Neumático {product.brand} pensado para {vehicleLabel(product)}, en la medida {product.size.width}/{product.size.profile} R{product.size.rim}.{" "}
             {brand?.fullDescription || brand?.description || `${product.brand} ofrece una relación costo-beneficio competitiva, con buen agarre y durabilidad para uso diario.`}
           </p>
+          {tireLabel && (
+            <p className="mt-4 rounded-xl bg-slate-50 px-4 py-3 text-xs leading-relaxed text-slate-500">
+              <strong className="text-slate-700">Certificado en la UE:</strong> eficiencia de
+              combustible {tireLabel.energyClass}, frenado en mojado {tireLabel.wetGripClass} y{" "}
+              {tireLabel.noiseDb} dB de ruido externo, con registro público verificable en{" "}
+              <a
+                href={`https://eprel.ec.europa.eu/screen/product/tyres/${tireLabel.eprelId}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-bold text-navy-700 underline decoration-navy-300 hover:decoration-navy-900"
+              >
+                EPREL
+              </a>
+              . <Link href="/blog/etiqueta-europea-neumaticos" className="font-bold text-navy-700 underline decoration-navy-300 hover:decoration-navy-900">Qué significa cada dato.</Link>
+            </p>
+          )}
         </div>
 
         <div>
