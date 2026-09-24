@@ -17,7 +17,6 @@ import {
   sizeSlug,
   vehiclesUsingSize,
 } from "@/lib/tire-sizes";
-import { sortVehiclesByPopularity } from "@/lib/vehicles";
 import { getTireLabel } from "@/lib/tire-labels";
 import { getExtraPhotos } from "@/lib/product-extra-photos";
 import { ProductNameWithHighlightedSize } from "@/components/ui/ProductNameWithHighlightedSize";
@@ -208,11 +207,6 @@ export default async function ProductPage({ params }: Props) {
   const loadKg = product.loadIndex ? LOAD_INDEX_KG[product.loadIndex] : undefined;
   const loadDualKg = product.loadIndexDual ? LOAD_INDEX_KG[product.loadIndexDual] : undefined;
   const vehiculos = vehiclesUsingSize(product.size);
-  const popularPreview = Array.from(
-    new Set(sortVehiclesByPopularity(vehiculos).map((v) => `${v.brand} ${v.model}`))
-  )
-    .slice(0, 5)
-    .join(", ");
 
   const characteristics = [
     { label: "Ancho", value: `${product.size.width} mm` },
@@ -315,27 +309,15 @@ export default async function ProductPage({ params }: Props) {
             <ProductNameWithHighlightedSize product={product} sizeClassName="font-bold" />
           </h1>
 
-          <Link href={`/marcas/${product.brandId}`} className="mb-4 group/brand inline-block">
+          <Link href={`/marcas/${product.brandId}`} className="mb-2 group/brand inline-block">
             {brandLogo ? (
               <img src={brandLogo} alt={product.brand} className="h-7 w-auto max-w-[140px] rounded object-contain transition-all hover:scale-105" />
             ) : (
-              <div>
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Marca</p>
-                <h2 className="text-base font-bold text-navy-600 uppercase tracking-wide group-hover/brand:text-navy-900 transition-colors">
-                  {product.brand}
-                </h2>
-              </div>
+              <h2 className="text-base font-bold text-navy-600 uppercase tracking-wide group-hover/brand:text-navy-900 transition-colors">
+                {product.brand}
+              </h2>
             )}
           </Link>
-
-          {popularPreview && (
-            <p className="text-xs text-slate-500 mb-4 leading-normal">
-              Usado en: <span className="font-semibold text-slate-700">{popularPreview}</span>{" "}
-              <Link href="#vehiculos-compatibles" className="font-semibold text-navy-700 underline decoration-navy-300 hover:decoration-navy-900 transition-colors">
-                y más.
-              </Link>
-            </p>
-          )}
 
           {product.tags.length > 0 && (
             <div className="flex flex-wrap gap-2 mb-6">
@@ -355,7 +337,7 @@ export default async function ProductPage({ params }: Props) {
           )}
 
           {/* Price */}
-          <div className="border-t border-slate-100 pt-6 mt-6">
+          <div className="border-t border-slate-100 pt-4 mt-2">
             {product.priceOld && (
               <div className="flex items-center gap-2 mb-1">
                 <span className="text-slate-400 line-through text-sm">
