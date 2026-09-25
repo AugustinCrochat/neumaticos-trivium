@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 import type { TireProduct } from "@/lib/types";
 import type { TireLabel } from "@/lib/tire-labels";
@@ -44,15 +44,28 @@ export function ProductImageGallery({
 
   const [index, setIndex] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [zoomed, setZoomed] = useState(false);
+  const [zoomPos, setZoomPos] = useState({ x: 50, y: 50 });
+  const frameRef = useRef<HTMLDivElement>(null);
   const current = slides[index];
   const eprelUrl = label ? `https://eprel.ec.europa.eu/screen/product/tyres/${label.eprelId}` : undefined;
+
+  // Zoom tipo Amazon: solo tiene sentido con mouse (hover real), no en touch.
+  const isTouch = () => typeof window !== "undefined" && window.matchMedia("(hover: none)").matches;
+
+  function handleMouseMove(e: React.MouseEvent<HTMLButtonElement>) {
+    const rect = frameRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    setZoomPos({ x: Math.min(100, Math.max(0, x)), y: Math.min(100, Math.max(0, y)) });
+  }
 
   function handleImageClick() {
     if (!current) return;
     // El QR de la etiqueta no se puede escanear desde la propia pantalla del
     // celular: en touch, en vez de ampliar, vamos directo al registro EPREL.
-    const isTouch = typeof window !== "undefined" && window.matchMedia("(hover: none)").matches;
-    if (current.kind === "etiqueta" && isTouch && eprelUrl) {
+    if (current.kind === "etiqueta" && isTouch() && eprelUrl) {
       window.open(eprelUrl, "_blank", "noopener,noreferrer");
       return;
     }
@@ -81,16 +94,27 @@ export function ProductImageGallery({
 
   return (
     <div>
-      <div className="bg-slate-50 rounded-2xl aspect-square flex items-center justify-center p-8 relative group">
+      <div ref={frameRef} className="bg-slate-50 rounded-2xl aspect-square flex items-center justify-center p-8 relative group overflow-hidden">
         {current?.kind === "foto" && index === 0 && badges}
         {current ? (
           <button
             type="button"
             onClick={handleImageClick}
+            onMouseEnter={() => setZoomed(true)}
+            onMouseLeave={() => setZoomed(false)}
+            onMouseMove={handleMouseMove}
             aria-label={current.kind === "etiqueta" ? "Ver registro oficial en EPREL" : "Ampliar imagen"}
             className={`relative h-full w-full cursor-zoom-in ${current.kind === "etiqueta" ? "p-4" : ""}`}
           >
-            <Image src={current.src} alt={current.alt} fill className="object-contain" sizes="(max-width: 768px) 100vw, 50vw" priority={index === 0} />
+            <Image
+              src={current.src}
+              alt={current.alt}
+              fill
+              className="object-contain transition-transform duration-150 ease-out"
+              style={zoomed ? { transform: "scale(2.2)", transformOrigin: `${zoomPos.x}% ${zoomPos.y}%` } : undefined}
+              sizes="(max-width: 768px) 100vw, 50vw"
+              priority={index === 0}
+            />
             <span className="absolute bottom-3 right-3 w-8 h-8 rounded-full bg-white/90 shadow-md flex items-center justify-center text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity">
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16zM11 8v6M8 11h6" />
