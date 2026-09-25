@@ -1,12 +1,4 @@
 {
-  "grenlander-maga-a-t-two-245-70-r16-110s": {
-    "eprelId": "515173",
-    "energyClass": "D",
-    "wetGripClass": "B",
-    "noiseDb": 72,
-    "noiseClass": "B",
-    "tyreDesignation": "LT245/70R16 113/110 S"
-  },
   "grenlander-estrella-88-225-45-r17-94w": {
     "eprelId": "2519611",
     "energyClass": "C",
@@ -48,7 +40,7 @@
     "tyreDesignation": "195/55R15 85 V"
   },
   "pirelli-cinturato-p1-175-65-r14-82t": {
-    "eprelId": "1522817",
+    "eprelId": "1428486",
     "energyClass": "C",
     "wetGripClass": "B",
     "noiseDb": 70,
@@ -152,9 +144,9 @@
     "tyreDesignation": "215/65R16 98 H"
   },
   "pirelli-cinturato-p1-195-60-r16-89h": {
-    "eprelId": "774415",
-    "energyClass": "B",
-    "wetGripClass": "C",
+    "eprelId": "595187",
+    "energyClass": "D",
+    "wetGripClass": "B",
     "noiseDb": 70,
     "noiseClass": "B",
     "tyreDesignation": "195/60R16 89 H"
@@ -231,14 +223,6 @@
     "noiseClass": "B",
     "tyreDesignation": "265/65R17 112 T"
   },
-  "grenlander-l-max9-195-70-r15c-102r": {
-    "eprelId": "519318",
-    "energyClass": "C",
-    "wetGripClass": "C",
-    "noiseDb": 71,
-    "noiseClass": "B",
-    "tyreDesignation": "195/70R15C 104/102 R"
-  },
   "pirelli-cinturato-p7-195-50-r16-84v": {
     "eprelId": "659472",
     "energyClass": "D",
@@ -272,11 +256,11 @@
     "tyreDesignation": "185/70R14 88 T"
   },
   "zmax-landgema-205-65-r15-94v": {
-    "eprelId": "2632386",
+    "eprelId": "551169",
     "energyClass": "C",
     "wetGripClass": "C",
     "noiseDb": 68,
-    "noiseClass": "A",
+    "noiseClass": "B",
     "tyreDesignation": "205/65R15 94 V"
   },
   "grenlander-kingpro-one-185-65-r15-88h": {
@@ -287,20 +271,12 @@
     "noiseClass": "B",
     "tyreDesignation": "185/65R15 88 H"
   },
-  "grenlander-stratour-e1-205-70-r15c-104r": {
-    "eprelId": "2616867",
-    "energyClass": "B",
-    "wetGripClass": "B",
-    "noiseDb": 71,
-    "noiseClass": "B",
-    "tyreDesignation": "205/70R15C 106/104 R"
-  },
   "zmax-landgema-185-65-r14-86h": {
-    "eprelId": "2632393",
+    "eprelId": "550250",
     "energyClass": "C",
     "wetGripClass": "C",
-    "noiseDb": 67,
-    "noiseClass": "A",
+    "noiseDb": 68,
+    "noiseClass": "B",
     "tyreDesignation": "185/65R14 86 H"
   },
   "grenlander-colo-h02-175-70-r14-88t": {
@@ -335,14 +311,6 @@
     "noiseClass": "A",
     "tyreDesignation": "205/55ZR16 94 W XL"
   },
-  "zmax-terra-xplorer-245-70-r16-110s": {
-    "eprelId": "981928",
-    "energyClass": "D",
-    "wetGripClass": "B",
-    "noiseDb": 72,
-    "noiseClass": "B",
-    "tyreDesignation": "LT245/70R16 113/110 S"
-  },
   "grenlander-colo-h02-185-60-r14-82h": {
     "eprelId": "2631956",
     "energyClass": "C",
@@ -375,14 +343,6 @@
     "noiseClass": "A",
     "tyreDesignation": "205/60R15 91 V"
   },
-  "zmax-zealion-225-45-r17-94w": {
-    "eprelId": "761198",
-    "energyClass": "C",
-    "wetGripClass": "C",
-    "noiseDb": 70,
-    "noiseClass": "B",
-    "tyreDesignation": "225/45ZR17 94 W XL"
-  },
   "arivo-premio-arz1rt-165-70-r13-79t": {
     "eprelId": "536854",
     "energyClass": "D",
@@ -392,11 +352,11 @@
     "tyreDesignation": "165/70R13 79 T"
   },
   "arivo-premio-arzero-205-55-r16-91v": {
-    "eprelId": "2632170",
+    "eprelId": "546117",
     "energyClass": "C",
     "wetGripClass": "C",
     "noiseDb": 68,
-    "noiseClass": "A",
+    "noiseClass": "B",
     "tyreDesignation": "205/55R16 91 V"
   },
   "grenlander-kingpro-one-165-70-r13-79t": {
@@ -416,11 +376,11 @@
     "tyreDesignation": "175/70R13 82 T"
   },
   "grenlander-colo-h02-195-55-r16-91v": {
-    "eprelId": "597327",
+    "eprelId": "2631933",
     "energyClass": "C",
     "wetGripClass": "C",
     "noiseDb": 68,
-    "noiseClass": "B",
+    "noiseClass": "A",
     "tyreDesignation": "195/55R16 91 V XL"
   },
   "grenlander-colo-h02-175-65-r14-86t": {
@@ -446,14 +406,6 @@
     "noiseDb": 69,
     "noiseClass": "B",
     "tyreDesignation": "215/65R16 98 H"
-  },
-  "grenlander-l-max9-225-75-r16c-114r": {
-    "eprelId": "519407",
-    "energyClass": "C",
-    "wetGripClass": "C",
-    "noiseDb": 72,
-    "noiseClass": "B",
-    "tyreDesignation": "225/75R16C 116/114 R"
   },
   "grenlander-kingpro-one-215-65-r16-98h": {
     "eprelId": "2236676",
@@ -486,14 +438,6 @@
     "noiseDb": 68,
     "noiseClass": "B",
     "tyreDesignation": "185/65R15 88 H"
-  },
-  "grenlander-greentour-a-s-175-65-r14c-88t": {
-    "eprelId": "2628050",
-    "energyClass": "D",
-    "wetGripClass": "C",
-    "noiseDb": 71,
-    "noiseClass": "B",
-    "tyreDesignation": "175/65R14C 90/88 T"
   },
   "pirelli-scorpion-205-60-r16-92h": {
     "eprelId": "1323327",
@@ -544,12 +488,12 @@
     "tyreDesignation": "LT235/75R15 104/101 S"
   },
   "zmax-landgema-175-70-r14-84t": {
-    "eprelId": "2632352",
+    "eprelId": "550154",
     "energyClass": "C",
     "wetGripClass": "C",
     "noiseDb": 67,
-    "noiseClass": "A",
-    "tyreDesignation": "175/70R14 84 T"
+    "noiseClass": "B",
+    "tyreDesignation": "175/70R14  84 T"
   },
   "grenlander-kingpro-one-195-70-r14-91t": {
     "eprelId": "2277057",
@@ -568,19 +512,19 @@
     "tyreDesignation": "185/60R15 84 H"
   },
   "zmax-zealion-205-45-r17-88w": {
-    "eprelId": "2779305",
-    "energyClass": "C",
+    "eprelId": "2634271",
+    "energyClass": "D",
     "wetGripClass": "C",
     "noiseDb": 67,
     "noiseClass": "A",
     "tyreDesignation": "205/45ZR17 88 W XL"
   },
   "zmax-landgema-185-60-r14-82h": {
-    "eprelId": "550214",
+    "eprelId": "2632392",
     "energyClass": "C",
     "wetGripClass": "C",
-    "noiseDb": 68,
-    "noiseClass": "B",
+    "noiseDb": 67,
+    "noiseClass": "A",
     "tyreDesignation": "185/60R14 82 H"
   },
   "grenlander-kingpro-one-165-70-r14-81t": {
@@ -590,22 +534,6 @@
     "noiseDb": 70,
     "noiseClass": "B",
     "tyreDesignation": "165/70R14 81 T"
-  },
-  "grenlander-maga-a-t-two-235-75-r15-101s": {
-    "eprelId": "515161",
-    "energyClass": "D",
-    "wetGripClass": "B",
-    "noiseDb": 72,
-    "noiseClass": "B",
-    "tyreDesignation": "LT235/75R15 104/101 S"
-  },
-  "grenlander-l-max9-175-65-r14c-88r": {
-    "eprelId": "519299",
-    "energyClass": "C",
-    "wetGripClass": "C",
-    "noiseDb": 71,
-    "noiseClass": "B",
-    "tyreDesignation": "175/65R14C 90/88 R"
   },
   "grenlander-maga-a-t-two-265-60-r18-110t": {
     "eprelId": "515258",
@@ -646,5 +574,69 @@
     "noiseDb": 69,
     "noiseClass": "B",
     "tyreDesignation": "205/55R16 91 V"
+  },
+  "grenlander-maga-a-t-two-245-70-r16-113s": {
+    "eprelId": "515173",
+    "energyClass": "D",
+    "wetGripClass": "B",
+    "noiseDb": 72,
+    "noiseClass": "B",
+    "tyreDesignation": "LT245/70R16 113/110 S"
+  },
+  "grenlander-l-max9-195-70-r15c-104r": {
+    "eprelId": "519318",
+    "energyClass": "C",
+    "wetGripClass": "C",
+    "noiseDb": 71,
+    "noiseClass": "B",
+    "tyreDesignation": "195/70R15C 104/102 R"
+  },
+  "grenlander-stratour-e1-205-70-r15c-106r": {
+    "eprelId": "2616867",
+    "energyClass": "B",
+    "wetGripClass": "B",
+    "noiseDb": 71,
+    "noiseClass": "B",
+    "tyreDesignation": "205/70R15C 106/104 R"
+  },
+  "grenlander-l-max9-225-75-r16c-116r": {
+    "eprelId": "519407",
+    "energyClass": "C",
+    "wetGripClass": "C",
+    "noiseDb": 72,
+    "noiseClass": "B",
+    "tyreDesignation": "225/75R16C 116/114 R"
+  },
+  "grenlander-greentour-a-s-175-65-r14c-90t": {
+    "eprelId": "2628050",
+    "energyClass": "D",
+    "wetGripClass": "C",
+    "noiseDb": 71,
+    "noiseClass": "B",
+    "tyreDesignation": "175/65R14C 90/88 T"
+  },
+  "grenlander-maga-a-t-two-235-75-r15-104s": {
+    "eprelId": "515161",
+    "energyClass": "D",
+    "wetGripClass": "B",
+    "noiseDb": 72,
+    "noiseClass": "B",
+    "tyreDesignation": "LT235/75R15 104/101 S"
+  },
+  "grenlander-l-max9-175-65-r14c-90r": {
+    "eprelId": "519299",
+    "energyClass": "C",
+    "wetGripClass": "C",
+    "noiseDb": 71,
+    "noiseClass": "B",
+    "tyreDesignation": "175/65R14C 90/88 R"
+  },
+  "zmax-terra-xplorer-245-70-r16-113s": {
+    "eprelId": "981928",
+    "energyClass": "D",
+    "wetGripClass": "B",
+    "noiseDb": 72,
+    "noiseClass": "B",
+    "tyreDesignation": "LT245/70R16 113/110 S"
   }
 }

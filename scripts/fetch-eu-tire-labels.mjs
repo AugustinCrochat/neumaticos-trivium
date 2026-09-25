@@ -173,10 +173,14 @@ async function main() {
     if (vistos.has(key)) continue;
     vistos.add(key);
 
+    // Réplica de parseLoadSpeed() en src/lib/pos-api.ts — los neumáticos de
+    // carga (C) traen dos índices simple/dual antes de la velocidad, ej.
+    // "113/110S": el slug (y el que reconoce EPREL) usa el primero, 113.
     const sinXL = (p.nombre || "").trim().replace(/\s*XL\s*$/i, "");
-    const loadSpeedMatch = sinXL.match(/(\d{2,3})([A-Z]{1,2})\s*$/);
-    const loadIndex = loadSpeedMatch?.[1];
-    const speedRating = loadSpeedMatch?.[2];
+    const dualMatch = sinXL.match(/(\d{2,3})\/(\d{2,3})([A-Z]{1,2})\s*$/);
+    const loadSpeedMatch = dualMatch ?? sinXL.match(/(\d{2,3})([A-Z]{1,2})\s*$/);
+    const loadIndex = dualMatch ? dualMatch[1] : loadSpeedMatch?.[1];
+    const speedRating = dualMatch ? dualMatch[3] : loadSpeedMatch?.[2];
 
     // Slug idéntico al que arma toTireProduct() en src/lib/pos-api.ts — si se
     // toca la fórmula ahí, tocar acá también (ver comentario en ese archivo).
