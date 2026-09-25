@@ -6,6 +6,7 @@ import { useVehicle } from "@/contexts/vehicle-context";
 import type { TireProduct } from "@/lib/types";
 import { SITE_URL } from "@/lib/config";
 import { isLowStock, stockLabel } from "@/lib/stock";
+import { BranchStatusBadge } from "@/app/sucursales/[id]/BranchStatusBadge";
 
 // Diámetro en mm: rodado en pulgadas * 25.4 + 2 * (ancho * perfil / 100)
 function outerDiameterMm(size: { width: number; profile: number; rim: number }): number {
@@ -219,6 +220,9 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
               <p className="text-xs font-bold text-red-600 mt-0.5">Sin stock para retiro</p>
             )}
             <p className="text-xs text-slate-500 mt-0.5 leading-snug">{selectedBranch.address}, {selectedBranch.city} · <span className="font-bold">{selectedBranch.hours}</span></p>
+            <div className="mt-2">
+              <BranchStatusBadge branch={selectedBranch} />
+            </div>
             {!enStock && (
               <button
                 onClick={() => openModal()}

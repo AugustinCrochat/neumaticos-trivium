@@ -3,17 +3,21 @@
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
+import type { Utqg } from "@/lib/utqg";
 
 export function ImageLightbox({
   src,
   alt,
   eprelUrl,
+  utqg,
   onClose,
 }: {
   src: string;
   alt: string;
   /** Si es la etiqueta UE, link directo al registro EPREL (el QR no se puede escanear desde la propia pantalla). */
   eprelUrl?: string;
+  /** Dato separado de la etiqueta UE, mostrado al pie si está verificado. */
+  utqg?: Utqg | null;
   onClose: () => void;
 }) {
   useEffect(() => {
@@ -43,6 +47,11 @@ export function ImageLightbox({
         <div className="relative w-full flex-1 min-h-0">
           <Image src={src} alt={alt} fill className="object-contain" sizes="100vw" />
         </div>
+        {utqg && (
+          <p className="rounded-sm bg-white px-4 py-2 text-sm font-black tracking-wide text-slate-900">
+            UTQG {utqg.treadwear} · {utqg.traction} · {utqg.temperature}
+          </p>
+        )}
         {eprelUrl && (
           <a
             href={eprelUrl}

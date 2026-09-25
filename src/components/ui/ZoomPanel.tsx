@@ -1,6 +1,7 @@
 "use client";
 
 import { createPortal } from "react-dom";
+import type { Utqg } from "@/lib/utqg";
 
 export function ZoomPanel({
   src,
@@ -10,6 +11,7 @@ export function ZoomPanel({
   focal,
   anchorRect,
   showEntireImage = false,
+  utqg,
 }: {
   src: string;
   alt: string;
@@ -22,6 +24,8 @@ export function ZoomPanel({
   anchorRect: DOMRect;
   /** Para etiquetas altas: mostrar la imagen completa dentro de un panel cuadrado. */
   showEntireImage?: boolean;
+  /** Dato adicional de EE.UU., verificado para esta medida cuando está presente. */
+  utqg: Utqg | null;
 }) {
   const gap = 16;
   // Lo más grande posible sin salirse de la ventana (ancho disponible a la
@@ -58,12 +62,18 @@ export function ZoomPanel({
         height: panelSize,
         backgroundImage: `url(${src})`,
         backgroundRepeat: "no-repeat",
-        backgroundSize: showEntireImage ? "contain" : `${scaledWidth}px ${scaledHeight}px`,
-        backgroundPosition: showEntireImage ? "center" : `${backgroundX}px ${backgroundY}px`,
+        backgroundSize: showEntireImage ? (utqg ? "auto calc(100% - 3rem)" : "contain") : `${scaledWidth}px ${scaledHeight}px`,
+        backgroundPosition: showEntireImage ? (utqg ? "center top" : "center") : `${backgroundX}px ${backgroundY}px`,
       }}
       role="img"
       title={alt}
-    />,
+    >
+      {utqg && (
+        <span className="absolute inset-x-3 bottom-3 flex h-9 items-center justify-center rounded-sm bg-slate-900 px-2 text-center text-[10px] font-black tracking-wide text-white">
+          UTQG {utqg.treadwear} · {utqg.traction} · {utqg.temperature}
+        </span>
+      )}
+    </div>,
     document.body
   );
 }

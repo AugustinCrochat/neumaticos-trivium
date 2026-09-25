@@ -287,7 +287,7 @@ export default async function ProductPage({ params }: Props) {
       <div className="grid md:grid-cols-2 gap-4 md:gap-12">
         {/* Image */}
         <div>
-          <ProductImageGallery product={product} extraPhotos={extraPhotos} label={tireLabel} />
+          <ProductImageGallery product={product} extraPhotos={extraPhotos} label={tireLabel} utqg={utqg} />
         </div>
 
         {/* Info */}

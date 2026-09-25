@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import Image from "next/image";
 import type { TireProduct } from "@/lib/types";
 import type { TireLabel } from "@/lib/tire-labels";
+import type { Utqg } from "@/lib/utqg";
 import { ImageLightbox } from "./ImageLightbox";
 import { ZoomPanel } from "./ZoomPanel";
 
@@ -29,11 +30,14 @@ export function ProductImageGallery({
   product,
   extraPhotos = [],
   label,
+  utqg,
 }: {
   product: TireProduct;
   /** Fotos adicionales del modelo (banda, flanco, llanta), antes de la etiqueta UE. */
   extraPhotos?: string[];
   label: TireLabel | null;
+  /** Dato separado de la etiqueta UE; se muestra al pie sólo si fue verificado. */
+  utqg: Utqg | null;
 }) {
   const hasImage = !!product.imageUrl && product.imageUrl !== "/images/tire-placeholder.webp";
 
@@ -57,6 +61,7 @@ export function ProductImageGallery({
   const [imgAspect, setImgAspect] = useState(1);
   const boxRef = useRef<HTMLButtonElement>(null);
   const current = slides[index];
+  const labelUtqg = current?.kind === "etiqueta" ? utqg : null;
   const eprelUrl = label ? `https://eprel.ec.europa.eu/screen/product/tyres/${label.eprelId}` : undefined;
 
   // Zoom tipo Amazon: solo tiene sentido con mouse (hover real), no en touch.
@@ -143,15 +148,22 @@ export function ProductImageGallery({
             aria-label={current.kind === "etiqueta" ? "Ver registro oficial en EPREL" : "Ampliar imagen"}
             className={`relative h-full w-full cursor-zoom-in ${current.kind === "etiqueta" ? "p-4" : ""}`}
           >
-            <Image
-              src={current.src}
-              alt={current.alt}
-              fill
-              className="object-contain"
-              sizes="(max-width: 768px) 100vw, 50vw"
-              priority={index === 0}
-              onLoad={(e) => setImgAspect(e.currentTarget.naturalWidth / e.currentTarget.naturalHeight)}
-            />
+            <div className={`relative w-full ${labelUtqg ? "h-[calc(100%-3rem)]" : "h-full"}`}>
+              <Image
+                src={current.src}
+                alt={current.alt}
+                fill
+                className="object-contain"
+                sizes="(max-width: 768px) 100vw, 50vw"
+                priority={index === 0}
+                onLoad={(e) => setImgAspect(e.currentTarget.naturalWidth / e.currentTarget.naturalHeight)}
+              />
+            </div>
+            {labelUtqg && (
+              <span className="absolute inset-x-3 bottom-0 flex h-10 items-center justify-center rounded-sm bg-slate-900 px-2 text-center text-[10px] font-black tracking-wide text-white">
+                UTQG {labelUtqg.treadwear} · {labelUtqg.traction} · {labelUtqg.temperature}
+              </span>
+            )}
             {zoomed && current.kind !== "etiqueta" && (
               <span
                 className="hidden lg:block absolute border-2 border-white bg-white/30 shadow-[0_0_0_1px_rgba(0,0,0,0.15)] pointer-events-none"
@@ -178,6 +190,7 @@ export function ProductImageGallery({
           focal={focal}
           anchorRect={frameRect}
           showEntireImage={current.kind === "etiqueta"}
+          utqg={labelUtqg}
         />
       )}
 
@@ -186,6 +199,7 @@ export function ProductImageGallery({
           src={current.src}
           alt={current.alt}
           eprelUrl={current.kind === "etiqueta" ? eprelUrl : undefined}
+          utqg={labelUtqg}
           onClose={() => setLightboxOpen(false)}
         />
       )}
