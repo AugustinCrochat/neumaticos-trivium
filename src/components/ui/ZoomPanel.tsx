@@ -28,17 +28,18 @@ export function ZoomPanel({
   const spaceLeft = anchorRect.left - gap * 2;
   const onRight = spaceRight >= spaceLeft;
   const maxWidth = Math.max(onRight ? spaceRight : spaceLeft, anchorRect.width);
-  const panelSize = Math.min(anchorRect.width * 1.8, maxWidth, maxHeight);
-  const left = onRight ? anchorRect.right + gap : anchorRect.left - gap - panelSize;
 
-  // Tamaño que ocuparía la imagen completa dentro del panel con object-contain
-  // (sin zoom), multiplicado por el factor de zoom — así el background-image
-  // mantiene su proporción real en vez de estirarse para llenar el cuadrado.
-  const panelAspect = 1; // el panel siempre es cuadrado (panelSize x panelSize)
-  const baseWidth = aspect > panelAspect ? panelSize : panelSize * aspect;
-  const baseHeight = aspect > panelAspect ? panelSize / aspect : panelSize;
-  const scaledWidth = baseWidth * zoomFactor;
-  const scaledHeight = baseHeight * zoomFactor;
+  // El panel debe conservar la misma proporción de la imagen. Un panel
+  // cuadrado para una etiqueta vertical veía un área más ancha que la lupa y
+  // por eso el encuadre se corría/cortaba. Con la misma relación de aspecto,
+  // la lente y el panel muestran exactamente el mismo sector ampliado.
+  const panelWidth = Math.min(anchorRect.width * 1.8, maxWidth, maxHeight * aspect);
+  const panelHeight = panelWidth / aspect;
+  const left = onRight ? anchorRect.right + gap : anchorRect.left - gap - panelWidth;
+  const scaledWidth = panelWidth * zoomFactor;
+  const scaledHeight = panelHeight * zoomFactor;
+  const backgroundX = Math.min(0, Math.max(panelWidth - scaledWidth, panelWidth / 2 - focal.x * scaledWidth));
+  const backgroundY = Math.min(0, Math.max(panelHeight - scaledHeight, panelHeight / 2 - focal.y * scaledHeight));
 
   return createPortal(
     <div
@@ -47,12 +48,12 @@ export function ZoomPanel({
       style={{
         left,
         top: anchorRect.top,
-        width: panelSize,
-        height: panelSize,
+        width: panelWidth,
+        height: panelHeight,
         backgroundImage: `url(${src})`,
         backgroundRepeat: "no-repeat",
         backgroundSize: `${scaledWidth}px ${scaledHeight}px`,
-        backgroundPosition: `${-(focal.x * (scaledWidth - panelSize))}px ${-(focal.y * (scaledHeight - panelSize))}px`,
+        backgroundPosition: `${backgroundX}px ${backgroundY}px`,
       }}
       role="img"
       title={alt}
