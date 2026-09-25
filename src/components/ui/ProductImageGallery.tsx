@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import type { TireProduct } from "@/lib/types";
 import type { TireLabel } from "@/lib/tire-labels";
+import { ImageLightbox } from "./ImageLightbox";
 
 function discount(price: number, priceOld: number) {
   return Math.round(((priceOld - price) / priceOld) * 100);
@@ -42,7 +43,21 @@ export function ProductImageGallery({
   ];
 
   const [index, setIndex] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
   const current = slides[index];
+  const eprelUrl = label ? `https://eprel.ec.europa.eu/screen/product/tyres/${label.eprelId}` : undefined;
+
+  function handleImageClick() {
+    if (!current) return;
+    // El QR de la etiqueta no se puede escanear desde la propia pantalla del
+    // celular: en touch, en vez de ampliar, vamos directo al registro EPREL.
+    const isTouch = typeof window !== "undefined" && window.matchMedia("(hover: none)").matches;
+    if (current.kind === "etiqueta" && isTouch && eprelUrl) {
+      window.open(eprelUrl, "_blank", "noopener,noreferrer");
+      return;
+    }
+    setLightboxOpen(true);
+  }
 
   const badges = (
     <div className="absolute top-4 left-4 z-10 flex flex-col gap-2 items-start">
@@ -66,16 +81,35 @@ export function ProductImageGallery({
 
   return (
     <div>
-      <div className="bg-slate-50 rounded-2xl aspect-square flex items-center justify-center p-8 relative">
+      <div className="bg-slate-50 rounded-2xl aspect-square flex items-center justify-center p-8 relative group">
         {current?.kind === "foto" && index === 0 && badges}
         {current ? (
-          <div className={`relative h-full w-full ${current.kind === "etiqueta" ? "p-4" : ""}`}>
+          <button
+            type="button"
+            onClick={handleImageClick}
+            aria-label={current.kind === "etiqueta" ? "Ver registro oficial en EPREL" : "Ampliar imagen"}
+            className={`relative h-full w-full cursor-zoom-in ${current.kind === "etiqueta" ? "p-4" : ""}`}
+          >
             <Image src={current.src} alt={current.alt} fill className="object-contain" sizes="(max-width: 768px) 100vw, 50vw" priority={index === 0} />
-          </div>
+            <span className="absolute bottom-3 right-3 w-8 h-8 rounded-full bg-white/90 shadow-md flex items-center justify-center text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity">
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16zM11 8v6M8 11h6" />
+              </svg>
+            </span>
+          </button>
         ) : (
           <div className="w-48 h-48">{TIRE_SVG}</div>
         )}
       </div>
+
+      {lightboxOpen && current && (
+        <ImageLightbox
+          src={current.src}
+          alt={current.alt}
+          eprelUrl={current.kind === "etiqueta" ? eprelUrl : undefined}
+          onClose={() => setLightboxOpen(false)}
+        />
+      )}
 
       {slides.length > 1 && (
         <div className="mt-3 flex gap-3">
