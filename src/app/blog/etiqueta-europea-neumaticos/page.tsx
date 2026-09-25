@@ -34,7 +34,7 @@ const FAQS = [
   {
     question: "¿Y el código UTQG que a veces aparece al pie de la etiqueta?",
     answer:
-      "Es una norma distinta, de Estados Unidos (Uniform Tire Quality Grading), no de la Unión Europea. Trae tres datos: desgaste relativo (un número, más alto es más duración estimada), tracción (letra, agarre en frenada) y temperatura (letra, resistencia al calor a alta velocidad). Muchos fabricantes la imprimen en el mismo sticker porque venden el mismo neumático en los dos mercados, pero es información aparte de la etiqueta UE.",
+      "Es una norma distinta, de Estados Unidos (Uniform Tire Quality Grading), no de la Unión Europea. Trae tres datos: desgaste relativo (un número, autodeclarado por el fabricante), tracción (letra, agarre en frenada) y temperatura (letra, resistencia al calor a alta velocidad). Muchos fabricantes la imprimen en el mismo sticker porque venden el mismo neumático en los dos mercados, pero es información aparte de la etiqueta UE — el detalle completo está en la nota sobre UTQG.",
   },
   {
     question: "¿Para qué sirve el código QR de la etiqueta?",
@@ -150,15 +150,17 @@ export default function Page() {
         etiqueta se compare entre productos del mismo segmento y no entre categorías distintas.
       </p>
 
-      <h2 id="utqg">UTQG: la norma que no es europea</h2>
+      <h2>UTQG: la norma que no es europea</h2>
       <p>
         En varios de nuestros modelos, debajo de la etiqueta UE aparece otro dato:{" "}
         <strong>UTQG</strong> (Uniform Tire Quality Grading), con un número y dos letras —por
-        ejemplo, <strong>400 A A</strong>. Es una norma de Estados Unidos, sin relación regulatoria
+        ejemplo, <strong>420 A A</strong>. Es una norma de Estados Unidos, sin relación regulatoria
         con la etiqueta europea, que muchos fabricantes incluyen en el mismo sticker porque venden
-        el mismo neumático en ambos mercados. El número es el desgaste relativo (treadwear): más
-        alto sugiere mayor vida útil estimada frente a un neumático de referencia. Las dos letras
-        son tracción y resistencia a la temperatura a alta velocidad, cada una de A (mejor) a C.
+        el mismo neumático en ambos mercados. El número es el desgaste relativo (treadwear, un dato
+        que declara el propio fabricante); las dos letras son tracción y resistencia a la
+        temperatura a alta velocidad. El detalle completo, con sus límites y por qué no todos los
+        modelos lo tienen, está en{" "}
+        <Link href="/blog/utqg-desgaste-traccion-temperatura">esta nota aparte</Link>.
       </p>
 
       <h2>En resumen</h2>

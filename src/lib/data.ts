@@ -153,6 +153,16 @@ export const SERVICES: Service[] = [
 // actual. Las más útiles para alguien que está por comprar van arriba.
 export const BLOG_POSTS: BlogPost[] = [
   {
+    id: "15",
+    title: "UTQG: qué significan el desgaste, la tracción y la temperatura",
+    excerpt:
+      "El código de EE. UU. que a veces aparece junto a la etiqueta europea, con un número y dos letras. Qué mide cada dato y por qué no todos los neumáticos lo tienen.",
+    imageUrl: "/images/blog-2.webp",
+    date: "2026-09-25",
+    slug: "utqg-desgaste-traccion-temperatura",
+    category: "Guías",
+  },
+  {
     id: "14",
     title: "Alineación con Geoliner 630 y balanceo con Geodyna 7800P: el equipo hace la diferencia",
     excerpt:
