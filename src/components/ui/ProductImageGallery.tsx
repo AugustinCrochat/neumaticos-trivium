@@ -49,8 +49,13 @@ export function ProductImageGallery({
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [zoomed, setZoomed] = useState(false);
   const [lensStyle, setLensStyle] = useState({ left: 0, top: 0, width: 0, height: 0 });
-  const [bgPos, setBgPos] = useState({ x: 50, y: 50 });
+  const [focal, setFocal] = useState({ x: 0.5, y: 0.5 });
   const [frameRect, setFrameRect] = useState<DOMRect | null>(null);
+  // Aspect ratio real de la imagen (ancho/alto) — la etiqueta UE es un
+  // rectángulo (886x1299), no un cuadrado, así que el cuadro/panel de zoom
+  // tienen que calcular el rectángulo "object-contain" real y no asumir que
+  // la imagen llena todo el marco cuadrado (eso la distorsionaba).
+  const [imgAspect, setImgAspect] = useState(1);
   const boxRef = useRef<HTMLButtonElement>(null);
   const current = slides[index];
   const eprelUrl = label ? `https://eprel.ec.europa.eu/screen/product/tyres/${label.eprelId}` : undefined;
@@ -58,19 +63,34 @@ export function ProductImageGallery({
   // Zoom tipo Amazon: solo tiene sentido con mouse (hover real), no en touch.
   const isTouch = () => typeof window !== "undefined" && window.matchMedia("(hover: none)").matches;
 
+  // Rectángulo real que ocupa la imagen dentro de un marco de frameW x frameH
+  // con object-contain, dado su aspect ratio.
+  function containRect(frameW: number, frameH: number, aspect: number) {
+    const frameAspect = frameW / frameH;
+    if (aspect > frameAspect) {
+      const width = frameW;
+      const height = frameW / aspect;
+      return { left: 0, top: (frameH - height) / 2, width, height };
+    }
+    const height = frameH;
+    const width = frameH * aspect;
+    return { left: (frameW - width) / 2, top: 0, width, height };
+  }
+
   function handleMouseMove(e: React.MouseEvent<HTMLButtonElement>) {
     const rect = boxRef.current?.getBoundingClientRect();
     if (!rect) return;
-    const lensW = rect.width / ZOOM_FACTOR;
-    const lensH = rect.height / ZOOM_FACTOR;
-    const rawLeft = e.clientX - rect.left - lensW / 2;
-    const rawTop = e.clientY - rect.top - lensH / 2;
-    const left = Math.min(Math.max(rawLeft, 0), rect.width - lensW);
-    const top = Math.min(Math.max(rawTop, 0), rect.height - lensH);
+    const img = containRect(rect.width, rect.height, imgAspect);
+    const lensW = img.width / ZOOM_FACTOR;
+    const lensH = img.height / ZOOM_FACTOR;
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    const left = Math.min(Math.max(mouseX - lensW / 2, img.left), img.left + img.width - lensW);
+    const top = Math.min(Math.max(mouseY - lensH / 2, img.top), img.top + img.height - lensH);
     setLensStyle({ left, top, width: lensW, height: lensH });
-    setBgPos({
-      x: (left / (rect.width - lensW || 1)) * 100,
-      y: (top / (rect.height - lensH || 1)) * 100,
+    setFocal({
+      x: (left - img.left + lensW / 2) / img.width,
+      y: (top - img.top + lensH / 2) / img.height,
     });
     setFrameRect(rect);
   }
@@ -124,7 +144,15 @@ export function ProductImageGallery({
             aria-label={current.kind === "etiqueta" ? "Ver registro oficial en EPREL" : "Ampliar imagen"}
             className={`relative h-full w-full cursor-zoom-in ${current.kind === "etiqueta" ? "p-4" : ""}`}
           >
-            <Image src={current.src} alt={current.alt} fill className="object-contain" sizes="(max-width: 768px) 100vw, 50vw" priority={index === 0} />
+            <Image
+              src={current.src}
+              alt={current.alt}
+              fill
+              className="object-contain"
+              sizes="(max-width: 768px) 100vw, 50vw"
+              priority={index === 0}
+              onLoad={(e) => setImgAspect(e.currentTarget.naturalWidth / e.currentTarget.naturalHeight)}
+            />
             {zoomed && (
               <span
                 className="hidden lg:block absolute border-2 border-white bg-white/30 shadow-[0_0_0_1px_rgba(0,0,0,0.15)] pointer-events-none"
@@ -143,7 +171,7 @@ export function ProductImageGallery({
       </div>
 
       {zoomed && frameRect && current && (
-        <ZoomPanel src={current.src} alt={current.alt} zoomFactor={ZOOM_FACTOR} bgPos={bgPos} anchorRect={frameRect} />
+        <ZoomPanel src={current.src} alt={current.alt} zoomFactor={ZOOM_FACTOR} aspect={imgAspect} focal={focal} anchorRect={frameRect} />
       )}
 
       {lightboxOpen && current && (
@@ -160,7 +188,10 @@ export function ProductImageGallery({
           {slides.map((slide, i) => (
             <button
               key={i}
-              onClick={() => setIndex(i)}
+              onClick={() => {
+                setIndex(i);
+                setImgAspect(1);
+              }}
               className={`relative h-16 w-16 shrink-0 overflow-hidden rounded-xl border-2 bg-slate-50 transition-colors ${
                 index === i ? "border-navy-700" : "border-transparent hover:border-slate-200"
               }`}

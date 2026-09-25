@@ -6,13 +6,17 @@ export function ZoomPanel({
   src,
   alt,
   zoomFactor,
-  bgPos,
+  aspect,
+  focal,
   anchorRect,
 }: {
   src: string;
   alt: string;
   zoomFactor: number;
-  bgPos: { x: number; y: number };
+  /** Aspect ratio (ancho/alto) real de la imagen — la etiqueta UE es rectangular, no cuadrada. */
+  aspect: number;
+  /** Punto focal (0-1, 0-1) dentro de la imagen, ya renderizada con object-contain. */
+  focal: { x: number; y: number };
   /** Rect del cuadro de la miniatura, para anclar el panel al costado (viewport coords). */
   anchorRect: DOMRect;
 }) {
@@ -27,6 +31,15 @@ export function ZoomPanel({
   const panelSize = Math.min(anchorRect.width * 1.8, maxWidth, maxHeight);
   const left = onRight ? anchorRect.right + gap : anchorRect.left - gap - panelSize;
 
+  // Tamaño que ocuparía la imagen completa dentro del panel con object-contain
+  // (sin zoom), multiplicado por el factor de zoom — así el background-image
+  // mantiene su proporción real en vez de estirarse para llenar el cuadrado.
+  const panelAspect = 1; // el panel siempre es cuadrado (panelSize x panelSize)
+  const baseWidth = aspect > panelAspect ? panelSize : panelSize * aspect;
+  const baseHeight = aspect > panelAspect ? panelSize / aspect : panelSize;
+  const scaledWidth = baseWidth * zoomFactor;
+  const scaledHeight = baseHeight * zoomFactor;
+
   return createPortal(
     <div
       aria-hidden
@@ -38,8 +51,8 @@ export function ZoomPanel({
         height: panelSize,
         backgroundImage: `url(${src})`,
         backgroundRepeat: "no-repeat",
-        backgroundSize: `${zoomFactor * 100}% ${zoomFactor * 100}%`,
-        backgroundPosition: `${bgPos.x}% ${bgPos.y}%`,
+        backgroundSize: `${scaledWidth}px ${scaledHeight}px`,
+        backgroundPosition: `${-(focal.x * (scaledWidth - panelSize))}px ${-(focal.y * (scaledHeight - panelSize))}px`,
       }}
       role="img"
       title={alt}
