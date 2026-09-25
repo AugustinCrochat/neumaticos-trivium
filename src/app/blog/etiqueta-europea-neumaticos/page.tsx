@@ -150,7 +150,7 @@ export default function Page() {
         etiqueta se compare entre productos del mismo segmento y no entre categorías distintas.
       </p>
 
-      <h2>UTQG: la norma que no es europea</h2>
+      <h2 id="utqg">UTQG: la norma que no es europea</h2>
       <p>
         En varios de nuestros modelos, debajo de la etiqueta UE aparece otro dato:{" "}
         <strong>UTQG</strong> (Uniform Tire Quality Grading), con un número y dos letras —por

@@ -18,6 +18,7 @@ import {
   vehiclesUsingSize,
 } from "@/lib/tire-sizes";
 import { getTireLabel } from "@/lib/tire-labels";
+import { getUtqg } from "@/lib/utqg";
 import { getExtraPhotos } from "@/lib/product-extra-photos";
 import { ProductNameWithHighlightedSize } from "@/components/ui/ProductNameWithHighlightedSize";
 import { ProductImageGallery } from "@/components/ui/ProductImageGallery";
@@ -200,6 +201,7 @@ export default async function ProductPage({ params }: Props) {
   if (!product) notFound();
 
   const tireLabel = getTireLabel(product.slug);
+  const utqg = getUtqg(product.brandId, product.modeloBase);
   const extraPhotos = getExtraPhotos(product.brandId, product.modeloBase);
   const brandLogo = getBrandLogo(product.brandId);
   const brand = BRANDS.find((b) => b.id === product.brandId);
@@ -235,6 +237,7 @@ export default async function ProductPage({ params }: Props) {
       ? [{ label: "Vehículos compatibles", value: `${vehiculos.length} modelos` }]
       : []),
     ...(brand?.origin ? [{ label: "Origen", value: brand.origin }] : []),
+    ...(utqg ? [{ label: "UTQG (norma EE. UU.)", value: `${utqg.treadwear} ${utqg.traction} ${utqg.temperature}` }] : []),
     { label: "Garantía", value: "1 año" },
   ];
 
@@ -367,6 +370,14 @@ export default async function ProductPage({ params }: Props) {
                 EPREL
               </a>
               . <Link href="/blog/etiqueta-europea-neumaticos" className="font-bold text-navy-700 underline decoration-navy-300 hover:decoration-navy-900">Qué significa cada dato.</Link>
+            </p>
+          )}
+          {utqg && (
+            <p className="mt-3 rounded-xl bg-slate-50 px-4 py-3 text-xs leading-relaxed text-slate-500">
+              <strong className="text-slate-700">UTQG {utqg.treadwear} {utqg.traction} {utqg.temperature}:</strong>{" "}
+              desgaste relativo {utqg.treadwear}, tracción {utqg.traction} y temperatura {utqg.temperature}, norma de
+              EE. UU. (no forma parte de la etiqueta europea).{" "}
+              <Link href="/blog/etiqueta-europea-neumaticos#utqg" className="font-bold text-navy-700 underline decoration-navy-300 hover:decoration-navy-900">Qué significa.</Link>
             </p>
           )}
         </div>
