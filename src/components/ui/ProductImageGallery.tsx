@@ -5,6 +5,9 @@ import Image from "next/image";
 import type { TireProduct } from "@/lib/types";
 import type { TireLabel } from "@/lib/tire-labels";
 import { ImageLightbox } from "./ImageLightbox";
+import { ZoomPanel } from "./ZoomPanel";
+
+const ZOOM_FACTOR = 2.5;
 
 function discount(price: number, priceOld: number) {
   return Math.round(((priceOld - price) / priceOld) * 100);
@@ -45,8 +48,10 @@ export function ProductImageGallery({
   const [index, setIndex] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [zoomed, setZoomed] = useState(false);
-  const [zoomPos, setZoomPos] = useState({ x: 50, y: 50 });
-  const frameRef = useRef<HTMLDivElement>(null);
+  const [lensStyle, setLensStyle] = useState({ left: 0, top: 0, width: 0, height: 0 });
+  const [bgPos, setBgPos] = useState({ x: 50, y: 50 });
+  const [frameRect, setFrameRect] = useState<DOMRect | null>(null);
+  const boxRef = useRef<HTMLButtonElement>(null);
   const current = slides[index];
   const eprelUrl = label ? `https://eprel.ec.europa.eu/screen/product/tyres/${label.eprelId}` : undefined;
 
@@ -54,11 +59,20 @@ export function ProductImageGallery({
   const isTouch = () => typeof window !== "undefined" && window.matchMedia("(hover: none)").matches;
 
   function handleMouseMove(e: React.MouseEvent<HTMLButtonElement>) {
-    const rect = frameRef.current?.getBoundingClientRect();
+    const rect = boxRef.current?.getBoundingClientRect();
     if (!rect) return;
-    const x = ((e.clientX - rect.left) / rect.width) * 100;
-    const y = ((e.clientY - rect.top) / rect.height) * 100;
-    setZoomPos({ x: Math.min(100, Math.max(0, x)), y: Math.min(100, Math.max(0, y)) });
+    const lensW = rect.width / ZOOM_FACTOR;
+    const lensH = rect.height / ZOOM_FACTOR;
+    const rawLeft = e.clientX - rect.left - lensW / 2;
+    const rawTop = e.clientY - rect.top - lensH / 2;
+    const left = Math.min(Math.max(rawLeft, 0), rect.width - lensW);
+    const top = Math.min(Math.max(rawTop, 0), rect.height - lensH);
+    setLensStyle({ left, top, width: lensW, height: lensH });
+    setBgPos({
+      x: (left / (rect.width - lensW || 1)) * 100,
+      y: (top / (rect.height - lensH || 1)) * 100,
+    });
+    setFrameRect(rect);
   }
 
   function handleImageClick() {
@@ -94,27 +108,29 @@ export function ProductImageGallery({
 
   return (
     <div>
-      <div ref={frameRef} className="bg-slate-50 rounded-2xl aspect-square flex items-center justify-center p-8 relative group overflow-hidden">
+      <div className="bg-slate-50 rounded-2xl aspect-square flex items-center justify-center p-8 relative group overflow-hidden">
         {current?.kind === "foto" && index === 0 && badges}
         {current ? (
           <button
+            ref={boxRef}
             type="button"
             onClick={handleImageClick}
-            onMouseEnter={() => setZoomed(true)}
-            onMouseLeave={() => setZoomed(false)}
+            onMouseEnter={() => !isTouch() && setZoomed(true)}
+            onMouseLeave={() => {
+              setZoomed(false);
+              setFrameRect(null);
+            }}
             onMouseMove={handleMouseMove}
             aria-label={current.kind === "etiqueta" ? "Ver registro oficial en EPREL" : "Ampliar imagen"}
             className={`relative h-full w-full cursor-zoom-in ${current.kind === "etiqueta" ? "p-4" : ""}`}
           >
-            <Image
-              src={current.src}
-              alt={current.alt}
-              fill
-              className="object-contain transition-transform duration-150 ease-out"
-              style={zoomed ? { transform: "scale(2.2)", transformOrigin: `${zoomPos.x}% ${zoomPos.y}%` } : undefined}
-              sizes="(max-width: 768px) 100vw, 50vw"
-              priority={index === 0}
-            />
+            <Image src={current.src} alt={current.alt} fill className="object-contain" sizes="(max-width: 768px) 100vw, 50vw" priority={index === 0} />
+            {zoomed && (
+              <span
+                className="hidden lg:block absolute border-2 border-white bg-white/30 shadow-[0_0_0_1px_rgba(0,0,0,0.15)] pointer-events-none"
+                style={{ left: lensStyle.left, top: lensStyle.top, width: lensStyle.width, height: lensStyle.height }}
+              />
+            )}
             <span className="absolute bottom-3 right-3 w-8 h-8 rounded-full bg-white/90 shadow-md flex items-center justify-center text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity">
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16zM11 8v6M8 11h6" />
@@ -125,6 +141,10 @@ export function ProductImageGallery({
           <div className="w-48 h-48">{TIRE_SVG}</div>
         )}
       </div>
+
+      {zoomed && frameRect && current && (
+        <ZoomPanel src={current.src} alt={current.alt} zoomFactor={ZOOM_FACTOR} bgPos={bgPos} anchorRect={frameRect} />
+      )}
 
       {lightboxOpen && current && (
         <ImageLightbox
