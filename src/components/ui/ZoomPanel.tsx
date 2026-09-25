@@ -9,6 +9,7 @@ export function ZoomPanel({
   aspect,
   focal,
   anchorRect,
+  showEntireImage = false,
 }: {
   src: string;
   alt: string;
@@ -19,6 +20,8 @@ export function ZoomPanel({
   focal: { x: number; y: number };
   /** Rect del cuadro de la miniatura, para anclar el panel al costado (viewport coords). */
   anchorRect: DOMRect;
+  /** Para etiquetas altas: mostrar la imagen completa dentro de un panel cuadrado. */
+  showEntireImage?: boolean;
 }) {
   const gap = 16;
   // Lo más grande posible sin salirse de la ventana (ancho disponible a la
@@ -29,17 +32,20 @@ export function ZoomPanel({
   const onRight = spaceRight >= spaceLeft;
   const maxWidth = Math.max(onRight ? spaceRight : spaceLeft, anchorRect.width);
 
-  // El panel debe conservar la misma proporción de la imagen. Un panel
-  // cuadrado para una etiqueta vertical veía un área más ancha que la lupa y
-  // por eso el encuadre se corría/cortaba. Con la misma relación de aspecto,
-  // la lente y el panel muestran exactamente el mismo sector ampliado.
-  const panelWidth = Math.min(anchorRect.width * 1.8, maxWidth, maxHeight * aspect);
-  const panelHeight = panelWidth / aspect;
-  const left = onRight ? anchorRect.right + gap : anchorRect.left - gap - panelWidth;
-  const scaledWidth = panelWidth * zoomFactor;
-  const scaledHeight = panelHeight * zoomFactor;
-  const backgroundX = Math.min(0, Math.max(panelWidth - scaledWidth, panelWidth / 2 - focal.x * scaledWidth));
-  const backgroundY = Math.min(0, Math.max(panelHeight - scaledHeight, panelHeight / 2 - focal.y * scaledHeight));
+  const panelSize = Math.min(anchorRect.width * 1.8, maxWidth, maxHeight);
+  const left = onRight ? anchorRect.right + gap : anchorRect.left - gap - panelSize;
+
+  // La etiqueta UE es vertical. En su caso el hover funciona como una vista
+  // ampliada completa: un lienzo cuadrado blanco con object-contain evita que
+  // se deforme o se recorte información (incluido el QR). Las fotos comunes
+  // conservan la lupa que sigue al cursor.
+  const panelAspect = 1;
+  const baseWidth = aspect > panelAspect ? panelSize : panelSize * aspect;
+  const baseHeight = aspect > panelAspect ? panelSize / aspect : panelSize;
+  const scaledWidth = baseWidth * zoomFactor;
+  const scaledHeight = baseHeight * zoomFactor;
+  const backgroundX = Math.min(0, Math.max(panelSize - scaledWidth, panelSize / 2 - focal.x * scaledWidth));
+  const backgroundY = Math.min(0, Math.max(panelSize - scaledHeight, panelSize / 2 - focal.y * scaledHeight));
 
   return createPortal(
     <div
@@ -48,12 +54,12 @@ export function ZoomPanel({
       style={{
         left,
         top: anchorRect.top,
-        width: panelWidth,
-        height: panelHeight,
+        width: panelSize,
+        height: panelSize,
         backgroundImage: `url(${src})`,
         backgroundRepeat: "no-repeat",
-        backgroundSize: `${scaledWidth}px ${scaledHeight}px`,
-        backgroundPosition: `${backgroundX}px ${backgroundY}px`,
+        backgroundSize: showEntireImage ? "contain" : `${scaledWidth}px ${scaledHeight}px`,
+        backgroundPosition: showEntireImage ? "center" : `${backgroundX}px ${backgroundY}px`,
       }}
       role="img"
       title={alt}

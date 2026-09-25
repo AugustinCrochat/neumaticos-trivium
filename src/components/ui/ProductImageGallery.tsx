@@ -51,10 +51,9 @@ export function ProductImageGallery({
   const [lensStyle, setLensStyle] = useState({ left: 0, top: 0, width: 0, height: 0 });
   const [focal, setFocal] = useState({ x: 0.5, y: 0.5 });
   const [frameRect, setFrameRect] = useState<DOMRect | null>(null);
-  // Aspect ratio real de la imagen (ancho/alto) — la etiqueta UE es un
-  // rectángulo (886x1299), no un cuadrado, así que el cuadro/panel de zoom
-  // tienen que calcular el rectángulo "object-contain" real y no asumir que
-  // la imagen llena todo el marco cuadrado (eso la distorsionaba).
+  // Aspect ratio real de la imagen (ancho/alto), usado por la lente de las
+  // fotos para respetar el área que object-contain dibuja dentro del marco.
+  // La etiqueta UE se muestra completa en su panel cuadrado (sin lente).
   const [imgAspect, setImgAspect] = useState(1);
   const boxRef = useRef<HTMLButtonElement>(null);
   const current = slides[index];
@@ -153,7 +152,7 @@ export function ProductImageGallery({
               priority={index === 0}
               onLoad={(e) => setImgAspect(e.currentTarget.naturalWidth / e.currentTarget.naturalHeight)}
             />
-            {zoomed && (
+            {zoomed && current.kind !== "etiqueta" && (
               <span
                 className="hidden lg:block absolute border-2 border-white bg-white/30 shadow-[0_0_0_1px_rgba(0,0,0,0.15)] pointer-events-none"
                 style={{ left: lensStyle.left, top: lensStyle.top, width: lensStyle.width, height: lensStyle.height }}
@@ -171,7 +170,15 @@ export function ProductImageGallery({
       </div>
 
       {zoomed && frameRect && current && (
-        <ZoomPanel src={current.src} alt={current.alt} zoomFactor={ZOOM_FACTOR} aspect={imgAspect} focal={focal} anchorRect={frameRect} />
+        <ZoomPanel
+          src={current.src}
+          alt={current.alt}
+          zoomFactor={ZOOM_FACTOR}
+          aspect={imgAspect}
+          focal={focal}
+          anchorRect={frameRect}
+          showEntireImage={current.kind === "etiqueta"}
+        />
       )}
 
       {lightboxOpen && current && (
