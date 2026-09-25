@@ -201,7 +201,7 @@ export default async function ProductPage({ params }: Props) {
   if (!product) notFound();
 
   const tireLabel = getTireLabel(product.slug);
-  const utqg = getUtqg(product.brandId, product.modeloBase);
+  const utqg = getUtqg(product.brandId, product.modeloBase, product.slug);
   const extraPhotos = getExtraPhotos(product.brandId, product.modeloBase);
   const brandLogo = getBrandLogo(product.brandId);
   const brand = BRANDS.find((b) => b.id === product.brandId);
