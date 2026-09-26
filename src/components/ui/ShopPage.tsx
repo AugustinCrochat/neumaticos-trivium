@@ -11,6 +11,7 @@ import { SizeOrVehicleSearch } from "@/components/ui/SizeOrVehicleSearch";
 import { useBranch } from "@/contexts/branch-context";
 import { useVehicle } from "@/contexts/vehicle-context";
 import { getCompatibleAccessory } from "@/lib/tuercas-vehiculos";
+import { goToWhatsApp } from "@/lib/gtag";
 import type { Accessory, TireProduct, TireSize, VehicleType } from "@/lib/types";
 
 // Removed PRICE_RANGES in favor of a slider
@@ -442,11 +443,9 @@ export function ShopPage({
         `Hola, no encontré neumáticos en medida ${waLabel || "específica"} en la web. ¿Tienen stock disponible?`
       )}`;
     if (hasConfirmedBranch) {
-      window.open(waUrl(selectedBranch), "_blank", "noopener,noreferrer");
+      goToWhatsApp(waUrl(selectedBranch));
     } else {
-      openModalForAction((branch) =>
-        window.open(waUrl(branch), "_blank", "noopener,noreferrer")
-      );
+      openModalForAction((branch) => goToWhatsApp(waUrl(branch)));
     }
   };
 

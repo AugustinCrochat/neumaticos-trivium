@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { useBranch } from "@/contexts/branch-context";
+import { goToWhatsApp } from "@/lib/gtag";
 
 // Las fichas de producto y de accesorio ya traen su propio CTA de WhatsApp
 // contextual (con el nombre del producto en el mensaje) — mostrar además el
@@ -17,12 +18,17 @@ export function FloatingWhatsAppButton() {
   if (OCULTAR_EN.some((re) => re.test(pathname))) return null;
 
   const waText = encodeURIComponent("Hola! Estoy mirando la web y quería hacer una consulta");
+  const href = `https://wa.me/${selectedBranch.whatsapp}?text=${waText}`;
 
   return (
     <a
-      href={`https://wa.me/${selectedBranch.whatsapp}?text=${waText}`}
+      href={href}
       target="_blank"
       rel="noopener noreferrer"
+      onClick={(e) => {
+        e.preventDefault();
+        goToWhatsApp(href);
+      }}
       aria-label={`Consultar por WhatsApp a ${selectedBranch.shortName}`}
       className="fixed bottom-24 right-5 z-40 sm:bottom-28 sm:right-6 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-xl shadow-navy-900/30 transition-colors hover:bg-[#1ebe57] active:scale-95"
     >

@@ -6,6 +6,7 @@ import Link from "next/link";
 import maplibregl, { type Map, type Marker } from "maplibre-gl";
 import type { Branch } from "@/lib/config";
 import { useBranch } from "@/contexts/branch-context";
+import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 
 type BranchesMapProps = {
   branches: Branch[];
@@ -165,14 +166,12 @@ function BranchSummary({
       </dl>
 
       <div className="mt-5 grid grid-cols-1 gap-2 sm:grid-cols-2">
-        <a
+        <WhatsAppLink
           href={`https://wa.me/${branch.whatsapp}`}
-          target="_blank"
-          rel="noopener noreferrer"
           className="inline-flex min-h-11 items-center justify-center rounded-xl bg-[#25d366] px-4 py-2.5 text-sm font-black text-white shadow-sm shadow-[#25d366]/20 transition-colors hover:bg-[#1fbd59]"
         >
           WhatsApp
-        </a>
+        </WhatsAppLink>
         <a
           href={branch.mapUrl}
           target="_blank"

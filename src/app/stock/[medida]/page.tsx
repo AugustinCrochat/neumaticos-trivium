@@ -6,6 +6,7 @@ import { getProductosDesdePOS } from "@/lib/pos-api";
 import { NOINDEX, SITE_NAME } from "@/lib/seo";
 import { equivalentSizes, formatSize, parseSizeSlug, sizeSlug, sizesEqual } from "@/lib/tire-sizes";
 import type { TireProduct, TireSize } from "@/lib/types";
+import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 
 /**
  * Disponibilidad en vivo de una medida en UNA sucursal.
@@ -131,14 +132,12 @@ function FilaProducto({
         >
           {stock === 0 ? "sin stock" : stock === 1 ? "queda 1" : `quedan ${stock}`}
         </span>
-        <a
+        <WhatsAppLink
           href={waHref(branch, texto)}
-          target="_blank"
-          rel="noopener noreferrer"
           className="rounded-lg bg-black px-3 py-1.5 text-sm font-bold text-white transition-opacity hover:opacity-90"
         >
           {stock > 0 ? "Reservar" : "Consultar"}
-        </a>
+        </WhatsAppLink>
       </div>
     </li>
   );
@@ -262,14 +261,12 @@ export default async function StockMedidaPage({ params, searchParams }: Props) {
       )}
 
       <div className="mt-10 flex flex-wrap gap-3">
-        <a
+        <WhatsAppLink
           href={waHref(branch, `Hola! Consulto por neumáticos ${label} en ${branch.shortName}.`)}
-          target="_blank"
-          rel="noopener noreferrer"
           className="rounded-xl bg-orange-600 px-5 py-3 font-black text-white transition-opacity hover:opacity-90"
         >
           Escribinos por WhatsApp
-        </a>
+        </WhatsAppLink>
         <Link
           href={`/neumaticos/${sizeSlug(size)}`}
           className="rounded-xl border border-slate-300 px-5 py-3 font-bold text-navy-900 transition-colors hover:border-navy-400"

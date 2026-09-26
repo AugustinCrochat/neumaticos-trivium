@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { BRANCHES, CONTACT_EMAIL } from "@/lib/config";
 import { LegalPage, LegalSection } from "@/components/ui/LegalPageLayout";
+import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 
 export const metadata: Metadata = {
   title: "Botón de Arrepentimiento — Neumáticos Trivium",
@@ -32,14 +33,12 @@ export default function ArrepentimientoPage() {
           retiro/devolución y el reintegro por el mismo medio de pago utilizado en la compra.
         </p>
         <div className="flex flex-col sm:flex-row gap-3 mt-4">
-          <a
+          <WhatsAppLink
             href={`https://wa.me/${branch.whatsapp}?text=${encodeURIComponent("Hola, quiero ejercer mi derecho de arrepentimiento sobre una compra que hice en la web.")}`}
-            target="_blank"
-            rel="noopener noreferrer"
             className="inline-flex items-center justify-center gap-2 bg-[#25d366] hover:bg-[#1ebe5d] text-white font-bold text-sm px-5 py-3 rounded-xl transition-colors"
           >
             Reclamar por WhatsApp
-          </a>
+          </WhatsAppLink>
           <a
             href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("Derecho de arrepentimiento")}`}
             className="inline-flex items-center justify-center gap-2 bg-black hover:bg-black text-white font-bold text-sm px-5 py-3 rounded-xl transition-colors"

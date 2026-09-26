@@ -12,6 +12,9 @@ export const CONTACT_EMAIL = "info@trivium.ar";
     de Reseñas de Clientes en Google en la página de confirmación de pago. */
 export const GOOGLE_MERCHANT_ID = 5832097672;
 export const GOOGLE_ADS_ID = "AW-969578983";
+/** Etiqueta de conversión de Ads para "clic en WhatsApp" — la usa
+    gtag_report_conversion en GoogleAdsTag. */
+export const GOOGLE_ADS_WHATSAPP_CONVERSION_LABEL = "AW-969578983/Ah1gCJPSp8MZEOezqs4D";
 export const INSTAGRAM_URL = "https://www.instagram.com/neumaticos.trivium/";
 export const FACEBOOK_URL = "https://www.facebook.com/profile.php?id=61589579136727";
 export const YOUTUBE_URL = "https://www.youtube.com/@neumaticos-trivium";

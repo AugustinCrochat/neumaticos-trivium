@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useBranch } from "@/contexts/branch-context";
 import { useCart } from "@/contexts/cart-context";
+import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 
 export function PaymentResult({ status }: { status?: string }) {
   const { items, total, clearCart, deliveryMethod, shippingAddress } = useCart();
@@ -33,9 +34,9 @@ export function PaymentResult({ status }: { status?: string }) {
         <h1 className="text-2xl font-black text-navy-900">{title}</h1>
         <p className="mt-3 text-slate-600 leading-relaxed">{message}</p>
         {approved && (
-          <a href={`https://wa.me/${selectedBranch.whatsapp}?text=${whatsappText}`} target="_blank" rel="noopener noreferrer" onClick={clearCart} className="mt-6 inline-flex w-full justify-center rounded-xl bg-[#25d366] px-5 py-3.5 font-black text-white hover:bg-[#1fbd59]">
+          <WhatsAppLink href={`https://wa.me/${selectedBranch.whatsapp}?text=${whatsappText}`} onClick={clearCart} className="mt-6 inline-flex w-full justify-center rounded-xl bg-[#25d366] px-5 py-3.5 font-black text-white hover:bg-[#1fbd59]">
             Coordinar {isShipping ? "envío" : "retiro"} por WhatsApp
-          </a>
+          </WhatsAppLink>
         )}
         <Link href="/catalogo" className="mt-4 inline-flex font-bold text-navy-700 underline underline-offset-4">Volver al catálogo</Link>
       </section>

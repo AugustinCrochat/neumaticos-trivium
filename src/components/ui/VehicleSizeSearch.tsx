@@ -7,6 +7,7 @@ import { useVehicle } from "@/contexts/vehicle-context";
 import { getSizesForVehicle, type VehicleDBEntry } from "@/lib/vehicles";
 import { VehicleCombobox } from "@/components/ui/VehicleCombobox";
 import type { VehiculoOption } from "@/lib/pos-api";
+import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 
 type Sizes = VehicleDBEntry["sizes"];
 
@@ -115,14 +116,12 @@ export function VehicleSizeSearch({ initialMedida }: { initialMedida?: string })
           <p className="text-sm font-semibold text-slate-600 mb-2">
             Todavía no tenemos cargada la medida de este modelo.
           </p>
-          <a
+          <WhatsAppLink
             href={`https://wa.me/${selectedBranch.whatsapp}?text=${waText}`}
-            target="_blank"
-            rel="noopener noreferrer"
             className="inline-flex items-center gap-2 text-orange-600 font-bold text-sm hover:underline"
           >
             Consultanos por WhatsApp
-          </a>
+          </WhatsAppLink>
         </div>
       )}
     </div>

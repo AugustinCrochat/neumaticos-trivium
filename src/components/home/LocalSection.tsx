@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { BRANCHES } from "@/lib/config";
 import { LOCALIDADES } from "@/lib/localidades";
+import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 
 /** "Córdoba, Argüello, Villa Allende y Saldán" — lista en prosa, con "y" final. */
 const ZONAS_EN_PROSA = LOCALIDADES.map((l) => l.name).reduce((acc, name, i, arr) => {
@@ -59,14 +60,12 @@ export function LocalSection() {
               >
                 Cómo llegar
               </Link>
-              <a
+              <WhatsAppLink
                 href={`https://wa.me/${branch.whatsapp}`}
-                target="_blank"
-                rel="noopener noreferrer"
                 className="inline-flex min-h-12 items-center justify-center rounded-xl border border-white/20 bg-white/5 px-6 text-sm font-black text-white transition-colors hover:bg-white/10"
               >
                 Escribir por WhatsApp
-              </a>
+              </WhatsAppLink>
             </div>
           </div>
 

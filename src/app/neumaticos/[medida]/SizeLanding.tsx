@@ -3,6 +3,7 @@ import type { TireProduct, TireSize } from "@/lib/types";
 import { BRANCHES, FREE_SHIPPING_THRESHOLD, SHIPPING_FLAT_RATE } from "@/lib/config";
 import { esRangoFlotation, formatFlotationEquivalent, metricToFlotation } from "@/lib/flotation";
 import { ProductCard } from "@/components/ui/ProductCard";
+import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 import { SizeHeader } from "./SizeHeader";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { FaqSection } from "@/components/seo/FaqSection";
@@ -180,16 +181,14 @@ export function SizeLanding({
             Escribinos con tu medida y te avisamos apenas ingrese, o te proponemos una equivalencia
             segura si necesitás resolverlo ya.
           </p>
-          <a
+          <WhatsAppLink
             href={`https://wa.me/${branch.whatsapp}?text=${encodeURIComponent(
               `Hola, busco neumáticos en medida ${label}. ¿Tienen stock o fecha de ingreso?`
             )}`}
-            target="_blank"
-            rel="noopener noreferrer"
             className="mt-4 inline-flex min-h-12 items-center justify-center rounded-xl bg-[#25d366] px-6 text-sm font-black text-white transition-transform active:scale-[0.98]"
           >
             Consultar {label} por WhatsApp
-          </a>
+          </WhatsAppLink>
         </section>
       )}
 

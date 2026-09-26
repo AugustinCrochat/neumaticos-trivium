@@ -3,6 +3,7 @@
 import { useBranch } from "@/contexts/branch-context";
 import type { Accessory } from "@/lib/types";
 import { isLowStock, stockLabel } from "@/lib/stock";
+import { WhatsAppLink } from "./WhatsAppLink";
 
 export function AccessoryConsult({ accessory }: { accessory: Accessory }) {
   const { selectedBranch } = useBranch();
@@ -17,14 +18,12 @@ export function AccessoryConsult({ accessory }: { accessory: Accessory }) {
         </p>
       )}
       {accessory.enStock ? (
-        <a
+        <WhatsAppLink
           href={`https://wa.me/${selectedBranch.whatsapp}?text=${waText}`}
-          target="_blank"
-          rel="noopener noreferrer"
           className="flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1ebe57] text-white font-semibold py-2.5 rounded-xl text-sm transition-colors"
         >
           Consultar en {selectedBranch.shortName}
-        </a>
+        </WhatsAppLink>
       ) : (
         <button disabled className="w-full bg-slate-300 text-white font-semibold py-2.5 rounded-xl text-sm">
           Sin stock

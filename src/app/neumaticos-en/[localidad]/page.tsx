@@ -13,6 +13,7 @@ import { canonical, SITE_NAME, type Faq } from "@/lib/seo";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { FaqSection } from "@/components/seo/FaqSection";
 import { MEDIDAS_PRIORITARIAS, formatSize, sizeSlug } from "@/lib/tire-sizes";
+import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 
 /**
  * Landings de SEO local: "neumáticos en Villa Allende", "gomería en Saldán".
@@ -147,14 +148,12 @@ export default async function LocalidadPage({ params }: Props) {
         <p className="mt-4 max-w-3xl leading-relaxed text-slate-600">{localidad.porQue}</p>
 
         <div className="mt-6 flex flex-wrap gap-3">
-          <a
+          <WhatsAppLink
             href={waLink}
-            target="_blank"
-            rel="noopener noreferrer"
             className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#25d366] px-6 text-sm font-black text-white transition-transform active:scale-[0.98]"
           >
             Consultar por WhatsApp
-          </a>
+          </WhatsAppLink>
           <Link
             href={`/sucursales/${branch.id}`}
             className="inline-flex min-h-12 items-center justify-center rounded-xl bg-black px-6 text-sm font-black text-white transition-transform active:scale-[0.98]"
