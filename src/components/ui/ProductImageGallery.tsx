@@ -218,7 +218,7 @@ export function ProductImageGallery({
     >
       <span className="flex shrink-0 items-center gap-1.5 rounded bg-white px-1.5 py-1">
         <Image src="/images/payments/visa.svg" alt="" width={32} height={20} className="h-4 w-auto" />
-        <Image src="/images/payments/mastercard.svg" alt="" width={32} height={20} className="h-5 w-auto" />
+        <Image src="/images/payments/mastercard.svg" alt="" width={32} height={20} className="h-6 w-auto" />
       </span>
       Hoy 3 cuotas sin interés
     </a>
