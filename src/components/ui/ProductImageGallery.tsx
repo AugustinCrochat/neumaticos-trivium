@@ -165,7 +165,10 @@ export function ProductImageGallery({
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z" />
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.5 12l1.75 1.75L14.5 10" />
       </svg>
-      Garantía 1 año
+      <span className="flex flex-col items-start leading-none">
+        <span>Garantía 1 año</span>
+        <span className="mt-0.5 text-[10px] font-bold normal-case tracking-normal text-amber-100">Trivium</span>
+      </span>
     </a>
   );
 
