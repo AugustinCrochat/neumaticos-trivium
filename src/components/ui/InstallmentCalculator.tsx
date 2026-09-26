@@ -56,7 +56,14 @@ function esBanco(grupo: string): boolean {
     filtrarlo acá evita mostrar un método de pago fantasma mientras no lo
     borren de recargos_tarjeta. */
 function esGrupoObsoleto(grupo: string): boolean {
-  return /sin\s*inter[eé]s/i.test(grupo);
+  // El viejo grupo dedicado de "3 cuotas sin interés" (ver aplicarOverrides).
+  if (/sin\s*inter[eé]s/i.test(grupo)) return true;
+  // "Cuotas" a secas es el genérico que en el POS es sólo la fuente de la
+  // que Visa/Master "toma prestada" la tasa a 12 cuotas (ver planesDelGrupo)
+  // — no es un medio de pago que el cliente pueda elegir por su cuenta acá,
+  // así que no se lista como grupo propio.
+  if (grupo.trim().toLowerCase() === "cuotas") return true;
+  return false;
 }
 
 /** Logo(s) del medio de pago seleccionado, mismo criterio que ya se usaba

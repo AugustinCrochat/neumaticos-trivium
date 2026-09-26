@@ -23,7 +23,7 @@ const TIRE_SVG = (
 type Slide =
   | { kind: "foto"; src: string; alt: string }
   | { kind: "etiqueta"; src: string; thumbSrc: string; alt: string }
-  | { kind: "sucursal"; src: string; alt: string; branchName: string; address: string; city: string; hours: string };
+  | { kind: "sucursal"; src: string; alt: string; branchName: string; address: string; city: string; hours: string; mapUrl: string };
 
 export function ProductImageGallery({
   product,
@@ -49,6 +49,17 @@ export function ProductImageGallery({
     update();
   }, []);
 
+  const [direccionCopiada, setDireccionCopiada] = useState(false);
+  function copiarDireccion(direccion: string) {
+    navigator.clipboard
+      .writeText(direccion)
+      .then(() => {
+        setDireccionCopiada(true);
+        setTimeout(() => setDireccionCopiada(false), 2000);
+      })
+      .catch(() => {});
+  }
+
   const slides: Slide[] = [
     ...(hasImage ? [{ kind: "foto" as const, src: product.imageUrl, alt: `${product.brand} ${product.model}` }] : []),
     ...extraPhotos.map((src) => ({ kind: "foto" as const, src, alt: `${product.brand} ${product.modeloBase} — otro ángulo` })),
@@ -64,6 +75,7 @@ export function ProductImageGallery({
           address: selectedBranch.address,
           city: selectedBranch.city,
           hours: selectedBranch.hours,
+          mapUrl: selectedBranch.mapUrl,
         }]
       : []),
   ];
@@ -272,18 +284,6 @@ export function ProductImageGallery({
                 UTQG {labelUtqg.treadwear} {labelUtqg.traction} {labelUtqg.temperature}
               </span>
             )}
-            {current.kind === "sucursal" && (
-              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent px-5 pb-5 pt-16 text-left text-white">
-                <p className="text-xl font-black">{current.branchName}</p>
-                <p className="mt-1 text-sm leading-snug text-slate-200">
-                  {current.address}, {current.city}
-                </p>
-                <p className="mt-0.5 text-sm leading-snug text-slate-200">{current.hours}</p>
-                <p className="mt-2.5 inline-block rounded-md bg-orange-500 px-3 py-1.5 text-xs font-black uppercase tracking-wide">
-                  Colocación y cambio de válvulas sin cargo
-                </p>
-              </div>
-            )}
             {zoomed && current.kind !== "etiqueta" && current.kind !== "sucursal" && (
               <span
                 className="hidden lg:block absolute border-2 border-white bg-white/30 shadow-[0_0_0_1px_rgba(0,0,0,0.15)] pointer-events-none"
@@ -300,6 +300,42 @@ export function ProductImageGallery({
           </button>
         ) : (
           <div className="w-48 h-48">{TIRE_SVG}</div>
+        )}
+        {current?.kind === "sucursal" && (
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent px-5 pb-5 pt-16 text-left text-white">
+            <p className="text-2xl font-black">{current.branchName}</p>
+            <p className="mt-1.5 text-base leading-snug text-slate-200">
+              {current.address}, {current.city}
+            </p>
+            <p className="mt-0.5 text-base leading-snug text-slate-200">{current.hours}</p>
+            <p className="mt-3 inline-block rounded-md bg-orange-500 px-3 py-1.5 text-xs font-black uppercase tracking-wide">
+              Colocación y cambio de válvulas sin cargo
+            </p>
+            <div className="pointer-events-auto mt-3 flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() => copiarDireccion(`${current.address}, ${current.city}`)}
+                className="flex items-center gap-1.5 rounded-lg bg-white/15 px-3 py-2 text-xs font-bold backdrop-blur-sm transition-colors hover:bg-white/25"
+              >
+                <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                </svg>
+                {direccionCopiada ? "¡Copiada!" : "Copiar dirección"}
+              </button>
+              <a
+                href={current.mapUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 rounded-lg bg-orange-500 px-3 py-2 text-xs font-black transition-colors hover:bg-orange-600"
+              >
+                <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                Cómo llegar
+              </a>
+            </div>
+          </div>
         )}
       </div>
 
