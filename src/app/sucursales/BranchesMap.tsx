@@ -56,9 +56,7 @@ function getBranchLngLat(branch: Branch): [number, number] {
 
 // Marcador HTML con el logo de Trivium sobre una insignia navy (para que el
 // logo blanco se lea sobre el mapa claro) y una etiqueta con el nombre corto.
-function createBranchMarkerElement(shortName: string, options?: { color?: string; dashed?: boolean; opacity?: number }) {
-  const color = options?.color ?? "#000000";
-  const border = options?.dashed ? `2px dashed ${color}` : `2px solid ${color}`;
+function createBranchMarkerElement(shortName: string) {
   // anchor:"bottom" del Marker pinea el borde inferior de ESTE div al punto
   // geográfico exacto — tiene que ser la puntita del "pointer", no el fondo
   // del texto de abajo. Antes el label estaba en el flujo normal debajo del
@@ -75,23 +73,23 @@ function createBranchMarkerElement(shortName: string, options?: { color?: string
   const badge = document.createElement("div");
   badge.dataset.role = "badge";
   badge.style.cssText =
-    `display:flex;align-items:center;justify-content:center;width:52px;height:52px;padding:8px;border-radius:15px;background:#ffffff;border:${border};box-shadow:0 4px 12px rgba(10,26,48,0.35);transition:transform .15s ease,border-color .15s ease`;
+    "display:flex;align-items:center;justify-content:center;width:52px;height:52px;padding:8px;border-radius:15px;background:#ffffff;border:2px solid #000000;box-shadow:0 4px 12px rgba(10,26,48,0.35);transition:transform .15s ease,border-color .15s ease";
 
   const img = document.createElement("img");
   img.src = "/pin-trivium.png";
   img.alt = "Neumáticos Trivium";
-  img.style.cssText = `width:100%;height:100%;object-fit:contain;display:block;opacity:${options?.opacity ?? 1}`;
+  img.style.cssText = "width:100%;height:100%;object-fit:contain;display:block";
   badge.appendChild(img);
 
   const pointer = document.createElement("div");
   pointer.dataset.role = "pointer";
   pointer.style.cssText =
-    `width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:8px solid ${color};margin-top:-1px`;
+    "width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:8px solid #000000;margin-top:-1px";
 
   const label = document.createElement("div");
   label.textContent = shortName;
   label.style.cssText =
-    `position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:3px;font-weight:800;font-size:12px;color:${color};white-space:nowrap;text-shadow:0 0 2px #fff,0 0 2px #fff,0 0 2px #fff,0 0 2px #fff`;
+    "position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:3px;font-weight:800;font-size:12px;color:#000000;white-space:nowrap;text-shadow:0 0 2px #fff,0 0 2px #fff,0 0 2px #fff,0 0 2px #fff";
 
   wrapper.appendChild(badge);
   wrapper.appendChild(pointer);
@@ -279,33 +277,90 @@ export function BranchesMap({ branches, comingSoon = [] }: BranchesMapProps) {
         branchMarkersRef.current[branch.id] = { marker, badge, pointer };
       }
 
-      for (const soon of comingSoon) {
-        // Literalmente la misma función que arma el pin de sucursal real
-        // (mismo anchor:"bottom", mismo wrapper/badge/pointer/label) — sólo
-        // cambia el color y el nombre. Es la prueba de control: si esto
-        // también se corre al alejar el zoom, el problema no está en cómo
-        // arma el DOM este pin puntual, porque es un objeto idéntico al que
-        // sí queda fijo.
-        const { wrapper } = createBranchMarkerElement(`Próximamente · ${soon.name}`, {
-          color: "#f97316",
-          dashed: true,
-          opacity: 0.6,
+      // El pin de "próximamente" se renderiza como capa nativa del mapa
+      // (fuente GeoJSON + circle/symbol layers), NO como maplibregl.Marker.
+      // Se vio en un video que el Marker de San Justo saltaba a cientos de
+      // km de su lngLat real durante un zoom-out rápido y se quedaba ahí —
+      // revisando el código fuente de maplibre-gl, Marker recalcula su
+      // posición en cada frame reposicionando un <div> por CSS (incluyendo
+      // una lógica de "smart wrap" que puede mutar la lngLat interna del
+      // marker), y un resync manual en zoomend/moveend no alcanzó a
+      // corregirlo. Una capa GL no tiene ese problema: la posiciona
+      // directamente el renderer WebGL a partir de la fuente + la cámara
+      // actual en cada frame, sin ningún estado intermedio en JS que se
+      // pueda desincronizar.
+      if (comingSoon.length > 0) {
+        map.addSource("coming-soon", {
+          type: "geojson",
+          data: {
+            type: "FeatureCollection",
+            features: comingSoon.map((soon) => ({
+              type: "Feature",
+              properties: { name: soon.name, address: soon.address },
+              geometry: { type: "Point", coordinates: [soon.coordinates.lng, soon.coordinates.lat] },
+            })),
+          },
         });
-        const popup = new maplibregl.Popup({ offset: 16, closeButton: true }).setHTML(
-          `<strong>${soon.name} — próximamente</strong><br/>${soon.address}`
-        );
-        wrapper.addEventListener("click", () => popup.setLngLat([soon.coordinates.lng, soon.coordinates.lat]).addTo(map));
-        const soonMarker = new maplibregl.Marker({ element: wrapper, anchor: "bottom" })
-          .setLngLat([soon.coordinates.lng, soon.coordinates.lat])
-          .addTo(map);
-        // Se vio en un video que durante un zoom-out rápido este marcador
-        // puede quedar con la posición en pantalla desincronizada de su
-        // lngLat real (un glitch puntual del cálculo interno del Marker) y
-        // no se autocorrige solo. Volver a llamar setLngLat al terminar
-        // cada gesto fuerza a maplibre a recalcular la posición de cero.
-        const resync = () => soonMarker.setLngLat([soon.coordinates.lng, soon.coordinates.lat]);
-        map.on("zoomend", resync);
-        map.on("moveend", resync);
+
+        map.addLayer({
+          id: "coming-soon-badge",
+          type: "circle",
+          source: "coming-soon",
+          paint: {
+            "circle-radius": 22,
+            "circle-color": "#ffffff",
+            "circle-stroke-color": "#f97316",
+            "circle-stroke-width": 2,
+          },
+        });
+
+        map.addLayer({
+          id: "coming-soon-label",
+          type: "symbol",
+          source: "coming-soon",
+          layout: {
+            "text-field": ["concat", "Próximamente · ", ["get", "name"]],
+            "text-size": 11,
+            "text-offset": [0, 1.9],
+            "text-anchor": "top",
+            "text-allow-overlap": true,
+          },
+          paint: {
+            "text-color": "#c2410c",
+            "text-halo-color": "#ffffff",
+            "text-halo-width": 2,
+          },
+        });
+
+        map.loadImage("/pin-trivium.png").then(({data}) => {
+          if (!map.hasImage("trivium-pin")) map.addImage("trivium-pin", data);
+          map.addLayer({
+            id: "coming-soon-icon",
+            type: "symbol",
+            source: "coming-soon",
+            layout: {
+              "icon-image": "trivium-pin",
+              "icon-size": 0.22,
+              "icon-allow-overlap": true,
+            },
+            paint: {
+              "icon-opacity": 0.65,
+            },
+          });
+        }).catch(() => {});
+
+        const soonPopup = new maplibregl.Popup({ offset: 16, closeButton: true });
+        map.on("click", "coming-soon-badge", (e) => {
+          const feature = e.features?.[0];
+          if (!feature || feature.geometry.type !== "Point") return;
+          const [lng, lat] = feature.geometry.coordinates;
+          soonPopup
+            .setLngLat([lng, lat])
+            .setHTML(`<strong>${feature.properties?.name} — próximamente</strong><br/>${feature.properties?.address}`)
+            .addTo(map);
+        });
+        map.on("mouseenter", "coming-soon-badge", () => { map.getCanvas().style.cursor = "pointer"; });
+        map.on("mouseleave", "coming-soon-badge", () => { map.getCanvas().style.cursor = ""; });
       }
     });
 
