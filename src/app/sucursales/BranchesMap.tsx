@@ -295,9 +295,17 @@ export function BranchesMap({ branches, comingSoon = [] }: BranchesMapProps) {
           `<strong>${soon.name} — próximamente</strong><br/>${soon.address}`
         );
         wrapper.addEventListener("click", () => popup.setLngLat([soon.coordinates.lng, soon.coordinates.lat]).addTo(map));
-        new maplibregl.Marker({ element: wrapper, anchor: "bottom" })
+        const soonMarker = new maplibregl.Marker({ element: wrapper, anchor: "bottom" })
           .setLngLat([soon.coordinates.lng, soon.coordinates.lat])
           .addTo(map);
+        // Se vio en un video que durante un zoom-out rápido este marcador
+        // puede quedar con la posición en pantalla desincronizada de su
+        // lngLat real (un glitch puntual del cálculo interno del Marker) y
+        // no se autocorrige solo. Volver a llamar setLngLat al terminar
+        // cada gesto fuerza a maplibre a recalcular la posición de cero.
+        const resync = () => soonMarker.setLngLat([soon.coordinates.lng, soon.coordinates.lat]);
+        map.on("zoomend", resync);
+        map.on("moveend", resync);
       }
     });
 
