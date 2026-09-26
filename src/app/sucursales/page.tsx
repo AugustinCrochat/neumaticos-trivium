@@ -51,7 +51,20 @@ export default function SucursalesPage() {
         </div>
       </div>
 
-      <BranchesMap branches={BRANCHES} />
+      <BranchesMap
+        branches={BRANCHES}
+        comingSoon={[
+          {
+            id: "san-justo",
+            name: "San Justo",
+            address: "Pres. Juan Domingo Perón 2847, San Justo, La Matanza, Buenos Aires",
+            // Coordenadas aproximadas del centro de San Justo (todavía no
+            // geocodificamos la dirección exacta) — alcanza para un pin de
+            // "acá vamos a estar", se ajusta cuando abra la sucursal.
+            coordinates: { lat: -34.6853, lng: -58.5636 },
+          },
+        ]}
+      />
 
       {/* San Justo todavía no tiene POS, teléfono ni horarios propios, así
           que no entra en BRANCHES (eso rompería checkout, el feed de Google
@@ -64,7 +77,7 @@ export default function SucursalesPage() {
           </p>
           <h2 className="text-xl font-black text-navy-900 md:text-2xl">Nueva sucursal en San Justo</h2>
           <p className="mt-2 max-w-2xl leading-relaxed text-slate-600">
-            En unos meses abrimos en San Justo, partido de La Matanza, provincia de Buenos Aires:
+            En aproximadamente 3 meses abrimos en San Justo, partido de La Matanza, provincia de Buenos Aires:
             Presidente Juan Domingo Perón 2847 (CP 1745).
           </p>
         </div>

@@ -8,8 +8,19 @@ import type { Branch } from "@/lib/config";
 import { useBranch } from "@/contexts/branch-context";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 
+type ComingSoonBranch = {
+  id: string;
+  name: string;
+  address: string;
+  coordinates: { lat: number; lng: number };
+};
+
 type BranchesMapProps = {
   branches: Branch[];
+  /** Sucursales anunciadas pero todavía sin abrir — pin propio, punteado, sin
+      las interacciones de una sucursal real (no tiene POS, teléfono ni
+      horarios: no se puede seleccionar como sucursal activa). */
+  comingSoon?: ComingSoonBranch[];
 };
 
 type UserLocation = {
@@ -84,6 +95,38 @@ function createBranchMarkerElement(shortName: string) {
   wrapper.appendChild(pointer);
   wrapper.appendChild(label);
   return { wrapper, badge, pointer };
+}
+
+// Mismo lenguaje visual que el pin de sucursal real (badge + pointer +
+// label) pero punteado y naranja en vez de negro, para que se lea de
+// entrada como "todavía no": no es un local al que se pueda ir hoy.
+function createComingSoonMarkerElement(name: string) {
+  const wrapper = document.createElement("div");
+  wrapper.style.cssText =
+    "position:relative;display:flex;flex-direction:column;align-items:center;cursor:pointer;user-select:none";
+
+  const badge = document.createElement("div");
+  badge.style.cssText =
+    "display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:13px;background:#fff7ed;border:2px dashed #f97316;box-shadow:0 4px 12px rgba(249,115,22,0.35)";
+
+  const icon = document.createElement("div");
+  icon.textContent = "🔜";
+  icon.style.cssText = "font-size:18px;line-height:1";
+  badge.appendChild(icon);
+
+  const pointer = document.createElement("div");
+  pointer.style.cssText =
+    "width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:8px solid #f97316;margin-top:-1px";
+
+  const label = document.createElement("div");
+  label.textContent = `Próximamente · ${name}`;
+  label.style.cssText =
+    "position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:3px;font-weight:800;font-size:11px;color:#c2410c;white-space:nowrap;text-shadow:0 0 2px #fff,0 0 2px #fff,0 0 2px #fff,0 0 2px #fff";
+
+  wrapper.appendChild(badge);
+  wrapper.appendChild(pointer);
+  wrapper.appendChild(label);
+  return wrapper;
 }
 
 function createUserMarkerElement() {
@@ -196,7 +239,7 @@ function BranchSummary({
   );
 }
 
-export function BranchesMap({ branches }: BranchesMapProps) {
+export function BranchesMap({ branches, comingSoon = [] }: BranchesMapProps) {
   const { selectedBranch } = useBranch();
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<Map | null>(null);
@@ -265,6 +308,17 @@ export function BranchesMap({ branches }: BranchesMapProps) {
           .addTo(map);
         branchMarkersRef.current[branch.id] = { marker, badge, pointer };
       }
+
+      for (const soon of comingSoon) {
+        const wrapper = createComingSoonMarkerElement(soon.name);
+        const popup = new maplibregl.Popup({ offset: 16, closeButton: true }).setHTML(
+          `<strong>${soon.name} — próximamente</strong><br/>${soon.address}`
+        );
+        wrapper.addEventListener("click", () => popup.setLngLat([soon.coordinates.lng, soon.coordinates.lat]).addTo(map));
+        new maplibregl.Marker({ element: wrapper, anchor: "bottom" })
+          .setLngLat([soon.coordinates.lng, soon.coordinates.lat])
+          .addTo(map);
+      }
     });
 
     mapRef.current = map;
@@ -278,7 +332,7 @@ export function BranchesMap({ branches }: BranchesMapProps) {
       map.remove();
       mapRef.current = null;
     };
-  }, [branches]);
+  }, [branches, comingSoon]);
 
   // Resalta el marcador de la sucursal activa.
   useEffect(() => {
