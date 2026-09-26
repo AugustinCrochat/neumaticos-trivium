@@ -158,6 +158,24 @@ export default async function NeumaticosPage() {
         </section>
       ))}
 
+      <section className="mb-12">
+        <h2 className="mb-4 text-2xl font-black text-navy-900">Por tipo de uso</h2>
+        <div className="flex flex-wrap gap-3">
+          <Link
+            href="/neumaticos/at"
+            className="rounded-xl border border-slate-200 bg-white px-5 py-3 font-bold text-navy-900 transition-colors hover:border-navy-400"
+          >
+            Neumáticos A/T (All Terrain)
+          </Link>
+          <Link
+            href="/neumaticos/carga"
+            className="rounded-xl border border-slate-200 bg-white px-5 py-3 font-bold text-navy-900 transition-colors hover:border-navy-400"
+          >
+            Neumáticos de carga
+          </Link>
+        </div>
+      </section>
+
       {marcasConProductos.length > 0 && (
         <section className="mt-12">
           <h2 className="mb-4 text-2xl font-black text-navy-900">Marcas que trabajamos</h2>
