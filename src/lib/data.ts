@@ -153,6 +153,16 @@ export const SERVICES: Service[] = [
 // actual. Las más útiles para alguien que está por comprar van arriba.
 export const BLOG_POSTS: BlogPost[] = [
   {
+    id: "16",
+    title: "Precio y calidad: cuánto sale realmente cada kilómetro",
+    excerpt:
+      "El precio de lista no dice nada solo. Comparamos Grenlander contra otras marcas por costo real por kilómetro, estándares de fabricación y homologación en Europa, EE. UU. y Argentina.",
+    imageUrl: "/images/blog-3.webp",
+    date: "2026-09-26",
+    slug: "precio-calidad-neumaticos-costo-por-km",
+    category: "Marcas",
+  },
+  {
     id: "15",
     title: "UTQG: qué significan el desgaste, la tracción y la temperatura",
     excerpt:
