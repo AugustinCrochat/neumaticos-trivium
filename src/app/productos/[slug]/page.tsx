@@ -46,7 +46,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!product) return {};
   // product.model ya trae el índice de carga/velocidad pegado a la medida
   // (ver toTireProduct en pos-api.ts) — no hace falta insertarlo acá.
-  const fullTitle = `${product.model} — Neumáticos Trivium`;
+  const fullTitle = `Neumático ${product.model} — Neumáticos Trivium`;
   const description = `Comprá el neumático ${product.model} al mejor precio. Outlet de neumáticos importados en Argentina.`;
   const pageUrl = `${SITE_URL}/productos/${product.slug}`;
   // La imagen de OG/Twitter la arma opengraph-image.tsx en esta misma carpeta
@@ -293,7 +293,7 @@ export default async function ProductPage({ params }: Props) {
         {/* Info */}
         <div className="flex flex-col">
           <h1 className="text-2xl md:text-4xl font-normal text-slate-900 mb-3 leading-tight">
-            <ProductNameWithHighlightedSize product={product} sizeClassName="font-bold" />
+            <ProductNameWithHighlightedSize product={product} sizeClassName="font-bold" hideBrand />
           </h1>
 
           <Link href={`/marcas/${product.brandId}`} className="mb-2 group/brand inline-block">

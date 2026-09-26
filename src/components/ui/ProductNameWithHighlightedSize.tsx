@@ -18,22 +18,31 @@ export function ProductNameWithHighlightedSize({
   className = "",
   sizeClassName = "",
   afterSize,
+  hideBrand = false,
 }: {
   product: TireProduct;
   className?: string;
   sizeClassName?: string;
   /** Contenido a insertar justo después de la medida resaltada, ej. índice de carga/velocidad. */
   afterSize?: ReactNode;
+  /** Saca la marca del texto (queda medida + modelo). Para el h1 de la ficha
+      de producto, donde la marca ya se muestra aparte con su logo — repetirla
+      en el título es ruido. El <title> de SEO y las tarjetas de listado
+      siguen mostrando el nombre completo. */
+  hideBrand?: boolean;
 }) {
-  const match = product.model.match(sizePattern(product));
+  const modelText = hideBrand
+    ? product.model.replace(new RegExp(`\\b${escapeRegex(product.brand)}\\b\\s*`, "i"), "").replace(/\s+/g, " ").trim()
+    : product.model;
+  const match = modelText.match(sizePattern(product));
 
   if (!match || match.index === undefined) {
-    return <span className={className}>{product.model}{afterSize}</span>;
+    return <span className={className}>{modelText}{afterSize}</span>;
   }
 
-  const before = product.model.slice(0, match.index);
+  const before = modelText.slice(0, match.index);
   const size = match[0];
-  const after = product.model.slice(match.index + size.length);
+  const after = modelText.slice(match.index + size.length);
 
   return (
     <span className={className}>
