@@ -216,28 +216,28 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
         </a>
       </div>
 
-      <div className="rounded-xl border border-slate-200 divide-y divide-slate-100 overflow-hidden bg-white">
-        <div className="flex items-start gap-3 p-3">
-          <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 shrink-0">
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
+        <div className="flex items-start gap-3.5">
+          <div className="w-12 h-12 rounded-full bg-emerald-600 flex items-center justify-center text-white shrink-0 shadow-md shadow-emerald-600/30">
+            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
           </div>
           <div className="min-w-0 flex-1">
-            <p className="font-bold text-navy-900 text-sm leading-snug">Colocación y válvulas en {selectedBranch.shortName} sin cargo</p>
+            <p className="font-black text-navy-900 text-base leading-snug">Colocación y válvulas en {selectedBranch.shortName} sin cargo</p>
             {enStock ? (
               <p
-                className={`text-xs font-bold mt-0.5 ${
-                  pickup && !pickup.sameDay ? "text-amber-600" : "text-emerald-600"
+                className={`text-sm font-bold mt-0.5 ${
+                  pickup && !pickup.sameDay ? "text-amber-600" : "text-emerald-700"
                 }`}
               >
                 {pickup?.label ?? "Retiro el mismo día"}
               </p>
             ) : (
-              <p className="text-xs font-bold text-red-600 mt-0.5">Sin stock para retiro</p>
+              <p className="text-sm font-bold text-red-600 mt-0.5">Sin stock para retiro</p>
             )}
-            <p className="text-xs text-slate-500 mt-0.5 leading-snug">{selectedBranch.address}, {selectedBranch.city} · <span className="font-bold">{selectedBranch.hours}</span></p>
+            <p className="text-xs text-slate-600 mt-1 leading-snug">{selectedBranch.address}, {selectedBranch.city} · <span className="font-bold">{selectedBranch.hours}</span></p>
             <div className="mt-2">
               <BranchStatusBadge branch={selectedBranch} />
             </div>

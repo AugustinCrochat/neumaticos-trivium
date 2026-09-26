@@ -38,6 +38,11 @@ type SearchApiResult = {
  */
 export function CotizadorClient({ initialProduct, compact = false }: { initialProduct?: QuoteProduct; compact?: boolean }) {
   const { selectedBranch } = useBranch();
+  // En Córdoba (Argüello) se dice "alineado y balanceado"; "alineación y
+  // balanceo" es como se lo llama en Buenos Aires. El nombre del servicio en
+  // el POS (combo.nombre) queda fijo con una sola forma, así que la variante
+  // regional se resuelve acá según la sucursal elegida, no en el dato.
+  const terminoAlineacion = selectedBranch.id === "arguello" ? "alineado + balanceado" : "alineación + balanceo";
   const combo = useUpsellCombo();
   // Colapsado por defecto cuando está embebido en la ficha de producto, para
   // no ocupar espacio si nadie lo va a usar; en /cotizador (compact=false) va
@@ -237,14 +242,12 @@ export function CotizadorClient({ initialProduct, compact = false }: { initialPr
             {canAddCombo && !includeCombo && (
               <button
                 onClick={() => setIncludeCombo(true)}
-                className="flex w-full items-center gap-4 bg-gradient-to-r from-orange-50 to-amber-50 p-4 text-left transition-colors hover:from-orange-100 hover:to-amber-100"
+                className="flex w-full items-center gap-4 bg-orange-50 p-4 text-left transition-colors hover:bg-orange-100"
               >
-                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-white shadow-md">
-                  <AlineacionBalanceoIcon size={32} />
-                </div>
+                <AlineacionBalanceoIcon size={36} />
                 <span className="flex-1 text-sm">
                   <span className="block text-base font-black leading-snug text-navy-900">
-                    ¿Sumamos alineación + balanceo de las 4 ruedas?
+                    ¿Sumamos {terminoAlineacion} de las 4 ruedas?
                   </span>
                   <span className="font-black text-orange-700">+{formatPrice(combo!.precio)}</span>
                 </span>
@@ -255,11 +258,11 @@ export function CotizadorClient({ initialProduct, compact = false }: { initialPr
             )}
             {includeCombo && combo && (
               <div className="flex items-center gap-4 bg-emerald-50 p-4">
-                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-white shadow-sm">
-                  <AlineacionBalanceoIcon size={32} />
-                </div>
+                <AlineacionBalanceoIcon size={36} />
                 <span className="flex-1 text-sm">
-                  <span className="block text-base font-black text-navy-900">Alineación + balanceo de las 4 ruedas</span>
+                  <span className="block text-base font-black text-navy-900">
+                    {terminoAlineacion.charAt(0).toUpperCase() + terminoAlineacion.slice(1)} de las 4 ruedas
+                  </span>
                   <span className="font-black text-emerald-700">+{formatPrice(combo.precio)}</span>
                 </span>
                 <button onClick={() => setIncludeCombo(false)} className="shrink-0 text-xs font-bold text-slate-400 hover:text-red-600">

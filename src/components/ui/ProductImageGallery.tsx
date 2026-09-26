@@ -226,7 +226,7 @@ export function ProductImageGallery({
 
   return (
     <div>
-      <div className="bg-slate-50 rounded-2xl aspect-square flex items-center justify-center p-8 relative group overflow-hidden">
+      <div className={`bg-slate-50 rounded-2xl aspect-square flex items-center justify-center relative group overflow-hidden ${current?.kind === "sucursal" ? "" : "p-8"}`}>
         {current?.kind === "foto" && index === 0 && (
           <>
             {badges}
@@ -261,7 +261,7 @@ export function ProductImageGallery({
                 src={current.src}
                 alt={current.alt}
                 fill
-                className="object-contain"
+                className={current.kind === "sucursal" ? "object-cover" : "object-contain"}
                 sizes="(max-width: 768px) 100vw, 50vw"
                 priority={index === 0}
                 onLoad={(e) => setImgAspect(e.currentTarget.naturalWidth / e.currentTarget.naturalHeight)}
@@ -273,13 +273,13 @@ export function ProductImageGallery({
               </span>
             )}
             {current.kind === "sucursal" && (
-              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/60 to-transparent px-4 pb-4 pt-10 text-left text-white">
-                <p className="text-sm font-black">{current.branchName}</p>
-                <p className="mt-0.5 text-xs leading-snug text-slate-200">
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent px-5 pb-5 pt-16 text-left text-white">
+                <p className="text-xl font-black">{current.branchName}</p>
+                <p className="mt-1 text-sm leading-snug text-slate-200">
                   {current.address}, {current.city}
                 </p>
-                <p className="mt-0.5 text-xs leading-snug text-slate-200">{current.hours}</p>
-                <p className="mt-2 inline-block rounded-md bg-orange-500 px-2 py-1 text-[10px] font-black uppercase tracking-wide">
+                <p className="mt-0.5 text-sm leading-snug text-slate-200">{current.hours}</p>
+                <p className="mt-2.5 inline-block rounded-md bg-orange-500 px-3 py-1.5 text-xs font-black uppercase tracking-wide">
                   Colocación y cambio de válvulas sin cargo
                 </p>
               </div>
