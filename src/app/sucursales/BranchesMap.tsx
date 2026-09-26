@@ -97,20 +97,23 @@ function createBranchMarkerElement(shortName: string) {
   return { wrapper, badge, pointer };
 }
 
-// Mismo lenguaje visual que el pin de sucursal real (badge + pointer +
-// label) pero punteado y naranja en vez de negro, para que se lea de
-// entrada como "todavía no": no es un local al que se pueda ir hoy.
+// Mismo logo que el pin de sucursal real, pero SIN la punta triangular ni
+// anchor:"bottom": ese pin ancla el borde inferior del elemento al punto
+// exacto, así que cualquier imprecisión de un par de píxeles en la altura
+// real de la punta (ej. el redondeo del navegador al renderizar un
+// triángulo hecho con bordes) se nota poco de cerca pero se magnifica un
+// montón en metros de distancia real al alejar el zoom. Acá se ancla por el
+// CENTRO del badge (anchor:"center" en el Marker), que no depende de medir
+// bien ninguna punta — el círculo se centra solo en el punto,
+// independientemente de cualquier diferencia de renderizado.
 function createComingSoonMarkerElement(name: string) {
   const wrapper = document.createElement("div");
   wrapper.style.cssText =
-    "position:relative;display:flex;flex-direction:column;align-items:center;cursor:pointer;user-select:none";
+    "position:relative;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none";
 
-  // Mismo tamaño/padding que el badge de sucursal real (52px, padding 8) —
-  // sólo cambia el borde (punteado y naranja en vez de sólido y negro) para
-  // que se distinga como "todavía no", con el mismo logo.
   const badge = document.createElement("div");
   badge.style.cssText =
-    "display:flex;align-items:center;justify-content:center;width:52px;height:52px;padding:8px;border-radius:15px;background:#ffffff;border:2px dashed #f97316;box-shadow:0 4px 12px rgba(249,115,22,0.35)";
+    "display:flex;align-items:center;justify-content:center;width:52px;height:52px;padding:8px;border-radius:50%;background:#ffffff;border:2px dashed #f97316;box-shadow:0 4px 12px rgba(249,115,22,0.35)";
 
   const img = document.createElement("img");
   img.src = "/pin-trivium.png";
@@ -120,17 +123,12 @@ function createComingSoonMarkerElement(name: string) {
   img.style.cssText = "width:100%;height:100%;object-fit:contain;display:block;opacity:0.6";
   badge.appendChild(img);
 
-  const pointer = document.createElement("div");
-  pointer.style.cssText =
-    "width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:8px solid #f97316;margin-top:-1px";
-
   const label = document.createElement("div");
   label.textContent = `Próximamente · ${name}`;
   label.style.cssText =
-    "position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:3px;font-weight:800;font-size:11px;color:#c2410c;white-space:nowrap;text-shadow:0 0 2px #fff,0 0 2px #fff,0 0 2px #fff,0 0 2px #fff";
+    "position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:5px;font-weight:800;font-size:11px;color:#c2410c;white-space:nowrap;text-shadow:0 0 2px #fff,0 0 2px #fff,0 0 2px #fff,0 0 2px #fff";
 
   wrapper.appendChild(badge);
-  wrapper.appendChild(pointer);
   wrapper.appendChild(label);
   return wrapper;
 }
@@ -321,7 +319,7 @@ export function BranchesMap({ branches, comingSoon = [] }: BranchesMapProps) {
           `<strong>${soon.name} — próximamente</strong><br/>${soon.address}`
         );
         wrapper.addEventListener("click", () => popup.setLngLat([soon.coordinates.lng, soon.coordinates.lat]).addTo(map));
-        new maplibregl.Marker({ element: wrapper, anchor: "bottom" })
+        new maplibregl.Marker({ element: wrapper, anchor: "center" })
           .setLngLat([soon.coordinates.lng, soon.coordinates.lat])
           .addTo(map);
       }
