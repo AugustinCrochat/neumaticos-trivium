@@ -31,9 +31,12 @@ export function PaymentMethodsSection({ price }: { price: number }) {
             <Image src="/images/payments/visa.svg" alt="Visa" width={48} height={32} className="h-8 w-auto" />
             <Image src="/images/payments/mastercard.svg" alt="Mastercard" width={48} height={32} className="h-9 w-auto" />
           </div>
-          <p className="text-sm font-bold text-emerald-800">
-            Hoy: 3 cuotas sin interés con Visa o Mastercard bancarizada
-          </p>
+          <div>
+            <p className="text-sm font-bold text-emerald-800">
+              Hoy: 3 cuotas sin interés con Visa o Master de banco
+            </p>
+            <p className="text-xs text-emerald-700">Todos los miércoles y sábados.</p>
+          </div>
         </div>
       )}
 
