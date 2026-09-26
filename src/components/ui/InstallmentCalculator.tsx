@@ -40,11 +40,23 @@ function mercadoPagoPlanes(amount: number) {
   return planes;
 }
 
-/** El grupo de un plan puede venir cargado en el POS como "...MiPyme" (la
+/** El grupo de un plan puede venir cargado en el POS como "Cuota Mipyme" (la
     categoría de tarifa del comercio) — es un dato interno que no le dice
     nada al cliente, así que en la web se muestra genérico. */
 function displayGrupoLabel(grupo: string): string {
-  return /mipyme/i.test(grupo) ? "Visa o Master de banco" : grupo;
+  return esBanco(grupo) ? "Visa o Master de banco" : grupo;
+}
+
+function esBanco(grupo: string): boolean {
+  return /mipyme/i.test(grupo);
+}
+
+/** El grupo viejo, dedicado, de "3 cuotas sin interés" quedó sin uso en el
+    POS al pasar esa lógica a un override por día (ver aplicarOverrides) —
+    filtrarlo acá evita mostrar un método de pago fantasma mientras no lo
+    borren de recargos_tarjeta. */
+function esGrupoObsoleto(grupo: string): boolean {
+  return /sin\s*inter[eé]s/i.test(grupo);
 }
 
 /** Logo(s) del medio de pago seleccionado, mismo criterio que ya se usaba
@@ -54,7 +66,7 @@ function logosDelGrupo(grupo: string): string[] {
   if (grupo === MERCADO_PAGO_GRUPO) return ["/images/payments/mercadopago.svg"];
   if (grupo === GOCUOTAS_GRUPO) return ["/images/payments/gocuotas.svg"];
   if (/naranja/i.test(grupo)) return ["/images/payments/naranja-x.svg"];
-  if (/mipyme/i.test(grupo)) return ["/images/payments/visa.svg", "/images/payments/mastercard.svg"];
+  if (esBanco(grupo)) return ["/images/payments/visa.svg", "/images/payments/mastercard.svg"];
   return [];
 }
 
@@ -70,11 +82,10 @@ type Plan = { id: string; cuotas: string; coeficiente: number | null };
  * cargado (con su recargo real).
  */
 function aplicarOverrides(grupo: string, planes: Plan[], esDiaPromo: boolean): Plan[] {
-  const esBanco = /mipyme/i.test(grupo);
   const esNaranja = /naranja/i.test(grupo);
-  if (!esBanco && !esNaranja) return planes;
+  if (!esBanco(grupo) && !esNaranja) return planes;
   return planes.map((p) => {
-    if (esBanco && esDiaPromo && parseInt(p.cuotas, 10) === 3) {
+    if (esBanco(grupo) && esDiaPromo && parseInt(p.cuotas, 10) === 3) {
       return { ...p, cuotas: "3 cuotas sin interés", coeficiente: 1 };
     }
     if (esNaranja && /plan\s*z/i.test(p.cuotas)) {
@@ -106,7 +117,7 @@ export function InstallmentCalculator({ basePrice }: { basePrice: number }) {
 
   const gruposPOS = useMemo(() => {
     if (!recargos) return [];
-    return Array.from(new Set(recargos.map((r) => r.grupo)));
+    return Array.from(new Set(recargos.map((r) => r.grupo).filter((g) => !esGrupoObsoleto(g))));
   }, [recargos]);
   const grupos = [MERCADO_PAGO_GRUPO, GOCUOTAS_GRUPO, ...gruposPOS];
 
@@ -121,6 +132,12 @@ export function InstallmentCalculator({ basePrice }: { basePrice: number }) {
             [
               { id: CONTADO_ID, cuotas: "1 pago", coeficiente: 1 },
               ...(recargos ?? []).filter((r) => r.grupo === grupoActual),
+              // El banco (Visa/Master) no tiene tasa Mipyme propia a 12 cuotas
+              // — el POS le presta la del grupo genérico "Cuotas" (mismo
+              // criterio que planesTarjetaCredito en pos-neumaticos).
+              ...(esBanco(grupoActual)
+                ? (recargos ?? []).filter((r) => r.grupo === "Cuotas" && parseInt(r.cuotas, 10) === 12)
+                : []),
             ],
             esDiaPromo
           );
