@@ -4,7 +4,6 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useBranch } from "@/contexts/branch-context";
-import { useVehicle } from "@/contexts/vehicle-context";
 import { SearchModal } from "@/components/ui/SearchModal";
 
 const NAV_LINKS = [
@@ -17,15 +16,14 @@ const NAV_LINKS = [
 
 export function Header() {
   const { selectedBranch, hasConfirmedBranch, openModal } = useBranch();
-  const { selectedVehicle, openModal: openVehicleModal } = useVehicle();
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-40 w-full">
       {/* Franja de colocación sin cargo: lo primero que se ve al entrar,
-          antes que el selector de auto/sucursal, porque es un diferencial
-          frente a comprar en otro lado sin taller propio. */}
+          antes que el selector de sucursal, porque es un diferencial frente
+          a comprar en otro lado sin taller propio. */}
       <Link
         href="/servicios"
         className="block bg-orange-500 px-4 py-1.5 text-center text-xs font-bold text-white transition-colors hover:bg-orange-600 md:text-sm"
@@ -33,33 +31,13 @@ export function Header() {
         Colocación y cambio de válvulas sin cargo comprando en el local
       </Link>
 
-      {/* Utility bar — vehículo + sucursal, en su propia franja para que
-          siempre entren cómodos sin pelear espacio con el logo/menú/carrito.
-          Negra como la nav principal (con un divisor sutil), con los botones
-          como chips claros que se despegan del fondo. */}
+      {/* Utility bar — sucursal activa, en su propia franja para que siempre
+          entre cómoda sin pelear espacio con el logo/menú/carrito. Negra
+          como la nav principal, con el botón como chip claro que se despega
+          del fondo. */}
       <div className="bg-zinc-950 border-b border-zinc-800">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-center gap-3 h-11">
-            <button
-              onClick={openVehicleModal}
-              className="flex items-center gap-1.5 bg-white hover:bg-slate-100 text-navy-900 pl-2.5 pr-2 py-1.5 rounded-full text-xs font-bold transition-colors group shadow-sm"
-              title="Elegir mi vehículo"
-            >
-              <svg className="w-3.5 h-3.5 text-[#e30613] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L16 11l-2.7-3.6a1 1 0 0 0-.8-.4H5.24a2 2 0 0 0-1.8 1.1l-.8 1.63A6 6 0 0 0 2 12.42V16h2" />
-                <circle cx="6.5" cy="16.5" r="2.5" />
-                <circle cx="16.5" cy="16.5" r="2.5" />
-              </svg>
-              <span className="truncate min-w-0 max-w-[100px]">
-                {selectedVehicle ? `${selectedVehicle.marca} ${selectedVehicle.modelo}` : "Mi auto"}
-              </span>
-              <svg className="w-3 h-3 text-slate-400 group-hover:text-slate-600 transition-colors flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-
-            <span className="w-px h-4 bg-zinc-700 shrink-0" aria-hidden="true" />
-
             <button
               onClick={openModal}
               className="flex items-center gap-1.5 bg-white hover:bg-slate-100 text-navy-900 pl-2.5 pr-2 py-1.5 rounded-full text-xs font-bold transition-colors group shadow-sm"
