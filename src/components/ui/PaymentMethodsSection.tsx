@@ -28,8 +28,8 @@ export function PaymentMethodsSection({ price }: { price: number }) {
       {isPromoDay && (
         <div className="mb-3 flex items-center gap-3 rounded-lg border border-emerald-200 bg-emerald-50 p-3">
           <div className="flex shrink-0 items-center gap-2">
-            <Image src="/images/payments/visa.svg" alt="Visa" width={40} height={26} className="h-6 w-auto" />
-            <Image src="/images/payments/mastercard.svg" alt="Mastercard" width={40} height={26} className="h-7 w-auto" />
+            <Image src="/images/payments/visa.svg" alt="Visa" width={48} height={32} className="h-8 w-auto" />
+            <Image src="/images/payments/mastercard.svg" alt="Mastercard" width={48} height={32} className="h-9 w-auto" />
           </div>
           <p className="text-sm font-bold text-emerald-800">
             Hoy: 3 cuotas sin interés con Visa o Mastercard bancarizada

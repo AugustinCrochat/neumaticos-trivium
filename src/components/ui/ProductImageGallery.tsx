@@ -223,11 +223,11 @@ export function ProductImageGallery({
   const promoBadge = isPromoDay && (
     <a
       href="#metodos-pago"
-      className="absolute bottom-4 left-4 z-10 flex items-center gap-2 rounded-lg bg-emerald-600 px-3 py-2 text-xs font-black text-white shadow-lg ring-2 ring-white/80 transition-colors hover:bg-emerald-700"
+      className="absolute bottom-4 left-4 z-10 flex items-center gap-2 rounded-lg bg-navy-900 px-3 py-2 text-xs font-black text-white shadow-lg ring-2 ring-white/80 transition-colors hover:bg-navy-800"
     >
-      <span className="flex shrink-0 items-center gap-1 rounded bg-white/15 px-1.5 py-0.5">
-        <Image src="/images/payments/visa.svg" alt="" width={24} height={16} className="h-3.5 w-auto" />
-        <Image src="/images/payments/mastercard.svg" alt="" width={24} height={16} className="h-4 w-auto" />
+      <span className="flex shrink-0 items-center gap-1.5 rounded bg-white px-1.5 py-1">
+        <Image src="/images/payments/visa.svg" alt="" width={32} height={20} className="h-4 w-auto" />
+        <Image src="/images/payments/mastercard.svg" alt="" width={32} height={20} className="h-5 w-auto" />
       </span>
       Hoy 3 cuotas sin interés
     </a>
