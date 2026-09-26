@@ -147,20 +147,23 @@ export function ProductImageGallery({
     </div>
   );
 
-  // Mismo formato que el resto de los badges de esta esquina (pill,
-  // px-3 py-1.5, mismo tamaño de texto) para que no desentone. Dorado/ámbar
-  // porque ninguno de los otros lo usa y es el color más asociado a
-  // "certificado/garantía". Es un <a>, no un <span>: el click lleva a la
-  // explicación de qué cubre y qué no la garantía (ver id="garantia" en la
-  // página de producto), porque "1 año de garantía" solo, sin condiciones,
-  // genera más consultas por WhatsApp preguntando qué cubre.
+  // Más grande que el resto de los badges de esta esquina a propósito: es el
+  // único que vende confianza en vez de describir el producto (OFF/Carga/A-T
+  // son datos, esto es una promesa), así que conviene que pese más visualmente.
+  // Ícono de escudo (símbolo de garantía/protección más reconocible que un
+  // check suelto) + anillo blanco para que lea como sello oficial en vez de
+  // una etiqueta más. Es un <a>: el click lleva a la explicación de qué cubre
+  // y qué no la garantía (id="garantia" en la página de producto), porque
+  // "1 año de garantía" solo, sin condiciones, generaba consultas por
+  // WhatsApp preguntando qué cubre.
   const warrantyBadge = (
     <a
       href="#garantia"
-      className="absolute top-4 right-4 z-10 flex items-center gap-1.5 rounded-md bg-amber-500 px-3 py-1.5 text-xs font-black uppercase tracking-tighter text-white shadow-md transition-colors hover:bg-amber-600"
+      className="absolute top-4 right-4 z-10 flex items-center gap-2 rounded-lg bg-amber-500 px-3.5 py-2 text-sm font-black uppercase tracking-tight text-white shadow-lg ring-2 ring-white/80 transition-colors hover:bg-amber-600"
     >
-      <svg className="h-3.5 w-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
+      <svg className="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.5 12l1.75 1.75L14.5 10" />
       </svg>
       Garantía 1 año
     </a>
