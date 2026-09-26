@@ -105,19 +105,20 @@ function createComingSoonMarkerElement(name: string) {
   wrapper.style.cssText =
     "position:relative;display:flex;flex-direction:column;align-items:center;cursor:pointer;user-select:none";
 
+  // Mismo tamaño/padding que el badge de sucursal real (52px, padding 8) —
+  // sólo cambia el borde (punteado y naranja en vez de sólido y negro) para
+  // que se distinga como "todavía no", con el mismo logo.
   const badge = document.createElement("div");
   badge.style.cssText =
-    "display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:13px;background:#fff7ed;border:2px dashed #f97316;box-shadow:0 4px 12px rgba(249,115,22,0.35)";
+    "display:flex;align-items:center;justify-content:center;width:52px;height:52px;padding:8px;border-radius:15px;background:#ffffff;border:2px dashed #f97316;box-shadow:0 4px 12px rgba(249,115,22,0.35)";
 
-  // Mismo ícono de neumático que se usa como placeholder en las fichas de
-  // producto, en blanco y negro y semitransparente (no es el logo a color
-  // de una sucursal real, es un "acá vamos a estar"). SVG en vez de un
-  // emoji: un glifo de emoji puede tardar en cargar su fuente y cambiar de
-  // tamaño después de que el marker ya se posicionó, y maplibre lo re-mide
-  // con ResizeObserver — eso se ve como que el pin "salta" de lugar al
-  // hacer zoom. El SVG tiene tamaño fijo desde el primer frame.
-  badge.innerHTML =
-    '<svg width="24" height="24" viewBox="0 0 100 100" fill="none" style="opacity:0.55"><circle cx="50" cy="50" r="45" stroke="#000" stroke-width="8"/><circle cx="50" cy="50" r="28" stroke="#000" stroke-width="4"/><circle cx="50" cy="50" r="10" fill="#000"/></svg>';
+  const img = document.createElement("img");
+  img.src = "/pin-trivium.png";
+  img.alt = "Neumáticos Trivium";
+  img.width = 36;
+  img.height = 36;
+  img.style.cssText = "width:100%;height:100%;object-fit:contain;display:block;opacity:0.6";
+  badge.appendChild(img);
 
   const pointer = document.createElement("div");
   pointer.style.cssText =
