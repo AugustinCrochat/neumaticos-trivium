@@ -31,32 +31,6 @@ export function Header() {
         Colocación y cambio de válvulas sin cargo comprando en el local
       </Link>
 
-      {/* Utility bar — sucursal activa, en su propia franja para que siempre
-          entre cómoda sin pelear espacio con el logo/menú/carrito. Negra
-          como la nav principal, con el botón como chip claro que se despega
-          del fondo. */}
-      <div className="bg-zinc-950 border-b border-zinc-800">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-center gap-3 h-11">
-            <button
-              onClick={openModal}
-              className="flex items-center gap-1.5 bg-white hover:bg-slate-100 text-navy-900 pl-2.5 pr-2 py-1.5 rounded-full text-xs font-bold transition-colors group shadow-sm"
-              title="Cambiar sucursal"
-            >
-              <svg className="w-3.5 h-3.5 text-[#e30613] flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5Z" />
-              </svg>
-              <span className="truncate min-w-0 max-w-[90px]">
-                {hasConfirmedBranch ? selectedBranch.shortName : "Sucursal"}
-              </span>
-              <svg className="w-3 h-3 text-slate-400 group-hover:text-slate-600 transition-colors flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-          </div>
-        </div>
-      </div>
-
       {/* Main nav */}
       <nav className="bg-black shadow-lg">
         <div className="max-w-7xl mx-auto px-4">
@@ -91,6 +65,22 @@ export function Header() {
             </div>
 
             <div className="flex items-center gap-3 ml-auto md:ml-0">
+              <button
+                onClick={openModal}
+                className="flex items-center gap-1.5 bg-white hover:bg-slate-100 text-navy-900 pl-2.5 pr-2 py-1.5 rounded-full text-xs font-bold transition-colors group shadow-sm"
+                title="Cambiar sucursal"
+              >
+                <svg className="w-3.5 h-3.5 text-[#e30613] flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5Z" />
+                </svg>
+                <span className="truncate min-w-0 max-w-[90px]">
+                  {hasConfirmedBranch ? selectedBranch.shortName : "Sucursal"}
+                </span>
+                <svg className="w-3 h-3 text-slate-400 group-hover:text-slate-600 transition-colors flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
               <button
                 onClick={() => setSearchOpen(true)}
                 className="text-zinc-200 hover:text-white p-2"
