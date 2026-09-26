@@ -74,6 +74,8 @@ export function ProductImageGallery({
   // La etiqueta UE se muestra completa en su panel cuadrado (sin lente).
   const [imgAspect, setImgAspect] = useState(1);
   const boxRef = useRef<HTMLButtonElement>(null);
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const didSwipeRef = useRef(false);
   const current = slides[index];
   const labelUtqg = current?.kind === "etiqueta" ? utqg : null;
   const eprelUrl = label ? `https://eprel.ec.europa.eu/screen/product/tyres/${label.eprelId}` : undefined;
@@ -115,6 +117,13 @@ export function ProductImageGallery({
 
   function handleImageClick() {
     if (!current) return;
+    // Un swipe en touch también dispara el click al soltar el dedo — si
+    // acabamos de navegar con el gesto, ese click no debe además abrir el
+    // lightbox o el link de EPREL.
+    if (didSwipeRef.current) {
+      didSwipeRef.current = false;
+      return;
+    }
     // El QR de la etiqueta no se puede escanear desde la propia pantalla del
     // celular: en touch, en vez de ampliar, vamos directo al registro EPREL.
     if (current.kind === "etiqueta" && isTouch() && eprelUrl) {
@@ -125,6 +134,33 @@ export function ProductImageGallery({
     // valga la pena ampliar con zoom/lightbox.
     if (current.kind === "sucursal") return;
     setLightboxOpen(true);
+  }
+
+  const SWIPE_THRESHOLD = 40;
+
+  function goToSlide(nextIndex: number) {
+    setIndex(((nextIndex % slides.length) + slides.length) % slides.length);
+    setImgAspect(1);
+  }
+
+  function handleTouchStart(e: React.TouchEvent<HTMLButtonElement>) {
+    const t = e.touches[0];
+    touchStartRef.current = { x: t.clientX, y: t.clientY };
+  }
+
+  function handleTouchEnd(e: React.TouchEvent<HTMLButtonElement>) {
+    const start = touchStartRef.current;
+    touchStartRef.current = null;
+    if (!start || slides.length < 2) return;
+    const t = e.changedTouches[0];
+    const deltaX = t.clientX - start.x;
+    const deltaY = t.clientY - start.y;
+    // Sólo cuenta como swipe de galería si el movimiento es sobre todo
+    // horizontal — si no, sería pisar un scroll vertical de la página.
+    if (Math.abs(deltaX) > SWIPE_THRESHOLD && Math.abs(deltaX) > Math.abs(deltaY) * 1.5) {
+      didSwipeRef.current = true;
+      goToSlide(deltaX < 0 ? index + 1 : index - 1);
+    }
   }
 
   const badges = (
@@ -192,6 +228,8 @@ export function ProductImageGallery({
               setFrameRect(null);
             }}
             onMouseMove={(e) => current.kind !== "sucursal" && handleMouseMove(e)}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
             aria-label={
               current.kind === "etiqueta"
                 ? "Ver registro oficial en EPREL"
@@ -276,10 +314,7 @@ export function ProductImageGallery({
           {slides.map((slide, i) => (
             <button
               key={i}
-              onClick={() => {
-                setIndex(i);
-                setImgAspect(1);
-              }}
+              onClick={() => goToSlide(i)}
               className={`relative h-16 w-16 shrink-0 overflow-hidden rounded-xl border-2 bg-slate-50 transition-colors ${
                 index === i ? "border-navy-700" : "border-transparent hover:border-slate-200"
               }`}
