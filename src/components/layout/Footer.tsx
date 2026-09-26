@@ -84,6 +84,7 @@ export function Footer() {
                 { href: "/marcas", label: "Marcas" },
                 { href: "/tuercas-antirrobo", label: "Tuercas antirrobo" },
                 { href: "/calculadora-equivalencia-neumaticos", label: "Calculadora de equivalencias" },
+                { href: "/cotizador", label: "Cotizador de neumáticos" },
                 { href: "/servicios", label: "Servicios" },
                 { href: "/blog", label: "Blog" },
                 { href: "/contacto", label: "Contacto" },

@@ -59,6 +59,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url("/neumaticos-en", 0.7, "monthly"),
     url("/marcas", 0.7, "weekly"),
     url("/calculadora-equivalencia-neumaticos", 0.8, "monthly"),
+    url("/cotizador", 0.7, "monthly"),
     url("/servicios", 0.7, "monthly"),
     url("/sucursales", 0.8, "monthly"),
     url("/tuercas-antirrobo", 0.7, "weekly"),
