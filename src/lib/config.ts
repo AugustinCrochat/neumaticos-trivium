@@ -11,6 +11,7 @@ export const CONTACT_EMAIL = "info@trivium.ar";
 /** ID de la cuenta de Google Merchant Center — lo usa el módulo de aceptación
     de Reseñas de Clientes en Google en la página de confirmación de pago. */
 export const GOOGLE_MERCHANT_ID = 5832097672;
+export const GOOGLE_ADS_ID = "AW-969578983";
 export const INSTAGRAM_URL = "https://www.instagram.com/neumaticos.trivium/";
 export const FACEBOOK_URL = "https://www.facebook.com/profile.php?id=61589579136727";
 export const YOUTUBE_URL = "https://www.youtube.com/@neumaticos-trivium";

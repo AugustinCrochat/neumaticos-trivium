@@ -15,6 +15,7 @@ import { CartDrawer } from "@/components/ui/CartDrawer";
 import { FloatingSearchWidget } from "@/components/ui/FloatingSearchWidget";
 import { FloatingWhatsAppButton } from "@/components/ui/FloatingWhatsAppButton";
 import { GoogleReviewsBadge } from "@/components/ui/GoogleReviewsBadge";
+import { GoogleAdsTag } from "@/components/ui/GoogleAdsTag";
 import { getAllVehicleOptions } from "@/lib/vehicles";
 
 const geist = Geist({
@@ -125,6 +126,7 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col bg-background text-foreground">
+        <GoogleAdsTag />
         <JsonLd data={siteGraphJsonLd()} />
         <BranchProvider>
           <VehicleProvider vehiculos={vehiculos}>
