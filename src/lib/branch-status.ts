@@ -41,17 +41,19 @@ function ruleForDay(schedule: ScheduleRule[], day: number): ScheduleRule | undef
   return schedule.find((rule) => rule.days.includes(day));
 }
 
-/** Busca la proxima apertura a partir de manana (hasta 7 dias) para el mensaje "Abre ...". */
-function nextOpening(schedule: ScheduleRule[], fromDay: number): string {
+/** Busca la próxima apertura a partir de mañana (hasta 7 días). `offset` 1 es
+    mañana; si ese día no abre (ej. domingo), sigue buscando, así que un
+    sábado cerrado da directo "lunes" en vez de pasar por el domingo. */
+function nextOpening(schedule: ScheduleRule[], fromDay: number): { dayLabel: string; time: string } | null {
   for (let offset = 1; offset <= 7; offset++) {
     const day = (fromDay + offset) % 7;
     const rule = ruleForDay(schedule, day);
     if (rule) {
-      const label = offset === 1 ? "mañana" : DAY_LABELS[day].toLowerCase();
-      return `Abre ${label} ${rule.open}`;
+      const dayLabel = offset === 1 ? "mañana" : DAY_LABELS[day].toLowerCase();
+      return { dayLabel, time: rule.open };
     }
   }
-  return "";
+  return null;
 }
 
 export function getBranchStatus(branch: Branch, now: Date = new Date()): BranchStatus {
@@ -70,5 +72,36 @@ export function getBranchStatus(branch: Branch, now: Date = new Date()): BranchS
     }
   }
 
-  return { isOpen: false, label: "Cerrado", detail: nextOpening(branch.schedule, day) };
+  const next = nextOpening(branch.schedule, day);
+  return { isOpen: false, label: "Cerrado", detail: next ? `Abre ${next.dayLabel} ${next.time}` : "" };
+}
+
+export type PickupTiming = {
+  /** true sólo si se puede retirar hoy (local abierto o todavía por abrir hoy). */
+  sameDay: boolean;
+  label: string;
+};
+
+/**
+ * Mensaje de "Retiro ..." para la ficha de producto: en vez de asumir que
+ * siempre se puede retirar el mismo día, calcula contra el horario real de
+ * la sucursal. Si está cerrada, dice cuándo abre próximo (saltea domingos u
+ * otros días sin horario, ver nextOpening) en vez de mostrar "retiro el
+ * mismo día" con el local cerrado, que generaba gente yendo en vano.
+ */
+export function getPickupLabel(branch: Branch, now: Date = new Date()): PickupTiming {
+  const { day, minutes } = nowInArgentina(now);
+  const todayRule = ruleForDay(branch.schedule, day);
+
+  if (todayRule) {
+    const open = toMinutes(todayRule.open);
+    const close = toMinutes(todayRule.close);
+    if (minutes < open) return { sameDay: true, label: `Retiro hoy a partir de las ${todayRule.open}` };
+    if (minutes < close) return { sameDay: true, label: "Retiro el mismo día" };
+  }
+
+  const next = nextOpening(branch.schedule, day);
+  return next
+    ? { sameDay: false, label: `Retiro ${next.dayLabel} a partir de las ${next.time}` }
+    : { sameDay: false, label: "Consultá el horario de retiro" };
 }

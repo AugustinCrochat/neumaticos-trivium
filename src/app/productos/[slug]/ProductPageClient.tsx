@@ -8,6 +8,7 @@ import { SITE_URL } from "@/lib/config";
 import { isLowStock, stockLabel } from "@/lib/stock";
 import { BranchStatusBadge } from "@/app/sucursales/[id]/BranchStatusBadge";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
+import { getPickupLabel, type PickupTiming } from "@/lib/branch-status";
 
 // Diámetro en mm: rodado en pulgadas * 25.4 + 2 * (ancho * perfil / 100)
 function outerDiameterMm(size: { width: number; profile: number; rim: number }): number {
@@ -52,6 +53,16 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
       cancelado = true;
     };
   }, [product.id, selectedBranch.id]);
+
+  // Se calcula en el cliente (como BranchStatusBadge) para usar la hora real
+  // y evitar mismatch de hidratación entre servidor y navegador.
+  const [pickup, setPickup] = useState<PickupTiming | null>(null);
+  useEffect(() => {
+    const update = () => setPickup(getPickupLabel(selectedBranch));
+    update();
+    const timer = setInterval(update, 60_000);
+    return () => clearInterval(timer);
+  }, [selectedBranch]);
 
   const waText = encodeURIComponent(
     `Hola, quiero consultar por el neumático ${product.model}\n${SITE_URL}/productos/${product.slug}`
@@ -214,7 +225,13 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
           <div className="min-w-0 flex-1">
             <p className="font-bold text-navy-900 text-sm leading-snug">Colocación y válvulas en {selectedBranch.shortName} sin cargo</p>
             {enStock ? (
-              <p className="text-xs font-bold text-emerald-600 mt-0.5">Retiro el mismo día</p>
+              <p
+                className={`text-xs font-bold mt-0.5 ${
+                  pickup && !pickup.sameDay ? "text-amber-600" : "text-emerald-600"
+                }`}
+              >
+                {pickup?.label ?? "Retiro el mismo día"}
+              </p>
             ) : (
               <p className="text-xs font-bold text-red-600 mt-0.5">Sin stock para retiro</p>
             )}
