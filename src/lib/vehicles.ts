@@ -65,14 +65,53 @@ const ORDEN_POPULARIDAD = [
   "Volkswagen Gol",
   "Ford EcoSport",
   "Fiat Argo",
+
+  // Discontinuados pero con parque usado enorme en Argentina — estos autos ya
+  // no se venden 0km, pero siguen siendo comunísimos en la calle y en el
+  // local, así que van antes que una marca de nicho aunque hoy no vendan.
+  "Fiat Palio",
+  "Chevrolet Corsa",
+  "Ford Fiesta",
+  "Renault Clio",
+  "Peugeot 206",
+  "Fiat Uno",
+  "Chevrolet Celta",
+  "Ford Ka",
+  "Peugeot 207",
+  "Volkswagen Fox",
+  "Chevrolet Classic",
+  "Fiat Siena",
+  "Volkswagen Voyage",
+  "Renault Megane",
+  "Ford Focus",
+  "Chevrolet Prisma",
+  "Peugeot 307",
+  "Volkswagen Bora",
+  "Citroen Xsara",
+  "Fiat Palio Weekend",
+  "Chevrolet Vectra",
+  "Renault Symbol",
+  "Toyota Etios",
+  "Honda Civic",
+  "Honda Fit",
+  "Fiat Idea",
+  "Fiat Linea",
+  "Volkswagen Vento",
+  "Renault Fluence",
+  "Chevrolet Meriva",
+  "Chevrolet Spin",
+  "Volkswagen Suran",
+  "Fiat Duna",
+  "Renault Twingo",
 ];
 
 /** Reordena una lista de `VehicleUsingSize` poniendo primero los modelos de
     `ORDEN_POPULARIDAD`, en ese orden, y dejando el resto como venían (ver
-    `vehiclesUsingSize`, que ya los entrega alfabético). Pensada para
-    resúmenes truncados; el listado completo de una medida sigue alfabético
-    porque ahí lo que importa es que alguien encuentre su auto rápido, no que
-    los primeros sean los más comunes. */
+    `vehiclesUsingSize`, que ya los entrega alfabético) — así una marca de
+    nicho no le gana el primer lugar a un auto que la mitad de la gente tiene
+    en la cochera. La usan tanto el resumen truncado de la meta description
+    como el listado completo de "qué autos usan esta medida" en la página de
+    cada medida (SizeLanding). */
 export function sortVehiclesByPopularity<T extends { brand: string; model: string }>(
   vehiculos: T[]
 ): T[] {

@@ -18,6 +18,7 @@ import {
   sizesEqual,
   vehiclesUsingSize,
 } from "@/lib/tire-sizes";
+import { sortVehiclesByPopularity } from "@/lib/vehicles";
 
 function formatPrice(price: number) {
   return new Intl.NumberFormat("es-AR", {
@@ -116,7 +117,7 @@ export function SizeLanding({
     (a, b) => Number(b.enStock) - Number(a.enStock) || a.price - b.price
   );
   const desde = enStock.length ? Math.min(...enStock.map((p) => p.price)) : null;
-  const vehiculos = vehiclesUsingSize(size);
+  const vehiculos = sortVehiclesByPopularity(vehiclesUsingSize(size));
   const branch = BRANCHES[0];
 
   // Sólo se ofrecen como alternativa las equivalencias que además tienen stock:
