@@ -56,7 +56,9 @@ function getBranchLngLat(branch: Branch): [number, number] {
 
 // Marcador HTML con el logo de Trivium sobre una insignia navy (para que el
 // logo blanco se lea sobre el mapa claro) y una etiqueta con el nombre corto.
-function createBranchMarkerElement(shortName: string) {
+function createBranchMarkerElement(shortName: string, options?: { color?: string; dashed?: boolean; opacity?: number }) {
+  const color = options?.color ?? "#000000";
+  const border = options?.dashed ? `2px dashed ${color}` : `2px solid ${color}`;
   // anchor:"bottom" del Marker pinea el borde inferior de ESTE div al punto
   // geográfico exacto — tiene que ser la puntita del "pointer", no el fondo
   // del texto de abajo. Antes el label estaba en el flujo normal debajo del
@@ -73,64 +75,28 @@ function createBranchMarkerElement(shortName: string) {
   const badge = document.createElement("div");
   badge.dataset.role = "badge";
   badge.style.cssText =
-    "display:flex;align-items:center;justify-content:center;width:52px;height:52px;padding:8px;border-radius:15px;background:#ffffff;border:2px solid #000000;box-shadow:0 4px 12px rgba(10,26,48,0.35);transition:transform .15s ease,border-color .15s ease";
+    `display:flex;align-items:center;justify-content:center;width:52px;height:52px;padding:8px;border-radius:15px;background:#ffffff;border:${border};box-shadow:0 4px 12px rgba(10,26,48,0.35);transition:transform .15s ease,border-color .15s ease`;
 
   const img = document.createElement("img");
   img.src = "/pin-trivium.png";
   img.alt = "Neumáticos Trivium";
-  img.style.cssText = "width:100%;height:100%;object-fit:contain;display:block";
+  img.style.cssText = `width:100%;height:100%;object-fit:contain;display:block;opacity:${options?.opacity ?? 1}`;
   badge.appendChild(img);
 
   const pointer = document.createElement("div");
   pointer.dataset.role = "pointer";
   pointer.style.cssText =
-    "width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:8px solid #000000;margin-top:-1px";
+    `width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:8px solid ${color};margin-top:-1px`;
 
   const label = document.createElement("div");
   label.textContent = shortName;
   label.style.cssText =
-    "position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:3px;font-weight:800;font-size:12px;color:#000000;white-space:nowrap;text-shadow:0 0 2px #fff,0 0 2px #fff,0 0 2px #fff,0 0 2px #fff";
+    `position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:3px;font-weight:800;font-size:12px;color:${color};white-space:nowrap;text-shadow:0 0 2px #fff,0 0 2px #fff,0 0 2px #fff,0 0 2px #fff`;
 
   wrapper.appendChild(badge);
   wrapper.appendChild(pointer);
   wrapper.appendChild(label);
   return { wrapper, badge, pointer };
-}
-
-// Mismo logo que el pin de sucursal real, pero SIN la punta triangular ni
-// anchor:"bottom": ese pin ancla el borde inferior del elemento al punto
-// exacto, así que cualquier imprecisión de un par de píxeles en la altura
-// real de la punta (ej. el redondeo del navegador al renderizar un
-// triángulo hecho con bordes) se nota poco de cerca pero se magnifica un
-// montón en metros de distancia real al alejar el zoom. Acá se ancla por el
-// CENTRO del badge (anchor:"center" en el Marker), que no depende de medir
-// bien ninguna punta — el círculo se centra solo en el punto,
-// independientemente de cualquier diferencia de renderizado.
-function createComingSoonMarkerElement(name: string) {
-  const wrapper = document.createElement("div");
-  wrapper.style.cssText =
-    "position:relative;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none";
-
-  const badge = document.createElement("div");
-  badge.style.cssText =
-    "display:flex;align-items:center;justify-content:center;width:52px;height:52px;padding:8px;border-radius:50%;background:#ffffff;border:2px dashed #f97316;box-shadow:0 4px 12px rgba(249,115,22,0.35)";
-
-  const img = document.createElement("img");
-  img.src = "/pin-trivium.png";
-  img.alt = "Neumáticos Trivium";
-  img.width = 36;
-  img.height = 36;
-  img.style.cssText = "width:100%;height:100%;object-fit:contain;display:block;opacity:0.6";
-  badge.appendChild(img);
-
-  const label = document.createElement("div");
-  label.textContent = `Próximamente · ${name}`;
-  label.style.cssText =
-    "position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:5px;font-weight:800;font-size:11px;color:#c2410c;white-space:nowrap;text-shadow:0 0 2px #fff,0 0 2px #fff,0 0 2px #fff,0 0 2px #fff";
-
-  wrapper.appendChild(badge);
-  wrapper.appendChild(label);
-  return wrapper;
 }
 
 function createUserMarkerElement() {
@@ -314,12 +280,22 @@ export function BranchesMap({ branches, comingSoon = [] }: BranchesMapProps) {
       }
 
       for (const soon of comingSoon) {
-        const wrapper = createComingSoonMarkerElement(soon.name);
+        // Literalmente la misma función que arma el pin de sucursal real
+        // (mismo anchor:"bottom", mismo wrapper/badge/pointer/label) — sólo
+        // cambia el color y el nombre. Es la prueba de control: si esto
+        // también se corre al alejar el zoom, el problema no está en cómo
+        // arma el DOM este pin puntual, porque es un objeto idéntico al que
+        // sí queda fijo.
+        const { wrapper } = createBranchMarkerElement(`Próximamente · ${soon.name}`, {
+          color: "#f97316",
+          dashed: true,
+          opacity: 0.6,
+        });
         const popup = new maplibregl.Popup({ offset: 16, closeButton: true }).setHTML(
           `<strong>${soon.name} — próximamente</strong><br/>${soon.address}`
         );
         wrapper.addEventListener("click", () => popup.setLngLat([soon.coordinates.lng, soon.coordinates.lat]).addTo(map));
-        new maplibregl.Marker({ element: wrapper, anchor: "center" })
+        new maplibregl.Marker({ element: wrapper, anchor: "bottom" })
           .setLngLat([soon.coordinates.lng, soon.coordinates.lat])
           .addTo(map);
       }
