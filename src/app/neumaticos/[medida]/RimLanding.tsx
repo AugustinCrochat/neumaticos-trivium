@@ -80,36 +80,35 @@ export function RimLanding({ rim, productos }: { rim: number; productos: TirePro
         ]}
       />
 
-      <header className="mb-8">
-        <h1 className="text-3xl font-black leading-tight text-navy-900 md:text-5xl">
-          Neumáticos rodado {rim}
-        </h1>
-      </header>
-
-      {ordenados.length > 0 && (
-        <section className="mb-14">
-          <h2 className="mb-5 text-2xl font-black text-navy-900">
-            Cubiertas R{rim} disponibles
-          </h2>
+      <section className="mb-14">
+        <div className="mb-5 flex flex-wrap items-center gap-3">
+          <h1 className="text-2xl font-black text-navy-900">Cubiertas R{rim}</h1>
+          {medidasConStock > 0 && (
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-xs font-black text-emerald-700">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+              {medidasConStock} {medidasConStock === 1 ? "medida" : "medidas"} con stock hoy
+            </span>
+          )}
+        </div>
+        {ordenados.length > 0 ? (
           <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 md:gap-6">
             {ordenados.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
-        </section>
-      )}
+        ) : (
+          <p className="max-w-2xl leading-relaxed text-slate-600">
+            Ahora mismo no tenemos stock en rodado {rim}, pero recibimos mercadería todas las
+            semanas: consultanos por WhatsApp y te avisamos apenas ingrese.
+          </p>
+        )}
+      </section>
 
       {(enCatalogo.length > 0 || soloPrioritarias.length > 0) && (
         <section className="mb-14">
-          <div className="mb-5 flex flex-wrap items-center gap-3">
-            <h2 className="text-2xl font-black text-navy-900">Medidas rodado {rim}</h2>
-            {medidasConStock > 0 && (
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-xs font-black text-emerald-700">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                {medidasConStock} {medidasConStock === 1 ? "medida" : "medidas"} con stock hoy
-              </span>
-            )}
-          </div>
+          <h2 className="mb-5 text-3xl font-black leading-tight text-navy-900 md:text-5xl">
+            Neumáticos rodado {rim}
+          </h2>
           <p className="mb-5 max-w-3xl leading-relaxed text-slate-600">
             {desde && (
               <>
