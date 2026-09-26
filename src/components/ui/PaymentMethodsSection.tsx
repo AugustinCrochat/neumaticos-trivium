@@ -40,14 +40,18 @@ export function PaymentMethodsSection({ price }: { price: number }) {
         </div>
       )}
 
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         <div className="flex items-center gap-3 rounded-lg border border-slate-200 p-3">
-          <Image src="/images/payments/naranja-x.svg" alt="Tarjeta Naranja" width={40} height={26} className="h-7 w-auto shrink-0" />
+          <Image src="/images/payments/naranja-x.svg" alt="Tarjeta Naranja" width={48} height={32} className="h-8 w-auto shrink-0" />
           <p className="text-sm font-semibold text-slate-700">Plan Z con Tarjeta Naranja, sin recargo</p>
         </div>
         <div className="flex items-center gap-3 rounded-lg border border-slate-200 p-3">
-          <Image src="/images/payments/gocuotas.svg" alt="GOcuotas" width={40} height={26} className="h-7 w-auto shrink-0" />
+          <Image src="/images/payments/gocuotas.svg" alt="GOcuotas" width={48} height={32} className="h-8 w-auto shrink-0" />
           <p className="text-sm font-semibold text-slate-700">Cuotas con GOcuotas, sin recargo</p>
+        </div>
+        <div className="flex items-center gap-3 rounded-lg border border-slate-200 p-3">
+          <Image src="/images/payments/mercadopago.svg" alt="Mercado Pago" width={48} height={32} className="h-8 w-auto shrink-0" />
+          <p className="text-sm font-semibold text-slate-700">2 o 3 cuotas sin interés según el monto</p>
         </div>
       </div>
 

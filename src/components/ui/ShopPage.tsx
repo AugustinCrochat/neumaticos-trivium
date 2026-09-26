@@ -528,11 +528,22 @@ export function ShopPage({
                   </div>
                 )}
 
-                <div className="mb-4">
-                  <h1 className="text-3xl font-black text-navy-900 mb-1">Catálogo de Neumáticos</h1>
-                  <p className="text-slate-500">
-                    {allProducts.length} producto{allProducts.length !== 1 ? "s" : ""} encontrados
-                  </p>
+                <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
+                  <div>
+                    <h1 className="text-3xl font-black text-navy-900 mb-1">Catálogo de Neumáticos</h1>
+                    <p className="text-slate-500">
+                      {allProducts.length} producto{allProducts.length !== 1 ? "s" : ""} encontrados
+                    </p>
+                  </div>
+                  <Link
+                    href="/cotizador"
+                    className="inline-flex min-h-11 items-center gap-2 rounded-xl border-2 border-orange-500 bg-orange-50 px-4 text-sm font-black text-orange-700 transition-colors hover:bg-orange-100"
+                  >
+                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m-6 4h6m-6 4h4M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z" />
+                    </svg>
+                    Armar presupuesto para varios neumáticos
+                  </Link>
                 </div>
                 {allProducts.length === 0 ? (
                   <div className="flex flex-col items-center justify-center py-20 text-center">
