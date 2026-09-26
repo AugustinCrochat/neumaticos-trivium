@@ -8,6 +8,7 @@ import { SITE_URL } from "@/lib/config";
 import { isLowStock, stockLabel } from "@/lib/stock";
 import { BranchStatusBadge } from "@/app/sucursales/[id]/BranchStatusBadge";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
+import { PaymentMethodsSection } from "@/components/ui/PaymentMethodsSection";
 import { getPickupLabel, type PickupTiming } from "@/lib/branch-status";
 
 // Diámetro en mm: rodado en pulgadas * 25.4 + 2 * (ancho * perfil / 100)
@@ -250,6 +251,8 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
           </div>
         </div>
       </div>
+
+      <PaymentMethodsSection />
     </div>
   );
 }

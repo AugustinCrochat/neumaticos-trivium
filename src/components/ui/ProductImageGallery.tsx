@@ -1,11 +1,12 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import type { TireProduct } from "@/lib/types";
 import type { TireLabel } from "@/lib/tire-labels";
 import type { Utqg } from "@/lib/utqg";
 import { useBranch } from "@/contexts/branch-context";
+import { isVisaMasterPromoDay } from "@/lib/promo-day";
 import { ImageLightbox } from "./ImageLightbox";
 import { ZoomPanel } from "./ZoomPanel";
 
@@ -43,6 +44,14 @@ export function ProductImageGallery({
 }) {
   const hasImage = !!product.imageUrl && product.imageUrl !== "/images/tire-placeholder.webp";
   const { selectedBranch } = useBranch();
+
+  // Igual que PaymentMethodsSection: arranca en false y se corrige al montar
+  // para no depender del día en que se generó esta página estática.
+  const [isPromoDay, setIsPromoDay] = useState(false);
+  useEffect(() => {
+    const update = () => setIsPromoDay(isVisaMasterPromoDay());
+    update();
+  }, []);
 
   const slides: Slide[] = [
     ...(hasImage ? [{ kind: "foto" as const, src: product.imageUrl, alt: `${product.brand} ${product.model}` }] : []),
@@ -208,6 +217,22 @@ export function ProductImageGallery({
     </a>
   );
 
+  // Sólo miércoles y sábado (ver isVisaMasterPromoDay). Va abajo, la única
+  // esquina libre: arriba ya están los badges de OFF/Carga/A-T (izquierda) y
+  // garantía (derecha).
+  const promoBadge = isPromoDay && (
+    <a
+      href="#metodos-pago"
+      className="absolute bottom-4 left-4 z-10 flex items-center gap-2 rounded-lg bg-emerald-600 px-3 py-2 text-xs font-black text-white shadow-lg ring-2 ring-white/80 transition-colors hover:bg-emerald-700"
+    >
+      <span className="flex shrink-0 items-center gap-1 rounded bg-white/15 px-1.5 py-0.5">
+        <Image src="/images/payments/visa.svg" alt="" width={24} height={16} className="h-3.5 w-auto" />
+        <Image src="/images/payments/mastercard.svg" alt="" width={24} height={16} className="h-4 w-auto" />
+      </span>
+      Hoy 3 cuotas sin interés
+    </a>
+  );
+
   return (
     <div>
       <div className="bg-slate-50 rounded-2xl aspect-square flex items-center justify-center p-8 relative group overflow-hidden">
@@ -215,6 +240,7 @@ export function ProductImageGallery({
           <>
             {badges}
             {warrantyBadge}
+            {promoBadge}
           </>
         )}
         {current ? (
