@@ -48,8 +48,8 @@ export function ImageLightbox({
           <Image src={src} alt={alt} fill className="object-contain" sizes="100vw" />
         </div>
         {utqg && (
-          <p className="rounded-sm bg-white px-4 py-2 text-sm font-black tracking-wide text-slate-900">
-            UTQG {utqg.treadwear} · {utqg.traction} · {utqg.temperature}
+          <p className="w-full max-w-md rounded-sm border border-slate-200 bg-white px-4 py-2 text-center text-sm font-black tracking-wide text-navy-900">
+            UTQG {utqg.treadwear} {utqg.traction} {utqg.temperature}
           </p>
         )}
         {eprelUrl && (

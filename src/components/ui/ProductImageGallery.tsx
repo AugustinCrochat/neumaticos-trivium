@@ -268,8 +268,8 @@ export function ProductImageGallery({
               />
             </div>
             {labelUtqg && (
-              <span className="absolute inset-x-3 bottom-0 flex h-10 items-center justify-center rounded-sm bg-slate-900 px-2 text-center text-[10px] font-black tracking-wide text-white">
-                UTQG {labelUtqg.treadwear} · {labelUtqg.traction} · {labelUtqg.temperature}
+              <span className="absolute inset-x-0 bottom-0 flex h-10 items-center justify-center border-t border-slate-200 bg-white px-2 text-center text-xs font-black tracking-wide text-navy-900">
+                UTQG {labelUtqg.treadwear} {labelUtqg.traction} {labelUtqg.temperature}
               </span>
             )}
             {current.kind === "sucursal" && (

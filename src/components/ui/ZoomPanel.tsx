@@ -69,8 +69,8 @@ export function ZoomPanel({
       title={alt}
     >
       {utqg && (
-        <span className="absolute inset-x-3 bottom-3 flex h-9 items-center justify-center rounded-sm bg-slate-900 px-2 text-center text-[10px] font-black tracking-wide text-white">
-          UTQG {utqg.treadwear} · {utqg.traction} · {utqg.temperature}
+        <span className="absolute inset-x-0 bottom-0 flex h-9 items-center justify-center border-t border-slate-200 bg-white px-2 text-center text-xs font-black tracking-wide text-navy-900">
+          UTQG {utqg.treadwear} {utqg.traction} {utqg.temperature}
         </span>
       )}
     </div>,
