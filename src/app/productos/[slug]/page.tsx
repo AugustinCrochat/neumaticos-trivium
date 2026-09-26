@@ -326,11 +326,11 @@ export default async function ProductPage({ params }: Props) {
           {/* Price */}
           <div className="border-t border-slate-100 pt-4 mt-2">
             {product.priceOld && (
-              <div className="flex items-center gap-2 mb-1">
+              <div className="flex items-center gap-2.5 mb-1.5">
                 <span className="text-slate-400 line-through text-sm">
                   {formatPrice(product.priceOld)}
                 </span>
-                <span className="bg-orange-600 text-white text-[10px] font-black px-2 py-0.5 rounded-md uppercase tracking-tighter">
+                <span className="bg-red-600 text-white text-sm font-black px-3 py-1 rounded-full shadow-md shadow-red-600/30 uppercase tracking-tighter animate-pulse">
                   {discount(product.price, product.priceOld)}% OFF
                 </span>
               </div>

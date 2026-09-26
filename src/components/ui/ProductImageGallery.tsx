@@ -12,10 +12,6 @@ import { ZoomPanel } from "./ZoomPanel";
 
 const ZOOM_FACTOR = 2.5;
 
-function discount(price: number, priceOld: number) {
-  return Math.round(((priceOld - price) / priceOld) * 100);
-}
-
 const TIRE_SVG = (
   <svg className="w-full h-full text-slate-300" viewBox="0 0 100 100" fill="none">
     <circle cx="50" cy="50" r="45" stroke="currentColor" strokeWidth="8" />
@@ -174,11 +170,6 @@ export function ProductImageGallery({
 
   const badges = (
     <div className="absolute top-4 left-4 z-10 flex flex-col gap-2 items-start">
-      {product.priceOld && (
-        <span className="bg-red-600 text-white text-xs font-black px-3 py-1.5 rounded-md shadow-lg uppercase tracking-tighter">
-          {discount(product.price, product.priceOld)}% OFF
-        </span>
-      )}
       {product.isCarga && (
         <span className="bg-orange-600 text-white text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-md shadow-md">
           Carga

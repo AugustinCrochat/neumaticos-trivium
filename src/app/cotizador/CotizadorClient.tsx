@@ -48,7 +48,7 @@ export function CotizadorClient({ initialProduct, compact = false }: { initialPr
   const [isOpen, setIsOpen] = useState(false);
   const [results, setResults] = useState<QuoteProduct[]>([]);
   const [items, setItems] = useState<QuoteItem[]>(
-    initialProduct ? [{ product: initialProduct, quantity: 2 }] : []
+    initialProduct ? [{ product: initialProduct, quantity: 4 }] : []
   );
   const [includeCombo, setIncludeCombo] = useState(false);
 
@@ -78,7 +78,7 @@ export function CotizadorClient({ initialProduct, compact = false }: { initialPr
     };
   }, [query]);
 
-  function addProduct(product: QuoteProduct, quantity = 2) {
+  function addProduct(product: QuoteProduct, quantity = 4) {
     setItems((prev) => {
       if (prev.some((it) => it.product.id === product.id)) return prev;
       return [...prev, { product, quantity }];
@@ -237,24 +237,32 @@ export function CotizadorClient({ initialProduct, compact = false }: { initialPr
             {canAddCombo && !includeCombo && (
               <button
                 onClick={() => setIncludeCombo(true)}
-                className="flex w-full items-center gap-3 border-dashed p-4 text-left transition-colors hover:bg-orange-50"
+                className="flex w-full items-center gap-4 bg-gradient-to-r from-orange-50 to-amber-50 p-4 text-left transition-colors hover:from-orange-100 hover:to-amber-100"
               >
-                <AlineacionBalanceoIcon size={28} />
+                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-white shadow-md">
+                  <AlineacionBalanceoIcon size={32} />
+                </div>
                 <span className="flex-1 text-sm">
-                  <span className="block font-bold text-navy-900">¿Sumamos {combo!.nombre.toLowerCase()}?</span>
-                  <span className="text-slate-500">+{formatPrice(combo!.precio)}</span>
+                  <span className="block text-base font-black leading-snug text-navy-900">
+                    ¿Sumamos alineación + balanceo de las 4 ruedas?
+                  </span>
+                  <span className="font-black text-orange-700">+{formatPrice(combo!.precio)}</span>
                 </span>
-                <span className="shrink-0 text-xs font-black text-orange-600">Agregar</span>
+                <span className="shrink-0 rounded-full bg-orange-500 px-4 py-2 text-xs font-black text-white shadow-md shadow-orange-500/30">
+                  Agregar
+                </span>
               </button>
             )}
             {includeCombo && combo && (
-              <div className="flex items-center gap-3 p-4">
-                <AlineacionBalanceoIcon size={28} />
+              <div className="flex items-center gap-4 bg-emerald-50 p-4">
+                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-white shadow-sm">
+                  <AlineacionBalanceoIcon size={32} />
+                </div>
                 <span className="flex-1 text-sm">
-                  <span className="block font-bold text-navy-900">{combo.nombre}</span>
-                  <span className="text-slate-500">+{formatPrice(combo.precio)}</span>
+                  <span className="block text-base font-black text-navy-900">Alineación + balanceo de las 4 ruedas</span>
+                  <span className="font-black text-emerald-700">+{formatPrice(combo.precio)}</span>
                 </span>
-                <button onClick={() => setIncludeCombo(false)} className="text-xs font-bold text-slate-400 hover:text-red-600">
+                <button onClick={() => setIncludeCombo(false)} className="shrink-0 text-xs font-bold text-slate-400 hover:text-red-600">
                   Quitar
                 </button>
               </div>
