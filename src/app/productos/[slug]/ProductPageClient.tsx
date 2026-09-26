@@ -9,6 +9,7 @@ import { isLowStock, stockLabel } from "@/lib/stock";
 import { BranchStatusBadge } from "@/app/sucursales/[id]/BranchStatusBadge";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 import { PaymentMethodsSection } from "@/components/ui/PaymentMethodsSection";
+import { CotizadorClient } from "@/app/cotizador/CotizadorClient";
 import { getPickupLabel, type PickupTiming } from "@/lib/branch-status";
 
 // Diámetro en mm: rodado en pulgadas * 25.4 + 2 * (ancho * perfil / 100)
@@ -253,6 +254,13 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
       </div>
 
       <PaymentMethodsSection price={product.price} />
+
+      <div className="rounded-xl border border-slate-200 bg-white p-4">
+        <CotizadorClient
+          compact
+          initialProduct={{ id: product.id, label: `${product.brand} ${product.model}`, price: product.price, imageUrl: product.imageUrl }}
+        />
+      </div>
     </div>
   );
 }

@@ -10,13 +10,27 @@ export function searchCatalog(query: string, productos: TireProduct[], accesorio
   const scored: ScoredMatch[] = [];
 
   for (const p of productos) {
+    const { width, profile, rim } = p.size;
+    // Alguien que busca la medida completa a veces la escribe pegada y en
+    // cualquier orden ("1756514", "6514175" en vez de "175 65 14") — como la
+    // búsqueda pega por palabra completa, sin esto ese token no matcheaba
+    // con nada. Las 6 combinaciones cubren cualquier orden real de w/p/r.
+    const digitCombos = [
+      `${width}${profile}${rim}`,
+      `${width}${rim}${profile}`,
+      `${profile}${width}${rim}`,
+      `${profile}${rim}${width}`,
+      `${rim}${width}${profile}`,
+      `${rim}${profile}${width}`,
+    ];
     const searchable = [
       p.brand,
       p.model,
-      `${p.size.width}/${p.size.profile}`,
-      `${p.size.width} ${p.size.profile}`,
-      `r${p.size.rim}`,
-      String(p.size.rim),
+      `${width}/${profile}`,
+      `${width} ${profile}`,
+      `r${rim}`,
+      String(rim),
+      ...digitCombos,
       p.loadIndex,
       p.speedRating,
       p.isCarga ? "carga" : null,

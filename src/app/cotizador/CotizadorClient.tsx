@@ -1,8 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import type { TireProduct } from "@/lib/types";
 import { useBranch } from "@/contexts/branch-context";
 import { useUpsellCombo } from "@/hooks/use-upsell-combo";
 import { AlineacionBalanceoIcon } from "@/components/ui/AlineacionBalanceoIcon";
@@ -13,41 +12,72 @@ function formatPrice(price: number) {
   return new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 }).format(price);
 }
 
-function normalize(text: string): string {
-  return text
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "");
-}
+export type QuoteProduct = { id: string; label: string; price: number; imageUrl: string | null };
+type QuoteItem = { product: QuoteProduct; quantity: number };
 
-type QuoteItem = { product: TireProduct; quantity: number };
+type SearchApiResult = {
+  type: "tire" | "accessory";
+  id: string;
+  slug: string;
+  title: string;
+  subtitle: string;
+  price: number;
+  imageUrl: string | null;
+  enStock: boolean;
+};
 
-export function CotizadorClient({ productos }: { productos: TireProduct[] }) {
+/**
+ * Cotizador de neumáticos: buscador liviano (pega a /api/search, la misma
+ * búsqueda "inteligente" del resto del sitio — entiende medidas escritas
+ * pegadas y en cualquier orden, ver searchCatalog) en vez de recibir el
+ * catálogo entero como prop, que en la ficha de producto se repetiría en
+ * cada página.
+ *
+ * `initialProduct` precarga un ítem — se usa para embeber el cotizador en
+ * la ficha de producto con esa medida ya agregada.
+ */
+export function CotizadorClient({ initialProduct, compact = false }: { initialProduct?: QuoteProduct; compact?: boolean }) {
   const { selectedBranch } = useBranch();
   const combo = useUpsellCombo();
 
   const [query, setQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-  const [items, setItems] = useState<QuoteItem[]>([]);
+  const [results, setResults] = useState<QuoteProduct[]>([]);
+  const [items, setItems] = useState<QuoteItem[]>(
+    initialProduct ? [{ product: initialProduct, quantity: 2 }] : []
+  );
   const [includeCombo, setIncludeCombo] = useState(false);
 
-  const matches = useMemo(() => {
-    const q = normalize(query.trim());
-    if (!q) return [];
-    const starts: TireProduct[] = [];
-    const includes: TireProduct[] = [];
-    for (const p of productos) {
-      const haystack = normalize(`${p.brand} ${p.model}`);
-      if (haystack.startsWith(q) || normalize(p.brand).startsWith(q)) starts.push(p);
-      else if (haystack.includes(q)) includes.push(p);
+  useEffect(() => {
+    const q = query.trim();
+    if (!q) {
+      const clear = () => setResults([]);
+      clear();
+      return;
     }
-    return [...starts, ...includes].slice(0, 8);
-  }, [productos, query]);
+    let cancelado = false;
+    const timer = setTimeout(() => {
+      fetch(`/api/search?q=${encodeURIComponent(q)}`)
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data: { results?: SearchApiResult[] } | null) => {
+          if (cancelado || !data?.results) return;
+          const productos: QuoteProduct[] = data.results
+            .filter((r) => r.type === "tire" && r.enStock)
+            .map((r) => ({ id: r.id, label: `${r.subtitle} ${r.title}`, price: r.price, imageUrl: r.imageUrl }));
+          setResults(productos);
+        })
+        .catch(() => {});
+    }, 250);
+    return () => {
+      cancelado = true;
+      clearTimeout(timer);
+    };
+  }, [query]);
 
-  function addProduct(product: TireProduct) {
+  function addProduct(product: QuoteProduct, quantity = 2) {
     setItems((prev) => {
       if (prev.some((it) => it.product.id === product.id)) return prev;
-      return [...prev, { product, quantity: 2 }];
+      return [...prev, { product, quantity }];
     });
     setQuery("");
     setIsOpen(false);
@@ -73,7 +103,7 @@ export function CotizadorClient({ productos }: { productos: TireProduct[] }) {
 
   function shareByWhatsApp() {
     const lineas = items.map(
-      (it) => `• ${it.quantity} x ${it.product.brand} ${it.product.model} — ${formatPrice(it.product.price * it.quantity)}`
+      (it) => `• ${it.quantity} x ${it.product.label} — ${formatPrice(it.product.price * it.quantity)}`
     );
     if (includeCombo && combo) {
       lineas.push(`• ${combo.nombre} — ${formatPrice(combo.precio)}`);
@@ -90,7 +120,11 @@ export function CotizadorClient({ productos }: { productos: TireProduct[] }) {
   }
 
   return (
-    <div className="space-y-6">
+    <div className={compact ? "space-y-4" : "space-y-6"}>
+      {compact && (
+        <h2 className="text-xs font-black uppercase tracking-wide text-navy-900">Armá tu presupuesto</h2>
+      )}
+
       {/* Buscador */}
       <div className="relative">
         <input
@@ -102,14 +136,14 @@ export function CotizadorClient({ productos }: { productos: TireProduct[] }) {
           }}
           onFocus={() => setIsOpen(true)}
           onBlur={() => setTimeout(() => setIsOpen(false), 150)}
-          placeholder="Buscá por marca o modelo, ej: Grenlander, Colo H02..."
+          placeholder="Buscá por marca, modelo o medida, ej: Grenlander, 205 55 16..."
           className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3.5 text-sm font-medium text-slate-700 outline-none focus:ring-2 focus:ring-navy-500/10"
         />
 
         {isOpen && query.trim().length > 0 && (
           <div className="absolute top-full left-0 right-0 z-20 mt-2 max-h-80 overflow-y-auto rounded-xl border border-slate-100 bg-white py-1 shadow-2xl">
-            {matches.length > 0 ? (
-              matches.map((p) => (
+            {results.length > 0 ? (
+              results.map((p) => (
                 <button
                   key={p.id}
                   type="button"
@@ -123,7 +157,7 @@ export function CotizadorClient({ productos }: { productos: TireProduct[] }) {
                     {p.imageUrl && <Image src={p.imageUrl} alt="" fill sizes="40px" className="object-contain p-1" />}
                   </div>
                   <span className="min-w-0 flex-1">
-                    <span className="block truncate font-bold text-navy-900">{p.brand} {p.model}</span>
+                    <span className="block truncate font-bold text-navy-900">{p.label}</span>
                     <span className="text-xs font-black text-red-600">{formatPrice(p.price)}</span>
                   </span>
                 </button>
@@ -149,13 +183,27 @@ export function CotizadorClient({ productos }: { productos: TireProduct[] }) {
                   {product.imageUrl && <Image src={product.imageUrl} alt="" fill sizes="64px" className="object-contain p-1" />}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="line-clamp-2 text-sm font-bold leading-snug text-navy-900">{product.brand} {product.model}</p>
+                  <p className="line-clamp-2 text-sm font-bold leading-snug text-navy-900">{product.label}</p>
                   <p className="mt-1 text-sm font-black text-red-600">{formatPrice(product.price)}</p>
-                  <div className="mt-2 flex items-center justify-between">
-                    <div className="inline-flex items-center rounded-lg border border-slate-200">
-                      <button onClick={() => updateQuantity(product.id, quantity - 1)} className="px-2.5 py-1.5 text-slate-600 hover:bg-slate-50" aria-label="Reducir cantidad">−</button>
-                      <span className="w-7 text-center text-sm font-bold">{quantity}</span>
-                      <button onClick={() => updateQuantity(product.id, quantity + 1)} className="px-2.5 py-1.5 text-slate-600 hover:bg-slate-50" aria-label="Aumentar cantidad">+</button>
+                  <div className="mt-2 flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => updateQuantity(product.id, 2)}
+                        className={`rounded-lg border-2 px-2.5 py-1 text-xs font-black transition-colors ${quantity === 2 ? "border-orange-500 bg-orange-50 text-orange-600" : "border-slate-200 text-slate-500 hover:border-slate-300"}`}
+                      >
+                        2
+                      </button>
+                      <button
+                        onClick={() => updateQuantity(product.id, 4)}
+                        className={`rounded-lg border-2 px-2.5 py-1 text-xs font-black transition-colors ${quantity === 4 ? "border-orange-500 bg-orange-50 text-orange-600" : "border-slate-200 text-slate-500 hover:border-slate-300"}`}
+                      >
+                        4
+                      </button>
+                      <div className="inline-flex items-center rounded-lg border border-slate-200">
+                        <button onClick={() => updateQuantity(product.id, quantity - 1)} className="px-2 py-1 text-slate-600 hover:bg-slate-50" aria-label="Reducir cantidad">−</button>
+                        <span className="w-6 text-center text-sm font-bold">{quantity}</span>
+                        <button onClick={() => updateQuantity(product.id, quantity + 1)} className="px-2 py-1 text-slate-600 hover:bg-slate-50" aria-label="Aumentar cantidad">+</button>
+                      </div>
                     </div>
                     <button onClick={() => removeItem(product.id)} className="text-xs font-bold text-slate-400 hover:text-red-600">
                       Quitar

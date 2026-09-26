@@ -1,6 +1,4 @@
 import type { Metadata } from "next";
-import { getProductosDesdePOS } from "@/lib/pos-api";
-import { getSelectedBranchSlug } from "@/lib/branch-server";
 import { canonical } from "@/lib/seo";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { CotizadorClient } from "./CotizadorClient";
@@ -12,11 +10,7 @@ export const metadata: Metadata = {
   alternates: canonical("/cotizador"),
 };
 
-export default async function CotizadorPage() {
-  const sucursal = await getSelectedBranchSlug();
-  const productos = await getProductosDesdePOS(sucursal);
-  const disponibles = productos.filter((p) => p.enStock);
-
+export default function CotizadorPage() {
   return (
     <div className="mx-auto max-w-4xl px-4 py-8">
       <Breadcrumbs
@@ -37,7 +31,7 @@ export default async function CotizadorPage() {
         </p>
       </header>
 
-      <CotizadorClient productos={disponibles} />
+      <CotizadorClient />
     </div>
   );
 }
