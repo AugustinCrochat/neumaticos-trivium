@@ -133,18 +133,6 @@ export default function PrecioCalidadNeumaticosPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-100">
-                <tr>
-                  <td className="px-4 py-3 font-bold text-zinc-900">Sin trazabilidad / franja de entrada</td>
-                  <td className="px-4 py-3 text-center">💲</td>
-                  <td className="px-4 py-3 text-center text-zinc-600">20.000–30.000 km</td>
-                  <td className="px-4 py-3 text-center font-black text-red-600">Alto</td>
-                </tr>
-                <tr className="bg-zinc-50">
-                  <td className="px-4 py-3 font-bold text-zinc-900">Marcas intermedias (Doubleking, Firemax)</td>
-                  <td className="px-4 py-3 text-center">💲💲</td>
-                  <td className="px-4 py-3 text-center text-zinc-600">35.000–45.000 km</td>
-                  <td className="px-4 py-3 text-center font-bold text-amber-600">Medio</td>
-                </tr>
                 <tr className="bg-red-50">
                   <td className="px-4 py-3 font-bold text-zinc-900">Grenlander</td>
                   <td className="px-4 py-3 text-center">💲💲</td>
@@ -158,10 +146,34 @@ export default function PrecioCalidadNeumaticosPage() {
                   <td className="px-4 py-3 text-center font-bold text-emerald-600">Bajo</td>
                 </tr>
                 <tr className="bg-zinc-50">
+                  <td className="px-4 py-3 font-bold text-zinc-900">Fate</td>
+                  <td className="px-4 py-3 text-center">💲💲</td>
+                  <td className="px-4 py-3 text-center text-zinc-600">45.000–55.000 km</td>
+                  <td className="px-4 py-3 text-center font-bold text-amber-600">Medio</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-3 font-bold text-zinc-900">Dunlop</td>
+                  <td className="px-4 py-3 text-center">💲💲💲</td>
+                  <td className="px-4 py-3 text-center text-zinc-600">50.000–65.000 km</td>
+                  <td className="px-4 py-3 text-center font-bold text-amber-600">Medio</td>
+                </tr>
+                <tr className="bg-zinc-50">
+                  <td className="px-4 py-3 font-bold text-zinc-900">Firestone</td>
+                  <td className="px-4 py-3 text-center">💲💲💲</td>
+                  <td className="px-4 py-3 text-center text-zinc-600">50.000–65.000 km</td>
+                  <td className="px-4 py-3 text-center font-bold text-amber-600">Medio</td>
+                </tr>
+                <tr>
                   <td className="px-4 py-3 font-bold text-zinc-900">BFGoodrich</td>
                   <td className="px-4 py-3 text-center">💲💲💲</td>
                   <td className="px-4 py-3 text-center text-zinc-600">50.000–70.000 km</td>
                   <td className="px-4 py-3 text-center font-bold text-amber-600">Medio</td>
+                </tr>
+                <tr className="bg-zinc-50">
+                  <td className="px-4 py-3 font-bold text-zinc-900">Goodyear</td>
+                  <td className="px-4 py-3 text-center">💲💲💲💲</td>
+                  <td className="px-4 py-3 text-center text-zinc-600">55.000–70.000 km</td>
+                  <td className="px-4 py-3 text-center font-bold text-amber-600">Medio-alto</td>
                 </tr>
                 <tr>
                   <td className="px-4 py-3 font-bold text-zinc-900">Pirelli / Michelin</td>
@@ -178,13 +190,15 @@ export default function PrecioCalidadNeumaticosPage() {
           </p>
 
           <p>
-            La lectura de la tabla es clara: contra la franja de entrada, la diferencia es enorme
-            y ni siquiera hace falta la cuenta fina. Contra las marcas premium, la historia es
-            distinta —Pirelli y Michelin duran más y frenan mejor en mojado— pero cuestan entre 2
-            y 3 veces más, así que el costo por kilómetro termina parecido o peor que el de
-            Grenlander. Es en ese punto medio, ni lo más barato ni lo más caro, donde Grenlander
-            rinde mejor la cuenta: durabilidad cercana a marcas que cuestan bastante más, a un
-            precio bastante más cercano a las marcas económicas.
+            La lectura de la tabla es clara contra el grupo de marcas de fábrica reconocida y
+            trayectoria real —que es la comparación que importa, no contra una franja de entrada
+            sin trazabilidad que ya de por sí pierde por goleada—. Fate, Dunlop, Firestone y
+            BFGoodrich rinden una durabilidad pareja o apenas mayor a la de Grenlander, pero
+            cuestan entre 50% y el doble más. Goodyear, Pirelli y Michelin duran algo más y frenan
+            mejor en mojado, pero cuestan entre el doble y 3 veces más. En todos los casos el costo
+            por kilómetro de Grenlander queda igual o por debajo, que es justamente el punto: no
+            hace falta pagar la marca más cara para tener un costo por kilómetro competitivo, si el
+            fabricante detrás cumple con estándares y homologación reales.
           </p>
 
           {/* Section 3: estándares de fabricación */}
