@@ -26,15 +26,15 @@ export function Header() {
           a comprar en otro lado sin taller propio. */}
       <Link
         href="/servicios"
-        className="block bg-orange-500 px-4 py-1.5 text-center text-xs font-bold text-white transition-colors hover:bg-orange-600 md:text-sm"
+        className="block bg-orange-500 px-4 py-1 text-center text-[11px] font-bold text-white transition-colors hover:bg-orange-600 md:text-xs"
       >
-        Colocación y cambio de válvulas sin cargo comprando en el local
+        Colocación y válvulas sin cargo en nuestros locales
       </Link>
 
       {/* Main nav */}
       <nav className="bg-black shadow-lg">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center h-16 gap-6">
+          <div className="flex items-center h-12 gap-6 md:h-14">
             {/* Logo */}
             <Link href="/" className="flex-shrink-0">
               <Image
@@ -42,7 +42,7 @@ export function Header() {
                 alt="Neumáticos Trivium"
                 width={240}
                 height={60}
-                className="h-9 md:h-14 w-auto"
+                className="h-7 md:h-10 w-auto"
                 priority
               />
             </Link>
@@ -67,7 +67,7 @@ export function Header() {
             <div className="flex items-center gap-3 ml-auto md:ml-0">
               <button
                 onClick={openModal}
-                className="flex items-center gap-1.5 bg-white hover:bg-slate-100 text-navy-900 pl-2.5 pr-2 py-1.5 rounded-full text-xs font-bold transition-colors group shadow-sm"
+                className="flex items-center gap-1.5 bg-white hover:bg-slate-100 text-navy-900 pl-2.5 pr-2 py-1 rounded-full text-xs font-bold transition-colors group shadow-sm"
                 title="Cambiar sucursal"
               >
                 <svg className="w-3.5 h-3.5 text-[#e30613] flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -83,7 +83,7 @@ export function Header() {
 
               <button
                 onClick={() => setSearchOpen(true)}
-                className="text-zinc-200 hover:text-white p-2"
+                className="text-zinc-200 hover:text-white p-1.5"
                 aria-label="Buscar productos"
               >
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
