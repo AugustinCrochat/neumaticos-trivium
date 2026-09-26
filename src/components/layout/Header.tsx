@@ -42,7 +42,7 @@ export function Header() {
                 alt="Neumáticos Trivium"
                 width={240}
                 height={60}
-                className="h-7 md:h-10 w-auto"
+                className="h-8 md:h-12 w-auto"
                 priority
               />
             </Link>
