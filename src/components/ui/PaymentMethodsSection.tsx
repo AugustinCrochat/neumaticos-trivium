@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { isVisaMasterPromoDay } from "@/lib/promo-day";
 import { useRecargosTarjeta } from "@/hooks/use-recargos-tarjeta";
-import { InstallmentCalculator } from "./InstallmentCalculator";
 
 function recargoPct(coeficiente: number | null): string | null {
   if (coeficiente == null) return null;
@@ -20,20 +19,22 @@ type Metodo = {
 };
 
 const METODOS: Metodo[] = [
-  { id: "visa", logo: "/images/payments/visa.svg", alt: "Visa", logoClassName: "h-6 w-auto" },
-  { id: "mastercard", logo: "/images/payments/mastercard.svg", alt: "Mastercard", logoClassName: "h-8 w-auto" },
-  { id: "mercadopago", logo: "/images/payments/mercadopago.svg", alt: "Mercado Pago", logoClassName: "h-8 w-auto" },
-  { id: "naranja", logo: "/images/payments/naranja-x.svg", alt: "Tarjeta Naranja", logoClassName: "h-8 w-auto" },
+  { id: "visa", logo: "/images/payments/visa.svg", alt: "Visa", logoClassName: "h-5 w-auto" },
+  { id: "mastercard", logo: "/images/payments/mastercard.svg", alt: "Mastercard", logoClassName: "h-7 w-auto" },
+  { id: "mercadopago", logo: "/images/payments/mercadopago.svg", alt: "Mercado Pago", logoClassName: "h-10 w-auto" },
+  { id: "naranja", logo: "/images/payments/naranja-x.svg", alt: "Tarjeta Naranja", logoClassName: "h-6 w-auto" },
   { id: "gocuotas", logo: "/images/payments/gocuotas.svg", alt: "GOcuotas", logoClassName: "h-7 w-auto" },
 ];
 
 /**
- * Medios de pago con recargo/beneficio, para la ficha de producto.
+ * Medios de pago con recargo/beneficio, para la ficha de producto. El
+ * cálculo de cuotas en sí (con coeficiente real) vive únicamente en el
+ * cotizador de más abajo — acá solo se muestra qué hay disponible.
  *
- * Los 5 logos van en una sola franja: al pasar el mouse (o tocar, en touch)
- * cada uno muestra su propio detalle abajo, en vez de una grilla de cajas
- * fijas — así entran todos parejos sin que Naranja/GOcuotas queden
- * apretados contra Visa/Master/Mercado Pago.
+ * Los 5 logos van en una sola franja: al pasar el mouse (o enfocar con
+ * teclado) cada uno muestra su detalle abajo, y se oculta apenas el mouse
+ * sale — no queda "pegado" el último que se tocó. En touch, el tap alterna
+ * mostrar/ocultar, porque ahí no existe el hover.
  *
  * El bloque de "hoy 3 cuotas" sólo se calcula en el cliente (ver
  * isVisaMasterPromoDay) para no quedar congelado con el día del último
@@ -41,7 +42,7 @@ const METODOS: Metodo[] = [
  * pintura (server y cliente) coincide siempre — sin eso, un miércoles
  * generaría un mismatch de hidratación.
  */
-export function PaymentMethodsSection({ price }: { price: number }) {
+export function PaymentMethodsSection() {
   const [isPromoDay, setIsPromoDay] = useState(false);
   useEffect(() => {
     const update = () => setIsPromoDay(isVisaMasterPromoDay());
@@ -68,11 +69,18 @@ export function PaymentMethodsSection({ price }: { price: number }) {
     visa: detalleVisaMaster,
     mastercard: detalleVisaMaster,
     mercadopago: "2 cuotas sin interés desde $50.000 · 3 cuotas sin interés desde $150.000.",
-    naranja: "Plan Z con Tarjeta Naranja, sin recargo.",
-    gocuotas: "Cuotas con GOcuotas, sin recargo.",
+    naranja: "Plan Z con Tarjeta Naranja: 3 cuotas sin interés.",
+    gocuotas: "Cuotas con GOcuotas: 3 cuotas sin interés.",
   };
 
   const [activo, setActivo] = useState<string | null>(null);
+
+  function mostrar(id: string) {
+    setActivo(id);
+  }
+  function ocultar(id: string) {
+    setActivo((prev) => (prev === id ? null : prev));
+  }
 
   return (
     <section id="metodos-pago" className="scroll-mt-24 rounded-xl border border-slate-200 bg-white p-4">
@@ -84,10 +92,12 @@ export function PaymentMethodsSection({ price }: { price: number }) {
             <button
               key={m.id}
               type="button"
-              onMouseEnter={() => setActivo(m.id)}
-              onFocus={() => setActivo(m.id)}
+              onMouseEnter={() => mostrar(m.id)}
+              onMouseLeave={() => ocultar(m.id)}
+              onFocus={() => mostrar(m.id)}
+              onBlur={() => ocultar(m.id)}
               onClick={() => setActivo((prev) => (prev === m.id ? null : m.id))}
-              className={`shrink-0 rounded-md p-1 transition-colors ${activo === m.id ? "bg-slate-100" : "hover:bg-slate-50"}`}
+              className={`shrink-0 rounded-md p-1.5 transition-colors ${activo === m.id ? "bg-slate-100" : "hover:bg-slate-50"}`}
               aria-expanded={activo === m.id}
             >
               <Image src={m.logo} alt={m.alt} width={80} height={40} className={m.logoClassName} />
@@ -95,14 +105,13 @@ export function PaymentMethodsSection({ price }: { price: number }) {
           ))}
         </div>
         {activo && (
-          <p className="mt-2.5 border-t border-slate-100 pt-2.5 text-xs font-semibold text-slate-600">
-            {detalles[activo]}
-          </p>
+          <div className="mt-3 flex items-start gap-2 rounded-lg border border-orange-200 bg-orange-50 p-3">
+            <svg className="mt-0.5 h-4 w-4 shrink-0 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <p className="text-sm font-bold text-orange-900">{detalles[activo]}</p>
+          </div>
         )}
-      </div>
-
-      <div className="mt-3">
-        <InstallmentCalculator basePrice={price} />
       </div>
     </section>
   );

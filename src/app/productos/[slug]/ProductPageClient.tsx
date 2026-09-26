@@ -253,7 +253,7 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
         </div>
       </div>
 
-      <PaymentMethodsSection price={product.price} />
+      <PaymentMethodsSection />
 
       <div className="rounded-xl border border-slate-200 bg-white p-4">
         <CotizadorClient

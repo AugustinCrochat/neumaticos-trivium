@@ -1,8 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { useRecargosTarjeta } from "@/hooks/use-recargos-tarjeta";
+import { isVisaMasterPromoDay } from "@/lib/promo-day";
 
 function formatPrice(price: number) {
   return new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 }).format(price);
@@ -57,6 +58,32 @@ function logosDelGrupo(grupo: string): string[] {
   return [];
 }
 
+type Plan = { id: string; cuotas: string; coeficiente: number | null };
+
+/**
+ * "3 cuotas sin interés" sólo existe como tal en dos casos puntuales, así
+ * que se fuerza acá en vez de depender de cómo esté cargado el coeficiente
+ * en el POS:
+ * - Visa/Master de banco ("mipyme"): únicamente los miércoles y sábados.
+ * - Plan Z de Naranja: siempre, es la definición del plan.
+ * Cualquier otro día, el plan de 3 cuotas de banco se muestra tal cual está
+ * cargado (con su recargo real).
+ */
+function aplicarOverrides(grupo: string, planes: Plan[], esDiaPromo: boolean): Plan[] {
+  const esBanco = /mipyme/i.test(grupo);
+  const esNaranja = /naranja/i.test(grupo);
+  if (!esBanco && !esNaranja) return planes;
+  return planes.map((p) => {
+    if (esBanco && esDiaPromo && parseInt(p.cuotas, 10) === 3) {
+      return { ...p, cuotas: "3 cuotas sin interés", coeficiente: 1 };
+    }
+    if (esNaranja && /plan\s*z/i.test(p.cuotas)) {
+      return { ...p, cuotas: "3 cuotas sin interés", coeficiente: 1 };
+    }
+    return p;
+  });
+}
+
 /**
  * Calculadora de cuotas. Mercado Pago siempre está disponible (reglas fijas,
  * ver mercadoPagoPlanes); los planes de tarjeta cobrada en el local vienen
@@ -67,6 +94,15 @@ export function InstallmentCalculator({ basePrice }: { basePrice: number }) {
   const recargos = useRecargosTarjeta();
   const [grupoSel, setGrupoSel] = useState<string | null>(null);
   const [cuotaId, setCuotaId] = useState<string | null>(null);
+
+  // Igual que en PaymentMethodsSection: se calcula en el cliente, no en el
+  // build (página estática), así que arranca en false y se corrige al
+  // montar para no quedar congelado con el día del último deploy.
+  const [esDiaPromo, setEsDiaPromo] = useState(false);
+  useEffect(() => {
+    const update = () => setEsDiaPromo(isVisaMasterPromoDay());
+    update();
+  }, []);
 
   const gruposPOS = useMemo(() => {
     if (!recargos) return [];
@@ -80,10 +116,14 @@ export function InstallmentCalculator({ basePrice }: { basePrice: number }) {
       ? mercadoPagoPlanes(basePrice)
       : grupoActual === GOCUOTAS_GRUPO
         ? [{ id: "goc-3", cuotas: "3 cuotas sin interés", coeficiente: 1 }]
-        : [
-            { id: CONTADO_ID, cuotas: "1 pago", coeficiente: 1 },
-            ...(recargos ?? []).filter((r) => r.grupo === grupoActual),
-          ];
+        : aplicarOverrides(
+            grupoActual,
+            [
+              { id: CONTADO_ID, cuotas: "1 pago", coeficiente: 1 },
+              ...(recargos ?? []).filter((r) => r.grupo === grupoActual),
+            ],
+            esDiaPromo
+          );
   const planActual = planesDelGrupo.find((p) => p.id === cuotaId) ?? planesDelGrupo[0];
   const coeficiente = planActual.coeficiente ?? 1;
   const total = Math.round(basePrice * coeficiente);
