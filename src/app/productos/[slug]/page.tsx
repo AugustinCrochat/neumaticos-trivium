@@ -13,10 +13,13 @@ import {
   formatSize,
   LOAD_INDEX_KG,
   rimSlug,
+  sizesEqual,
   SPEED_RATING_KMH,
   sizeSlug,
   vehiclesUsingSize,
 } from "@/lib/tire-sizes";
+import { ProductCard } from "@/components/ui/ProductCard";
+import { CompatibleAccessorySection } from "@/components/ui/CompatibleAccessorySection";
 import { getTireLabel } from "@/lib/tire-labels";
 import { getUtqg } from "@/lib/utqg";
 import { getExtraPhotos } from "@/lib/product-extra-photos";
@@ -209,6 +212,20 @@ export default async function ProductPage({ params }: Props) {
   const loadKg = product.loadIndex ? LOAD_INDEX_KG[product.loadIndex] : undefined;
   const loadDualKg = product.loadIndexDual ? LOAD_INDEX_KG[product.loadIndexDual] : undefined;
   const vehiculos = vehiclesUsingSize(product.size);
+
+  // Una tarjeta por marca (la más barata en stock), no cada SKU — mostrar
+  // 3 modelos de la misma marca en distinto precio es ruido, lo que importa
+  // acá es "esta medida también la tenés en otra marca".
+  const otrasMarcasMismaMedida = (() => {
+    const porMarca = new Map<string, typeof product>();
+    for (const p of productos) {
+      if (p.id === product.id || p.brand === product.brand || !p.enStock) continue;
+      if (!sizesEqual(p.size, product.size)) continue;
+      const actual = porMarca.get(p.brand);
+      if (!actual || p.price < actual.price) porMarca.set(p.brand, p);
+    }
+    return Array.from(porMarca.values()).sort((a, b) => a.price - b.price).slice(0, 6);
+  })();
 
   const characteristics = [
     { label: "Ancho", value: `${product.size.width} mm` },
@@ -459,6 +476,29 @@ export default async function ProductPage({ params }: Props) {
           </p>
         </div>
       )}
+
+      {/* Misma medida en otras marcas */}
+      {otrasMarcasMismaMedida.length > 0 && (
+        <div className="mt-14 pt-10 border-t border-slate-100">
+          <h2 className="text-lg font-black text-navy-900 uppercase tracking-wide flex items-center gap-2 mb-1">
+            <svg className="w-5 h-5 text-navy-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3" />
+            </svg>
+            {formatSize(product.size)} en otras marcas
+          </h2>
+          <p className="text-sm text-slate-600 mb-6">
+            Misma medida, con stock disponible ahora en otras marcas:
+          </p>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {otrasMarcasMismaMedida.map((p) => (
+              <ProductCard key={p.id} product={p} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      <CompatibleAccessorySection />
     </div>
   );
 }

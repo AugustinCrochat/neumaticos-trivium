@@ -109,10 +109,13 @@ function createComingSoonMarkerElement(name: string) {
   badge.style.cssText =
     "display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:13px;background:#fff7ed;border:2px dashed #f97316;box-shadow:0 4px 12px rgba(249,115,22,0.35)";
 
-  const icon = document.createElement("div");
-  icon.textContent = "🔜";
-  icon.style.cssText = "font-size:18px;line-height:1";
-  badge.appendChild(icon);
+  // SVG en vez de un emoji: un glifo de emoji puede tardar en cargar su
+  // fuente y cambiar de tamaño después de que el marker ya se posicionó —
+  // maplibre re-mide el elemento con ResizeObserver y lo corrige, lo que se
+  // ve como que el pin "salta" de lugar al hacer zoom. El SVG tiene tamaño
+  // fijo desde el primer frame.
+  badge.innerHTML =
+    '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>';
 
   const pointer = document.createElement("div");
   pointer.style.cssText =

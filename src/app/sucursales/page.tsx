@@ -58,10 +58,8 @@ export default function SucursalesPage() {
             id: "san-justo",
             name: "San Justo",
             address: "Pres. Juan Domingo Perón 2847, San Justo, La Matanza, Buenos Aires",
-            // Coordenadas aproximadas del centro de San Justo (todavía no
-            // geocodificamos la dirección exacta) — alcanza para un pin de
-            // "acá vamos a estar", se ajusta cuando abra la sucursal.
-            coordinates: { lat: -34.6853, lng: -58.5636 },
+            // Coordenadas exactas (de Google Maps, ubicación real del local).
+            coordinates: { lat: -34.6736285, lng: -58.5606326 },
           },
         ]}
       />
