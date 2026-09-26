@@ -12,6 +12,7 @@ const memoryCache = {
   accesorios: new Map<string, { data: Accessory[]; expires: number }>(),
   vehiculos: new Map<string, { data: VehiculoOption[]; expires: number }>(),
   servicios: new Map<string, { data: ServicioPrecio[]; expires: number }>(),
+  recargos: new Map<string, { data: RecargoTarjeta[]; expires: number }>(),
 };
 
 const CACHE_TTLS = {
@@ -19,6 +20,7 @@ const CACHE_TTLS = {
   accesorios: 300 * 1000,  // 5 minutos
   vehiculos: 1800 * 1000,  // 30 minutos
   servicios: 300 * 1000,   // 5 minutos
+  recargos: 1800 * 1000,   // 30 minutos — cambian poco, no hace falta pegarle tan seguido
 };
 
 // .trim() por si la variable de entorno se pegó con un espacio o salto de
@@ -57,6 +59,18 @@ export type ServicioPrecio = {
   precio: number;
   grupo: string;
   codigoTango: string | null;
+};
+
+export type RecargoTarjeta = {
+  id: string;
+  /** Agrupa las cuotas de un mismo medio, ej. "Tarjeta de crédito bancarizada". */
+  grupo: string;
+  /** Ej. "Visa/Mastercard". */
+  tarjetas: string;
+  /** Ej. "3 cuotas". Texto libre, no siempre un número (ver planes tipo "Plan Z"). */
+  cuotas: string;
+  /** Multiplicador sobre el precio de contado. null si el plan no tiene coeficiente cargado. */
+  coeficiente: number | null;
 };
 
 // TEMPORAL: el POS no expone este servicio por un bug al guardar
@@ -432,6 +446,43 @@ export async function getServiciosPrecios(grupo?: string, sucursalSlug: string =
     return result;
   } catch (err) {
     console.error("[pos-api] Error de red al obtener servicios del POS:", err);
+    return cached ? cached.data : [];
+  }
+}
+
+/** Planes de recargo por cuotas (misma tabla que usa el cotizador y la
+    pantalla de cobro del POS), para calcular en la web cuánto sale en
+    cuotas sin tener el coeficiente hardcodeado y desactualizado. No varía
+    por sucursal, pero la URL sigue el mismo prefijo que el resto. */
+export async function getRecargosTarjeta(sucursalSlug: string = DEFAULT_BRANCH_ID): Promise<RecargoTarjeta[]> {
+  const now = Date.now();
+  const cached = memoryCache.recargos.get(sucursalSlug);
+  if (cached && cached.expires > now) {
+    return cached.data;
+  }
+
+  if (!POS_API_BASE_URL) {
+    console.error("[pos-api] Falta la variable de entorno POS_API_BASE_URL");
+    return cached ? cached.data : [];
+  }
+  try {
+    const res = await fetch(`${POS_API_BASE_URL}/${sucursalSlug}/recargos-tarjeta`, { cache: "force-cache", signal: AbortSignal.timeout(8000) });
+    if (!res.ok) {
+      console.error(`[pos-api] Error ${res.status} al obtener recargos del POS`);
+      return cached ? cached.data : [];
+    }
+    const data = (await res.json()) as {
+      recargos: { id: string; grupo: string; tarjetas: string; cuotas: string; coeficiente: number | null }[];
+    };
+    const result = data.recargos;
+
+    memoryCache.recargos.set(sucursalSlug, {
+      data: result,
+      expires: now + CACHE_TTLS.recargos,
+    });
+    return result;
+  } catch (err) {
+    console.error("[pos-api] Error de red al obtener recargos del POS:", err);
     return cached ? cached.data : [];
   }
 }

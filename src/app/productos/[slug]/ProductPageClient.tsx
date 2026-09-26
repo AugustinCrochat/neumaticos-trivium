@@ -252,7 +252,7 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
         </div>
       </div>
 
-      <PaymentMethodsSection />
+      <PaymentMethodsSection price={product.price} />
     </div>
   );
 }

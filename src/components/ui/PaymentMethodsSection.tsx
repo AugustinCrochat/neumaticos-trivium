@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { isVisaMasterPromoDay } from "@/lib/promo-day";
+import { InstallmentCalculator } from "./InstallmentCalculator";
 
 /**
  * Medios de pago con recargo/beneficio, para la ficha de producto.
@@ -13,7 +14,7 @@ import { isVisaMasterPromoDay } from "@/lib/promo-day";
  * pintura (server y cliente) coincide siempre — sin eso, un miércoles
  * generaría un mismatch de hidratación.
  */
-export function PaymentMethodsSection() {
+export function PaymentMethodsSection({ price }: { price: number }) {
   const [isPromoDay, setIsPromoDay] = useState(false);
   useEffect(() => {
     const update = () => setIsPromoDay(isVisaMasterPromoDay());
@@ -45,6 +46,10 @@ export function PaymentMethodsSection() {
           <Image src="/images/payments/gocuotas.svg" alt="GOcuotas" width={40} height={26} className="h-7 w-auto shrink-0" />
           <p className="text-sm font-semibold text-slate-700">Cuotas con GOcuotas, sin recargo</p>
         </div>
+      </div>
+
+      <div className="mt-3">
+        <InstallmentCalculator basePrice={price} />
       </div>
     </section>
   );

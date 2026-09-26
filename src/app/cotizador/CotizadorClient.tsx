@@ -6,6 +6,7 @@ import type { TireProduct } from "@/lib/types";
 import { useBranch } from "@/contexts/branch-context";
 import { useUpsellCombo } from "@/hooks/use-upsell-combo";
 import { AlineacionBalanceoIcon } from "@/components/ui/AlineacionBalanceoIcon";
+import { InstallmentCalculator } from "@/components/ui/InstallmentCalculator";
 import { goToWhatsApp } from "@/lib/gtag";
 
 function formatPrice(price: number) {
@@ -214,6 +215,8 @@ export function CotizadorClient({ productos }: { productos: TireProduct[] }) {
           </button>
         </div>
       )}
+
+      {hasItems && <InstallmentCalculator basePrice={total} />}
     </div>
   );
 }
