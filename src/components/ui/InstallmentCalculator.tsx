@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Image from "next/image";
 import { useRecargosTarjeta } from "@/hooks/use-recargos-tarjeta";
 
 function formatPrice(price: number) {
@@ -76,7 +77,12 @@ export function InstallmentCalculator({ basePrice }: { basePrice: number }) {
 
   return (
     <div className="rounded-xl border border-slate-200 bg-white p-4">
-      <h3 className="mb-3 text-xs font-black uppercase tracking-wide text-navy-900">Calculá tus cuotas</h3>
+      <div className="mb-3 flex items-center justify-between">
+        <h3 className="text-xs font-black uppercase tracking-wide text-navy-900">Calculá tus cuotas</h3>
+        {grupoActual === MERCADO_PAGO_GRUPO && (
+          <Image src="/images/payments/mercadopago.svg" alt="Mercado Pago" width={140} height={40} className="h-5 w-auto" />
+        )}
+      </div>
 
       <div className="grid grid-cols-2 gap-2">
         <select
