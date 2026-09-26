@@ -5,6 +5,7 @@ import Image from "next/image";
 import type { TireProduct } from "@/lib/types";
 import type { TireLabel } from "@/lib/tire-labels";
 import type { Utqg } from "@/lib/utqg";
+import { useBranch } from "@/contexts/branch-context";
 import { ImageLightbox } from "./ImageLightbox";
 import { ZoomPanel } from "./ZoomPanel";
 
@@ -24,7 +25,8 @@ const TIRE_SVG = (
 
 type Slide =
   | { kind: "foto"; src: string; alt: string }
-  | { kind: "etiqueta"; src: string; thumbSrc: string; alt: string };
+  | { kind: "etiqueta"; src: string; thumbSrc: string; alt: string }
+  | { kind: "sucursal"; src: string; alt: string; branchName: string; address: string; city: string; hours: string };
 
 export function ProductImageGallery({
   product,
@@ -40,12 +42,24 @@ export function ProductImageGallery({
   utqg: Utqg | null;
 }) {
   const hasImage = !!product.imageUrl && product.imageUrl !== "/images/tire-placeholder.webp";
+  const { selectedBranch } = useBranch();
 
   const slides: Slide[] = [
     ...(hasImage ? [{ kind: "foto" as const, src: product.imageUrl, alt: `${product.brand} ${product.model}` }] : []),
     ...extraPhotos.map((src) => ({ kind: "foto" as const, src, alt: `${product.brand} ${product.modeloBase} — otro ángulo` })),
     ...(label
       ? [{ kind: "etiqueta" as const, src: label.imagePath, thumbSrc: label.thumbPath, alt: `Etiqueta de eficiencia energética UE — ${product.brand} ${product.modeloBase}, ${label.tyreDesignation}` }]
+      : []),
+    ...(selectedBranch.facadePhoto
+      ? [{
+          kind: "sucursal" as const,
+          src: selectedBranch.facadePhoto,
+          alt: `Fachada de ${selectedBranch.name}`,
+          branchName: selectedBranch.shortName,
+          address: selectedBranch.address,
+          city: selectedBranch.city,
+          hours: selectedBranch.hours,
+        }]
       : []),
   ];
 
@@ -107,6 +121,9 @@ export function ProductImageGallery({
       window.open(eprelUrl, "_blank", "noopener,noreferrer");
       return;
     }
+    // La foto de la sucursal es informativa, no un detalle de producto que
+    // valga la pena ampliar con zoom/lightbox.
+    if (current.kind === "sucursal") return;
     setLightboxOpen(true);
   }
 
@@ -139,14 +156,20 @@ export function ProductImageGallery({
             ref={boxRef}
             type="button"
             onClick={handleImageClick}
-            onMouseEnter={() => !isTouch() && setZoomed(true)}
+            onMouseEnter={() => !isTouch() && current.kind !== "sucursal" && setZoomed(true)}
             onMouseLeave={() => {
               setZoomed(false);
               setFrameRect(null);
             }}
-            onMouseMove={handleMouseMove}
-            aria-label={current.kind === "etiqueta" ? "Ver registro oficial en EPREL" : "Ampliar imagen"}
-            className={`relative h-full w-full cursor-zoom-in ${current.kind === "etiqueta" ? "p-4" : ""}`}
+            onMouseMove={(e) => current.kind !== "sucursal" && handleMouseMove(e)}
+            aria-label={
+              current.kind === "etiqueta"
+                ? "Ver registro oficial en EPREL"
+                : current.kind === "sucursal"
+                ? `Sucursal ${current.branchName}`
+                : "Ampliar imagen"
+            }
+            className={`relative h-full w-full ${current.kind === "sucursal" ? "cursor-default" : "cursor-zoom-in"} ${current.kind === "etiqueta" ? "p-4" : ""}`}
           >
             <div className={`relative w-full ${labelUtqg ? "h-[calc(100%-3rem)]" : "h-full"}`}>
               <Image
@@ -164,24 +187,38 @@ export function ProductImageGallery({
                 UTQG {labelUtqg.treadwear} · {labelUtqg.traction} · {labelUtqg.temperature}
               </span>
             )}
-            {zoomed && current.kind !== "etiqueta" && (
+            {current.kind === "sucursal" && (
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/60 to-transparent px-4 pb-4 pt-10 text-left text-white">
+                <p className="text-sm font-black">{current.branchName}</p>
+                <p className="mt-0.5 text-xs leading-snug text-slate-200">
+                  {current.address}, {current.city}
+                </p>
+                <p className="mt-0.5 text-xs leading-snug text-slate-200">{current.hours}</p>
+                <p className="mt-2 inline-block rounded-md bg-orange-500 px-2 py-1 text-[10px] font-black uppercase tracking-wide">
+                  Colocación y cambio de válvulas sin cargo
+                </p>
+              </div>
+            )}
+            {zoomed && current.kind !== "etiqueta" && current.kind !== "sucursal" && (
               <span
                 className="hidden lg:block absolute border-2 border-white bg-white/30 shadow-[0_0_0_1px_rgba(0,0,0,0.15)] pointer-events-none"
                 style={{ left: lensStyle.left, top: lensStyle.top, width: lensStyle.width, height: lensStyle.height }}
               />
             )}
-            <span className="absolute bottom-3 right-3 w-8 h-8 rounded-full bg-white/90 shadow-md flex items-center justify-center text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity">
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16zM11 8v6M8 11h6" />
-              </svg>
-            </span>
+            {current.kind !== "sucursal" && (
+              <span className="absolute bottom-3 right-3 w-8 h-8 rounded-full bg-white/90 shadow-md flex items-center justify-center text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16zM11 8v6M8 11h6" />
+                </svg>
+              </span>
+            )}
           </button>
         ) : (
           <div className="w-48 h-48">{TIRE_SVG}</div>
         )}
       </div>
 
-      {zoomed && frameRect && current && (
+      {zoomed && frameRect && current && current.kind !== "sucursal" && (
         <ZoomPanel
           src={current.src}
           alt={current.alt}
@@ -216,7 +253,13 @@ export function ProductImageGallery({
               className={`relative h-16 w-16 shrink-0 overflow-hidden rounded-xl border-2 bg-slate-50 transition-colors ${
                 index === i ? "border-navy-700" : "border-transparent hover:border-slate-200"
               }`}
-              aria-label={slide.kind === "etiqueta" ? "Ver etiqueta de eficiencia energética UE" : "Ver foto del producto"}
+              aria-label={
+                slide.kind === "etiqueta"
+                  ? "Ver etiqueta de eficiencia energética UE"
+                  : slide.kind === "sucursal"
+                  ? "Ver sucursal"
+                  : "Ver foto del producto"
+              }
             >
               <Image src={slide.kind === "etiqueta" ? slide.thumbSrc : slide.src} alt="" fill className="object-contain p-1.5" sizes="64px" />
             </button>
