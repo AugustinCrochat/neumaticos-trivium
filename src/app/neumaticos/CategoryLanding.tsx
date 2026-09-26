@@ -32,6 +32,9 @@ export function CategoryLanding({
     (a, b) => Number(b.enStock) - Number(a.enStock) || a.price - b.price
   );
   const medidas = sizesFromCatalog(productos);
+  const medidasConStock = new Set(
+    productos.filter((p) => p.enStock).map((p) => sizeSlug(p.size))
+  ).size;
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8">
@@ -63,7 +66,15 @@ export function CategoryLanding({
 
       {medidas.length > 0 && (
         <section className="mb-14">
-          <h2 className="mb-5 text-2xl font-black text-navy-900">Medidas disponibles</h2>
+          <div className="mb-5 flex flex-wrap items-center gap-3">
+            <h2 className="text-2xl font-black text-navy-900">Medidas disponibles</h2>
+            {medidasConStock > 0 && (
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-xs font-black text-emerald-700">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                {medidasConStock} {medidasConStock === 1 ? "medida" : "medidas"} con stock hoy
+              </span>
+            )}
+          </div>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
             {medidas.map(({ size, count }) => (
               <Link

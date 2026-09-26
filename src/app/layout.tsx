@@ -13,6 +13,7 @@ import { Footer } from "@/components/layout/Footer";
 import { CartProvider } from "@/contexts/cart-context";
 import { CartDrawer } from "@/components/ui/CartDrawer";
 import { FloatingSearchWidget } from "@/components/ui/FloatingSearchWidget";
+import { FloatingWhatsAppButton } from "@/components/ui/FloatingWhatsAppButton";
 import { GoogleReviewsBadge } from "@/components/ui/GoogleReviewsBadge";
 import { getAllVehicleOptions } from "@/lib/vehicles";
 
@@ -133,6 +134,7 @@ export default function RootLayout({
               <VehicleModal />
               <CartDrawer />
               <FloatingSearchWidget />
+              <FloatingWhatsAppButton />
               <GoogleReviewsBadge />
               <main className="flex-1">{children}</main>
               <Footer />

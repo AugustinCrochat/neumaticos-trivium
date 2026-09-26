@@ -58,6 +58,9 @@ export function RimLanding({ rim, productos }: { rim: number; productos: TirePro
   // Medidas de este rodado: las que hay en catálogo primero, después las
   // prioritarias que todavía no tienen stock pero sí página propia.
   const enCatalogo = sizesFromCatalog(delRodado);
+  const medidasConStock = new Set(
+    delRodado.filter((p) => p.enStock).map((p) => sizeSlug(p.size))
+  ).size;
   const slugsEnCatalogo = new Set(enCatalogo.map((s) => sizeSlug(s.size)));
   const soloPrioritarias = MEDIDAS_PRIORITARIAS.filter(
     (s) => s.rim === rim && !slugsEnCatalogo.has(sizeSlug(s))
@@ -81,22 +84,41 @@ export function RimLanding({ rim, productos }: { rim: number; productos: TirePro
         <h1 className="text-3xl font-black leading-tight text-navy-900 md:text-5xl">
           Neumáticos rodado {rim}
         </h1>
-        <p className="mt-4 max-w-3xl text-lg leading-relaxed text-slate-600">
-          Todas las medidas R{rim} que manejamos, con stock y precio actualizados.
-          {desde && (
-            <>
-              {" "}
-              Arrancan en <strong className="text-navy-900">{formatPrice(desde)}</strong> por unidad.
-            </>
-          )}{" "}
-          Si no sabés cuál es tu medida exacta, mirala en el flanco del neumático que tenés puesto:
-          el número después de la R es el rodado, y tiene que coincidir con el de tu llanta.
-        </p>
       </header>
+
+      {ordenados.length > 0 && (
+        <section className="mb-14">
+          <h2 className="mb-5 text-2xl font-black text-navy-900">
+            Cubiertas R{rim} disponibles
+          </h2>
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 md:gap-6">
+            {ordenados.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        </section>
+      )}
 
       {(enCatalogo.length > 0 || soloPrioritarias.length > 0) && (
         <section className="mb-14">
-          <h2 className="mb-5 text-2xl font-black text-navy-900">Medidas rodado {rim}</h2>
+          <div className="mb-5 flex flex-wrap items-center gap-3">
+            <h2 className="text-2xl font-black text-navy-900">Medidas rodado {rim}</h2>
+            {medidasConStock > 0 && (
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-xs font-black text-emerald-700">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                {medidasConStock} {medidasConStock === 1 ? "medida" : "medidas"} con stock hoy
+              </span>
+            )}
+          </div>
+          <p className="mb-5 max-w-3xl leading-relaxed text-slate-600">
+            {desde && (
+              <>
+                Arrancan en <strong className="text-navy-900">{formatPrice(desde)}</strong> por unidad.{" "}
+              </>
+            )}
+            Si no sabés cuál es tu medida exacta, mirala en el flanco del neumático que tenés puesto:
+            el número después de la R es el rodado, y tiene que coincidir con el de tu llanta.
+          </p>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
             {enCatalogo.map(({ size, count }) => (
               <Link
@@ -119,19 +141,6 @@ export function RimLanding({ rim, productos }: { rim: number; productos: TirePro
                 <span className="block font-black text-navy-700">{formatSize(size)}</span>
                 <span className="mt-1 block text-xs font-bold text-slate-400">a pedido</span>
               </Link>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {ordenados.length > 0 && (
-        <section className="mb-14">
-          <h2 className="mb-5 text-2xl font-black text-navy-900">
-            Cubiertas R{rim} disponibles
-          </h2>
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 md:gap-6">
-            {ordenados.map((product) => (
-              <ProductCard key={product.id} product={product} />
             ))}
           </div>
         </section>

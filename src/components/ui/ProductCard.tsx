@@ -169,13 +169,22 @@ export function ProductCard({
 
           <Link
             href={`/productos/${product.slug}`}
-            className={`mt-3 block w-full text-center font-semibold py-2.5 rounded-xl text-sm transition-colors ${
+            className={`mt-3 flex w-full items-center justify-center gap-1.5 rounded-xl py-2.5 text-sm font-black transition-all ${
               product.enStock
-                ? "bg-black hover:bg-neutral-800 text-white"
+                ? "bg-orange-500 text-white shadow-md shadow-orange-500/20 hover:bg-orange-600 hover:shadow-lg hover:shadow-orange-500/30 active:scale-[0.98]"
                 : "bg-slate-300 text-white pointer-events-none"
             }`}
           >
-            {product.enStock ? "Ver detalle" : "Sin stock"}
+            {product.enStock ? (
+              <>
+                Ver detalle
+                <svg className="h-4 w-4 transition-transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                </svg>
+              </>
+            ) : (
+              "Sin stock"
+            )}
           </Link>
         </div>
       </div>
