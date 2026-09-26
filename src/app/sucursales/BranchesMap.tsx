@@ -109,13 +109,15 @@ function createComingSoonMarkerElement(name: string) {
   badge.style.cssText =
     "display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:13px;background:#fff7ed;border:2px dashed #f97316;box-shadow:0 4px 12px rgba(249,115,22,0.35)";
 
-  // SVG en vez de un emoji: un glifo de emoji puede tardar en cargar su
-  // fuente y cambiar de tamaño después de que el marker ya se posicionó —
-  // maplibre re-mide el elemento con ResizeObserver y lo corrige, lo que se
-  // ve como que el pin "salta" de lugar al hacer zoom. El SVG tiene tamaño
-  // fijo desde el primer frame.
+  // Mismo ícono de neumático que se usa como placeholder en las fichas de
+  // producto, en blanco y negro y semitransparente (no es el logo a color
+  // de una sucursal real, es un "acá vamos a estar"). SVG en vez de un
+  // emoji: un glifo de emoji puede tardar en cargar su fuente y cambiar de
+  // tamaño después de que el marker ya se posicionó, y maplibre lo re-mide
+  // con ResizeObserver — eso se ve como que el pin "salta" de lugar al
+  // hacer zoom. El SVG tiene tamaño fijo desde el primer frame.
   badge.innerHTML =
-    '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>';
+    '<svg width="24" height="24" viewBox="0 0 100 100" fill="none" style="opacity:0.55"><circle cx="50" cy="50" r="45" stroke="#000" stroke-width="8"/><circle cx="50" cy="50" r="28" stroke="#000" stroke-width="4"/><circle cx="50" cy="50" r="10" fill="#000"/></svg>';
 
   const pointer = document.createElement("div");
   pointer.style.cssText =
