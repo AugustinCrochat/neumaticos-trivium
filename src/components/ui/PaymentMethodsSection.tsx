@@ -20,11 +20,11 @@ type Metodo = {
 };
 
 const METODOS: Metodo[] = [
-  { id: "visa", logo: "/images/payments/visa.svg", alt: "Visa", logoClassName: "h-8 w-auto" },
-  { id: "mastercard", logo: "/images/payments/mastercard.svg", alt: "Mastercard", logoClassName: "h-9 w-auto" },
-  { id: "mercadopago", logo: "/images/payments/mercadopago.svg", alt: "Mercado Pago", logoClassName: "h-9 w-auto" },
-  { id: "naranja", logo: "/images/payments/naranja-x.svg", alt: "Tarjeta Naranja", logoClassName: "h-9 w-auto" },
-  { id: "gocuotas", logo: "/images/payments/gocuotas.svg", alt: "GOcuotas", logoClassName: "h-8 w-auto" },
+  { id: "visa", logo: "/images/payments/visa.svg", alt: "Visa", logoClassName: "h-6 w-auto" },
+  { id: "mastercard", logo: "/images/payments/mastercard.svg", alt: "Mastercard", logoClassName: "h-8 w-auto" },
+  { id: "mercadopago", logo: "/images/payments/mercadopago.svg", alt: "Mercado Pago", logoClassName: "h-8 w-auto" },
+  { id: "naranja", logo: "/images/payments/naranja-x.svg", alt: "Tarjeta Naranja", logoClassName: "h-8 w-auto" },
+  { id: "gocuotas", logo: "/images/payments/gocuotas.svg", alt: "GOcuotas", logoClassName: "h-7 w-auto" },
 ];
 
 /**
@@ -79,7 +79,7 @@ export function PaymentMethodsSection({ price }: { price: number }) {
       <h2 className="mb-3 text-xs font-black uppercase tracking-wide text-navy-900">Medios de pago</h2>
 
       <div className="rounded-lg border border-slate-200 p-3">
-        <div className="flex flex-wrap items-center gap-5">
+        <div className="flex flex-nowrap items-center justify-between gap-2 overflow-x-auto sm:gap-3">
           {METODOS.map((m) => (
             <button
               key={m.id}

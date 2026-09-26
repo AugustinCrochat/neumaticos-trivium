@@ -10,6 +10,7 @@ function formatPrice(price: number) {
 
 const CONTADO_ID = "__contado__";
 const MERCADO_PAGO_GRUPO = "Mercado Pago";
+const GOCUOTAS_GRUPO = "GOcuotas";
 
 /**
  * Cuotas de Mercado Pago con tarjeta de crédito Mercado Pago: no vienen de
@@ -45,6 +46,17 @@ function displayGrupoLabel(grupo: string): string {
   return /mipyme/i.test(grupo) ? "Visa o Master de banco" : grupo;
 }
 
+/** Logo(s) del medio de pago seleccionado, mismo criterio que ya se usaba
+    para Mercado Pago — el banco muestra Visa y Mastercard juntas porque el
+    plan de "mipyme" aplica a ambas. */
+function logosDelGrupo(grupo: string): string[] {
+  if (grupo === MERCADO_PAGO_GRUPO) return ["/images/payments/mercadopago.svg"];
+  if (grupo === GOCUOTAS_GRUPO) return ["/images/payments/gocuotas.svg"];
+  if (/naranja/i.test(grupo)) return ["/images/payments/naranja-x.svg"];
+  if (/mipyme/i.test(grupo)) return ["/images/payments/visa.svg", "/images/payments/mastercard.svg"];
+  return [];
+}
+
 /**
  * Calculadora de cuotas. Mercado Pago siempre está disponible (reglas fijas,
  * ver mercadoPagoPlanes); los planes de tarjeta cobrada en el local vienen
@@ -60,16 +72,18 @@ export function InstallmentCalculator({ basePrice }: { basePrice: number }) {
     if (!recargos) return [];
     return Array.from(new Set(recargos.map((r) => r.grupo)));
   }, [recargos]);
-  const grupos = [MERCADO_PAGO_GRUPO, ...gruposPOS];
+  const grupos = [MERCADO_PAGO_GRUPO, GOCUOTAS_GRUPO, ...gruposPOS];
 
   const grupoActual = grupoSel && grupos.includes(grupoSel) ? grupoSel : grupos[0];
   const planesDelGrupo =
     grupoActual === MERCADO_PAGO_GRUPO
       ? mercadoPagoPlanes(basePrice)
-      : [
-          { id: CONTADO_ID, cuotas: "1 pago", coeficiente: 1 },
-          ...(recargos ?? []).filter((r) => r.grupo === grupoActual),
-        ];
+      : grupoActual === GOCUOTAS_GRUPO
+        ? [{ id: "goc-3", cuotas: "3 cuotas sin interés", coeficiente: 1 }]
+        : [
+            { id: CONTADO_ID, cuotas: "1 pago", coeficiente: 1 },
+            ...(recargos ?? []).filter((r) => r.grupo === grupoActual),
+          ];
   const planActual = planesDelGrupo.find((p) => p.id === cuotaId) ?? planesDelGrupo[0];
   const coeficiente = planActual.coeficiente ?? 1;
   const total = Math.round(basePrice * coeficiente);
@@ -79,9 +93,11 @@ export function InstallmentCalculator({ basePrice }: { basePrice: number }) {
     <div className="rounded-xl border border-slate-200 bg-white p-4">
       <div className="mb-3 flex items-center justify-between">
         <h3 className="text-xs font-black uppercase tracking-wide text-navy-900">Calculá tus cuotas</h3>
-        {grupoActual === MERCADO_PAGO_GRUPO && (
-          <Image src="/images/payments/mercadopago.svg" alt="Mercado Pago" width={140} height={40} className="h-5 w-auto" />
-        )}
+        <div className="flex items-center gap-2">
+          {logosDelGrupo(grupoActual).map((logo) => (
+            <Image key={logo} src={logo} alt="" width={140} height={40} className="h-5 w-auto" />
+          ))}
+        </div>
       </div>
 
       <div className="grid grid-cols-2 gap-2">

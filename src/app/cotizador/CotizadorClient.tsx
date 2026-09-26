@@ -39,6 +39,10 @@ type SearchApiResult = {
 export function CotizadorClient({ initialProduct, compact = false }: { initialProduct?: QuoteProduct; compact?: boolean }) {
   const { selectedBranch } = useBranch();
   const combo = useUpsellCombo();
+  // Colapsado por defecto cuando está embebido en la ficha de producto, para
+  // no ocupar espacio si nadie lo va a usar; en /cotizador (compact=false) va
+  // siempre expandido, no tiene sentido colapsar la página entera.
+  const [expanded, setExpanded] = useState(!compact);
 
   const [query, setQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
@@ -122,9 +126,26 @@ export function CotizadorClient({ initialProduct, compact = false }: { initialPr
   return (
     <div className={compact ? "space-y-4" : "space-y-6"}>
       {compact && (
-        <h2 className="text-xs font-black uppercase tracking-wide text-navy-900">Armá tu presupuesto</h2>
+        <button
+          type="button"
+          onClick={() => setExpanded((prev) => !prev)}
+          className="flex w-full items-center justify-between"
+          aria-expanded={expanded}
+        >
+          <h2 className="text-xs font-black uppercase tracking-wide text-navy-900">Armá tu presupuesto</h2>
+          <svg
+            className={`h-4 w-4 text-slate-400 transition-transform ${expanded ? "rotate-180" : ""}`}
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
       )}
 
+      {expanded && (
+      <>
       {/* Buscador */}
       <div className="relative">
         <input
@@ -265,6 +286,8 @@ export function CotizadorClient({ initialProduct, compact = false }: { initialPr
       )}
 
       {hasItems && <InstallmentCalculator basePrice={total} />}
+      </>
+      )}
     </div>
   );
 }
