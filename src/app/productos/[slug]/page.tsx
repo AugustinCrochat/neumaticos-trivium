@@ -404,6 +404,13 @@ export default async function ProductPage({ params }: Props) {
               .
             </p>
           )}
+
+          <div id="garantia" className="mt-3 scroll-mt-24 rounded-xl bg-amber-50 px-4 py-3 text-xs leading-relaxed text-amber-900">
+            <strong className="text-amber-900">Garantía de 1 año:</strong> cubre fallas de fabricación
+            del neumático desde la fecha de compra. No cubre desgaste por uso, pinchaduras, cortes ni
+            daños por golpes, baches o falta de alineación. Se gestiona directamente en el local,
+            presentando la factura de compra.
+          </div>
         </div>
       </div>
 
