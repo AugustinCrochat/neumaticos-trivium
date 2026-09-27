@@ -14,15 +14,14 @@ function cantidadCuotas(plan: Plan): number {
   return parseInt(plan.cuotas, 10) || 1;
 }
 
-/** Primero las opciones sin interés a varias cuotas (si hay), después el
-    pago único, y por último las que sí tienen recargo — así lo primero que
-    se lee es siempre la mejor opción, no necesariamente "1 pago". */
+/** Sólo opciones en cuotas (el pago único no aporta nada acá, ya se ve en el
+    precio de la ficha) — primero las sin interés, después las que sí tienen
+    recargo. */
 function ordenarPlanes(planes: Plan[]): Plan[] {
-  const conCoef = planes.filter((p) => p.coeficiente != null);
-  const contado = conCoef.filter((p) => cantidadCuotas(p) <= 1);
-  const sinInteres = conCoef.filter((p) => cantidadCuotas(p) > 1 && p.coeficiente === 1);
-  const conRecargo = conCoef.filter((p) => cantidadCuotas(p) > 1 && p.coeficiente !== 1);
-  return sinInteres.length > 0 ? [...sinInteres, ...contado, ...conRecargo] : [...contado, ...conRecargo];
+  const conCuotas = planes.filter((p) => p.coeficiente != null && cantidadCuotas(p) > 1);
+  const sinInteres = conCuotas.filter((p) => p.coeficiente === 1);
+  const conRecargo = conCuotas.filter((p) => p.coeficiente !== 1);
+  return [...sinInteres, ...conRecargo];
 }
 
 /** Una línea por plan con el monto real de cada cuota (para 1 neumático,
@@ -33,10 +32,8 @@ function ordenarPlanes(planes: Plan[]): Plan[] {
     hacía ilegible en una sola línea. */
 function lineasCuotas(planes: Plan[], basePrice: number): string[] {
   return ordenarPlanes(planes).map((p) => {
-    const cantidad = cantidadCuotas(p);
     const total = Math.round(basePrice * (p.coeficiente ?? 1));
-    if (cantidad <= 1) return `${p.cuotas} de ${formatPrice(total)}`;
-    const monto = Math.round(total / cantidad);
+    const monto = Math.round(total / cantidadCuotas(p));
     return `${p.cuotas} de ${formatPrice(monto)} (total ${formatPrice(total)})`;
   });
 }
