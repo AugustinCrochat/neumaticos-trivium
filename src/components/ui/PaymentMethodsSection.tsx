@@ -10,20 +10,35 @@ function formatPrice(price: number) {
   return new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 }).format(price);
 }
 
-function montoCuota(basePrice: number, plan: Plan): number {
-  const cantidad = parseInt(plan.cuotas, 10) || 1;
-  return Math.round((basePrice * (plan.coeficiente ?? 1)) / cantidad);
+function cantidadCuotas(plan: Plan): number {
+  return parseInt(plan.cuotas, 10) || 1;
+}
+
+/** Primero las opciones sin interés a varias cuotas (si hay), después el
+    pago único, y por último las que sí tienen recargo — así lo primero que
+    se lee es siempre la mejor opción, no necesariamente "1 pago". */
+function ordenarPlanes(planes: Plan[]): Plan[] {
+  const conCoef = planes.filter((p) => p.coeficiente != null);
+  const contado = conCoef.filter((p) => cantidadCuotas(p) <= 1);
+  const sinInteres = conCoef.filter((p) => cantidadCuotas(p) > 1 && p.coeficiente === 1);
+  const conRecargo = conCoef.filter((p) => cantidadCuotas(p) > 1 && p.coeficiente !== 1);
+  return sinInteres.length > 0 ? [...sinInteres, ...contado, ...conRecargo] : [...contado, ...conRecargo];
 }
 
 /** Una línea por plan con el monto real de cada cuota (para 1 neumático,
-    basePrice), no solo el % de recargo — así el hover contesta directamente
-    "cuánto pago por mes" sin tener que abrir el cotizador de más abajo.
-    Antes iba todo junto separado por "·" y con varias opciones (típico en
-    Mercado Pago, que tiene hasta 4) se hacía ilegible en una sola línea. */
+    basePrice) y al lado el total final con el recargo ya aplicado — así el
+    hover contesta directamente "cuánto pago por mes y en total" sin tener
+    que abrir el cotizador de más abajo. Antes iba todo junto separado por
+    "·" y con varias opciones (típico en Mercado Pago, que tiene hasta 4) se
+    hacía ilegible en una sola línea. */
 function lineasCuotas(planes: Plan[], basePrice: number): string[] {
-  return planes
-    .filter((p) => p.coeficiente != null && (parseInt(p.cuotas, 10) || 1) > 1)
-    .map((p) => `${p.cuotas} de ${formatPrice(montoCuota(basePrice, p))}`);
+  return ordenarPlanes(planes).map((p) => {
+    const cantidad = cantidadCuotas(p);
+    const total = Math.round(basePrice * (p.coeficiente ?? 1));
+    if (cantidad <= 1) return `${p.cuotas} de ${formatPrice(total)}`;
+    const monto = Math.round(total / cantidad);
+    return `${p.cuotas} de ${formatPrice(monto)} (total ${formatPrice(total)})`;
+  });
 }
 
 type Metodo = {
