@@ -1,5 +1,6 @@
 import { SITE_URL, BRANCHES, SHIPPING_FLAT_RATE, FREE_SHIPPING_THRESHOLD } from "@/lib/config";
 import { getProductosDesdePOS, getServiciosPrecios, getAccesoriosDesdePOS, COMBO_ALINEACION_BALANCEO_AUTO } from "@/lib/pos-api";
+import { createGoCuotasCheckout } from "@/lib/gocuotas";
 
 type CheckoutItem = { kind?: unknown; id?: unknown; quantity?: unknown };
 type ShippingAddressInput = {
@@ -7,16 +8,40 @@ type ShippingAddressInput = {
 };
 
 export async function POST(request: Request) {
-  const accessToken = process.env.MERCADOPAGO_ACCESS_TOKEN?.trim();
-  if (!accessToken) {
-    return Response.json({ error: "Los pagos online todavía no están configurados." }, { status: 503 });
-  }
-
-  let body: { items?: CheckoutItem[]; branchId?: unknown; deliveryMethod?: unknown; shippingAddress?: ShippingAddressInput };
+  let body: {
+    items?: CheckoutItem[];
+    branchId?: unknown;
+    deliveryMethod?: unknown;
+    shippingAddress?: ShippingAddressInput;
+    provider?: unknown;
+    buyerEmail?: unknown;
+    buyerPhone?: unknown;
+  };
   try {
     body = await request.json() as typeof body;
   } catch {
     return Response.json({ error: "El carrito recibido no es válido." }, { status: 400 });
+  }
+
+  const provider = body.provider === "gocuotas" ? "gocuotas" : "mercadopago";
+  const accessToken = process.env.MERCADOPAGO_ACCESS_TOKEN?.trim();
+  if (provider === "mercadopago" && !accessToken) {
+    return Response.json({ error: "Los pagos online todavía no están configurados." }, { status: 503 });
+  }
+  // GoCuotas necesita mail y teléfono del comprador *antes* de crear el
+  // checkout (Mercado Pago los pide en su propia página, así que ahí no
+  // hace falta juntarlos acá).
+  let buyerEmail = "";
+  let buyerPhone = "";
+  if (provider === "gocuotas") {
+    if (typeof body.buyerEmail !== "string" || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(body.buyerEmail)) {
+      return Response.json({ error: "Ingresá un email válido." }, { status: 400 });
+    }
+    if (typeof body.buyerPhone !== "string" || body.buyerPhone.replace(/\D/g, "").length < 8) {
+      return Response.json({ error: "Ingresá un teléfono válido." }, { status: 400 });
+    }
+    buyerEmail = body.buyerEmail.trim();
+    buyerPhone = body.buyerPhone;
   }
 
   if (!Array.isArray(body.items) || body.items.length === 0 || body.items.length > 20 || typeof body.branchId !== "string") {
@@ -87,6 +112,20 @@ export async function POST(request: Request) {
   const shippingCost = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_FLAT_RATE;
 
   const externalReference = `${body.branchId}-${crypto.randomUUID()}`;
+
+  if (provider === "gocuotas") {
+    const result = await createGoCuotasCheckout({
+      amountInCents: Math.round((subtotal + (deliveryMethod === "shipping" ? shippingCost : 0)) * 100),
+      email: buyerEmail,
+      phoneNumber: buyerPhone,
+      orderReferenceId: externalReference,
+      urlSuccess: `${SITE_URL}/pago/resultado?estado=aprobado&provider=gocuotas`,
+      urlFailure: `${SITE_URL}/pago/resultado?estado=fallido&provider=gocuotas`,
+    });
+    if ("error" in result) return Response.json({ error: result.error }, { status: 502 });
+    return Response.json({ initPoint: result.initPoint });
+  }
+
   const preference = {
     items: [
       ...cartTires.map(({ product, quantity }) => ({

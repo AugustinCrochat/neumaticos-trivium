@@ -16,7 +16,12 @@
 		// Sin sucursal al final (antes terminaba en "/arguello") — cada fetch en
 		// pos-api.ts arma /{sucursal}/productos, etc. según la sucursal elegida.
 		"POS_API_BASE_URL": "https://pos-neumaticos.vercel.app/api/public",
-		"MERCADOPAGO_ACCESS_TOKEN": "APP_USR-6323540170330488-071417-4413e75117545308b4946db2d376bbf4-3541709725"
+		"MERCADOPAGO_ACCESS_TOKEN": "APP_USR-6323540170330488-071417-4413e75117545308b4946db2d376bbf4-3541709725",
+		// GOCUOTAS_ENV: "sandbox" para probar contra su ambiente de pruebas,
+		// cualquier otro valor (o ausente) usa producción — ver src/lib/gocuotas.ts.
+		"GOCUOTAS_ENV": "production",
+		"GOCUOTAS_API_KEY_PRODUCTION": "6447898-0ac4de0d-cc00-43b6-b2ed-c534d7cbf196",
+		"GOCUOTAS_API_KEY_SANDBOX": "6447898-0124b010-2492-4d4d-84a4-c42be177ad77"
 	},
 	"assets": {
 		"directory": ".open-next/assets",

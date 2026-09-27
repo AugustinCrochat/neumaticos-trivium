@@ -482,8 +482,7 @@ export default async function ProductPage({ params }: Props) {
         <div className="mt-14 pt-10 border-t border-slate-100">
           <h2 className="text-lg font-black text-navy-900 uppercase tracking-wide flex items-center gap-2 mb-1">
             <svg className="w-5 h-5 text-navy-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             {formatSize(product.size)} en otras marcas
           </h2>

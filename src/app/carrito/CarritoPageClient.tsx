@@ -2,14 +2,15 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
 import { useBranch } from "@/contexts/branch-context";
 import { useVehicle } from "@/contexts/vehicle-context";
 import { useCart, itemKey } from "@/contexts/cart-context";
 import { useUpsellCombo } from "@/hooks/use-upsell-combo";
 import { useAccesorios } from "@/hooks/use-accesorios";
+import { useCheckout } from "@/hooks/use-checkout";
 import { getCompatibleAccessory } from "@/lib/tuercas-vehiculos";
 import { AlineacionBalanceoIcon } from "@/components/ui/AlineacionBalanceoIcon";
+import { CheckoutPaymentSection } from "@/components/ui/CheckoutPaymentSection";
 import { DeliveryMethodSelector, isShippingAddressComplete } from "@/components/ui/DeliveryMethodSelector";
 
 function formatPrice(price: number) {
@@ -20,8 +21,7 @@ export function CarritoPageClient() {
   const { items, itemsTotal, shippingCost, total, removeItem, updateQuantity, addService, addAccessory, deliveryMethod, shippingAddress } = useCart();
   const { selectedBranch } = useBranch();
   const { selectedVehicle } = useVehicle();
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  const checkout = useCheckout();
   const combo = useUpsellCombo();
   const accesorios = useAccesorios();
   const shippingIncomplete = deliveryMethod === "shipping" && !isShippingAddressComplete(shippingAddress);
@@ -36,27 +36,8 @@ export function CarritoPageClient() {
   const hasAccessoryInCart = items.some((item) => item.kind === "accessory" && item.id === compatibleAccessory?.id);
   const showAccessoryUpsell = hasTires && !!compatibleAccessory && !hasAccessoryInCart;
 
-  async function checkout() {
-    setError("");
-    setIsLoading(true);
-    try {
-      const response = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          branchId: selectedBranch.id,
-          items: items.map(({ kind, id, quantity }) => ({ kind, id, quantity })),
-          deliveryMethod,
-          shippingAddress: deliveryMethod === "shipping" ? shippingAddress : undefined,
-        }),
-      });
-      const data = await response.json() as { initPoint?: string; error?: string };
-      if (!response.ok || !data.initPoint) throw new Error(data.error || "No pudimos iniciar el pago.");
-      window.location.assign(data.initPoint);
-    } catch (checkoutError) {
-      setError(checkoutError instanceof Error ? checkoutError.message : "No pudimos iniciar el pago.");
-      setIsLoading(false);
-    }
+  function handleCheckout() {
+    checkout.submit({ branchId: selectedBranch.id, items, deliveryMethod, shippingAddress });
   }
 
   return (
@@ -154,23 +135,12 @@ export function CarritoPageClient() {
             <p className="text-xs text-slate-500 mb-4">
               Los neumáticos tienen 1 año de garantía. Precio sujeto a validación de stock al confirmar el pedido.
             </p>
-            {error && <p className="mb-3 rounded-lg bg-red-50 p-3 text-sm font-medium text-red-700">{error}</p>}
-            <button
-              onClick={checkout}
-              disabled={isLoading || shippingIncomplete}
-              className="w-full flex items-center justify-center gap-2 rounded-xl bg-[#FFE600] hover:bg-[#f5dc00] disabled:opacity-60 text-navy-900 font-black py-3.5 transition-colors"
-            >
-              {isLoading ? (
-                "Redirigiendo al pago…"
-              ) : shippingIncomplete ? (
-                "Completá la dirección de envío"
-              ) : (
-                <>
-                  Pagar con
-                  <Image src="/images/mercadopago-logo.svg" alt="Mercado Pago" width={180} height={45} className="h-9 w-auto" />
-                </>
-              )}
-            </button>
+            <CheckoutPaymentSection
+              checkout={checkout}
+              disabled={shippingIncomplete}
+              disabledLabel="Completá la dirección de envío"
+              onSubmit={handleCheckout}
+            />
             <Link href="/catalogo" className="block text-center mt-3 text-sm font-bold text-navy-700 hover:text-navy-900 transition-colors">
               Seguir comprando
             </Link>
