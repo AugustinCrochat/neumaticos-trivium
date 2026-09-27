@@ -1,14 +1,27 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { isVisaMasterPromoDay } from "@/lib/promo-day";
 import { useRecargosTarjeta } from "@/hooks/use-recargos-tarjeta";
+import { MERCADO_PAGO_GRUPO, GOCUOTAS_GRUPO, esBanco, esNaranja, planesParaGrupo, type Plan } from "@/lib/cuotas";
 
-function recargoPct(coeficiente: number | null): string | null {
-  if (coeficiente == null) return null;
-  const pct = Math.round((coeficiente - 1) * 100);
-  return pct > 0 ? `+${pct}%` : null;
+function formatPrice(price: number) {
+  return new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 }).format(price);
+}
+
+function montoCuota(basePrice: number, plan: Plan): number {
+  const cantidad = parseInt(plan.cuotas, 10) || 1;
+  return Math.round((basePrice * (plan.coeficiente ?? 1)) / cantidad);
+}
+
+/** Línea con el monto real de cada cuota (para 1 neumático, basePrice), no
+    solo el % de recargo — así el hover contesta directamente "cuánto pago
+    por mes" sin tener que abrir el cotizador de más abajo. */
+function lineaCuotas(planes: Plan[], basePrice: number): string | null {
+  const conCuotas = planes.filter((p) => p.coeficiente != null && (parseInt(p.cuotas, 10) || 1) > 1);
+  if (conCuotas.length === 0) return null;
+  return conCuotas.map((p) => `${p.cuotas} de ${formatPrice(montoCuota(basePrice, p))}`).join(" · ");
 }
 
 type Metodo = {
@@ -27,9 +40,10 @@ const METODOS: Metodo[] = [
 ];
 
 /**
- * Medios de pago con recargo/beneficio, para la ficha de producto. El
- * cálculo de cuotas en sí (con coeficiente real) vive únicamente en el
- * cotizador de más abajo — acá solo se muestra qué hay disponible.
+ * Medios de pago con recargo/beneficio, para la ficha de producto. `basePrice`
+ * es el precio de 1 sola cubierta — el detalle de cada medio se calcula con
+ * ese monto (mismas reglas que InstallmentCalculator, ver lib/cuotas) para
+ * contestar directo "cuánto pago por mes" sin abrir el cotizador de abajo.
  *
  * Los 5 logos van en una sola franja: al pasar el mouse (o enfocar con
  * teclado) cada uno muestra su detalle abajo, y se oculta apenas el mouse
@@ -42,7 +56,13 @@ const METODOS: Metodo[] = [
  * pintura (server y cliente) coincide siempre — sin eso, un miércoles
  * generaría un mismatch de hidratación.
  */
-export function PaymentMethodsSection({ onCalcularCuotas }: { onCalcularCuotas?: () => void } = {}) {
+export function PaymentMethodsSection({
+  basePrice,
+  onCalcularCuotas,
+}: {
+  basePrice: number;
+  onCalcularCuotas?: () => void;
+}) {
   const [isPromoDay, setIsPromoDay] = useState(false);
   useEffect(() => {
     const update = () => setIsPromoDay(isVisaMasterPromoDay());
@@ -51,29 +71,42 @@ export function PaymentMethodsSection({ onCalcularCuotas }: { onCalcularCuotas?:
 
   // "mipyme" es el nombre interno de esa tarifa en el POS (ver también
   // displayGrupoLabel en InstallmentCalculator, mismo criterio) — al
-  // cliente se le muestra "Visa o Master de banco".
+  // cliente se le muestra "Visa o Master de banco". El grupo exacto de
+  // Naranja también varía según cómo esté cargado en el POS, así que se
+  // busca por patrón en vez de asumir un nombre fijo.
   const recargos = useRecargosTarjeta();
-  const planesBanco = recargos?.filter((r) => /mipyme/i.test(r.grupo)) ?? [];
-  const plan3 = planesBanco.find((r) => parseInt(r.cuotas, 10) === 3);
-  const plan6 = planesBanco.find((r) => parseInt(r.cuotas, 10) === 6);
-  const recargo3 = recargoPct(plan3?.coeficiente ?? null);
-  const recargo6 = recargoPct(plan6?.coeficiente ?? null);
+  const grupoBanco = recargos?.find((r) => esBanco(r.grupo))?.grupo ?? null;
+  const grupoNaranja = recargos?.find((r) => esNaranja(r.grupo))?.grupo ?? null;
 
-  const detalleVisaMaster = isPromoDay
-    ? "Hoy 3 cuotas sin interés (todos los miércoles y sábados)."
-    : recargo3 || recargo6
-      ? `${[recargo3 && `3 cuotas ${recargo3}`, recargo6 && `6 cuotas ${recargo6}`].filter(Boolean).join(" · ")}. Sin interés los miércoles y sábados.`
-      : "Consultá cuotas disponibles.";
+  const bancoPlanes = grupoBanco ? planesParaGrupo(grupoBanco, basePrice, recargos, isPromoDay) : [];
+  const mpPlanes = planesParaGrupo(MERCADO_PAGO_GRUPO, basePrice, recargos, isPromoDay);
+  const naranjaPlanes = grupoNaranja ? planesParaGrupo(grupoNaranja, basePrice, recargos, isPromoDay) : [];
+  const gocPlanes = planesParaGrupo(GOCUOTAS_GRUPO, basePrice, recargos, isPromoDay);
+
+  const lineaBanco = lineaCuotas(bancoPlanes, basePrice);
+  const detalleBanco = lineaBanco
+    ? isPromoDay
+      ? `${lineaBanco} (todos los miércoles y sábados).`
+      : `${lineaBanco}. Sin interés los miércoles y sábados.`
+    : "Consultá cuotas disponibles.";
 
   const detalles: Record<string, string> = {
-    visa: detalleVisaMaster,
-    mastercard: detalleVisaMaster,
-    mercadopago: "2 cuotas sin interés desde $50.000 · 3 cuotas sin interés desde $150.000.",
-    naranja: "Plan Z con Tarjeta Naranja: 3 cuotas sin interés.",
-    gocuotas: "Cuotas con GOcuotas: 3 cuotas sin interés.",
+    visa: detalleBanco,
+    mastercard: detalleBanco,
+    mercadopago: lineaCuotas(mpPlanes, basePrice) ?? "Consultá cuotas disponibles.",
+    naranja: lineaCuotas(naranjaPlanes, basePrice) ?? "Plan Z con Tarjeta Naranja: 3 cuotas sin interés.",
+    gocuotas: lineaCuotas(gocPlanes, basePrice) ?? "Cuotas con GOcuotas: 3 cuotas sin interés.",
   };
 
   const [activo, setActivo] = useState<string | null>(null);
+  // Se captura acá el `activo` de ANTES de este toque, en onPointerDown —
+  // que dispara antes de que el navegador mueva el foco al botón tocado. Si
+  // el onClick usara el `activo` del render (ya actualizado por el onFocus
+  // de este mismo toque, que llega antes que el click), tocar un método B
+  // mientras A estaba abierto hacía: focus(B) abre B, y el click de ESE
+  // MISMO toque, al ver que B ya estaba "activo", lo cerraba de nuevo — en
+  // celular quedaba todo cerrado y había que tocar una segunda vez.
+  const activoAntesDelToqueRef = useRef<string | null>(null);
 
   function mostrar(id: string) {
     setActivo(id);
@@ -103,11 +136,14 @@ export function PaymentMethodsSection({ onCalcularCuotas }: { onCalcularCuotas?:
             <button
               key={m.id}
               type="button"
+              onPointerDown={() => {
+                activoAntesDelToqueRef.current = activo;
+              }}
               onMouseEnter={() => mostrar(m.id)}
               onMouseLeave={() => ocultar(m.id)}
               onFocus={() => mostrar(m.id)}
               onBlur={() => ocultar(m.id)}
-              onClick={() => setActivo((prev) => (prev === m.id ? null : m.id))}
+              onClick={() => setActivo(activoAntesDelToqueRef.current === m.id ? null : m.id)}
               className={`shrink-0 rounded-md p-1.5 transition-colors ${activo === m.id ? "bg-slate-100" : "hover:bg-slate-50"}`}
               aria-expanded={activo === m.id}
             >

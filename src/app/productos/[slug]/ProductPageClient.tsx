@@ -254,7 +254,10 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
         </div>
       </div>
 
-      <PaymentMethodsSection onCalcularCuotas={() => cotizadorRef.current?.openConUnaUnidad()} />
+      <PaymentMethodsSection
+        basePrice={product.price}
+        onCalcularCuotas={() => cotizadorRef.current?.openConUnaUnidad()}
+      />
 
       <div className="rounded-xl border border-slate-200 bg-white p-4">
         <CotizadorClient
