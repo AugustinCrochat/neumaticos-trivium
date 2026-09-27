@@ -77,6 +77,15 @@ function logosDelGrupo(grupo: string): string[] {
   return [];
 }
 
+/** Los SVG de cada medio vienen con proporciones muy distintas entre sí — a
+    una altura pareja (h-5) Mercado Pago y GOcuotas se ven chicos al lado de
+    Visa/Mastercard/Naranja, así que se les da más altura acá. */
+function logoClassName(logo: string): string {
+  if (logo === "/images/payments/mercadopago.svg") return "h-9 w-auto";
+  if (logo === "/images/payments/gocuotas.svg") return "h-6 w-auto";
+  return "h-5 w-auto";
+}
+
 type Plan = { id: string; cuotas: string; coeficiente: number | null };
 
 /**
@@ -159,7 +168,7 @@ export function InstallmentCalculator({ basePrice }: { basePrice: number }) {
         <h3 className="text-xs font-black uppercase tracking-wide text-navy-900">Calculá tus cuotas</h3>
         <div className="flex items-center gap-2">
           {logosDelGrupo(grupoActual).map((logo) => (
-            <Image key={logo} src={logo} alt="" width={140} height={40} className="h-5 w-auto" />
+            <Image key={logo} src={logo} alt="" width={140} height={40} className={logoClassName(logo)} />
           ))}
         </div>
       </div>

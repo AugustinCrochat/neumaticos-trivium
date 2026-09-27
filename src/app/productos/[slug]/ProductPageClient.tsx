@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useBranch } from "@/contexts/branch-context";
 import { useVehicle } from "@/contexts/vehicle-context";
 import type { TireProduct } from "@/lib/types";
@@ -9,7 +9,7 @@ import { isLowStock, stockLabel } from "@/lib/stock";
 import { BranchStatusBadge } from "@/app/sucursales/[id]/BranchStatusBadge";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 import { PaymentMethodsSection } from "@/components/ui/PaymentMethodsSection";
-import { CotizadorClient } from "@/app/cotizador/CotizadorClient";
+import { CotizadorClient, type CotizadorHandle } from "@/app/cotizador/CotizadorClient";
 import { getPickupLabel, type PickupTiming } from "@/lib/branch-status";
 
 // Diámetro en mm: rodado en pulgadas * 25.4 + 2 * (ancho * perfil / 100)
@@ -33,6 +33,7 @@ function formatSize(size: { width: number; profile: number; rim: number }): stri
 export function ProductPageClient({ product }: { product: TireProduct }) {
   const { selectedBranch, openModal } = useBranch();
   const { selectedVehicle } = useVehicle();
+  const cotizadorRef = useRef<CotizadorHandle | null>(null);
 
   // El stock de `product` viene horneado en el HTML del último build (el
   // sitio es 100% estático, sin ISR — ver memoria del proyecto), así que
@@ -253,10 +254,11 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
         </div>
       </div>
 
-      <PaymentMethodsSection />
+      <PaymentMethodsSection onCalcularCuotas={() => cotizadorRef.current?.openConUnaUnidad()} />
 
       <div className="rounded-xl border border-slate-200 bg-white p-4">
         <CotizadorClient
+          ref={cotizadorRef}
           compact
           initialProduct={{ id: product.id, label: `${product.brand} ${product.model}`, price: product.price, imageUrl: product.imageUrl }}
         />

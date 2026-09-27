@@ -19,8 +19,8 @@ type Metodo = {
 };
 
 const METODOS: Metodo[] = [
-  { id: "visa", logo: "/images/payments/visa.svg", alt: "Visa", logoClassName: "h-5 w-auto" },
-  { id: "mastercard", logo: "/images/payments/mastercard.svg", alt: "Mastercard", logoClassName: "h-7 w-auto" },
+  { id: "visa", logo: "/images/payments/visa.svg", alt: "Visa", logoClassName: "h-4 w-auto" },
+  { id: "mastercard", logo: "/images/payments/mastercard.svg", alt: "Mastercard", logoClassName: "h-8 w-auto" },
   { id: "mercadopago", logo: "/images/payments/mercadopago.svg", alt: "Mercado Pago", logoClassName: "h-10 w-auto" },
   { id: "naranja", logo: "/images/payments/naranja-x.svg", alt: "Tarjeta Naranja", logoClassName: "h-6 w-auto" },
   { id: "gocuotas", logo: "/images/payments/gocuotas.svg", alt: "GOcuotas", logoClassName: "h-7 w-auto" },
@@ -42,7 +42,7 @@ const METODOS: Metodo[] = [
  * pintura (server y cliente) coincide siempre — sin eso, un miércoles
  * generaría un mismatch de hidratación.
  */
-export function PaymentMethodsSection() {
+export function PaymentMethodsSection({ onCalcularCuotas }: { onCalcularCuotas?: () => void } = {}) {
   const [isPromoDay, setIsPromoDay] = useState(false);
   useEffect(() => {
     const update = () => setIsPromoDay(isVisaMasterPromoDay());
@@ -84,7 +84,18 @@ export function PaymentMethodsSection() {
 
   return (
     <section id="metodos-pago" className="scroll-mt-24 rounded-xl border border-slate-200 bg-white p-4">
-      <h2 className="mb-3 text-xs font-black uppercase tracking-wide text-navy-900">Medios de pago</h2>
+      <div className="mb-3 flex items-center justify-between gap-2">
+        <h2 className="text-xs font-black uppercase tracking-wide text-navy-900">Medios de pago</h2>
+        {onCalcularCuotas && (
+          <button
+            type="button"
+            onClick={onCalcularCuotas}
+            className="shrink-0 rounded-lg border border-navy-200 px-2.5 py-1.5 text-xs font-black text-navy-700 transition-colors hover:border-orange-500 hover:bg-orange-50 hover:text-orange-700"
+          >
+            Calcular cuotas
+          </button>
+        )}
+      </div>
 
       <div className="rounded-lg border border-slate-200 p-3">
         <div className="flex flex-nowrap items-center justify-between gap-2 overflow-x-auto sm:gap-3">
