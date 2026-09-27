@@ -340,7 +340,9 @@ export function BranchesMap({ branches, comingSoon = [] }: BranchesMapProps) {
             source: "coming-soon",
             layout: {
               "icon-image": "trivium-pin",
-              "icon-size": 0.22,
+              // pin-trivium.png es de 320×324px — a 0.11 renderiza ~35px,
+              // adentro del círculo de 44px (circle-radius: 22) de atrás.
+              "icon-size": 0.11,
               "icon-allow-overlap": true,
             },
             paint: {
