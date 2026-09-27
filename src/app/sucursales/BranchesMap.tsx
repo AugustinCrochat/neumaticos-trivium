@@ -73,7 +73,7 @@ function createBranchMarkerElement(shortName: string) {
   const badge = document.createElement("div");
   badge.dataset.role = "badge";
   badge.style.cssText =
-    "display:flex;align-items:center;justify-content:center;width:52px;height:52px;padding:8px;border-radius:15px;background:#ffffff;border:2px solid #000000;box-shadow:0 4px 12px rgba(10,26,48,0.35);transition:transform .15s ease,border-color .15s ease";
+    "display:flex;align-items:center;justify-content:center;width:52px;height:52px;padding:6px;border-radius:15px;background:#ffffff;border:2px solid #000000;box-shadow:0 4px 12px rgba(10,26,48,0.35);transition:transform .15s ease,border-color .15s ease";
 
   const img = document.createElement("img");
   img.src = "/pin-trivium.png";
