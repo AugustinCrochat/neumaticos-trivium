@@ -75,7 +75,7 @@ export default function SucursalesPage() {
           </p>
           <h2 className="text-xl font-black text-navy-900 md:text-2xl">Nueva sucursal en San Justo</h2>
           <p className="mt-2 max-w-2xl leading-relaxed text-slate-600">
-            En aproximadamente 3 meses abrimos en San Justo, partido de La Matanza, provincia de Buenos Aires:
+            En aproximadamente 2 meses abrimos en San Justo, partido de La Matanza, provincia de Buenos Aires:
             Presidente Juan Domingo Perón 2847 (CP 1745).
           </p>
         </div>
