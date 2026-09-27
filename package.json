@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "prebuild": "node scripts/generate-og-product-photos.mjs",
+    "prebuild": "node scripts/generate-og-product-photos.mjs && node scripts/generate-og-branch-photos.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",

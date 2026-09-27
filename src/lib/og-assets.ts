@@ -28,3 +28,23 @@ export async function getBrandIconDataUri() {
   }
   return iconDataUri;
 }
+
+const branchPhotoCache = new Map<string, string | null>();
+
+/** Foto de fachada de una sucursal, ya convertida a PNG por
+    scripts/generate-og-branch-photos.mjs (ver ese script: next/og no sabe
+    decodificar webp). Se usa como fondo de las og-image "genéricas" (home,
+    medida) — null si esa sucursal todavía no tiene foto o no corrió el
+    prebuild (ej. en dev sin haber corrido `npm run prebuild` a mano). */
+export async function getBranchPhotoDataUri(fileBaseName: string): Promise<string | null> {
+  if (branchPhotoCache.has(fileBaseName)) return branchPhotoCache.get(fileBaseName) ?? null;
+  try {
+    const png = await readFile(join(process.cwd(), "public", "og-cache", "branches", `${fileBaseName}.png`));
+    const dataUri = `data:image/png;base64,${png.toString("base64")}`;
+    branchPhotoCache.set(fileBaseName, dataUri);
+    return dataUri;
+  } catch {
+    branchPhotoCache.set(fileBaseName, null);
+    return null;
+  }
+}

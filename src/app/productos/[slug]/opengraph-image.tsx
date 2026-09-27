@@ -3,7 +3,7 @@ import { join } from "node:path";
 import { ImageResponse } from "next/og";
 import { getProductosDesdePOS } from "@/lib/pos-api";
 import { DEFAULT_BRANCH_ID } from "@/lib/config";
-import { getBrandWordmarkDataUri } from "@/lib/og-assets";
+import { getBrandWordmarkDataUri, getBrandIconDataUri } from "@/lib/og-assets";
 
 export const alt = "Neumáticos Trivium";
 export const size = { width: 1200, height: 630 };
@@ -62,8 +62,9 @@ export default async function Image({ params }: { params: Promise<{ slug: string
   const productos = await getProductosDesdePOS(DEFAULT_BRANCH_ID);
   const product = productos.find((p) => p.slug === slug);
 
-  const [wordmark, photo] = await Promise.all([
+  const [wordmark, icon, photo] = await Promise.all([
     getBrandWordmarkDataUri(),
+    getBrandIconDataUri(),
     product ? getImageDataUri(product.imageUrl) : Promise.resolve(null),
   ]);
 
@@ -83,11 +84,17 @@ export default async function Image({ params }: { params: Promise<{ slug: string
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          background: "linear-gradient(135deg, #06111f 0%, #0a1a30 60%, #0f2444 100%)",
+          background: "#050505",
           padding: "0 64px",
+          position: "relative",
         }}
       >
         <div style={{ display: "flex", position: "absolute", top: 0, left: 0, right: 0, height: 6, background: "#ff1e00" }} />
+
+        {/* Isotipo como marca de agua — negro sobre negro, sólo queda el
+            contorno blanco y el cartelito rojo (ver src/app/icon.svg). */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={icon} width={420} height={420} alt="" style={{ position: "absolute", left: -100, bottom: -120, opacity: 0.14 }} />
 
         <div style={{ display: "flex", flexDirection: "column", width: 600 }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -95,7 +102,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
 
           {product ? (
             <div style={{ display: "flex", flexDirection: "column" }}>
-              <span style={{ display: "flex", fontSize: 14, fontWeight: 800, color: "#ff8066", letterSpacing: 2, textTransform: "uppercase", marginBottom: 12 }}>
+              <span style={{ display: "flex", fontSize: 14, fontWeight: 800, color: "#ff1e00", letterSpacing: 2, textTransform: "uppercase", marginBottom: 12 }}>
                 {product.brand}
               </span>
               <span style={{ display: "flex", fontSize: 62, fontWeight: 900, color: "white", lineHeight: 1.05 }}>
@@ -106,7 +113,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
                   display: "flex",
                   fontSize: 26,
                   fontWeight: 700,
-                  color: "#dceaf8",
+                  color: "#cbd5e1",
                   marginTop: 14,
                   lineHeight: 1.3,
                   maxWidth: 560,
@@ -114,7 +121,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
               >
                 {modelWithoutSize}
               </span>
-              <span style={{ display: "flex", fontSize: 48, fontWeight: 900, color: "#ff4d33", marginTop: 28 }}>
+              <span style={{ display: "flex", fontSize: 48, fontWeight: 900, color: "#ff1e00", marginTop: 28 }}>
                 {formatPrice(product.price)}
               </span>
             </div>
@@ -124,27 +131,53 @@ export default async function Image({ params }: { params: Promise<{ slug: string
             </span>
           )}
 
-          <span style={{ display: "flex", fontSize: 18, fontWeight: 700, color: "#a8c8ec", marginTop: 32, letterSpacing: 1 }}>
+          <span style={{ display: "flex", fontSize: 18, fontWeight: 700, color: "#94a3b8", marginTop: 32, letterSpacing: 1 }}>
             neumaticos.trivium.ar
           </span>
         </div>
 
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            width: 460,
-            height: 460,
-            borderRadius: 32,
-            background: "rgba(255, 255, 255, 0.06)",
-            border: "2px solid rgba(255, 255, 255, 0.1)",
-          }}
-        >
-          {photo && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={photo} alt="" width={400} height={400} style={{ objectFit: "contain" }} />
-          )}
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", position: "relative" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: 460,
+              height: 460,
+              borderRadius: 32,
+              background: "white",
+            }}
+          >
+            {photo && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={photo} alt="" width={400} height={400} style={{ objectFit: "contain" }} />
+            )}
+          </div>
+
+          {/* Colocación gratis: se pisa un poco con el borde de arriba de la
+              tarjeta blanca (margin negativo), como una cinta de promo. */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              marginTop: -22,
+              padding: "10px 22px",
+              borderRadius: 9999,
+              background: "#ff1e00",
+              boxShadow: "0 8px 20px rgba(255, 30, 0, 0.35)",
+            }}
+          >
+            {/* El glifo "✓" no está en la fuente default de satori/resvg (se
+                renderiza como tofu) — un check dibujado en SVG no depende de
+                qué caracteres soporte la fuente. */}
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round">
+              <path d="M20 6 9 17l-5-5" />
+            </svg>
+            <span style={{ display: "flex", fontSize: 18, fontWeight: 900, color: "white", letterSpacing: 0.5 }}>
+              Colocación gratis
+            </span>
+          </div>
         </div>
       </div>
     ),

@@ -1,5 +1,5 @@
 import { ImageResponse } from "next/og";
-import { getBrandWordmarkDataUri } from "@/lib/og-assets";
+import { getBrandWordmarkDataUri, getBrandIconDataUri } from "@/lib/og-assets";
 
 function parseSize(value: string | null) {
   if (!value) return null;
@@ -22,7 +22,7 @@ export async function GET(request: Request) {
       ? ((tireDiameter(equivalente) - tireDiameter(original)) / tireDiameter(original)) * 100
       : null;
 
-  const wordmark = await getBrandWordmarkDataUri();
+  const [wordmark, icon] = await Promise.all([getBrandWordmarkDataUri(), getBrandIconDataUri()]);
 
   return new ImageResponse(
     (
@@ -34,12 +34,15 @@ export async function GET(request: Request) {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          // Navy de marca (mismo que --color-navy-950/900 en globals.css)
-          background: "linear-gradient(135deg, #06111f 0%, #0a1a30 60%, #0f2444 100%)",
+          background: "#050505",
           padding: 40,
+          position: "relative",
         }}
       >
         <div style={{ display: "flex", position: "absolute", top: 0, left: 0, right: 0, height: 6, background: "#ff1e00" }} />
+
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={icon} width={420} height={420} alt="" style={{ position: "absolute", right: -110, bottom: -130, opacity: 0.14 }} />
 
         <div
           style={{
@@ -51,6 +54,7 @@ export async function GET(request: Request) {
             border: "2px solid rgba(255, 255, 255, 0.1)",
             borderRadius: 32,
             padding: "36px 40px",
+            position: "relative",
           }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -61,7 +65,7 @@ export async function GET(request: Request) {
               display: "flex",
               fontSize: 14,
               fontWeight: 800,
-              color: "#ff8066",
+              color: "#ff1e00",
               letterSpacing: 2,
               textTransform: "uppercase",
               marginBottom: 24,
@@ -74,7 +78,7 @@ export async function GET(request: Request) {
             {/* Original */}
             {original && (
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                <span style={{ fontSize: 12, fontWeight: 800, color: "#dceaf8", letterSpacing: 1.5, marginBottom: 4 }}>MEDIDA ORIGINAL</span>
+                <span style={{ fontSize: 12, fontWeight: 800, color: "#cbd5e1", letterSpacing: 1.5, marginBottom: 4 }}>MEDIDA ORIGINAL</span>
                 <span style={{ fontSize: 56, fontWeight: 900, color: "white", lineHeight: 1 }}>
                   {original.width}/{original.profile} R{original.rim}
                 </span>
@@ -112,7 +116,7 @@ export async function GET(request: Request) {
             {/* Equivalente */}
             {equivalente && (
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                <span style={{ fontSize: 12, fontWeight: 800, color: "#dceaf8", letterSpacing: 1.5, marginBottom: 4 }}>MEDIDA EQUIVALENTE</span>
+                <span style={{ fontSize: 12, fontWeight: 800, color: "#cbd5e1", letterSpacing: 1.5, marginBottom: 4 }}>MEDIDA EQUIVALENTE</span>
                 <span style={{ fontSize: 56, fontWeight: 900, color: "white", lineHeight: 1 }}>
                   {equivalente.width}/{equivalente.profile} R{equivalente.rim}
                 </span>
@@ -125,7 +129,7 @@ export async function GET(request: Request) {
                 <span style={{ fontSize: 32, fontWeight: 900, color: "white", textAlign: "center" }}>
                   Compará la medida de tus neumáticos
                 </span>
-                <span style={{ fontSize: 18, fontWeight: 600, color: "#dceaf8", marginTop: 12, textAlign: "center" }}>
+                <span style={{ fontSize: 18, fontWeight: 600, color: "#cbd5e1", marginTop: 12, textAlign: "center" }}>
                   Calculá tolerancias y diámetros en segundos
                 </span>
               </div>
@@ -133,7 +137,7 @@ export async function GET(request: Request) {
           </div>
         </div>
 
-        <div style={{ display: "flex", marginTop: 24, fontSize: 18, fontWeight: 700, color: "#a8c8ec", letterSpacing: 1.5 }}>
+        <div style={{ display: "flex", marginTop: 24, fontSize: 18, fontWeight: 700, color: "#94a3b8", letterSpacing: 1.5 }}>
           neumaticos.trivium.ar
         </div>
       </div>
