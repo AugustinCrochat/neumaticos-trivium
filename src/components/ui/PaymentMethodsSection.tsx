@@ -15,13 +15,15 @@ function montoCuota(basePrice: number, plan: Plan): number {
   return Math.round((basePrice * (plan.coeficiente ?? 1)) / cantidad);
 }
 
-/** Línea con el monto real de cada cuota (para 1 neumático, basePrice), no
-    solo el % de recargo — así el hover contesta directamente "cuánto pago
-    por mes" sin tener que abrir el cotizador de más abajo. */
-function lineaCuotas(planes: Plan[], basePrice: number): string | null {
-  const conCuotas = planes.filter((p) => p.coeficiente != null && (parseInt(p.cuotas, 10) || 1) > 1);
-  if (conCuotas.length === 0) return null;
-  return conCuotas.map((p) => `${p.cuotas} de ${formatPrice(montoCuota(basePrice, p))}`).join(" · ");
+/** Una línea por plan con el monto real de cada cuota (para 1 neumático,
+    basePrice), no solo el % de recargo — así el hover contesta directamente
+    "cuánto pago por mes" sin tener que abrir el cotizador de más abajo.
+    Antes iba todo junto separado por "·" y con varias opciones (típico en
+    Mercado Pago, que tiene hasta 4) se hacía ilegible en una sola línea. */
+function lineasCuotas(planes: Plan[], basePrice: number): string[] {
+  return planes
+    .filter((p) => p.coeficiente != null && (parseInt(p.cuotas, 10) || 1) > 1)
+    .map((p) => `${p.cuotas} de ${formatPrice(montoCuota(basePrice, p))}`);
 }
 
 type Metodo = {
@@ -83,19 +85,22 @@ export function PaymentMethodsSection({
   const naranjaPlanes = grupoNaranja ? planesParaGrupo(grupoNaranja, basePrice, recargos, isPromoDay) : [];
   const gocPlanes = planesParaGrupo(GOCUOTAS_GRUPO, basePrice, recargos, isPromoDay);
 
-  const lineaBanco = lineaCuotas(bancoPlanes, basePrice);
-  const detalleBanco = lineaBanco
-    ? isPromoDay
-      ? `${lineaBanco} (todos los miércoles y sábados).`
-      : `${lineaBanco}. Sin interés los miércoles y sábados.`
-    : "Consultá cuotas disponibles.";
+  const lineasBanco = lineasCuotas(bancoPlanes, basePrice);
+  const detalleBanco =
+    lineasBanco.length > 0
+      ? [...lineasBanco, isPromoDay ? "Promo válida todos los miércoles y sábados." : "Sin interés los miércoles y sábados."]
+      : ["Consultá cuotas disponibles."];
 
-  const detalles: Record<string, string> = {
+  const lineasMp = lineasCuotas(mpPlanes, basePrice);
+  const lineasNaranja = lineasCuotas(naranjaPlanes, basePrice);
+  const lineasGocuotas = lineasCuotas(gocPlanes, basePrice);
+
+  const detalles: Record<string, string[]> = {
     visa: detalleBanco,
     mastercard: detalleBanco,
-    mercadopago: lineaCuotas(mpPlanes, basePrice) ?? "Consultá cuotas disponibles.",
-    naranja: lineaCuotas(naranjaPlanes, basePrice) ?? "Plan Z con Tarjeta Naranja: 3 cuotas sin interés.",
-    gocuotas: lineaCuotas(gocPlanes, basePrice) ?? "Cuotas con GOcuotas: 3 cuotas sin interés.",
+    mercadopago: lineasMp.length > 0 ? lineasMp : ["Consultá cuotas disponibles."],
+    naranja: lineasNaranja.length > 0 ? lineasNaranja : ["Plan Z con Tarjeta Naranja: 3 cuotas sin interés."],
+    gocuotas: lineasGocuotas.length > 0 ? lineasGocuotas : ["Cuotas con GOcuotas: 3 cuotas sin interés."],
   };
 
   const [activo, setActivo] = useState<string | null>(null);
@@ -156,7 +161,13 @@ export function PaymentMethodsSection({
             <svg className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <p className="text-sm font-bold text-emerald-900">{detalles[activo]}</p>
+            <div className="space-y-0.5">
+              {detalles[activo].map((linea, i) => (
+                <p key={i} className="text-sm font-bold text-emerald-900">
+                  {linea}
+                </p>
+              ))}
+            </div>
           </div>
         )}
       </div>
