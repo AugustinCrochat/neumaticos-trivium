@@ -303,25 +303,13 @@ export function BranchesMap({ branches, comingSoon = [] }: BranchesMapProps) {
         });
 
         map.addLayer({
-          id: "coming-soon-badge",
-          type: "circle",
-          source: "coming-soon",
-          paint: {
-            "circle-radius": 22,
-            "circle-color": "#ffffff",
-            "circle-stroke-color": "#f97316",
-            "circle-stroke-width": 2,
-          },
-        });
-
-        map.addLayer({
           id: "coming-soon-label",
           type: "symbol",
           source: "coming-soon",
           layout: {
             "text-field": ["concat", "Próximamente · ", ["get", "name"]],
             "text-size": 11,
-            "text-offset": [0, 1.9],
+            "text-offset": [0, 0.6],
             "text-anchor": "top",
             "text-allow-overlap": true,
           },
@@ -332,37 +320,40 @@ export function BranchesMap({ branches, comingSoon = [] }: BranchesMapProps) {
           },
         });
 
-        map.loadImage("/pin-trivium.png").then(({data}) => {
-          if (!map.hasImage("trivium-pin")) map.addImage("trivium-pin", data);
+        // pin-proximamente.png es una insignia pre-compuesta (fondo redondeado
+        // + borde naranja + triangulo puntero + logo semitransparente) del
+        // mismo estilo que el pin de sucursal real, para poder usarla como
+        // icono de una capa GL (un circle layer no puede dibujar la forma
+        // redondeada con puntero). Es de 208×240px (4x de 52×60px) para verse
+        // nítida en pantallas retina; icon-size 0.25 la renderiza a 52px de
+        // ancho, igual que el badge de las sucursales reales.
+        map.loadImage("/pin-proximamente.png").then(({data}) => {
+          if (!map.hasImage("pin-proximamente")) map.addImage("pin-proximamente", data);
           map.addLayer({
             id: "coming-soon-icon",
             type: "symbol",
             source: "coming-soon",
             layout: {
-              "icon-image": "trivium-pin",
-              // pin-trivium.png es de 320×324px — a 0.11 renderiza ~35px,
-              // adentro del círculo de 44px (circle-radius: 22) de atrás.
-              "icon-size": 0.11,
+              "icon-image": "pin-proximamente",
+              "icon-size": 0.25,
+              "icon-anchor": "bottom",
               "icon-allow-overlap": true,
             },
-            paint: {
-              "icon-opacity": 0.65,
-            },
           });
-        }).catch(() => {});
 
-        const soonPopup = new maplibregl.Popup({ offset: 16, closeButton: true });
-        map.on("click", "coming-soon-badge", (e) => {
-          const feature = e.features?.[0];
-          if (!feature || feature.geometry.type !== "Point") return;
-          const [lng, lat] = feature.geometry.coordinates;
-          soonPopup
-            .setLngLat([lng, lat])
-            .setHTML(`<strong>${feature.properties?.name} — próximamente</strong><br/>${feature.properties?.address}`)
-            .addTo(map);
-        });
-        map.on("mouseenter", "coming-soon-badge", () => { map.getCanvas().style.cursor = "pointer"; });
-        map.on("mouseleave", "coming-soon-badge", () => { map.getCanvas().style.cursor = ""; });
+          const soonPopup = new maplibregl.Popup({ offset: 16, closeButton: true });
+          map.on("click", "coming-soon-icon", (e) => {
+            const feature = e.features?.[0];
+            if (!feature || feature.geometry.type !== "Point") return;
+            const [lng, lat] = feature.geometry.coordinates;
+            soonPopup
+              .setLngLat([lng, lat])
+              .setHTML(`<strong>${feature.properties?.name} — próximamente</strong><br/>${feature.properties?.address}`)
+              .addTo(map);
+          });
+          map.on("mouseenter", "coming-soon-icon", () => { map.getCanvas().style.cursor = "pointer"; });
+          map.on("mouseleave", "coming-soon-icon", () => { map.getCanvas().style.cursor = ""; });
+        }).catch(() => {});
       }
     });
 
