@@ -373,6 +373,30 @@ export default async function ProductPage({ params }: Props) {
             Neumático {product.brand} pensado para {vehicleLabel(product)}, en la medida {product.size.width}/{product.size.profile} R{product.size.rim}.{" "}
             {brand?.fullDescription || brand?.description || `${product.brand} ofrece una relación costo-beneficio competitiva, con buen agarre y durabilidad para uso diario.`}
           </p>
+          <p className="mt-3 text-sm text-slate-500">
+            {product.isCarga ? (
+              <>
+                Es un neumático de carga (serie C).{" "}
+                <Link href="/neumaticos/carga" className="font-bold text-navy-700 underline decoration-navy-300 hover:decoration-navy-900">
+                  Ver todos los de carga.
+                </Link>
+              </>
+            ) : product.isAT ? (
+              <>
+                Es un neumático A/T (All Terrain).{" "}
+                <Link href="/neumaticos/at" className="font-bold text-navy-700 underline decoration-navy-300 hover:decoration-navy-900">
+                  Ver todos los A/T.
+                </Link>
+              </>
+            ) : (
+              <>
+                Es un neumático H/T (Highway Terrain), de calle.{" "}
+                <Link href="/neumaticos/ht" className="font-bold text-navy-700 underline decoration-navy-300 hover:decoration-navy-900">
+                  Ver todos los H/T.
+                </Link>
+              </>
+            )}
+          </p>
           {tireLabel && (
             <p className="mt-4 rounded-xl bg-slate-50 px-4 py-3 text-xs leading-relaxed text-slate-500">
               <strong className="text-slate-700">Certificado en la UE:</strong> eficiencia de
