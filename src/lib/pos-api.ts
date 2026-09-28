@@ -196,6 +196,11 @@ function parseLoadSpeed(nombre: string): {
   return { loadIndex: match[1], speedRating: match[2] };
 }
 
+// Marcas de entrada/económicas — todas fabricadas por Zodo Tyre o similares,
+// pensadas para el comprador que prioriza precio. "arivo-premio" porque el
+// POS carga la marca como "ARIVO PREMIO".
+const ECONOMIC_BRAND_IDS = new Set(["grenlander", "zmax", "arivo-premio"]);
+
 function toTireProduct(p: PosProducto): TireProduct | null {
   if (!p.neumatico_ancho || !p.neumatico_perfil || !p.neumatico_diametro) {
     // No es un neumático con medida completa — no se puede mostrar en el catálogo de la web
@@ -238,7 +243,7 @@ function toTireProduct(p: PosProducto): TireProduct | null {
     price: p.precio,
     imageUrl: p.imagen_url || localImageFallback(p) || PLACEHOLDER_IMAGE,
     tags: [],
-    isEconomic: false,
+    isEconomic: ECONOMIC_BRAND_IDS.has(brandId),
     isImported: true,
     isCarga: p.es_carga,
     isAT: p.es_at,

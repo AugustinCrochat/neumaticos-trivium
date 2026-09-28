@@ -162,6 +162,12 @@ export default async function NeumaticosPage() {
         <h2 className="mb-4 text-2xl font-black text-navy-900">Por tipo de uso</h2>
         <div className="flex flex-wrap gap-3">
           <Link
+            href="/neumaticos/ht"
+            className="rounded-xl border border-slate-200 bg-white px-5 py-3 font-bold text-navy-900 transition-colors hover:border-navy-400"
+          >
+            Neumáticos H/T (Highway Terrain)
+          </Link>
+          <Link
             href="/neumaticos/at"
             className="rounded-xl border border-slate-200 bg-white px-5 py-3 font-bold text-navy-900 transition-colors hover:border-navy-400"
           >
