@@ -5,6 +5,7 @@ import { SITE_URL } from "@/lib/config";
 import { SITE_NAME, siteGraphJsonLd } from "@/lib/seo";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { BranchProvider } from "@/contexts/branch-context";
+import { LiveStockProvider } from "@/contexts/live-stock-context";
 import { BranchModal } from "@/components/ui/BranchModal";
 import { VehicleProvider } from "@/contexts/vehicle-context";
 import { VehicleModal } from "@/components/ui/VehicleModal";
@@ -129,19 +130,21 @@ export default function RootLayout({
         <GoogleAdsTag />
         <JsonLd data={siteGraphJsonLd()} />
         <BranchProvider>
-          <VehicleProvider vehiculos={vehiculos}>
-            <CartProvider>
-              <Header />
-              <BranchModal />
-              <VehicleModal />
-              <CartDrawer />
-              <FloatingSearchWidget />
-              <FloatingWhatsAppButton />
-              <GoogleReviewsBadge />
-              <main className="flex-1">{children}</main>
-              <Footer />
-            </CartProvider>
-          </VehicleProvider>
+          <LiveStockProvider>
+            <VehicleProvider vehiculos={vehiculos}>
+              <CartProvider>
+                <Header />
+                <BranchModal />
+                <VehicleModal />
+                <CartDrawer />
+                <FloatingSearchWidget />
+                <FloatingWhatsAppButton />
+                <GoogleReviewsBadge />
+                <main className="flex-1">{children}</main>
+                <Footer />
+              </CartProvider>
+            </VehicleProvider>
+          </LiveStockProvider>
         </BranchProvider>
       </body>
     </html>
