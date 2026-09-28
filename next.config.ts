@@ -1,6 +1,17 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Sin esto, `next build` reparte la generación estática en varios workers
+  // en paralelo, cada uno con su propia copia en memoria del catálogo
+  // (memoryCache en pos-api.ts no se comparte entre procesos). Si el POS
+  // cambia un precio o el stock mientras el build está corriendo (~5 min),
+  // dos páginas del mismo deploy pueden terminar con dos fotos distintas del
+  // mismo producto (ej. la ficha bien y el catálogo/relacionados con el dato
+  // viejo, o viceversa) hasta el próximo redeploy. cpus: 1 fuerza un solo
+  // proceso para que todas las páginas lean la misma foto congelada.
+  experimental: {
+    cpus: 1,
+  },
   async redirects() {
     return [
       {
