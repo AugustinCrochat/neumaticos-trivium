@@ -29,6 +29,24 @@ export async function getBrandIconDataUri() {
   return iconDataUri;
 }
 
+const brandLogoCache = new Map<string, string | null>();
+
+/** Logo de la marca del neumático (no de Trivium) para la og-image de
+    producto — sólo unas pocas marcas tienen SVG propio en public/brands/
+    (ver BRANDS.logoUrl en data.ts); null para el resto, que cae al nombre
+    en texto. */
+export async function getTireBrandLogoDataUri(brandId: string): Promise<string | null> {
+  if (brandLogoCache.has(brandId)) return brandLogoCache.get(brandId) ?? null;
+  try {
+    const dataUri = await toDataUri(`public/brands/${brandId}.svg`);
+    brandLogoCache.set(brandId, dataUri);
+    return dataUri;
+  } catch {
+    brandLogoCache.set(brandId, null);
+    return null;
+  }
+}
+
 const branchPhotoCache = new Map<string, string | null>();
 
 /** Foto de fachada de una sucursal, ya convertida a PNG por
