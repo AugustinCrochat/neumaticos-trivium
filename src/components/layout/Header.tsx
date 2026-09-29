@@ -12,6 +12,7 @@ const NAV_LINKS = [
   { href: "/servicios", label: "Servicios" },
   { href: "/sucursales", label: "Sucursales" },
   { href: "/contacto", label: "Contacto" },
+  { href: "/blog", label: "Blog" },
 ];
 
 export function Header() {
