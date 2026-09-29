@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { BRANCHES } from "@/lib/config";
 import { LOCALIDADES } from "@/lib/localidades";
@@ -75,6 +76,17 @@ export function LocalSection() {
               sin que nadie la usara para navegar. Las landings de
               /neumaticos-en siguen enlazadas desde el footer y el sitemap. */}
           <div>
+            {branch.facadePhoto && (
+              <div className="relative mb-6 aspect-[4/3] w-full overflow-hidden rounded-2xl">
+                <Image
+                  src={branch.facadePhoto}
+                  alt={`Fachada del local de Neumáticos Trivium ${branch.shortName}`}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 600px"
+                />
+              </div>
+            )}
             <h3 className="text-xl font-black">Zonas donde vendemos</h3>
             <p className="mt-2 leading-relaxed text-slate-300">
               Atendemos Córdoba Capital y todo el corredor de Sierras Chicas:{" "}

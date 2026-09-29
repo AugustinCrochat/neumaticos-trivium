@@ -22,10 +22,6 @@ export function FeaturedProductsSection({ productos }: { productos: TireProduct[
         <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
           <div className="max-w-2xl">
             <h2 className="text-3xl font-black text-navy-900">Precios de hoy</h2>
-            <p className="mt-3 text-lg leading-relaxed text-slate-600">
-              Nada de "a consultar": estos son algunos de los modelos que más salen, con el precio y
-              el stock real del local.
-            </p>
           </div>
           <Link
             href="/catalogo"
