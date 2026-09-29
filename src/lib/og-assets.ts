@@ -8,23 +8,44 @@ import { join } from "node:path";
 let wordmarkDataUri: string | null = null;
 let iconDataUri: string | null = null;
 
-async function toDataUri(relativePath: string) {
-  const svg = await readFile(join(process.cwd(), relativePath), "utf-8");
-  return `data:image/svg+xml;base64,${Buffer.from(svg).toString("base64")}`;
+// Los archivos que se generan con generateStaticParams (opengraph-image.tsx
+// de producto/medida) corren ENTERO en build time (Node.js con filesystem
+// completo) y el resultado queda como PNG estático — ahí readFile siempre
+// encuentra el archivo. Pero una ruta que responde en vivo en el Worker de
+// Cloudflare (ej. /api/og/equivalencia, que no se puede pre-renderizar
+// porque acepta cualquier combinación de medidas por query string) no tiene
+// /public en su filesystem: readFile tira ENOENT ahí. `baseUrl` (la URL de
+// la propia request) es el fallback para ese caso — trae el SVG por HTTP,
+// que sí sirve el binding de assets del Worker.
+async function toDataUri(relativePath: string, baseUrl?: string) {
+  try {
+    const svg = await readFile(join(process.cwd(), relativePath), "utf-8");
+    return `data:image/svg+xml;base64,${Buffer.from(svg).toString("base64")}`;
+  } catch (err) {
+    if (!baseUrl) throw err;
+    const publicPath = relativePath.replace(/^(public\/|src\/app\/)/, "");
+    const res = await fetch(new URL(`/${publicPath}`, baseUrl));
+    if (!res.ok) throw err;
+    const svg = await res.text();
+    return `data:image/svg+xml;base64,${Buffer.from(svg).toString("base64")}`;
+  }
 }
 
-/** Isologo completo (ícono + "NEUMÁTICOS TRIVIUM"), texto en blanco. */
-export async function getBrandWordmarkDataUri() {
+/** Isologo completo (ícono + "NEUMÁTICOS TRIVIUM"), texto en blanco.
+    `baseUrl` sólo hace falta desde una ruta que corre en vivo en el Worker
+    (ver comentario de `toDataUri`) — pasar `request.url`. */
+export async function getBrandWordmarkDataUri(baseUrl?: string) {
   if (!wordmarkDataUri) {
-    wordmarkDataUri = await toDataUri("public/logo-neumaticos-trivium.svg");
+    wordmarkDataUri = await toDataUri("public/logo-neumaticos-trivium.svg", baseUrl);
   }
   return wordmarkDataUri;
 }
 
-/** Sólo el isotipo (la cubierta), sin texto — para espacios chicos. */
-export async function getBrandIconDataUri() {
+/** Sólo el isotipo (la cubierta), sin texto — para espacios chicos. Ídem
+    `baseUrl` que en getBrandWordmarkDataUri. */
+export async function getBrandIconDataUri(baseUrl?: string) {
   if (!iconDataUri) {
-    iconDataUri = await toDataUri("src/app/icon.svg");
+    iconDataUri = await toDataUri("src/app/icon.svg", baseUrl);
   }
   return iconDataUri;
 }
@@ -35,10 +56,10 @@ const brandLogoCache = new Map<string, string | null>();
     producto — sólo unas pocas marcas tienen SVG propio en public/brands/
     (ver BRANDS.logoUrl en data.ts); null para el resto, que cae al nombre
     en texto. */
-export async function getTireBrandLogoDataUri(brandId: string): Promise<string | null> {
+export async function getTireBrandLogoDataUri(brandId: string, baseUrl?: string): Promise<string | null> {
   if (brandLogoCache.has(brandId)) return brandLogoCache.get(brandId) ?? null;
   try {
-    const dataUri = await toDataUri(`public/brands/${brandId}.svg`);
+    const dataUri = await toDataUri(`public/brands/${brandId}.svg`, baseUrl);
     brandLogoCache.set(brandId, dataUri);
     return dataUri;
   } catch {

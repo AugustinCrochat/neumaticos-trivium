@@ -32,9 +32,8 @@ export default async function Image() {
         <div style={{ display: "flex", fontSize: 72, fontWeight: 900, color: "#ff1e00", lineHeight: 1.1, marginBottom: 26 }}>
           neumático
         </div>
-        <div style={{ display: "flex", flexDirection: "column", fontSize: 26, fontWeight: 600, color: "#cbd5e1" }}>
-          <div style={{ display: "flex" }}>Cubiertas para auto y camioneta</div>
-          <div style={{ display: "flex", marginTop: 6 }}>Envío a todo el país</div>
+        <div style={{ display: "flex", fontSize: 26, fontWeight: 600, color: "#cbd5e1" }}>
+          Cubiertas para auto y camioneta
         </div>
       </GenericOgLayout>
     ),

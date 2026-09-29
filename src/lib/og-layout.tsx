@@ -40,15 +40,11 @@ export function GenericOgLayout({ wordmark, icon, photo, kicker, children }: Gen
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={wordmark} width={220} height={55} alt="" style={{ marginBottom: 32 }} />
 
-        <div style={{ display: "flex", fontSize: 14, fontWeight: 800, color: "#ff1e00", letterSpacing: 2, textTransform: "uppercase", marginBottom: 16 }}>
+        <div style={{ display: "flex", fontSize: 20, fontWeight: 900, color: "#ff1e00", letterSpacing: 2, textTransform: "uppercase", marginBottom: 20 }}>
           {kicker}
         </div>
 
         {children}
-
-        <div style={{ display: "flex", fontSize: 18, fontWeight: 700, color: "#94a3b8", marginTop: 36, letterSpacing: 1 }}>
-          neumaticos.trivium.ar
-        </div>
       </div>
 
       {photo && (

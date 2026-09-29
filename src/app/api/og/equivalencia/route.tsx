@@ -22,7 +22,10 @@ export async function GET(request: Request) {
       ? ((tireDiameter(equivalente) - tireDiameter(original)) / tireDiameter(original)) * 100
       : null;
 
-  const [wordmark, icon] = await Promise.all([getBrandWordmarkDataUri(), getBrandIconDataUri()]);
+  const [wordmark, icon] = await Promise.all([
+    getBrandWordmarkDataUri(request.url),
+    getBrandIconDataUri(request.url),
+  ]);
 
   return new ImageResponse(
     (
