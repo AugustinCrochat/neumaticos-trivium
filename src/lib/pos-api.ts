@@ -285,17 +285,24 @@ export async function getProductosDesdePOS(
     // (ver .github/workflows/deploy.yml). No volver a next.revalidate — un solo
     // fetch con revalidate reactiva la cola ISR de OpenNext, que necesita el
     // Durable Object que agotaba el límite gratuito de Cloudflare.
-    const res = await fetch(`${POS_API_BASE_URL}/${sucursalSlug}/productos`, {
-      ...(opciones.fresh ? { cache: "no-store" as const } : { cache: "force-cache" as const }),
-      signal: AbortSignal.timeout(8000),
-    });
-    if (!res.ok) {
-      console.error(`[pos-api] Error ${res.status} al obtener productos del POS`);
+    let productos = await fetchProductosCrudos(sucursalSlug, opciones.fresh);
+    if (productos === null) {
       return cached ? cached.data : [];
     }
-    const data = (await res.json()) as { productos: PosProducto[] };
-    const mapped = data.productos.map(toTireProduct).filter((p): p is TireProduct => p !== null);
-    
+
+    // Visto en producción (2026-09): el POS a veces responde 200 con una
+    // lista parcial (le faltaban 6-9 productos Grenlander sin ningún error
+    // HTTP) — eso queda congelado en el build hasta el próximo redeploy. Si
+    // pinta sospechosamente chica, un segundo pedido sin caché casi siempre
+    // trae la lista completa; si no, nos quedamos con la que ya teníamos.
+    if (productos.length < MIN_PRODUCTOS_ESPERADOS && !opciones.fresh) {
+      console.error(`[pos-api] Catálogo sospechosamente chico (${productos.length} productos), reintentando sin caché`);
+      const retry = await fetchProductosCrudos(sucursalSlug, true);
+      if (retry && retry.length > productos.length) productos = retry;
+    }
+
+    const mapped = productos.map(toTireProduct).filter((p): p is TireProduct => p !== null);
+
     memoryCache.productos.set(cacheKey, {
       data: mapped,
       expires: now + CACHE_TTLS.productos,
@@ -305,6 +312,24 @@ export async function getProductosDesdePOS(
     console.error("[pos-api] Error de red al obtener productos del POS:", err);
     return cached ? cached.data : [];
   }
+}
+
+// Catálogo real ronda los ~85 productos — un valor muy por debajo de esto no
+// es que se vendió todo, es señal de que el POS devolvió una respuesta
+// parcial (ver comentario en getProductosDesdePOS).
+const MIN_PRODUCTOS_ESPERADOS = 40;
+
+async function fetchProductosCrudos(sucursalSlug: string, fresh?: boolean): Promise<PosProducto[] | null> {
+  const res = await fetch(`${POS_API_BASE_URL}/${sucursalSlug}/productos`, {
+    ...(fresh ? { cache: "no-store" as const } : { cache: "force-cache" as const }),
+    signal: AbortSignal.timeout(8000),
+  });
+  if (!res.ok) {
+    console.error(`[pos-api] Error ${res.status} al obtener productos del POS`);
+    return null;
+  }
+  const data = (await res.json()) as { productos: PosProducto[] };
+  return data.productos;
 }
 
 type PosAccesorio = {
