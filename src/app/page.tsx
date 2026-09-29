@@ -1,18 +1,23 @@
 import type { Metadata } from "next";
 import { HeroSection } from "@/components/home/HeroSection";
-import { ValueSection } from "@/components/home/ValueSection";
 import { ArrepentimientoBanner } from "@/components/home/ArrepentimientoBanner";
+import { FeaturedProductsSection } from "@/components/home/FeaturedProductsSection";
 import { PopularSizesSection } from "@/components/home/PopularSizesSection";
 import { AboutSection } from "@/components/home/AboutSection";
 import { LocalSection } from "@/components/home/LocalSection";
 import { FaqSection } from "@/components/seo/FaqSection";
 import { FREE_SHIPPING_THRESHOLD, SHIPPING_FLAT_RATE } from "@/lib/config";
+import { getProductosDesdePOS } from "@/lib/pos-api";
+import { getSelectedBranchSlug } from "@/lib/branch-server";
 import { canonical } from "@/lib/seo";
 
-// La home no consulta el POS ni ninguna otra fuente de datos: es estática de
-// punta a punta y se sirve desde el asset, sin render. Es deliberado — ver el
-// comentario de PopularSizesSection.
-export const dynamic = "force-static";
+// Antes la home era `force-static` sin ningún fetch, a propósito: pegarle al
+// POS acá reactivaba un costo de cold-start en Cloudflare (ver el comentario
+// viejo, todavía en PopularSizesSection.tsx). Eso era de antes de sumar el
+// caché incremental en R2 (ver open-next.config.ts) — con R2 ya andando,
+// esta página se comporta como cualquier otra ruta estática del sitio
+// (catálogo, ofertas, marcas): el fetch corre una vez en build time con
+// `force-cache` y quedan congelados hasta el redeploy, sin costo en runtime.
 
 export const metadata: Metadata = {
   // Título propio en vez de heredar el default del layout: la home compite por
@@ -63,15 +68,17 @@ const FAQS = [
   },
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const productos = await getProductosDesdePOS(await getSelectedBranchSlug());
+
   return (
     <>
       <HeroSection />
       <ArrepentimientoBanner />
+      <FeaturedProductsSection productos={productos} />
       <PopularSizesSection />
-      <ValueSection />
-      <AboutSection />
       <LocalSection />
+      <AboutSection />
       <div className="mx-auto max-w-4xl px-4 pb-16">
         <FaqSection faqs={FAQS} />
       </div>
