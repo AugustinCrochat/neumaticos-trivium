@@ -1,53 +1,23 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
+import { TRIVIUM_WORDMARK_SVG_BASE64, TRIVIUM_ICON_SVG_BASE64 } from "./og-assets-data";
 
-// Los logos se leen como SVG y se embeben como data URI: las imágenes
-// generadas con ImageResponse (satori) no pueden hacer fetch a rutas
-// relativas de /public, así que hay que pasarles el binario directo.
-// Se cachean en memoria del proceso porque no cambian entre requests.
-let wordmarkDataUri: string | null = null;
-let iconDataUri: string | null = null;
+// El wordmark y el ícono de Trivium van embebidos como constantes (ver
+// og-assets-data.ts) en vez de leerse con fs.readFile: una ruta API dinámica
+// como /api/og/equivalencia corre en vivo en el Worker de Cloudflare, donde
+// /public no existe en el filesystem (readFile tira ENOENT ahí). Se probó
+// un fallback con fetch() a la propia URL del sitio y quedó colgado en
+// producción (el Worker haciéndose fetch a sí mismo no resuelve) — mejor no
+// depender de I/O en absoluto para dos SVG que nunca cambian.
 
-// Los archivos que se generan con generateStaticParams (opengraph-image.tsx
-// de producto/medida) corren ENTERO en build time (Node.js con filesystem
-// completo) y el resultado queda como PNG estático — ahí readFile siempre
-// encuentra el archivo. Pero una ruta que responde en vivo en el Worker de
-// Cloudflare (ej. /api/og/equivalencia, que no se puede pre-renderizar
-// porque acepta cualquier combinación de medidas por query string) no tiene
-// /public en su filesystem: readFile tira ENOENT ahí. `baseUrl` (la URL de
-// la propia request) es el fallback para ese caso — trae el SVG por HTTP,
-// que sí sirve el binding de assets del Worker.
-async function toDataUri(relativePath: string, baseUrl?: string) {
-  try {
-    const svg = await readFile(join(process.cwd(), relativePath), "utf-8");
-    return `data:image/svg+xml;base64,${Buffer.from(svg).toString("base64")}`;
-  } catch (err) {
-    if (!baseUrl) throw err;
-    const publicPath = relativePath.replace(/^(public\/|src\/app\/)/, "");
-    const res = await fetch(new URL(`/${publicPath}`, baseUrl));
-    if (!res.ok) throw err;
-    const svg = await res.text();
-    return `data:image/svg+xml;base64,${Buffer.from(svg).toString("base64")}`;
-  }
+/** Isologo completo (ícono + "NEUMÁTICOS TRIVIUM"), texto en blanco. */
+export async function getBrandWordmarkDataUri() {
+  return `data:image/svg+xml;base64,${TRIVIUM_WORDMARK_SVG_BASE64}`;
 }
 
-/** Isologo completo (ícono + "NEUMÁTICOS TRIVIUM"), texto en blanco.
-    `baseUrl` sólo hace falta desde una ruta que corre en vivo en el Worker
-    (ver comentario de `toDataUri`) — pasar `request.url`. */
-export async function getBrandWordmarkDataUri(baseUrl?: string) {
-  if (!wordmarkDataUri) {
-    wordmarkDataUri = await toDataUri("public/logo-neumaticos-trivium.svg", baseUrl);
-  }
-  return wordmarkDataUri;
-}
-
-/** Sólo el isotipo (la cubierta), sin texto — para espacios chicos. Ídem
-    `baseUrl` que en getBrandWordmarkDataUri. */
-export async function getBrandIconDataUri(baseUrl?: string) {
-  if (!iconDataUri) {
-    iconDataUri = await toDataUri("src/app/icon.svg", baseUrl);
-  }
-  return iconDataUri;
+/** Sólo el isotipo (la cubierta), sin texto — para espacios chicos. */
+export async function getBrandIconDataUri() {
+  return `data:image/svg+xml;base64,${TRIVIUM_ICON_SVG_BASE64}`;
 }
 
 const brandLogoCache = new Map<string, string | null>();
@@ -55,11 +25,14 @@ const brandLogoCache = new Map<string, string | null>();
 /** Logo de la marca del neumático (no de Trivium) para la og-image de
     producto — sólo unas pocas marcas tienen SVG propio en public/brands/
     (ver BRANDS.logoUrl en data.ts); null para el resto, que cae al nombre
-    en texto. */
-export async function getTireBrandLogoDataUri(brandId: string, baseUrl?: string): Promise<string | null> {
+    en texto. Sólo se usa desde la og-image de producto, que se pre-renderiza
+    entera en build time (generateStaticParams + dynamicParams=false), así
+    que fs.readFile ahí es seguro — nunca corre en vivo en el Worker. */
+export async function getTireBrandLogoDataUri(brandId: string): Promise<string | null> {
   if (brandLogoCache.has(brandId)) return brandLogoCache.get(brandId) ?? null;
   try {
-    const dataUri = await toDataUri(`public/brands/${brandId}.svg`, baseUrl);
+    const svg = await readFile(join(process.cwd(), "public", "brands", `${brandId}.svg`), "utf-8");
+    const dataUri = `data:image/svg+xml;base64,${Buffer.from(svg).toString("base64")}`;
     brandLogoCache.set(brandId, dataUri);
     return dataUri;
   } catch {
@@ -74,7 +47,9 @@ const branchPhotoCache = new Map<string, string | null>();
     scripts/generate-og-branch-photos.mjs (ver ese script: next/og no sabe
     decodificar webp). Se usa como fondo de las og-image "genéricas" (home,
     medida) — null si esa sucursal todavía no tiene foto o no corrió el
-    prebuild (ej. en dev sin haber corrido `npm run prebuild` a mano). */
+    prebuild (ej. en dev sin haber corrido `npm run prebuild` a mano). Igual
+    que getTireBrandLogoDataUri, sólo se usa desde og-images que se
+    pre-renderizan en build time. */
 export async function getBranchPhotoDataUri(fileBaseName: string): Promise<string | null> {
   if (branchPhotoCache.has(fileBaseName)) return branchPhotoCache.get(fileBaseName) ?? null;
   try {
