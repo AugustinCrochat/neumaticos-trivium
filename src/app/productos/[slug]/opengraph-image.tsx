@@ -125,7 +125,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
         <div style={{ display: "flex", position: "absolute", top: 0, left: 0, right: 0, height: 6, background: "#ff1e00" }} />
 
         {/* Columna izquierda: identidad del producto */}
-        <div style={{ display: "flex", flexDirection: "column", width: 330 }}>
+        <div style={{ display: "flex", flexDirection: "column", width: 300 }}>
           {/* El wordmark ya trae "El outlet del neumático" incorporado — no
               hace falta repetir la idea en un renglón aparte. */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -164,15 +164,15 @@ export default async function Image({ params }: { params: Promise<{ slug: string
               display: "flex",
               alignItems: "center",
               gap: 8,
-              marginBottom: -20,
-              padding: "14px 34px",
+              marginBottom: -26,
+              padding: "18px 44px",
               borderRadius: 9999,
               background: "#ff1e00",
               boxShadow: "0 8px 20px rgba(255, 30, 0, 0.35)",
               zIndex: 2,
             }}
           >
-            <span style={{ display: "flex", fontSize: 42, fontWeight: 900, color: "white", letterSpacing: -0.5 }}>
+            <span style={{ display: "flex", fontSize: 54, fontWeight: 900, color: "white", letterSpacing: -0.5 }}>
               {formatPrice(product.price)}
             </span>
           </div>
@@ -182,15 +182,15 @@ export default async function Image({ params }: { params: Promise<{ slug: string
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              width: 420,
-              height: 420,
+              width: 460,
+              height: 460,
               borderRadius: 32,
               background: "white",
             }}
           >
             {photo && (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={photo} alt="" width={360} height={360} style={{ objectFit: "contain" }} />
+              <img src={photo} alt="" width={400} height={400} style={{ objectFit: "contain" }} />
             )}
           </div>
 
@@ -218,11 +218,20 @@ export default async function Image({ params }: { params: Promise<{ slug: string
           </div>
         </div>
 
-        {/* Columna derecha: isotipo como marca de agua */}
-        <div style={{ display: "flex", width: 260, alignItems: "center", justifyContent: "center" }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={icon} width={240} height={240} alt="" style={{ opacity: 0.35 }} />
-        </div>
+        {/* Espaciador: mantiene el centrado del recorte cuadrado (misma
+            width que la columna izquierda) — el isotipo va aparte, con
+            position absolute, para poder sobresalir del borde. */}
+        <div style={{ display: "flex", width: 300 }} />
+
+        {/* Isotipo como marca de agua, sobresaliendo del borde derecho. */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={icon}
+          width={480}
+          height={480}
+          alt=""
+          style={{ position: "absolute", top: 75, right: -90, opacity: 0.4 }}
+        />
       </div>
     ),
     {
