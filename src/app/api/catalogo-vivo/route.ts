@@ -40,16 +40,45 @@ export async function GET(request: Request) {
     BRANCHES[0];
 
   const hit = cache.get(branch.id);
-  let data: Record<string, Entry>;
   if (hit && hit.expires > Date.now()) {
-    data = hit.data;
-  } else {
-    let pending = inflight.get(branch.id);
-    if (!pending) {
-      pending = cargar(branch.id).finally(() => inflight.delete(branch.id));
-      inflight.set(branch.id, pending);
+    return Response.json(hit.data, { headers: { "Cache-Control": "no-store" } });
+  }
+
+  // El caché por isolate no alcanza: con tráfico Cloudflare levanta muchos
+  // isolates y cada uno rearmaba el catálogo entero (1102 de nuevo el
+  // 2026-09-30 13:52 UTC). La Cache API se comparte entre isolates del mismo
+  // datacenter.
+  const edge = (globalThis as unknown as { caches?: { default?: Cache } }).caches?.default;
+  const key = new Request(`https://cache.internal/catalogo-vivo/${branch.id}`);
+  if (edge) {
+    try {
+      const cached = await edge.match(key);
+      if (cached) {
+        const data = (await cached.json()) as Record<string, Entry>;
+        cache.set(branch.id, { data, expires: Date.now() + TTL_MS });
+        return Response.json(data, { headers: { "Cache-Control": "no-store" } });
+      }
+    } catch {
+      // Sin Cache API (dev local): se sigue con el fetch normal.
     }
-    data = await pending;
+  }
+
+  let pending = inflight.get(branch.id);
+  if (!pending) {
+    pending = cargar(branch.id).finally(() => inflight.delete(branch.id));
+    inflight.set(branch.id, pending);
+  }
+  const data = await pending;
+
+  if (edge && Object.keys(data).length > 0) {
+    try {
+      await edge.put(
+        key,
+        new Response(JSON.stringify(data), {
+          headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=60" },
+        }),
+      );
+    } catch {}
   }
 
   return Response.json(data, { headers: { "Cache-Control": "no-store" } });
