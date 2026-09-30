@@ -233,6 +233,11 @@ export default async function ProductPage({ params }: Props) {
     { label: "Rodado", value: `R${product.size.rim}` },
     { label: "Marca", value: product.brand },
     { label: "Línea", value: product.model.replace(/^\d+\/\d+ R\d+[A-Z]* /, "").replace(new RegExp(`^${product.brand}\\s+`, "i"), "") },
+    ...(tireLabel ? [
+      { label: "Eficiencia de combustible", value: `Clase ${tireLabel.energyClass}` },
+      { label: "Frenado en mojado", value: `Clase ${tireLabel.wetGripClass}` },
+      { label: "Ruido externo", value: `${tireLabel.noiseDb} dB (Clase ${tireLabel.noiseClass})` },
+    ] : []),
     ...(product.loadIndex && product.loadIndexDual
       ? [
           {
