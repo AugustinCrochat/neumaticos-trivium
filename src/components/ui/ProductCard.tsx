@@ -3,8 +3,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { getBrandLogo } from "@/lib/brand-utils";
-import { getTireLabel } from "@/lib/tire-labels";
-import { Volume2 } from "lucide-react";
 import { ProductNameWithHighlightedSize } from "@/components/ui/ProductNameWithHighlightedSize";
 import { isLowStock, stockLabel } from "@/lib/stock";
 import { useLiveStock } from "@/contexts/live-stock-context";
@@ -143,18 +141,7 @@ export function ProductCard({
           </p>
         )}
 
-        {(() => {
-          const tireLabel = getTireLabel(product.slug);
-          if (!tireLabel) return null;
-          return (
-            <div className="flex items-center gap-2 mb-2 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
-               <span className="flex items-center gap-0.5 bg-slate-100 px-1.5 py-0.5 rounded" title="Nivel de ruido exterior">
-                 <Volume2 className="w-3 h-3 text-blue-400" />
-                 {tireLabel.noiseDb} dB
-               </span>
-            </div>
-          );
-        })()}
+
 
         {/* Price */}
         <div className="mt-auto">
