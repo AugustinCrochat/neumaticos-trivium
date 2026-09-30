@@ -1,12 +1,23 @@
 import { ProductBlock } from '@/components/blog/ProductBlock';
 import Link from 'next/link';
+import { getProductosDesdePOS } from '@/lib/pos-api';
+import { getTireLabel } from '@/lib/tire-labels';
 
-export default function VeranoVsAllSeasonArticle() {
+export default async function VeranoVsAllSeasonArticle() {
+  const productos = await getProductosDesdePOS('arguello');
+  // Buscar un producto de verano (suele ser el default) y uno all-season. 
+  // O usamos Grenlander y Pirelli de nuevo como pidió el usuario para comparar.
+  const verano = productos?.find(p => p.brand.toLowerCase() === 'pirelli' && p.imageUrl);
+  const allSeason = productos?.find(p => p.brand.toLowerCase() === 'grenlander' && p.imageUrl);
+
+  const veranoLabel = verano ? getTireLabel(verano.slug) : null;
+  const allSeasonLabel = allSeason ? getTireLabel(allSeason.slug) : null;
+
   return (
     <article className="max-w-3xl mx-auto py-12 px-4 sm:px-6 lg:px-8 prose lg:prose-xl">
-      <Link href="/blog" className="text-blue-600 hover:underline mb-8 inline-block">&larr; Volver al blog</Link>
+      <Link href="/blog" className="text-navy-600 hover:underline mb-8 inline-block">&larr; Volver al blog</Link>
       
-      <h1 className="text-4xl font-extrabold mb-6">Neumáticos de Verano vs. All-Season: ¿Qué te conviene en Argentina?</h1>
+      <h1 className="text-4xl font-extrabold mb-6 text-slate-800">Neumáticos de Verano vs. All-Season: ¿Qué te conviene en Argentina?</h1>
       
       <p className="mb-4">Si estás por cambiar las cubiertas de tu auto o camioneta, es probable que hayas escuchado los términos <strong>"Summer" (Verano)</strong> y <strong>"All-Season" (Todas las estaciones o Mixtos)</strong>. A simple vista, parecen solo etiquetas de marketing, pero la realidad es que el compuesto de goma y el dibujo cambian drásticamente el comportamiento de tu vehículo.</p>
       
@@ -32,19 +43,22 @@ export default function VeranoVsAllSeasonArticle() {
         <li>¡Prohibidos en hielo o nieve!</li>
       </ul>
       
-      <p className="mb-4">Mirá este ejemplo de un excelente neumático de verano:</p>
+      <p className="mb-4">Mirá este ejemplo de un excelente neumático de Pirelli, una marca premium que suele destacarse en compuestos de verano:</p>
       
-      <div className="my-8 not-prose">
-        <ProductBlock 
-          title="Continental PremiumContact 6" 
-          brand="Continental"
-          description="Neumático de verano premium diseñado para brindar máximo confort, agarre extremo en seco y bajo nivel de ruido. Ideal para autos de alta gama o para quienes buscan un manejo deportivo pero seguro en ruta."
-          price={285000}
-          decibels={71}
-          wetGrip="A"
-          fuelEfficiency="C"
-        />
-      </div>
+      {verano && (
+        <div className="my-8 not-prose">
+          <ProductBlock 
+            title={`${verano.brand} ${verano.model}`} 
+            brand={verano.brand}
+            description="Neumático premium diseñado para brindar máximo confort, agarre extremo en seco y precisión de manejo. Ideal para autos de alta gama o para quienes buscan un manejo seguro en ruta."
+            price={verano.price}
+            decibels={veranoLabel?.noiseDb || 71}
+            wetGrip={veranoLabel?.wetGripClass || "B"}
+            fuelEfficiency={veranoLabel?.energyClass || "C"}
+            imageUrl={verano.imageUrl}
+          />
+        </div>
+      )}
       
       <h2 className="text-2xl font-bold mt-8 mb-4">Neumáticos All-Season: El comodín de todas las rutas</h2>
       
@@ -64,19 +78,22 @@ export default function VeranoVsAllSeasonArticle() {
         <li>Al no ser especialistas, no frenan <em>tan</em> rápido en piso seco caliente como uno de verano, ni traccionan <em>tan</em> bien en nieve profunda como uno 100% de invierno.</li>
       </ul>
       
-      <p className="mb-4">Un gran ejemplo de un All-Season que siempre recomendamos en la gomería:</p>
+      <p className="mb-4">Un gran ejemplo de un All-Season versátil que siempre recomendamos, de la marca Grenlander:</p>
       
-      <div className="my-8 not-prose">
-        <ProductBlock 
-          title="Pirelli Cinturato All Season Plus" 
-          brand="Pirelli"
-          description="La solución inteligente para moverte en la ciudad y hacer viajes ocasionales a zonas frías. Cuenta con canales más profundos para drenaje y un compuesto que resiste bien las bajas temperaturas sin perder confort."
-          price={270000}
-          decibels={73}
-          wetGrip="B"
-          fuelEfficiency="C"
-        />
-      </div>
+      {allSeason && (
+        <div className="my-8 not-prose">
+          <ProductBlock 
+            title={`${allSeason.brand} ${allSeason.model}`} 
+            brand={allSeason.brand}
+            description="La solución inteligente para moverte en la ciudad y hacer viajes ocasionales a zonas frías. Cuenta con canales profundos para drenaje y un compuesto que resiste bien las bajas temperaturas sin perder confort, con una relación precio-calidad insuperable."
+            price={allSeason.price}
+            decibels={allSeasonLabel?.noiseDb || 72}
+            wetGrip={allSeasonLabel?.wetGripClass || "C"}
+            fuelEfficiency={allSeasonLabel?.energyClass || "C"}
+            imageUrl={allSeason.imageUrl}
+          />
+        </div>
+      )}
       
       <h2 className="text-2xl font-bold mt-8 mb-4">Conclusión: ¿Cuál compro?</h2>
       
@@ -85,7 +102,7 @@ export default function VeranoVsAllSeasonArticle() {
         <li>Si vivís en la Patagonia, o cruzás regularmente la cordillera, y querés evitar el dolor de cabeza de poner cadenas por unas heladas ligeras, andá por los <strong>All-Season</strong>.</li>
       </ul>
       
-      <p className="mb-8 font-semibold">¡Pasá por nuestra gomería y te asesoramos con la opción exacta para tu rodado!</p>
+      <p className="mb-8 font-semibold">¡Pasá por nuestra gomería de Argüello y te asesoramos con la opción exacta para tu rodado!</p>
     </article>
   );
 }

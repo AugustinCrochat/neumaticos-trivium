@@ -1,12 +1,21 @@
 import { ProductBlock } from '@/components/blog/ProductBlock';
 import Link from 'next/link';
+import { getProductosDesdePOS } from '@/lib/pos-api';
+import { getTireLabel } from '@/lib/tire-labels';
 
-export default function RuidoNeumaticosArticle() {
+export default async function RuidoNeumaticosArticle() {
+  const productos = await getProductosDesdePOS('arguello');
+  const pirelli = productos?.find(p => p.brand.toLowerCase() === 'pirelli' && p.imageUrl);
+  const grenlander = productos?.find(p => p.brand.toLowerCase() === 'grenlander' && p.imageUrl);
+
+  const pirelliLabel = pirelli ? getTireLabel(pirelli.slug) : null;
+  const grenlanderLabel = grenlander ? getTireLabel(grenlander.slug) : null;
+
   return (
     <article className="max-w-3xl mx-auto py-12 px-4 sm:px-6 lg:px-8 prose lg:prose-xl">
-      <Link href="/blog" className="text-blue-600 hover:underline mb-8 inline-block">&larr; Volver al blog</Link>
+      <Link href="/blog" className="text-navy-600 hover:underline mb-8 inline-block">&larr; Volver al blog</Link>
       
-      <h1 className="text-4xl font-extrabold mb-6">¿Sabías que tus neumáticos hablan? Hablemos de los Decibeles y el Ruido al Rodar</h1>
+      <h1 className="text-4xl font-extrabold mb-6 text-slate-800">¿Sabías que tus neumáticos hablan? Hablemos de los Decibeles y el Ruido al Rodar</h1>
       
       <p className="mb-4">¡Hola a todos! Hoy quiero hablarles de algo que muchas veces pasamos por alto cuando compramos cubiertas nuevas: <strong>el ruido</strong>.</p>
       
@@ -35,37 +44,41 @@ export default function RuidoNeumaticosArticle() {
       
       <h2 className="text-2xl font-bold mt-8 mb-4">Algunos de los neumáticos que tenemos y cuánto ruido hacen</h2>
       
-      <p className="mb-4">Para que te des una idea de cómo se ve esto en la práctica, te dejo un par de ejemplos de cubiertas que podés encontrar en nuestro local.</p>
+      <p className="mb-4">Para que te des una idea de cómo se ve esto en la práctica, te dejo un par de ejemplos de cubiertas de nuestro stock, con sus precios reales y etiquetas europeas.</p>
       
-      <div className="my-8 not-prose">
-        <ProductBlock 
-          title="Michelin Primacy 4" 
-          brand="Michelin"
-          description="El rey del confort. Un neumático de verano pensado para autos de turismo que ofrece una frenada excelente en mojado y, sobre todo, un andar súper silencioso."
-          price={245000}
-          decibels={68}
-          wetGrip="A"
-          fuelEfficiency="C"
-        />
-      </div>
+      {grenlander && (
+        <div className="my-8 not-prose">
+          <ProductBlock 
+            title={`${grenlander.brand} ${grenlander.model}`} 
+            brand={grenlander.brand}
+            description="Una excelente opción que demuestra que no hace falta gastar una fortuna para tener un neumático silencioso. Cumple con exigentes estándares europeos ofreciendo un andar muy confortable en la ciudad."
+            price={grenlander.price}
+            decibels={grenlanderLabel?.noiseDb || 71}
+            wetGrip={grenlanderLabel?.wetGripClass || "C"}
+            fuelEfficiency={grenlanderLabel?.energyClass || "C"}
+            imageUrl={grenlander.imageUrl}
+          />
+        </div>
+      )}
       
-      <p className="mb-8">Como podés ver, el Primacy 4 está en los 68 dB. Es ideal si sos de los que viaja en familia y quiere ir charlando sin levantar la voz.</p>
+      <p className="mb-8">Como podés ver, la marca Grenlander sorprende con niveles de ruido muy contenidos, ideales si sos de los que viaja en familia y quiere ir charlando sin levantar la voz.</p>
       
-      <div className="my-8 not-prose">
-        <ProductBlock 
-          title="Pirelli Scorpion ATR" 
-          brand="Pirelli"
-          description="Un clásico para las camionetas. Es un neumático mixto (All-Terrain) que se banca la tierra y el barro, pero que lógicamente, hace un poco más de ruido en el asfalto."
-          price={310000}
-          decibels={74}
-          wetGrip="C"
-          fuelEfficiency="D"
-        />
-      </div>
+      {pirelli && (
+        <div className="my-8 not-prose">
+          <ProductBlock 
+            title={`${pirelli.brand} ${pirelli.model}`} 
+            brand={pirelli.brand}
+            description="Un clásico y referente de la industria. Pirelli invierte millones en desarrollo para ofrecer cubiertas de altísima performance y diseño de banda de rodadura optimizado."
+            price={pirelli.price}
+            decibels={pirelliLabel?.noiseDb || 72}
+            wetGrip={pirelliLabel?.wetGripClass || "B"}
+            fuelEfficiency={pirelliLabel?.energyClass || "C"}
+            imageUrl={pirelli.imageUrl}
+          />
+        </div>
+      )}
       
-      <p className="mb-8">En el caso del Scorpion ATR, subimos a los 74 dB. Al tener tacos más grandes para el barro, el golpe contra el pavimento se hace notar un poco más. ¡Es el precio a pagar por la aventura!</p>
-      
-      <p className="mb-8 font-semibold">¿Qué te pareció esta info? La próxima vez que vengas a cambiar las gomas, acordate de preguntarnos por los decibeles. ¡Te esperamos!</p>
+      <p className="mb-8 font-semibold">¿Qué te pareció esta info? La próxima vez que vengas a cambiar las gomas, acordate de preguntarnos por los decibeles. ¡Te esperamos en nuestra sucursal de Argüello!</p>
     </article>
   );
 }

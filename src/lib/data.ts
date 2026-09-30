@@ -153,6 +153,24 @@ export const SERVICES: Service[] = [
 // actual. Las más útiles para alguien que está por comprar van arriba.
 export const BLOG_POSTS: BlogPost[] = [
   {
+    id: "18",
+    title: "¿Sabías que tus neumáticos hablan? Hablemos de los Decibeles y el Ruido al Rodar",
+    excerpt: "Descubrí cómo se mide el ruido de las cubiertas y por qué elegir una cubierta silenciosa puede cambiar tu viaje.",
+    imageUrl: "/images/blog-1.webp",
+    date: "2026-09-29",
+    slug: "ruido-neumaticos",
+    category: "Guías",
+  },
+  {
+    id: "17",
+    title: "Neumáticos de Verano vs. All-Season: ¿Qué te conviene en Argentina?",
+    excerpt: "Te explicamos las diferencias para que elijas la mejor opción según por dónde manejes.",
+    imageUrl: "/images/blog-2.webp",
+    date: "2026-09-29",
+    slug: "verano-vs-allseason",
+    category: "Guías",
+  },
+  {
     id: "16",
     title: "Precio y calidad: cuánto sale realmente cada kilómetro",
     excerpt:
