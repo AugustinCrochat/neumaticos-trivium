@@ -42,9 +42,11 @@ export function esGrupoObsoleto(grupo: string): boolean {
  * que van hardcodeadas acá según las reglas vigentes:
  * - 2 cuotas sin interés se activan a partir de $50.000.
  * - 3 cuotas sin interés se activan a partir de $150.000; por debajo de eso
- *   sigue habiendo 3 cuotas, pero con el coeficiente 1.027 (con interés).
- * - 6 y 12 cuotas son siempre con interés (1.089 y 1.188), no hay monto que
+ *   sigue habiendo 3 cuotas, pero con el coeficiente 1.0471 (con interés).
+ * - 6 y 12 cuotas son siempre con interés (1.1148 y 1.2422), no hay monto que
  *   las vuelva sin interés.
+ * Los coeficientes son los "S/IVA" del simulador de coeficientes de Mercado
+ * Pago (el IVA no se suma acá).
  */
 export function mercadoPagoPlanes(amount: number): Plan[] {
   const planes: Plan[] = [{ id: "mp-1", cuotas: "1 pago", coeficiente: 1 }];
@@ -54,10 +56,10 @@ export function mercadoPagoPlanes(amount: number): Plan[] {
   planes.push({
     id: "mp-3",
     cuotas: amount > 150000 ? "3 cuotas sin interés" : "3 cuotas",
-    coeficiente: amount > 150000 ? 1 : 1.027,
+    coeficiente: amount > 150000 ? 1 : 1.0471,
   });
-  planes.push({ id: "mp-6", cuotas: "6 cuotas", coeficiente: 1.089 });
-  planes.push({ id: "mp-12", cuotas: "12 cuotas", coeficiente: 1.188 });
+  planes.push({ id: "mp-6", cuotas: "6 cuotas", coeficiente: 1.1148 });
+  planes.push({ id: "mp-12", cuotas: "12 cuotas", coeficiente: 1.2422 });
   return planes;
 }
 
