@@ -119,7 +119,13 @@ export function sortVehiclesByPopularity<T extends { brand: string; model: strin
     const i = ORDEN_POPULARIDAD.indexOf(`${v.brand} ${v.model}`);
     return i === -1 ? ORDEN_POPULARIDAD.length : i;
   };
-  return [...vehiculos].sort((a, b) => rango(a) - rango(b));
+  return [...vehiculos].sort((a, b) => {
+    const diff = rango(a) - rango(b);
+    if (diff !== 0) return diff;
+    const la = `${a.brand} ${a.model}`;
+    const lb = `${b.brand} ${b.model}`;
+    return la > lb ? 1 : la < lb ? -1 : 0;
+  });
 }
 
 export const VEHICLE_DB: VehicleDBEntry[] = [

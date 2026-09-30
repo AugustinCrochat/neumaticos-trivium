@@ -162,11 +162,7 @@ export function vehiclesUsingSize(size: TireSize): VehicleUsingSize[] {
       }
     }
   }
-  return result.sort((a, b) => {
-    const la = `${a.brand} ${a.model}`;
-    const lb = `${b.brand} ${b.model}`;
-    return la > lb ? 1 : la < lb ? -1 : 0;
-  });
+  return sortVehiclesByPopularity(result);
 }
 
 /**
