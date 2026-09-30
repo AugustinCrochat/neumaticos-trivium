@@ -5,10 +5,30 @@ import { getTireLabel } from '@/lib/tire-labels';
 
 export default async function VeranoVsAllSeasonArticle() {
   const productos = await getProductosDesdePOS('arguello');
-  // Buscar un producto de verano (suele ser el default) y uno all-season. 
-  // O usamos Grenlander y Pirelli de nuevo como pidió el usuario para comparar.
-  const verano = productos?.find(p => p.brand.toLowerCase() === 'pirelli' && p.imageUrl);
-  const allSeason = productos?.find(p => p.brand.toLowerCase() === 'grenlander' && p.imageUrl);
+  const pirelliProducts = productos?.filter(p => p.brand.toLowerCase() === 'pirelli' && p.imageUrl) || [];
+  const grenlanderProducts = productos?.filter(p => p.brand.toLowerCase() === 'grenlander' && p.imageUrl) || [];
+
+  let verano = null;
+  let allSeason = null;
+
+  for (const p of pirelliProducts) {
+    const match = grenlanderProducts.find(g => 
+      g.size.width === p.size.width && 
+      g.size.profile === p.size.profile && 
+      g.size.rim === p.size.rim
+    );
+    if (match) {
+      verano = p;
+      allSeason = match;
+      break;
+    }
+  }
+
+  // Fallback si no hay coincidencia exacta
+  if (!verano || !allSeason) {
+    verano = pirelliProducts[0];
+    allSeason = grenlanderProducts[0];
+  }
 
   const veranoLabel = verano ? getTireLabel(verano.slug) : null;
   const allSeasonLabel = allSeason ? getTireLabel(allSeason.slug) : null;
@@ -43,7 +63,7 @@ export default async function VeranoVsAllSeasonArticle() {
         <li>¡Prohibidos en hielo o nieve!</li>
       </ul>
       
-      <p className="mb-4">Mirá este ejemplo de un excelente neumático de Pirelli, una marca premium que suele destacarse en compuestos de verano:</p>
+      <p className="mb-4">Mirá este ejemplo de un excelente neumático de Pirelli, una marca premium que suele destacarse en compuestos de verano. Elegimos la medida <strong>{verano?.size.width}/{verano?.size.profile} R{verano?.size.rim}</strong> para esta comparación:</p>
       
       {verano && (
         <div className="my-8 not-prose">

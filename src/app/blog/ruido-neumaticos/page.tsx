@@ -5,8 +5,30 @@ import { getTireLabel } from '@/lib/tire-labels';
 
 export default async function RuidoNeumaticosArticle() {
   const productos = await getProductosDesdePOS('arguello');
-  const pirelli = productos?.find(p => p.brand.toLowerCase() === 'pirelli' && p.imageUrl);
-  const grenlander = productos?.find(p => p.brand.toLowerCase() === 'grenlander' && p.imageUrl);
+  const pirelliProducts = productos?.filter(p => p.brand.toLowerCase() === 'pirelli' && p.imageUrl) || [];
+  const grenlanderProducts = productos?.filter(p => p.brand.toLowerCase() === 'grenlander' && p.imageUrl) || [];
+
+  let pirelli = null;
+  let grenlander = null;
+
+  for (const p of pirelliProducts) {
+    const match = grenlanderProducts.find(g => 
+      g.size.width === p.size.width && 
+      g.size.profile === p.size.profile && 
+      g.size.rim === p.size.rim
+    );
+    if (match) {
+      pirelli = p;
+      grenlander = match;
+      break;
+    }
+  }
+
+  // Fallback si no hay coincidencia exacta de medida
+  if (!pirelli || !grenlander) {
+    pirelli = pirelliProducts[0];
+    grenlander = grenlanderProducts[0];
+  }
 
   const pirelliLabel = pirelli ? getTireLabel(pirelli.slug) : null;
   const grenlanderLabel = grenlander ? getTireLabel(grenlander.slug) : null;
@@ -44,7 +66,7 @@ export default async function RuidoNeumaticosArticle() {
       
       <h2 className="text-2xl font-bold mt-8 mb-4">Algunos de los neumáticos que tenemos y cuánto ruido hacen</h2>
       
-      <p className="mb-4">Para que te des una idea de cómo se ve esto en la práctica, te dejo un par de ejemplos de cubiertas de nuestro stock, con sus precios reales y etiquetas europeas.</p>
+      <p className="mb-4">Para que te des una idea de cómo se ve esto en la práctica, comparamos dos neumáticos <strong>de la misma medida ({grenlander?.size.width}/{grenlander?.size.profile} R{grenlander?.size.rim})</strong> de nuestro stock, con sus precios reales y etiquetas europeas.</p>
       
       {grenlander && (
         <div className="my-8 not-prose">
