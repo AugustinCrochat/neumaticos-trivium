@@ -5,8 +5,8 @@ import { getTireLabel } from '@/lib/tire-labels';
 
 export default async function VeranoVsAllSeasonArticle() {
   const productos = await getProductosDesdePOS('arguello');
-  const pirelliProducts = productos?.filter(p => p.brand.toLowerCase() === 'pirelli' && p.imageUrl) || [];
-  const grenlanderProducts = productos?.filter(p => p.brand.toLowerCase() === 'grenlander' && p.imageUrl) || [];
+  const pirelliProducts = productos?.filter(p => p.brand.toLowerCase() === 'pirelli' && p.imageUrl && p.enStock) || [];
+  const grenlanderProducts = productos?.filter(p => p.brand.toLowerCase() === 'grenlander' && p.imageUrl && p.enStock) || [];
 
   let verano = null;
   let allSeason = null;
@@ -68,7 +68,7 @@ export default async function VeranoVsAllSeasonArticle() {
       {verano && (
         <div className="my-8 not-prose">
           <ProductBlock 
-            title={`${verano.brand} ${verano.model}`} 
+            title={verano.model} 
             brand={verano.brand}
             description="Neumático premium diseñado para brindar máximo confort, agarre extremo en seco y precisión de manejo. Ideal para autos de alta gama o para quienes buscan un manejo seguro en ruta."
             price={verano.price}
@@ -103,7 +103,7 @@ export default async function VeranoVsAllSeasonArticle() {
       {allSeason && (
         <div className="my-8 not-prose">
           <ProductBlock 
-            title={`${allSeason.brand} ${allSeason.model}`} 
+            title={allSeason.model} 
             brand={allSeason.brand}
             description="La solución inteligente para moverte en la ciudad y hacer viajes ocasionales a zonas frías. Cuenta con canales profundos para drenaje y un compuesto que resiste bien las bajas temperaturas sin perder confort, con una relación precio-calidad insuperable."
             price={allSeason.price}

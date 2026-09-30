@@ -5,8 +5,8 @@ import { getTireLabel } from '@/lib/tire-labels';
 
 export default async function RuidoNeumaticosArticle() {
   const productos = await getProductosDesdePOS('arguello');
-  const pirelliProducts = productos?.filter(p => p.brand.toLowerCase() === 'pirelli' && p.imageUrl) || [];
-  const grenlanderProducts = productos?.filter(p => p.brand.toLowerCase() === 'grenlander' && p.imageUrl) || [];
+  const pirelliProducts = productos?.filter(p => p.brand.toLowerCase() === 'pirelli' && p.imageUrl && p.enStock) || [];
+  const grenlanderProducts = productos?.filter(p => p.brand.toLowerCase() === 'grenlander' && p.imageUrl && p.enStock) || [];
 
   let pirelli = null;
   let grenlander = null;
@@ -71,7 +71,7 @@ export default async function RuidoNeumaticosArticle() {
       {grenlander && (
         <div className="my-8 not-prose">
           <ProductBlock 
-            title={`${grenlander.brand} ${grenlander.model}`} 
+            title={grenlander.model} 
             brand={grenlander.brand}
             description="Una excelente opción que demuestra que no hace falta gastar una fortuna para tener un neumático silencioso. Cumple con exigentes estándares europeos ofreciendo un andar muy confortable en la ciudad."
             price={grenlander.price}
@@ -88,7 +88,7 @@ export default async function RuidoNeumaticosArticle() {
       {pirelli && (
         <div className="my-8 not-prose">
           <ProductBlock 
-            title={`${pirelli.brand} ${pirelli.model}`} 
+            title={pirelli.model} 
             brand={pirelli.brand}
             description="Un clásico y referente de la industria. Pirelli invierte millones en desarrollo para ofrecer cubiertas de altísima performance y diseño de banda de rodadura optimizado."
             price={pirelli.price}
