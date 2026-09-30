@@ -1,4 +1,5 @@
 import { ProductBlock } from '@/components/blog/ProductBlock';
+import { CatalogWidget } from '@/components/blog/CatalogWidget';
 import Link from 'next/link';
 import { getProductosDesdePOS } from '@/lib/pos-api';
 import { getTireLabel } from '@/lib/tire-labels';
@@ -101,6 +102,8 @@ export default async function RuidoNeumaticosArticle() {
       )}
       
       <p className="mb-8 font-semibold">¿Qué te pareció esta info? La próxima vez que vengas a cambiar las gomas, acordate de preguntarnos por los decibeles. ¡Te esperamos en nuestra sucursal de Argüello!</p>
+
+      <CatalogWidget title="Neumáticos recomendados" limit={4} />
     </article>
   );
 }

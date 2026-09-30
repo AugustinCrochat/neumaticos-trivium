@@ -1,4 +1,5 @@
 import { ProductBlock } from '@/components/blog/ProductBlock';
+import { CatalogWidget } from '@/components/blog/CatalogWidget';
 import Link from 'next/link';
 import { getProductosDesdePOS } from '@/lib/pos-api';
 import { getTireLabel } from '@/lib/tire-labels';
@@ -123,6 +124,8 @@ export default async function VeranoVsAllSeasonArticle() {
       </ul>
       
       <p className="mb-8 font-semibold">¡Pasá por nuestra gomería de Argüello y te asesoramos con la opción exacta para tu rodado!</p>
+
+      <CatalogWidget title="Ofertas recomendadas" limit={4} />
     </article>
   );
 }
