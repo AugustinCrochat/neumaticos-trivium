@@ -16,6 +16,58 @@ export type VehicleDBEntry = {
   }[];
 };
 
+/** El tipo de construcción que puede ofrecer una ficha de vehículo. No se
+ * deduce de la medida: 175/65 R14, por ejemplo, puede existir tanto para un
+ * auto liviano como para una Berlingo de trabajo. */
+export type VehicleTireProfile = "passenger" | "pickup" | "commercial";
+
+const COMMERCIAL_MODELS = new Set([
+  "Fiat Ducato",
+  "Fiat Fiorino",
+  "Ford Transit",
+  "Mercedes-Benz Sprinter",
+  "Peugeot Boxer",
+  "Peugeot Expert",
+  "Renault Master",
+  "Renault Trafic",
+  "Toyota Hiace",
+]);
+
+const PICKUP_MODELS = new Set([
+  "Chevrolet S10",
+  "Fiat Strada",
+  "Fiat Toro",
+  "Ford Ranger",
+  "Nissan Frontier",
+  "Renault Oroch",
+  "Toyota Hilux",
+  "Volkswagen Amarok",
+  "Volkswagen Saveiro",
+]);
+
+/**
+ * Selección de construcción para las fichas por vehículo.
+ *
+ * Un neumático C no se recomienda por el simple hecho de compartir medida:
+ * requiere llanta, presión y capacidad de carga compatibles. Por eso los
+ * autos y pickups lo excluyen. Los furgones dedicados piden C; Berlingo y
+ * Vito se resuelven por su versión porque comparten nombre comercial entre
+ * transporte de pasajeros y trabajo.
+ */
+export function vehicleTireProfile(
+  vehicle: Pick<VehicleDBEntry, "brand" | "model">,
+  version?: string
+): VehicleTireProfile {
+  const name = `${vehicle.brand} ${vehicle.model}`;
+  if (COMMERCIAL_MODELS.has(name)) return "commercial";
+  if (PICKUP_MODELS.has(name)) return "pickup";
+
+  if (/(furg[oó]n|cargo|utilitario|combi|minibus|commuter|maxicargo)/i.test(version ?? "")) {
+    return "commercial";
+  }
+  return "passenger";
+}
+
 /**
  * Orden de popularidad para los resúmenes truncados ("Usado en: ...", la
  * descripción meta de una medida): sin esto, `vehiclesUsingSize` devuelve

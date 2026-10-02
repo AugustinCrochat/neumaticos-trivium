@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { SITE_URL, BRANCHES, DEFAULT_BRANCH_ID, TIRE_RIMS } from "@/lib/config";
 import { BRANDS, SERVICES, BLOG_POSTS } from "@/lib/data";
 import { LOCALIDADES } from "@/lib/localidades";
+import { LOAD_SPEED_CODES } from "@/lib/load-speed";
 import { getProductosDesdePOS, getAccesoriosDesdePOS } from "@/lib/pos-api";
 import {
   MEDIDAS_PRIORITARIAS,
@@ -66,6 +67,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url("/tuercas-antirrobo", 0.7, "weekly"),
     url("/contacto", 0.5, "yearly"),
     url("/blog", 0.6, "weekly"),
+    ...LOAD_SPEED_CODES.map((code) =>
+      url(`/indice-carga-velocidad/${code.toLowerCase()}`, 0.6, "monthly")
+    ),
     // Legales: prioridad baja pero indexables. Google las usa como señal de
     // confianza del comercio (y Merchant Center las exige).
     url("/terminos", 0.2, "yearly"),

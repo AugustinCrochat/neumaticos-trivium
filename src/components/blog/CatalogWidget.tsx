@@ -2,16 +2,22 @@ import React from 'react';
 import { getProductosDesdePOS } from '@/lib/pos-api';
 import { ProductCard } from '@/components/ui/ProductCard';
 import type { TireSize } from '@/lib/types';
+import type { VehicleTireProfile } from '@/lib/vehicles';
 import Link from 'next/link';
 
 interface CatalogWidgetProps {
   size?: TireSize;
+  /** Filtra por el código real del flanco, ej. 86T. Se puede combinar con medida. */
+  loadIndex?: string;
+  speedRating?: string;
+  /** Compatibilidad estructural cuando el widget se usa desde una ficha de vehículo. */
+  vehicleProfile?: VehicleTireProfile;
   title?: string;
   limit?: number;
   branch?: string;
 }
 
-export async function CatalogWidget({ size, title, limit = 4, branch = 'arguello' }: CatalogWidgetProps) {
+export async function CatalogWidget({ size, loadIndex, speedRating, vehicleProfile, title, limit = 4, branch = 'arguello' }: CatalogWidgetProps) {
   const allProducts = await getProductosDesdePOS(branch);
   
   if (!allProducts) return null;
@@ -24,6 +30,25 @@ export async function CatalogWidget({ size, title, limit = 4, branch = 'arguello
       p.size.profile === size.profile && 
       p.size.rim === size.rim
     );
+  }
+
+  if (loadIndex) {
+    filtered = filtered.filter((p) => p.loadIndex === loadIndex);
+  }
+
+  if (speedRating) {
+    filtered = filtered.filter((p) => p.speedRating === speedRating);
+  }
+
+  // Igual medida no equivale a igual aplicación: una cubierta C trabaja con
+  // presiones y carga distintas. Las pickups pueden usar A/T, los autos de
+  // calle no, y los furgones necesitan la construcción comercial.
+  if (vehicleProfile === "commercial") {
+    filtered = filtered.filter((p) => p.isCarga);
+  } else if (vehicleProfile === "pickup") {
+    filtered = filtered.filter((p) => !p.isCarga);
+  } else if (vehicleProfile === "passenger") {
+    filtered = filtered.filter((p) => !p.isCarga && !p.isAT);
   }
 
   // Sort by price ascending, or keep some variety

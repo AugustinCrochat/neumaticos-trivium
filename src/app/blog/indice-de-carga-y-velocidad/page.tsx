@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
+import { LOAD_SPEED_CODES } from "@/lib/load-speed";
 import { canonical } from "@/lib/seo";
+import { LOAD_INDEX_KG, SPEED_RATING_KMH } from "@/lib/tire-sizes";
 
 const SLUG = "indice-de-carga-y-velocidad";
 const TITLE = "Índice de carga y velocidad: qué significan el 91 y la V del flanco";
@@ -43,40 +45,8 @@ const FAQS = [
   },
 ];
 
-const CARGA = [
-  ["75", "387"],
-  ["80", "450"],
-  ["82", "475"],
-  ["84", "500"],
-  ["85", "515"],
-  ["86", "530"],
-  ["88", "560"],
-  ["90", "600"],
-  ["91", "615"],
-  ["94", "670"],
-  ["95", "690"],
-  ["97", "730"],
-  ["99", "775"],
-  ["100", "800"],
-  ["102", "850"],
-  ["104", "900"],
-  ["107", "975"],
-  ["109", "1030"],
-  ["112", "1120"],
-  ["116", "1250"],
-];
-
-const VELOCIDAD = [
-  ["Q", "160"],
-  ["R", "170"],
-  ["S", "180"],
-  ["T", "190"],
-  ["U", "200"],
-  ["H", "210"],
-  ["V", "240"],
-  ["W", "270"],
-  ["Y", "300"],
-];
+const CARGA = Object.entries(LOAD_INDEX_KG);
+const VELOCIDAD = Object.entries(SPEED_RATING_KMH);
 
 export default function Page() {
   return (
@@ -118,6 +88,11 @@ export default function Page() {
       </p>
 
       <h3>Tabla de índice de carga</h3>
+      <p>
+        Esta es la tabla completa de los índices que se usan habitualmente en neumáticos de auto,
+        camioneta y utilitario. El número siempre expresa la carga máxima de <strong>una</strong>
+        cubierta, no del vehículo entero.
+      </p>
       <table>
         <thead>
           <tr>
@@ -179,6 +154,24 @@ export default function Page() {
         la V. Es un resabio histórico —originalmente H significaba &quot;high performance&quot; y
         era el tope de la escala— que quedó cuando se agregaron letras por encima.
       </p>
+
+      <h2>Buscá el código exacto de tu neumático</h2>
+      <p>
+        Si buscaste una combinación puntual —por ejemplo, &quot;qué significa 86T en un neumático&quot;—,
+        abrí su explicación directa. Vas a ver la carga en kilos y la velocidad en km/h sin tener
+        que interpretar la tabla.
+      </p>
+      <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
+        {LOAD_SPEED_CODES.map((code) => (
+          <Link
+            key={code}
+            href={`/indice-carga-velocidad/${code.toLowerCase()}`}
+            className="rounded-lg border border-slate-200 px-3 py-2 text-center no-underline hover:border-navy-500"
+          >
+            {code}
+          </Link>
+        ))}
+      </div>
 
       <h2>La C de los neumáticos de carga</h2>
       <p>

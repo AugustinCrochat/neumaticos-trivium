@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { VEHICLE_DB, sortVehiclesByPopularity } from '@/lib/vehicles';
+import { VEHICLE_DB, sortVehiclesByPopularity, vehicleTireProfile, type VehicleTireProfile } from '@/lib/vehicles';
 import { CatalogWidget } from '@/components/blog/CatalogWidget';
 import Link from 'next/link';
 import { canonical } from '@/lib/seo';
@@ -16,7 +16,7 @@ export async function generateStaticParams() {
   }));
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const vehicle = VEHICLE_DB.find(v => slugify(`${v.brand} ${v.model}`) === slug);
   
@@ -29,7 +29,17 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-export default async function VehiclePage({ params }: { params: { slug: string } }) {
+function selectionCopy(profile: VehicleTireProfile) {
+  if (profile === "commercial") {
+    return "Mostramos sólo neumáticos comerciales (C), con carcasa y capacidad de carga aptas para esta versión de trabajo.";
+  }
+  if (profile === "pickup") {
+    return "Mostramos neumáticos para pickup; puede incluir opciones A/T, pero no cubiertas comerciales C de utilitario.";
+  }
+  return "Mostramos neumáticos de auto: excluimos cubiertas comerciales C y A/T aunque compartan esta medida.";
+}
+
+export default async function VehiclePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const vehicle = VEHICLE_DB.find(v => slugify(`${v.brand} ${v.model}`) === slug);
   
@@ -68,25 +78,32 @@ export default async function VehiclePage({ params }: { params: { slug: string }
           <div className="space-y-12">
             {uniqueSizes.map(size => (
               <div key={`${size.w}-${size.p}-${size.r}`} className="border-b border-slate-100 pb-12 last:border-0 last:pb-0">
+                {(() => {
+                  const versions = vehicle.sizes.filter(s => s.w === size.w && s.p === size.p && s.r === size.r);
+                  const profile = vehicleTireProfile(vehicle, versions.map((s) => s.version).filter(Boolean).join(" / "));
+                  return <>
                 <div className="mb-6">
                   <h2 className="text-2xl font-bold text-navy-900 mb-2">
                     Medida {size.w}/{size.p} R{size.r}
                   </h2>
                   <p className="text-slate-500">
                     Suele venir de fábrica en versiones como: {
-                      vehicle.sizes
-                        .filter(s => s.w === size.w && s.p === size.p && s.r === size.r)
+                      versions
                         .map(s => s.version || s.generation)
                         .filter(Boolean)
                         .join(", ") || "Varias versiones"
                     }.
                   </p>
+                  <p className="mt-2 text-sm font-medium text-slate-600">{selectionCopy(profile)}</p>
                 </div>
                 
                 <CatalogWidget 
                   size={{ width: Number(size.w), profile: Number(size.p), rim: Number(size.r) }} 
+                  vehicleProfile={profile}
                   title={`En stock hoy`}
                 />
+                  </>;
+                })()}
               </div>
             ))}
           </div>
