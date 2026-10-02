@@ -25,7 +25,7 @@ function findVersionIndexBySize(sizes: Sizes | null, size?: Sizes[number]): numb
   return sizes.findIndex((s) => s.w === size.w && s.p === size.p && s.r === size.r);
 }
 
-export function VehicleSizeSearch({ initialMedida }: { initialMedida?: string }) {
+export function VehicleSizeSearch({ initialMedida, economicos = false }: { initialMedida?: string; economicos?: boolean }) {
   const router = useRouter();
   const { selectedBranch } = useBranch();
   const { vehiculos, selectedVehicle, setSelectedVehicle, clearSelectedVehicle } = useVehicle();
@@ -57,7 +57,7 @@ export function VehicleSizeSearch({ initialMedida }: { initialMedida?: string })
   function verNeumaticos() {
     if (!selectedVehicle || !selectedSize) return;
     const medida = `${selectedSize.w}-${selectedSize.p}-r${selectedSize.r}`;
-    router.push(`/buscar?medida=${medida}&marca=${encodeURIComponent(selectedVehicle.marca)}&modelo=${encodeURIComponent(selectedVehicle.modelo)}`);
+    router.push(`/buscar?medida=${medida}&marca=${encodeURIComponent(selectedVehicle.marca)}&modelo=${encodeURIComponent(selectedVehicle.modelo)}${economicos ? "&economicos=1" : ""}`);
   }
 
   const waText = selectedVehicle

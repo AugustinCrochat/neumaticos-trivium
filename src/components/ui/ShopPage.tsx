@@ -380,7 +380,15 @@ export function ShopPage({
 
   const [brandFilter, setBrandFilter] = useState("todos");
   const [maxPrice, setMaxPrice] = useState(MAX_POSSIBLE_PRICE);
-  const [onlyEconomic, setOnlyEconomic] = useState(false);
+  const economicosParam = searchParams.get("economicos") === "1";
+  const [onlyEconomic, setOnlyEconomic] = useState(economicosParam);
+  // El buscador puede volver a mandar a /buscar con otro valor del toggle sin
+  // remontar esta página, así que el estado sigue al parámetro.
+  const [prevEconomicosParam, setPrevEconomicosParam] = useState(economicosParam);
+  if (prevEconomicosParam !== economicosParam) {
+    setPrevEconomicosParam(economicosParam);
+    setOnlyEconomic(economicosParam);
+  }
   const [onlyCarga, setOnlyCarga] = useState(false);
   const [onlyAT, setOnlyAT] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
@@ -472,7 +480,7 @@ export function ShopPage({
 
           {/* Sidebar — search widget only */}
           <aside className="w-full lg:w-72 shrink-0 lg:sticky lg:top-8 lg:self-start">
-            <SizeOrVehicleSearch key={medida ?? "empty"} compact initialMedida={medida} forceVoiceButton />
+            <SizeOrVehicleSearch key={`${medida ?? "empty"}-${economicosParam}`} compact initialMedida={medida} forceVoiceButton initialEconomicos={economicosParam} />
           </aside>
 
           {/* Main content */}

@@ -45,6 +45,7 @@ export function TireSizeSearch({
   forceVoiceButton = false,
   hideLearnLink = false,
   embedded = false,
+  economicos = false,
 }: {
   initialMedida?: string;
   compact?: boolean;
@@ -52,8 +53,16 @@ export function TireSizeSearch({
   hideLearnLink?: boolean;
   /** Sin fondo/borde/padding propios — para cuando ya está dentro de otra tarjeta (ver SizeOrVehicleSearch). */
   embedded?: boolean;
+  /** Si está activo, la búsqueda va a /buscar con el filtro de económicos. */
+  economicos?: boolean;
 }) {
   const router = useRouter();
+  // Ref y no closure: el reconocimiento de voz y el auto-search capturan la
+  // función al arrancar, y el toggle puede cambiar después.
+  const economicosRef = useRef(economicos);
+  useEffect(() => {
+    economicosRef.current = economicos;
+  }, [economicos]);
 
   function parseInitial(medida?: string) {
     if (!medida) return { w: "", p: "", r: "" };
@@ -221,8 +230,8 @@ export function TireSizeSearch({
       setShowPopular(false);
       if (flotationEquivalent) rememberFlotationOrigin();
       const href = flotationEquivalent
-        ? sizeSearchHref(String(flotationEquivalent.width), String(flotationEquivalent.profile), String(flotationEquivalent.rim))
-        : sizeSearchHref(width, profile, rim);
+        ? sizeSearchHref(String(flotationEquivalent.width), String(flotationEquivalent.profile), String(flotationEquivalent.rim), economicosRef.current)
+        : sizeSearchHref(width, profile, rim, economicosRef.current);
       router.push(href);
     }, 300);
     return () => clearTimeout(t);
@@ -235,7 +244,7 @@ export function TireSizeSearch({
       document.activeElement.blur();
     }
     setShowPopular(false); // Ocultar dropdown después de búsqueda
-    router.push(sizeSearchHref(w, p, rVal));
+    router.push(sizeSearchHref(w, p, rVal, economicosRef.current));
   };
 
   function executeSearch() {
@@ -404,7 +413,7 @@ export function TireSizeSearch({
       if (!w || !p || !rVal) return;
       hasNavigated = true;
       if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
-      router.push(sizeSearchHref(w, p, rVal));
+      router.push(sizeSearchHref(w, p, rVal, economicosRef.current));
     };
 
     r.onresult = (ev) => {
