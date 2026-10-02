@@ -34,7 +34,7 @@ export function SizeOrVehicleSearch({
   }, [mode, loadVehiculos]);
 
   return (
-    <div className={`bg-slate-100 rounded-2xl border border-slate-200 ${compact ? "p-4" : "p-6"} shadow-xl shadow-slate-300/40 w-full`}>
+    <div className={`bg-slate-100 rounded-2xl border border-slate-200 ${compact ? "p-4" : "p-6"} w-full`}>
       <div className="mb-4 flex flex-wrap items-center justify-between gap-x-4 gap-y-3">
       <div className="inline-flex items-center rounded-xl border border-slate-200 bg-white p-1">
         <button
@@ -58,17 +58,21 @@ export function SizeOrVehicleSearch({
 
       <button
         type="button"
-        role="switch"
-        aria-checked={economicos}
+        aria-pressed={economicos}
         onClick={() => setEconomicos((v) => !v)}
-        className="group inline-flex items-center gap-2.5 text-sm font-bold text-slate-700"
+        className={`inline-flex items-center gap-2 rounded-full border py-1.5 pl-1.5 pr-4 text-sm font-bold transition-colors ${
+          economicos
+            ? "border-orange-500 bg-orange-500 text-white"
+            : "border-slate-300 bg-white text-slate-700 hover:border-slate-400"
+        }`}
       >
         <span
-          className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${economicos ? "bg-orange-500" : "bg-slate-300"}`}
+          aria-hidden="true"
+          className={`flex h-6 w-6 items-center justify-center rounded-full text-sm font-black ${
+            economicos ? "bg-white text-orange-500" : "bg-slate-200 text-slate-500"
+          }`}
         >
-          <span
-            className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform ${economicos ? "translate-x-[22px]" : "translate-x-0.5"}`}
-          />
+          $
         </span>
         Solo económicos
       </button>
