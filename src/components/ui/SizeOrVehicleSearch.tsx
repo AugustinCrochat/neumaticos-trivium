@@ -56,7 +56,7 @@ export function SizeOrVehicleSearch({
       </div>
 
       <label
-        className={`mb-4 flex cursor-pointer items-center gap-3 rounded-xl border-2 px-3.5 py-2.5 transition-colors ${
+        className={`mb-3 flex w-fit cursor-pointer items-center gap-2 rounded-lg border-2 py-1.5 pl-2 pr-1.5 transition-colors ${
           economicos ? "border-orange-500 bg-orange-50" : "border-slate-200 bg-white hover:border-slate-300"
         }`}
       >
@@ -68,21 +68,18 @@ export function SizeOrVehicleSearch({
         />
         <span
           aria-hidden="true"
-          className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-md border-2 transition-colors peer-focus-visible:ring-2 peer-focus-visible:ring-navy-400 ${
+          className={`flex h-5 w-5 shrink-0 items-center justify-center rounded border-2 transition-colors peer-focus-visible:ring-2 peer-focus-visible:ring-navy-400 ${
             economicos ? "border-orange-500 bg-orange-500 text-white" : "border-slate-300 bg-white text-transparent"
           }`}
         >
-          <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth={3.5} viewBox="0 0 24 24">
+          <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth={3.5} viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
           </svg>
         </span>
-        <span className="min-w-0 flex-1">
-          <span className="block text-sm font-black text-navy-900">Solo económicos</span>
-          <span className="block text-xs text-slate-500">Mostrar únicamente las marcas de menor precio</span>
-        </span>
+        <span className="text-sm font-bold text-navy-900">Solo económicos</span>
         <span
           aria-hidden="true"
-          className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-base font-black ${
+          className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-sm font-black ${
             economicos ? "bg-orange-500 text-white" : "bg-slate-200 text-slate-500"
           }`}
         >
