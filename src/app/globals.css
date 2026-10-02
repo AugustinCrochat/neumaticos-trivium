@@ -54,6 +54,8 @@
   --color-foreground: #0f172a;
 
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  /* Títulos de la home: condensada, en mayúsculas desde las clases. */
+  --font-display: var(--font-display-face), var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
 }
 
 body {

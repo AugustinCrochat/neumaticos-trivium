@@ -22,14 +22,14 @@ export function LocalSection() {
   const branch = BRANCHES[0];
 
   return (
-    <section className="border-b border-slate-100 bg-black py-16 text-white">
+    <section className="bg-navy-950 py-16 text-white">
       <div className="mx-auto max-w-7xl px-4">
         <div className="grid gap-10 md:grid-cols-2">
           <div>
-            <p className="mb-3 text-sm font-black uppercase tracking-widest text-orange-400">
+            <p className="mb-3 text-sm font-bold uppercase tracking-widest text-navy-300">
               {branch.city}, {branch.province}
             </p>
-            <h2 className="text-3xl font-black leading-tight">
+            <h2 className="font-display text-4xl font-bold uppercase leading-tight tracking-wide">
               Local a la calle en {branch.neighborhood ?? branch.city}
             </h2>
             <p className="mt-4 text-lg leading-relaxed text-slate-300">
@@ -77,7 +77,7 @@ export function LocalSection() {
               /neumaticos-en siguen enlazadas desde el footer y el sitemap. */}
           <div>
             {branch.facadePhoto && (
-              <div className="relative mb-6 aspect-[4/3] w-full overflow-hidden rounded-2xl">
+              <div className="relative mb-6 aspect-[4/3] w-full overflow-hidden rounded-xl">
                 <Image
                   src={branch.facadePhoto}
                   alt={`Fachada del local de Neumáticos Trivium ${branch.shortName}`}
@@ -87,7 +87,7 @@ export function LocalSection() {
                 />
               </div>
             )}
-            <h3 className="text-xl font-black">Zonas donde vendemos</h3>
+            <h3 className="font-display text-2xl font-bold uppercase tracking-wide">Zonas donde vendemos</h3>
             <p className="mt-2 leading-relaxed text-slate-300">
               Atendemos Córdoba Capital y todo el corredor de Sierras Chicas:{" "}
               {ZONAS_EN_PROSA}. Si estás en cualquiera de esas zonas, el retiro en el local no tiene

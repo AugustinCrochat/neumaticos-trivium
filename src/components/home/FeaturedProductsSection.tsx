@@ -17,11 +17,11 @@ export function FeaturedProductsSection({ productos }: { productos: TireProduct[
   if (destacados.length === 0) return null;
 
   return (
-    <section className="border-b border-slate-100 bg-white py-16">
+    <section className="bg-white py-16">
       <div className="mx-auto max-w-7xl px-4">
         <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
           <div className="max-w-2xl">
-            <h2 className="text-3xl font-black text-navy-900">Precios de hoy</h2>
+            <h2 className="font-display text-4xl font-bold uppercase tracking-wide text-navy-900">Precios de hoy</h2>
           </div>
           <Link
             href="/catalogo"

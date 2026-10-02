@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { HeroSection } from "@/components/home/HeroSection";
+import { TrustStrip } from "@/components/home/TrustStrip";
 import { ArrepentimientoBanner } from "@/components/home/ArrepentimientoBanner";
 import { FeaturedProductsSection } from "@/components/home/FeaturedProductsSection";
 import { PopularSizesSection } from "@/components/home/PopularSizesSection";
@@ -74,11 +75,12 @@ export default async function HomePage() {
   return (
     <>
       <HeroSection />
-      <ArrepentimientoBanner />
-      <FeaturedProductsSection productos={productos} />
+      <TrustStrip />
       <PopularSizesSection />
       <LocalSection />
+      <FeaturedProductsSection productos={productos} />
       <AboutSection />
+      <ArrepentimientoBanner />
       <div className="mx-auto max-w-4xl px-4 pb-16">
         <FaqSection faqs={FAQS} />
       </div>

@@ -22,10 +22,10 @@ export function PopularSizesSection() {
   const medidas = MEDIDAS_PRIORITARIAS.slice(0, 18);
 
   return (
-    <section className="border-b border-slate-100 bg-slate-50 py-16">
+    <section className="bg-slate-50 py-16">
       <div className="mx-auto max-w-7xl px-4">
         <div className="mb-8 max-w-3xl">
-          <h2 className="text-3xl font-black text-navy-900">Elegí tu medida</h2>
+          <h2 className="font-display text-4xl font-bold uppercase tracking-wide text-navy-900">Elegí tu medida</h2>
           <p className="mt-3 text-lg leading-relaxed text-slate-600">
             Estas son las medidas que más nos piden. Entrá a la tuya y vas a ver los modelos
             disponibles con precio y stock, los autos que la usan de fábrica y qué medidas
@@ -38,9 +38,9 @@ export function PopularSizesSection() {
             <Link
               key={sizeSlug(size)}
               href={`/neumaticos/${sizeSlug(size)}`}
-              className="rounded-xl border border-slate-200 bg-white p-4 text-center transition-colors hover:border-orange-400"
+              className="rounded-xl border border-slate-200 bg-white p-4 text-center shadow-sm transition hover:-translate-y-0.5 hover:border-navy-400 hover:shadow-md"
             >
-              <span className="block font-black text-navy-900">{formatSize(size)}</span>
+              <span className="font-display block text-xl font-bold tracking-wide text-navy-900">{formatSize(size)}</span>
               <span className="mt-1 block text-xs font-bold text-slate-500">Ver precios</span>
             </Link>
           ))}
@@ -54,7 +54,7 @@ export function PopularSizesSection() {
             <Link
               key={rim}
               href={`/neumaticos/${rimSlug(rim)}`}
-              className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-navy-900 transition-colors hover:border-navy-400"
+              className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-navy-900 transition-colors hover:border-navy-400"
             >
               R{rim}
             </Link>

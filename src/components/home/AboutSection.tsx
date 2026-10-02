@@ -12,9 +12,9 @@ import { FREE_SHIPPING_THRESHOLD, SHIPPING_FLAT_RATE } from "@/lib/config";
  */
 export function AboutSection() {
   return (
-    <section className="border-b border-slate-100 bg-white py-16">
+    <section className="bg-white py-16">
       <div className="mx-auto max-w-4xl px-4">
-        <h2 className="text-3xl font-black text-navy-900">
+        <h2 className="font-display text-4xl font-bold uppercase tracking-wide text-navy-900">
           Comprar neumáticos sin pagar de más
         </h2>
 
@@ -40,7 +40,7 @@ export function AboutSection() {
             matices, no un eslogan.
           </p>
 
-          <h3 className="pt-4 text-2xl font-black text-navy-900">
+          <h3 className="font-display pt-4 text-3xl font-bold uppercase tracking-wide text-navy-900">
             Stock real, publicado y verificable
           </h3>
           <p>
@@ -51,7 +51,7 @@ export function AboutSection() {
             distribuidor y te cita dos días después.
           </p>
 
-          <h3 className="pt-4 text-2xl font-black text-navy-900">
+          <h3 className="font-display pt-4 text-3xl font-bold uppercase tracking-wide text-navy-900">
             Cubiertas para auto, camioneta y carga
           </h3>
           <p>
@@ -68,7 +68,7 @@ export function AboutSection() {
             — o buscá directamente por marca y modelo de tu auto y te decimos qué lleva.
           </p>
 
-          <h3 className="pt-4 text-2xl font-black text-navy-900">
+          <h3 className="font-display pt-4 text-3xl font-bold uppercase tracking-wide text-navy-900">
             Taller propio: salís con el auto listo
           </h3>
           <p>
@@ -85,7 +85,7 @@ export function AboutSection() {
             .
           </p>
 
-          <h3 className="pt-4 text-2xl font-black text-navy-900">
+          <h3 className="font-display pt-4 text-3xl font-bold uppercase tracking-wide text-navy-900">
             Envío a todo el país o retiro sin cargo
           </h3>
           <p>

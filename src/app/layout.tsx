@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Geist, Barlow_Condensed } from "next/font/google";
 import "./globals.css";
 import { SITE_URL } from "@/lib/config";
 import { SITE_NAME, siteGraphJsonLd } from "@/lib/seo";
@@ -22,6 +22,12 @@ import { getAllVehicleOptions } from "@/lib/vehicles";
 const geist = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+});
+
+const display = Barlow_Condensed({
+  variable: "--font-display-face",
+  subsets: ["latin"],
+  weight: ["600", "700", "800"],
 });
 
 export const metadata: Metadata = {
@@ -88,7 +94,7 @@ export default function RootLayout({
   // layout raíz — ver memoria cache-incremental-sin-r2 y el error 1102.
   const vehiculos = getAllVehicleOptions();
   return (
-    <html lang="es" className={`${geist.variable} h-full antialiased`}>
+    <html lang="es" className={`${geist.variable} ${display.variable} h-full antialiased`}>
       <head>
         <script
           dangerouslySetInnerHTML={{
