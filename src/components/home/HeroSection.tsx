@@ -12,8 +12,8 @@ export function HeroSection() {
           sin competir con el título ni con el buscador. */}
       {foto && (
         <>
-          <Image src={foto} alt="" fill priority sizes="100vw" className="object-cover opacity-25" />
-          <div className="absolute inset-0 bg-gradient-to-r from-navy-950 via-navy-950/85 to-navy-950/50" />
+          <Image src={foto} alt="" fill priority sizes="100vw" className="object-cover opacity-60" />
+          <div className="absolute inset-0 bg-gradient-to-r from-navy-950/90 via-navy-950/55 to-navy-950/10" />
         </>
       )}
       <div className="relative max-w-7xl mx-auto px-4">
