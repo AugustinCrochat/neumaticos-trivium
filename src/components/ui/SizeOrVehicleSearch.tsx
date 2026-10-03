@@ -84,7 +84,7 @@ export function SizeOrVehicleSearch({
             economicos ? "bg-orange-500 text-white" : "bg-slate-200 text-slate-500"
           }`}
         >
-          $
+          %
         </span>
       </label>
       </div>
