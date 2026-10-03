@@ -49,7 +49,6 @@ export default async function NeumaticosCargaPage() {
         accent: "para trabajar.",
         bajada:
           "Neumáticos de carga para utilitarios, vans y pick-ups que andan con peso todos los días.",
-        tread: "carga",
         highlights: [
           {
             titulo: "Más capacidad",

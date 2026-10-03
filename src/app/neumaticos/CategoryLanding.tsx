@@ -12,54 +12,10 @@ export type CategoryHero = {
   headline: string;
   accent: string;
   bajada: string;
-  /** Qué dibuja el neumático decorativo: tacos grandes, surcos continuos o flanco reforzado. */
-  tread: "at" | "ht" | "carga";
   highlights: { titulo: string; detalle: string }[];
   idealPara: string[];
   noIdealPara: string[];
 };
-
-/** Neumático decorativo del hero: sólo cambia el dibujo de la banda. */
-function TreadArt({ tread }: { tread: CategoryHero["tread"] } ) {
-  const lugs = Array.from({ length: tread === "at" ? 16 : 28 }, (_, i) => i);
-  const n = lugs.length;
-  return (
-    <svg viewBox="0 0 200 200" className="h-full w-full" aria-hidden="true">
-      <circle cx="100" cy="100" r="92" fill="#161616" stroke="#2a2a2a" strokeWidth="2" />
-      {tread === "ht" ? (
-        <>
-          <circle cx="100" cy="100" r="82" fill="none" stroke="#ff1e00" strokeWidth="3" opacity="0.9" />
-          <circle cx="100" cy="100" r="73" fill="none" stroke="#3a3a3a" strokeWidth="3" />
-          <circle cx="100" cy="100" r="64" fill="none" stroke="#ff1e00" strokeWidth="3" opacity="0.6" />
-        </>
-      ) : (
-        lugs.map((i) => {
-          const a = (i / n) * 360;
-          return (
-            <rect
-              key={i}
-              x={tread === "at" ? 92 : 96}
-              y="8"
-              width={tread === "at" ? 16 : 8}
-              height={tread === "at" ? 22 : 16}
-              rx="2"
-              fill={tread === "at" ? "#ff1e00" : "#3a3a3a"}
-              opacity={tread === "at" ? 0.9 : 1}
-              transform={`rotate(${a} 100 100)`}
-            />
-          );
-        })
-      )}
-      {tread === "carga" && <circle cx="100" cy="100" r="68" fill="none" stroke="#ff1e00" strokeWidth="6" />}
-      <circle cx="100" cy="100" r="50" fill="#0a0a0a" stroke="#4d4d4d" strokeWidth="3" />
-      <circle cx="100" cy="100" r="34" fill="none" stroke="#2a2a2a" strokeWidth="2" />
-      {[0, 72, 144, 216, 288].map((a) => (
-        <circle key={a} cx="100" cy="76" r="4" fill="#6a6a6a" transform={`rotate(${a} 100 100)`} />
-      ))}
-      <circle cx="100" cy="100" r="9" fill="#6a6a6a" />
-    </svg>
-  );
-}
 
 /**
  * Landing por categoría de neumático (A/T, carga), hermana de RimLanding pero
@@ -114,9 +70,14 @@ export function CategoryLanding({
               "repeating-linear-gradient(-45deg, #ff1e00 0, #ff1e00 2px, transparent 2px, transparent 26px)",
           }}
         />
-        <div className="pointer-events-none absolute -right-16 -top-10 h-72 w-72 opacity-30 md:opacity-90 md:-right-6 md:top-1/2 md:h-96 md:w-96 md:-translate-y-1/2">
-          <TreadArt tread={hero.tread} />
-        </div>
+        {/* Mismo recurso que la miniatura de links compartidos (og-layout): el
+            isotipo grande, cortado contra la esquina y casi transparente. */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/images/trivium-icon.svg"
+          alt=""
+          className="pointer-events-none absolute -bottom-24 -right-20 h-80 w-80 opacity-[0.14] md:-bottom-32 md:-right-16 md:h-[28rem] md:w-[28rem]"
+        />
         <div className="relative max-w-2xl px-6 py-10 md:px-10 md:py-16">
           <h1 className="inline-block rounded-md bg-[#ff1e00] px-3 py-1 text-xs font-bold uppercase tracking-widest text-white">
             {title}

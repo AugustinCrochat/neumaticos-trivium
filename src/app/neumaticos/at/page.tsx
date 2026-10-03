@@ -49,7 +49,6 @@ export default async function NeumaticosATPage() {
         accent: "Un solo neumático.",
         bajada:
           "Tacos grandes y bien espaciados para camionetas y 4x4 que no se quedan en la ruta.",
-        tread: "at",
         highlights: [
           {
             titulo: "Tracción en tierra",

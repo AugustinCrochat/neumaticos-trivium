@@ -49,7 +49,6 @@ export default async function NeumaticosHTPage() {
         accent: "en cada kilómetro.",
         bajada:
           "Banda de rodamiento pensada para asfalto: manejo estable, bajo ruido y buen rendimiento de combustible.",
-        tread: "ht",
         highlights: [
           {
             titulo: "Silenciosos",
