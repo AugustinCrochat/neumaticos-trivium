@@ -63,13 +63,6 @@ export function CategoryLanding({
       />
 
       <header className="relative mb-6 overflow-hidden rounded-3xl bg-black">
-        <div
-          className="pointer-events-none absolute inset-0 opacity-[0.12]"
-          style={{
-            backgroundImage:
-              "repeating-linear-gradient(-45deg, #ff1e00 0, #ff1e00 2px, transparent 2px, transparent 26px)",
-          }}
-        />
         {/* Mismo recurso que la miniatura de links compartidos (og-layout): el
             isotipo grande, cortado contra la esquina y casi transparente. */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -189,13 +182,6 @@ export function CategoryLanding({
       <FaqSection faqs={faqs} />
 
       <section className="relative mt-14 overflow-hidden rounded-3xl bg-black p-6 md:p-10">
-        <div
-          className="pointer-events-none absolute inset-0 opacity-[0.12]"
-          style={{
-            backgroundImage:
-              "repeating-linear-gradient(-45deg, #ff1e00 0, #ff1e00 2px, transparent 2px, transparent 26px)",
-          }}
-        />
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1 bg-[#ff1e00]" />
         <div className="relative flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
           <div className="flex items-start gap-4">

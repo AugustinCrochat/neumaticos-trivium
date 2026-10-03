@@ -84,13 +84,6 @@ export default async function OfertasPage() {
     <div className="min-h-screen bg-slate-50">
       {/* Hero */}
       <header className="relative overflow-hidden bg-black">
-        <div
-          className="pointer-events-none absolute inset-0 opacity-[0.12]"
-          style={{
-            backgroundImage:
-              "repeating-linear-gradient(-45deg, #ff1e00 0, #ff1e00 2px, transparent 2px, transparent 26px)",
-          }}
-        />
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1 bg-[#ff1e00]" />
         <div className="relative mx-auto max-w-7xl px-4 py-12 md:py-20">
           <span className="inline-block rounded-md bg-[#ff1e00] px-3 py-1 text-xs font-bold uppercase tracking-widest text-white">
