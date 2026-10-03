@@ -7,12 +7,11 @@ import { useBranch } from "@/contexts/branch-context";
 import { SearchModal } from "@/components/ui/SearchModal";
 
 const NAV_LINKS = [
-  { href: "/ofertas", label: "Ofertas" },
+  { href: "/ofertas", label: "% Ofertas" },
   { href: "/catalogo", label: "Neumáticos" },
   { href: "/servicios", label: "Servicios" },
   { href: "/sucursales", label: "Sucursales" },
   { href: "/contacto", label: "Contacto" },
-  { href: "/blog", label: "Blog" },
 ];
 
 export function Header() {
@@ -27,7 +26,7 @@ export function Header() {
           a comprar en otro lado sin taller propio. */}
       <Link
         href="/servicios"
-        className="block bg-orange-500 px-4 py-1 text-center text-[11px] font-bold text-white transition-colors hover:bg-orange-600 md:text-xs"
+        className="block bg-[#e30613] px-4 py-1 text-center text-[11px] font-bold text-white transition-colors hover:bg-[#c00510] md:text-xs"
       >
         Colocación y válvulas sin cargo en nuestros locales
       </Link>
@@ -56,7 +55,7 @@ export function Header() {
                   href={link.href}
                   className={
                     link.href === "/ofertas"
-                      ? "text-orange-400 hover:text-orange-300 hover:bg-zinc-900 px-4 py-2 rounded-lg text-sm font-black transition-colors"
+                      ? "text-[#e30613] hover:text-[#c00510] hover:bg-zinc-900 px-4 py-2 rounded-lg text-sm font-black transition-colors"
                       : "text-zinc-200 hover:text-white hover:bg-zinc-900 px-4 py-2 rounded-lg text-sm font-medium transition-colors"
                   }
                 >
@@ -119,7 +118,7 @@ export function Header() {
                 href={link.href}
                 className={
                   link.href === "/ofertas"
-                    ? "block text-orange-400 hover:text-orange-300 hover:bg-zinc-900 px-4 py-2.5 rounded-lg text-sm font-black transition-colors"
+                    ? "block text-[#e30613] hover:text-[#c00510] hover:bg-zinc-900 px-4 py-2.5 rounded-lg text-sm font-black transition-colors"
                     : "block text-zinc-200 hover:text-white hover:bg-zinc-900 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors"
                 }
                 onClick={() => setMenuOpen(false)}
