@@ -19,7 +19,7 @@ const FAQS = [
   {
     question: "¿Qué quiere decir la C después de la medida?",
     answer:
-      "La C es de \"Commercial\": indica que el neumático es de carga, con una carcasa reforzada para soportar más peso que uno de auto en la misma medida. Se usa en utilitarios, furgones y camiones livianos, y no es intercambiable con un neumático de auto aunque coincida el ancho, perfil y rodado, porque el índice de carga es distinto.",
+      'La C es de "Commercial": indica que el neumático es de carga, con una carcasa reforzada para soportar más peso que uno de auto en la misma medida. Se usa en utilitarios, furgones y camiones livianos, y no es intercambiable con un neumático de auto aunque coincida el ancho, perfil y rodado, porque el índice de carga es distinto.',
   },
   {
     question: "¿Cómo sé qué índice de carga necesito?",
@@ -44,6 +44,37 @@ export default async function NeumaticosCargaPage() {
       title="Neumáticos de carga"
       productos={carga}
       faqs={FAQS}
+      hero={{
+        headline: "Reforzados",
+        accent: "para trabajar.",
+        bajada:
+          "Neumáticos de carga para utilitarios, vans y pick-ups que andan con peso todos los días.",
+        tread: "carga",
+        highlights: [
+          {
+            titulo: "Más capacidad",
+            detalle:
+              "Carcasa reforzada con mayor índice de carga por neumático.",
+          },
+          {
+            titulo: "Aguantan el trabajo",
+            detalle: "Pensados para uso intensivo y viajes con carga.",
+          },
+          {
+            titulo: "Medida con C",
+            detalle:
+              "Llevan una C después del rodado, por ejemplo 195/70 R15C.",
+          },
+        ],
+        idealPara: [
+          "Utilitarios, furgones y vans",
+          "Reparto y trabajo diario con carga",
+          "Pick-ups que cargan peso",
+        ],
+        noIdealPara: [
+          "Autos de pasajeros: se sienten más duros y no los necesitan",
+        ],
+      }}
     />
   );
 }

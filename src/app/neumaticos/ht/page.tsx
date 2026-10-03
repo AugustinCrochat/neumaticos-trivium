@@ -19,7 +19,7 @@ const FAQS = [
   {
     question: "¿Qué es un neumático H/T?",
     answer:
-      "H/T es de \"Highway Terrain\": el neumático de calle estándar, pensado para asfalto y uso urbano/ruta. A diferencia de un A/T (All Terrain), no tiene tacos grandes ni espaciados para ripio o barro, así que es más silencioso, dura más en asfalto y gasta menos combustible. Es lo que trae de fábrica la mayoría de los autos y camionetas que no van a hacer offroad.",
+      'H/T es de "Highway Terrain": el neumático de calle estándar, pensado para asfalto y uso urbano/ruta. A diferencia de un A/T (All Terrain), no tiene tacos grandes ni espaciados para ripio o barro, así que es más silencioso, dura más en asfalto y gasta menos combustible. Es lo que trae de fábrica la mayoría de los autos y camionetas que no van a hacer offroad.',
   },
   {
     question: "¿En qué se diferencia de uno de carga?",
@@ -44,6 +44,35 @@ export default async function NeumaticosHTPage() {
       title="Neumáticos H/T (Highway Terrain)"
       productos={ht}
       faqs={FAQS}
+      hero={{
+        headline: "Confort y silencio",
+        accent: "en cada kilómetro.",
+        bajada:
+          "Banda de rodamiento pensada para asfalto: manejo estable, bajo ruido y buen rendimiento de combustible.",
+        tread: "ht",
+        highlights: [
+          {
+            titulo: "Silenciosos",
+            detalle: "Surcos continuos que reducen el ruido de rodadura.",
+          },
+          {
+            titulo: "Buen consumo",
+            detalle: "Menor resistencia al avance que un neumático de tacos.",
+          },
+          {
+            titulo: "Más duración",
+            detalle: "Desgaste parejo en uso de ciudad y ruta.",
+          },
+        ],
+        idealPara: [
+          "Autos y camionetas de uso diario",
+          "Ciudad y rutas asfaltadas",
+          "Quien prioriza confort y consumo",
+        ],
+        noIdealPara: [
+          "Caminos de tierra o barro frecuentes (te conviene un A/T)",
+        ],
+      }}
     />
   );
 }

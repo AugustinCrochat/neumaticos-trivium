@@ -44,6 +44,37 @@ export default async function NeumaticosATPage() {
       title="Neumáticos A/T (All Terrain)"
       productos={at}
       faqs={FAQS}
+      hero={{
+        headline: "Ripio, barro y asfalto.",
+        accent: "Un solo neumático.",
+        bajada:
+          "Tacos grandes y bien espaciados para camionetas y 4x4 que no se quedan en la ruta.",
+        tread: "at",
+        highlights: [
+          {
+            titulo: "Tracción en tierra",
+            detalle: "Tacos grandes que agarran en ripio, barro y arena.",
+          },
+          {
+            titulo: "Flancos resistentes",
+            detalle: "Más protección ante piedras y caminos rotos.",
+          },
+          {
+            titulo: "Sirve en asfalto",
+            detalle:
+              "Andan bien en ruta, con algo más de ruido que uno de calle.",
+          },
+        ],
+        idealPara: [
+          "Camionetas y 4x4 con uso mixto",
+          "Campo, ripio y caminos de tierra",
+          "Viajes y escapadas off-road suaves",
+        ],
+        noIdealPara: [
+          "Uso 100% urbano (te conviene un H/T)",
+          "Off-road extremo con barro profundo (M/T)",
+        ],
+      }}
     />
   );
 }

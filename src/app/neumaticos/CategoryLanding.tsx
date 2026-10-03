@@ -1,11 +1,65 @@
 import Link from "next/link";
 import type { TireProduct } from "@/lib/types";
 import { BRANCHES } from "@/lib/config";
-import { ProductCard } from "@/components/ui/ProductCard";
+import { CategoryProductGrid } from "./CategoryProductGrid";
+import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { FaqSection } from "@/components/seo/FaqSection";
 import type { Faq } from "@/lib/seo";
 import { formatSize, sizeSlug, sizesFromCatalog } from "@/lib/tire-sizes";
+
+export type CategoryHero = {
+  headline: string;
+  accent: string;
+  bajada: string;
+  /** Qué dibuja el neumático decorativo: tacos grandes, surcos continuos o flanco reforzado. */
+  tread: "at" | "ht" | "carga";
+  highlights: { titulo: string; detalle: string }[];
+  idealPara: string[];
+  noIdealPara: string[];
+};
+
+/** Neumático decorativo del hero: sólo cambia el dibujo de la banda. */
+function TreadArt({ tread }: { tread: CategoryHero["tread"] } ) {
+  const lugs = Array.from({ length: tread === "at" ? 16 : 28 }, (_, i) => i);
+  const n = lugs.length;
+  return (
+    <svg viewBox="0 0 200 200" className="h-full w-full" aria-hidden="true">
+      <circle cx="100" cy="100" r="92" fill="#161616" stroke="#2a2a2a" strokeWidth="2" />
+      {tread === "ht" ? (
+        <>
+          <circle cx="100" cy="100" r="82" fill="none" stroke="#ff1e00" strokeWidth="3" opacity="0.9" />
+          <circle cx="100" cy="100" r="73" fill="none" stroke="#3a3a3a" strokeWidth="3" />
+          <circle cx="100" cy="100" r="64" fill="none" stroke="#ff1e00" strokeWidth="3" opacity="0.6" />
+        </>
+      ) : (
+        lugs.map((i) => {
+          const a = (i / n) * 360;
+          return (
+            <rect
+              key={i}
+              x={tread === "at" ? 92 : 96}
+              y="8"
+              width={tread === "at" ? 16 : 8}
+              height={tread === "at" ? 22 : 16}
+              rx="2"
+              fill={tread === "at" ? "#ff1e00" : "#3a3a3a"}
+              opacity={tread === "at" ? 0.9 : 1}
+              transform={`rotate(${a} 100 100)`}
+            />
+          );
+        })
+      )}
+      {tread === "carga" && <circle cx="100" cy="100" r="68" fill="none" stroke="#ff1e00" strokeWidth="6" />}
+      <circle cx="100" cy="100" r="50" fill="#0a0a0a" stroke="#4d4d4d" strokeWidth="3" />
+      <circle cx="100" cy="100" r="34" fill="none" stroke="#2a2a2a" strokeWidth="2" />
+      {[0, 72, 144, 216, 288].map((a) => (
+        <circle key={a} cx="100" cy="76" r="4" fill="#6a6a6a" transform={`rotate(${a} 100 100)`} />
+      ))}
+      <circle cx="100" cy="100" r="9" fill="#6a6a6a" />
+    </svg>
+  );
+}
 
 /**
  * Landing por categoría de neumático (A/T, carga), hermana de RimLanding pero
@@ -20,21 +74,27 @@ export function CategoryLanding({
   title,
   productos,
   faqs,
+  hero,
 }: {
   crumbLabel: string;
   path: string;
   title: string;
   productos: TireProduct[];
   faqs: Faq[];
+  hero: CategoryHero;
 }) {
   const branch = BRANCHES[0];
   const ordenados = [...productos].sort(
     (a, b) => Number(b.enStock) - Number(a.enStock) || a.price - b.price
   );
   const medidas = sizesFromCatalog(productos);
-  const medidasConStock = new Set(
-    productos.filter((p) => p.enStock).map((p) => sizeSlug(p.size))
-  ).size;
+  const slugsConStock = new Set(productos.filter((p) => p.enStock).map((p) => sizeSlug(p.size)));
+  const medidasConStock = slugsConStock.size;
+  const porAro = [
+    ...medidas
+      .reduce((m, e) => m.set(e.size.rim, [...(m.get(e.size.rim) ?? []), e]), new Map<number, typeof medidas>())
+      .entries(),
+  ].sort((a, b) => a[0] - b[0]);
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8">
@@ -46,17 +106,69 @@ export function CategoryLanding({
         ]}
       />
 
-      <header className="mb-8">
-        <h1 className="text-3xl font-black leading-tight text-navy-900 md:text-5xl">{title}</h1>
+      <header className="relative mb-6 overflow-hidden rounded-3xl bg-black">
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.12]"
+          style={{
+            backgroundImage:
+              "repeating-linear-gradient(-45deg, #ff1e00 0, #ff1e00 2px, transparent 2px, transparent 26px)",
+          }}
+        />
+        <div className="pointer-events-none absolute -right-16 -top-10 h-72 w-72 opacity-30 md:opacity-90 md:-right-6 md:top-1/2 md:h-96 md:w-96 md:-translate-y-1/2">
+          <TreadArt tread={hero.tread} />
+        </div>
+        <div className="relative max-w-2xl px-6 py-10 md:px-10 md:py-16">
+          <h1 className="inline-block rounded-md bg-[#ff1e00] px-3 py-1 text-xs font-bold uppercase tracking-widest text-white">
+            {title}
+          </h1>
+          <p className="font-display mt-4 text-4xl font-bold uppercase leading-[0.95] tracking-wide text-white md:text-6xl">
+            {hero.headline}
+            <br />
+            <span className="text-[#ff1e00]">{hero.accent}</span>
+          </p>
+          <p className="mt-4 max-w-lg text-base text-slate-300 md:text-lg">{hero.bajada}</p>
+        </div>
       </header>
+
+      <ul className="mb-6 grid grid-cols-1 gap-3 md:grid-cols-3">
+        {hero.highlights.map((h) => (
+          <li key={h.titulo} className="rounded-2xl border border-slate-200 bg-white p-4">
+            <span className="font-display block text-xl font-bold uppercase tracking-wide text-slate-900">
+              {h.titulo}
+            </span>
+            <span className="mt-1 block text-sm leading-relaxed text-slate-600">{h.detalle}</span>
+          </li>
+        ))}
+      </ul>
+
+      <div className="mb-10 grid gap-3 md:grid-cols-2">
+        <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
+          <p className="mb-2 text-xs font-black uppercase tracking-wide text-emerald-800">Ideal para</p>
+          <ul className="space-y-1 text-sm font-medium text-emerald-950">
+            {hero.idealPara.map((t) => (
+              <li key={t} className="flex gap-2">
+                <span aria-hidden="true">✓</span>
+                {t}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+          <p className="mb-2 text-xs font-black uppercase tracking-wide text-slate-600">No es lo mejor para</p>
+          <ul className="space-y-1 text-sm font-medium text-slate-700">
+            {hero.noIdealPara.map((t) => (
+              <li key={t} className="flex gap-2">
+                <span aria-hidden="true">–</span>
+                {t}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
 
       {ordenados.length > 0 ? (
         <section className="mb-14">
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 md:gap-6">
-            {ordenados.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
+          <CategoryProductGrid productos={ordenados} />
         </section>
       ) : (
         <section className="mb-14 rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-6 text-slate-600">
@@ -67,7 +179,9 @@ export function CategoryLanding({
       {medidas.length > 0 && (
         <section className="mb-14">
           <div className="mb-5 flex flex-wrap items-center gap-3">
-            <h2 className="text-2xl font-black text-navy-900">Medidas disponibles</h2>
+            <h2 className="font-display text-3xl font-bold uppercase tracking-wide text-slate-900">
+              Medidas disponibles
+            </h2>
             {medidasConStock > 0 && (
               <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-xs font-black text-emerald-700">
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
@@ -75,18 +189,37 @@ export function CategoryLanding({
               </span>
             )}
           </div>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-            {medidas.map(({ size, count }) => (
-              <Link
-                key={sizeSlug(size)}
-                href={`/neumaticos/${sizeSlug(size)}`}
-                className="rounded-xl border border-slate-200 bg-white p-4 text-center transition-colors hover:border-orange-400"
-              >
-                <span className="block font-black text-navy-900">{formatSize(size)}</span>
-                <span className="mt-1 block text-xs font-bold text-slate-500">
-                  {count} {count === 1 ? "modelo" : "modelos"}
-                </span>
-              </Link>
+          <div className="space-y-6">
+            {porAro.map(([aro, items]) => (
+              <div key={aro}>
+                <h3 className="mb-2 flex items-center gap-3 text-sm font-black uppercase tracking-widest text-slate-500">
+                  <span className="rounded-md bg-black px-2 py-0.5 text-white">R{aro}</span>
+                  <span className="h-px flex-1 bg-slate-200" />
+                </h3>
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+                  {items.map(({ size, count }) => {
+                    const hayStock = slugsConStock.has(sizeSlug(size));
+                    return (
+                      <Link
+                        key={sizeSlug(size)}
+                        href={`/neumaticos/${sizeSlug(size)}`}
+                        className="group relative rounded-xl border border-slate-200 bg-white p-4 text-center transition-colors hover:border-[#ff1e00]"
+                      >
+                        {hayStock && (
+                          <span
+                            className="absolute right-2.5 top-2.5 h-2 w-2 rounded-full bg-emerald-500"
+                            title="Con stock"
+                          />
+                        )}
+                        <span className="block font-black text-slate-900">{formatSize(size)}</span>
+                        <span className="mt-1 block text-xs font-bold text-slate-500">
+                          {count} {count === 1 ? "modelo" : "modelos"}
+                        </span>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
             ))}
           </div>
         </section>
@@ -94,26 +227,52 @@ export function CategoryLanding({
 
       <FaqSection faqs={faqs} />
 
-      <section className="mt-14 rounded-2xl border border-slate-200 bg-slate-50 p-6">
-        <h2 className="text-xl font-black text-navy-900">¿No encontrás lo que buscás?</h2>
-        <p className="mt-2 max-w-2xl leading-relaxed text-slate-600">
-          Escribinos con la medida o el uso que necesitás y te decimos si la tenemos, cuándo ingresa
-          o qué alternativa te sirve. Atendemos de {branch.hours.toLowerCase()} en {branch.address},{" "}
-          {branch.city}.
-        </p>
-        <div className="mt-5 flex flex-wrap gap-3">
-          <Link
-            href="/neumaticos"
-            className="inline-flex min-h-12 items-center justify-center rounded-xl bg-black px-6 text-sm font-black text-white transition-transform active:scale-[0.98]"
-          >
-            Ver todas las medidas
-          </Link>
-          <Link
-            href="/calculadora-equivalencia-neumaticos"
-            className="inline-flex min-h-12 items-center justify-center rounded-xl border border-slate-300 bg-white px-6 text-sm font-black text-navy-900 transition-colors hover:border-navy-400"
-          >
-            Calculadora de equivalencias
-          </Link>
+      <section className="relative mt-14 overflow-hidden rounded-3xl bg-black p-6 md:p-10">
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.12]"
+          style={{
+            backgroundImage:
+              "repeating-linear-gradient(-45deg, #ff1e00 0, #ff1e00 2px, transparent 2px, transparent 26px)",
+          }}
+        />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1 bg-[#ff1e00]" />
+        <div className="relative flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+          <div className="flex items-start gap-4">
+            <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-[#ff1e00]">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/icons/servicios/desarmadora.svg" alt="" className="h-8 w-8 brightness-0 invert" />
+            </span>
+            <div>
+              <h2 className="font-display text-3xl font-bold uppercase leading-tight tracking-wide text-white md:text-4xl">
+                Colocación y válvulas <span className="text-[#ff1e00]">sin cargo</span>
+              </h2>
+              <p className="mt-2 max-w-xl text-slate-300">
+                ¿No encontrás tu medida? Escribinos con la medida o el uso que necesitás y te decimos si la tenemos,
+                cuándo ingresa o qué alternativa te sirve. Atendemos de {branch.hours.toLowerCase()} en{" "}
+                {branch.address}, {branch.city}.
+              </p>
+            </div>
+          </div>
+          <div className="flex flex-wrap gap-3 md:shrink-0">
+            <WhatsAppLink
+              href={`https://wa.me/${branch.whatsapp}?text=${encodeURIComponent(`Hola! Consulto por neumáticos: ${crumbLabel}`)}`}
+              className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#ff1e00] px-6 text-sm font-black text-white transition-transform active:scale-[0.98]"
+            >
+              Consultar por WhatsApp
+            </WhatsAppLink>
+            <Link
+              href="/neumaticos"
+              className="inline-flex min-h-12 items-center justify-center rounded-xl border border-white/30 px-6 text-sm font-black text-white transition-colors hover:border-white"
+            >
+              Ver todas las medidas
+            </Link>
+            <Link
+              href="/calculadora-equivalencia-neumaticos"
+              className="inline-flex min-h-12 items-center justify-center rounded-xl border border-white/30 px-6 text-sm font-black text-white transition-colors hover:border-white"
+            >
+              Calculadora de equivalencias
+            </Link>
+          </div>
         </div>
       </section>
     </div>
