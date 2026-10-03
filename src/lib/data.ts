@@ -153,6 +153,15 @@ export const SERVICES: Service[] = [
 // actual. Las más útiles para alguien que está por comprar van arriba.
 export const BLOG_POSTS: BlogPost[] = [
   {
+    id: "19",
+    title: "Opiniones sobre neumáticos Linglong, Mileking y Sumaxx: ¿Valen la pena?",
+    excerpt: "Analizamos las marcas de cubiertas importadas más buscadas: Linglong, Mileking y Sumaxx. Conocé sus ventajas, desventajas y si son la opción ideal para tu auto.",
+    imageUrl: "/images/blog-1.webp",
+    date: "2026-10-03",
+    slug: "opiniones-linglong-mileking-sumaxx",
+    category: "Opiniones y Comparativas",
+  },
+  {
     id: "18",
     title: "¿Sabías que tus neumáticos hablan? Hablemos de los Decibeles y el Ruido al Rodar",
     excerpt: "Descubrí cómo se mide el ruido de las cubiertas y por qué elegir una cubierta silenciosa puede cambiar tu viaje.",

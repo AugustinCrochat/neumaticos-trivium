@@ -26,7 +26,7 @@ export function Header() {
           a comprar en otro lado sin taller propio. */}
       <Link
         href="/servicios"
-        className="block bg-[#e30613] px-4 py-1 text-center text-[11px] font-bold text-white transition-colors hover:bg-[#c00510] md:text-xs"
+        className="block bg-[#ff1e00] px-4 py-1 text-center text-[11px] font-bold text-white transition-colors hover:bg-[#cc1800] md:text-xs"
       >
         Colocación y válvulas sin cargo en nuestros locales
       </Link>
@@ -55,7 +55,7 @@ export function Header() {
                   href={link.href}
                   className={
                     link.href === "/ofertas"
-                      ? "text-[#e30613] hover:text-[#c00510] hover:bg-zinc-900 px-4 py-2 rounded-lg text-sm font-black transition-colors"
+                      ? "bg-[#ff1e00] text-white hover:bg-[#cc1800] px-4 py-2 rounded-lg text-sm font-black transition-colors"
                       : "text-zinc-200 hover:text-white hover:bg-zinc-900 px-4 py-2 rounded-lg text-sm font-medium transition-colors"
                   }
                 >
@@ -70,7 +70,7 @@ export function Header() {
                 className="flex items-center gap-1.5 bg-white hover:bg-slate-100 text-navy-900 pl-2.5 pr-2 py-1 rounded-full text-xs font-bold transition-colors group shadow-sm"
                 title="Cambiar sucursal"
               >
-                <svg className="w-3.5 h-3.5 text-[#e30613] flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <svg className="w-3.5 h-3.5 text-[#ff1e00] flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5Z" />
                 </svg>
                 <span className="truncate min-w-0 max-w-[90px]">
@@ -118,7 +118,7 @@ export function Header() {
                 href={link.href}
                 className={
                   link.href === "/ofertas"
-                    ? "block text-[#e30613] hover:text-[#c00510] hover:bg-zinc-900 px-4 py-2.5 rounded-lg text-sm font-black transition-colors"
+                    ? "block bg-[#ff1e00] text-white hover:bg-[#cc1800] px-4 py-2.5 rounded-lg text-sm font-black transition-colors"
                     : "block text-zinc-200 hover:text-white hover:bg-zinc-900 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors"
                 }
                 onClick={() => setMenuOpen(false)}
