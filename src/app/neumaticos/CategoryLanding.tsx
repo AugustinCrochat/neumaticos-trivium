@@ -76,7 +76,7 @@ export function CategoryLanding({
         <img
           src="/images/trivium-icon.svg"
           alt=""
-          className="pointer-events-none absolute -bottom-24 -right-20 h-80 w-80 opacity-[0.14] md:-bottom-32 md:-right-16 md:h-[28rem] md:w-[28rem]"
+          className="pointer-events-none absolute -right-6 top-0 h-64 w-64 opacity-25 md:right-10 md:top-1/2 md:h-[24rem] md:w-[24rem] md:-translate-y-1/2 md:opacity-40"
         />
         <div className="relative max-w-2xl px-6 py-10 md:px-10 md:py-16">
           <h1 className="inline-block rounded-md bg-[#ff1e00] px-3 py-1 text-xs font-bold uppercase tracking-widest text-white">
