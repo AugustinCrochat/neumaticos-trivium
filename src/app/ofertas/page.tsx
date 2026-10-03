@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { PaymentMethodsSection } from "@/components/ui/PaymentMethodsSection";
 import { ProductCard } from "@/components/ui/ProductCard";
 import { AccessoryCard } from "@/components/ui/AccessoryCard";
 import { getProductosDesdePOS, getAccesoriosDesdePOS } from "@/lib/pos-api";
@@ -12,6 +13,55 @@ export const metadata: Metadata = {
     "Ofertas de la semana en Neumáticos Trivium: precios especiales en neumáticos Grenlander y tuercas antirrobo, por tiempo limitado y hasta agotar stock.",
   alternates: canonical("/ofertas"),
 };
+
+const BENEFICIOS = [
+  {
+    titulo: "Stock limitado",
+    detalle: "Precios válidos hasta agotar stock",
+    icono: (
+      <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    ),
+  },
+  {
+    titulo: "Instalación gratis",
+    detalle: "Colocación y válvulas sin cargo",
+    // Ícono de la desarmadora (el mismo de /servicios). El SVG es negro fijo,
+    // así que se pasa a blanco con brightness-0 + invert.
+    icono: (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img src="/icons/servicios/desarmadora.svg" alt="" className="h-7 w-7 brightness-0 invert" />
+    ),
+  },
+  {
+    titulo: "Medios de pago",
+    detalle: "Efectivo, tarjetas y cuotas fijas",
+    icono: (
+      <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+      </svg>
+    ),
+  },
+];
+
+function SectionHeading({ titulo, detalle, cantidad }: { titulo: string; detalle: string; cantidad?: number }) {
+  return (
+    <div className="mb-6 flex items-end justify-between gap-4 border-b border-slate-200 pb-4">
+      <div>
+        <h2 className="font-display text-3xl font-bold uppercase tracking-wide text-slate-900 md:text-4xl">
+          {titulo}
+        </h2>
+        <p className="mt-1 text-sm text-slate-500 md:text-base">{detalle}</p>
+      </div>
+      {cantidad != null && (
+        <span className="shrink-0 rounded-full bg-slate-900 px-3 py-1 text-xs font-bold text-white">
+          {cantidad} {cantidad === 1 ? "oferta" : "ofertas"}
+        </span>
+      )}
+    </div>
+  );
+}
 
 export default async function OfertasPage() {
   const sucursal = await getSelectedBranchSlug();
@@ -27,96 +77,72 @@ export default async function OfertasPage() {
     (a): a is NonNullable<typeof a> => !!a
   );
 
+  // Las cuotas se muestran sobre 1 neumático: el más barato de la selección.
+  const precioBase = ofertasNeumaticos.length > 0 ? Math.min(...ofertasNeumaticos.map((p) => p.price)) : 0;
+
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Hero */}
-      <header className="relative overflow-hidden bg-black py-16 md:py-24">
+      <header className="relative overflow-hidden bg-black">
         <div
-          className="pointer-events-none absolute inset-0 opacity-20"
+          className="pointer-events-none absolute inset-0 opacity-[0.12]"
           style={{
             backgroundImage:
-              "repeating-linear-gradient(-45deg, #ff1e00 0, #ff1e00 2px, transparent 2px, transparent 22px)",
+              "repeating-linear-gradient(-45deg, #ff1e00 0, #ff1e00 2px, transparent 2px, transparent 26px)",
           }}
         />
-        <div className="relative mx-auto max-w-7xl px-4 text-center">
-          <span className="inline-flex items-center gap-2 rounded-full bg-[#ff1e00] px-5 py-2 text-sm font-black uppercase tracking-widest text-white shadow-lg animate-pulse">
-            ⏱️ Ofertas por tiempo limitado
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1 bg-[#ff1e00]" />
+        <div className="relative mx-auto max-w-7xl px-4 py-12 md:py-20">
+          <span className="inline-block rounded-md bg-[#ff1e00] px-3 py-1 text-xs font-bold uppercase tracking-widest text-white">
+            Ofertas de la semana
           </span>
-          <h1 className="mt-6 text-5xl font-black leading-tight text-white md:text-7xl drop-shadow-md">
-            SALE <span className="text-[#ff1e00]">TRIVIUM</span>
+          <h1 className="font-display mt-4 text-5xl font-bold uppercase leading-[0.95] tracking-wide text-white md:text-7xl">
+            Precios especiales,
+            <br />
+            <span className="text-[#ff1e00]">hasta agotar stock</span>
           </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-xl font-medium text-slate-300">
-            Aprovechá estos precios especiales hasta agotar stock. ¡Equipá tu auto con la mejor calidad!
+          <p className="mt-5 max-w-xl text-base text-slate-300 md:text-lg">
+            Neumáticos y accesorios seleccionados con descuento. Retirás y te los colocamos en el local, sin cargo.
           </p>
         </div>
       </header>
 
-      {/* Beneficios Banner */}
-      <div className="bg-gradient-to-r from-[#ff1e00] to-[#cc1800] py-8 border-y-4 border-black">
-        <div className="mx-auto max-w-7xl px-4 text-center md:text-left">
-          <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16">
-            <div className="flex items-center gap-4 text-white">
-              <div className="flex-shrink-0 bg-white/20 p-3 rounded-full">
-                <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <div className="text-left">
-                <p className="font-black text-xl leading-tight">Stock Limitado</p>
-                <p className="text-sm font-medium text-white/90">Apurate antes de que se agoten</p>
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-4 text-white">
-              <div className="flex-shrink-0 bg-white/20 p-3 rounded-full">
-                <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 5.758a3 3 0 10-4.243 4.243 3 3 0 004.243-4.243zm0-5.758a3 3 0 10-4.243-4.243 3 3 0 004.243 4.243z" />
-                </svg>
-              </div>
-              <div className="text-left">
-                <p className="font-black text-xl leading-tight">Instalación Gratis</p>
-                <p className="text-sm font-medium text-white/90">Colocación y válvulas sin cargo</p>
-              </div>
-            </div>
+      {/* Beneficios */}
+      <section className="border-b border-slate-200 bg-white">
+        <ul className="mx-auto grid max-w-7xl grid-cols-1 gap-px bg-slate-200 sm:grid-cols-3">
+          {BENEFICIOS.map((b) => (
+            <li key={b.titulo} className="flex items-center gap-4 bg-white px-4 py-5">
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#ff1e00] text-white">
+                {b.icono}
+              </span>
+              <span>
+                <span className="font-display block text-xl font-bold uppercase leading-tight tracking-wide text-slate-900">
+                  {b.titulo}
+                </span>
+                <span className="block text-sm text-slate-500">{b.detalle}</span>
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
 
-            <div className="flex items-center gap-4 text-white">
-              <div className="flex-shrink-0 bg-white/20 p-3 rounded-full">
-                <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-                </svg>
-              </div>
-              <div className="text-left">
-                <p className="font-black text-xl leading-tight">Medios de Pago</p>
-                <p className="text-sm font-medium text-white/90">Efectivo, Tarjetas y Cuotas Fijas</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <main className="mx-auto max-w-7xl px-4 py-14">
+      <main className="mx-auto max-w-7xl px-4 py-10 md:py-14">
         {ofertasNeumaticos.length === 0 && ofertasAccesorios.length === 0 ? (
-          <p className="py-20 text-center text-slate-500 font-medium text-lg">
+          <p className="py-20 text-center text-lg text-slate-500">
             No hay ofertas activas en este momento. ¡Volvé a pasar pronto!
           </p>
         ) : (
-          <>
+          <div className="space-y-14">
             {ofertasNeumaticos.length > 0 && (
-              <section className="mb-20">
-                <div className="flex items-end justify-between mb-8 border-b-2 border-slate-200 pb-4">
-                  <div>
-                    <h2 className="text-3xl font-black text-navy-900">Neumáticos</h2>
-                    <p className="text-slate-500 font-medium mt-1">Llevá calidad con instalación incluida en nuestras sucursales</p>
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 md:gap-6">
+              <section>
+                <SectionHeading
+                  titulo="Neumáticos"
+                  detalle="Con colocación y válvulas sin cargo en nuestros locales"
+                  cantidad={ofertasNeumaticos.length}
+                />
+                <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-5 lg:grid-cols-4">
                   {ofertasNeumaticos.map((producto) => (
-                    <div
-                      key={producto.id}
-                      className="rounded-[1.4rem] bg-gradient-to-b from-[#ff1e00]/60 to-transparent p-[3px] shadow-lg hover:-translate-y-1 transition-transform"
-                    >
-                      <ProductCard product={producto} />
-                    </div>
+                    <ProductCard key={producto.id} product={producto} />
                   ))}
                 </div>
               </section>
@@ -124,25 +150,34 @@ export default async function OfertasPage() {
 
             {ofertasAccesorios.length > 0 && (
               <section>
-                <div className="flex items-end justify-between mb-8 border-b-2 border-slate-200 pb-4">
-                  <div>
-                    <h2 className="text-3xl font-black text-navy-900">Accesorios</h2>
-                    <p className="text-slate-500 font-medium mt-1">Completá tu compra con estos accesorios en promoción</p>
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 md:gap-6">
+                <SectionHeading
+                  titulo="Accesorios"
+                  detalle="Completá tu compra con estos accesorios en promoción"
+                  cantidad={ofertasAccesorios.length}
+                />
+                <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-5 lg:grid-cols-4">
                   {ofertasAccesorios.map((accesorio) => (
-                    <div
-                      key={accesorio.id}
-                      className="rounded-[1.4rem] bg-gradient-to-b from-[#ff1e00]/60 to-transparent p-[3px] shadow-lg hover:-translate-y-1 transition-transform"
-                    >
-                      <AccessoryCard accessory={accesorio} priceOld={accesorio.priceOld} />
-                    </div>
+                    <AccessoryCard key={accesorio.id} accessory={accesorio} priceOld={accesorio.priceOld} />
                   ))}
                 </div>
               </section>
             )}
-          </>
+
+            {precioBase > 0 && (
+              <section>
+                <SectionHeading
+                  titulo="Cómo pagar"
+                  detalle="Tocá una tarjeta para ver las cuotas y recargos"
+                />
+                <div className="max-w-2xl">
+                  <PaymentMethodsSection basePrice={precioBase} />
+                  <p className="mt-2 text-xs text-slate-500">
+                    Cuotas calculadas sobre un neumático de la selección. El detalle exacto lo ves en cada producto.
+                  </p>
+                </div>
+              </section>
+            )}
+          </div>
         )}
       </main>
     </div>
