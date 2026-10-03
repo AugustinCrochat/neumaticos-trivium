@@ -35,7 +35,8 @@ export function SizeOrVehicleSearch({
 
   return (
     <div className={`bg-slate-100 rounded-2xl border border-slate-200 ${compact ? "p-4" : "p-6"} w-full`}>
-      <div className="inline-flex items-center rounded-xl border border-slate-200 bg-white p-1 mb-3">
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+      <div className="inline-flex items-center rounded-xl border border-slate-200 bg-white p-1">
         <button
           onClick={() => setManualMode("medida")}
           className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors ${mode === "medida" ? "bg-black text-white" : "text-slate-500 hover:text-slate-800"}`}
@@ -56,7 +57,7 @@ export function SizeOrVehicleSearch({
       </div>
 
       <label
-        className={`mb-3 flex w-fit cursor-pointer items-center gap-2 rounded-lg border-2 py-1.5 pl-2 pr-1.5 transition-colors ${
+        className={`flex w-fit cursor-pointer items-center gap-2 rounded-lg border-2 py-1.5 pl-2 pr-1.5 transition-colors ${
           economicos ? "border-orange-500 bg-orange-50" : "border-slate-200 bg-white hover:border-slate-300"
         }`}
       >
@@ -86,6 +87,7 @@ export function SizeOrVehicleSearch({
           $
         </span>
       </label>
+      </div>
 
       {mode === "medida" ? (
         <TireSizeSearch
