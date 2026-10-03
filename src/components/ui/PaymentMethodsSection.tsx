@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { isVisaMasterPromoDay } from "@/lib/promo-day";
+import { isVisaMasterPromoDay, VISA_MASTER_PROMO_ACTIVA } from "@/lib/promo-day";
 import { useRecargosTarjeta } from "@/hooks/use-recargos-tarjeta";
 import { MERCADO_PAGO_GRUPO, GOCUOTAS_GRUPO, esBanco, esNaranja, planesParaGrupo, type Plan } from "@/lib/cuotas";
 
@@ -100,7 +100,9 @@ export function PaymentMethodsSection({
   const lineasBanco = lineasCuotas(bancoPlanes, basePrice);
   const detalleBanco =
     lineasBanco.length > 0
-      ? [...lineasBanco, isPromoDay ? "Promo válida todos los miércoles y sábados." : "Sin interés los miércoles y sábados."]
+      ? VISA_MASTER_PROMO_ACTIVA
+        ? [...lineasBanco, isPromoDay ? "Promo válida todos los miércoles y sábados." : "Sin interés los miércoles y sábados."]
+        : lineasBanco
       : ["Consultá cuotas disponibles."];
 
   const lineasMp = lineasCuotas(mpPlanes, basePrice);
