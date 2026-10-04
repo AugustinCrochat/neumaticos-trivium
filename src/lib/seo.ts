@@ -156,6 +156,9 @@ export function siteGraphJsonLd() {
         "@id": WEBSITE_ID,
         url: SITE_URL,
         name: SITE_NAME,
+        // Google deriva el nombre por dominio raíz; sin alternateName hereda el
+        // del sitio principal ("Trivium Center") en vez del de este subdominio.
+        alternateName: ["Trivium Neumáticos", "neumaticos.trivium.ar"],
         inLanguage: "es-AR",
         publisher: { "@id": ORGANIZATION_ID },
         potentialAction: {
