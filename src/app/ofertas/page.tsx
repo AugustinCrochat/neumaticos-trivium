@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { PaymentMethodsSection } from "@/components/ui/PaymentMethodsSection";
+import { OfertasMediosPago } from "./OfertasMediosPago";
+import { formatSize } from "@/lib/tire-sizes";
 import { ProductCard } from "@/components/ui/ProductCard";
 import { AccessoryCard } from "@/components/ui/AccessoryCard";
 import { getProductosDesdePOS, getAccesoriosDesdePOS } from "@/lib/pos-api";
@@ -77,8 +78,10 @@ export default async function OfertasPage() {
     (a): a is NonNullable<typeof a> => !!a
   );
 
-  // Las cuotas se muestran sobre 1 neumático: el más barato de la selección.
-  const precioBase = ofertasNeumaticos.length > 0 ? Math.min(...ofertasNeumaticos.map((p) => p.price)) : 0;
+  const itemsCotizables = [
+    ...ofertasNeumaticos.map((p) => ({ id: p.id, label: `${p.brand} ${p.model} ${formatSize(p.size)}`, price: p.price })),
+    ...ofertasAccesorios.map((a) => ({ id: a.id, label: a.nombre, price: a.price })),
+  ];
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -156,20 +159,13 @@ export default async function OfertasPage() {
               </section>
             )}
 
-            {precioBase > 0 && (
-              <section>
-                <SectionHeading
-                  titulo="Cómo pagar"
-                  detalle="Tocá una tarjeta para ver las cuotas y recargos"
-                />
-                <div className="max-w-2xl">
-                  <PaymentMethodsSection basePrice={precioBase} />
-                  <p className="mt-2 text-xs text-slate-500">
-                    Cuotas calculadas sobre un neumático de la selección. El detalle exacto lo ves en cada producto.
-                  </p>
-                </div>
-              </section>
-            )}
+            <section>
+              <SectionHeading
+                titulo="Medios de pago"
+                detalle="Cuotas y recargos de cada medio, y cotización de un producto puntual"
+              />
+              <OfertasMediosPago items={itemsCotizables} />
+            </section>
           </div>
         )}
       </main>

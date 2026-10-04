@@ -27,7 +27,7 @@ export function LocalSection() {
         <div className="grid gap-10 md:grid-cols-2">
           <div>
             <p className="mb-3 text-sm font-bold uppercase tracking-widest text-navy-300">
-              {branch.city}, {branch.province}
+              {branch.city === branch.province ? branch.city : `${branch.city}, ${branch.province}`}
             </p>
             <h2 className="font-display text-4xl font-bold uppercase leading-tight tracking-wide">
               Local a la calle en {branch.neighborhood ?? branch.city}
