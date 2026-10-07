@@ -101,7 +101,7 @@ export function PaymentMethodsSection({
   const detalleBanco =
     lineasBanco.length > 0
       ? VISA_MASTER_PROMO_ACTIVA
-        ? [...lineasBanco, isPromoDay ? "Promo válida todos los miércoles y sábados." : "Sin interés los miércoles y sábados."]
+        ? [...lineasBanco, ...(isPromoDay ? ["Promo vigente: 3 cuotas sin interés con Visa o Master de banco."] : [])]
         : lineasBanco
       : ["Consultá cuotas disponibles."];
 
