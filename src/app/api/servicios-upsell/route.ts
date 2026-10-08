@@ -4,5 +4,5 @@ export async function GET() {
   const servicios = await getServiciosPrecios();
   const combo = servicios.find((s) => s.codigoTango === COMBO_ALINEACION_BALANCEO_AUTO.codigoTango) ?? COMBO_ALINEACION_BALANCEO_AUTO;
 
-  return Response.json({ combo });
+  return Response.json({ combo }, { headers: { "Cache-Control": "public, max-age=300, s-maxage=300" } });
 }

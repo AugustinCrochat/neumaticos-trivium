@@ -18,18 +18,28 @@ type Entry = { enStock: boolean; stock: number; price: number };
 // respuesta ya armada se reusa 60s por isolate y los pedidos simultáneos
 // comparten un único fetch al POS.
 const TTL_MS = 60 * 1000;
-const cache = new Map<string, { data: Record<string, Entry>; expires: number }>();
-const inflight = new Map<string, Promise<Record<string, Entry>>>();
+// Se guarda el JSON ya serializado: reusarlo es devolver un string, sin
+// parsear ni volver a stringify el catálogo entero en cada visita.
+const cache = new Map<string, { body: string; expires: number }>();
+const inflight = new Map<string, Promise<string>>();
 
-async function cargar(branchId: string): Promise<Record<string, Entry>> {
+// `max-age` hace que el navegador no vuelva a pedirlo en 60s (recargas,
+// navegación entre páginas completas); `s-maxage` deja que el edge lo sirva.
+const HEADERS = {
+  "Content-Type": "application/json",
+  "Cache-Control": "public, max-age=60, s-maxage=60",
+};
+
+async function cargar(branchId: string): Promise<string> {
   const productos = await getProductosDesdePOS(branchId, { fresh: true });
   const data: Record<string, Entry> = {};
   for (const p of productos) {
     data[p.id] = { enStock: p.enStock ?? false, stock: p.stock ?? 0, price: p.price };
   }
+  const body = JSON.stringify(data);
   // Un catálogo vacío es una falla del POS, no "se vendió todo": no cachearlo.
-  if (productos.length > 0) cache.set(branchId, { data, expires: Date.now() + TTL_MS });
-  return data;
+  if (productos.length > 0) cache.set(branchId, { body, expires: Date.now() + TTL_MS });
+  return body;
 }
 
 export async function GET(request: Request) {
@@ -40,9 +50,7 @@ export async function GET(request: Request) {
     BRANCHES[0];
 
   const hit = cache.get(branch.id);
-  if (hit && hit.expires > Date.now()) {
-    return Response.json(hit.data, { headers: { "Cache-Control": "no-store" } });
-  }
+  if (hit && hit.expires > Date.now()) return new Response(hit.body, { headers: HEADERS });
 
   // El caché por isolate no alcanza: con tráfico Cloudflare levanta muchos
   // isolates y cada uno rearmaba el catálogo entero (1102 de nuevo el
@@ -54,9 +62,9 @@ export async function GET(request: Request) {
     try {
       const cached = await edge.match(key);
       if (cached) {
-        const data = (await cached.json()) as Record<string, Entry>;
-        cache.set(branch.id, { data, expires: Date.now() + TTL_MS });
-        return Response.json(data, { headers: { "Cache-Control": "no-store" } });
+        const body = await cached.text();
+        cache.set(branch.id, { body, expires: Date.now() + TTL_MS });
+        return new Response(body, { headers: HEADERS });
       }
     } catch {
       // Sin Cache API (dev local): se sigue con el fetch normal.
@@ -68,18 +76,13 @@ export async function GET(request: Request) {
     pending = cargar(branch.id).finally(() => inflight.delete(branch.id));
     inflight.set(branch.id, pending);
   }
-  const data = await pending;
+  const body = await pending;
 
-  if (edge && Object.keys(data).length > 0) {
+  if (edge && body !== "{}") {
     try {
-      await edge.put(
-        key,
-        new Response(JSON.stringify(data), {
-          headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=60" },
-        }),
-      );
+      await edge.put(key, new Response(body, { headers: HEADERS }));
     } catch {}
   }
 
-  return Response.json(data, { headers: { "Cache-Control": "no-store" } });
+  return new Response(body, { headers: HEADERS });
 }

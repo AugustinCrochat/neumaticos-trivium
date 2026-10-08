@@ -3,5 +3,5 @@ import { getSelectedBranchSlug } from "@/lib/branch-server";
 
 export async function GET() {
   const accesorios = await getAccesoriosDesdePOS(await getSelectedBranchSlug());
-  return Response.json({ accesorios });
+  return Response.json({ accesorios }, { headers: { "Cache-Control": "private, max-age=300" } });
 }
