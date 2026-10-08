@@ -6,7 +6,7 @@ const AR_TIME_ZONE = "America/Argentina/Buenos_Aires";
  * interés" en el cotizador) y el plan de 3 cuotas del banco se ve con su
  * recargo real. Para reactivarla alcanza con ponerlo en true.
  */
-export const VISA_MASTER_PROMO_ACTIVA = false;
+export const VISA_MASTER_PROMO_ACTIVA = true;
 
 /**
  * Miércoles y sábado: promo de 3 cuotas sin interés con Visa/Mastercard
