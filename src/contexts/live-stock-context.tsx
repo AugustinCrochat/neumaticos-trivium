@@ -27,7 +27,7 @@ export function LiveStockProvider({ children }: { children: ReactNode }) {
     let cancelado = false;
     async function load() {
       try {
-        const res = await fetch(`/api/catalogo-vivo?sucursal=${selectedBranch.id}`, { cache: "no-store" });
+        const res = await fetch(`/api/catalogo-vivo?sucursal=${selectedBranch.id}`, { cache: "default" });
         if (!res.ok || cancelado) return;
         const json = (await res.json()) as Record<string, LiveEntry>;
         if (!cancelado) setData(json);
