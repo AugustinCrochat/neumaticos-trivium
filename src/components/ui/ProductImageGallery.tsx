@@ -220,7 +220,7 @@ export function ProductImageGallery({
     </a>
   );
 
-  // Mientras rija la promo (ver isVisaMasterPromoDay). Va abajo, la única
+  // Sólo miércoles y sábado (ver isVisaMasterPromoDay). Va abajo, la única
   // esquina libre: arriba ya están los badges de OFF/Carga/A-T (izquierda) y
   // garantía (derecha).
   const promoBadge = isPromoDay && (
@@ -232,7 +232,7 @@ export function ProductImageGallery({
         <Image src="/images/payments/visa.svg" alt="" width={32} height={20} className="h-4 w-auto" />
         <Image src="/images/payments/mastercard.svg" alt="" width={32} height={20} className="h-6 w-auto" />
       </span>
-      3 cuotas sin interés
+      Hoy 3 cuotas sin interés
     </a>
   );
 
