@@ -102,6 +102,31 @@ export type Branch = {
   googleStoreCode?: string;
 };
 
+/**
+ * Sucursales anunciadas que todavía no abrieron. Viven aparte de BRANCHES a
+ * propósito: no tienen POS, teléfono ni horarios, y meterlas ahí rompería el
+ * checkout, el feed de Merchant y /sucursales/[id]. Cuando abra San Justo se
+ * pasa a BRANCHES (con googleStoreCode, teléfono y horarios) y se borra de acá.
+ * Antes era Ruedas Bojanich - Sucursal San Justo en Google Maps: al crear el
+ * perfil de Google Business hay que reclamar/actualizar esa ficha, no duplicarla.
+ */
+export const COMING_SOON_BRANCHES = [
+  {
+    id: "san-justo",
+    name: "Neumáticos Trivium San Justo",
+    shortName: "San Justo",
+    address: "Pres. Juan Domingo Perón 2847",
+    neighborhood: "San Justo",
+    city: "San Justo",
+    partido: "La Matanza",
+    province: "Buenos Aires",
+    postalCode: "1754",
+    // CPA tal como figura en Google Maps.
+    cpa: "B1754AZW",
+    coordinates: { lat: -34.6736285, lng: -58.5606326 },
+  },
+] as const;
+
 export const BRANCHES: Branch[] = [
   {
     id: "arguello",

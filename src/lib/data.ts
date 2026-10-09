@@ -153,6 +153,33 @@ export const SERVICES: Service[] = [
 // actual. Las más útiles para alguien que está por comprar van arriba.
 export const BLOG_POSTS: BlogPost[] = [
   {
+    id: "22",
+    title: "Comprar neumáticos en Córdoba: qué comparar además del precio",
+    excerpt: "Dos presupuestos con el mismo precio pueden no ser lo mismo. Qué preguntar antes de comprar: fecha DOT, colocación, stock real y garantía.",
+    imageUrl: "/images/blog-2.webp",
+    date: "2026-10-09",
+    slug: "comprar-neumaticos-en-cordoba",
+    category: "Guías",
+  },
+  {
+    id: "21",
+    title: "Gomería en Córdoba: qué servicios hacen y cómo elegir una buena",
+    excerpt: "Pinchadura, balanceo, alineación, rotación y válvulas: qué hace cada servicio, cuáles conviene combinar y qué mirar en un taller.",
+    imageUrl: "/images/blog-1.webp",
+    date: "2026-10-09",
+    slug: "gomeria-en-cordoba",
+    category: "Guías",
+  },
+  {
+    id: "20",
+    title: "Neumáticos para las sierras de Córdoba: qué llevar antes de salir a ruta",
+    excerpt: "Altas Cumbres, Punilla y Traslasierra exigen más a las cubiertas. Checklist previo al viaje y cuándo conviene una H/T o A/T.",
+    imageUrl: "/images/blog-1.webp",
+    date: "2026-10-09",
+    slug: "neumaticos-sierras-de-cordoba",
+    category: "Guías",
+  },
+  {
     id: "19",
     title: "Opiniones sobre neumáticos Linglong, Mileking y Sumaxx: ¿Valen la pena?",
     excerpt: "Analizamos las marcas de cubiertas importadas más buscadas: Linglong, Mileking y Sumaxx. Conocé sus ventajas, desventajas y si son la opción ideal para tu auto.",
