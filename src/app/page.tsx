@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     // redundante como sí lo era con "neumáticos y cubiertas" (que son el
     // mismo sustantivo repetido). "Cubiertas" va en la descripción, por
     // separado, para no competir con esta misma frase por el mismo término.
-    absolute: "Neumáticos baratos y económicos — Neumáticos Trivium",
+    absolute: "Neumáticos baratos de importación directa — Neumáticos Trivium",
   },
   description:
     "Comprá neumáticos de importación directa a precio de outlet. Stock real publicado, envío a todo el país y local con taller propio en Córdoba. Cubiertas para auto, camioneta y carga.",

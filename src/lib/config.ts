@@ -102,31 +102,6 @@ export type Branch = {
   googleStoreCode?: string;
 };
 
-/**
- * Sucursales anunciadas que todavía no abrieron. Viven aparte de BRANCHES a
- * propósito: no tienen POS, teléfono ni horarios, y meterlas ahí rompería el
- * checkout, el feed de Merchant y /sucursales/[id]. Cuando abra San Justo se
- * pasa a BRANCHES (con googleStoreCode, teléfono y horarios) y se borra de acá.
- * Antes era Ruedas Bojanich - Sucursal San Justo en Google Maps: al crear el
- * perfil de Google Business hay que reclamar/actualizar esa ficha, no duplicarla.
- */
-export const COMING_SOON_BRANCHES = [
-  {
-    id: "san-justo",
-    name: "Neumáticos Trivium San Justo",
-    shortName: "San Justo",
-    address: "Pres. Juan Domingo Perón 2847",
-    neighborhood: "San Justo",
-    city: "San Justo",
-    partido: "La Matanza",
-    province: "Buenos Aires",
-    postalCode: "1754",
-    // CPA tal como figura en Google Maps.
-    cpa: "B1754AZW",
-    coordinates: { lat: -34.6736285, lng: -58.5606326 },
-  },
-] as const;
-
 export const BRANCHES: Branch[] = [
   {
     id: "arguello",
@@ -169,6 +144,39 @@ export const BRANCHES: Branch[] = [
       y: 22,
     },
     googleStoreCode: "14523860207436626950",
+  },
+  {
+    id: "san-justo",
+    name: "Neumáticos Trivium San Justo",
+    shortName: "San Justo",
+    address: "Pres. Juan Domingo Perón 2847",
+    city: "San Justo",
+    province: "Buenos Aires",
+    // CPA B1754AZW tal como figura en Google Maps. Antes era Ruedas Bojanich -
+    // Sucursal San Justo: al crear el perfil de Google Business hay que
+    // reclamar/actualizar esa ficha, no duplicarla.
+    postalCode: "B1754AZW",
+    neighborhood: "San Justo",
+    areaServed: [
+      "San Justo",
+      "La Matanza",
+      "Ramos Mejía",
+      "Villa Luzuriaga",
+      "Isidro Casanova",
+      "Laferrere",
+      "González Catán",
+    ],
+    // PROVISORIO: mismo WhatsApp y horario que Argüello hasta tener los de San
+    // Justo. Pendiente de googleStoreCode, mapUrl, reviewUrl y
+    // googleMapsEmbedUrl (salen del perfil de Google Business, que todavía no
+    // existe); sin googleStoreCode queda fuera del feed de inventario local.
+    phone: "+54 9 3517 57-0422",
+    whatsapp: "5493517570422",
+    hours: "Lun–Sáb 9–19h (de corrido)",
+    schedule: [{ days: [1, 2, 3, 4, 5, 6], open: "09:00", close: "19:00" }],
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=-34.6736285,-58.5606326",
+    coordinates: { lat: -34.6736285, lng: -58.5606326 },
+    mapPosition: { x: 52, y: 62 },
   },
 ];
 

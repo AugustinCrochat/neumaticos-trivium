@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { BRANCHES, COMING_SOON_BRANCHES } from "@/lib/config";
+import { BRANCHES } from "@/lib/config";
 import { BranchesMap } from "./BranchesMap";
 import { canonical } from "@/lib/seo";
 
@@ -53,30 +53,7 @@ export default function SucursalesPage() {
 
       <BranchesMap
         branches={BRANCHES}
-        comingSoon={COMING_SOON_BRANCHES.map((b) => ({
-          id: b.id,
-          name: b.shortName,
-          address: `${b.address}, ${b.city}, ${b.partido}, ${b.province}`,
-          coordinates: b.coordinates,
-        }))}
       />
-
-      {/* San Justo todavía no tiene POS, teléfono ni horarios propios, así
-          que no entra en BRANCHES (eso rompería checkout, el feed de Google
-          Merchant y /sucursales/[id], que asumen una sucursal operativa).
-          Es solo un anuncio hasta que abra. */}
-      <div className="mx-auto max-w-7xl px-4 pb-16">
-        <div className="rounded-2xl border-2 border-dashed border-orange-300 bg-orange-50 p-6 md:p-8">
-          <p className="mb-2 text-xs font-black uppercase tracking-widest text-orange-600">
-            Próximamente
-          </p>
-          <h2 className="text-xl font-black text-navy-900 md:text-2xl">Nueva sucursal en San Justo</h2>
-          <p className="mt-2 max-w-2xl leading-relaxed text-slate-600">
-            Muy pronto abrimos en San Justo, partido de La Matanza, provincia de Buenos Aires:
-            Presidente Juan Domingo Perón 2847 (CP 1754).
-          </p>
-        </div>
-      </div>
     </div>
   );
 }

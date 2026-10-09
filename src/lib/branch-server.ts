@@ -1,27 +1,22 @@
-import { BRANCHES, DEFAULT_BRANCH_ID } from "./config";
+import { DEFAULT_BRANCH_ID } from "./config";
 
 /**
  * Sucursal a usar en Server Components / route handlers.
  *
- * Antes esto leía la cookie de sucursal con `cookies()`. El problema: llamar a
- * `cookies()` marca la página como dinámica, así que /catalogo, /buscar,
- * /productos/[slug], /marcas/[slug], /tuercas-antirrobo y compañía salían con
- * `cache-control: private, no-cache, no-store` y se renderizaban enteras en el
- * Worker en cada request — el `export const revalidate = 300` de esas páginas
- * era letra muerta. Todo eso para leer una cookie que hoy siempre devuelve lo
- * mismo, porque BRANCHES tiene una sola sucursal (Argüello).
+ * Siempre devuelve la sucursal por defecto, a propósito. Leer la cookie con
+ * `cookies()` marca la página como dinámica: /catalogo, /productos/[slug] y
+ * compañía salían con `cache-control: private, no-cache, no-store` y se
+ * renderizaban enteras en el Worker en cada request (y eso empujó los 1102).
  *
- * Sigue siendo `async` para no tocar los ~12 call sites, y el `if` de abajo
- * hace que el día que se agregue una segunda sucursal el build falle acá y no
- * en silencio con precios de la sucursal equivocada. Cuando llegue ese día hay
- * que volver a la cookie, pero moviendo el catálogo a un slot/segmento
- * dinámico para no volver a tirar el caché de todo el sitio.
+ * Con más de una sucursal el HTML estático se hornea con el catálogo de
+ * Argüello, y la sucursal que el visitante eligió se aplica en el cliente:
+ * LiveStockProvider (/api/catalogo-vivo?sucursal=) y ProductPageClient
+ * (/api/stock/[id]?sucursal=) corrigen stock y precio de la sucursal elegida.
+ * Límite conocido: un producto que existe sólo en otra sucursal no aparece en
+ * las grillas, y /api/search y /api/accesorios siguen devolviendo Argüello.
+ * Cuando haya ecommerce o stock propio en San Justo hay que resolver eso
+ * (p. ej. un segmento dinámico por sucursal) en vez de leer la cookie.
  */
 export async function getSelectedBranchSlug(): Promise<string> {
-  if (BRANCHES.length > 1) {
-    throw new Error(
-      "Hay más de una sucursal: getSelectedBranchSlug() tiene que volver a leer la cookie de sucursal (ver el comentario de este archivo)."
-    );
-  }
   return DEFAULT_BRANCH_ID;
 }
