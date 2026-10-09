@@ -7,6 +7,7 @@ import { getBrandLogo } from "@/lib/brand-utils";
 import { BRANDS } from "@/lib/data";
 import { BRANCHES, DEFAULT_BRANCH_ID, SHIPPING_FLAT_RATE, SITE_URL } from "@/lib/config";
 import { ORGANIZATION_ID, branchNodeId, breadcrumbJsonLd, canonical } from "@/lib/seo";
+import { LivePrice } from "./LivePrice";
 import { JsonLd } from "@/components/seo/JsonLd";
 import {
   buildTireDescription,
@@ -73,18 +74,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description,
     },
   };
-}
-
-function formatPrice(price: number) {
-  return new Intl.NumberFormat("es-AR", {
-    style: "currency",
-    currency: "ARS",
-    maximumFractionDigits: 0,
-  }).format(price);
-}
-
-function discount(price: number, priceOld: number) {
-  return Math.round(((priceOld - price) / priceOld) * 100);
 }
 
 function vehicleLabel(product: { vehicleType: string[] }) {
@@ -347,22 +336,7 @@ export default async function ProductPage({ params }: Props) {
 
           {/* Price */}
           <div className="border-t border-slate-100 pt-4 mt-2">
-            {product.priceOld && (
-              <div className="flex items-center gap-2.5 mb-1.5">
-                <span className="text-slate-400 line-through text-sm">
-                  {formatPrice(product.priceOld)}
-                </span>
-                <span className="bg-red-600 text-white text-sm font-black px-3 py-1 rounded-full shadow-md shadow-red-600/30 uppercase tracking-tighter animate-pulse">
-                  {discount(product.price, product.priceOld)}% OFF
-                </span>
-              </div>
-            )}
-            <span className="text-4xl font-black text-red-600">
-              {formatPrice(product.price)}
-            </span>
-            <p className="text-xs text-slate-400 mt-1">
-              Precio por unidad · Precio sin impuestos nacionales: {formatPrice(product.price / 1.21)}
-            </p>
+            <LivePrice id={product.id} price={product.price} priceOld={product.priceOld} />
 
             {/* Client component handles branch-specific WhatsApp link */}
             <ProductPageClient product={product} />

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useBranch } from "@/contexts/branch-context";
+import { useLiveStock } from "@/contexts/live-stock-context";
 import { useVehicle } from "@/contexts/vehicle-context";
 import type { TireProduct } from "@/lib/types";
 import { SITE_URL } from "@/lib/config";
@@ -34,6 +35,7 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
   const { selectedBranch, openModal } = useBranch();
   const { selectedVehicle } = useVehicle();
   const cotizadorRef = useRef<CotizadorHandle | null>(null);
+  const price = useLiveStock(product.id)?.price ?? product.price;
 
   // El stock de `product` viene horneado en el HTML del último build (el
   // sitio es 100% estático, sin ISR — ver memoria del proyecto), así que
@@ -255,7 +257,7 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
       </div>
 
       <PaymentMethodsSection
-        basePrice={product.price}
+        basePrice={price}
         onCalcularCuotas={() => cotizadorRef.current?.openConUnaUnidad()}
       />
 
@@ -263,7 +265,7 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
         <CotizadorClient
           ref={cotizadorRef}
           compact
-          initialProduct={{ id: product.id, label: `${product.brand} ${product.model}`, price: product.price, imageUrl: product.imageUrl }}
+          initialProduct={{ id: product.id, label: `${product.brand} ${product.model}`, price, imageUrl: product.imageUrl }}
         />
       </div>
     </div>
