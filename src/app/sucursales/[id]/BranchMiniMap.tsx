@@ -74,7 +74,7 @@ export function BranchMiniMap({ branch }: { branch: Branch }) {
 
   if (branch.googleMapsEmbedUrl) {
     return (
-      <div className="relative h-[280px] w-full overflow-hidden rounded-2xl border border-slate-200 bg-slate-200 shadow-sm md:h-[340px]">
+      <div className="relative h-[420px] w-full overflow-hidden rounded-2xl border border-slate-200 bg-slate-200 shadow-sm md:h-[560px] lg:h-[640px]">
         <iframe
           src={branch.googleMapsEmbedUrl}
           title={`Mapa de ${branch.name}`}
@@ -89,7 +89,7 @@ export function BranchMiniMap({ branch }: { branch: Branch }) {
   }
 
   return (
-    <div className="relative h-[280px] w-full overflow-hidden rounded-2xl border border-slate-200 bg-slate-200 shadow-sm md:h-[340px]">
+    <div className="relative h-[420px] w-full overflow-hidden rounded-2xl border border-slate-200 bg-slate-200 shadow-sm md:h-[560px] lg:h-[640px]">
       <div ref={containerRef} className="absolute inset-0 h-full w-full" />
     </div>
   );

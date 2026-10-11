@@ -107,7 +107,7 @@ export default async function BranchPage({ params }: Props) {
 
       {/* Hero */}
       <header className="bg-black pb-8 pt-8 md:pb-12 md:pt-12">
-        <div className="mx-auto max-w-3xl px-4">
+        <div className="mx-auto max-w-6xl px-4">
           <Link
             href="/sucursales"
             className="mb-6 inline-flex items-center gap-1.5 text-sm text-slate-400 transition-colors hover:text-white"
@@ -144,7 +144,7 @@ export default async function BranchPage({ params }: Props) {
         </div>
       </header>
 
-      <main className="mx-auto max-w-3xl space-y-6 px-4 py-8">
+      <main className="mx-auto max-w-6xl space-y-6 px-4 py-8">
         <Breadcrumbs
           crumbs={[
             { name: "Inicio", path: "/" },
@@ -153,6 +153,7 @@ export default async function BranchPage({ params }: Props) {
           ]}
         />
 
+        <div className="grid gap-6 lg:grid-cols-2 lg:items-start">
         {branch.facadePhoto && (
           // aspect-[4/3] en todos los tamaños: es la proporción real de la
           // foto — a partir de sm pasaba a aspect-video (16:9) y se comía
@@ -163,12 +164,13 @@ export default async function BranchPage({ params }: Props) {
               alt={`Fachada del local de Neumáticos Trivium ${branch.shortName}`}
               fill
               className="object-cover"
-              sizes="(max-width: 768px) 100vw, 768px"
+              sizes="(max-width: 1024px) 100vw, 576px"
               priority
             />
           </div>
         )}
 
+        <div className="space-y-6">
         {/* Acciones principales */}
         <section className="grid grid-cols-2 gap-3">
           <WhatsAppLink
@@ -223,6 +225,9 @@ export default async function BranchPage({ params }: Props) {
           </p>
         </section>
 
+        </div>
+        </div>
+
         {/* Ubicacion + mapa */}
         <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
           <h2 className="mb-3 text-lg font-black text-navy-900">Ubicación y cómo llegar</h2>
@@ -247,7 +252,7 @@ export default async function BranchPage({ params }: Props) {
         <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
           <h2 className="mb-1 text-lg font-black text-navy-900">Servicios en esta sucursal</h2>
           <p className="mb-4 text-sm text-slate-500">Taller propio con equipos de última generación.</p>
-          <div className="space-y-3">
+          <div className="grid gap-3 md:grid-cols-2">
             {SERVICES.map((service) => (
               <div key={service.id} className="rounded-xl bg-slate-50 p-4">
                 <h3 className="font-bold text-navy-900">{service.title}</h3>
