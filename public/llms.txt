@@ -8,6 +8,15 @@ Neumáticos Trivium es la marca comercial de TRIVIUM CENTER S.A. Vende neumátic
 
 Compra directa a fábrica, sin importador ni distribuidor mayorista ni distribuidor regional intermedio: la diferencia de margen de esa cadena se traslada al precio de venta. Es outlet, no liquidación de stock viejo: el catálogo completo tiene el mismo precio publicado, con el stock real disponible marcado en cada producto.
 
+## Neumáticos de carga (serie C) para furgones y utilitarios
+
+Neumáticos comerciales con la C después del rodado (por ejemplo 195/70 R15C, 225/75 R16C) para furgones, utilitarios y reparto, a precios bajos por importación directa. Precio por unidad con IVA incluido, stock real por medida y garantía de un año por defecto de fábrica. Colocación y válvulas sin cargo al comprar en el local de Córdoba; envío a todo el país.
+
+- Categoría con precio "desde" por medida: https://neumaticos.trivium.ar/neumaticos/carga
+- Una página por medida de carga, con modelos, capacidad por rueda (simple y dual) y precio: https://neumaticos.trivium.ar/neumaticos/carga/195-70-r15c (mismo formato para el resto: ancho-perfil-rodado + "c")
+- Regla técnica: el neumático de reemplazo tiene que ser C y con índice de carga igual o mayor al original; uno de auto en la misma medida no es equivalente.
+- Guías: https://neumaticos.trivium.ar/blog/neumaticos-para-utilitarios-furgones-reparto · https://neumaticos.trivium.ar/blog/neumatico-c-o-de-auto-utilitario · https://neumaticos.trivium.ar/blog/presion-neumaticos-utilitarios-con-carga · https://neumaticos.trivium.ar/blog/carga-simple-y-dual-neumaticos-c
+
 ## Gomería y taller
 
 Local propio en Córdoba (Argüello) con taller integrado: alineación computarizada 3D, balanceo dinámico y arme/desarme de neumáticos. La colocación y el cambio de válvulas son sin cargo al comprar las cubiertas en el local. Atención por orden de llegada, sin sistema de turnos.

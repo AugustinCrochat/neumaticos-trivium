@@ -153,6 +153,33 @@ export const SERVICES: Service[] = [
 // actual. Las más útiles para alguien que está por comprar van arriba.
 export const BLOG_POSTS: BlogPost[] = [
   {
+    id: "25",
+    title: "Neumáticos para utilitarios, furgones y reparto: cómo elegirlos sin pagar de más",
+    excerpt: "Medida C, índice de carga, simple o dual y costo por kilómetro: cómo elegir cubiertas para un vehículo de trabajo.",
+    imageUrl: "/images/blog-2.webp",
+    date: "2026-10-10",
+    slug: "neumaticos-para-utilitarios-furgones-reparto",
+    category: "Guías",
+  },
+  {
+    id: "24",
+    title: "¿Neumático C o de auto en un utilitario? Las diferencias y cuándo no se puede cambiar",
+    excerpt: "Mismo ancho, perfil y rodado no es lo mismo: qué cambia en la carcasa, la carga y la presión.",
+    imageUrl: "/images/blog-1.webp",
+    date: "2026-10-10",
+    slug: "neumatico-c-o-de-auto-utilitario",
+    category: "Guías",
+  },
+  {
+    id: "23",
+    title: "Presión de neumáticos en utilitarios con carga: cómo calibrar según el peso",
+    excerpt: "La presión de un furgón vacío no es la de uno cargado: dónde está la tabla, cada cuánto controlar y qué riesgos tiene andar con poco aire.",
+    imageUrl: "/images/blog-2.webp",
+    date: "2026-10-10",
+    slug: "presion-neumaticos-utilitarios-con-carga",
+    category: "Guías",
+  },
+  {
     id: "22",
     title: "Comprar neumáticos en Córdoba: qué comparar además del precio",
     excerpt: "Dos presupuestos con el mismo precio pueden no ser lo mismo. Qué preguntar antes de comprar: fecha DOT, colocación, stock real y garantía.",

@@ -1,5 +1,6 @@
 import Link from "next/link";
-import type { TireProduct } from "@/lib/types";
+import type { ReactNode } from "react";
+import type { TireProduct, TireSize } from "@/lib/types";
 import { BRANCHES } from "@/lib/config";
 import { CategoryProductGrid } from "./CategoryProductGrid";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
@@ -31,6 +32,9 @@ export function CategoryLanding({
   productos,
   faqs,
   hero,
+  sizeHref = (size) => `/neumaticos/${sizeSlug(size)}`,
+  sizeLabel = formatSize,
+  extra,
 }: {
   crumbLabel: string;
   path: string;
@@ -38,6 +42,12 @@ export function CategoryLanding({
   productos: TireProduct[];
   faqs: Faq[];
   hero: CategoryHero;
+  /** Destino de cada medida de la grilla. Por defecto, la landing de auto. */
+  sizeHref?: (size: TireSize) => string;
+  /** Texto de cada medida (la categoría carga agrega la "C"). */
+  sizeLabel?: (size: TireSize) => string;
+  /** Contenido editorial propio de la categoría, antes de las preguntas frecuentes. */
+  extra?: ReactNode;
 }) {
   const branch = BRANCHES[0];
   const ordenados = [...productos].sort(
@@ -156,7 +166,7 @@ export function CategoryLanding({
                     return (
                       <Link
                         key={sizeSlug(size)}
-                        href={`/neumaticos/${sizeSlug(size)}`}
+                        href={sizeHref(size)}
                         className="group relative rounded-xl border border-slate-200 bg-white p-4 text-center transition-colors hover:border-[#ff1e00]"
                       >
                         {hayStock && (
@@ -165,7 +175,7 @@ export function CategoryLanding({
                             title="Con stock"
                           />
                         )}
-                        <span className="block font-black text-slate-900">{formatSize(size)}</span>
+                        <span className="block font-black text-slate-900">{sizeLabel(size)}</span>
                         <span className="mt-1 block text-xs font-bold text-slate-500">
                           {count} {count === 1 ? "modelo" : "modelos"}
                         </span>
@@ -178,6 +188,8 @@ export function CategoryLanding({
           </div>
         </section>
       )}
+
+      {extra}
 
       <FaqSection faqs={faqs} />
 

@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { SITE_URL, BRANCHES, DEFAULT_BRANCH_ID, TIRE_RIMS } from "@/lib/config";
 import { BRANDS, SERVICES, BLOG_POSTS } from "@/lib/data";
 import { LOCALIDADES } from "@/lib/localidades";
+import { cargaSlug } from "@/lib/carga";
 import { LOAD_SPEED_CODES } from "@/lib/load-speed";
 import { getProductosDesdePOS, getAccesoriosDesdePOS } from "@/lib/pos-api";
 import {
@@ -93,6 +94,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     if (!medidas.has(slug)) medidas.set(slug, url(`/neumaticos/${slug}`, 0.6, "weekly"));
   }
 
+  // Landings de medida C: una por medida de carga con producto en catálogo.
+  const medidasCarga: Entry[] = [
+    ...new Set(productos.filter((p) => p.isCarga).map((p) => cargaSlug(p.size))),
+  ].map((slug) => url(`/neumaticos/carga/${slug}`, 0.8, "daily"));
+
   const rodados: Entry[] = TIRE_RIMS.map((rim) =>
     url(`/neumaticos/${rimSlug(rim)}`, 0.7, "weekly")
   );
@@ -129,6 +135,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     ...estaticas,
     ...medidas.values(),
+    ...medidasCarga,
     ...rodados,
     ...localidades,
     ...sucursales,

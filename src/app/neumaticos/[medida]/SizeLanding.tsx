@@ -19,6 +19,7 @@ import {
   sizesEqual,
   vehiclesUsingSize,
 } from "@/lib/tire-sizes";
+import { cargaSlug, formatCargaSize } from "@/lib/carga";
 import { sortVehiclesByPopularity } from "@/lib/vehicles";
 
 function formatPrice(price: number) {
@@ -190,6 +191,16 @@ export function SizeLanding({
             Consultar {label} por WhatsApp
           </WhatsAppLink>
         </section>
+      )}
+
+      {productos.some((p) => p.isCarga) && (
+        <p className="mb-10 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700">
+          Esta medida también existe en versión de carga (C) para furgones y utilitarios:{" "}
+          <Link href={`/neumaticos/carga/${cargaSlug(size)}`} className="font-bold text-[#ff1e00] underline">
+            ver neumáticos {formatCargaSize(size)}
+          </Link>
+          .
+        </p>
       )}
 
       {/* Desglose de la medida */}
