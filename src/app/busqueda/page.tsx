@@ -26,7 +26,7 @@ export default async function BusquedaPage({ searchParams }: Props) {
 
   if (!query) {
     return (
-      <div className="max-w-7xl mx-auto px-4 py-20 text-center">
+      <div className="max-w-7xl 2xl:max-w-[96rem] mx-auto px-4 py-20 text-center">
         <p className="text-slate-400 text-lg font-medium">Ingresá un término de búsqueda.</p>
       </div>
     );
@@ -37,7 +37,7 @@ export default async function BusquedaPage({ searchParams }: Props) {
   const matches = searchCatalog(query, productos, accesorios);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
+    <div className="max-w-7xl 2xl:max-w-[96rem] mx-auto px-4 py-8">
       <h1 className="text-2xl md:text-3xl font-black text-navy-900 mb-1">
         Resultados para &quot;{query}&quot;
       </h1>

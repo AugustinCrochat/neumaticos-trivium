@@ -15,7 +15,7 @@ export default function SucursalesPage() {
   return (
     <div className="min-h-screen bg-slate-50">
       <div className="bg-black py-10 md:py-14">
-        <div className="max-w-7xl mx-auto px-4">
+        <div className="max-w-7xl 2xl:max-w-[96rem] mx-auto px-4">
           <Link
             href="/"
             className="mb-6 inline-flex items-center gap-1.5 text-sm text-slate-400 transition-colors hover:text-white"

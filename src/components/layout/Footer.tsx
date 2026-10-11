@@ -17,7 +17,7 @@ export function Footer() {
   return (
     <footer id="contacto" className="bg-black text-zinc-300">
       {/* Main content */}
-      <div className="max-w-7xl mx-auto px-4 py-14">
+      <div className="max-w-7xl 2xl:max-w-[96rem] mx-auto px-4 py-14">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* Brand */}
           <div className="lg:col-span-1">
@@ -201,7 +201,7 @@ export function Footer() {
 
       {/* Identidad legal + Data Fiscal */}
       <div className="border-t border-zinc-900">
-        <div className="max-w-7xl mx-auto px-4 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-500">
+        <div className="max-w-7xl 2xl:max-w-[96rem] mx-auto px-4 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-500">
           <div className="text-center sm:text-left space-y-0.5">
             {/* La razón social enlaza al sitio del grupo. Es el lugar honesto
                 para el enlace: describe una relación societaria real, no es un
@@ -231,7 +231,7 @@ export function Footer() {
 
       {/* Bottom bar */}
       <div className="border-t border-zinc-900">
-        <div className="max-w-7xl mx-auto px-4 py-5 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-zinc-500">
+        <div className="max-w-7xl 2xl:max-w-[96rem] mx-auto px-4 py-5 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-zinc-500">
           <p>© {year} Neumáticos Trivium. Todos los derechos reservados.</p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link href="/arrepentimiento" className="font-bold text-white hover:text-zinc-300 transition-colors">

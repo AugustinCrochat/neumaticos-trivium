@@ -466,7 +466,7 @@ export function BranchesMap({ branches, comingSoon = [] }: BranchesMapProps) {
 
   return (
     <section className="bg-slate-50">
-      <div className="max-w-7xl mx-auto px-4 py-8 md:py-10">
+      <div className="max-w-7xl 2xl:max-w-[96rem] mx-auto px-4 py-8 md:py-10">
         <div className="grid grid-cols-1 gap-6">
           <div className="relative h-[54vh] min-h-[360px] max-h-[520px] w-full overflow-hidden rounded-2xl border border-slate-200 bg-slate-200 shadow-xl shadow-slate-200/80 md:h-[720px] md:max-h-none">
             <div ref={mapContainerRef} className="absolute inset-0 min-h-full w-full" />

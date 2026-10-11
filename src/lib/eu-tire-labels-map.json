@@ -368,11 +368,11 @@
     "tyreDesignation": "165/70R13 79 T"
   },
   "grenlander-colo-h02-175-70-r13-82t": {
-    "eprelId": "597195",
+    "eprelId": "2631916",
     "energyClass": "C",
     "wetGripClass": "C",
     "noiseDb": 67,
-    "noiseClass": "B",
+    "noiseClass": "A",
     "tyreDesignation": "175/70R13 82 T"
   },
   "grenlander-colo-h02-195-55-r16-91v": {
@@ -638,5 +638,21 @@
     "noiseDb": 72,
     "noiseClass": "B",
     "tyreDesignation": "LT245/70R16 113/110 S"
+  },
+  "grenlander-colo-h02-195-60-r16-89h": {
+    "eprelId": "2631965",
+    "energyClass": "C",
+    "wetGripClass": "C",
+    "noiseDb": 68,
+    "noiseClass": "A",
+    "tyreDesignation": "195/60R16 89 H"
+  },
+  "grenlander-aa112-215-75-r17-5-135j": {
+    "eprelId": "2189140",
+    "energyClass": "D",
+    "wetGripClass": "D",
+    "noiseDb": 73,
+    "noiseClass": "B",
+    "tyreDesignation": "215/75R17.5 135/133 J"
   }
 }

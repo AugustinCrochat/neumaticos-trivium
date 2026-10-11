@@ -16,7 +16,7 @@ export function HeroSection() {
           <div className="absolute inset-0 bg-gradient-to-r from-navy-950/90 via-navy-950/55 to-navy-950/10" />
         </>
       )}
-      <div className="relative max-w-7xl mx-auto px-4">
+      <div className="relative max-w-7xl 2xl:max-w-[96rem] mx-auto px-4">
         <div className="grid md:grid-cols-2 gap-0 min-h-[480px]">
 
           {/* Left: copy */}

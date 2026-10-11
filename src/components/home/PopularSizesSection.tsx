@@ -23,7 +23,7 @@ export function PopularSizesSection() {
 
   return (
     <section className="bg-slate-50 py-16">
-      <div className="mx-auto max-w-7xl px-4">
+      <div className="mx-auto max-w-7xl 2xl:max-w-[96rem] px-4">
         <div className="mb-8 max-w-3xl">
           <h2 className="font-display text-4xl font-bold uppercase tracking-wide text-navy-900">Elegí tu medida</h2>
           <p className="mt-3 text-lg leading-relaxed text-slate-600">

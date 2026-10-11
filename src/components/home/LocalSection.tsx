@@ -23,7 +23,7 @@ export function LocalSection() {
 
   return (
     <section className="bg-navy-950 py-16 text-white">
-      <div className="mx-auto max-w-7xl px-4">
+      <div className="mx-auto max-w-7xl 2xl:max-w-[96rem] px-4">
         <div className="grid gap-10 md:grid-cols-2">
           <div>
             <p className="mb-3 text-sm font-bold uppercase tracking-widest text-navy-300">

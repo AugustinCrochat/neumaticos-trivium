@@ -258,7 +258,7 @@ export async function ServicesSection() {
 
   return (
     <section id="servicios" className="py-16 bg-white">
-      <div className="max-w-7xl mx-auto px-4">
+      <div className="max-w-7xl 2xl:max-w-[96rem] mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-12">
           <span className="inline-block text-orange-500 text-sm font-bold uppercase tracking-widest mb-3">

@@ -88,7 +88,7 @@ export default async function OfertasPage() {
       {/* Hero */}
       <header className="relative overflow-hidden bg-black">
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1 bg-[#ff1e00]" />
-        <div className="relative mx-auto max-w-7xl px-4 py-12 md:py-20">
+        <div className="relative mx-auto max-w-7xl 2xl:max-w-[96rem] px-4 py-12 md:py-20">
           <span className="inline-block rounded-md bg-[#ff1e00] px-3 py-1 text-xs font-bold uppercase tracking-widest text-white">
             Ofertas de la semana
           </span>
@@ -105,7 +105,7 @@ export default async function OfertasPage() {
 
       {/* Beneficios */}
       <section className="border-b border-slate-200 bg-white">
-        <ul className="mx-auto grid max-w-7xl grid-cols-1 gap-px bg-slate-200 sm:grid-cols-3">
+        <ul className="mx-auto grid max-w-7xl 2xl:max-w-[96rem] grid-cols-1 gap-px bg-slate-200 sm:grid-cols-3">
           {BENEFICIOS.map((b) => (
             <li key={b.titulo} className="flex items-center gap-4 bg-white px-4 py-5">
               <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#ff1e00] text-white">
@@ -122,7 +122,7 @@ export default async function OfertasPage() {
         </ul>
       </section>
 
-      <main className="mx-auto max-w-7xl px-4 py-10 md:py-14">
+      <main className="mx-auto max-w-7xl 2xl:max-w-[96rem] px-4 py-10 md:py-14">
         {ofertasNeumaticos.length === 0 && ofertasAccesorios.length === 0 ? (
           <p className="py-20 text-center text-lg text-slate-500">
             No hay ofertas activas en este momento. ¡Volvé a pasar pronto!

@@ -76,7 +76,7 @@ export default async function BrandPage({ params }: Props) {
       )}
       {/* Brand Header */}
       <header className="bg-slate-50 border-b border-slate-100 pt-12 md:pt-20 pb-12 md:pb-16">
-        <div className="max-w-7xl mx-auto px-4">
+        <div className="max-w-7xl 2xl:max-w-[96rem] mx-auto px-4">
           <div className="flex flex-col md:flex-row items-center md:items-start gap-10 md:gap-16">
             <div className="shrink-0 flex items-center justify-center py-4">
               {brandLogo ? (
@@ -141,7 +141,7 @@ export default async function BrandPage({ params }: Props) {
       </header>
 
       {/* Products Grid */}
-      <main className="max-w-7xl mx-auto px-4 py-12 md:py-20">
+      <main className="max-w-7xl 2xl:max-w-[96rem] mx-auto px-4 py-12 md:py-20">
         <div className="flex flex-col md:flex-row items-center justify-between mb-12 gap-6">
           <div>
             <h2 className="text-3xl font-black text-navy-950 mb-2">Modelos en stock</h2>
@@ -187,7 +187,7 @@ export default async function BrandPage({ params }: Props) {
         <div className="absolute top-0 right-0 w-1/2 h-full opacity-10 pointer-events-none">
            {brandLogo && <img src={brandLogo} alt="" className="w-full h-full object-contain grayscale invert scale-150 translate-x-1/4" />}
         </div>
-        <div className="max-w-7xl mx-auto px-4 relative z-10 text-center md:text-left">
+        <div className="max-w-7xl 2xl:max-w-[96rem] mx-auto px-4 relative z-10 text-center md:text-left">
            <div className="md:flex items-center justify-between gap-12">
               <div className="mb-10 md:mb-0 max-w-2xl">
                  <h2 className="text-3xl md:text-5xl font-black text-white mb-6 leading-tight">¿No encontrás la medida que buscás?</h2>

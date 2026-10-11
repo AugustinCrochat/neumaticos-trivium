@@ -93,7 +93,7 @@ export default async function NeumaticosPage() {
   );
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8">
+    <div className="mx-auto max-w-7xl 2xl:max-w-[96rem] px-4 py-8">
       <Breadcrumbs
         crumbs={[
           { name: "Inicio", path: "/" },

@@ -475,7 +475,7 @@ export function ShopPage({
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="max-w-7xl mx-auto px-4 pt-4 pb-8">
+      <div className="max-w-7xl 2xl:max-w-[96rem] mx-auto px-4 pt-4 pb-8">
         <div className="flex flex-col lg:flex-row gap-8 items-stretch lg:items-start">
 
           {/* Sidebar — search widget only */}

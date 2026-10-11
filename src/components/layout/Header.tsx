@@ -33,7 +33,7 @@ export function Header() {
 
       {/* Main nav */}
       <nav className="bg-black shadow-lg">
-        <div className="max-w-7xl mx-auto px-4">
+        <div className="max-w-7xl 2xl:max-w-[96rem] mx-auto px-4">
           <div className="flex items-center h-12 gap-6 md:h-14">
             {/* Logo */}
             <Link href="/" className="flex-shrink-0">
