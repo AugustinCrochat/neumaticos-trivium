@@ -25,6 +25,12 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # El POS lo dispara cuando cambia un producto (webhook de Supabase →
+  # /api/whatsapp/sync-catalog/webhook). Es lo que mantiene el HTML con el
+  # precio vigente para Google Ads/Merchant; el cron de abajo queda de red de
+  # seguridad porque GitHub atrasa o saltea los schedules.
+  repository_dispatch:
+    types: [pos-actualizado]
   # Redeploy programado: el sitio es 100% estático (sin ISR — la cola con
   # Durable Object agotaba el free tier de Cloudflare y bloqueó la cuenta el
   # 2026-08-31), así que precios y stock del POS solo se refrescan buildeando
