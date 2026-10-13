@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { Metadata } from "next";
-import { getProductosDesdePOS } from "@/lib/pos-api";
+import { getProductosDesdePOS, esRodadoCamion } from "@/lib/pos-api";
 import { getSelectedBranchSlug } from "@/lib/branch-server";
 import { getBrandLogo } from "@/lib/brand-utils";
 import { BRANDS } from "@/lib/data";
@@ -76,7 +76,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-function vehicleLabel(product: { vehicleType: string[] }) {
+function vehicleLabel(product: { vehicleType: string[]; size?: { rim: number } }) {
+  if (product.size && esRodadoCamion(product.size.rim)) return "camiones medianos y vehículos de carga";
   const hasAuto = product.vehicleType.includes("auto");
   const hasCamioneta = product.vehicleType.includes("camioneta");
   if (hasAuto && hasCamioneta) return "autos y camionetas";
@@ -355,7 +356,9 @@ export default async function ProductPage({ params }: Props) {
           <p className="mt-3 text-sm text-slate-500">
             {product.isCarga ? (
               <>
-                Es un neumático de carga (serie C).{" "}
+                {esRodadoCamion(product.size.rim)
+                  ? "Es un neumático de carga para camiones medianos."
+                  : "Es un neumático de carga (serie C)."}{" "}
                 <Link href="/neumaticos/carga" className="font-bold text-navy-700 underline decoration-navy-300 hover:decoration-navy-900">
                   Ver todos los de carga.
                 </Link>

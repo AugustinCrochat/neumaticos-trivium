@@ -411,7 +411,7 @@ export default function GrenlanderPage() {
               <p className="text-xs font-bold text-amber-600 uppercase tracking-widest mb-1">Comercial / Carga</p>
               <h3 className="text-lg font-black text-zinc-900 mb-2">AA112</h3>
               <p className="text-sm text-zinc-500 leading-relaxed">
-                Neumático para uso comercial y vehículos de carga liviana. Alta resistencia a la deformación bajo peso sostenido, indicado para furgones, camionetas de reparto y flotas.
+                Neumático de carga para camiones medianos (medida 215/75 R17.5, índice 135/133). Alta resistencia a la deformación bajo peso sostenido, pensado para camiones de reparto y flotas.
               </p>
             </div>
           </div>

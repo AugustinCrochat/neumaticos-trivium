@@ -95,6 +95,9 @@ const PLACEHOLDER_IMAGE = "/images/tire-placeholder.webp";
 // rodado para neumáticos de carga — ej. "205/70 R15C" vs "205/70 R15".
 // Réplica de pos-neumaticos/src/lib/tire.ts (formatMedida) — si se toca acá,
 // tocar allá también.
+/** Rodados de camión (17.5, 19.5, 22.5): no son H/T de calle, se tratan como carga. */
+export const esRodadoCamion = (diametro: number) => diametro >= 17.5;
+
 function formatMedida(ancho: number, perfil: number, diametro: number, esCarga: boolean): string {
   return `${ancho}/${perfil} R${diametro}${esCarga ? "C" : ""}`;
 }
@@ -245,7 +248,9 @@ function toTireProduct(p: PosProducto): TireProduct | null {
     tags: [],
     isEconomic: ECONOMIC_BRAND_IDS.has(brandId),
     isImported: true,
-    isCarga: p.es_carga,
+    // Un R17.5 en adelante es de camión mediano aunque en el POS no tenga marcada
+    // la casilla de carga (si se marcara, cambiaría el slug y la medida con "C").
+    isCarga: p.es_carga || esRodadoCamion(p.neumatico_diametro),
     isAT: p.es_at,
     slug,
     enStock: p.en_stock,
