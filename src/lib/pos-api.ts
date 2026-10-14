@@ -96,7 +96,8 @@ const PLACEHOLDER_IMAGE = "/images/tire-placeholder.webp";
 // Réplica de pos-neumaticos/src/lib/tire.ts (formatMedida) — si se toca acá,
 // tocar allá también.
 /** Rodados de camión (17.5, 19.5, 22.5): no son H/T de calle, se tratan como carga. */
-export const esRodadoCamion = (diametro: number) => diametro >= 17.5;
+const RODADOS_CAMION = [17.5, 19.5, 22.5, 24.5];
+export const esRodadoCamion = (diametro: number) => RODADOS_CAMION.includes(diametro);
 
 function formatMedida(ancho: number, perfil: number, diametro: number, esCarga: boolean): string {
   return `${ancho}/${perfil} R${diametro}${esCarga ? "C" : ""}`;
