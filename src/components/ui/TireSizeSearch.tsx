@@ -82,6 +82,9 @@ export function TireSizeSearch({
   const [placeholderIndex, setPlaceholderIndex] = useState(0);
 
   const [showPopular, setShowPopular] = useState(false);
+  // Índice resaltado con las flechas del teclado (-1 = ninguno).
+  // Atado a lo escrito: al cambiar la medida la lista se filtra y el índice viejo deja de valer.
+  const [activeState, setActiveState] = useState({ key: "", index: -1 });
   const containerRef = useRef<HTMLDivElement>(null);
 
   const POPULAR_SIZES = [
@@ -114,6 +117,8 @@ export function TireSizeSearch({
   }).slice(0, 8);
 
   // Check if the current input is already a "complete" valid size from our list
+  const queryKey = `${width}|${profile}|${rim}`;
+  const activeOption = activeState.key === queryKey ? activeState.index : -1;
   const isComplete = POPULAR_SIZES.some(s => s.w === width && s.p === profile && s.r === rim);
   const shouldShowDropdown = showPopular && filteredSizes.length > 0 && !isComplete;
 
@@ -257,11 +262,31 @@ export function TireSizeSearch({
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (shouldShowDropdown && (e.key === "ArrowDown" || e.key === "ArrowUp")) {
+      e.preventDefault();
+      const n = filteredSizes.length;
+      setActiveState({ key: queryKey, index: e.key === "ArrowDown" ? (activeOption + 1) % n : (activeOption <= 0 ? n - 1 : activeOption - 1) });
+      return;
+    }
+    if (e.key === "Escape") {
+      setShowPopular(false);
+      return;
+    }
     if (e.key === "Enter") {
       e.preventDefault();
-      executeSearch();
+      const picked = shouldShowDropdown ? filteredSizes[activeOption] : undefined;
+      if (picked) pickPopular(picked);
+      else executeSearch();
     }
   };
+
+  function pickPopular(s: { w: string; p: string; r: string }) {
+    setWidth(s.w);
+    setProfile(s.p);
+    setRim(s.r);
+    setShowPopular(false);
+    performSearch(s.w, s.p, s.r);
+  }
 
   const clearInitialMeasureForEdit = () => {
     if (!shouldClearInitialOnEdit) return;
@@ -672,30 +697,31 @@ export function TireSizeSearch({
           )}
 
           {shouldShowDropdown && (
-            <div className={`absolute left-0 z-50 bg-white border border-slate-200 rounded-xl shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200 ${compact ? 'top-full mt-2 right-[56px] lg:right-0' : 'top-full mt-2 right-[56px]'}`}>
+            // En el flujo y no `absolute`: el hero (overflow-hidden) y el modal
+            // del buscador flotante (overflow-y-auto) recortaban la lista
+            // cuando se pasaba del borde del contenedor.
+            <div role="listbox" aria-label="Medidas populares" className="mt-2 bg-white border border-slate-200 rounded-xl shadow-lg overflow-hidden">
               <p className="px-4 py-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest border-b border-slate-200 bg-slate-50">
                 Medidas populares
               </p>
               <div className="max-h-[240px] overflow-y-auto">
-                {filteredSizes.map((s) => (
+                {filteredSizes.map((s, i) => (
                   <button
                     key={`${s.w}-${s.p}-${s.r}`}
                     type="button"
+                    role="option"
+                    aria-selected={i === activeOption}
                     onMouseDown={(e) => {
                       // Use onMouseDown to prevent blur before click
                       e.preventDefault();
-                      setWidth(s.w);
-                      setProfile(s.p);
-                      setRim(s.r);
-                      setShowPopular(false);
-                      performSearch(s.w, s.p, s.r);
+                      pickPopular(s);
                     }}
-                    className="w-full px-4 py-3 text-left hover:bg-orange-50 transition-colors flex items-center justify-between group border-b border-slate-100 last:border-0"
+                    className={`w-full px-4 py-3 text-left hover:bg-orange-50 transition-colors flex items-center justify-between group border-b border-slate-100 last:border-0 ${i === activeOption ? "bg-orange-50" : ""}`}
                   >
                     <span className="text-navy-900 font-bold">
                       {s.w} / {s.p} <span className="text-slate-500 font-medium">R</span>{s.r}
                     </span>
-                    <svg className="w-4 h-4 text-orange-500 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg className={`w-4 h-4 text-orange-500 transition-opacity ${i === activeOption ? "opacity-100" : "opacity-0 group-hover:opacity-100"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
                     </svg>
                   </button>
