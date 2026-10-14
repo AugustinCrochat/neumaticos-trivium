@@ -5,7 +5,7 @@ import { getProductosDesdePOS, esRodadoCamion } from "@/lib/pos-api";
 import { getSelectedBranchSlug } from "@/lib/branch-server";
 import { getBrandLogo } from "@/lib/brand-utils";
 import { BRANDS } from "@/lib/data";
-import { BRANCHES, DEFAULT_BRANCH_ID, SHIPPING_FLAT_RATE, SITE_URL } from "@/lib/config";
+import { BRANCHES, DEFAULT_BRANCH_ID, SHIPPING_FLAT_RATE, SITE_URL, TIRE_RIMS } from "@/lib/config";
 import { ORGANIZATION_ID, branchNodeId, breadcrumbJsonLd, canonical } from "@/lib/seo";
 import { LivePrice } from "./LivePrice";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -215,6 +215,26 @@ export default async function ProductPage({ params }: Props) {
       if (!actual || p.price < actual.price) porMarca.set(p.brand, p);
     }
     return Array.from(porMarca.values()).sort((a, b) => a.price - b.price).slice(0, 6);
+  })();
+
+  // Mismo rodado, otra medida: para quien todavía no cerró la medida o busca
+  // algo parecido. Una tarjeta por medida (la más barata en stock), de la
+  // misma clase (carga con carga), las de diámetro total más cercano primero.
+  const mismoRodado = (() => {
+    const diametro = (z: typeof product.size) => z.rim * 25.4 + (2 * z.width * z.profile) / 100;
+    const d0 = diametro(product.size);
+    const porMedida = new Map<string, typeof product>();
+    for (const p of productos) {
+      if (p.id === product.id || !p.enStock) continue;
+      if (p.size.rim !== product.size.rim || sizesEqual(p.size, product.size)) continue;
+      if (Boolean(p.isCarga) !== Boolean(product.isCarga)) continue;
+      const key = sizeSlug(p.size);
+      const actual = porMedida.get(key);
+      if (!actual || p.price < actual.price) porMedida.set(key, p);
+    }
+    return Array.from(porMedida.values())
+      .sort((x, y) => Math.abs(diametro(x.size) - d0) - Math.abs(diametro(y.size) - d0) || x.price - y.price)
+      .slice(0, 4);
   })();
 
   const characteristics = [
@@ -497,6 +517,29 @@ export default async function ProductPage({ params }: Props) {
           </p>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {otrasMarcasMismaMedida.map((p) => (
+              <ProductCard key={p.id} product={p} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Mismo rodado, otras medidas */}
+      {mismoRodado.length > 0 && (
+        <div className="mt-14 pt-10 border-t border-slate-100">
+          <h2 className="text-lg font-black text-navy-900 uppercase tracking-wide mb-1">
+            Más neumáticos rodado {product.size.rim}
+          </h2>
+          <p className="text-sm text-slate-600 mb-6">
+            Otras medidas del mismo rodado con stock ahora. Antes de cambiar de medida, confirmá cuál sirve para tu
+            vehículo.{" "}
+            {TIRE_RIMS.includes(product.size.rim) && (
+              <Link href={`/neumaticos/${rimSlug(product.size.rim)}`} className="font-bold text-[#ff1e00] underline">
+                Ver todas las medidas R{product.size.rim}
+              </Link>
+            )}
+          </p>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {mismoRodado.map((p) => (
               <ProductCard key={p.id} product={p} />
             ))}
           </div>
