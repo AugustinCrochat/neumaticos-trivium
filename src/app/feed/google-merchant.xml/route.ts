@@ -61,6 +61,20 @@ function additionalImageLinks(urls: string[]): string {
     .join("");
 }
 
+// IDs de la taxonomía oficial de Google (taxonomy-with-ids, verificados):
+// 6093 = Vehículos y recambios > … > Neumáticos para vehículos motorizados >
+// Neumáticos para automóviles. NO usar 7252: es para TT/UTV/cuatriciclos y no
+// corresponde a un A/T de camioneta. 2556 = Piezas para ruedas de vehículos
+// motorizados (donde caen las tuercas de rueda).
+const CATEGORIA_NEUMATICOS = 6093;
+const CATEGORIA_TUERCAS = 2556;
+
+function tipoNeumatico(p: TireProduct): string {
+  if (p.isCarga) return "Carga y comerciales";
+  if (p.isAT) return "Todo terreno (A/T)";
+  return "Auto y camioneta";
+}
+
 function tireItem(p: TireProduct): string {
   const link = `${SITE_URL}/productos/${p.slug}`;
   const description = buildTireDescription(p);
@@ -79,7 +93,8 @@ function tireItem(p: TireProduct): string {
       <g:price>${p.price.toFixed(2)} ARS</g:price>
       <g:brand>${cdata(p.brand)}</g:brand>
       <g:identifier_exists>no</g:identifier_exists>
-      <g:product_type>${cdata(`Neumáticos > ${p.brand}`)}</g:product_type>${SHIPPING_BLOCK}
+      <g:google_product_category>${CATEGORIA_NEUMATICOS}</g:google_product_category>
+      <g:product_type>${cdata(`Neumáticos > ${tipoNeumatico(p)} > Rodado ${p.size.rim} > ${p.brand}`)}</g:product_type>${SHIPPING_BLOCK}
     </item>`;
 }
 
@@ -101,7 +116,8 @@ function accessoryItem(a: Accessory & { imageUrl: string }): string {
       <g:price>${a.price.toFixed(2)} ARS</g:price>
       <g:brand>${cdata("Z3")}</g:brand>
       <g:identifier_exists>no</g:identifier_exists>
-      <g:product_type>${cdata("Tuercas Antirrobo")}</g:product_type>${SHIPPING_BLOCK}
+      <g:google_product_category>${CATEGORIA_TUERCAS}</g:google_product_category>
+      <g:product_type>${cdata("Accesorios para ruedas > Tuercas antirrobo")}</g:product_type>${SHIPPING_BLOCK}
     </item>`;
 }
 
