@@ -10,6 +10,10 @@ import type { TireProduct, Accessory } from "@/lib/types";
 // g:id tiene que ser idéntico al id que usa ESE producto en el feed
 // principal — mismo p.id/a.id en los dos, así que no hace falta duplicar
 // nada a mano.
+// Sin pickup_method/pickup_sla a propósito: la recogida el mismo día exige que
+// el sitio permita comprar online y elegir retiro en tienda, y el carrito está
+// oculto (Google la rechazó en Merchant Center, 2026-10). Sin esos atributos
+// el producto igual aparece como "disponible en tienda" con su stock y precio.
 export const dynamic = "force-dynamic";
 
 function cdata(text: string): string {
@@ -24,8 +28,6 @@ function tireItem(p: TireProduct, storeCode: string): string {
       <g:availability>${p.enStock ? "in_stock" : "out_of_stock"}</g:availability>
       <g:price>${p.price.toFixed(2)} ARS</g:price>
       <g:quantity>${p.stock ?? 0}</g:quantity>
-      <g:pickup_method>buy</g:pickup_method>
-      <g:pickup_sla>same_day</g:pickup_sla>
     </item>`;
 }
 
@@ -37,8 +39,6 @@ function accessoryItem(a: Accessory, storeCode: string): string {
       <g:availability>${a.enStock ? "in_stock" : "out_of_stock"}</g:availability>
       <g:price>${a.price.toFixed(2)} ARS</g:price>
       <g:quantity>${a.stock}</g:quantity>
-      <g:pickup_method>buy</g:pickup_method>
-      <g:pickup_sla>same_day</g:pickup_sla>
     </item>`;
 }
 
