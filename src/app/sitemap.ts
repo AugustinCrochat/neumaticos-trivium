@@ -4,6 +4,7 @@ import { BRANDS, SERVICES, BLOG_POSTS } from "@/lib/data";
 import { LOCALIDADES } from "@/lib/localidades";
 import { cargaSlug } from "@/lib/carga";
 import { LOAD_SPEED_CODES } from "@/lib/load-speed";
+import { POPULAR_VEHICLES, vehicleSlug } from "@/lib/vehicles";
 import { getProductosDesdePOS, getAccesoriosDesdePOS } from "@/lib/pos-api";
 import {
   MEDIDAS_PRIORITARIAS,
@@ -61,6 +62,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url("/neumaticos/carga", 0.7, "weekly"),
     url("/neumaticos-en", 0.7, "monthly"),
     url("/marcas", 0.7, "weekly"),
+    url("/vehiculos", 0.8, "weekly"),
+    ...POPULAR_VEHICLES.map((v) => url(`/vehiculos/${vehicleSlug(v.brand, v.model)}`, 0.8, "weekly")),
     url("/calculadora-equivalencia-neumaticos", 0.8, "monthly"),
     url("/cotizador", 0.7, "monthly"),
     url("/servicios", 0.7, "monthly"),

@@ -20,7 +20,7 @@ import {
   vehiclesUsingSize,
 } from "@/lib/tire-sizes";
 import { cargaSlug, formatCargaSize } from "@/lib/carga";
-import { sortVehiclesByPopularity } from "@/lib/vehicles";
+import { sortVehiclesByPopularity, POPULAR_VEHICLES, vehicleSlug } from "@/lib/vehicles";
 
 function formatPrice(price: number) {
   return new Intl.NumberFormat("es-AR", {
@@ -281,9 +281,18 @@ export function SizeLanding({
                 key={`${v.brand}-${v.model}-${v.version ?? ""}`}
                 className="rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-sm"
               >
-                <span className="font-bold text-navy-900">
-                  {v.brand} {v.model}
-                </span>
+                {POPULAR_VEHICLES.some((p) => p.brand === v.brand && p.model === v.model) ? (
+                  <Link
+                    href={`/vehiculos/${vehicleSlug(v.brand, v.model)}`}
+                    className="font-bold text-navy-900 underline underline-offset-4 hover:text-orange-600"
+                  >
+                    {v.brand} {v.model}
+                  </Link>
+                ) : (
+                  <span className="font-bold text-navy-900">
+                    {v.brand} {v.model}
+                  </span>
+                )}
                 {v.version && <span className="ml-1.5 text-slate-500">{v.version}</span>}
               </li>
             ))}

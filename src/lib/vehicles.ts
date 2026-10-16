@@ -699,3 +699,17 @@ export function getAllVehicleOptions(): { marca: string; modelo: string; label: 
 
   return cachedOptions;
 }
+
+/** Slug de URL de una ficha de vehículo: "Toyota Hilux" -> "toyota-hilux". */
+export function vehicleSlug(brand: string, model: string): string {
+  return `${brand} ${model}`.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
+}
+
+/**
+ * Vehículos que tienen landing propia (/vehiculos/[slug]): los de
+ * ORDEN_POPULARIDAD que existen en VEHICLE_DB, en ese orden. El resto de la
+ * base se queda sin página a propósito — una ficha por cada modelo del
+ * catálogo sería contenido delgado; se suman a mano a ORDEN_POPULARIDAD.
+ */
+export const POPULAR_VEHICLES: VehicleDBEntry[] = sortVehiclesByPopularity(VEHICLE_DB)
+  .filter((v) => ORDEN_POPULARIDAD.includes(`${v.brand} ${v.model}`));
