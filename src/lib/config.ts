@@ -67,6 +67,11 @@ export type Branch = {
       y las páginas de /neumaticos-en. Los nombres tienen que coincidir con el
       `name` de las entradas de localidades.ts. */
   areaServed: string[];
+  /** true mientras el teléfono, el WhatsApp, el horario o los servicios de la
+      sucursal no estén confirmados. Las landings locales (/neumaticos-en) no
+      muestran esos datos ni prometen taller, stock u orden de llegada hasta
+      que se saque. */
+  provisorio?: boolean;
   phone: string;
   whatsapp: string;
   hours: string;
@@ -159,6 +164,7 @@ export const BRANCHES: Branch[] = [
     // reclamar/actualizar esa ficha, no duplicarla.
     postalCode: "B1754AZW",
     neighborhood: "San Justo",
+    provisorio: true,
     areaServed: [
       "San Justo",
       "La Matanza",
@@ -167,6 +173,15 @@ export const BRANCHES: Branch[] = [
       "Isidro Casanova",
       "Laferrere",
       "González Catán",
+      "Hurlingham",
+      "Tres de Febrero",
+      "Morón",
+      "San Martín",
+      "Esteban Echeverría",
+      "Merlo",
+      "Ituzaingó",
+      "Ezeiza",
+      "Capital Federal",
     ],
     // PROVISORIO: mismo WhatsApp y horario que Argüello hasta tener los de San
     // Justo. Pendiente de googleStoreCode, mapUrl, reviewUrl y

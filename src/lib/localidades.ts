@@ -152,6 +152,149 @@ export const LOCALIDADES: Localidad[] = [
     porQue:
       "Las gomerías de Río Ceballos resuelven el service del día a día, pero para neumáticos importados en la medida exacta que necesitás, conviene bajar hasta el outlet. Manejar en Sierras Chicas implica pendientes, frenadas largas y curvas cerradas, todo lo que más exige a un neumático. Ahí la profundidad de dibujo y el índice de velocidad correcto no son un detalle. Te mostramos las opciones que hay en tu medida y te explicamos la diferencia real entre una y otra, sin empujarte a la más cara.",
   },
+  // --- Sucursal San Justo (Buenos Aires). Los tiempos son aproximados, sin
+  // tráfico: validarlos con el equipo antes de confiar en ellos como dato duro.
+  {
+    slug: "san-justo",
+    name: "San Justo",
+    province: "Buenos Aires",
+    branchId: "san-justo",
+    esCabecera: true,
+    minutosHastaSucursal: 5,
+    comoLlegar:
+      "El local está en Pres. Juan Domingo Perón 2847, en San Justo, partido de La Matanza. Si venís desde Ramos Mejía, Villa Luzuriaga o el resto de La Matanza, es cuestión de sumar el destino en Google Maps y llegar en auto.",
+    intro:
+      "Trivium abrió su sucursal de Buenos Aires en San Justo, en el corazón de La Matanza. Es el mismo modelo de outlet que ya funciona en Córdoba: importamos neumáticos directo de fábrica y los vendemos al público sin pasar por distribuidores intermedios.",
+    porQue:
+      "La Matanza es el partido con más autos de la provincia, y el que más neumáticos gasta. Para quien vive acá, tener el local en San Justo significa comparar precio sin cruzar la General Paz ni ir hasta el microcentro. Mirá las medidas y los precios en la web y comparalos con lo que te cotizan: en un juego de cuatro la diferencia se nota.",
+    incluye: ["Ramos Mejía", "Villa Luzuriaga", "Isidro Casanova", "Laferrere", "González Catán", "Lomas del Mirador"],
+  },
+  {
+    slug: "moron",
+    name: "Morón",
+    province: "Buenos Aires",
+    branchId: "san-justo",
+    minutosHastaSucursal: 15,
+    comoLlegar:
+      "Morón limita con La Matanza, así que el trayecto es corto: desde Morón centro, Haedo o Castelar se llega a San Justo en auto en un cuarto de hora aproximadamente, según el tránsito. Google Maps te marca el recorrido exacto desde tu casa.",
+    intro:
+      "Morón es uno de los partidos vecinos a La Matanza, y desde Haedo, Castelar o el centro de Morón San Justo queda a un cuarto de hora aproximadamente. Es el cliente que más nos queda a mano: no hace falta salir de la zona oeste para comprar a precio de outlet.",
+    porQue:
+      "En Morón, Haedo y Castelar hay muchísima oferta de gomerías y negocios de neumáticos, y cada uno cotiza distinto. Vale la pena cruzar al local de San Justo a comparar: el neumático que vendemos es importación directa, sin el margen de un mayorista en el medio. Mirá tu medida en la web, llevá la cotización que te hicieron y compará.",
+    incluye: ["Haedo", "Castelar", "El Palomar", "Villa Sarmiento"],
+  },
+  {
+    slug: "tres-de-febrero",
+    name: "Tres de Febrero",
+    province: "Buenos Aires",
+    branchId: "san-justo",
+    minutosHastaSucursal: 20,
+    comoLlegar:
+      "Desde Ciudadela, Caseros o Santos Lugares se llega a San Justo por el límite con La Matanza, en unos veinte minutos aproximadamente. Desde Villa Bosch o Loma Hermosa conviene tomar Ruta 3 o la General Paz según el tránsito del momento.",
+    intro:
+      "Tres de Febrero es frontera directa con La Matanza: Ciudadela y Villa Luzuriaga están pegadas, separadas por una avenida. Para quien vive en Caseros, Ciudadela, Santos Lugares o Villa Bosch, San Justo es un viaje corto en auto.",
+    porQue:
+      "En Caseros, Santos Lugares y Ciudadela se junta gente que maneja a diario por la General Paz y el Acceso Oeste, y es la que más neumáticos gasta. Si vas a cambiar las cuatro cubiertas, comparar el precio de un outlet de importación directa contra el de tu gomería habitual puede cubrir de sobra el viaje a San Justo.",
+    incluye: ["Caseros", "Ciudadela", "Santos Lugares", "Villa Bosch", "Martín Coronado", "Loma Hermosa", "José Ingeniero", "Villa Raffo"],
+  },
+  {
+    slug: "hurlingham",
+    name: "Hurlingham",
+    province: "Buenos Aires",
+    branchId: "san-justo",
+    minutosHastaSucursal: 25,
+    comoLlegar:
+      "Desde Hurlingham, Villa Tesei o William C. Morris se cruza hacia el sur por Morón hasta La Matanza: son unos veinticinco minutos aproximadamente, según el tránsito. Google Maps arma el recorrido más rápido en el momento.",
+    intro:
+      "Hurlingham es un partido chico y muy residencial del oeste. La mayoría de los autos de la zona son de uso diario para trabajar o llevar a los chicos a la escuela, y eso se traduce en desgaste parejo y recambio de las cuatro cubiertas más o menos al mismo tiempo.",
+    porQue:
+      "Ese tipo de uso es justo el que hace que valga comparar precios: cuando cambiás las cuatro, la diferencia entre un neumático de outlet y uno de gomería se multiplica por cuatro. San Justo queda a media hora de Hurlingham. Mirá tu medida en la web y fijate cuánto sale antes de decidir.",
+    incluye: ["Villa Tesei", "William C. Morris", "Hurlingham centro"],
+  },
+  {
+    slug: "ituzaingo",
+    name: "Ituzaingó",
+    province: "Buenos Aires",
+    branchId: "san-justo",
+    minutosHastaSucursal: 25,
+    comoLlegar:
+      "Desde Ituzaingó norte o sur se baja hacia Morón y de ahí a La Matanza: son unos veinticinco minutos aproximadamente. Si salís por el Acceso Oeste, el tránsito de la hora pico cambia bastante el tiempo, así que conviene consultar Google Maps antes de salir.",
+    intro:
+      "Ituzaingó es uno de los partidos del oeste con más gente que viaja todos los días a Capital: el Acceso Oeste y el Camino del Buen Ayre le dan a los autos kilómetros de autopista y mucha frenada. Los neumáticos se gastan distinto a un uso urbano chico.",
+    porQue:
+      "Con ese uso conviene mirar no solo el precio sino el índice de velocidad y la carga del neumático. En el local te ayudamos a elegir según cómo manejás y cuántos kilómetros hacés por semana, y comparás contra lo que te cotizaron en tu zona.",
+    incluye: ["Ituzaingó Norte", "Ituzaingó Sur", "Villa Udaondo", "Parque Leloir"],
+  },
+  {
+    slug: "merlo",
+    name: "Merlo",
+    province: "Buenos Aires",
+    branchId: "san-justo",
+    minutosHastaSucursal: 25,
+    comoLlegar:
+      "Merlo limita con La Matanza por el sur. Desde Merlo centro, Parque San Martín o Libertad se llega a San Justo en unos veinticinco minutos aproximadamente. Según el horario, el tránsito en las avenidas principales puede sumar bastante.",
+    intro:
+      "Merlo es un partido grande y con mucha población en barrios que dependen del auto: Libertad, San Antonio de Padua, Pontevedra, Mariano Acosta. Para esa zona, tener un outlet de neumáticos a mano en La Matanza ahorra cruzar a Morón o a Capital.",
+    porQue:
+      "Cuando el auto es herramienta de trabajo, el precio del neumático pesa en el presupuesto del mes. Vale la pena comparar: en San Justo vendemos importación directa y en la web ves el precio de cada medida antes de ir. Si tenés una cotización de tu gomería, traela y compará.",
+    incluye: ["Libertad", "San Antonio de Padua", "Pontevedra", "Mariano Acosta", "Parque San Martín"],
+  },
+  {
+    slug: "san-martin",
+    name: "San Martín",
+    province: "Buenos Aires",
+    branchId: "san-justo",
+    minutosHastaSucursal: 30,
+    comoLlegar:
+      "Desde San Martín, Villa Ballester o José León Suárez se llega por la General Paz o por las avenidas que bajan hacia La Matanza; son unos treinta minutos aproximadamente, y en hora pico bastante más. Conviene verificar en Google Maps antes de salir.",
+    intro:
+      "San Martín es el partido más industrial del norte del conurbano, con mucha gente que maneja a diario para trabajar y no pocos autos de uso comercial. Es una zona con muchas gomerías, pero no tanta oferta de neumáticos importados a precio de outlet.",
+    porQue:
+      "San Justo no es el local más cercano de San Martín, y es una verdad: te queda a una media hora larga. Lo que lo justifica es el precio, sobre todo si vas a cambiar el juego completo o cubrir más de un vehículo. Mirá tu medida en la web y calculá si la diferencia compensa el viaje.",
+    incluye: ["Villa Ballester", "José León Suárez", "Billinghurst", "Villa Lynch", "Santos Lugares", "Loma Hermosa"],
+  },
+  {
+    slug: "esteban-echeverria",
+    name: "Esteban Echeverría",
+    province: "Buenos Aires",
+    branchId: "san-justo",
+    minutosHastaSucursal: 25,
+    comoLlegar:
+      "Esteban Echeverría limita con La Matanza hacia el sureste. Desde Monte Grande, Luis Guillón o El Jagüel se llega a San Justo en unos veinticinco minutos aproximadamente, según el tránsito. Google Maps arma el trayecto más rápido en el momento.",
+    intro:
+      "Esteban Echeverría reúne Monte Grande, Luis Guillón, El Jagüel y 9 de Abril, con mucha gente que depende del auto para llegar a Capital o al resto del conurbano. Es una zona sur que tiene a La Matanza como vecino directo.",
+    porQue:
+      "Si venís de Monte Grande o Luis Guillón, cruzar a San Justo es un viaje corto, y para un cambio de cuatro neumáticos puede ser más conveniente que ir a Capital. Sumá la medida en la web, fijate el precio y comparalo con lo que te cotizan donde sueles ir.",
+    incluye: ["Monte Grande", "Luis Guillón", "El Jagüel", "9 de Abril", "Canning"],
+  },
+  {
+    slug: "ezeiza",
+    name: "Ezeiza",
+    province: "Buenos Aires",
+    branchId: "san-justo",
+    minutosHastaSucursal: 30,
+    comoLlegar:
+      "Desde Ezeiza o Tristán Suárez se llega a La Matanza en unos treinta minutos aproximadamente. La Autopista Ricchieri y las rutas de la zona sirven de referencia, pero el recorrido más rápido depende del momento: usá Google Maps antes de salir.",
+    intro:
+      "Ezeiza combina barrios cerrados, zonas rurales y la autopista de acceso al aeropuerto. Quien vive ahí suele hacer bastantes kilómetros por semana, y el neumático es un gasto que se repite más seguido que en uso urbano.",
+    porQue:
+      "Con ese uso conviene comparar bien el precio por juego completo. Desde Ezeiza y Tristán Suárez, San Justo queda a media hora aproximadamente, y para cambiar las cuatro cubiertas la diferencia de precio puede justificar el viaje. Mirá tu medida en la web antes de salir.",
+    incluye: ["Tristán Suárez", "Canning", "La Unión", "Carlos Spegazzini"],
+  },
+  {
+    slug: "capital-federal",
+    name: "Capital Federal",
+    province: "Ciudad Autónoma de Buenos Aires",
+    branchId: "san-justo",
+    minutosHastaSucursal: 30,
+    comoLlegar:
+      "Desde los barrios del oeste y sur de la Ciudad (Liniers, Mataderos, Villa Luro, Parque Avellaneda) se llega a La Matanza por la General Paz o por la Ruta 3 en unos treinta minutos aproximadamente, según el tránsito. Google Maps te marca el recorrido desde tu barrio.",
+    intro:
+      "Muchos vecinos de la Ciudad cruzan la General Paz para comprar neumáticos: los precios de los comercios de Capital incluyen alquileres caros, y el neumático termina costando más. San Justo queda del otro lado de la avenida.",
+    porQue:
+      "Si vivís en el oeste o sur de la Ciudad, salir por la General Paz hacia La Matanza es un trayecto corto. Para un cambio de cuatro neumáticos, la diferencia entre el precio de Capital y el de un outlet de importación directa justifica el viaje. Mirá tu medida en la web, compará, y decidí.",
+    incluye: ["Liniers", "Mataderos", "Villa Luro", "Parque Avellaneda", "Villa Lugano", "Floresta"],
+  },
 ];
 
 export function getLocalidad(slug: string): Localidad | undefined {

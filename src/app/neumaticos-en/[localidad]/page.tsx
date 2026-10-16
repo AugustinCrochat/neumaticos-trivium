@@ -45,6 +45,11 @@ export function generateStaticParams() {
 function tituloLocal(localidad: Localidad): string {
   // "Baratos" es el modificador de precio con más volumen de búsqueda junto a
   // "neumáticos", y no aparecía en ningún título de esta serie de landings.
+  if (getBranchForLocalidad(localidad).provisorio) {
+    return localidad.esCabecera
+      ? `Neumáticos baratos en ${localidad.name} — outlet de importación directa`
+      : `Neumáticos baratos en ${localidad.name} — precios de outlet, local en San Justo`;
+  }
   return localidad.esCabecera
     ? `Neumáticos baratos en ${localidad.name} — outlet con stock y local propio`
     : `Neumáticos baratos en ${localidad.name} — precios de outlet a ${localidad.minutosHastaSucursal} min`;
@@ -57,10 +62,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const branch = getBranchForLocalidad(localidad);
   const title = tituloLocal(localidad);
-  const description =
-    `Comprá neumáticos baratos en ${localidad.name}, ${localidad.province}, a precio de importación directa. ` +
-    `Cubiertas con stock real, colocación sin cargo y gomería con taller de alineación y balanceo en ${branch.address}, a ` +
-    `${localidad.minutosHastaSucursal} minutos de ${localidad.name}.`;
+  const description = branch.provisorio
+    ? `Neumáticos baratos para ${localidad.name} a precio de importación directa. ` +
+      `Mirá medidas y precios en la web y pasá por nuestro local de ${branch.address}, ${branch.city}.`
+    : `Comprá neumáticos baratos en ${localidad.name}, ${localidad.province}, a precio de importación directa. ` +
+      `Cubiertas con stock real, colocación sin cargo y gomería con taller de alineación y balanceo en ${branch.address}, a ` +
+      `${localidad.minutosHastaSucursal} minutos de ${localidad.name}.`;
 
   return {
     title,
@@ -75,6 +82,29 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 function buildFaqs(localidad: Localidad, branch: ReturnType<typeof getBranchForLocalidad>): Faq[] {
+  // Sucursal con datos sin confirmar: solo lo que es cierto para cualquier
+  // local de Trivium (importación directa, garantía) y la ubicación real.
+  if (branch.provisorio) {
+    return [
+      {
+        question: `¿Dónde comprar neumáticos baratos en ${localidad.name}?`,
+        answer:
+          `Trivium tiene un local en ${branch.address}, ${branch.city}, a unos ${localidad.minutosHastaSucursal} minutos aproximados de ${localidad.name}. ` +
+          `Vendemos neumáticos de importación directa, así que el precio no lleva el margen de un distribuidor intermedio. En la web ves las medidas y los precios antes de ir.`,
+      },
+      {
+        question: `¿Vale la pena viajar desde ${localidad.name} para comprar neumáticos?`,
+        answer:
+          `Depende de cuántos cambies. En un juego de cuatro neumáticos la diferencia de precio entre un outlet de importación directa y una gomería de barrio se multiplica por cuatro, y suele superar el costo del viaje. ` +
+          `Mirá tu medida en la web, pedí una cotización en tu zona y compará.`,
+      },
+      {
+        question: `¿Los neumáticos importados tienen garantía?`,
+        answer:
+          `Sí. Todo lo que vendemos cumple con las homologaciones vigentes, viene con los índices de carga y velocidad marcados en el flanco y tiene un año de garantía por defecto de fabricación.`,
+      },
+    ];
+  }
   return [
     {
       question: `¿Dónde comprar neumáticos baratos en ${localidad.name}?`,
@@ -148,12 +178,14 @@ export default async function LocalidadPage({ params }: Props) {
         <p className="mt-4 max-w-3xl leading-relaxed text-slate-600">{localidad.porQue}</p>
 
         <div className="mt-6 flex flex-wrap gap-3">
-          <WhatsAppLink
-            href={waLink}
-            className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#25d366] px-6 text-sm font-black text-white transition-transform active:scale-[0.98]"
-          >
-            Consultar por WhatsApp
-          </WhatsAppLink>
+          {!branch.provisorio && (
+            <WhatsAppLink
+              href={waLink}
+              className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#25d366] px-6 text-sm font-black text-white transition-transform active:scale-[0.98]"
+            >
+              Consultar por WhatsApp
+            </WhatsAppLink>
+          )}
           <Link
             href={`/sucursales/${branch.id}`}
             className="inline-flex min-h-12 items-center justify-center rounded-xl bg-black px-6 text-sm font-black text-white transition-transform active:scale-[0.98]"
@@ -183,21 +215,25 @@ export default async function LocalidadPage({ params }: Props) {
                 {branch.postalCode && `, ${branch.postalCode}`}
               </dd>
             </div>
-            <div>
-              <dt className="font-black uppercase tracking-widest text-slate-400">Horario</dt>
-              <dd className="mt-0.5 text-slate-700">{branch.hours}</dd>
-            </div>
-            <div>
-              <dt className="font-black uppercase tracking-widest text-slate-400">Teléfono</dt>
-              <dd className="mt-0.5">
-                <a
-                  href={`tel:${branch.phone.replace(/[^\d+]/g, "")}`}
-                  className="font-bold text-navy-700 underline underline-offset-2"
-                >
-                  {branch.phone}
-                </a>
-              </dd>
-            </div>
+            {!branch.provisorio && (
+              <>
+                <div>
+                  <dt className="font-black uppercase tracking-widest text-slate-400">Horario</dt>
+                  <dd className="mt-0.5 text-slate-700">{branch.hours}</dd>
+                </div>
+                <div>
+                  <dt className="font-black uppercase tracking-widest text-slate-400">Teléfono</dt>
+                  <dd className="mt-0.5">
+                    <a
+                      href={`tel:${branch.phone.replace(/[^\d+]/g, "")}`}
+                      className="font-bold text-navy-700 underline underline-offset-2"
+                    >
+                      {branch.phone}
+                    </a>
+                  </dd>
+                </div>
+              </>
+            )}
             <div>
               <dt className="font-black uppercase tracking-widest text-slate-400">
                 Distancia desde {localidad.name}
@@ -222,7 +258,8 @@ export default async function LocalidadPage({ params }: Props) {
         </div>
       </section>
 
-      {/* Servicios */}
+      {/* Servicios: solo con taller confirmado */}
+      {!branch.provisorio && (
       <section className="mb-12">
         <h2 className="mb-2 text-2xl font-black text-navy-900">
           Gomería y taller para clientes de {localidad.name}
@@ -244,6 +281,7 @@ export default async function LocalidadPage({ params }: Props) {
           ))}
         </div>
       </section>
+      )}
 
       {/* Medidas más pedidas — enlaza el cluster nacional desde el local */}
       <section className="mb-12">
