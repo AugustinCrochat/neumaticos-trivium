@@ -38,6 +38,8 @@ export type TireProduct = {
   enStock?: boolean;
   /** Cantidad disponible en la sucursal. */
   stock?: number;
+  /** Unidades vendidas en los últimos 180 días en la sucursal (ranking de popularidad). */
+  vendidos?: number;
   /** Ej: "91". Extraído del nombre cargado en el POS, no siempre está presente. En un neumático de carga con dos índices (ej. "90/88"), este es el simple (el más alto). */
   loadIndex?: string;
   /** Índice de carga en rodado dual (el más bajo de los dos), sólo presente en neumáticos de carga cuyo nombre trae el par "90/88". */

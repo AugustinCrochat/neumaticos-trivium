@@ -51,6 +51,7 @@ type PosProducto = {
   imagen_url: string | null;
   en_stock: boolean;
   stock?: number;
+  vendidos?: number;
 };
 
 export type ServicioPrecio = {
@@ -255,6 +256,7 @@ function toTireProduct(p: PosProducto): TireProduct | null {
     isAT: p.es_at,
     slug,
     enStock: p.en_stock,
+    vendidos: p.vendidos ?? 0,
     stock: p.stock,
     loadIndex,
     loadIndexDual,

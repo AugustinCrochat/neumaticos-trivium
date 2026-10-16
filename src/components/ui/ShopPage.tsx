@@ -360,6 +360,11 @@ function FilterBar({
   );
 }
 
+// Catálogo sin medida: lo más vendido arriba (últimos 180 días en la sucursal),
+// y a igualdad de ventas el más barato. Sin esto el orden era el del UUID.
+const porPopularidad = (a: TireProduct, b: TireProduct) =>
+  (b.vendidos ?? 0) - (a.vendidos ?? 0) || getUnitPrice(a) - getUnitPrice(b);
+
 export function ShopPage({
   showCatalogTitle = false,
   products,
@@ -412,7 +417,7 @@ export function ShopPage({
       // encontrables buscando por medida o entrando por marca (ver
       // isExactMatch/isCompatibleSize más abajo y /marcas/[slug], que no
       // filtran por stock).
-      return { exactResults: [], compatibleResults: [], allProducts: products.filter(ok).filter((p) => p.enStock) };
+      return { exactResults: [], compatibleResults: [], allProducts: products.filter(ok).filter((p) => p.enStock).sort(porPopularidad) };
     }
 
     // Los resultados exactos se recortan a 5 más abajo, así que el stock
