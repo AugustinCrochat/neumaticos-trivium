@@ -4,8 +4,10 @@ import { createContext, useContext, useEffect, useMemo, useState, type ReactNode
 import type { Accessory, TireProduct } from "@/lib/types";
 import { FREE_SHIPPING_THRESHOLD, SHIPPING_FLAT_RATE } from "@/lib/config";
 
-export type TireCartItem = Pick<TireProduct, "id" | "brand" | "model" | "size" | "price" | "imageUrl" | "slug"> & {
+export type TireCartItem = Pick<TireProduct, "id" | "brand" | "model" | "price" | "imageUrl" | "slug"> & {
   kind: "tire";
+  /** Opcional: los ítems que vienen del cotizador (búsqueda liviana) no traen la medida. */
+  size?: TireProduct["size"];
   quantity: number;
 };
 
@@ -51,6 +53,8 @@ type CartContextType = {
   deliveryMethod: DeliveryMethod;
   shippingAddress: ShippingAddress | null;
   addTire: (product: TireProduct, quantity: number) => void;
+  /** Para el cotizador, que arma el ítem desde la búsqueda y no tiene el TireProduct entero. */
+  addTireLine: (line: Pick<TireProduct, "id" | "brand" | "model" | "price" | "imageUrl" | "slug">, quantity: number) => void;
   addService: (service: { id: string; nombre: string; price: number }, quantity: number) => void;
   addAccessory: (accessory: Accessory, quantity: number) => void;
   updateQuantity: (key: string, quantity: number) => void;
@@ -140,6 +144,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
       addTire: (product, quantity) => {
         const { id, brand, model, size, price, imageUrl, slug } = product;
         upsert({ kind: "tire", id, brand, model, size, price, imageUrl, slug, quantity: Math.min(quantity, 8) });
+      },
+      addTireLine: (line, quantity) => {
+        const { id, brand, model, price, imageUrl, slug } = line;
+        upsert({ kind: "tire", id, brand, model, price, imageUrl, slug, quantity: Math.min(quantity, 8) });
       },
       addService: (service, quantity) => {
         upsert({ kind: "service", id: service.id, nombre: service.nombre, price: service.price, quantity: Math.min(quantity, 8) });

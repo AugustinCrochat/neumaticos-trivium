@@ -265,7 +265,7 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
         <CotizadorClient
           ref={cotizadorRef}
           compact
-          initialProduct={{ id: product.id, label: `${product.brand} ${product.model}`, price, imageUrl: product.imageUrl }}
+          initialProduct={{ id: product.id, label: `${product.brand} ${product.model}`, price, imageUrl: product.imageUrl, brand: product.brand, model: product.model, slug: product.slug }}
         />
       </div>
     </div>

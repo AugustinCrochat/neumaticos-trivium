@@ -2,6 +2,7 @@
 
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import Image from "next/image";
+import { useCart } from "@/contexts/cart-context";
 import { useBranch } from "@/contexts/branch-context";
 import { useUpsellCombo } from "@/hooks/use-upsell-combo";
 import { AlineacionBalanceoIcon } from "@/components/ui/AlineacionBalanceoIcon";
@@ -12,7 +13,16 @@ function formatPrice(price: number) {
   return new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 }).format(price);
 }
 
-export type QuoteProduct = { id: string; label: string; price: number; imageUrl: string | null };
+export type QuoteProduct = {
+  id: string;
+  label: string;
+  price: number;
+  imageUrl: string | null;
+  /** Para armar el ítem del carrito; sin estos no se ofrece "Comprar". */
+  brand?: string;
+  model?: string;
+  slug?: string;
+};
 type QuoteItem = { product: QuoteProduct; quantity: number };
 
 type SearchApiResult = {
@@ -47,6 +57,7 @@ export type CotizadorHandle = {
 export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: QuoteProduct; compact?: boolean }>(
   function CotizadorClient({ initialProduct, compact = false }, ref) {
   const { selectedBranch } = useBranch();
+  const { addTireLine, addService, openCart } = useCart();
   // En Córdoba (Argüello) se dice "alineado y balanceado"; "alineación y
   // balanceo" es como se lo llama en Buenos Aires. El nombre del servicio en
   // el POS (combo.nombre) queda fijo con una sola forma, así que la variante
@@ -90,7 +101,7 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
           if (cancelado || !data?.results) return;
           const productos: QuoteProduct[] = data.results
             .filter((r) => r.type === "tire" && r.enStock)
-            .map((r) => ({ id: r.id, label: `${r.subtitle} ${r.title}`, price: r.price, imageUrl: r.imageUrl }));
+            .map((r) => ({ id: r.id, label: `${r.subtitle} ${r.title}`, price: r.price, imageUrl: r.imageUrl, brand: r.subtitle, model: r.title, slug: r.slug }));
           setResults(productos);
         })
         .catch(() => {});
@@ -127,6 +138,18 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
   const total = itemsTotal + comboTotal;
   const hasItems = items.length > 0;
   const canAddCombo = hasItems && !!combo;
+
+  // Pasa el presupuesto al carrito (cantidades incluidas) y abre el pago. El
+  // precio que se cobra lo vuelve a leer /api/checkout del POS, no de acá.
+  function buyOnline() {
+    for (const it of items) {
+      const { brand, model, slug } = it.product;
+      if (!brand || !model || !slug) continue;
+      addTireLine({ id: it.product.id, brand, model, slug, price: it.product.price, imageUrl: it.product.imageUrl ?? "" }, it.quantity);
+    }
+    if (includeCombo && combo) addService({ id: combo.id, nombre: combo.nombre, price: combo.precio }, 1);
+    openCart();
+  }
 
   function shareByWhatsApp() {
     const lineas = items.map(
@@ -308,6 +331,7 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
           basePrice={total}
           notaPrecio={`Precio con IVA incluido, retirando en ${selectedBranch.shortName}. No incluye envío.`}
           onShare={shareByWhatsApp}
+          onBuy={items.every((it) => it.product.slug) ? buyOnline : undefined}
         />
       )}
       </>
