@@ -1,4 +1,4 @@
-import { getProductosDesdePOS, getAccesoriosDesdePOS } from "@/lib/pos-api";
+import { getProductosDesdePOS, getAccesoriosDesdePOS, esRodadoCamion } from "@/lib/pos-api";
 import { SITE_URL, SHIPPING_FLAT_RATE, FREE_SHIPPING_THRESHOLD } from "@/lib/config";
 import { buildTireDescription } from "@/lib/tire-sizes";
 import { getExtraPhotos } from "@/lib/product-extra-photos";
@@ -74,6 +74,9 @@ function additionalImageLinks(urls: string[]): string {
 // corresponde a un A/T de camioneta. 2556 = Piezas para ruedas de vehículos
 // motorizados (donde caen las tuercas de rueda).
 const CATEGORIA_NEUMATICOS = 6093;
+// 911 = Neumáticos para vehículos motorizados (la categoría general, sin
+// subcategoría de camión en la taxonomía): para rodados de camión (17.5+).
+const CATEGORIA_NEUMATICOS_CAMION = 911;
 const CATEGORIA_TUERCAS = 2556;
 
 function tipoNeumatico(p: TireProduct): string {
@@ -100,7 +103,7 @@ function tireItem(p: TireProduct): string {
       <g:price>${p.price.toFixed(2)} ARS</g:price>
       <g:brand>${cdata(p.brand)}</g:brand>
       <g:identifier_exists>no</g:identifier_exists>
-      <g:google_product_category>${CATEGORIA_NEUMATICOS}</g:google_product_category>
+      <g:google_product_category>${esRodadoCamion(p.size.rim) ? CATEGORIA_NEUMATICOS_CAMION : CATEGORIA_NEUMATICOS}</g:google_product_category>
       <g:product_type>${cdata(`Neumáticos > ${tipoNeumatico(p)} > Rodado ${p.size.rim} > ${p.brand}`)}</g:product_type>${shippingBlock(p.price)}
     </item>`;
 }

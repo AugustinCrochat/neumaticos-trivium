@@ -187,7 +187,10 @@ export function buildTireDescription(product: {
   loadIndexDual?: string;
   speedRating?: string;
 }): string {
-  const tipo = vehicleTypeLabel(product.vehicleType);
+  // Rodado 17.5 o más: neumático de camión chico/mediano (ver esRodadoCamion en
+  // pos-api.ts), no de auto ni camioneta — el POS igual lo carga con
+  // vehicleType ["auto","camioneta"], así que se decide por el rodado.
+  const tipo = product.size.rim >= 17.5 ? "camiones chicos y medianos" : vehicleTypeLabel(product.vehicleType);
   const loadKg = product.loadIndex ? LOAD_INDEX_KG[product.loadIndex] : undefined;
   const loadDualKg = product.loadIndexDual ? LOAD_INDEX_KG[product.loadIndexDual] : undefined;
   const speedKmh = product.speedRating ? SPEED_RATING_KMH[product.speedRating] : undefined;
