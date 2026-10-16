@@ -1,5 +1,6 @@
 declare global {
   interface Window {
+    gtag?: (...args: unknown[]) => void;
     /** Definida por el script de Google Ads en GoogleAdsTag (ver layout raíz).
         Puede no estar todavía si el script tardó en cargar. */
     gtag_report_conversion?: (url?: string) => boolean;
@@ -19,9 +20,16 @@ declare global {
  */
 export function goToWhatsApp(url: string) {
   if (typeof window === "undefined") return;
+  trackEvent("click_whatsapp", { link_url: url });
   if (window.gtag_report_conversion) {
     window.gtag_report_conversion(url);
   } else {
     window.open(url, "_blank", "noopener,noreferrer");
   }
+}
+
+/** Evento de GA4. No hace nada si gtag todavía no cargó. */
+export function trackEvent(name: string, params: Record<string, unknown> = {}) {
+  if (typeof window === "undefined" || typeof window.gtag !== "function") return;
+  window.gtag("event", name, { page_path: window.location.pathname, ...params });
 }

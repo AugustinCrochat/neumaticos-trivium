@@ -1,6 +1,8 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
+import { trackEvent } from "@/lib/gtag";
 import { useBranch } from "@/contexts/branch-context";
 import { useCart } from "@/contexts/cart-context";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
@@ -11,6 +13,22 @@ export function PaymentResult({ status }: { status?: string }) {
   const approved = status === "aprobado";
   const pending = status === "pendiente";
   const isShipping = deliveryMethod === "shipping";
+  // Compra aprobada para GA4. El carrito todavía está lleno (se vacía recién
+  // al coordinar por WhatsApp); sessionStorage evita contarla dos veces si se
+  // recarga la página.
+  useEffect(() => {
+    if (!approved || items.length === 0) return;
+    try {
+      if (sessionStorage.getItem("ga4-purchase-sent")) return;
+      sessionStorage.setItem("ga4-purchase-sent", "1");
+    } catch {}
+    trackEvent("purchase", {
+      currency: "ARS",
+      value: total,
+      items: items.map((it) => ({ item_id: it.id, item_name: it.kind === "tire" ? it.model : it.nombre, price: it.price, quantity: it.quantity })),
+    });
+  }, [approved, items, total]);
+
   const title = approved ? "¡Pago recibido!" : pending ? "Tu pago está pendiente" : "No se completó el pago";
   const message = approved
     ? isShipping

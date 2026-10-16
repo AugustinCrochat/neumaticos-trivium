@@ -7,7 +7,7 @@ import { useBranch } from "@/contexts/branch-context";
 import { useUpsellCombo } from "@/hooks/use-upsell-combo";
 import { AlineacionBalanceoIcon } from "@/components/ui/AlineacionBalanceoIcon";
 import { InstallmentCalculator } from "@/components/ui/InstallmentCalculator";
-import { goToWhatsApp } from "@/lib/gtag";
+import { goToWhatsApp, trackEvent } from "@/lib/gtag";
 
 function formatPrice(price: number) {
   return new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 }).format(price);
@@ -148,6 +148,7 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
       addTireLine({ id: it.product.id, brand, model, slug, price: it.product.price, imageUrl: it.product.imageUrl ?? "" }, it.quantity);
     }
     if (includeCombo && combo) addService({ id: combo.id, nombre: combo.nombre, price: combo.precio }, 1);
+    trackEvent("begin_checkout", { currency: "ARS", value: total });
     openCart();
   }
 
