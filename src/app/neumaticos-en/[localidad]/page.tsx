@@ -178,14 +178,12 @@ export default async function LocalidadPage({ params }: Props) {
         <p className="mt-4 max-w-3xl leading-relaxed text-slate-600">{localidad.porQue}</p>
 
         <div className="mt-6 flex flex-wrap gap-3">
-          {!branch.provisorio && (
-            <WhatsAppLink
-              href={waLink}
-              className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#25d366] px-6 text-sm font-black text-white transition-transform active:scale-[0.98]"
-            >
-              Consultar por WhatsApp
-            </WhatsAppLink>
-          )}
+          <WhatsAppLink
+            href={waLink}
+            className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#25d366] px-6 text-sm font-black text-white transition-transform active:scale-[0.98]"
+          >
+            Consultar por WhatsApp
+          </WhatsAppLink>
           <Link
             href={`/sucursales/${branch.id}`}
             className="inline-flex min-h-12 items-center justify-center rounded-xl bg-black px-6 text-sm font-black text-white transition-transform active:scale-[0.98]"
@@ -216,24 +214,22 @@ export default async function LocalidadPage({ params }: Props) {
               </dd>
             </div>
             {!branch.provisorio && (
-              <>
-                <div>
-                  <dt className="font-black uppercase tracking-widest text-slate-400">Horario</dt>
-                  <dd className="mt-0.5 text-slate-700">{branch.hours}</dd>
-                </div>
-                <div>
-                  <dt className="font-black uppercase tracking-widest text-slate-400">Teléfono</dt>
-                  <dd className="mt-0.5">
-                    <a
-                      href={`tel:${branch.phone.replace(/[^\d+]/g, "")}`}
-                      className="font-bold text-navy-700 underline underline-offset-2"
-                    >
-                      {branch.phone}
-                    </a>
-                  </dd>
-                </div>
-              </>
+              <div>
+                <dt className="font-black uppercase tracking-widest text-slate-400">Horario</dt>
+                <dd className="mt-0.5 text-slate-700">{branch.hours}</dd>
+              </div>
             )}
+            <div>
+              <dt className="font-black uppercase tracking-widest text-slate-400">Teléfono</dt>
+              <dd className="mt-0.5">
+                <a
+                  href={`tel:${branch.phone.replace(/[^\d+]/g, "")}`}
+                  className="font-bold text-navy-700 underline underline-offset-2"
+                >
+                  {branch.phone}
+                </a>
+              </dd>
+            </div>
             <div>
               <dt className="font-black uppercase tracking-widest text-slate-400">
                 Distancia desde {localidad.name}

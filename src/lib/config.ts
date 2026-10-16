@@ -67,9 +67,9 @@ export type Branch = {
       y las páginas de /neumaticos-en. Los nombres tienen que coincidir con el
       `name` de las entradas de localidades.ts. */
   areaServed: string[];
-  /** true mientras el teléfono, el WhatsApp, el horario o los servicios de la
-      sucursal no estén confirmados. Las landings locales (/neumaticos-en) no
-      muestran esos datos ni prometen taller, stock u orden de llegada hasta
+  /** true mientras el horario o los servicios (taller, stock, orden de
+      llegada) de la sucursal no estén confirmados. Las landings locales
+      (/neumaticos-en) no muestran el horario ni prometen esos servicios hasta
       que se saque. */
   provisorio?: boolean;
   phone: string;
@@ -183,12 +183,13 @@ export const BRANCHES: Branch[] = [
       "Ezeiza",
       "Capital Federal",
     ],
-    // PROVISORIO: mismo WhatsApp y horario que Argüello hasta tener los de San
-    // Justo. Pendiente de googleStoreCode, mapUrl, reviewUrl y
-    // googleMapsEmbedUrl (salen del perfil de Google Business, que todavía no
-    // existe); sin googleStoreCode queda fuera del feed de inventario local.
-    phone: "+54 9 3517 57-0422",
-    whatsapp: "5493517570422",
+    // WhatsApp/teléfono: número personal de Augustin, provisorio hasta tener el
+    // de la sucursal. El horario sigue siendo el de Argüello (sin confirmar).
+    // Pendiente de googleStoreCode, reviewUrl y googleMapsEmbedUrl (salen del
+    // perfil de Google Business); sin googleStoreCode queda fuera del feed de
+    // inventario local.
+    phone: "+54 9 11 4037-0322",
+    whatsapp: "5491140370322",
     hours: "Lun–Sáb 9–19h (de corrido)",
     schedule: [{ days: [1, 2, 3, 4, 5, 6], open: "09:00", close: "19:00" }],
     mapUrl: "https://www.google.com/maps/search/?api=1&query=-34.6736285,-58.5606326",
