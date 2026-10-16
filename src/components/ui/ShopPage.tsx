@@ -24,11 +24,15 @@ function BrandDropdown({
   value,
   onChange,
   className = "",
+  availableBrandIds,
 }: {
   value: string;
   onChange: (v: string) => void;
   className?: string;
+  /** Marcas con al menos un producto para mostrar; la elegida se conserva siempre. */
+  availableBrandIds: Set<string>;
 }) {
+  const brands = BRANDS.filter((b) => availableBrandIds.has(b.id) || b.id === value);
   const [isOpen, setIsOpen] = useState(false);
   const selectedBrand = BRANDS.find((b) => b.id === value);
 
@@ -87,7 +91,7 @@ function BrandDropdown({
               Todas las marcas
             </button>
             <div className="max-h-[300px] overflow-y-auto">
-              {BRANDS.map((b) => (
+              {brands.map((b) => (
                 <button
                   key={b.id}
                   onClick={() => {
@@ -232,6 +236,7 @@ function getUnitPrice(product: TireProduct) {
 
 function FilterBar({
   brandFilter, setBrandFilter,
+  availableBrandIds,
   maxPrice, setMaxPrice,
   onlyEconomic, setOnlyEconomic,
   onlyCarga, setOnlyCarga,
@@ -239,6 +244,7 @@ function FilterBar({
   hasActiveFilters, clearFilters,
   layout,
 }: {
+  availableBrandIds: Set<string>;
   brandFilter: string;
   setBrandFilter: (v: string) => void;
   maxPrice: number;
@@ -259,6 +265,7 @@ function FilterBar({
         <BrandDropdown
           value={brandFilter}
           onChange={setBrandFilter}
+          availableBrandIds={availableBrandIds}
           className="w-56"
         />
         
@@ -313,7 +320,7 @@ function FilterBar({
     <div className="bg-white rounded-2xl border border-slate-100 p-6 space-y-8 shadow-sm">
       <div>
         <p className="text-xs font-black text-slate-400 uppercase tracking-[0.15em] mb-4">Marca</p>
-        <BrandDropdown value={brandFilter} onChange={setBrandFilter} className="w-full" />
+        <BrandDropdown value={brandFilter} onChange={setBrandFilter} availableBrandIds={availableBrandIds} className="w-full" />
       </div>
 
       <div>
@@ -462,8 +469,20 @@ export function ShopPage({
     }
   };
 
+  // Solo marcas con productos para mostrar: con medida, los que coinciden
+  // con esa medida (exactos o compatibles); sin medida, los que están en stock
+  // (lo único que lista el catálogo). Ignora los otros filtros a propósito
+  // para que el desplegable no cambie mientras se tocan.
+  const availableBrandIds = useMemo(() => {
+    const visibles = parsed
+      ? products.filter((p) => isExactMatch(p, parsed) || isCompatibleSize(p, parsed))
+      : products.filter((p) => p.enStock);
+    return new Set(visibles.map((p) => p.brandId));
+  }, [parsed, products]);
+
   const filterProps = {
     brandFilter, setBrandFilter,
+    availableBrandIds,
     maxPrice, setMaxPrice,
     onlyEconomic, setOnlyEconomic,
     onlyCarga, setOnlyCarga,
