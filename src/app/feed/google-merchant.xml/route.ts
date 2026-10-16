@@ -1,5 +1,5 @@
 import { getProductosDesdePOS, getAccesoriosDesdePOS } from "@/lib/pos-api";
-import { SITE_URL, SHIPPING_FLAT_RATE } from "@/lib/config";
+import { SITE_URL, SHIPPING_FLAT_RATE, FREE_SHIPPING_THRESHOLD } from "@/lib/config";
 import { buildTireDescription } from "@/lib/tire-sizes";
 import { getExtraPhotos } from "@/lib/product-extra-photos";
 import { getTireLabel } from "@/lib/tire-labels";
@@ -8,12 +8,19 @@ import type { TireProduct, Accessory } from "@/lib/types";
 // Tarifa unica a todo el pais (alternativa al retiro gratis en sucursal, que
 // para Merchant Center simplemente no se declara como shipping — es gratis
 // por definicion al no cobrar envio).
-const SHIPPING_BLOCK = `
+// Envío gratis desde FREE_SHIPPING_THRESHOLD, igual que en el carrito del
+// sitio: el feed no tiene un atributo de umbral, así que se declara por ítem
+// (los que llegan solos al monto salen con envío 0). El umbral para pedidos
+// de varios ítems se configura aparte en Merchant Center → Envío.
+function shippingBlock(price: number): string {
+  const envio = price >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_FLAT_RATE;
+  return `
       <g:shipping>
         <g:country>AR</g:country>
         <g:service>Standard</g:service>
-        <g:price>${SHIPPING_FLAT_RATE.toFixed(2)} ARS</g:price>
+        <g:price>${envio.toFixed(2)} ARS</g:price>
       </g:shipping>`;
+}
 
 // Feed de productos para Google Merchant Center (scheduled fetch): configurar
 // esta URL una sola vez en Merchant Center y Google la vuelve a leer solo,
@@ -94,7 +101,7 @@ function tireItem(p: TireProduct): string {
       <g:brand>${cdata(p.brand)}</g:brand>
       <g:identifier_exists>no</g:identifier_exists>
       <g:google_product_category>${CATEGORIA_NEUMATICOS}</g:google_product_category>
-      <g:product_type>${cdata(`Neumáticos > ${tipoNeumatico(p)} > Rodado ${p.size.rim} > ${p.brand}`)}</g:product_type>${SHIPPING_BLOCK}
+      <g:product_type>${cdata(`Neumáticos > ${tipoNeumatico(p)} > Rodado ${p.size.rim} > ${p.brand}`)}</g:product_type>${shippingBlock(p.price)}
     </item>`;
 }
 
@@ -117,7 +124,7 @@ function accessoryItem(a: Accessory & { imageUrl: string }): string {
       <g:brand>${cdata("Z3")}</g:brand>
       <g:identifier_exists>no</g:identifier_exists>
       <g:google_product_category>${CATEGORIA_TUERCAS}</g:google_product_category>
-      <g:product_type>${cdata("Accesorios para ruedas > Tuercas antirrobo")}</g:product_type>${SHIPPING_BLOCK}
+      <g:product_type>${cdata("Accesorios para ruedas > Tuercas antirrobo")}</g:product_type>${shippingBlock(a.price)}
     </item>`;
 }
 
