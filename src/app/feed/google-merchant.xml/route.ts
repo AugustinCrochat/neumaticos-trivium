@@ -125,7 +125,9 @@ export async function GET() {
   const [productos, accesorios] = await Promise.all([getProductosDesdePOS(), getAccesoriosDesdePOS()]);
 
   const items = [
-    ...productos.map(tireItem),
+    // Sin foto real la URL del placeholder da 404 y Merchant rechaza el ítem
+    // (y baja el porcentaje de imágenes válidas): mejor no listarlo.
+    ...productos.filter((p) => p.imageUrl && !p.imageUrl.includes("tire-placeholder")).map(tireItem),
     ...accesorios
       .filter((a): a is Accessory & { imageUrl: string } => !!a.imageUrl)
       .map(accessoryItem),
