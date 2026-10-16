@@ -85,6 +85,29 @@ function tipoNeumatico(p: TireProduct): string {
   return "Auto y camioneta";
 }
 
+// Atributos técnicos estructurados (product_detail): son los "datos
+// importantes" que Merchant Center busca además de la descripción.
+function tireDetails(p: TireProduct): string {
+  const { width, profile, rim } = p.size;
+  const rows: [string, string][] = [
+    ["Ancho", `${width} mm`],
+    ["Perfil", `${profile} %`],
+    ["Rodado", `${rim} pulgadas`],
+  ];
+  if (p.loadIndex) rows.push(["Índice de carga", p.loadIndexDual ? `${p.loadIndex}/${p.loadIndexDual}` : p.loadIndex]);
+  if (p.speedRating) rows.push(["Índice de velocidad", p.speedRating]);
+  return rows
+    .map(
+      ([name, value]) => `
+      <g:product_detail>
+        <g:section_name>${cdata("Especificaciones")}</g:section_name>
+        <g:attribute_name>${cdata(name)}</g:attribute_name>
+        <g:attribute_value>${cdata(value)}</g:attribute_value>
+      </g:product_detail>`
+    )
+    .join("");
+}
+
 function tireItem(p: TireProduct): string {
   const link = `${SITE_URL}/productos/${p.slug}`;
   const description = buildTireDescription(p);
@@ -104,7 +127,7 @@ function tireItem(p: TireProduct): string {
       <g:brand>${cdata(p.brand)}</g:brand>
       <g:identifier_exists>no</g:identifier_exists>
       <g:google_product_category>${esRodadoCamion(p.size.rim) ? CATEGORIA_NEUMATICOS_CAMION : CATEGORIA_NEUMATICOS}</g:google_product_category>
-      <g:product_type>${cdata(`Neumáticos > ${tipoNeumatico(p)} > Rodado ${p.size.rim} > ${p.brand}`)}</g:product_type>${shippingBlock(p.price)}
+      <g:product_type>${cdata(`Neumáticos > ${tipoNeumatico(p)} > Rodado ${p.size.rim} > ${p.brand}`)}</g:product_type>${tireDetails(p)}${shippingBlock(p.price)}
     </item>`;
 }
 
