@@ -14,6 +14,7 @@ import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { FaqSection } from "@/components/seo/FaqSection";
 import { MEDIDAS_PRIORITARIAS, formatSize, sizeSlug } from "@/lib/tire-sizes";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
+import { PreselectBranch } from "@/components/ui/PreselectBranch";
 
 /**
  * Landings de SEO local: "neumáticos en Villa Allende", "gomería en Saldán".
@@ -159,6 +160,7 @@ export default async function LocalidadPage({ params }: Props) {
 
   return (
     <div className="mx-auto max-w-7xl 2xl:max-w-[96rem] px-4 py-8">
+      <PreselectBranch branchId={branch.id} />
       <Breadcrumbs
         crumbs={[
           { name: "Inicio", path: "/" },
