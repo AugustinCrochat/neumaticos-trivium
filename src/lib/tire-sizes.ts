@@ -3,7 +3,7 @@ import { VEHICLE_DB, sortVehiclesByPopularity } from "./vehicles";
 
 // Tabla de referencia de índices de velocidad habituales en neumáticos de auto/camioneta.
 export const SPEED_RATING_KMH: Record<string, number> = {
-  Q: 160, R: 170, S: 180, T: 190, U: 200, H: 210, V: 240, W: 270, Y: 300,
+  J: 100, Q: 160, R: 170, S: 180, T: 190, U: 200, H: 210, V: 240, W: 270, Y: 300,
 };
 
 // Tabla ETRTO de índice de carga -> peso máximo por neumático (kg).
@@ -15,7 +15,7 @@ export const LOAD_INDEX_KG: Record<string, number> = {
   "100": 800, "101": 825, "102": 850, "103": 875, "104": 900, "105": 925, "106": 950, "107": 975, "108": 1000, "109": 1030,
   "110": 1060, "111": 1090, "112": 1120, "113": 1150, "114": 1180, "115": 1215, "116": 1250, "117": 1285, "118": 1320, "119": 1360,
   "120": 1400, "121": 1450, "122": 1500, "123": 1550, "124": 1600, "125": 1650, "126": 1700, "127": 1750, "128": 1800, "129": 1850,
-  "130": 1900,
+  "130": 1900, "131": 1950, "132": 2000, "133": 2060, "134": 2120, "135": 2180,
 };
 
 export function vehicleTypeLabel(vehicleType: string[]): string {
