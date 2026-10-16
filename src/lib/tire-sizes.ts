@@ -194,6 +194,16 @@ export function buildTireDescription(product: {
 
   const partes = [`Neumático ${product.model} para ${tipo}, de importación directa.`];
 
+  // Merchant Center pide el tamaño explícito en la descripción: el ancho, el
+  // perfil y el rodado en palabras, y el diámetro exterior aproximado.
+  const { width, profile, rim } = product.size;
+  if (width && profile && rim) {
+    const diametroMm = Math.round(rim * 25.4 + 2 * ((width * profile) / 100));
+    partes.push(
+      `Tamaño: ancho ${width} mm, perfil ${profile} % y rodado ${rim} pulgadas (diámetro exterior aproximado ${diametroMm} mm).`
+    );
+  }
+
   if (loadKg && loadDualKg && speedKmh) {
     partes.push(
       `Índice de carga ${product.loadIndex}/${product.loadIndexDual} (hasta ${loadKg} kg en montaje simple, ${loadDualKg} kg en rodado dual) y velocidad ${product.speedRating} (hasta ${speedKmh} km/h).`
