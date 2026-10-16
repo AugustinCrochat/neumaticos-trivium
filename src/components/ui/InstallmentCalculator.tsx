@@ -202,7 +202,7 @@ export function InstallmentCalculator({
           </dl>
           {notaPrecio && <p className="mt-3 text-xs text-slate-400">{notaPrecio}</p>}
           {(onShare || onBuy) && (
-            <div className="mt-4 grid gap-2 sm:grid-cols-2">
+            <div className="mt-4 flex flex-col gap-2">
               {onBuy && (
                 <button
                   type="button"
