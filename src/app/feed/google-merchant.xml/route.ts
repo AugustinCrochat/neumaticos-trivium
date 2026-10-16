@@ -3,6 +3,7 @@ import { SITE_URL, SHIPPING_FLAT_RATE, FREE_SHIPPING_THRESHOLD } from "@/lib/con
 import { buildTireDescription } from "@/lib/tire-sizes";
 import { getExtraPhotos } from "@/lib/product-extra-photos";
 import { getTireLabel } from "@/lib/tire-labels";
+import { getTreadCloseup } from "@/lib/tread-closeups";
 import type { TireProduct, Accessory } from "@/lib/types";
 
 // Tarifa unica a todo el pais (alternativa al retiro gratis en sucursal, que
@@ -113,7 +114,8 @@ function tireItem(p: TireProduct): string {
   const description = buildTireDescription(p);
   const imageUrl = p.imageUrl.startsWith("/") ? `${SITE_URL}${p.imageUrl}` : p.imageUrl;
   const label = getTireLabel(p.slug);
-  const extraImages = [...getExtraPhotos(p.brandId, p.modeloBase), ...(label ? [label.imagePath] : [])];
+  const tread = getTreadCloseup(p.imageUrl);
+  const extraImages = [...(tread ? [tread] : []), ...getExtraPhotos(p.brandId, p.modeloBase), ...(label ? [label.imagePath] : [])];
   return `
     <item>
       <g:id>${escapeXml(p.id)}</g:id>

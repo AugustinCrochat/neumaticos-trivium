@@ -24,6 +24,7 @@ import { CompatibleAccessorySection } from "@/components/ui/CompatibleAccessoryS
 import { getTireLabel } from "@/lib/tire-labels";
 import { getUtqg } from "@/lib/utqg";
 import { getExtraPhotos } from "@/lib/product-extra-photos";
+import { getTreadCloseup } from "@/lib/tread-closeups";
 import { ProductNameWithHighlightedSize } from "@/components/ui/ProductNameWithHighlightedSize";
 import { ProductImageGallery } from "@/components/ui/ProductImageGallery";
 import { ProductPageClient } from "./ProductPageClient";
@@ -195,7 +196,8 @@ export default async function ProductPage({ params }: Props) {
 
   const tireLabel = getTireLabel(product.slug);
   const utqg = getUtqg(product.brandId, product.modeloBase, product.slug);
-  const extraPhotos = getExtraPhotos(product.brandId, product.modeloBase);
+  const treadCloseup = getTreadCloseup(product.imageUrl);
+  const extraPhotos = [...(treadCloseup ? [treadCloseup] : []), ...getExtraPhotos(product.brandId, product.modeloBase)];
   const brandLogo = getBrandLogo(product.brandId);
   const brand = BRANDS.find((b) => b.id === product.brandId);
   const speedKmh = product.speedRating ? SPEED_RATING_KMH[product.speedRating] : undefined;
