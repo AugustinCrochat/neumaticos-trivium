@@ -39,7 +39,7 @@ export function BlogSection() {
           {BLOG_POSTS.map((post, i) => (
             <article
               key={post.id}
-              className={`group bg-white rounded-2xl overflow-hidden border border-slate-100 hover:border-navy-200 hover:shadow-lg transition-all duration-200 ${
+              className={`group relative bg-white rounded-2xl overflow-hidden border border-slate-100 hover:border-navy-200 hover:shadow-lg transition-all duration-200 ${
                 i === 0 ? "md:col-span-1" : ""
               }`}
             >
@@ -64,7 +64,7 @@ export function BlogSection() {
 
                 <Link
                   href={`/blog/${post.slug}`}
-                  className="inline-flex items-center gap-1.5 text-navy-600 hover:text-navy-800 text-sm font-semibold transition-colors"
+                  className="inline-flex items-center gap-1.5 text-navy-600 hover:text-navy-800 text-sm font-semibold transition-colors after:absolute after:inset-0 after:content-['']"
                 >
                   Leer artículo
                   <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">

@@ -61,7 +61,7 @@ export async function CatalogWidget({ size, loadIndex, speedRating, vehicleProfi
   }
 
   return (
-    <div className="my-10 bg-slate-50 p-6 rounded-2xl border border-slate-100 not-prose">
+    <div className="my-10 bg-slate-50 p-6 rounded-2xl border border-slate-100 not-prose [&_a]:!no-underline">
       {title && <h3 className="text-2xl font-black text-navy-900 mb-6">{title}</h3>}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {displayProducts.map(p => (

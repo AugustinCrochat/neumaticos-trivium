@@ -4,24 +4,42 @@ import { blogMeta } from "@/lib/blog-meta";
 import { BlogCover } from "@/components/blog/BlogCover";
 
 /**
- * Atajos de compra para quien llegó por una duda puntual: links a las
- * categorías relacionadas con la nota. En móvil se desplazan de costado para
- * no empujar el texto hacia abajo.
+ * Atajos de compra para quien llegó por una duda puntual: la sección más
+ * visible de la nota. Botones grandes en grilla de dos columnas (cómodos para
+ * el pulgar en móvil); el primero va relleno de rojo Trivium y es el camino
+ * principal, los demás son secundarios.
  */
 export function BlogShopLinks({ slug }: { slug: string }) {
   const { shopIntro, shopLinks } = blogMeta(slug);
   return (
-    <nav aria-label="Productos relacionados con esta nota" >
-      <p className="mb-2 text-sm font-black text-navy-900">{shopIntro}</p>
-      <ul className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0">
-        {shopLinks.map((l) => (
-          <li key={l.href} className="shrink-0">
+    <nav
+      aria-label="Productos relacionados con esta nota"
+      className="overflow-hidden rounded-2xl bg-gradient-to-br from-navy-950 to-black p-4 shadow-lg sm:p-5"
+    >
+      <p className="mb-1 text-xs font-black uppercase tracking-widest text-orange-400">
+        Mirá en el catálogo
+      </p>
+      <p className="mb-4 text-lg font-black leading-snug text-white">{shopIntro}</p>
+      <ul className="grid grid-cols-2 gap-2.5 sm:grid-cols-3">
+        {shopLinks.map((l, i) => (
+          <li key={l.href} className={i === 0 && shopLinks.length % 2 === 1 ? "col-span-2 sm:col-span-1" : ""}>
             <Link
               href={l.href}
-              className="inline-flex min-h-11 items-center gap-1.5 rounded-full border border-slate-200 bg-white px-4 text-sm font-bold text-navy-900 !text-navy-900 !no-underline shadow-sm transition-colors hover:border-orange-500 hover:!text-orange-600 active:scale-[0.98]"
+              className={`flex min-h-14 items-center justify-between gap-2 rounded-xl px-4 py-3 text-left text-sm font-black leading-tight !no-underline transition-all active:scale-[0.97] ${
+                i === 0
+                  ? "bg-orange-500 !text-white shadow-md shadow-orange-900/30 hover:bg-orange-600"
+                  : "border border-white/15 bg-white/10 !text-white hover:border-orange-400 hover:bg-white/20"
+              }`}
             >
-              {l.label}
-              <span aria-hidden="true">&rarr;</span>
+              <span>{l.label}</span>
+              <span
+                aria-hidden="true"
+                className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-base ${
+                  i === 0 ? "bg-white/25" : "bg-orange-500"
+                }`}
+              >
+                &rarr;
+              </span>
             </Link>
           </li>
         ))}

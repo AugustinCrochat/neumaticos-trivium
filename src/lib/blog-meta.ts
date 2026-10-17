@@ -1,9 +1,9 @@
 /**
  * Imágenes y atajos de compra de cada nota del blog.
  *
- * Todas las fotos son archivos propios del repo (local, taller y bandas de
- * rodamiento de los productos que vendemos); no hay stock fotográfico ni
- * imágenes que dependan de que un producto esté cargado en el POS.
+ * Todas las fotos son del local y el taller de Trivium (archivos propios del
+ * repo); no hay stock fotográfico ni imágenes que dependan de que un producto
+ * esté cargado en el POS.
  *
  * Los links apuntan sólo a rutas que existen y no dependen del stock de hoy
  * (categorías, rodados y marcas), así que una nota vieja no manda a un 404.
@@ -12,7 +12,8 @@
 export type BlogImage = {
   src: string;
   alt: string;
-  /** "contain" para cubiertas recortadas sobre fondo claro; por defecto "cover". */
+  /** Foto vertical: en la nota se muestra angosta y centrada en vez de recortada. */
+  portrait?: boolean;
   fit?: "cover" | "contain";
   /** object-position CSS para encuadrar la foto en formato apaisado. */
   position?: string;
@@ -31,24 +32,28 @@ export type BlogMeta = {
   shopLinks: ShopLink[];
 };
 
-const TALLER = {
+const LOCAL = "/images/local";
+const IMG = {
+  // Fotos del taller y el local (ver public/images/local y public/images/servicios).
   alineacion: "/images/servicios/alineacion.webp",
   balanceo: "/images/servicios/balanceo.webp",
   montaje: "/images/servicios/arme-desarme.webp",
   local: "/images/branches/arguello-fachada.webp",
   geoliner: "/images/blog/geoliner-630-alineadora-trivium.webp",
   geodyna: "/images/blog/geodyna-7800p-balanceadora-trivium.webp",
-};
-
-const BANDA = {
-  calle: "/images/products-tread/1010060-205-45-r17-extraload-88-v-michelin-primacy-4-x1.webp",
-  calleEco: "/images/products-tread/1010913-205-65-r16c-agilis3-x1.webp",
-  offroad: "/images/products-tread/1011137-265-65r17-112t-terra-xplorer-c2-a-t-terra-xplorer-c2-a-t-x1.webp",
-};
-
-const CUBIERTA = {
-  calle: "/images/products/arivo-premio-arzero-205-55-r16.webp",
-  at: "/images/products-extra/grenlander-maga-a-t-two-1.webp",
+  fachada: `${LOCAL}/fachada-local-neumaticos-trivium-cordoba.webp`,
+  camionetas: `${LOCAL}/camionetas-en-elevador-taller-neumaticos-trivium-cordoba.webp`,
+  taxi: `${LOCAL}/taxi-en-el-taller-neumaticos-trivium-cordoba.webp`,
+  geoliner630: `${LOCAL}/alineadora-geoliner-630-taller-neumaticos-trivium-cordoba.webp`,
+  grenlanderPerfilBajo: `${LOCAL}/cubierta-perfil-bajo-grenlander-colocada-neumaticos-trivium.webp`,
+  pickup4x4: `${LOCAL}/pickup-4x4-en-elevador-alineacion-neumaticos-trivium-cordoba.webp`,
+  tecnicosAlineando: `${LOCAL}/tecnicos-alineando-auto-elevador-gomeria-trivium-cordoba.webp`,
+  rotacion: `${LOCAL}/rotacion-de-neumaticos-pirelli-rueda-desmontada-trivium.webp`,
+  utilitario: `${LOCAL}/balanceadora-y-alineadora-utilitario-taller-trivium-cordoba.webp`,
+  atClasica: `${LOCAL}/neumatico-at-grenlander-maga-at-two-camioneta-clasica-trivium.webp`,
+  balanceando: `${LOCAL}/tecnico-balanceando-rueda-balanceadora-trivium-cordoba.webp`,
+  target: `${LOCAL}/target-alineadora-rueda-auto-elevador-trivium-cordoba.webp`,
+  kingpro: `${LOCAL}/neumatico-grenlander-kingpro-one-pickup-trivium.webp`,
 };
 
 const L = {
@@ -78,155 +83,161 @@ const L = {
 
 export const BLOG_META: Record<string, BlogMeta> = {
   "neumaticos-para-utilitarios-furgones-reparto": {
-    cover: { src: TALLER.montaje, alt: "Montaje de una cubierta de carga Zmax en un taller", position: "center 40%" },
-    figure: { src: BANDA.calleEco, alt: "Banda de rodamiento de un neumático de carga", caption: "La banda de un neumático de carga: pensada para kilómetros y peso, no para estética." },
+    cover: { src: IMG.camionetas, alt: "Dos camionetas en el taller de Neumáticos Trivium, una sobre el elevador" },
+    figure: { src: IMG.utilitario, alt: "Utilitario sobre el elevador de alineación, con la balanceadora en primer plano", portrait: true, caption: "Un utilitario en el elevador: la alineación y el balanceo cuidan las cubiertas de trabajo." },
     shopIntro: "Cubiertas para furgones, utilitarios y reparto:",
     shopLinks: [L.carga, L.ofertas, L.todos],
   },
   "neumatico-c-o-de-auto-utilitario": {
-    cover: { src: TALLER.montaje, alt: "Neumático de carga con etiqueta Zmax montado en la desmontadora", position: "center 55%" },
-    figure: { src: BANDA.calleEco, alt: "Detalle de la banda de un neumático C", caption: "Un neumático C lleva carcasa reforzada: por eso soporta más peso y más presión." },
+    cover: { src: IMG.montaje, alt: "Cubierta de carga Zmax montada en la desmontadora", position: "center 55%" },
+    figure: { src: IMG.alineacion, alt: "Utilitario blanco elevado en el taller de Neumáticos Trivium", caption: "Un utilitario en el taller de Trivium: la medida es la misma, la cubierta no." },
     shopIntro: "Mirá las cubiertas C disponibles:",
     shopLinks: [L.carga, L.todos, L.indice],
   },
   "presion-neumaticos-utilitarios-con-carga": {
-    cover: { src: TALLER.alineacion, alt: "Utilitario blanco elevado en el taller de Neumáticos Trivium", position: "center 30%" },
-    figure: { src: BANDA.calleEco, alt: "Banda de rodamiento con desgaste parejo", caption: "Con la presión correcta el desgaste de la banda es parejo de lado a lado." },
+    cover: { src: IMG.alineacion, alt: "Utilitario blanco elevado en el taller de Neumáticos Trivium", position: "center 30%" },
+    figure: { src: IMG.camionetas, alt: "Dos camionetas en el taller de Neumáticos Trivium, una sobre el elevador", caption: "Con carga o sin ella, la presión se revisa antes de salir." },
     shopIntro: "Si ya toca cambiarlas, estas son las cubiertas para trabajo:",
     shopLinks: [L.carga, L.servicios, L.todos],
   },
   "comprar-neumaticos-en-cordoba": {
-    cover: { src: TALLER.local, alt: "Frente del local de Neumáticos Trivium en Córdoba", position: "center 45%" },
-    figure: { src: TALLER.balanceo, alt: "Técnico de Trivium balanceando una rueda con la balanceadora", caption: "El taller del local alinea y balancea." },
+    cover: { src: IMG.fachada, alt: "Frente del local de Neumáticos Trivium en Córdoba", position: "center 45%" },
+    figure: { src: IMG.taxi, alt: "Taxi dentro del taller de Neumáticos Trivium", caption: "Un taxi en el taller: la cubierta se compra y se coloca en el mismo lugar." },
     shopIntro: "Elegí por medida o por categoría:",
     shopLinks: [L.todos, L.ofertas, L.marcas, L.servicios],
   },
   "gomeria-en-cordoba": {
-    cover: { src: TALLER.local, alt: "Gomería Trivium: frente del taller con autos en elevadores", position: "center 55%" },
-    figure: { src: TALLER.montaje, alt: "Montaje de una cubierta nueva en la desmontadora", caption: "Montaje con desmontadora en el taller de Trivium." },
+    cover: { src: IMG.local, alt: "Frente del local de Neumáticos Trivium", position: "center 55%" },
+    figure: { src: IMG.balanceando, alt: "Técnico de Trivium balanceando una rueda", portrait: true, caption: "Balanceo de una rueda con la balanceadora del taller." },
     shopIntro: "Comprá las cubiertas y colocalas en el local:",
     shopLinks: [L.todos, L.servicios, L.ofertas],
   },
   "neumaticos-sierras-de-cordoba": {
-    cover: { src: CUBIERTA.at, alt: "Neumático A/T Grenlander Maga A/T Two", fit: "contain" },
-    figure: { src: BANDA.offroad, alt: "Tacos de un neumático A/T de uso mixto", caption: "Los tacos abiertos de un A/T evacuan barro y piedra suelta en caminos de sierra." },
+    cover: { src: IMG.atClasica, alt: "Técnico colocando un Grenlander Maga A/T Two en una pickup Ford clásica", portrait: true, position: "center 70%" },
+    figure: { src: IMG.pickup4x4, alt: "Pickup 4x4 sobre el elevador de alineación con el sensor colocado", portrait: true, caption: "Una pickup 4x4 en el elevador: antes de la sierra conviene alinear." },
     shopIntro: "Para ripio, sierra y ruta:",
     shopLinks: [L.at, L.ht, L.m265],
   },
   "opiniones-linglong-mileking-sumaxx": {
-    cover: { src: CUBIERTA.calle, alt: "Neumático de calle de una marca de importación directa", fit: "contain" },
-    figure: { src: BANDA.calle, alt: "Banda de rodamiento de un neumático de calle", caption: "Lo que importa se ve en la banda: dibujo, canales y goma." },
+    cover: { src: IMG.montaje, alt: "Cubierta de carga Zmax montada en la desmontadora", position: "center 55%" },
+    figure: { src: IMG.grenlanderPerfilBajo, alt: "Cubierta Grenlander de perfil bajo recién colocada en un auto rojo", portrait: true, caption: "Una cubierta de importación recién colocada en el taller." },
     shopIntro: "Mirá los modelos y precios de estas marcas:",
     shopLinks: [L.marcas, L.ofertas, L.todos],
   },
   "ruido-neumaticos": {
-    cover: { src: CUBIERTA.calle, alt: "Neumático de calle con dibujo asimétrico", fit: "contain" },
-    figure: { src: BANDA.calle, alt: "Canales y laminillas de un neumático silencioso", caption: "Canales y laminillas: de ahí sale buena parte del ruido de rodadura." },
+    cover: { src: IMG.rotacion, alt: "Auto con una rueda desmontada y la cubierta Pirelli al lado, durante una rotación", portrait: true, position: "center 55%" },
+    figure: { src: IMG.grenlanderPerfilBajo, alt: "Cubierta Grenlander de perfil bajo recién colocada en un auto rojo", portrait: true, caption: "Perfil bajo: más agarre, y también más ruido de rodadura." },
     shopIntro: "Cubiertas de calle, por rodado:",
     shopLinks: [L.r14, L.r15, L.r16, L.todos],
   },
   "verano-vs-allseason": {
-    cover: { src: CUBIERTA.at, alt: "Neumático all-season Grenlander", fit: "contain" },
-    figure: { src: BANDA.calle, alt: "Banda de rodamiento de un neumático de verano", caption: "Verano o all-season: cambia la goma y el dibujo, no la medida." },
+    cover: { src: IMG.grenlanderPerfilBajo, alt: "Cubierta Grenlander de perfil bajo recién colocada en un auto rojo", portrait: true, position: "center 60%" },
+    figure: { src: IMG.atClasica, alt: "Técnico colocando un Grenlander Maga A/T Two en una pickup Ford clásica", portrait: true, caption: "Un all-terrain montado en una pickup clásica." },
     shopIntro: "Elegí por rodado o mirá todo el catálogo:",
     shopLinks: [L.r15, L.r16, L.r17, L.todos],
   },
   "precio-calidad-neumaticos-costo-por-km": {
-    cover: { src: BANDA.calle, alt: "Primer plano de la banda de rodamiento de un neumático" },
-    figure: { src: CUBIERTA.calle, alt: "Neumático nuevo de importación directa", fit: "contain", caption: "El precio de lista no es el costo real: cuenta cuántos kilómetros rinde." },
+    cover: { src: IMG.kingpro, alt: "Cubierta Grenlander Kingpro One apoyada junto a una pickup sin la rueda", portrait: true, position: "center 60%" },
+    figure: { src: IMG.taxi, alt: "Taxi dentro del taller de Neumáticos Trivium", caption: "Un taxi hace muchísimos kilómetros por año: ahí se ve el costo por km." },
     shopIntro: "Compará precios en tu medida:",
     shopLinks: [L.ofertas, L.todos, L.marcas],
   },
   "utqg-desgaste-traccion-temperatura": {
-    cover: { src: BANDA.calle, alt: "Banda de rodamiento de un neumático, donde se mide el UTQG" },
-    figure: { src: BANDA.offroad, alt: "Tacos de un neumático de uso mixto", caption: "El UTQG califica desgaste, tracción y temperatura sobre la banda." },
+    cover: { src: IMG.rotacion, alt: "Auto con una rueda desmontada y la cubierta Pirelli al lado, durante una rotación", portrait: true, position: "center 55%" },
+    figure: { src: IMG.kingpro, alt: "Cubierta Grenlander Kingpro One apoyada junto a una pickup sin la rueda", portrait: true, caption: "El UTQG califica el desgaste, la tracción y la temperatura de la banda." },
     shopIntro: "Buscá cubiertas por tipo de uso:",
     shopLinks: [L.todos, L.ht, L.at],
   },
   "geoliner-630-geodyna-7800p-alineacion-balanceo": {
-    cover: { src: TALLER.geoliner, alt: "Alineadora Geoliner 630 en el taller de Trivium" },
-    figure: { src: TALLER.geodyna, alt: "Balanceadora Geodyna 7800P en el taller de Trivium", caption: "La Geodyna 7800P balancea la rueda con la cubierta ya montada." },
+    cover: { src: IMG.geoliner, alt: "Alineadora Geoliner 630 en el taller de Trivium" },
+    figure: { src: IMG.geodyna, alt: "Balanceadora Geodyna 7800P en el taller de Trivium", caption: "La Geodyna 7800P balancea la rueda en el taller de Trivium." },
     shopIntro: "Con cubiertas nuevas, alineá y balanceá en el mismo turno:",
     shopLinks: [L.servicios, L.todos, L.ofertas],
   },
   "carga-simple-y-dual-neumaticos-c": {
-    cover: { src: BANDA.calleEco, alt: "Banda de rodamiento de un neumático de carga C" },
-    figure: { src: TALLER.montaje, alt: "Cubierta de carga montada con etiqueta de índice de carga", caption: "El 90/88 está en el flanco, junto a la medida." },
+    cover: { src: IMG.montaje, alt: "Cubierta de carga Zmax montada en la desmontadora", position: "center 55%" },
+    figure: { src: IMG.camionetas, alt: "Dos camionetas en el taller de Neumáticos Trivium, una sobre el elevador", caption: "El índice de carga se lee en el flanco, junto a la medida." },
     shopIntro: "Cubiertas C por medida:",
     shopLinks: [L.carga, L.indice, L.todos],
   },
   "medidas-flotation-camionetas": {
-    cover: { src: CUBIERTA.at, alt: "Neumático de camioneta A/T en medida alta", fit: "contain" },
-    figure: { src: BANDA.offroad, alt: "Tacos grandes de un neumático para camioneta", caption: "En camioneta, la medida flotation se traduce a métrico para encontrar la equivalente." },
+    cover: { src: IMG.pickup4x4, alt: "Pickup 4x4 sobre el elevador de alineación con el sensor colocado", portrait: true, position: "center 55%" },
+    figure: { src: IMG.atClasica, alt: "Técnico colocando un Grenlander Maga A/T Two en una pickup Ford clásica", portrait: true, caption: "En camionetas, la medida flotation se pasa a métrico para encontrar la equivalente." },
     shopIntro: "Cubiertas para camioneta:",
     shopLinks: [L.at, L.m265, L.equivalencias],
   },
   "cada-cuantos-km-cambiar-neumaticos": {
-    cover: { src: BANDA.calle, alt: "Banda de rodamiento con los canales visibles" },
-    figure: { src: TALLER.alineacion, alt: "Revisión del tren delantero en el taller", caption: "Un tren delantero desalineado gasta la banda antes de tiempo." },
+    cover: { src: IMG.taxi, alt: "Taxi dentro del taller de Neumáticos Trivium", position: "center 40%" },
+    figure: { src: IMG.rotacion, alt: "Auto con una rueda desmontada y la cubierta Pirelli al lado, durante una rotación", portrait: true, caption: "La rotación reparte el desgaste entre las cuatro ruedas." },
     shopIntro: "¿Ya te toca? Buscá tu medida:",
     shopLinks: [L.todos, L.ofertas, L.servicios],
   },
   "precio-neumaticos-argentina": {
-    cover: { src: CUBIERTA.calle, alt: "Neumático nuevo de importación directa", fit: "contain" },
-    figure: { src: TALLER.local, alt: "Local de Neumáticos Trivium", caption: "El local de Neumáticos Trivium, en Córdoba." },
+    cover: { src: IMG.fachada, alt: "Frente del local de Neumáticos Trivium en Córdoba", position: "center 45%" },
+    figure: { src: IMG.kingpro, alt: "Cubierta Grenlander Kingpro One apoyada junto a una pickup sin la rueda", portrait: true, caption: "Cubierta Grenlander Kingpro One, una de las opciones de entrada." },
     shopIntro: "Precios por rodado:",
     shopLinks: [L.r13, L.r14, L.r15, L.r16, L.ofertas],
   },
   "presion-de-neumaticos": {
-    cover: { src: TALLER.balanceo, alt: "Rueda en la balanceadora del taller de Trivium", position: "center 45%" },
-    figure: { src: BANDA.calle, alt: "Banda con desgaste parejo gracias a la presión correcta", caption: "La presión correcta mantiene toda la banda apoyada en el piso." },
+    cover: { src: IMG.balanceo, alt: "Técnico de Trivium junto a la balanceadora con una rueda montada", position: "center 45%" },
+    figure: { src: IMG.rotacion, alt: "Auto con una rueda desmontada y la cubierta Pirelli al lado, durante una rotación", portrait: true, caption: "Con la rueda afuera es el mejor momento para revisar presión y estado." },
     shopIntro: "Si el desgaste ya está al límite:",
     shopLinks: [L.todos, L.ofertas, L.servicios],
   },
   "alineacion-y-balanceo": {
-    cover: { src: TALLER.alineacion, alt: "Técnico de Trivium alineando un utilitario sobre el elevador", position: "center 35%" },
-    figure: { src: TALLER.balanceo, alt: "Rueda en la balanceadora", caption: "Balanceo: se compensa el peso de la rueda para que no vibre." },
+    cover: { src: IMG.tecnicosAlineando, alt: "Dos técnicos de Trivium trabajando bajo un auto en el elevador", portrait: true, position: "center 40%" },
+    figure: { src: IMG.target, alt: "Sensor de la alineadora colocado en la rueda de un auto sobre el elevador", portrait: true, caption: "El sensor de la alineadora colocado en la rueda mide los ángulos del tren delantero." },
     shopIntro: "Estrená cubiertas y alineá en el mismo turno:",
     shopLinks: [L.servicios, L.todos, L.ofertas],
   },
   "indice-de-carga-y-velocidad": {
-    cover: { src: CUBIERTA.calle, alt: "Flanco de un neumático donde se lee el índice de carga y velocidad", fit: "contain" },
-    figure: { src: TALLER.montaje, alt: "Neumático con etiqueta que muestra índice de carga", caption: "El índice de carga y la letra de velocidad van después de la medida." },
+    cover: { src: IMG.kingpro, alt: "Cubierta Grenlander Kingpro One apoyada junto a una pickup sin la rueda", portrait: true, position: "center 55%" },
+    figure: { src: IMG.montaje, alt: "Cubierta de carga Zmax montada en la desmontadora", caption: "El índice de carga y la letra de velocidad van después de la medida." },
     shopIntro: "Buscá por medida e índice:",
     shopLinks: [L.todos, L.indice, L.carga],
   },
   "como-leer-medida-neumatico": {
-    cover: { src: CUBIERTA.calle, alt: "Neumático de calle con el flanco visible", fit: "contain" },
-    figure: { src: TALLER.montaje, alt: "Flanco de un neumático con la medida impresa", caption: "La medida está impresa en el flanco: ancho, perfil y rodado." },
+    cover: { src: IMG.grenlanderPerfilBajo, alt: "Cubierta Grenlander de perfil bajo recién colocada en un auto rojo", portrait: true, position: "center 60%" },
+    figure: { src: IMG.kingpro, alt: "Cubierta Grenlander Kingpro One apoyada junto a una pickup sin la rueda", portrait: true, caption: "La medida está impresa en el flanco: ancho, perfil y rodado." },
     shopIntro: "Con tu medida a mano:",
     shopLinks: [L.m175, L.m185, L.m205, L.todos],
   },
   equivalencias: {
-    cover: { src: CUBIERTA.calle, alt: "Neumático de calle", fit: "contain" },
-    figure: { src: TALLER.montaje, alt: "Cubierta montada en llanta", caption: "Una equivalente cambia hasta ±3% de diámetro, no la forma de la rueda." },
+    cover: { src: IMG.rotacion, alt: "Auto con una rueda desmontada y la cubierta Pirelli al lado, durante una rotación", portrait: true, position: "center 55%" },
+    figure: { src: IMG.grenlanderPerfilBajo, alt: "Cubierta Grenlander de perfil bajo recién colocada en un auto rojo", portrait: true, caption: "Una equivalente cambia hasta ±3% de diámetro, no la forma de la rueda." },
     shopIntro: "Probá tu medida en la calculadora o mirá el catálogo:",
     shopLinks: [L.equivalencias, L.todos, L.ofertas],
   },
   grenlander: {
-    cover: { src: CUBIERTA.at, alt: "Neumático Grenlander Maga A/T Two", fit: "contain" },
-    figure: { src: BANDA.offroad, alt: "Banda de un neumático de camioneta", caption: "Grenlander: del segmento urbano al A/T de camioneta." },
+    cover: { src: IMG.atClasica, alt: "Técnico colocando un Grenlander Maga A/T Two en una pickup Ford clásica", portrait: true, position: "center 70%" },
+    figure: { src: IMG.kingpro, alt: "Cubierta Grenlander Kingpro One apoyada junto a una pickup sin la rueda", portrait: true, caption: "Grenlander Kingpro One, de la línea de calle." },
     shopIntro: "Mirá toda la línea Grenlander en stock:",
     shopLinks: [L.grenlander, L.at, L.todos],
   },
   "marcas-chinas-neumaticos-comparativa": {
-    cover: { src: CUBIERTA.calle, alt: "Neumático de marca de importación", fit: "contain" },
-    figure: { src: BANDA.calle, alt: "Banda de rodamiento de un neumático de calle", caption: "La diferencia entre marcas se ve en la banda y se mide en kilómetros." },
+    cover: { src: IMG.grenlanderPerfilBajo, alt: "Cubierta Grenlander de perfil bajo recién colocada en un auto rojo", portrait: true, position: "center 60%" },
+    figure: { src: IMG.atClasica, alt: "Técnico colocando un Grenlander Maga A/T Two en una pickup Ford clásica", portrait: true, caption: "La diferencia entre marcas se ve en el uso y se mide en kilómetros." },
     shopIntro: "Mirá las marcas que vendemos:",
     shopLinks: [L.marcas, L.grenlander, L.ofertas],
   },
   "etiqueta-europea-neumaticos": {
-    cover: { src: TALLER.montaje, alt: "Neumático nuevo con la etiqueta europea en la banda", position: "center 70%" },
-    figure: { src: BANDA.calle, alt: "Banda de rodamiento de un neumático de calle", caption: "La etiqueta clasifica consumo, agarre en mojado y ruido." },
+    cover: { src: IMG.montaje, alt: "Cubierta de carga Zmax montada en la desmontadora", position: "center 70%" },
+    figure: { src: IMG.rotacion, alt: "Auto con una rueda desmontada y la cubierta Pirelli al lado, durante una rotación", portrait: true, caption: "La etiqueta clasifica consumo, agarre en mojado y ruido." },
     shopIntro: "Elegí cubiertas según su etiqueta:",
     shopLinks: [L.todos, L.ofertas, L.marcas],
+  },
+  "rotacion-de-neumaticos": {
+    cover: { src: IMG.rotacion, alt: "Auto con una rueda desmontada y la cubierta Pirelli al lado, durante una rotación", portrait: true, position: "center 55%" },
+    figure: { src: IMG.balanceando, alt: "Técnico de Trivium balanceando una rueda", portrait: true, caption: "Después de rotar conviene balancear: la balanceadora del taller." },
+    shopIntro: "Si al rotar viste desgaste de más:",
+    shopLinks: [L.todos, L.servicios, L.ofertas],
   },
 };
 
 /** Respaldo para una nota nueva que todavía no está cargada arriba. */
 export const DEFAULT_BLOG_META: BlogMeta = {
-  cover: { src: TALLER.local, alt: "Frente del local de Neumáticos Trivium", position: "center 45%" },
-  figure: { src: TALLER.montaje, alt: "Montaje de un neumático en el taller", caption: "Colocación en el taller del local." },
+  cover: { src: IMG.local, alt: "Frente del local de Neumáticos Trivium", position: "center 45%" },
+  figure: { src: IMG.montaje, alt: "Montaje de un neumático en el taller", caption: "Colocación en el taller del local." },
   shopIntro: "Buscá tu medida o mirá el catálogo:",
   shopLinks: [L.todos, L.ofertas, L.servicios],
 };

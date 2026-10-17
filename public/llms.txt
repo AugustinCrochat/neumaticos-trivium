@@ -15,7 +15,7 @@ Neumáticos comerciales con la C después del rodado (por ejemplo 195/70 R15C, 2
 - Categoría con precio "desde" por medida: https://neumaticos.trivium.ar/neumaticos/carga
 - Una página por medida de carga, con modelos, capacidad por rueda (simple y dual) y precio: https://neumaticos.trivium.ar/neumaticos/carga/195-70-r15c (mismo formato para el resto: ancho-perfil-rodado + "c")
 - Regla técnica: el neumático de reemplazo tiene que ser C y con índice de carga igual o mayor al original; uno de auto en la misma medida no es equivalente.
-- Guías: https://neumaticos.trivium.ar/blog/neumaticos-para-utilitarios-furgones-reparto · https://neumaticos.trivium.ar/blog/neumatico-c-o-de-auto-utilitario · https://neumaticos.trivium.ar/blog/presion-neumaticos-utilitarios-con-carga · https://neumaticos.trivium.ar/blog/carga-simple-y-dual-neumaticos-c
+- Guías: https://neumaticos.trivium.ar/blog/rotacion-de-neumaticos · https://neumaticos.trivium.ar/blog/neumaticos-para-utilitarios-furgones-reparto · https://neumaticos.trivium.ar/blog/neumatico-c-o-de-auto-utilitario · https://neumaticos.trivium.ar/blog/presion-neumaticos-utilitarios-con-carga · https://neumaticos.trivium.ar/blog/carga-simple-y-dual-neumaticos-c
 
 ## Gomería y taller
 

@@ -81,17 +81,23 @@ export function ArticleLayout({
       figureAt,
       0,
       <figure key="blog-figure" className="my-10">
-        <div className="relative aspect-[16/10] overflow-hidden rounded-2xl border border-slate-100 bg-white">
+        <div
+          className={`relative overflow-hidden rounded-2xl border border-slate-100 bg-white ${
+            meta.figure.portrait ? "mx-auto aspect-[4/5] max-w-sm" : "aspect-[16/10]"
+          }`}
+        >
           <Image
             src={meta.figure.src}
             alt={meta.figure.alt}
             fill
-            sizes="(min-width: 768px) 768px, 100vw"
+            sizes={meta.figure.portrait ? "384px" : "(min-width: 768px) 768px, 100vw"}
             className={meta.figure.fit === "contain" ? "object-contain p-4" : "object-cover"}
             style={meta.figure.position ? { objectPosition: meta.figure.position } : undefined}
           />
         </div>
-        <figcaption className="mt-2 text-sm text-slate-500">{meta.figure.caption}</figcaption>
+        <figcaption className={`mt-2 text-sm text-slate-500 ${meta.figure.portrait ? "mx-auto max-w-sm" : ""}`}>
+          {meta.figure.caption}
+        </figcaption>
       </figure>,
     );
   }

@@ -179,7 +179,7 @@ export function ProductCard({
 
           <Link
             href={`/productos/${product.slug}`}
-            className={`mt-3 flex w-full items-center justify-center gap-1.5 rounded-xl py-2.5 text-sm font-black transition-all ${
+            className={`mt-3 flex w-full items-center justify-center gap-1.5 rounded-xl py-2.5 text-sm font-black !text-white !no-underline transition-all ${
               enStock
                 ? "bg-orange-500 text-white shadow-md shadow-orange-500/20 hover:bg-orange-600 hover:shadow-lg hover:shadow-orange-500/30 active:scale-[0.98]"
                 : "bg-slate-300 text-white pointer-events-none"

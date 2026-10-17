@@ -153,6 +153,15 @@ export const SERVICES: Service[] = [
 // actual. Las más útiles para alguien que está por comprar van arriba.
 export const BLOG_POSTS: BlogPost[] = [
   {
+    id: "26",
+    title: "Rotación de neumáticos: cada cuánto y en qué orden se cambian de lugar",
+    excerpt: "Las ruedas de adelante se gastan más rápido: cada cuánto rotarlas, qué esquema usar según la tracción y cuándo no se puede.",
+    imageUrl: "/images/local/rotacion-de-neumaticos-pirelli-rueda-desmontada-trivium.webp",
+    date: "2026-10-17",
+    slug: "rotacion-de-neumaticos",
+    category: "Mantenimiento",
+  },
+  {
     id: "25",
     title: "Neumáticos para utilitarios, furgones y reparto: cómo elegirlos sin pagar de más",
     excerpt: "Medida C, índice de carga, simple o dual y costo por kilómetro: cómo elegir cubiertas para un vehículo de trabajo.",
