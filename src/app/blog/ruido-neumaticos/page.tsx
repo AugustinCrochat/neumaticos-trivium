@@ -1,6 +1,9 @@
 import { ProductBlock } from '@/components/blog/ProductBlock';
 import { CatalogWidget } from '@/components/blog/CatalogWidget';
 import Link from 'next/link';
+import { blogMeta } from '@/lib/blog-meta';
+import { BlogCover } from '@/components/blog/BlogCover';
+import { BlogSearchStrip, BlogShopLinks } from '@/components/blog/BlogShop';
 import { getProductosDesdePOS } from '@/lib/pos-api';
 import { getTireLabel } from '@/lib/tire-labels';
 
@@ -35,10 +38,15 @@ export default async function RuidoNeumaticosArticle() {
   const grenlanderLabel = grenlander ? getTireLabel(grenlander.slug) : null;
 
   return (
-    <article className="max-w-3xl mx-auto py-12 px-4 sm:px-6 lg:px-8 prose lg:prose-xl">
+    <>
+    <article className="max-w-3xl mx-auto pt-12 px-4 sm:px-6 lg:px-8 prose lg:prose-xl">
       <Link href="/blog" className="text-navy-600 hover:underline mb-8 inline-block">&larr; Volver al blog</Link>
       
       <h1 className="text-4xl font-extrabold mb-6 text-slate-800">¿Sabías que tus neumáticos hablan? Hablemos de los Decibeles y el Ruido al Rodar</h1>
+      <div className="not-prose -mx-4 mb-8 sm:mx-0">
+        <BlogCover image={blogMeta("ruido-neumaticos").cover} priority sizes="(min-width: 768px) 768px, 100vw" className="aspect-[16/9] sm:rounded-2xl" />
+        <div className="mt-5 px-4 sm:px-0"><BlogShopLinks slug="ruido-neumaticos" /></div>
+      </div>
       
       <p className="mb-4">¡Hola a todos! Hoy quiero hablarles de algo que muchas veces pasamos por alto cuando compramos cubiertas nuevas: <strong>el ruido</strong>.</p>
       
@@ -105,5 +113,8 @@ export default async function RuidoNeumaticosArticle() {
 
       <CatalogWidget title="Neumáticos recomendados" limit={4} />
     </article>
+    <BlogSearchStrip slug="ruido-neumaticos" />
+    <div className="pb-12" />
+    </>
   );
 }

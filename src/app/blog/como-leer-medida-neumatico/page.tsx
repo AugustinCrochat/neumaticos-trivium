@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { TireSizeSearch } from "@/components/ui/TireSizeSearch";
+import { BlogCoverStrip } from "@/components/blog/BlogShop";
 
 export const metadata = {
   title: "¿Cómo leer la medida de tu neumático? — Trivium",
@@ -23,6 +24,8 @@ export default function ComoLeerMedidaPage() {
           </div>
         </div>
       </div>
+
+      <BlogCoverStrip slug="como-leer-medida-neumatico" />
 
       {/* Guide Content */}
       <div className="max-w-4xl mx-auto px-4 py-16 md:py-24">

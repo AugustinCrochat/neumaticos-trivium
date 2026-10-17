@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { BLOG_POSTS } from "@/lib/data";
+import { blogMeta } from "@/lib/blog-meta";
+import { BlogCover } from "@/components/blog/BlogCover";
 
 function formatDate(dateStr: string) {
   return new Date(dateStr).toLocaleDateString("es-AR", {
@@ -41,32 +43,7 @@ export function BlogSection() {
                 i === 0 ? "md:col-span-1" : ""
               }`}
             >
-              {/* Image placeholder */}
-              <div className="bg-gradient-to-br from-navy-950 to-black h-44 flex items-center justify-center relative overflow-hidden">
-                <div className="absolute inset-0 opacity-20">
-                  <div
-                    style={{
-                      backgroundImage: `radial-gradient(circle at 1px 1px, white 1px, transparent 0)`,
-                      backgroundSize: "24px 24px",
-                      width: "100%",
-                      height: "100%",
-                    }}
-                  />
-                </div>
-                <div className="relative text-center">
-                  <svg
-                    className="w-12 h-12 text-slate-400 mx-auto mb-2 group-hover:text-orange-400 transition-colors"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                  </svg>
-                  <span className="text-slate-400 text-xs font-semibold uppercase tracking-wider">
-                    {post.category}
-                  </span>
-                </div>
-              </div>
+              <BlogCover image={blogMeta(post.slug).cover} className="h-44" />
 
               <div className="p-5">
                 <div className="flex items-center gap-2 mb-3">

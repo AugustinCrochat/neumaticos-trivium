@@ -1,6 +1,9 @@
 import { ProductBlock } from '@/components/blog/ProductBlock';
 import { CatalogWidget } from '@/components/blog/CatalogWidget';
 import Link from 'next/link';
+import { blogMeta } from '@/lib/blog-meta';
+import { BlogCover } from '@/components/blog/BlogCover';
+import { BlogSearchStrip, BlogShopLinks } from '@/components/blog/BlogShop';
 import { getProductosDesdePOS } from '@/lib/pos-api';
 import { getTireLabel } from '@/lib/tire-labels';
 
@@ -35,10 +38,15 @@ export default async function VeranoVsAllSeasonArticle() {
   const allSeasonLabel = allSeason ? getTireLabel(allSeason.slug) : null;
 
   return (
-    <article className="max-w-3xl mx-auto py-12 px-4 sm:px-6 lg:px-8 prose lg:prose-xl">
+    <>
+    <article className="max-w-3xl mx-auto pt-12 px-4 sm:px-6 lg:px-8 prose lg:prose-xl">
       <Link href="/blog" className="text-navy-600 hover:underline mb-8 inline-block">&larr; Volver al blog</Link>
       
       <h1 className="text-4xl font-extrabold mb-6 text-slate-800">Neumáticos de Verano vs. All-Season: ¿Qué te conviene en Argentina?</h1>
+      <div className="not-prose -mx-4 mb-8 sm:mx-0">
+        <BlogCover image={blogMeta("verano-vs-allseason").cover} priority sizes="(min-width: 768px) 768px, 100vw" className="aspect-[16/9] sm:rounded-2xl" />
+        <div className="mt-5 px-4 sm:px-0"><BlogShopLinks slug="verano-vs-allseason" /></div>
+      </div>
       
       <p className="mb-4">Si estás por cambiar las cubiertas de tu auto o camioneta, es probable que hayas escuchado los términos <strong>"Summer" (Verano)</strong> y <strong>"All-Season" (Todas las estaciones o Mixtos)</strong>. A simple vista, parecen solo etiquetas de marketing, pero la realidad es que el compuesto de goma y el dibujo cambian drásticamente el comportamiento de tu vehículo.</p>
       
@@ -127,5 +135,8 @@ export default async function VeranoVsAllSeasonArticle() {
 
       <CatalogWidget title="Ofertas recomendadas" limit={4} />
     </article>
+    <BlogSearchStrip slug="verano-vs-allseason" />
+    <div className="pb-12" />
+    </>
   );
 }

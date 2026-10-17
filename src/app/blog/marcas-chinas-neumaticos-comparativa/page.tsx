@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { BlogCoverStrip, BlogSearchStrip } from "@/components/blog/BlogShop";
 
 export const metadata: Metadata = {
   title: "Marcas chinas de neumáticos: ¿cuál es la mejor? — Trivium",
@@ -32,6 +33,8 @@ export default function MarcasChinasComparativaPage() {
           </div>
         </div>
       </div>
+
+      <BlogCoverStrip slug="marcas-chinas-neumaticos-comparativa" />
 
       {/* Content */}
       <div className="max-w-3xl mx-auto px-4 py-16 md:py-24">
@@ -268,6 +271,8 @@ export default function MarcasChinasComparativaPage() {
 
         </div>
       </div>
+
+      <BlogSearchStrip slug="marcas-chinas-neumaticos-comparativa" />
 
       {/* CTA — Link to brand page */}
       <div className="bg-zinc-950 py-16 text-center">

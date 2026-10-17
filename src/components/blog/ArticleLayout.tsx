@@ -1,12 +1,36 @@
 import Link from "next/link";
+import { Children, isValidElement } from "react";
 import type { ReactNode } from "react";
+import Image from "next/image";
 import { BLOG_POSTS } from "@/lib/data";
+import { blogMeta } from "@/lib/blog-meta";
+import { BlogCover } from "@/components/blog/BlogCover";
+import { BlogSearchCard, BlogShopLinks } from "@/components/blog/BlogShop";
 import { BRANCHES } from "@/lib/config";
 import { absoluteUrl, ORGANIZATION_ID, SITE_NAME } from "@/lib/seo";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { FaqSection } from "@/components/seo/FaqSection";
 import { JsonLd } from "@/components/seo/JsonLd";
 import type { Faq } from "@/lib/seo";
+
+// La tipografía del cuerpo se define una sola vez con selectores descendentes,
+// así las notas escriben HTML plano sin clases. Es una constante porque el
+// texto se parte en dos tramos (ver ArticleLayout) y ambos deben verse igual.
+const TYPO = `
+  [&_a]:font-bold [&_a]:text-navy-800 [&_a]:underline [&_a]:underline-offset-2
+  [&_h2]:mb-4 [&_h2]:mt-12 [&_h2]:text-2xl [&_h2]:font-black [&_h2]:text-navy-900
+  [&_h3]:mb-3 [&_h3]:mt-8 [&_h3]:text-xl [&_h3]:font-black [&_h3]:text-navy-900
+  [&_li]:leading-relaxed [&_li]:text-slate-600
+  [&_ol]:mb-5 [&_ol]:list-decimal [&_ol]:space-y-2 [&_ol]:pl-6
+  [&_p]:mb-5 [&_p]:text-lg [&_p]:leading-relaxed [&_p]:text-slate-600
+  [&_strong]:font-bold [&_strong]:text-navy-900
+  [&_table]:mb-6 [&_table]:w-full [&_table]:text-left [&_table]:text-sm
+  [&_td]:border-t [&_td]:border-slate-100 [&_td]:px-3 [&_td]:py-2.5 [&_td]:text-slate-600
+  [&_th]:bg-slate-50 [&_th]:px-3 [&_th]:py-2.5 [&_th]:font-black [&_th]:text-navy-900
+  [&_ul]:mb-5 [&_ul]:list-disc [&_ul]:space-y-2 [&_ul]:pl-6
+`;
+
+const isH2 = (node: ReactNode) => isValidElement(node) && node.type === "h2";
 
 /**
  * Envoltorio común de las notas del blog.
@@ -41,6 +65,36 @@ export function ArticleLayout({
 }) {
   const branch = BRANCHES[0];
   const relacionadas = BLOG_POSTS.filter((p) => p.slug !== slug).slice(0, 3);
+  const meta = blogMeta(slug);
+
+  // El texto se parte en dos tramos para intercalar, sin que la tipografía
+  // descendente de TYPO le pise los estilos, una foto (antes del 2.º h2) y el
+  // buscador por medida (antes del 3.º h2, o del último si hay menos).
+  const nodes = Children.toArray(children);
+  const h2At = nodes.flatMap((n, i) => (isH2(n) ? [i] : []));
+  const figureAt = h2At.length >= 2 ? h2At[1] : -1;
+  const searchAt = h2At.length >= 2 ? h2At[Math.min(2, h2At.length - 1)] : nodes.length;
+  const antes = nodes.slice(0, searchAt);
+  const despues = nodes.slice(searchAt);
+  if (figureAt >= 0) {
+    antes.splice(
+      figureAt,
+      0,
+      <figure key="blog-figure" className="my-10">
+        <div className="relative aspect-[16/10] overflow-hidden rounded-2xl border border-slate-100 bg-white">
+          <Image
+            src={meta.figure.src}
+            alt={meta.figure.alt}
+            fill
+            sizes="(min-width: 768px) 768px, 100vw"
+            className={meta.figure.fit === "contain" ? "object-contain p-4" : "object-cover"}
+            style={meta.figure.position ? { objectPosition: meta.figure.position } : undefined}
+          />
+        </div>
+        <figcaption className="mt-2 text-sm text-slate-500">{meta.figure.caption}</figcaption>
+      </figure>,
+    );
+  }
 
   const articleJsonLd = {
     "@context": "https://schema.org",
@@ -51,6 +105,7 @@ export function ArticleLayout({
     datePublished: date,
     dateModified: updated ?? date,
     articleSection: category,
+    image: absoluteUrl(meta.cover.src),
     inLanguage: "es-AR",
     // El autor es la empresa, no una persona inventada: firmar con un nombre
     // que no existe es exactamente lo que las guidelines de E-E-A-T penalizan.
@@ -93,23 +148,28 @@ export function ArticleLayout({
         </div>
       </header>
 
-      {/* La tipografía del cuerpo se define acá una sola vez con selectores
-          descendentes, así las notas escriben HTML plano sin clases. */}
-      <article
-        className="mx-auto max-w-3xl px-4 py-12
-          [&_a]:font-bold [&_a]:text-navy-800 [&_a]:underline [&_a]:underline-offset-2
-          [&_h2]:mb-4 [&_h2]:mt-12 [&_h2]:text-2xl [&_h2]:font-black [&_h2]:text-navy-900
-          [&_h3]:mb-3 [&_h3]:mt-8 [&_h3]:text-xl [&_h3]:font-black [&_h3]:text-navy-900
-          [&_li]:leading-relaxed [&_li]:text-slate-600
-          [&_ol]:mb-5 [&_ol]:list-decimal [&_ol]:space-y-2 [&_ol]:pl-6
-          [&_p]:mb-5 [&_p]:text-lg [&_p]:leading-relaxed [&_p]:text-slate-600
-          [&_strong]:font-bold [&_strong]:text-navy-900
-          [&_table]:mb-6 [&_table]:w-full [&_table]:text-left [&_table]:text-sm
-          [&_td]:border-t [&_td]:border-slate-100 [&_td]:px-3 [&_td]:py-2.5 [&_td]:text-slate-600
-          [&_th]:bg-slate-50 [&_th]:px-3 [&_th]:py-2.5 [&_th]:font-black [&_th]:text-navy-900
-          [&_ul]:mb-5 [&_ul]:list-disc [&_ul]:space-y-2 [&_ul]:pl-6"
-      >
-        {children}
+      {/* Portada y atajos a los productos del tema: lo primero que ve quien
+          llegó por una duda puntual. */}
+      <div className="mx-auto max-w-3xl px-4 pt-8">
+        <BlogCover
+          image={meta.cover}
+          priority
+          sizes="(min-width: 768px) 768px, 100vw"
+          className="aspect-[16/9] rounded-2xl sm:aspect-[2/1]"
+        />
+        <div className="mt-5">
+          <BlogShopLinks slug={slug} />
+        </div>
+      </div>
+
+      <div className={`mx-auto max-w-3xl px-4 pt-4 ${TYPO}`}>{antes}</div>
+
+      <div className="mx-auto max-w-3xl px-4">
+        <BlogSearchCard slug={slug} />
+      </div>
+
+      <article className={`mx-auto max-w-3xl px-4 pb-12 ${TYPO}`}>
+        {despues}
 
         {faqs && faqs.length > 0 && <FaqSection faqs={faqs} />}
 

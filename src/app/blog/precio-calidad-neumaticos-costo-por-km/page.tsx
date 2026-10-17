@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { breadcrumbJsonLd, canonical } from "@/lib/seo";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { BlogCoverStrip, BlogSearchStrip } from "@/components/blog/BlogShop";
 
 export const metadata: Metadata = {
   title: "Precio y calidad en neumáticos: cuánto sale cada kilómetro — Trivium",
@@ -42,6 +43,8 @@ export default function PrecioCalidadNeumaticosPage() {
           </div>
         </div>
       </div>
+
+      <BlogCoverStrip slug="precio-calidad-neumaticos-costo-por-km" />
 
       {/* Content */}
       <div className="max-w-3xl mx-auto px-4 py-16 md:py-24">
@@ -321,6 +324,8 @@ export default function PrecioCalidadNeumaticosPage() {
 
         </div>
       </div>
+
+      <BlogSearchStrip slug="precio-calidad-neumaticos-costo-por-km" />
 
       {/* CTA */}
       <div className="bg-zinc-950 py-16 text-center">

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { EquivalenceCalculator } from "@/components/ui/EquivalenceCalculator";
 import { getProductosDesdePOS } from "@/lib/pos-api";
 import { getSelectedBranchSlug } from "@/lib/branch-server";
+import { BlogCoverStrip, BlogSearchStrip } from "@/components/blog/BlogShop";
 
 export const metadata = {
   title: "Equivalencias de neumáticos: ¿Qué son y cómo funcionan? — Trivium",
@@ -36,6 +37,8 @@ export default async function EquivalenciasPage() {
           </div>
         </div>
       </div>
+
+      <BlogCoverStrip slug="equivalencias" />
 
       {/* Content */}
       <div className="max-w-3xl mx-auto px-4 py-16 md:py-24">
@@ -84,6 +87,8 @@ export default async function EquivalenciasPage() {
           </p>
         </div>
       </div>
+
+      <BlogSearchStrip slug="equivalencias" />
 
       {/* Footer CTA */}
       <div className="bg-slate-50 py-16 border-t border-slate-100 text-center">

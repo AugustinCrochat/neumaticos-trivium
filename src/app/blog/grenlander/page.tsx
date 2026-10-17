@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { breadcrumbJsonLd, canonical } from "@/lib/seo";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { BlogCoverStrip, BlogSearchStrip } from "@/components/blog/BlogShop";
 
 export const metadata: Metadata = {
   title: "Grenlander: ¿Son buenos los neumáticos? Análisis y comparativa — Trivium",
@@ -41,6 +42,8 @@ export default function GrenlanderPage() {
           </div>
         </div>
       </div>
+
+      <BlogCoverStrip slug="grenlander" />
 
       {/* Content */}
       <div className="max-w-3xl mx-auto px-4 py-16 md:py-24">
@@ -417,6 +420,8 @@ export default function GrenlanderPage() {
           </div>
         </div>
       </div>
+
+      <BlogSearchStrip slug="grenlander" />
 
       {/* CTA — Link to brand page */}
       <div className="bg-zinc-950 py-16 text-center">
