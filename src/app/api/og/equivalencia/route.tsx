@@ -58,7 +58,7 @@ export async function GET(request: Request) {
           }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={wordmark} width={200} height={50} alt="" style={{ marginBottom: 20 }} />
+          <img src={wordmark} width={146} height={50} alt="" style={{ marginBottom: 20 }} />
 
           <div
             style={{

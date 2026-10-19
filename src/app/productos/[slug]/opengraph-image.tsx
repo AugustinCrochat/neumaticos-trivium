@@ -93,7 +93,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
         >
           <div style={{ display: "flex", position: "absolute", top: 0, left: 0, right: 0, height: 6, background: "#ff1e00" }} />
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={wordmark} width={260} height={65} alt="" />
+          <img src={wordmark} width={190} height={65} alt="" />
           <span style={{ display: "flex", fontSize: 40, fontWeight: 900, color: "white", marginTop: 24 }}>
             Neumáticos Trivium
           </span>
@@ -129,7 +129,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
           {/* El wordmark ya trae "El outlet del neumático" incorporado — no
               hace falta repetir la idea en un renglón aparte. */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={wordmark} width={260} height={65} alt="" style={{ marginBottom: 44 }} />
+          <img src={wordmark} width={190} height={65} alt="" style={{ marginBottom: 44 }} />
 
           {brandLogo ? (
             // eslint-disable-next-line @next/next/no-img-element

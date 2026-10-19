@@ -38,7 +38,7 @@ export function GenericOgLayout({ wordmark, icon, photo, kicker, children }: Gen
         <img src={icon} width={440} height={440} alt="" style={{ position: "absolute", right: -110, bottom: -130, opacity: 0.14 }} />
 
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={wordmark} width={220} height={55} alt="" style={{ marginBottom: 32 }} />
+        <img src={wordmark} width={161} height={55} alt="" style={{ marginBottom: 32 }} />
 
         <div style={{ display: "flex", fontSize: 20, fontWeight: 900, color: "#ff1e00", letterSpacing: 2, textTransform: "uppercase", marginBottom: 20 }}>
           {kicker}

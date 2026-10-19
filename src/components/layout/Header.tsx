@@ -40,7 +40,7 @@ export function Header() {
               <Image
                 src="/logo-neumaticos-trivium.svg"
                 alt="Neumáticos Trivium"
-                width={240}
+                width={175}
                 height={60}
                 className="h-8 md:h-12 w-auto"
                 priority
