@@ -2,22 +2,27 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { useBranch } from "@/contexts/branch-context";
 import { SearchModal } from "@/components/ui/SearchModal";
 
 const NAV_LINKS = [
-  { href: "/ofertas", label: "% Ofertas" },
-  { href: "/catalogo", label: "Neumáticos" },
-  { href: "/servicios", label: "Servicios" },
-  { href: "/sucursales", label: "Sucursales" },
-  { href: "/contacto", label: "Contacto" },
+  { href: "/ofertas", label: "% Ofertas", match: ["/ofertas"] },
+  { href: "/catalogo", label: "Neumáticos", match: ["/catalogo", "/neumaticos", "/buscar", "/productos", "/marcas", "/tuercas-antirrobo"] },
+  { href: "/servicios", label: "Servicios", match: ["/servicios"] },
+  { href: "/sucursales", label: "Sucursales", match: ["/sucursales"] },
+  { href: "/contacto", label: "Contacto", match: ["/contacto"] },
 ];
+
+const isActive = (pathname: string, match: string[]) =>
+  match.some((m) => pathname === m || pathname.startsWith(`${m}/`));
 
 export function Header() {
   const { selectedBranch, hasConfirmedBranch, openModal } = useBranch();
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
     <header className="sticky top-0 z-40 w-full">
@@ -49,19 +54,29 @@ export function Header() {
 
             {/* Desktop nav links */}
             <div className="hidden md:flex items-center gap-1 flex-1">
-              {NAV_LINKS.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={
-                    link.href === "/ofertas"
-                      ? "bg-[#ff1e00] text-white hover:bg-[#cc1800] px-4 py-2 rounded-lg text-sm font-black transition-colors"
-                      : "text-zinc-200 hover:text-white hover:bg-zinc-900 px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-                  }
-                >
-                  {link.label}
-                </Link>
-              ))}
+              {NAV_LINKS.map((link) => {
+                const active = isActive(pathname, link.match);
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    aria-current={active ? "page" : undefined}
+                    className={
+                      link.href === "/ofertas"
+                        ? `px-4 py-2 rounded-lg text-sm font-black text-white transition-colors ${
+                            active ? "bg-[#cc1800] ring-2 ring-white/70" : "bg-[#ff1e00] hover:bg-[#cc1800]"
+                          }`
+                        : `px-4 py-2 rounded-lg text-sm transition-colors ${
+                            active
+                              ? "bg-zinc-800 font-bold text-white shadow-[inset_0_-2px_0_#ff1e00]"
+                              : "font-medium text-zinc-200 hover:text-white hover:bg-zinc-900"
+                          }`
+                    }
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
             </div>
 
             <div className="flex items-center gap-3 ml-auto md:ml-0">
