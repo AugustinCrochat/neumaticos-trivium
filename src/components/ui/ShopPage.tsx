@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { BRANDS } from "@/lib/data";
 import { getBrandLogo } from "@/lib/brand-utils";
+import { PriceTagIcon } from "@/components/ui/PriceTagIcon";
 import { ProductCard } from "@/components/ui/ProductCard";
 import { bestPriceByGroup } from "@/lib/best-price";
 import { SizeOrVehicleSearch } from "@/components/ui/SizeOrVehicleSearch";
@@ -285,7 +286,10 @@ function FilterBar({
           >
             <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow-md transition-transform duration-300 ${onlyEconomic ? "translate-x-5" : "translate-x-0.5"}`} />
           </div>
-          <span className="text-sm font-bold text-slate-700 group-hover:text-navy-900 transition-colors">Solo económicos</span>
+          <span className="flex items-center gap-1.5 text-sm font-bold text-slate-700 group-hover:text-navy-900 transition-colors">
+            <PriceTagIcon className="h-6 w-5" />
+            Solo económicos
+          </span>
         </label>
 
         <label className="flex items-center gap-3 cursor-pointer group">
@@ -335,7 +339,10 @@ function FilterBar({
             className={`w-12 h-6 rounded-full transition-all duration-300 relative ${onlyEconomic ? "bg-neutral-800 shadow-inner" : "bg-slate-200"}`}>
             <div className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow-md transition-transform duration-300 ${onlyEconomic ? "translate-x-7" : "translate-x-1"}`} />
           </div>
-          <span className="text-sm font-bold text-slate-700 group-hover:text-navy-900 transition-colors">Solo económicos</span>
+          <span className="flex items-center gap-1.5 text-sm font-bold text-slate-700 group-hover:text-navy-900 transition-colors">
+            <PriceTagIcon className="h-6 w-5" />
+            Solo económicos
+          </span>
         </label>
       </div>
 
@@ -693,7 +700,10 @@ export function ShopPage({
             {parsed && exactResults.length > 0 && (
               <section className="mb-12">
                 <div className="flex items-baseline flex-wrap gap-x-3 gap-y-1 mb-6">
-                  <h2 className="text-2xl font-black text-navy-900">Medida buscada</h2>
+                  <h2 className="flex items-center gap-2 text-2xl font-black text-navy-900">
+                    <PriceTagIcon className="h-8 w-7" />
+                    Medida buscada
+                  </h2>
                   {label && <span className="text-lg font-bold text-slate-500">{label}</span>}
                   <span className="text-sm text-slate-400 font-medium">
                     ({exactResults.length} resultado{exactResults.length !== 1 ? "s" : ""})
