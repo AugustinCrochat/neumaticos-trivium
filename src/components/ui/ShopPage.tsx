@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { BRANDS } from "@/lib/data";
 import { getBrandLogo } from "@/lib/brand-utils";
+import { EconomicChip } from "@/components/ui/EconomicChip";
 import { PriceTagIcon } from "@/components/ui/PriceTagIcon";
 import { ProductCard } from "@/components/ui/ProductCard";
 import { bestPriceByGroup } from "@/lib/best-price";
@@ -279,18 +280,7 @@ function FilterBar({
 
         <div className="w-px h-8 bg-slate-100 mx-1 shrink-0" />
 
-        <label className="flex items-center gap-3 cursor-pointer group">
-          <div
-            onClick={() => setOnlyEconomic(!onlyEconomic)}
-            className={`w-10 h-5 rounded-full relative transition-all duration-300 ${onlyEconomic ? "bg-neutral-800 shadow-inner" : "bg-slate-200"}`}
-          >
-            <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow-md transition-transform duration-300 ${onlyEconomic ? "translate-x-5" : "translate-x-0.5"}`} />
-          </div>
-          <span className="flex items-center gap-1.5 text-sm font-bold text-slate-700 group-hover:text-navy-900 transition-colors">
-            <PriceTagIcon className="h-7 w-5 shrink-0" />
-            Solo económicos
-          </span>
-        </label>
+        <EconomicChip checked={onlyEconomic} onChange={setOnlyEconomic} />
 
         <label className="flex items-center gap-3 cursor-pointer group">
           <div
@@ -334,16 +324,7 @@ function FilterBar({
       </div>
 
       <div className="pt-6 border-t border-slate-100">
-        <label className="flex items-center gap-4 cursor-pointer group">
-          <div onClick={() => setOnlyEconomic(!onlyEconomic)}
-            className={`w-12 h-6 rounded-full transition-all duration-300 relative ${onlyEconomic ? "bg-neutral-800 shadow-inner" : "bg-slate-200"}`}>
-            <div className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow-md transition-transform duration-300 ${onlyEconomic ? "translate-x-7" : "translate-x-1"}`} />
-          </div>
-          <span className="flex items-center gap-1.5 text-sm font-bold text-slate-700 group-hover:text-navy-900 transition-colors">
-            <PriceTagIcon className="h-7 w-5 shrink-0" />
-            Solo económicos
-          </span>
-        </label>
+        <EconomicChip checked={onlyEconomic} onChange={setOnlyEconomic} />
       </div>
 
       <div className="pt-6 border-t border-slate-100">
