@@ -127,20 +127,30 @@ export function Header() {
         {/* Mobile dropdown menu */}
         {menuOpen && (
           <div className="md:hidden border-t border-zinc-900 bg-black px-4 py-3 space-y-1">
-            {NAV_LINKS.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={
-                  link.href === "/ofertas"
-                    ? "block bg-[#ff1e00] text-white hover:bg-[#cc1800] px-4 py-2.5 rounded-lg text-sm font-black transition-colors"
-                    : "block text-zinc-200 hover:text-white hover:bg-zinc-900 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors"
-                }
-                onClick={() => setMenuOpen(false)}
-              >
-                {link.label}
-              </Link>
-            ))}
+            {NAV_LINKS.map((link) => {
+              const active = isActive(pathname, link.match);
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  aria-current={active ? "page" : undefined}
+                  className={
+                    link.href === "/ofertas"
+                      ? `block px-4 py-2.5 rounded-lg text-sm font-black text-white transition-colors ${
+                          active ? "bg-[#cc1800] ring-2 ring-white/70" : "bg-[#ff1e00] hover:bg-[#cc1800]"
+                        }`
+                      : `block px-4 py-2.5 rounded-lg text-sm transition-colors ${
+                          active
+                            ? "bg-zinc-800 font-bold text-white shadow-[inset_0_-2px_0_#ff1e00]"
+                            : "font-medium text-zinc-200 hover:text-white hover:bg-zinc-900"
+                        }`
+                  }
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
           </div>
         )}
       </nav>
