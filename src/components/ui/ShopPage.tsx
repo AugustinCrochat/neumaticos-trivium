@@ -7,6 +7,7 @@ import Link from "next/link";
 import { BRANDS } from "@/lib/data";
 import { getBrandLogo } from "@/lib/brand-utils";
 import { ProductCard } from "@/components/ui/ProductCard";
+import { bestPriceByGroup } from "@/lib/best-price";
 import { SizeOrVehicleSearch } from "@/components/ui/SizeOrVehicleSearch";
 import { useBranch } from "@/contexts/branch-context";
 import { useVehicle } from "@/contexts/vehicle-context";
@@ -453,7 +454,8 @@ export function ShopPage({
     parsed?.width && parsed.profile && parsed.rim
       ? { width: parsed.width, profile: parsed.profile, rim: parsed.rim }
       : null;
-  const cheapestExactId = exactResults[0]?.id ?? null;
+  const mejoresExactos = useMemo(() => bestPriceByGroup(exactResults), [exactResults]);
+  const mejoresCatalogo = useMemo(() => bestPriceByGroup(allProducts), [allProducts]);
   const hasActiveFilters =
     brandFilter !== "todos" || maxPrice < MAX_POSSIBLE_PRICE || onlyEconomic || onlyCarga || onlyAT;
 
@@ -591,7 +593,7 @@ export function ShopPage({
                   <>
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                       {allProducts.slice(0, visibleCount).map(product => (
-                        <ProductCard key={product.id} product={product} />
+                        <ProductCard key={product.id} product={product} isCheapest={mejoresCatalogo.has(product.id)} cheapestLabel={mejoresCatalogo.get(product.id)} />
                       ))}
                     </div>
                     {visibleCount < allProducts.length && (
@@ -699,7 +701,7 @@ export function ShopPage({
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                   {exactResults.map(product => (
-                    <ProductCard key={product.id} product={product} isCheapest={product.id === cheapestExactId} />
+                    <ProductCard key={product.id} product={product} isCheapest={mejoresExactos.has(product.id)} />
                   ))}
                 </div>
               </section>

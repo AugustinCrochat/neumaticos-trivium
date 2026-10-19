@@ -5,6 +5,7 @@ import Image from "next/image";
 import type { TireProduct } from "@/lib/types";
 import { ProductCard } from "@/components/ui/ProductCard";
 import { getBrandLogo } from "@/lib/brand-utils";
+import { bestPriceByGroup } from "@/lib/best-price";
 
 /**
  * Listado de una landing de categoría con filtros de aro, marca y "sólo en
@@ -39,11 +40,12 @@ export function CategoryProductGrid({ productos }: { productos: TireProduct[] })
   const conStock = filtrados.filter((p) => p.enStock).length;
   const hayFiltros = aro != null || marca != null || soloStock;
 
-  // Destacado: el más barato con stock. Sólo sin filtros y con suficiente
-  // listado como para que "mejor precio" signifique algo.
-  const destacado = !hayFiltros && productos.length >= 3 ? productos.find((p) => p.enStock) : undefined;
-  const mejorPrecio = destacado ? productos.filter((p) => p.enStock).sort((a, b) => a.price - b.price)[0] : undefined;
-  const lista = mejorPrecio ? [mejorPrecio, ...filtrados.filter((p) => p.id !== mejorPrecio.id)] : filtrados;
+  // Mejor precio por medida y tipo, sobre el listado completo (no sobre el
+  // filtrado) así el tag no salta de producto al filtrar. Con medidas mezcladas
+  // se aclara la medida en el tag.
+  const mejores = useMemo(() => bestPriceByGroup(productos), [productos]);
+  const variasMedidas = aros.length > 1 || new Set(productos.map((p) => `${p.size.width}/${p.size.profile}`)).size > 1;
+  const lista = filtrados;
 
   const pill = (activo: boolean) =>
     `shrink-0 rounded-full border px-3.5 py-1.5 text-sm font-bold transition-colors ${
@@ -136,7 +138,7 @@ export function CategoryProductGrid({ productos }: { productos: TireProduct[] })
       {lista.length > 0 ? (
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6 lg:grid-cols-4">
           {lista.map((p) => (
-            <ProductCard key={p.id} product={p} isCheapest={p.id === mejorPrecio?.id} />
+            <ProductCard key={p.id} product={p} isCheapest={mejores.has(p.id)} cheapestLabel={variasMedidas ? mejores.get(p.id) : undefined} />
           ))}
         </div>
       ) : (

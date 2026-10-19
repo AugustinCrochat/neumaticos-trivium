@@ -37,11 +37,14 @@ export function ProductCard({
   product,
   imageFooter,
   isCheapest,
+  cheapestLabel,
   note,
 }: {
   product: TireProduct;
   imageFooter?: ReactNode;
   isCheapest?: boolean;
+  /** Medida a la que se refiere el tag, para listados con medidas mezcladas. */
+  cheapestLabel?: string;
   note?: ReactNode;
 }) {
   const hasImage =
@@ -62,7 +65,7 @@ export function ProductCard({
         <div className="absolute top-3 left-3 z-10 flex flex-col gap-2 items-start">
           {isCheapest && (
             <span className="bg-emerald-600 text-white text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-md shadow-md animate-pulse">
-              Mejor precio
+              Mejor precio{cheapestLabel ? ` en ${cheapestLabel}` : ""}
             </span>
           )}
           {product.priceOld && (
