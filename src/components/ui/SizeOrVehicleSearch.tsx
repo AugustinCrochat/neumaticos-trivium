@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { TireSizeSearch } from "@/components/ui/TireSizeSearch";
 import { VehicleSizeSearch } from "@/components/ui/VehicleSizeSearch";
+import { PriceTagIcon } from "@/components/ui/PriceTagIcon";
 import { useVehicle } from "@/contexts/vehicle-context";
 
 export function SizeOrVehicleSearch({
@@ -78,14 +79,7 @@ export function SizeOrVehicleSearch({
           </svg>
         </span>
         <span className="text-sm font-bold text-navy-900">Solo económicos</span>
-        <span
-          aria-hidden="true"
-          className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-sm font-black ${
-            economicos ? "bg-orange-500 text-white" : "bg-slate-200 text-slate-500"
-          }`}
-        >
-          %
-        </span>
+        <PriceTagIcon className={`h-7 w-5 shrink-0 transition-opacity ${economicos ? "" : "opacity-60 grayscale"}`} />
       </label>
       </div>
 
