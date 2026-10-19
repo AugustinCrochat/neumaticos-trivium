@@ -701,7 +701,7 @@ export function ShopPage({
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                   {exactResults.map(product => (
-                    <ProductCard key={product.id} product={product} isCheapest={mejoresExactos.has(product.id)} />
+                    <ProductCard key={product.id} product={product} isCheapest={mejoresExactos.has(product.id)} cheapestLabel={mejoresExactos.get(product.id)} />
                   ))}
                 </div>
               </section>

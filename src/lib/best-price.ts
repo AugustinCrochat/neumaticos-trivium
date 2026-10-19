@@ -20,9 +20,8 @@ export function bestPriceByGroup(products: TireProduct[]): Map<string, string> {
   }
   const best = new Map<string, string>();
   for (const g of groups.values()) {
-    if (g.length < 2) continue;
     const top = g.filter((p) => p.enStock).sort((a, b) => a.price - b.price)[0];
-    if (top) best.set(top.id, sizeLabel(top));
+    if (top) best.set(top.id, `${sizeLabel(top)}${top.isCarga ? " Carga" : ""}${top.isAT ? " A/T" : ""}`);
   }
   return best;
 }

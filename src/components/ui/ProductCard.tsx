@@ -64,8 +64,14 @@ export function ProductCard({
       <Link href={`/productos/${product.slug}`} className="relative bg-white pt-[95%] overflow-hidden block">
         <div className="absolute top-3 left-3 z-10 flex flex-col gap-2 items-start">
           {isCheapest && (
-            <span className="bg-emerald-600 text-white text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-md shadow-md animate-pulse">
-              Mejor precio{cheapestLabel ? ` en ${cheapestLabel}` : ""}
+            <span className="flex max-w-[11rem] items-center gap-1.5 rounded-lg bg-gradient-to-r from-emerald-600 to-emerald-500 py-1 pl-1.5 pr-2.5 text-white shadow-lg shadow-emerald-600/30 ring-2 ring-white">
+              <svg className="h-4 w-4 shrink-0 text-amber-300" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path d="M10 1.5l2.6 5.3 5.9.9-4.25 4.15 1 5.85L10 14.9l-5.25 2.8 1-5.85L1.5 7.7l5.9-.9L10 1.5z" />
+              </svg>
+              <span className="flex flex-col leading-none">
+                <span className="text-[11px] font-black uppercase tracking-wider">Mejor precio</span>
+                {cheapestLabel && <span className="mt-0.5 text-[10px] font-bold text-emerald-50">{cheapestLabel}</span>}
+              </span>
             </span>
           )}
           {product.priceOld && (

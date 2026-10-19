@@ -41,10 +41,8 @@ export function CategoryProductGrid({ productos }: { productos: TireProduct[] })
   const hayFiltros = aro != null || marca != null || soloStock;
 
   // Mejor precio por medida y tipo, sobre el listado completo (no sobre el
-  // filtrado) así el tag no salta de producto al filtrar. Con medidas mezcladas
-  // se aclara la medida en el tag.
+  // filtrado) así el tag no salta de producto al filtrar. El tag aclara medida y tipo.
   const mejores = useMemo(() => bestPriceByGroup(productos), [productos]);
-  const variasMedidas = aros.length > 1 || new Set(productos.map((p) => `${p.size.width}/${p.size.profile}`)).size > 1;
   const lista = filtrados;
 
   const pill = (activo: boolean) =>
@@ -138,7 +136,7 @@ export function CategoryProductGrid({ productos }: { productos: TireProduct[] })
       {lista.length > 0 ? (
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6 lg:grid-cols-4">
           {lista.map((p) => (
-            <ProductCard key={p.id} product={p} isCheapest={mejores.has(p.id)} cheapestLabel={variasMedidas ? mejores.get(p.id) : undefined} />
+            <ProductCard key={p.id} product={p} isCheapest={mejores.has(p.id)} cheapestLabel={mejores.get(p.id)} />
           ))}
         </div>
       ) : (
