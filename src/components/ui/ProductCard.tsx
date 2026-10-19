@@ -89,7 +89,7 @@ export function ProductCard({
             </span>
           )}
         </div>
-        <div className="absolute inset-0 p-1">
+        <div className="absolute inset-0 translate-y-3 p-1 md:translate-y-0">
           {hasImage ? (
             <div className="relative w-full h-full">
               <Image
