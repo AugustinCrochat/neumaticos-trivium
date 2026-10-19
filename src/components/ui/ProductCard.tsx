@@ -66,9 +66,7 @@ export function ProductCard({
         <div className="absolute top-3 left-3 z-10 flex flex-col gap-2 items-start">
           {isCheapest && (
             <span className="flex max-w-[11rem] items-center gap-1.5 rounded-lg bg-gradient-to-r from-emerald-600 to-emerald-500 py-1 pl-1.5 pr-2.5 text-white shadow-lg shadow-emerald-600/30 ring-2 ring-white">
-              <span className="flex h-7 w-6 shrink-0 items-center justify-center rounded-md bg-white">
-                <PriceTagIcon className="h-6 w-5" />
-              </span>
+              <PriceTagIcon className="h-7 w-5 shrink-0" />
               <span className="flex flex-col leading-none">
                 <span className="text-[11px] font-black uppercase tracking-wider">Mejor precio</span>
                 {cheapestLabel && <span className="mt-0.5 text-[10px] font-bold text-emerald-50">{cheapestLabel}</span>}
