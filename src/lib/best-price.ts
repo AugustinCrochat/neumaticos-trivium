@@ -20,8 +20,13 @@ export function bestPriceByGroup(products: TireProduct[]): Map<string, string> {
   }
   const best = new Map<string, string>();
   for (const g of groups.values()) {
-    const top = g.filter((p) => p.enStock).sort((a, b) => a.price - b.price)[0];
-    if (top) best.set(top.id, `${sizeLabel(top)}${top.isCarga ? " Carga" : ""}${top.isAT ? " A/T" : ""}`);
+    // Todos los empatados en el mínimo llevan el tag.
+    const conStock = g.filter((p) => p.enStock);
+    if (conStock.length === 0) continue;
+    const min = Math.min(...conStock.map((p) => p.price));
+    for (const p of conStock) {
+      if (p.price === min) best.set(p.id, `${sizeLabel(p)}${p.isCarga ? " Carga" : ""}${p.isAT ? " A/T" : ""}`);
+    }
   }
   return best;
 }
