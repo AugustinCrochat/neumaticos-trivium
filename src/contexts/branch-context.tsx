@@ -29,6 +29,13 @@ function readBranchCookie(): string | null {
   return match ? decodeURIComponent(match[1]) : null;
 }
 
+// Cookie de sesión (sin max-age) para la sucursal sugerida por IP: las páginas
+// del servidor leen la misma cookie, pero una sugerencia aproximada no debe
+// quedar fija un año — la próxima visita se vuelve a estimar.
+function writeSessionBranchCookie(branchId: string) {
+  document.cookie = `${BRANCH_COOKIE}=${branchId}; path=/; SameSite=Lax`;
+}
+
 function writeBranchCookie(branchId: string) {
   document.cookie = `${BRANCH_COOKIE}=${branchId}; path=/; max-age=31536000; SameSite=Lax`;
 }
@@ -61,7 +68,25 @@ export function BranchProvider({ children }: { children: ReactNode }) {
         setSelectedBranchState(branch);
         setHasConfirmedBranch(true);
       }
+      return;
     }
+
+    // Primera visita sin elección previa: se preselecciona la sucursal más
+    // cercana por IP. Si el usuario elige otra, setSelectedBranch pisa esto.
+    let cancelado = false;
+    fetch("/api/sucursal-cercana", { cache: "no-store" })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((json: { branchId: string | null } | null) => {
+        const branch = json?.branchId ? BRANCHES.find((b) => b.id === json.branchId) : undefined;
+        if (!branch || cancelado || readBranchCookie()) return;
+        setSelectedBranchState(branch);
+        writeSessionBranchCookie(branch.id);
+        setHasConfirmedBranch(true);
+      })
+      .catch(() => {});
+    return () => {
+      cancelado = true;
+    };
   }, []);
 
   const setSelectedBranch = (branch: Branch) => {
