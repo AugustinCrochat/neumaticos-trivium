@@ -86,7 +86,7 @@ export function LocalProductCarousel({
         className="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth px-4 py-3"
       >
         {lista.map((p) => (
-          <div key={p.id} className="w-[68vw] max-w-[260px] shrink-0 snap-start md:w-[250px]">
+          <div key={p.id} className="flex w-[68vw] max-w-[260px] shrink-0 snap-start md:w-[250px] [&>article]:w-full">
             <ProductCard
               product={p}
               isCheapest={mejoresMap.has(p.id)}
