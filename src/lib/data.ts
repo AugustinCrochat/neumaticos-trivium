@@ -93,6 +93,8 @@ export const BRANDS: TireBrand[] = [
     id: "yokohama",
     name: "Yokohama",
     origin: "Japón",
+    logoUrl: "/brands/yokohama.png",
+    description: "Marca japonesa con más de un siglo de trayectoria y fuerte presencia en 4x4 y all-terrain.",
   },
   {
     id: "grenlander",

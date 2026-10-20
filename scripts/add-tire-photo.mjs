@@ -14,7 +14,12 @@
  * nombre de archivo distinto (para SEO) que apunte a la misma imagen fuente.
  *
  * Uso:
- *   node --env-file=.env.local scripts/add-tire-photo.mjs <ruta-foto> "<marca>" "<modelo>"
+ *   node --env-file=.env.local scripts/add-tire-photo.mjs <ruta-foto> "<marca>" "<modelo>" [nombre-seo]
+ *
+ * nombre-seo (opcional) reemplaza "<marca>-<modelo>" en el nombre del archivo
+ * (ej. "yokohama-geolandar-at-g018" cuando el POS solo dice "G018"). Si se usa,
+ * hay que registrar el alias en IMAGE_NAME_ALIASES de src/lib/pos-api.ts para
+ * que el sitio lo encuentre sin imagen_url en el POS.
  *
  * Ejemplo:
  *   node --env-file=.env.local scripts/add-tire-photo.mjs ~/Descargas/kingpro.jpg "Grenlander" "Kingpro One"
@@ -39,7 +44,7 @@ import {
 } from "./lib/tire-photos.mjs";
 
 async function main() {
-  const [, , sourcePhoto, marca, modelo] = process.argv;
+  const [, , sourcePhoto, marca, modelo, fileBase] = process.argv;
 
   if (!sourcePhoto || !marca || !modelo) {
     console.error(
@@ -74,7 +79,7 @@ async function main() {
 
   for (const [sizeKey, prods] of bySize) {
     const [width, profile, rim] = sizeKey.split("-");
-    const filename = `${brandSlug}-${modelSlug}-${width}-${profile}-r${rim}.webp`;
+    const filename = `${fileBase || `${brandSlug}-${modelSlug}`}-${width}-${profile}-r${rim}.webp`;
     const outPath = path.join(OUTPUT_DIR, filename);
     const publicUrl = `${SITE_URL}/images/products/${filename}`;
 

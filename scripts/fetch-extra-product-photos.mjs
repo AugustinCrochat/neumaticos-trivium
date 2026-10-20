@@ -26,7 +26,7 @@
  * son la misma foto — a diferencia de la etiqueta UE, que sí cambia por
  * medida exacta.
  */
-import { writeFileSync, mkdirSync } from "node:fs";
+import { writeFileSync, readFileSync, mkdirSync } from "node:fs";
 import path from "node:path";
 import { compositeOnWhite } from "./lib/tire-photos.mjs";
 
@@ -84,6 +84,13 @@ const SOURCES = {
   // S/A/T+ y S-I S-ATR (all-terrain/highway, 1 SKU cada uno) no están en el
   // catálogo de neumaticosmartin.com.ar ni encontramos otro revendedor con
   // ficha propia — quedan sin fotos extra por ahora.
+  // Yokohama Geolandar A/T4 (G018): ficha de Central Tire, que trae banda y
+  // flanco de estudio. La key sigue siendo la del POS (marca + "G018"), pero los
+  // archivos llevan el nombre completo del modelo para SEO.
+  "yokohama-g018": [
+    { url: "https://centraltire.com.ar/wp-content/uploads/2026/05/G018-1.png", angulo: "banda", file: "yokohama-geolandar-at-g018-banda" },
+    { url: "https://centraltire.com.ar/wp-content/uploads/2026/05/G018-2.jpg", angulo: "flanco", file: "yokohama-geolandar-at-g018-flanco" },
+  ],
   "pirelli-p400ev": [
     { url: "https://neumaticosmartin.com.ar/tienda/wp-content/uploads/2022/06/p400-evo-img-2.jpg", angulo: "flanco" },
     { url: "https://neumaticosmartin.com.ar/tienda/wp-content/uploads/2022/06/p400-evo-img-3.jpg", angulo: "banda" },
@@ -98,19 +105,25 @@ const SOURCES = {
 
 async function main() {
   mkdirSync(OUT_DIR, { recursive: true });
-  const manifest = {};
+  // Con slugs como argumentos solo se bajan esos modelos y se suman al
+  // manifiesto existente, sin volver a bajar (ni pisar) el resto.
+  const only = process.argv.slice(2);
+  const manifest = only.length
+    ? JSON.parse(readFileSync("./src/lib/product-extra-photos.json", "utf8"))
+    : {};
 
   for (const [slug, photos] of Object.entries(SOURCES)) {
+    if (only.length && !only.includes(slug)) continue;
     manifest[slug] = [];
     for (let i = 0; i < photos.length; i++) {
-      const { url, angulo } = photos[i];
+      const { url, angulo, file } = photos[i];
       const res = await fetch(url, { headers: { "User-Agent": "Mozilla/5.0" } });
       if (!res.ok) {
         console.log(`✗ ${slug} (${angulo}): HTTP ${res.status}`);
         continue;
       }
       const buffer = Buffer.from(await res.arrayBuffer());
-      const outName = `${slug}-${i + 1}.webp`;
+      const outName = file ? `${file}.webp` : `${slug}-${i + 1}.webp`;
       const webp = await compositeOnWhite(buffer);
       writeFileSync(path.join(OUT_DIR, outName), webp);
       manifest[slug].push(`/images/products-extra/${outName}`);

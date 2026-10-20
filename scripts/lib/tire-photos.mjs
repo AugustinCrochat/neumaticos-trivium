@@ -15,9 +15,11 @@ export function slugify(text) {
 }
 
 export async function fetchProductos() {
-  const POS_API_URL = process.env.POS_API_URL;
-  if (!POS_API_URL) throw new Error("Falta POS_API_URL (corré con node --env-file=.env.local ...)");
-  const res = await fetch(`${POS_API_URL}/productos`);
+  // POS_API_BASE_URL ya no lleva sucursal: el catálogo es el mismo en todas,
+  // así que alcanza con la default.
+  const base = process.env.POS_API_BASE_URL?.trim() || process.env.POS_API_URL;
+  if (!base) throw new Error("Falta POS_API_BASE_URL (corré con node --env-file=.env.local ...)");
+  const res = await fetch(`${base}/arguello/productos`);
   if (!res.ok) throw new Error(`POS respondió ${res.status}`);
   const data = await res.json();
   return data.productos;

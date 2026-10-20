@@ -160,6 +160,12 @@ function fixBrandAndModel(rawMarca: string, rawModelo: string): { marca: string;
   return { marca: rawMarca, modelo: fixModelName(rawModelo) };
 }
 
+// Algunos modelos están cargados en el POS solo por código ("G018") y sus fotos
+// llevan el nombre completo para SEO: "<marca>-<modelo>" del POS -> base del archivo.
+const IMAGE_NAME_ALIASES: Record<string, string> = {
+  "yokohama-g018": "yokohama-geolandar-at-g018",
+};
+
 // Mientras el POS no tenga imagen_url cargada, usamos la foto que ya subimos
 // nosotros a /public/images/products (ver scripts/add-tire-photo*.mjs), buscando
 // por marca+modelo+medida original del POS (sin la corrección de fixBrandAndModel).
@@ -168,7 +174,8 @@ function fixBrandAndModel(rawMarca: string, rawModelo: string): { marca: string;
 function localImageFallback(p: PosProducto): string | null {
   const brandSlug = slugify(p.marca || "");
   const modelSlug = slugify(p.modelo || "");
-  const filename = `${brandSlug}-${modelSlug}-${p.neumatico_ancho}-${p.neumatico_perfil}-r${p.neumatico_diametro}.webp`;
+  const base = `${brandSlug}-${modelSlug}`;
+  const filename = `${IMAGE_NAME_ALIASES[base] ?? base}-${p.neumatico_ancho}-${p.neumatico_perfil}-r${p.neumatico_diametro}.webp`;
   return AVAILABLE_IMAGES.has(filename) ? `/images/products/${filename}` : null;
 }
 
