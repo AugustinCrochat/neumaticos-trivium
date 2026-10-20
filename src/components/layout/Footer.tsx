@@ -79,13 +79,19 @@ export function Footer() {
             </h4>
             <ul className="space-y-2">
               {[
+                { href: "/neumaticos-baratos", label: "Neumáticos baratos" },
                 { href: "/neumaticos", label: "Neumáticos por medida" },
+                { href: "/neumaticos/at", label: "Neumáticos A/T" },
+                { href: "/neumaticos/carga", label: "Neumáticos de carga" },
                 { href: "/catalogo", label: "Catálogo de neumáticos" },
                 { href: "/marcas", label: "Marcas" },
                 { href: "/tuercas-antirrobo", label: "Tuercas antirrobo" },
                 { href: "/calculadora-equivalencia-neumaticos", label: "Calculadora de equivalencias" },
                 { href: "/cotizador", label: "Cotizador de neumáticos" },
-                { href: "/servicios", label: "Servicios" },
+                { href: "/servicios", label: "Gomería y servicios" },
+                { href: "/servicios/alineacion", label: "Alineación" },
+                { href: "/servicios/balanceo", label: "Balanceo" },
+                { href: "/servicios/rotacion-de-ruedas", label: "Rotación de ruedas" },
                 { href: "/blog", label: "Blog" },
                 { href: "/contacto", label: "Contacto" },
                 { href: "/sucursales", label: "Sucursales" },

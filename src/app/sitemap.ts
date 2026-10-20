@@ -61,6 +61,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url("/neumaticos/ht", 0.7, "weekly"),
     url("/neumaticos/at", 0.7, "weekly"),
     url("/neumaticos/carga", 0.7, "weekly"),
+    url("/neumaticos-baratos", 0.9, "daily"),
     url("/neumaticos-en", 0.7, "monthly"),
     url("/marcas", 0.7, "weekly"),
     url("/vehiculos", 0.8, "weekly"),
