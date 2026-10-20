@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { FREE_SHIPPING_THRESHOLD, SHIPPING_FLAT_RATE } from "@/lib/config";
+import { DEFAULT_BRANCH_ID, FREE_SHIPPING_THRESHOLD, SHIPPING_FLAT_RATE } from "@/lib/config";
+import { getProductosDesdePOS } from "@/lib/pos-api";
+import { bestPriceByGroup } from "@/lib/best-price";
 import { SERVICES } from "@/lib/data";
 import {
   LOCALIDADES,
@@ -15,6 +17,8 @@ import { FaqSection } from "@/components/seo/FaqSection";
 import { MEDIDAS_PRIORITARIAS, formatSize, sizeSlug } from "@/lib/tire-sizes";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 import { PreselectBranch } from "@/components/ui/PreselectBranch";
+import { LocalProductCarousel } from "../LocalProductCarousel";
+import { LocalPhotos } from "../LocalPhotos";
 
 /**
  * Landings de SEO local: "neumáticos en Villa Allende", "gomería en Saldán".
@@ -30,10 +34,10 @@ import { PreselectBranch } from "@/components/ui/PreselectBranch";
  * doorway pages y puede desindexar todo el conjunto: el contenido propio no es
  * decorativo acá, es lo que sostiene la estrategia.
  *
- * No consultan el catálogo: son estáticas puras. Con el caché incremental sin
- * R2 (ver open-next.config.ts), cualquier fetch acá haría que cada isolate frío
- * de Cloudflare espere a la red antes de responder. El stock y los precios
- * viven en las landings de medida, a un clic de acá.
+ * Leen el catálogo (DEFAULT_BRANCH_ID, como el resto de las landings de SEO)
+ * solo para el carrusel de productos, y como el sitio es estático sin ISR eso
+ * ocurre en el build: el refresco de stock y precios es el redeploy del cron.
+ * El stock en vivo lo corrige LiveStockProvider en el cliente.
  */
 export const dynamic = "force-static";
 
@@ -152,6 +156,13 @@ export default async function LocalidadPage({ params }: Props) {
 
   const branch = getBranchForLocalidad(localidad);
   const medidas = MEDIDAS_PRIORITARIAS.slice(0, 12);
+  // Lo más vendido primero, y a igual venta el más barato: el carrusel tiene
+  // que abrir con lo que más probablemente convierte.
+  const todos = await getProductosDesdePOS(DEFAULT_BRANCH_ID);
+  const conStock = todos
+    .filter((p) => p.enStock)
+    .sort((a, b) => (b.vendidos ?? 0) - (a.vendidos ?? 0) || a.price - b.price);
+  const mejores = [...bestPriceByGroup(conStock)];
   const otras = LOCALIDADES.filter((l) => l.slug !== localidad.slug);
 
   const waLink = `https://wa.me/${branch.whatsapp}?text=${encodeURIComponent(
@@ -194,6 +205,12 @@ export default async function LocalidadPage({ params }: Props) {
           </Link>
         </div>
       </header>
+
+      <LocalProductCarousel
+        productos={conStock}
+        mejores={mejores}
+        titulo={`Neumáticos con stock y precio hoy — para ${localidad.name}`}
+      />
 
       {/* Datos del local: el bloque NAP que Google cruza con la ficha de Maps */}
       <section className="mb-12 grid gap-6 rounded-2xl border border-slate-200 bg-white p-6 md:grid-cols-2">
@@ -255,6 +272,8 @@ export default async function LocalidadPage({ params }: Props) {
           )}
         </div>
       </section>
+
+      {!branch.provisorio && <LocalPhotos zona={localidad.name} />}
 
       {/* Servicios: solo con taller confirmado */}
       {!branch.provisorio && (
