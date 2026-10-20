@@ -8,6 +8,8 @@ import {
   BRANCHES,
   type Branch,
 } from "./config";
+import { SERVICES } from "./data";
+import { ROTACION_SERVICE } from "./servicios-seo";
 
 /** Nombre comercial — el que Google tiene que asociar a la marca. */
 export const SITE_NAME = "Neumáticos Trivium";
@@ -86,12 +88,48 @@ export function tireShopJsonLd(branch: Branch) {
       latitude: branch.coordinates.lat,
       longitude: branch.coordinates.lng,
     },
-    openingHoursSpecification: branch.schedule.map((rule) => ({
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: rule.days.map((d) => SCHEMA_DAYS[d]),
-      opens: rule.open,
-      closes: rule.close,
-    })),
+    // Una sucursal que todavía no abrió no declara horario: publicarlo diría
+    // que ya atiende.
+    ...(branch.apertura
+      ? {}
+      : {
+          openingHoursSpecification: branch.schedule.map((rule) => ({
+            "@type": "OpeningHoursSpecification",
+            dayOfWeek: rule.days.map((d) => SCHEMA_DAYS[d]),
+            opens: rule.open,
+            closes: rule.close,
+          })),
+        }),
+    // Catálogo de servicios de la gomería: nombra, con su URL, lo que Google
+    // tiene que asociar al negocio (alineación, balanceo, rotación, montaje).
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: "Neumáticos y gomería",
+      itemListElement: [
+        {
+          "@type": "OfferCatalog",
+          name: "Neumáticos",
+          url: absoluteUrl("/neumaticos-baratos"),
+        },
+        ...[...SERVICES, ROTACION_SERVICE].map((service) => ({
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: service.title,
+            url: absoluteUrl(`/servicios/${service.id}`),
+          },
+        })),
+      ],
+    },
+    knowsAbout: [
+      "Neumáticos",
+      "Cubiertas",
+      "Neumáticos A/T",
+      "Neumáticos de carga",
+      "Alineación",
+      "Balanceo",
+      "Rotación de ruedas",
+    ],
     // Las localidades que atiende esta sucursal — le da a Google el radio real
     // de servicio en vez de dejarlo inferir sólo por la dirección.
     areaServed: branch.areaServed.map((name) => ({
