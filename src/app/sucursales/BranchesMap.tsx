@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import maplibregl, { type Map, type Marker } from "maplibre-gl";
+import maplibregl, { type ExpressionSpecification, type Map, type Marker } from "maplibre-gl";
 import type { Branch } from "@/lib/config";
 import { useBranch } from "@/contexts/branch-context";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
@@ -54,47 +54,68 @@ function getBranchLngLat(branch: Branch): [number, number] {
   return [branch.coordinates.lng, branch.coordinates.lat];
 }
 
-// Marcador HTML con el logo de Trivium sobre una insignia navy (para que el
-// logo blanco se lea sobre el mapa claro) y una etiqueta con el nombre corto.
-function createBranchMarkerElement(shortName: string) {
-  // anchor:"bottom" del Marker pinea el borde inferior de ESTE div al punto
-  // geográfico exacto — tiene que ser la puntita del "pointer", no el fondo
-  // del texto de abajo. Antes el label estaba en el flujo normal debajo del
-  // pointer, así que el borde inferior real era el fondo del texto: un
-  // desfasaje fijo en píxeles que de cerca no se nota (representa pocos
-  // metros) pero de lejos, con el mismo mapa mostrando kilómetros por
-  // pantalla, hace que el pin quede visiblemente corrido de la ubicación
-  // real. El label ahora es absolute (fuera del flujo) para que no cuente en
-  // la caja del wrapper.
-  const wrapper = document.createElement("div");
-  wrapper.style.cssText =
-    "position:relative;display:flex;flex-direction:column;align-items:center;cursor:pointer;user-select:none";
+// Pines de sucursal como capas nativas del mapa (fuente GeoJSON + symbol
+// layers), NO como maplibregl.Marker: el Marker reposiciona un <div> por CSS en
+// cada frame y su smartWrap podía dejar el pin corrido de su ubicación real en
+// un zoom-out rápido (se vio con San Justo, dos veces). Una capa GL la
+// posiciona el renderer a partir de la fuente + cámara, sin estado en JS.
+const pinImageExpr = (activeId: string): ExpressionSpecification => [
+  "case", ["==", ["get", "id"], activeId], "pin-sucursal-activa", "pin-sucursal",
+];
+const pinSizeExpr = (activeId: string): ExpressionSpecification => [
+  "case", ["==", ["get", "id"], activeId], 1.12, 1,
+];
+const PIN_BORDER = "#000000";
+const PIN_BORDER_ACTIVE = "#ff1e00";
 
-  const badge = document.createElement("div");
-  badge.dataset.role = "badge";
-  badge.style.cssText =
-    "display:flex;align-items:center;justify-content:center;width:52px;height:52px;padding:6px;border-radius:15px;background:#ffffff;border:2px solid #000000;box-shadow:0 4px 12px rgba(10,26,48,0.35);transition:transform .15s ease,border-color .15s ease";
+// Dibuja la insignia (cuadrado blanco redondeado con borde, logo y puntero) a
+// 2x para pantallas retina; se registra con pixelRatio 2 (52×60 px CSS).
+function drawPinImage(logo: HTMLImageElement, borderColor: string) {
+  const ratio = 2;
+  const w = 56;
+  const h = 66;
+  const canvas = document.createElement("canvas");
+  canvas.width = w * ratio;
+  canvas.height = h * ratio;
+  const ctx = canvas.getContext("2d")!;
+  ctx.scale(ratio, ratio);
+  const box = 52;
+  const x0 = (w - box) / 2;
+  const y0 = 2;
+  ctx.shadowColor = "rgba(10,26,48,0.35)";
+  ctx.shadowBlur = 6;
+  ctx.shadowOffsetY = 2;
+  ctx.fillStyle = "#ffffff";
+  ctx.strokeStyle = borderColor;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.roundRect(x0 + 1, y0 + 1, box - 2, box - 2, 15);
+  ctx.fill();
+  ctx.shadowColor = "transparent";
+  ctx.stroke();
+  const pad = 8;
+  const inner = box - pad * 2;
+  const scale = Math.min(inner / logo.naturalWidth, inner / logo.naturalHeight);
+  const lw = logo.naturalWidth * scale;
+  const lh = logo.naturalHeight * scale;
+  ctx.drawImage(logo, x0 + (box - lw) / 2, y0 + (box - lh) / 2, lw, lh);
+  ctx.fillStyle = borderColor;
+  ctx.beginPath();
+  ctx.moveTo(w / 2 - 6, y0 + box - 1);
+  ctx.lineTo(w / 2 + 6, y0 + box - 1);
+  ctx.lineTo(w / 2, y0 + box + 8);
+  ctx.closePath();
+  ctx.fill();
+  return { data: ctx.getImageData(0, 0, canvas.width, canvas.height), ratio };
+}
 
-  const img = document.createElement("img");
-  img.src = "/pin-trivium.png";
-  img.alt = "Neumáticos Trivium";
-  img.style.cssText = "width:100%;height:100%;object-fit:contain;display:block";
-  badge.appendChild(img);
-
-  const pointer = document.createElement("div");
-  pointer.dataset.role = "pointer";
-  pointer.style.cssText =
-    "width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:8px solid #000000;margin-top:-1px";
-
-  const label = document.createElement("div");
-  label.textContent = shortName;
-  label.style.cssText =
-    "position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:3px;font-weight:800;font-size:12px;color:#000000;white-space:nowrap;text-shadow:0 0 2px #fff,0 0 2px #fff,0 0 2px #fff,0 0 2px #fff";
-
-  wrapper.appendChild(badge);
-  wrapper.appendChild(pointer);
-  wrapper.appendChild(label);
-  return { wrapper, badge, pointer };
+function loadImage(src: string) {
+  return new Promise<HTMLImageElement>((resolve, reject) => {
+    const img = new window.Image();
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    img.src = src;
+  });
 }
 
 function createUserMarkerElement() {
@@ -212,7 +233,7 @@ export function BranchesMap({ branches, comingSoon = [] }: BranchesMapProps) {
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<Map | null>(null);
   const userMarkerRef = useRef<Marker | null>(null);
-  const branchMarkersRef = useRef<Record<string, { marker: Marker; badge: HTMLElement; pointer: HTMLElement }>>({});
+  const activeIdRef = useRef<string>("");
   const initialBranchRef = useRef<Branch | null>(null);
   const [activeBranchId, setActiveBranchId] = useState<string | null>(null);
   const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
@@ -272,14 +293,57 @@ export function BranchesMap({ branches, comingSoon = [] }: BranchesMapProps) {
     map.on("load", () => {
       map.resize();
 
-      for (const branch of branches) {
-        const { wrapper, badge, pointer } = createBranchMarkerElement(branch.shortName);
-        wrapper.addEventListener("click", () => selectBranch(branch));
-        const marker = new maplibregl.Marker({ element: wrapper, anchor: "bottom" })
-          .setLngLat(getBranchLngLat(branch))
-          .addTo(map);
-        branchMarkersRef.current[branch.id] = { marker, badge, pointer };
-      }
+      loadImage("/pin-trivium.png")
+        .then((logo) => {
+          const normal = drawPinImage(logo, PIN_BORDER);
+          const active = drawPinImage(logo, PIN_BORDER_ACTIVE);
+          if (!map.hasImage("pin-sucursal")) map.addImage("pin-sucursal", normal.data, { pixelRatio: normal.ratio });
+          if (!map.hasImage("pin-sucursal-activa")) map.addImage("pin-sucursal-activa", active.data, { pixelRatio: active.ratio });
+
+          map.addSource("branches", {
+            type: "geojson",
+            data: {
+              type: "FeatureCollection",
+              features: branches.map((branch) => ({
+                type: "Feature",
+                properties: { id: branch.id, name: branch.shortName },
+                geometry: { type: "Point", coordinates: getBranchLngLat(branch) },
+              })),
+            },
+          });
+          map.addLayer({
+            id: "branches-label",
+            type: "symbol",
+            source: "branches",
+            layout: {
+              "text-field": ["get", "name"],
+              "text-size": 12,
+              "text-offset": [0, 0.6],
+              "text-anchor": "top",
+              "text-allow-overlap": true,
+            },
+            paint: { "text-color": "#000000", "text-halo-color": "#ffffff", "text-halo-width": 2 },
+          });
+          map.addLayer({
+            id: "branches-icon",
+            type: "symbol",
+            source: "branches",
+            layout: {
+              "icon-image": pinImageExpr(activeIdRef.current),
+              "icon-size": pinSizeExpr(activeIdRef.current),
+              "icon-anchor": "bottom",
+              "icon-allow-overlap": true,
+            },
+          });
+          map.on("click", "branches-icon", (e) => {
+            const id = e.features?.[0]?.properties?.id;
+            const branch = branches.find((b) => b.id === id);
+            if (branch) selectBranch(branch);
+          });
+          map.on("mouseenter", "branches-icon", () => { map.getCanvas().style.cursor = "pointer"; });
+          map.on("mouseleave", "branches-icon", () => { map.getCanvas().style.cursor = ""; });
+        })
+        .catch(() => {});
 
       // El pin de "próximamente" se renderiza como capa nativa del mapa
       // (fuente GeoJSON + circle/symbol layers), NO como maplibregl.Marker.
@@ -367,21 +431,19 @@ export function BranchesMap({ branches, comingSoon = [] }: BranchesMapProps) {
     return () => {
       userMarkerRef.current?.remove();
       userMarkerRef.current = null;
-      for (const { marker } of Object.values(branchMarkersRef.current)) marker.remove();
-      branchMarkersRef.current = {};
       map.remove();
       mapRef.current = null;
     };
   }, [branches, comingSoon]);
 
-  // Resalta el marcador de la sucursal activa.
+  // Resalta el pin de la sucursal activa: las expresiones de la capa leen el id
+  // activo, así que se vuelven a setear con el valor nuevo.
   useEffect(() => {
-    for (const [id, { badge, pointer }] of Object.entries(branchMarkersRef.current)) {
-      const isActive = id === activeBranch.id;
-      badge.style.borderColor = isActive ? "#ff1e00" : "#000000";
-      badge.style.transform = isActive ? "scale(1.12)" : "scale(1)";
-      pointer.style.borderTopColor = isActive ? "#ff1e00" : "#000000";
-    }
+    activeIdRef.current = activeBranch.id;
+    const map = mapRef.current;
+    if (!map || !map.getLayer("branches-icon")) return;
+    map.setLayoutProperty("branches-icon", "icon-image", pinImageExpr(activeBranch.id));
+    map.setLayoutProperty("branches-icon", "icon-size", pinSizeExpr(activeBranch.id));
   }, [activeBranch.id]);
 
   useEffect(() => {
