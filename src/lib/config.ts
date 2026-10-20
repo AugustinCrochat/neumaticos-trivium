@@ -194,7 +194,7 @@ export const BRANCHES: Branch[] = [
       "Capital Federal",
     ],
     // WhatsApp/teléfono: número personal de Augustin, provisorio hasta tener el
-    // de la sucursal. El horario sigue siendo el de Argüello (sin confirmar).
+    // de la sucursal. El horario es el mismo que el de Argüello (confirmado).
     // Pendiente de googleStoreCode, reviewUrl y googleMapsEmbedUrl (salen del
     // perfil de Google Business); sin googleStoreCode queda fuera del feed de
     // inventario local.

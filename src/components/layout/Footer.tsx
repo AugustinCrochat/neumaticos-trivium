@@ -124,8 +124,12 @@ export function Footer() {
                   <p className="text-zinc-400 text-xs mb-0.5">{branch.address}</p>
                   <p className="text-zinc-400 text-xs mb-2">{branch.city}</p>
                   <p className="text-zinc-500 text-xs mb-3">{branch.hours}</p>
-                  {branch.googleRating && (
+                  {branch.googleRating ? (
                     <GoogleRatingBadge branchId={branch.id} className="text-zinc-300 mb-3" />
+                  ) : (
+                    branch.apertura && (
+                      <p className="mb-3 text-sm font-bold text-zinc-300">Abrimos {branch.apertura}</p>
+                    )
                   )}
                   <div className="flex gap-2">
                     <a
