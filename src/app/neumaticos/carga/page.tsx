@@ -13,8 +13,8 @@ export async function generateMetadata(): Promise<Metadata> {
   // El precio "desde" va en el título porque es lo que decide el clic en la
   // SERP: el posicionamiento de esta página es precio bajo en carga.
   const title = desde
-    ? `Neumáticos de carga desde $${desde.toLocaleString("es-AR")} para furgones y utilitarios`
-    : "Neumáticos de carga para furgones y utilitarios — precios y medidas";
+    ? `Neumáticos de carga desde $${desde.toLocaleString("es-AR")} en Córdoba`
+    : "Neumáticos de carga en Córdoba para furgones y utilitarios";
   return {
     title,
     description:

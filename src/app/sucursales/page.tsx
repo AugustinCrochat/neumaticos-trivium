@@ -5,7 +5,7 @@ import { BranchesMap } from "./BranchesMap";
 import { canonical } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Sucursales — dónde estamos",
+  title: "Sucursales de neumáticos y gomería en Córdoba",
   description:
     "Dirección, horarios, teléfono y cómo llegar a las sucursales de Neumáticos Trivium. Local con stock propio y taller de alineación y balanceo en Córdoba.",
   alternates: canonical("/sucursales"),

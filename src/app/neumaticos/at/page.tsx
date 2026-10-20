@@ -5,9 +5,9 @@ import { canonical, SITE_NAME } from "@/lib/seo";
 import { CategoryLanding } from "../CategoryLanding";
 
 export const metadata: Metadata = {
-  title: "Neumáticos A/T (All Terrain) — precios y medidas",
+  title: "Neumáticos A/T (All Terrain) en Córdoba: precios y medidas",
   description:
-    "Neumáticos All Terrain para camionetas y 4x4, con stock y precio actualizado. Importación directa, garantía de 1 año y envío a todo el país.",
+    "Neumáticos A/T (All Terrain) para camionetas, pick-ups y 4x4 al mejor precio, con stock y precio actualizado. Importación directa, garantía de 1 año, colocación sin cargo en Córdoba y envío a todo el país.",
   alternates: canonical("/neumaticos/at"),
   openGraph: {
     title: `Neumáticos A/T (All Terrain) — ${SITE_NAME}`,
