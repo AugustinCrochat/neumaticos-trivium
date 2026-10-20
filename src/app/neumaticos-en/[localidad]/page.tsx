@@ -19,6 +19,7 @@ import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 import { PreselectBranch } from "@/components/ui/PreselectBranch";
 import { LocalProductCarousel } from "../LocalProductCarousel";
 import { LocalPhotos } from "../LocalPhotos";
+import { ZonasAgrupadas } from "@/components/seo/ZonasAgrupadas";
 
 /**
  * Landings de SEO local: "neumáticos en Villa Allende", "gomería en Saldán".
@@ -341,17 +342,7 @@ export default async function LocalidadPage({ params }: Props) {
       {otras.length > 0 && (
         <section className="mt-12">
           <h2 className="mb-4 text-xl font-black text-navy-900">Otras zonas que atendemos</h2>
-          <div className="flex flex-wrap gap-2">
-            {otras.map((l) => (
-              <Link
-                key={l.slug}
-                href={`/neumaticos-en/${l.slug}`}
-                className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-bold text-navy-900 transition-colors hover:border-navy-400"
-              >
-                {l.name}
-              </Link>
-            ))}
-          </div>
+          <ZonasAgrupadas variant="light" actual={localidad.slug} />
         </section>
       )}
     </div>

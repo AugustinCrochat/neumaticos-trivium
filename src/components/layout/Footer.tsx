@@ -3,7 +3,7 @@ import Image from "next/image";
 import { BRANCHES, LEGAL_NAME, CUIT, CONTACT_EMAIL, INSTAGRAM_URL, FACEBOOK_URL, YOUTUBE_URL, AFIP_DATA_FISCAL_QR } from "@/lib/config";
 import { GoogleRatingBadge } from "@/components/ui/GoogleRatingBadge";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
-import { LOCALIDADES } from "@/lib/localidades";
+import { ZonasAgrupadas } from "@/components/seo/ZonasAgrupadas";
 import { MEDIDAS_PRIORITARIAS, formatSize, sizeSlug } from "@/lib/tire-sizes";
 
 // Un subconjunto de las medidas prioritarias: enlazar las 22 en el footer de
@@ -188,18 +188,7 @@ export function Footer() {
             <h4 className="mb-4 text-sm font-bold uppercase tracking-wide text-white">
               Zonas que atendemos
             </h4>
-            <ul className="flex flex-wrap gap-x-4 gap-y-2">
-              {LOCALIDADES.map((localidad) => (
-                <li key={localidad.slug}>
-                  <Link
-                    href={`/neumaticos-en/${localidad.slug}`}
-                    className="text-sm text-zinc-400 transition-colors hover:text-white"
-                  >
-                    Neumáticos en {localidad.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <ZonasAgrupadas variant="dark" prefijo />
           </div>
         </div>
       </div>

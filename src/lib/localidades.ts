@@ -22,6 +22,9 @@ export type Localidad = {
   province: string;
   /** Sucursal que la atiende. */
   branchId: string;
+  /** slug de la ciudad que la engloba, si es un barrio/localidad menor: en los
+      listados de zonas se muestra dentro del desplegable de esa ciudad. */
+  parent?: string;
   /** true en la ciudad cabecera — usa un H1 y un copy de mayor alcance. */
   esCabecera?: boolean;
   /** Minutos de auto hasta la sucursal, aproximado y honesto. */
@@ -64,6 +67,7 @@ export const LOCALIDADES: Localidad[] = [
     name: "Argüello",
     province: "Córdoba",
     branchId: "arguello",
+    parent: "cordoba",
     minutosHastaSucursal: 2,
     comoLlegar:
       "Estamos sobre la misma Av. Donato Álvarez al 7971, en pleno Argüello. Si vivís en el barrio, llegás caminando o con cinco minutos de auto desde cualquier punto.",
@@ -174,6 +178,7 @@ export const LOCALIDADES: Localidad[] = [
     name: "Villa Luzuriaga",
     province: "Buenos Aires",
     branchId: "san-justo",
+    parent: "san-justo",
     minutosHastaSucursal: 8,
     comoLlegar:
       "Villa Luzuriaga está pegada a San Justo, dentro del mismo partido: se llega en auto en menos de diez minutos, sin salir de La Matanza ni tomar autopista. Sumá la dirección del local en Google Maps y te marca el recorrido exacto desde tu casa.",
@@ -188,6 +193,7 @@ export const LOCALIDADES: Localidad[] = [
     name: "Ramos Mejía",
     province: "Buenos Aires",
     branchId: "san-justo",
+    parent: "san-justo",
     minutosHastaSucursal: 12,
     comoLlegar:
       "Desde el centro de Ramos Mejía se llega a San Justo en unos doce minutos en auto, siguiendo hacia el sur por La Matanza. Desde la zona de la estación o de Av. de Mayo conviene dejarle a Google Maps la elección del camino según el tránsito.",
@@ -202,6 +208,7 @@ export const LOCALIDADES: Localidad[] = [
     name: "Lomas del Mirador",
     province: "Buenos Aires",
     branchId: "san-justo",
+    parent: "san-justo",
     minutosHastaSucursal: 10,
     comoLlegar:
       "Lomas del Mirador está en el mismo partido, al noreste de San Justo: son unos diez minutos en auto, con el tránsito normal de la zona. Google Maps calcula el recorrido exacto desde tu domicilio y te avisa si hay demoras.",
@@ -216,6 +223,7 @@ export const LOCALIDADES: Localidad[] = [
     name: "Ciudad Evita",
     province: "Buenos Aires",
     branchId: "san-justo",
+    parent: "san-justo",
     minutosHastaSucursal: 15,
     comoLlegar:
       "Desde Ciudad Evita se llega a San Justo en unos quince minutos aproximadamente, yendo por las avenidas principales de La Matanza. Según la hora puede haber más tránsito: dejale a Google Maps la elección del camino.",
@@ -230,6 +238,7 @@ export const LOCALIDADES: Localidad[] = [
     name: "Isidro Casanova",
     province: "Buenos Aires",
     branchId: "san-justo",
+    parent: "san-justo",
     minutosHastaSucursal: 15,
     comoLlegar:
       "Desde Isidro Casanova se llega por Ruta 3 hacia el norte: son unos quince minutos aproximadamente hasta San Justo, según el tránsito. Es un recorrido directo, sin cruzar de partido.",
@@ -244,6 +253,7 @@ export const LOCALIDADES: Localidad[] = [
     name: "Laferrere",
     province: "Buenos Aires",
     branchId: "san-justo",
+    parent: "san-justo",
     minutosHastaSucursal: 20,
     comoLlegar:
       "Desde Laferrere se llega a San Justo por Ruta 3 hacia el norte, en unos veinte minutos aproximadamente, según el tránsito. Para elegir el recorrido más rápido a tu hora, Google Maps es lo más confiable.",
@@ -258,6 +268,7 @@ export const LOCALIDADES: Localidad[] = [
     name: "González Catán",
     province: "Buenos Aires",
     branchId: "san-justo",
+    parent: "san-justo",
     minutosHastaSucursal: 25,
     comoLlegar:
       "Desde González Catán se llega a San Justo por Ruta 3 hacia el norte: son unos veinticinco minutos aproximadamente, según el tránsito y la hora. Dejale a Google Maps la elección del camino.",
@@ -272,6 +283,7 @@ export const LOCALIDADES: Localidad[] = [
     name: "Aldo Bonzi",
     province: "Buenos Aires",
     branchId: "san-justo",
+    parent: "san-justo",
     minutosHastaSucursal: 15,
     comoLlegar:
       "Aldo Bonzi queda al este de San Justo, ya sobre el límite con la Ciudad: se llega en unos quince minutos aproximadamente, según el tránsito. Google Maps te marca el recorrido exacto desde tu casa.",
@@ -286,6 +298,7 @@ export const LOCALIDADES: Localidad[] = [
     name: "Ciudadela",
     province: "Buenos Aires",
     branchId: "san-justo",
+    parent: "tres-de-febrero",
     minutosHastaSucursal: 15,
     comoLlegar:
       "Desde Ciudadela se llega a San Justo en unos quince minutos aproximadamente, cruzando hacia La Matanza. Según la hora puede haber más tránsito: dejale a Google Maps la elección del camino.",
@@ -300,6 +313,7 @@ export const LOCALIDADES: Localidad[] = [
     name: "Villa Madero",
     province: "Buenos Aires",
     branchId: "san-justo",
+    parent: "san-justo",
     minutosHastaSucursal: 10,
     comoLlegar:
       "Villa Madero queda al noreste de San Justo, dentro de La Matanza: son unos diez minutos en auto, con el tránsito normal de la zona. Google Maps calcula el recorrido exacto desde tu domicilio.",
@@ -450,4 +464,12 @@ export function getBranchForLocalidad(localidad: Localidad): Branch {
 /** Localidades atendidas por una sucursal, para enlazar desde su ficha. */
 export function localidadesDeSucursal(branchId: string): Localidad[] {
   return LOCALIDADES.filter((l) => l.branchId === branchId);
+}
+
+/** Localidades agrupadas por ciudad: cada ciudad con sus barrios/localidades menores. */
+export function localidadesAgrupadas(): { ciudad: Localidad; barrios: Localidad[] }[] {
+  return LOCALIDADES.filter((l) => !l.parent).map((ciudad) => ({
+    ciudad,
+    barrios: LOCALIDADES.filter((l) => l.parent === ciudad.slug),
+  }));
 }
