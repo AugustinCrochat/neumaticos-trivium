@@ -40,6 +40,7 @@ export function BranchModal() {
   const { isModalOpen, closeModal, setSelectedBranch, selectedBranch, hasConfirmedBranch } = useBranch();
   const [nearestId, setNearestId] = useState<string | null>(null);
   const [geoState, setGeoState] = useState<GeoState>("idle");
+  const [geoMsg, setGeoMsg] = useState("No pudimos acceder a tu ubicación. Elegí manualmente.");
 
   useEffect(() => {
     if (isModalOpen) {
@@ -54,6 +55,7 @@ export function BranchModal() {
 
   function detectLocation() {
     if (!navigator.geolocation) {
+      setGeoMsg("Tu navegador no permite detectar la ubicación. Elegí manualmente.");
       setGeoState("error");
       return;
     }
@@ -69,7 +71,10 @@ export function BranchModal() {
       clearTimeout(watchdog);
       setGeoState(state);
     };
-    const watchdog = setTimeout(() => finish("error"), 15000);
+    const watchdog = setTimeout(() => {
+      setGeoMsg("La ubicación tardó demasiado en responder. Elegí manualmente.");
+      finish("error");
+    }, 15000);
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         const nearest = getNearestBranch(pos.coords.latitude, pos.coords.longitude);
@@ -77,7 +82,16 @@ export function BranchModal() {
         setNearestId(nearest.id);
         finish("done");
       },
-      () => finish("error"),
+      (err) => {
+        setGeoMsg(
+          err.code === err.PERMISSION_DENIED
+            ? "La ubicación está bloqueada para este sitio. Habilitala en los permisos del navegador (el candado junto a la dirección) o elegí manualmente."
+            : err.code === err.POSITION_UNAVAILABLE
+              ? "Tu dispositivo no pudo calcular la ubicación (¿tenés el GPS o la ubicación del sistema activados?). Elegí manualmente."
+              : "La ubicación tardó demasiado en responder. Elegí manualmente."
+        );
+        finish("error");
+      },
       { timeout: 10000, maximumAge: 10 * 60 * 1000 }
     );
   }
@@ -155,7 +169,7 @@ export function BranchModal() {
               <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
               </svg>
-              No pudimos acceder a tu ubicación. Elegí manualmente.
+              {geoMsg}
             </div>
           )}
         </div>
