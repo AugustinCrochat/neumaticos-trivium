@@ -238,7 +238,7 @@ export function ProductImageGallery({
 
   return (
     <div>
-      <div className={`bg-slate-50 rounded-2xl aspect-square flex items-center justify-center relative group overflow-hidden ${current?.kind === "sucursal" ? "" : "p-8"}`}>
+      <div className={`bg-slate-50 rounded-2xl aspect-square flex items-center justify-center relative group overflow-hidden ${current?.kind === "sucursal" ? "" : current?.kind === "etiqueta" ? "p-8" : "p-1 md:p-2"}`}>
         {current?.kind === "foto" && index === 0 && (
           <>
             {badges}

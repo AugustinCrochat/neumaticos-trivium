@@ -62,7 +62,7 @@ export function ProductCard({
   return (
     <article className={`group bg-white rounded-2xl border transition-all duration-300 overflow-hidden flex flex-col ${isCheapest ? "border-emerald-500 shadow-2xl shadow-emerald-500/20 scale-[1.02] relative z-20 ring-4 ring-emerald-500/10" : "border-slate-100 hover:border-navy-200 hover:shadow-xl"}`}>
       {/* Image */}
-      <Link href={`/productos/${product.slug}`} className="relative bg-white pt-[95%] overflow-hidden block">
+      <Link href={`/productos/${product.slug}`} className="relative bg-white pt-[108%] md:pt-[95%] overflow-hidden block">
         <div className="absolute top-3 left-3 z-10 flex flex-col gap-2 items-start">
           {isCheapest && (
             <span className="flex max-w-[11rem] items-center gap-1.5 rounded-lg bg-gradient-to-r from-emerald-600 to-emerald-500 py-1 pl-1.5 pr-2.5 text-white shadow-lg shadow-emerald-600/30 ring-2 ring-white">
@@ -89,7 +89,7 @@ export function ProductCard({
             </span>
           )}
         </div>
-        <div className="absolute inset-0 translate-y-3 p-1 md:translate-y-0">
+        <div className="absolute inset-0 p-1 pt-6 md:pt-1">
           {hasImage ? (
             <div className="relative w-full h-full">
               <Image
