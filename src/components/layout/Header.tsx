@@ -64,11 +64,11 @@ export function Header() {
                     className={
                       link.href === "/ofertas"
                         ? `px-4 py-2 rounded-lg text-sm font-black text-white transition-colors ${
-                            active ? "bg-[#cc1800] ring-2 ring-white/70" : "bg-[#ff1e00] hover:bg-[#cc1800]"
+                            active ? "bg-[#ff1e00] rounded-b-none shadow-[inset_0_-3px_0_#fff]" : "bg-[#ff1e00] hover:bg-[#cc1800]"
                           }`
                         : `px-4 py-2 rounded-lg text-sm transition-colors ${
                             active
-                              ? "bg-zinc-800 font-bold text-white shadow-[inset_0_-2px_0_#ff1e00]"
+                              ? "rounded-b-none font-bold text-white shadow-[inset_0_-3px_0_#ff1e00]"
                               : "font-medium text-zinc-200 hover:text-white hover:bg-zinc-900"
                           }`
                     }
@@ -137,11 +137,11 @@ export function Header() {
                   className={
                     link.href === "/ofertas"
                       ? `block px-4 py-2.5 rounded-lg text-sm font-black text-white transition-colors ${
-                          active ? "bg-[#cc1800] ring-2 ring-white/70" : "bg-[#ff1e00] hover:bg-[#cc1800]"
+                          active ? "bg-[#ff1e00] rounded-b-none shadow-[inset_0_-3px_0_#fff]" : "bg-[#ff1e00] hover:bg-[#cc1800]"
                         }`
                       : `block px-4 py-2.5 rounded-lg text-sm transition-colors ${
                           active
-                            ? "bg-zinc-800 font-bold text-white shadow-[inset_0_-2px_0_#ff1e00]"
+                            ? "rounded-b-none font-bold text-white shadow-[inset_0_-3px_0_#ff1e00]"
                             : "font-medium text-zinc-200 hover:text-white hover:bg-zinc-900"
                         }`
                   }
