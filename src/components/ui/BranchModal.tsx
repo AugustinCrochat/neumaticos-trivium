@@ -58,14 +58,27 @@ export function BranchModal() {
       return;
     }
     setGeoState("loading");
+    // El `timeout` de getCurrentPosition no cuenta la espera del cartel de
+    // permiso: si el cartel se ignora, o el navegador/SO bloquea la ubicación
+    // sin avisar, ninguno de los callbacks se llama y quedaba cargando para
+    // siempre. Este timer corta la espera pase lo que pase.
+    let settled = false;
+    const finish = (state: GeoState) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(watchdog);
+      setGeoState(state);
+    };
+    const watchdog = setTimeout(() => finish("error"), 15000);
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         const nearest = getNearestBranch(pos.coords.latitude, pos.coords.longitude);
+        if (settled) return;
         setNearestId(nearest.id);
-        setGeoState("done");
+        finish("done");
       },
-      () => setGeoState("error"),
-      { timeout: 8000 }
+      () => finish("error"),
+      { timeout: 10000, maximumAge: 10 * 60 * 1000 }
     );
   }
 
