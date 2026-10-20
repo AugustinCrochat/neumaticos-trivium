@@ -170,6 +170,146 @@ export const LOCALIDADES: Localidad[] = [
     incluye: ["Ramos Mejía", "Villa Luzuriaga", "Isidro Casanova", "Laferrere", "González Catán", "Lomas del Mirador"],
   },
   {
+    slug: "villa-luzuriaga",
+    name: "Villa Luzuriaga",
+    province: "Buenos Aires",
+    branchId: "san-justo",
+    minutosHastaSucursal: 8,
+    comoLlegar:
+      "Villa Luzuriaga está pegada a San Justo, dentro del mismo partido: se llega en auto en menos de diez minutos, sin salir de La Matanza ni tomar autopista. Sumá la dirección del local en Google Maps y te marca el recorrido exacto desde tu casa.",
+    intro:
+      "Villa Luzuriaga es el barrio de La Matanza que queda justo al lado de San Justo, entre Ramos Mejía y el centro del partido. Para quien vive o trabaja acá, el local de Trivium es la opción de neumáticos más cercana que hay: no hace falta ir hasta el microcentro ni cruzar la General Paz.",
+    porQue:
+      "Es una zona de mucho tránsito diario, con gente que usa el auto para trabajar y cambia cubiertas seguido. Por eso conviene comparar: el neumático que vendemos es de importación directa y sale bastante menos que en una cadena. Mirá tu medida en la web, comparala con la cotización que ya tenés y, si te sirve, pasás a verlo, porque queda a unas pocas cuadras.",
+    incluye: ["Ramos Mejía"],
+  },
+  {
+    slug: "ramos-mejia",
+    name: "Ramos Mejía",
+    province: "Buenos Aires",
+    branchId: "san-justo",
+    minutosHastaSucursal: 12,
+    comoLlegar:
+      "Desde el centro de Ramos Mejía se llega a San Justo en unos doce minutos en auto, siguiendo hacia el sur por La Matanza. Desde la zona de la estación o de Av. de Mayo conviene dejarle a Google Maps la elección del camino según el tránsito.",
+    intro:
+      "Ramos Mejía es una de las zonas comerciales más fuertes del oeste del Gran Buenos Aires, y desde ahí San Justo queda a un viaje corto. Es un público que compara precios antes de comprar, y Trivium está pensado para eso: stock y precios publicados en la web, sin tener que ir a preguntar.",
+    porQue:
+      "En Ramos Mejía hay muchas gomerías y casas de neumáticos, cada una con su lista de precios. Antes de cambiar las cuatro cubiertas vale la pena ver cuánto sale el mismo neumático en un outlet de importación directa: en un juego completo la diferencia suele pagar el viaje. Elegí tu medida en la web, comparala y decidí con el número en la mano.",
+    incluye: ["Ramos Mejía centro"],
+  },
+  {
+    slug: "lomas-del-mirador",
+    name: "Lomas del Mirador",
+    province: "Buenos Aires",
+    branchId: "san-justo",
+    minutosHastaSucursal: 10,
+    comoLlegar:
+      "Lomas del Mirador está en el mismo partido, al noreste de San Justo: son unos diez minutos en auto, con el tránsito normal de la zona. Google Maps calcula el recorrido exacto desde tu domicilio y te avisa si hay demoras.",
+    intro:
+      "Lomas del Mirador es un barrio grande y muy poblado de La Matanza, con muchísimos autos de uso diario. Para quien vive acá, San Justo es el centro más cercano para comprar neumáticos sin ir hasta Capital.",
+    porQue:
+      "Una zona con tanto parque automotor tiene precios muy parejos entre gomerías, y casi nadie se anima a comparar contra una importación directa. Si estás por cambiar las cubiertas, mirá el precio de tu medida en nuestra web y compará con lo que te dieron: al ser neumáticos nuevos con garantía de un año, la comparación es de igual a igual.",
+    incluye: ["Lomas del Mirador centro"],
+  },
+  {
+    slug: "ciudad-evita",
+    name: "Ciudad Evita",
+    province: "Buenos Aires",
+    branchId: "san-justo",
+    minutosHastaSucursal: 15,
+    comoLlegar:
+      "Desde Ciudad Evita se llega a San Justo en unos quince minutos aproximadamente, yendo por las avenidas principales de La Matanza. Según la hora puede haber más tránsito: dejale a Google Maps la elección del camino.",
+    intro:
+      "Ciudad Evita queda sobre el límite sur de La Matanza, cerca del Aeropuerto de Ezeiza por autopista y del Camino de Cintura. Desde ahí San Justo es el punto de compra de neumáticos más cercano con stock real y precios publicados.",
+    porQue:
+      "Para quien viaja seguido por la Autopista Ezeiza–Cañuelas, el Camino de Cintura o el Acceso Oeste, el desgaste del neumático se nota rápido. Si tenés que reponer, comparar un precio de outlet de importación directa contra el de tu gomería de siempre te puede ahorrar lo suficiente como para justificar el viaje a San Justo.",
+    incluye: ["Ciudad Evita centro", "Rafael Castillo"],
+  },
+  {
+    slug: "isidro-casanova",
+    name: "Isidro Casanova",
+    province: "Buenos Aires",
+    branchId: "san-justo",
+    minutosHastaSucursal: 15,
+    comoLlegar:
+      "Desde Isidro Casanova se llega por Ruta 3 hacia el norte: son unos quince minutos aproximadamente hasta San Justo, según el tránsito. Es un recorrido directo, sin cruzar de partido.",
+    intro:
+      "Isidro Casanova es uno de los núcleos más poblados de La Matanza, con mucho comercio y mucho tránsito sobre la Ruta 3. San Justo queda a un viaje corto y directo, sobre la misma ruta.",
+    porQue:
+      "Con tanta gente que se mueve en auto por Ruta 3, el neumático es un gasto recurrente. Lo que ofrecemos es precio de importación directa, con neumáticos nuevos y garantía de un año por defecto de fábrica. Mirá tu medida en la web, comparala con tu cotización y, si te conviene, te pasás por San Justo.",
+    incluye: ["Isidro Casanova centro"],
+  },
+  {
+    slug: "laferrere",
+    name: "Laferrere",
+    province: "Buenos Aires",
+    branchId: "san-justo",
+    minutosHastaSucursal: 20,
+    comoLlegar:
+      "Desde Laferrere se llega a San Justo por Ruta 3 hacia el norte, en unos veinte minutos aproximadamente, según el tránsito. Para elegir el recorrido más rápido a tu hora, Google Maps es lo más confiable.",
+    intro:
+      "Laferrere es de las localidades más grandes del oeste de La Matanza, y desde ahí San Justo queda sobre la misma Ruta 3, a un trayecto de unos veinte minutos.",
+    porQue:
+      "Quien vive en Laferrere suele hacer muchos kilómetros por día y conoce bien lo que cuesta reponer neumáticos. Antes de pagar el precio de siempre, conviene mirar cuánto sale tu medida en un outlet con importación directa: los neumáticos son nuevos, tienen un año de garantía por defecto de fábrica y el precio publicado en la web es el que se cobra en el local.",
+    incluye: ["Laferrere centro", "Gregorio de Laferrère"],
+  },
+  {
+    slug: "gonzalez-catan",
+    name: "González Catán",
+    province: "Buenos Aires",
+    branchId: "san-justo",
+    minutosHastaSucursal: 25,
+    comoLlegar:
+      "Desde González Catán se llega a San Justo por Ruta 3 hacia el norte: son unos veinticinco minutos aproximadamente, según el tránsito y la hora. Dejale a Google Maps la elección del camino.",
+    intro:
+      "González Catán está en el extremo oeste de La Matanza, y desde ahí San Justo es el local de neumáticos con precios publicados más cercano. Es un viaje de unos veinticinco minutos por la Ruta 3.",
+    porQue:
+      "Si hacés el trayecto largo por Ruta 3 todos los días, la cubierta se gasta más rápido y reponerla es un gasto grande. Vale la pena ver el precio de tu medida en nuestra web: al comprar un juego de cuatro la diferencia contra una gomería habitual puede cubrir sobradamente el viaje hasta San Justo.",
+    incluye: ["González Catán centro", "Virrey del Pino"],
+  },
+  {
+    slug: "aldo-bonzi",
+    name: "Aldo Bonzi",
+    province: "Buenos Aires",
+    branchId: "san-justo",
+    minutosHastaSucursal: 15,
+    comoLlegar:
+      "Aldo Bonzi queda al este de San Justo, ya sobre el límite con la Ciudad: se llega en unos quince minutos aproximadamente, según el tránsito. Google Maps te marca el recorrido exacto desde tu casa.",
+    intro:
+      "Aldo Bonzi es un barrio de La Matanza muy cercano al límite con Capital Federal y a la zona de la Av. General Paz. Para quien vive acá, San Justo es el punto de compra de neumáticos en La Matanza más cercano.",
+    porQue:
+      "Los vecinos de Aldo Bonzi y Tapiales suelen cambiar neumáticos en gomerías del barrio o cruzan a Capital. Comparar el precio de tu medida contra un outlet de importación directa es sencillo: lo ves en la web antes de moverte y, si te conviene, te llegás a San Justo.",
+    incluye: ["Aldo Bonzi centro", "Tapiales", "La Tablada", "Villa Celina"],
+  },
+  {
+    slug: "ciudadela",
+    name: "Ciudadela",
+    province: "Buenos Aires",
+    branchId: "san-justo",
+    minutosHastaSucursal: 15,
+    comoLlegar:
+      "Desde Ciudadela se llega a San Justo en unos quince minutos aproximadamente, cruzando hacia La Matanza. Según la hora puede haber más tránsito: dejale a Google Maps la elección del camino.",
+    intro:
+      "Ciudadela es del partido de Tres de Febrero, pero queda pegada a La Matanza, y desde ahí San Justo es un viaje corto. Es una zona con muchísimo comercio y mucho auto de uso diario.",
+    porQue:
+      "En Ciudadela hay muchas gomerías y casas de neumáticos, y los precios son bastante parecidos entre sí. Comparar contra un outlet de importación directa es la forma más simple de saber si estás pagando de más: lo ves en la web, sin moverte, y recién después decidís si te conviene el viaje.",
+    incluye: ["Ciudadela centro"],
+  },
+  {
+    slug: "villa-madero",
+    name: "Villa Madero",
+    province: "Buenos Aires",
+    branchId: "san-justo",
+    minutosHastaSucursal: 10,
+    comoLlegar:
+      "Villa Madero queda al noreste de San Justo, dentro de La Matanza: son unos diez minutos en auto, con el tránsito normal de la zona. Google Maps calcula el recorrido exacto desde tu domicilio.",
+    intro:
+      "Villa Madero es un barrio comercial y residencial de La Matanza, muy cerca de San Justo. Quien vive acá tiene el local de Trivium a pocos minutos.",
+    porQue:
+      "Al estar a pocos minutos, el trámite es simple: ves el precio publicado en la web, lo comparás y, si te conviene, pasás por el local. Mirá tu medida, comparala con lo que te cotizaron en otro lado y, si te conviene, pasás.",
+    incluye: ["Villa Madero centro", "La Tablada"],
+  },
+  {
     slug: "moron",
     name: "Morón",
     province: "Buenos Aires",
