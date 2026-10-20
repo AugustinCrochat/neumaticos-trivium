@@ -1,6 +1,5 @@
 import Image from "next/image";
 import { SizeOrVehicleSearch } from "@/components/ui/SizeOrVehicleSearch";
-import { GoogleRatingBadge } from "@/components/ui/GoogleRatingBadge";
 import { BRANCHES } from "@/lib/config";
 
 export function HeroSection() {
@@ -37,7 +36,6 @@ export function HeroSection() {
               con stock real y precio publicado. Retiro en nuestro local de Córdoba con colocación
               incluida, gomería propia (alineación, balanceo y rotación) y envío a todo el país.
             </p>
-            <GoogleRatingBadge className="text-white mt-5" />
           </div>
 
           {/* Right: search */}

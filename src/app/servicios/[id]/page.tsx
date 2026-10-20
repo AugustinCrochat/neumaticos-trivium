@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { SERVICES } from "@/lib/data";
@@ -9,6 +10,7 @@ import { formatPrecio, splitAutoCamioneta } from "@/lib/servicios";
 import { FaqSection } from "@/components/seo/FaqSection";
 import { ROTACION_SERVICE, SERVICIOS_SEO } from "@/lib/servicios-seo";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { SERVICIOS_FOTOS } from "@/lib/servicios-fotos";
 import { breadcrumbJsonLd, canonical, serviceJsonLd } from "@/lib/seo";
 
 type Props = { params: Promise<{ id: string }> };
@@ -42,6 +44,7 @@ export default async function ServicioPage({ params }: Props) {
   const precios =
     service.id === ROTACION_SERVICE.id ? [] : await getServiciosPrecios(id, await getSelectedBranchSlug());
   const { auto, camioneta } = splitAutoCamioneta(precios);
+  const fotos = SERVICIOS_FOTOS[service.id];
 
   return (
     <div className="min-h-screen bg-white">
@@ -54,19 +57,33 @@ export default async function ServicioPage({ params }: Props) {
       />
       <JsonLd data={serviceJsonLd(service)} />
       <div className="bg-black py-12 md:py-16">
-        <div className="max-w-3xl mx-auto px-4">
-          <Link
-            href="/servicios"
-            className="inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-white mb-8 transition-colors"
-          >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-            Volver a servicios
-          </Link>
-          <div className="text-orange-500 mb-4">{ICONS[service.icon]}</div>
-          <h1 className="text-3xl md:text-4xl font-black text-white mb-4">{seo?.h1 ?? service.title}</h1>
-          <p className="text-slate-300 text-lg max-w-xl leading-relaxed">{service.description}</p>
+        <div className="max-w-5xl mx-auto px-4 grid items-center gap-8 md:grid-cols-[1fr_380px]">
+          <div>
+            <Link
+              href="/servicios"
+              className="inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-white mb-8 transition-colors"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+              Volver a servicios
+            </Link>
+            <div className="text-orange-500 mb-4">{ICONS[service.icon]}</div>
+            <h1 className="text-3xl md:text-4xl font-black text-white mb-4">{seo?.h1 ?? service.title}</h1>
+            <p className="text-slate-300 text-lg max-w-xl leading-relaxed">{service.description}</p>
+          </div>
+          {fotos && (
+            <div className="relative aspect-[4/3] overflow-hidden rounded-2xl ring-1 ring-white/10">
+              <Image
+                src={fotos.principal.src}
+                alt={fotos.principal.alt}
+                fill
+                priority
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 380px"
+              />
+            </div>
+          )}
         </div>
       </div>
 
@@ -179,6 +196,19 @@ export default async function ServicioPage({ params }: Props) {
               </ul>
             </section>
           </div>
+        )}
+
+        {fotos && (
+          <section className="mt-12">
+            <h2 className="text-xl font-black text-navy-900 mb-3">En nuestro taller de Argüello</h2>
+            <div className="grid grid-cols-3 gap-3">
+              {fotos.galeria.map((f) => (
+                <div key={f.src} className="relative aspect-[3/4] overflow-hidden rounded-xl bg-slate-100">
+                  <Image src={f.src} alt={f.alt} fill className="object-cover" sizes="(max-width: 768px) 33vw, 240px" />
+                </div>
+              ))}
+            </div>
+          </section>
         )}
 
         <div className="mt-12 bg-orange-50 border border-orange-100 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-4">

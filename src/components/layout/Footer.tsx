@@ -34,7 +34,6 @@ export function Footer() {
               El outlet del neumático. Importación directa desde China con la mejor
               relación calidad-precio del mercado argentino.
             </p>
-            <GoogleRatingBadge className="text-zinc-300 mb-4" />
             <div className="flex gap-3">
               <a
                 href={INSTAGRAM_URL}
@@ -125,6 +124,9 @@ export function Footer() {
                   <p className="text-zinc-400 text-xs mb-0.5">{branch.address}</p>
                   <p className="text-zinc-400 text-xs mb-2">{branch.city}</p>
                   <p className="text-zinc-500 text-xs mb-3">{branch.hours}</p>
+                  {branch.googleRating && (
+                    <GoogleRatingBadge branchId={branch.id} className="text-zinc-300 mb-3" />
+                  )}
                   <div className="flex gap-2">
                     <a
                       href={`tel:${branch.phone.replace(/\s/g, "")}`}

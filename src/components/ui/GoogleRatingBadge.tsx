@@ -16,8 +16,15 @@ const STAR = (
   </svg>
 );
 
-export function GoogleRatingBadge({ className = "" }: { className?: string }) {
-  const branch = BRANCHES.find((b) => b.googleRating);
+export function GoogleRatingBadge({
+  className = "",
+  branchId,
+}: {
+  className?: string;
+  /** Sucursal a la que pertenece el puntaje; sin esto toma la primera que tenga. */
+  branchId?: string;
+}) {
+  const branch = BRANCHES.find((b) => b.googleRating && (!branchId || b.id === branchId));
   if (!branch?.googleRating) return null;
   const { value, count } = branch.googleRating;
 
