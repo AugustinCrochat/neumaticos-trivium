@@ -39,7 +39,7 @@ export function Header() {
       {/* Main nav */}
       <nav className="bg-black shadow-lg">
         <div className="max-w-7xl 2xl:max-w-[96rem] mx-auto px-4">
-          <div className="flex items-center h-12 gap-6 md:h-14">
+          <div className="flex items-center h-14 gap-6 md:h-[4.5rem]">
             {/* Logo */}
             <Link href="/" className="flex-shrink-0">
               <Image
@@ -47,7 +47,7 @@ export function Header() {
                 alt="Neumáticos Trivium"
                 width={175}
                 height={60}
-                className="h-8 md:h-12 w-auto"
+                className="h-9 md:h-16 w-auto"
                 priority
               />
             </Link>

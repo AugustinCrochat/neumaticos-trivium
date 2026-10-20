@@ -27,7 +27,7 @@ export function Footer() {
                 alt="Neumáticos Trivium"
                 width={132}
                 height={45}
-                className="h-9 w-auto"
+                className="h-14 w-auto"
               />
             </div>
             <p className="text-sm text-zinc-400 leading-relaxed mb-4">
