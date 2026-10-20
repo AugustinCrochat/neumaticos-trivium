@@ -252,6 +252,30 @@ export function serviceJsonLd(service: {
   };
 }
 
+/**
+ * Landing de una localidad: un Service (venta de neumáticos y gomería) cuyo
+ * área de servicio es esa localidad y cuyo proveedor es la sucursal que la
+ * atiende. Le da a buscadores y a LLMs la relación explícita "esta zona ->
+ * este local" que el texto de la página dice en prosa.
+ */
+export function localidadJsonLd(localidad: { slug: string; name: string; province: string }, branch: Branch) {
+  const path = `/neumaticos-en/${localidad.slug}`;
+  return {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "@id": `${SITE_URL}${path}#servicio`,
+    name: `Neumáticos baratos en ${localidad.name}`,
+    serviceType: "Venta de neumáticos",
+    url: absoluteUrl(path),
+    provider: { "@id": branchNodeId(branch) },
+    areaServed: {
+      "@type": "City",
+      name: localidad.name,
+      containedInPlace: { "@type": "AdministrativeArea", name: localidad.province },
+    },
+  };
+}
+
 export type Faq = { question: string; answer: string };
 
 export function faqJsonLd(faqs: Faq[]) {

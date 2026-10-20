@@ -36,6 +36,58 @@ Local propio en Córdoba (Argüello) con taller integrado: alineación computari
 - Contacto y consultas de stock/turnos: por WhatsApp desde /contacto
 - Zona de cobertura del local: Córdoba Capital, Villa Allende, Saldán, La Calera, Mendiolaza, Unquillo, Río Ceballos
 
+## Zonas donde vendemos (una página por zona)
+
+Cada página explica cómo llegar al local desde esa zona y muestra neumáticos con stock y precio.
+
+- Córdoba: https://neumaticos.trivium.ar/neumaticos-en/cordoba — local Argüello (Córdoba)
+  - Argüello: https://neumaticos.trivium.ar/neumaticos-en/arguello
+  - Cerro de las Rosas: https://neumaticos.trivium.ar/neumaticos-en/cerro-de-las-rosas
+  - Villa Belgrano: https://neumaticos.trivium.ar/neumaticos-en/villa-belgrano
+  - Urca: https://neumaticos.trivium.ar/neumaticos-en/urca
+  - Villa Rivera Indarte: https://neumaticos.trivium.ar/neumaticos-en/villa-rivera-indarte
+  - Villa Cabrera: https://neumaticos.trivium.ar/neumaticos-en/villa-cabrera
+  - General Paz: https://neumaticos.trivium.ar/neumaticos-en/general-paz
+  - Alta Córdoba: https://neumaticos.trivium.ar/neumaticos-en/alta-cordoba
+  - Nueva Córdoba: https://neumaticos.trivium.ar/neumaticos-en/nueva-cordoba
+  - Güemes: https://neumaticos.trivium.ar/neumaticos-en/guemes
+  - Los Boulevares: https://neumaticos.trivium.ar/neumaticos-en/los-boulevares
+- Villa Allende: https://neumaticos.trivium.ar/neumaticos-en/villa-allende — local Argüello (Córdoba)
+- Saldán: https://neumaticos.trivium.ar/neumaticos-en/saldan — local Argüello (Córdoba)
+- La Calera: https://neumaticos.trivium.ar/neumaticos-en/la-calera — local Argüello (Córdoba)
+- Mendiolaza: https://neumaticos.trivium.ar/neumaticos-en/mendiolaza — local Argüello (Córdoba)
+- Unquillo: https://neumaticos.trivium.ar/neumaticos-en/unquillo — local Argüello (Córdoba)
+- Río Ceballos: https://neumaticos.trivium.ar/neumaticos-en/rio-ceballos — local Argüello (Córdoba)
+- La Matanza: https://neumaticos.trivium.ar/neumaticos-en/la-matanza — local San Justo (abre en diciembre)
+  - San Justo: https://neumaticos.trivium.ar/neumaticos-en/san-justo
+  - Villa Luzuriaga: https://neumaticos.trivium.ar/neumaticos-en/villa-luzuriaga
+  - Ramos Mejía: https://neumaticos.trivium.ar/neumaticos-en/ramos-mejia
+  - Lomas del Mirador: https://neumaticos.trivium.ar/neumaticos-en/lomas-del-mirador
+  - Ciudad Evita: https://neumaticos.trivium.ar/neumaticos-en/ciudad-evita
+  - Isidro Casanova: https://neumaticos.trivium.ar/neumaticos-en/isidro-casanova
+  - Laferrere: https://neumaticos.trivium.ar/neumaticos-en/laferrere
+  - González Catán: https://neumaticos.trivium.ar/neumaticos-en/gonzalez-catan
+  - Aldo Bonzi: https://neumaticos.trivium.ar/neumaticos-en/aldo-bonzi
+  - Villa Madero: https://neumaticos.trivium.ar/neumaticos-en/villa-madero
+- Morón: https://neumaticos.trivium.ar/neumaticos-en/moron — local San Justo (abre en diciembre)
+- Tres de Febrero: https://neumaticos.trivium.ar/neumaticos-en/tres-de-febrero — local San Justo (abre en diciembre)
+  - Ciudadela: https://neumaticos.trivium.ar/neumaticos-en/ciudadela
+- Hurlingham: https://neumaticos.trivium.ar/neumaticos-en/hurlingham — local San Justo (abre en diciembre)
+- Ituzaingó: https://neumaticos.trivium.ar/neumaticos-en/ituzaingo — local San Justo (abre en diciembre)
+- Merlo: https://neumaticos.trivium.ar/neumaticos-en/merlo — local San Justo (abre en diciembre)
+- San Martín: https://neumaticos.trivium.ar/neumaticos-en/san-martin — local San Justo (abre en diciembre)
+- Esteban Echeverría: https://neumaticos.trivium.ar/neumaticos-en/esteban-echeverria — local San Justo (abre en diciembre)
+- Ezeiza: https://neumaticos.trivium.ar/neumaticos-en/ezeiza — local San Justo (abre en diciembre)
+- Capital Federal: https://neumaticos.trivium.ar/neumaticos-en/capital-federal — local San Justo (abre en diciembre)
+  - Liniers: https://neumaticos.trivium.ar/neumaticos-en/liniers
+  - Mataderos: https://neumaticos.trivium.ar/neumaticos-en/mataderos
+  - Parque Avellaneda: https://neumaticos.trivium.ar/neumaticos-en/parque-avellaneda
+  - Villa Lugano: https://neumaticos.trivium.ar/neumaticos-en/villa-lugano
+  - Versalles: https://neumaticos.trivium.ar/neumaticos-en/versalles
+  - Villa Luro: https://neumaticos.trivium.ar/neumaticos-en/villa-luro
+  - Villa Devoto: https://neumaticos.trivium.ar/neumaticos-en/villa-devoto
+  - Floresta: https://neumaticos.trivium.ar/neumaticos-en/floresta
+
 ## Páginas de referencia
 
 - Home: https://neumaticos.trivium.ar/

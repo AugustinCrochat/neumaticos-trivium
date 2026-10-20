@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { BRANCHES } from "@/lib/config";
+import { ZonasAgrupadas } from "@/components/seo/ZonasAgrupadas";
 import { LOCALIDADES, getBranchForLocalidad } from "@/lib/localidades";
 import { canonical, SITE_NAME } from "@/lib/seo";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
@@ -36,6 +37,11 @@ export default function ZonasPage() {
           acercarte: el retiro es sin cargo y la colocación va incluida.
         </p>
       </header>
+
+      <section className="mb-10 rounded-2xl border border-slate-200 bg-slate-50 p-6">
+        <h2 className="mb-4 text-xl font-black text-navy-900">Elegí tu ciudad o barrio</h2>
+        <ZonasAgrupadas variant="light" />
+      </section>
 
       {[...cabecera, ...resto].length > 0 && (
         <section className="mb-12">

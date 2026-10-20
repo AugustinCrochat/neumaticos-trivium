@@ -11,7 +11,8 @@ import {
   getLocalidad,
   type Localidad,
 } from "@/lib/localidades";
-import { canonical, SITE_NAME, type Faq } from "@/lib/seo";
+import { canonical, localidadJsonLd, SITE_NAME, type Faq } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { FaqSection } from "@/components/seo/FaqSection";
 import { MEDIDAS_PRIORITARIAS, formatSize, sizeSlug } from "@/lib/tire-sizes";
@@ -173,6 +174,7 @@ export default async function LocalidadPage({ params }: Props) {
   return (
     <div className="mx-auto max-w-7xl 2xl:max-w-[96rem] px-4 py-8">
       <PreselectBranch branchId={branch.id} />
+      <JsonLd data={localidadJsonLd(localidad, branch)} />
       <Breadcrumbs
         crumbs={[
           { name: "Inicio", path: "/" },

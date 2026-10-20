@@ -78,6 +78,156 @@ export const LOCALIDADES: Localidad[] = [
     incluye: ["Villa Warcalde", "Argüello Norte", "Los Carolinos", "Quintas de Argüello"],
   },
   {
+    slug: "cerro-de-las-rosas",
+    name: "Cerro de las Rosas",
+    province: "Córdoba",
+    branchId: "arguello",
+    parent: "cordoba",
+    minutosHastaSucursal: 10,
+    comoLlegar:
+      "Desde Cerro de las Rosas se llega al local de Argüello en unos diez minutos en auto, bajando hacia el noroeste de la ciudad. Google Maps te marca el recorrido exacto desde tu cuadra y el tránsito del momento.",
+    intro:
+      "Cerro de las Rosas es una de las zonas comerciales más activas de Córdoba, con mucho auto de uso diario y poca oferta de neumáticos con precio publicado. Trivium queda a diez minutos, en Argüello, con stock a la vista y precios en la web antes de salir.",
+    porQue:
+      "Entre las concesionarias y las gomerías de paso, cambiar cubiertas en Cerro suele salir caro y sin comparar. Mirá tu medida en nuestra web, llevá la cotización que ya tenés y compará: son neumáticos nuevos de importación directa, con un año de garantía por defecto de fábrica.",
+    incluye: ["Cerro de las Rosas centro", "Quebrada de las Rosas"],
+  },
+  {
+    slug: "villa-belgrano",
+    name: "Villa Belgrano",
+    province: "Córdoba",
+    branchId: "arguello",
+    parent: "cordoba",
+    minutosHastaSucursal: 12,
+    comoLlegar:
+      "Villa Belgrano queda hacia el norte de la ciudad: son unos doce minutos en auto hasta el local de Argüello, según el tránsito. Dejale a Google Maps la elección del recorrido desde tu casa.",
+    intro:
+      "Villa Belgrano es un barrio residencial de Córdoba con mucho parque automotor de gama media y alta, y para quien vive ahí Argüello es el local de neumáticos con precio publicado más cercano.",
+    porQue:
+      "En una zona de camionetas y autos familiares, reponer las cuatro cubiertas es un gasto importante. Antes de pagarlo, vale la pena ver cuánto sale la misma medida en un outlet de importación directa, con el stock y el precio a la vista en la web.",
+    incluye: ["Villa Belgrano", "Villa Belgrano Norte"],
+  },
+  {
+    slug: "urca",
+    name: "Urca",
+    province: "Córdoba",
+    branchId: "arguello",
+    parent: "cordoba",
+    minutosHastaSucursal: 15,
+    comoLlegar:
+      "Desde Urca se llega al local de Argüello en unos quince minutos aproximadamente, cruzando el noroeste de la ciudad. Según la hora puede haber más tránsito: Google Maps calcula el recorrido exacto.",
+    intro:
+      "Urca es un barrio de Córdoba muy transitado, cerca de la zona universitaria y de los accesos al norte, con mucho auto de uso cotidiano. Para quien vive o trabaja ahí, Argüello queda a un viaje corto.",
+    porQue:
+      "Con tanto auto de uso diario, el neumático es un gasto que se repite. Mirá el precio de tu medida en la web antes de moverte, compará con tu gomería habitual y decidí con el número en la mano.",
+    incluye: ["Urca", "Villa Centenario"],
+  },
+  {
+    slug: "villa-rivera-indarte",
+    name: "Villa Rivera Indarte",
+    province: "Córdoba",
+    branchId: "arguello",
+    parent: "cordoba",
+    minutosHastaSucursal: 12,
+    comoLlegar:
+      "Villa Rivera Indarte está al norte de Córdoba y queda a unos doce minutos en auto del local de Argüello, según el tránsito. Google Maps te marca el recorrido más rápido desde tu casa.",
+    intro:
+      "Villa Rivera Indarte es un barrio extenso del norte de la ciudad, de los que más viajan hacia el centro todos los días. Desde ahí, Argüello es el local de neumáticos más cercano con stock y precios publicados.",
+    porQue:
+      "Quien hace el trayecto diario al centro desgasta rápido las cubiertas, y reponerlas con precio de gomería de barrio suele ser caro. Mirá tu medida en la web y comparala: la diferencia de un juego de cuatro puede cubrir el viaje.",
+    incluye: ["Villa Rivera Indarte", "Ampliación Rivera Indarte"],
+  },
+  {
+    slug: "villa-cabrera",
+    name: "Villa Cabrera",
+    province: "Córdoba",
+    branchId: "arguello",
+    parent: "cordoba",
+    minutosHastaSucursal: 15,
+    comoLlegar:
+      "Desde Villa Cabrera se llega a Argüello en unos quince minutos aproximadamente. Si vas desde la zona del Parque Sarmiento o de Nueva Córdoba, Google Maps te marca el camino más rápido a esa hora.",
+    intro:
+      "Villa Cabrera es un barrio residencial de Córdoba con muchos autos de uso familiar. Trivium queda a un viaje corto, y las medidas y los precios están publicados para ver todo antes de ir.",
+    porQue:
+      "En una zona donde casi todo el mundo usa el auto, vale la pena no cambiar cubiertas sin comparar. Elegí tu medida en la web, mirá el precio y la garantía de un año, y decidí si te conviene acercarte.",
+    incluye: ["Villa Cabrera", "Observatorio"],
+  },
+  {
+    slug: "general-paz",
+    name: "General Paz",
+    province: "Córdoba",
+    branchId: "arguello",
+    parent: "cordoba",
+    minutosHastaSucursal: 20,
+    comoLlegar:
+      "General Paz queda hacia el este del centro: son unos veinte minutos en auto hasta Argüello, según el tránsito y la hora. Dejale a Google Maps la elección del camino.",
+    intro:
+      "General Paz es uno de los barrios más tradicionales y comerciales de Córdoba. Desde ahí, el local de Argüello es una opción de outlet de neumáticos que no obliga a pedir por encargo ni a esperar días.",
+    porQue:
+      "En una zona con tantas gomerías de barrio, los precios suelen ser parecidos entre sí. Comparar contra una importación directa es sencillo: lo ves en la web, sin moverte, y recién después decidís si te conviene el viaje.",
+    incluye: ["General Paz", "Pueyrredón"],
+  },
+  {
+    slug: "alta-cordoba",
+    name: "Alta Córdoba",
+    province: "Córdoba",
+    branchId: "arguello",
+    parent: "cordoba",
+    minutosHastaSucursal: 20,
+    comoLlegar:
+      "Desde Alta Córdoba se llega a Argüello en unos veinte minutos aproximadamente. Según la hora hay más tránsito: Google Maps calcula el recorrido exacto desde tu domicilio.",
+    intro:
+      "Alta Córdoba es un barrio céntrico y muy poblado, con mucho comercio y tránsito, y desde ahí Argüello queda a un trayecto razonable para comprar neumáticos con precio publicado.",
+    porQue:
+      "Para un cambio de cuatro cubiertas, comparar el precio de una gomería céntrica con el de un outlet de importación directa puede marcar una diferencia importante. Mirá tu medida en la web y llevá tu cotización para comparar.",
+    incluye: ["Alta Córdoba", "Barrio Colón"],
+  },
+  {
+    slug: "nueva-cordoba",
+    name: "Nueva Córdoba",
+    province: "Córdoba",
+    branchId: "arguello",
+    parent: "cordoba",
+    minutosHastaSucursal: 20,
+    comoLlegar:
+      "Desde Nueva Córdoba se llega a Argüello en unos veinte minutos en auto aproximadamente, por el norte de la ciudad. Dejale a Google Maps la elección del camino según el tránsito.",
+    intro:
+      "Nueva Córdoba es el barrio universitario de la ciudad, con muchos autos pero poca oferta de neumáticos a precio de mayorista. Argüello es la salida más directa hacia un local con stock a la vista.",
+    porQue:
+      "Si tenés auto en Córdoba y estás por cambiar las cubiertas, mirá el precio publicado de tu medida en nuestra web antes de decidir. Los neumáticos son nuevos, de importación directa, con un año de garantía por defecto de fábrica.",
+    incluye: ["Nueva Córdoba", "Güemes", "Centro"],
+  },
+  {
+    slug: "guemes",
+    name: "Güemes",
+    province: "Córdoba",
+    branchId: "arguello",
+    parent: "cordoba",
+    minutosHastaSucursal: 22,
+    comoLlegar:
+      "Desde Güemes se llega al local de Argüello en unos veintidós minutos aproximadamente, según el tránsito. Google Maps te marca el recorrido más rápido a esa hora.",
+    intro:
+      "Güemes es un barrio céntrico y muy transitado de Córdoba, con mucha vida comercial y nocturna. Para quien vive o trabaja ahí, Argüello es un local de neumáticos con precio publicado a un viaje corto.",
+    porQue:
+      "En el centro de la ciudad el espacio comercial es caro, y eso se nota en el precio de las cubiertas. Ver tu medida en la web y compararla con tu cotización habitual es el primer paso para saber si te conviene el viaje.",
+    incluye: ["Güemes", "San Vicente"],
+  },
+  {
+    slug: "los-boulevares",
+    name: "Los Boulevares",
+    province: "Córdoba",
+    branchId: "arguello",
+    parent: "cordoba",
+    minutosHastaSucursal: 12,
+    comoLlegar:
+      "Los Boulevares está al norte de la ciudad: son unos doce minutos en auto hasta el local de Argüello, según el tránsito. Dejale a Google Maps la elección del camino desde tu casa.",
+    intro:
+      "Los Boulevares es una zona residencial de Córdoba, de barrios cerrados y casas, con mucho auto de uso diario y camionetas. Argüello queda a un viaje corto.",
+    porQue:
+      "En una zona de camionetas y autos familiares, el neumático es un gasto importante. Mirá tu medida en la web, comparala con la cotización que tengas y, si te conviene, pasás por el local de Argüello.",
+    incluye: ["Los Boulevares", "Jardín del Pilar"],
+  },
+  {
     slug: "villa-allende",
     name: "Villa Allende",
     province: "Córdoba",
@@ -159,10 +309,25 @@ export const LOCALIDADES: Localidad[] = [
   // --- Sucursal San Justo (Buenos Aires). Los tiempos son aproximados, sin
   // tráfico: validarlos con el equipo antes de confiar en ellos como dato duro.
   {
+    slug: "la-matanza",
+    name: "La Matanza",
+    province: "Buenos Aires",
+    branchId: "san-justo",
+    minutosHastaSucursal: 8,
+    comoLlegar:
+      "La Matanza es el partido donde está el local: Pres. Juan Domingo Perón 2847, en San Justo. Desde cualquier punto del partido se llega en auto; sumá la dirección en Google Maps y te marca el recorrido exacto desde tu casa.",
+    intro:
+      "La Matanza es el partido más poblado del Gran Buenos Aires y el que más autos tiene. Trivium abre su sucursal en San Justo, en el centro del partido, para que quien vive acá compre neumáticos de importación directa sin ir hasta Capital.",
+    porQue:
+      "Con tantos autos y tanto kilometraje, el neumático es un gasto constante en La Matanza. Mirá en la web el precio de tu medida, comparalo con lo que te cotizan en tu zona y decidí con el número en la mano.",
+    incluye: ["San Justo", "Ramos Mejía", "Villa Luzuriaga", "Isidro Casanova", "Laferrere", "González Catán", "Lomas del Mirador", "Ciudad Evita"],
+  },
+  {
     slug: "san-justo",
     name: "San Justo",
     province: "Buenos Aires",
     branchId: "san-justo",
+    parent: "la-matanza",
     esCabecera: true,
     minutosHastaSucursal: 5,
     comoLlegar:
@@ -178,7 +343,7 @@ export const LOCALIDADES: Localidad[] = [
     name: "Villa Luzuriaga",
     province: "Buenos Aires",
     branchId: "san-justo",
-    parent: "san-justo",
+    parent: "la-matanza",
     minutosHastaSucursal: 8,
     comoLlegar:
       "Villa Luzuriaga está pegada a San Justo, dentro del mismo partido: se llega en auto en menos de diez minutos, sin salir de La Matanza ni tomar autopista. Sumá la dirección del local en Google Maps y te marca el recorrido exacto desde tu casa.",
@@ -193,7 +358,7 @@ export const LOCALIDADES: Localidad[] = [
     name: "Ramos Mejía",
     province: "Buenos Aires",
     branchId: "san-justo",
-    parent: "san-justo",
+    parent: "la-matanza",
     minutosHastaSucursal: 12,
     comoLlegar:
       "Desde el centro de Ramos Mejía se llega a San Justo en unos doce minutos en auto, siguiendo hacia el sur por La Matanza. Desde la zona de la estación o de Av. de Mayo conviene dejarle a Google Maps la elección del camino según el tránsito.",
@@ -208,7 +373,7 @@ export const LOCALIDADES: Localidad[] = [
     name: "Lomas del Mirador",
     province: "Buenos Aires",
     branchId: "san-justo",
-    parent: "san-justo",
+    parent: "la-matanza",
     minutosHastaSucursal: 10,
     comoLlegar:
       "Lomas del Mirador está en el mismo partido, al noreste de San Justo: son unos diez minutos en auto, con el tránsito normal de la zona. Google Maps calcula el recorrido exacto desde tu domicilio y te avisa si hay demoras.",
@@ -223,7 +388,7 @@ export const LOCALIDADES: Localidad[] = [
     name: "Ciudad Evita",
     province: "Buenos Aires",
     branchId: "san-justo",
-    parent: "san-justo",
+    parent: "la-matanza",
     minutosHastaSucursal: 15,
     comoLlegar:
       "Desde Ciudad Evita se llega a San Justo en unos quince minutos aproximadamente, yendo por las avenidas principales de La Matanza. Según la hora puede haber más tránsito: dejale a Google Maps la elección del camino.",
@@ -238,7 +403,7 @@ export const LOCALIDADES: Localidad[] = [
     name: "Isidro Casanova",
     province: "Buenos Aires",
     branchId: "san-justo",
-    parent: "san-justo",
+    parent: "la-matanza",
     minutosHastaSucursal: 15,
     comoLlegar:
       "Desde Isidro Casanova se llega por Ruta 3 hacia el norte: son unos quince minutos aproximadamente hasta San Justo, según el tránsito. Es un recorrido directo, sin cruzar de partido.",
@@ -253,7 +418,7 @@ export const LOCALIDADES: Localidad[] = [
     name: "Laferrere",
     province: "Buenos Aires",
     branchId: "san-justo",
-    parent: "san-justo",
+    parent: "la-matanza",
     minutosHastaSucursal: 20,
     comoLlegar:
       "Desde Laferrere se llega a San Justo por Ruta 3 hacia el norte, en unos veinte minutos aproximadamente, según el tránsito. Para elegir el recorrido más rápido a tu hora, Google Maps es lo más confiable.",
@@ -268,7 +433,7 @@ export const LOCALIDADES: Localidad[] = [
     name: "González Catán",
     province: "Buenos Aires",
     branchId: "san-justo",
-    parent: "san-justo",
+    parent: "la-matanza",
     minutosHastaSucursal: 25,
     comoLlegar:
       "Desde González Catán se llega a San Justo por Ruta 3 hacia el norte: son unos veinticinco minutos aproximadamente, según el tránsito y la hora. Dejale a Google Maps la elección del camino.",
@@ -283,7 +448,7 @@ export const LOCALIDADES: Localidad[] = [
     name: "Aldo Bonzi",
     province: "Buenos Aires",
     branchId: "san-justo",
-    parent: "san-justo",
+    parent: "la-matanza",
     minutosHastaSucursal: 15,
     comoLlegar:
       "Aldo Bonzi queda al este de San Justo, ya sobre el límite con la Ciudad: se llega en unos quince minutos aproximadamente, según el tránsito. Google Maps te marca el recorrido exacto desde tu casa.",
@@ -313,7 +478,7 @@ export const LOCALIDADES: Localidad[] = [
     name: "Villa Madero",
     province: "Buenos Aires",
     branchId: "san-justo",
-    parent: "san-justo",
+    parent: "la-matanza",
     minutosHastaSucursal: 10,
     comoLlegar:
       "Villa Madero queda al noreste de San Justo, dentro de La Matanza: son unos diez minutos en auto, con el tránsito normal de la zona. Google Maps calcula el recorrido exacto desde tu domicilio.",
@@ -448,6 +613,118 @@ export const LOCALIDADES: Localidad[] = [
     porQue:
       "Si vivís en el oeste o sur de la Ciudad, salir por la General Paz hacia La Matanza es un trayecto corto. Para un cambio de cuatro neumáticos, la diferencia entre el precio de Capital y el de un outlet de importación directa justifica el viaje. Mirá tu medida en la web, compará, y decidí.",
     incluye: ["Liniers", "Mataderos", "Villa Luro", "Parque Avellaneda", "Villa Lugano", "Floresta"],
+  },
+  {
+    slug: "liniers",
+    name: "Liniers",
+    province: "Ciudad Autónoma de Buenos Aires",
+    branchId: "san-justo",
+    parent: "capital-federal",
+    minutosHastaSucursal: 20,
+    comoLlegar:
+      "Liniers queda pegado al límite con La Matanza: se llega a San Justo en unos veinte minutos en auto, cruzando la General Paz hacia el oeste. Google Maps te marca el recorrido más rápido a esa hora.",
+    intro:
+      "Liniers es la puerta de entrada de la Ciudad al oeste, con mucho tránsito y mucho comercio. Para quien vive o trabaja ahí, el local de San Justo queda del otro lado de la avenida.",
+    porQue:
+      "En Liniers hay muchísima oferta de gomerías y casas de neumáticos, y cada una cotiza distinto. Antes de cambiar las cuatro cubiertas, mirá cuánto sale tu medida en un outlet de importación directa: el precio está en la web antes de ir.",
+  },
+  {
+    slug: "mataderos",
+    name: "Mataderos",
+    province: "Ciudad Autónoma de Buenos Aires",
+    branchId: "san-justo",
+    parent: "capital-federal",
+    minutosHastaSucursal: 20,
+    comoLlegar:
+      "Desde Mataderos se llega a La Matanza por la General Paz o por la Ruta 3: son unos veinte minutos aproximados hasta San Justo, según el tránsito. Google Maps calcula el recorrido exacto.",
+    intro:
+      "Mataderos es un barrio de la Ciudad muy ligado al mundo del transporte y del trabajo con vehículos, a pocos minutos del límite con La Matanza. Para quien vive ahí, San Justo es el outlet de neumáticos más cercano fuera de la Ciudad.",
+    porQue:
+      "Quien trabaja con el auto o con un utilitario cambia cubiertas seguido, y ahí cada diferencia de precio pesa. Mirá tu medida en la web, compará con tu cotización y decidí si te conviene cruzar la avenida.",
+  },
+  {
+    slug: "parque-avellaneda",
+    name: "Parque Avellaneda",
+    province: "Ciudad Autónoma de Buenos Aires",
+    branchId: "san-justo",
+    parent: "capital-federal",
+    minutosHastaSucursal: 25,
+    comoLlegar:
+      "Desde Parque Avellaneda se llega a La Matanza por la General Paz en unos veinticinco minutos aproximadamente, según el tránsito. Dejale a Google Maps la elección del camino desde tu casa.",
+    intro:
+      "Parque Avellaneda es un barrio residencial del sudoeste de la Ciudad, con mucho auto familiar y salida directa a la General Paz. Desde ahí, San Justo queda a un viaje corto hacia el oeste.",
+    porQue:
+      "Con los costos de una zona comercial de Capital, las cubiertas suelen salir más caras. Ver el precio de tu medida en la web antes de moverte es lo que te dice si el viaje vale la pena.",
+  },
+  {
+    slug: "villa-lugano",
+    name: "Villa Lugano",
+    province: "Ciudad Autónoma de Buenos Aires",
+    branchId: "san-justo",
+    parent: "capital-federal",
+    minutosHastaSucursal: 25,
+    comoLlegar:
+      "Desde Villa Lugano se llega a San Justo en unos veinticinco minutos aproximados, por la General Paz y luego hacia La Matanza. Según la hora puede haber más tránsito: Google Maps calcula el camino.",
+    intro:
+      "Villa Lugano está en el extremo sur de la Ciudad, cerca del límite con La Matanza, y desde ahí San Justo es una opción de neumáticos a precio de outlet a un viaje razonable.",
+    porQue:
+      "Para quien vive en el sur de la Ciudad y usa el auto a diario, reponer cubiertas es un gasto fuerte. Mirá tu medida en la web, comparala con la cotización que tengas y decidí con el número en la mano.",
+  },
+  {
+    slug: "versalles",
+    name: "Versalles",
+    province: "Ciudad Autónoma de Buenos Aires",
+    branchId: "san-justo",
+    parent: "capital-federal",
+    minutosHastaSucursal: 25,
+    comoLlegar:
+      "Versalles queda al oeste de la Ciudad, cerca de la General Paz: son unos veinticinco minutos en auto hasta San Justo, según el tránsito. Google Maps te marca el recorrido exacto desde tu casa.",
+    intro:
+      "Versalles es un barrio residencial tranquilo del oeste de la Ciudad, con casas bajas y mucho auto familiar. Desde ahí, el local de San Justo queda a un cruce de la General Paz.",
+    porQue:
+      "En una zona de uso familiar, el neumático se cambia por desgaste o por seguridad, y siempre conviene comparar. Mirá el precio de tu medida en la web y llevá tu cotización para ver si te conviene.",
+  },
+  {
+    slug: "villa-luro",
+    name: "Villa Luro",
+    province: "Ciudad Autónoma de Buenos Aires",
+    branchId: "san-justo",
+    parent: "capital-federal",
+    minutosHastaSucursal: 25,
+    comoLlegar:
+      "Desde Villa Luro se llega a La Matanza en unos veinticinco minutos aproximadamente, por la General Paz o por la Ruta 3. Dejale a Google Maps la elección del camino según el tránsito.",
+    intro:
+      "Villa Luro es un barrio del oeste de la Ciudad con mucho comercio y tránsito, cerca del límite con La Matanza. San Justo queda del otro lado de la avenida.",
+    porQue:
+      "Con tanta oferta de gomerías en la zona, comparar precios no es difícil: lo ves en la web, sin moverte, y recién después decidís si te conviene el viaje a San Justo.",
+  },
+  {
+    slug: "villa-devoto",
+    name: "Villa Devoto",
+    province: "Ciudad Autónoma de Buenos Aires",
+    branchId: "san-justo",
+    parent: "capital-federal",
+    minutosHastaSucursal: 30,
+    comoLlegar:
+      "Desde Villa Devoto se llega a La Matanza en unos treinta minutos aproximadamente, por la General Paz hacia el sur. Según la hora hay más tránsito: Google Maps calcula el recorrido exacto.",
+    intro:
+      "Villa Devoto es un barrio residencial del noroeste de la Ciudad, muy ligado al auto. Para un cambio completo de cubiertas, vale la pena evaluar cruzar la General Paz hasta San Justo.",
+    porQue:
+      "En un barrio donde el auto es parte de la vida diaria, reponer cubiertas es un gasto que se repite. Mirá tu medida en la web, comparala con tu cotización y decidí si el viaje se justifica.",
+  },
+  {
+    slug: "floresta",
+    name: "Floresta",
+    province: "Ciudad Autónoma de Buenos Aires",
+    branchId: "san-justo",
+    parent: "capital-federal",
+    minutosHastaSucursal: 25,
+    comoLlegar:
+      "Desde Floresta se llega a San Justo en unos veinticinco minutos aproximados, por la General Paz hacia La Matanza. Google Maps te marca el camino más rápido a esa hora.",
+    intro:
+      "Floresta es un barrio del oeste de la Ciudad, con mucho auto de uso diario y a pocos minutos del límite con La Matanza. San Justo queda del otro lado de la avenida.",
+    porQue:
+      "Con alquileres de Capital, las cubiertas en la zona suelen salir más caras. Mirá tu medida en la web antes de moverte: es la manera más simple de saber si te conviene cruzar.",
   },
 ];
 
