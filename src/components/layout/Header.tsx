@@ -33,7 +33,9 @@ export function Header() {
         href="/servicios"
         className="block bg-[#ff1e00] px-4 py-1 text-center text-[11px] font-bold text-white transition-colors hover:bg-[#cc1800] md:text-xs"
       >
-        Colocación y válvulas sin cargo en nuestros locales
+        {selectedBranch.apertura
+          ? `Neumáticos Trivium ${selectedBranch.shortName} abre ${selectedBranch.apertura}`
+          : "Colocación y válvulas sin cargo en nuestros locales"}
       </Link>
 
       {/* Main nav */}

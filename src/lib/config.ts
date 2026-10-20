@@ -72,6 +72,10 @@ export type Branch = {
       (/neumaticos-en) no muestran el horario ni prometen esos servicios hasta
       que se saque. */
   provisorio?: boolean;
+  /** Mientras tenga valor, la sucursal todavía no abrió: en vez de "Abierto
+      ahora"/horario se muestra "Abrimos <valor>" (ej. "en diciembre") y el
+      banner rojo del header lo anuncia. Sacarlo el día de la apertura. */
+  apertura?: string;
   phone: string;
   whatsapp: string;
   hours: string;
@@ -165,6 +169,7 @@ export const BRANCHES: Branch[] = [
     postalCode: "B1754AZW",
     neighborhood: "San Justo",
     provisorio: true,
+    apertura: "en diciembre",
     areaServed: [
       "San Justo",
       "La Matanza",

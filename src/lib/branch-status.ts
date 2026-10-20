@@ -57,6 +57,8 @@ function nextOpening(schedule: ScheduleRule[], fromDay: number): { dayLabel: str
 }
 
 export function getBranchStatus(branch: Branch, now: Date = new Date()): BranchStatus {
+  if (branch.apertura) return { isOpen: false, label: `Abrimos ${branch.apertura}`, detail: "" };
+
   const { day, minutes } = nowInArgentina(now);
   const todayRule = ruleForDay(branch.schedule, day);
 
@@ -90,6 +92,8 @@ export type PickupTiming = {
  * mismo día" con el local cerrado, que generaba gente yendo en vano.
  */
 export function getPickupLabel(branch: Branch, now: Date = new Date()): PickupTiming {
+  if (branch.apertura) return { sameDay: false, label: `Retiro desde que abramos, ${branch.apertura}` };
+
   const { day, minutes } = nowInArgentina(now);
   const todayRule = ruleForDay(branch.schedule, day);
 
