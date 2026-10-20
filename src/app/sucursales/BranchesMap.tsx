@@ -441,16 +441,22 @@ export function BranchesMap({ branches, comingSoon = [] }: BranchesMapProps) {
         setUserLocation(nextLocation);
         setActiveBranchId(nearestBranch.id);
         setGeoStatus("ready");
-        mapRef.current?.fitBounds(bounds, {
-          padding: {
-            top: 110,
-            right: 110,
-            bottom: 110,
-            left: 110,
-          },
-          maxZoom: 13,
-          essential: true,
-        });
+        // Con un padding fijo de 110px, un mapa más bajo/angosto que 220px no
+        // puede "contener" los bounds y MapLibre deja la cámara quieta sin
+        // avisar: la tarjeta se marcaba pero el mapa no se movía. El padding
+        // se limita a una fracción del tamaño real del contenedor.
+        const map = mapRef.current;
+        if (map) {
+          const { clientWidth, clientHeight } = map.getContainer();
+          const padX = Math.min(110, Math.floor(clientWidth * 0.2));
+          const padY = Math.min(110, Math.floor(clientHeight * 0.2));
+          map.resize();
+          map.fitBounds(bounds, {
+            padding: { top: padY, right: padX, bottom: padY, left: padX },
+            maxZoom: 13,
+            essential: true,
+          });
+        }
       },
       () => {
         setGeoStatus("error");
