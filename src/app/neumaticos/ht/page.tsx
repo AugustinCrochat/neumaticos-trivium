@@ -5,7 +5,7 @@ import { canonical, SITE_NAME } from "@/lib/seo";
 import { CategoryLanding } from "../CategoryLanding";
 
 export const metadata: Metadata = {
-  title: "Neumáticos H/T (Highway Terrain) en Córdoba: precios",
+  title: "Neumáticos H/T en Córdoba: precios y medidas",
   description:
     "Neumáticos H/T de calle y ruta para camionetas, SUV y autos, al mejor precio y con stock actualizado. Importación directa, garantía de 1 año, colocación sin cargo en Córdoba y envío a todo el país.",
   alternates: canonical("/neumaticos/ht"),

@@ -22,7 +22,7 @@ export function HeroSection() {
           {/* Left: copy */}
           <div className="flex flex-col justify-center pt-10 pb-5 md:py-20 pr-0 md:pr-12">
             <span className="mb-4 inline-flex w-fit rounded-full bg-orange-500 px-3 py-1 text-xs font-bold uppercase tracking-widest text-white">
-              Importación directa · Precios outlet
+              Neumáticos baratos en Córdoba · Importación directa
             </span>
             <h1 className="font-display text-6xl font-extrabold uppercase leading-[0.95] tracking-tight text-white md:text-7xl lg:text-8xl">
               El outlet del{" "}
@@ -33,9 +33,9 @@ export function HeroSection() {
                 la ciudad). Sin él, la home no tenía ni una frase indexable
                 debajo del título. */}
             <p className="mt-5 max-w-lg text-lg leading-relaxed text-slate-300">
-              Cubiertas para auto y camioneta de importación directa, con stock real y precio
-              publicado. Envío a todo el país o retiro sin cargo en nuestro local de Córdoba, con
-              colocación incluida.
+              Cubiertas al mejor precio para auto, camioneta, A/T y carga, de importación directa,
+              con stock real y precio publicado. Retiro en nuestro local de Córdoba con colocación
+              incluida, gomería propia (alineación, balanceo y rotación) y envío a todo el país.
             </p>
             <GoogleRatingBadge className="text-white mt-5" />
           </div>
