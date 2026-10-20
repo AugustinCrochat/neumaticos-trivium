@@ -250,6 +250,10 @@ export function BranchesMap({ branches, comingSoon = [] }: BranchesMapProps) {
       minZoom: ARGENTINA_MIN_ZOOM,
       maxZoom: 17,
       cooperativeGestures: true,
+      // Sin copias del mundo, Marker no corre su lngLat ±360° (smartWrap) en
+      // un zoom-out rápido: ese salto dejaba el pin de San Justo a cientos de
+      // km de su ubicación real. Sólo se muestra Argentina, no hacen falta.
+      renderWorldCopies: false,
       locale: MAP_LOCALE,
       attributionControl: false,
     });
