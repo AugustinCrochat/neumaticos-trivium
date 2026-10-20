@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL, BRANCHES, DEFAULT_BRANCH_ID, TIRE_RIMS } from "@/lib/config";
 import { BRANDS, SERVICES, BLOG_POSTS } from "@/lib/data";
+import { ROTACION_SERVICE } from "@/lib/servicios-seo";
 import { LOCALIDADES } from "@/lib/localidades";
 import { cargaSlug } from "@/lib/carga";
 import { LOAD_SPEED_CODES } from "@/lib/load-speed";
@@ -121,7 +122,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url(`/marcas/${b.id}`, 0.7, "weekly")
   );
 
-  const servicios: Entry[] = SERVICES.map((s) => url(`/servicios/${s.id}`, 0.6, "monthly"));
+  const servicios: Entry[] = [...SERVICES, ROTACION_SERVICE].map((s) => url(`/servicios/${s.id}`, 0.7, "monthly"));
 
   const posts: Entry[] = BLOG_POSTS.map((p) =>
     url(`/blog/${p.slug}`, 0.6, "monthly", p.date)

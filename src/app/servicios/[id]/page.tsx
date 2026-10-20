@@ -6,32 +6,41 @@ import { ICONS } from "@/components/home/ServicesSection";
 import { getServiciosPrecios } from "@/lib/pos-api";
 import { getSelectedBranchSlug } from "@/lib/branch-server";
 import { formatPrecio, splitAutoCamioneta } from "@/lib/servicios";
+import { FaqSection } from "@/components/seo/FaqSection";
+import { ROTACION_SERVICE, SERVICIOS_SEO } from "@/lib/servicios-seo";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbJsonLd, canonical, serviceJsonLd } from "@/lib/seo";
 
 type Props = { params: Promise<{ id: string }> };
 
+// La rotación de ruedas tiene página propia (se busca aparte) pero no figura en
+// el listado de servicios: comparte grupo de precios con "Balanceo y Rotación".
+const findService = (id: string) => [...SERVICES, ROTACION_SERVICE].find((s) => s.id === id);
+
 export async function generateStaticParams() {
-  return SERVICES.map((s) => ({ id: s.id }));
+  return [...SERVICES, ROTACION_SERVICE].map((s) => ({ id: s.id }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
-  const service = SERVICES.find((s) => s.id === id);
+  const service = findService(id);
   if (!service) return {};
+  const seo = SERVICIOS_SEO[service.id];
   return {
-    title: `${service.title} — Neumáticos Trivium`,
-    description: service.description,
+    title: seo?.title ?? service.title,
+    description: seo?.metaDescription ?? service.description,
     alternates: canonical(`/servicios/${service.id}`),
   };
 }
 
 export default async function ServicioPage({ params }: Props) {
   const { id } = await params;
-  const service = SERVICES.find((s) => s.id === id);
+  const service = findService(id);
   if (!service) notFound();
+  const seo = SERVICIOS_SEO[service.id];
 
-  const precios = await getServiciosPrecios(id, await getSelectedBranchSlug());
+  const precios =
+    service.id === ROTACION_SERVICE.id ? [] : await getServiciosPrecios(id, await getSelectedBranchSlug());
   const { auto, camioneta } = splitAutoCamioneta(precios);
 
   return (
@@ -56,7 +65,7 @@ export default async function ServicioPage({ params }: Props) {
             Volver a servicios
           </Link>
           <div className="text-orange-500 mb-4">{ICONS[service.icon]}</div>
-          <h1 className="text-3xl md:text-4xl font-black text-white mb-4">{service.title}</h1>
+          <h1 className="text-3xl md:text-4xl font-black text-white mb-4">{seo?.h1 ?? service.title}</h1>
           <p className="text-slate-300 text-lg max-w-xl leading-relaxed">{service.description}</p>
         </div>
       </div>
@@ -113,6 +122,64 @@ export default async function ServicioPage({ params }: Props) {
             )}
           </div>
         </div>
+
+        {seo && (
+          <div className="mt-12 space-y-8">
+            <div className="space-y-4 text-slate-700 leading-relaxed">
+              {seo.intro.map((p) => (
+                <p key={p}>{p}</p>
+              ))}
+            </div>
+            {seo.secciones.map((sec) => (
+              <section key={sec.titulo}>
+                <h2 className="text-xl font-black text-navy-900 mb-3">{sec.titulo}</h2>
+                {sec.texto && <p className="text-slate-700 leading-relaxed">{sec.texto}</p>}
+                {sec.items && (
+                  <ul className="list-disc space-y-2 pl-5 text-slate-700 leading-relaxed">
+                    {sec.items.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                )}
+              </section>
+            ))}
+            <FaqSection faqs={seo.faqs} />
+            <section>
+              <h2 className="text-xl font-black text-navy-900 mb-3">Más información</h2>
+              <ul className="space-y-2">
+                {seo.relacionados.map(([slug, label]) => (
+                  <li key={slug}>
+                    <Link href={`/blog/${slug}`} className="font-bold text-orange-700 underline underline-offset-4">
+                      {label}
+                    </Link>
+                  </li>
+                ))}
+                {[...SERVICES, ROTACION_SERVICE]
+                  .filter((other) => other.id !== service.id)
+                  .map((other) => (
+                    <li key={other.id}>
+                      <Link
+                        href={`/servicios/${other.id}`}
+                        className="font-bold text-orange-700 underline underline-offset-4"
+                      >
+                        {SERVICIOS_SEO[other.id]?.h1 ?? other.title}
+                      </Link>
+                    </li>
+                  ))}
+                <li>
+                  <Link href="/servicios" className="font-bold text-orange-700 underline underline-offset-4">
+                    Todos los servicios de la gomería
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/neumaticos-en/cordoba" className="font-bold text-orange-700 underline underline-offset-4">
+                    Neumáticos en Córdoba
+                  </Link>
+                </li>
+              </ul>
+            </section>
+          </div>
+        )}
 
         <div className="mt-12 bg-orange-50 border border-orange-100 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <div>
