@@ -5,11 +5,6 @@ import { useBranch } from "@/contexts/branch-context";
 import { BRANCHES, type Branch } from "@/lib/config";
 import { WhatsAppLink } from "./WhatsAppLink";
 
-// Coordenadas aproximadas de cada sucursal
-const BRANCH_COORDS: Record<string, { lat: number; lng: number }> = {
-  arguello: { lat: -31.3302015, lng: -64.2650135 },
-};
-
 function haversineKm(
   lat1: number, lng1: number,
   lat2: number, lng2: number
@@ -27,9 +22,8 @@ function haversineKm(
 
 function getNearestBranch(lat: number, lng: number): Branch {
   return BRANCHES.reduce((nearest, branch) => {
-    const coords = BRANCH_COORDS[branch.id];
-    const distNearest = haversineKm(lat, lng, BRANCH_COORDS[nearest.id].lat, BRANCH_COORDS[nearest.id].lng);
-    const distThis = haversineKm(lat, lng, coords.lat, coords.lng);
+    const distNearest = haversineKm(lat, lng, nearest.coordinates.lat, nearest.coordinates.lng);
+    const distThis = haversineKm(lat, lng, branch.coordinates.lat, branch.coordinates.lng);
     return distThis < distNearest ? branch : nearest;
   });
 }
@@ -77,10 +71,14 @@ export function BranchModal() {
     }, 15000);
     navigator.geolocation.getCurrentPosition(
       (pos) => {
-        const nearest = getNearestBranch(pos.coords.latitude, pos.coords.longitude);
         if (settled) return;
-        setNearestId(nearest.id);
-        finish("done");
+        try {
+          setNearestId(getNearestBranch(pos.coords.latitude, pos.coords.longitude).id);
+          finish("done");
+        } catch {
+          setGeoMsg("No pudimos calcular la sucursal más cercana. Elegí manualmente.");
+          finish("error");
+        }
       },
       (err) => {
         setGeoMsg(
