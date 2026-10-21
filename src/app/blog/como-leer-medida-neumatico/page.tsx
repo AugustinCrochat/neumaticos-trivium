@@ -19,7 +19,7 @@ const INFOGRAPHIC = "/como-leer-medida-neumatico-205-55-r16.webp";
 // Foto real del flanco con cada código señalado (ver "Dónde mirarlo").
 const FLANCO_PHOTO = "/donde-encontrar-la-medida-en-el-flanco-del-neumatico.webp";
 const FLANCO_ALT =
-  "Flanco de un neumático 195/65 R15 95T XL con cada código señalado: ancho 195 mm, perfil 65, construcción radial R, llanta de 15 pulgadas, índice de carga 95, código de velocidad T, XL, M+S y tubeless";
+  "Flanco de un neumático 195/65 R15 95T XL con cada código numerado: 1 ancho 195 mm, 2 perfil 65, 3 construcción radial R, 4 llanta de 15 pulgadas, 5 índice de carga 95, 6 código de velocidad T, 7 XL, 8 M+S y 9 tubeless";
 
 const INFOGRAPHIC_ALT =
   "Infografía de cómo leer la medida 205/55 R16 en el flanco de un neumático: 205 es el ancho en milímetros, 55 el perfil, R la construcción radial y 16 el diámetro de la llanta en pulgadas";
@@ -226,23 +226,21 @@ export default function ComoLeerMedidaPage() {
 
       {/* Dónde mirarlo */}
       <section id="flanco" className="scroll-mt-16 bg-slate-50 py-14 md:py-20">
-        <div className="mx-auto grid max-w-6xl gap-9 px-4 lg:grid-cols-[.9fr_1.1fr] lg:items-center">
+        <div className="mx-auto max-w-5xl px-4">
+          <SectionHead kicker="Dónde mirarlo" title="El flanco es tu punto de partida">
+            La medida está moldeada en relieve sobre el flanco, la pared lateral del neumático, junto al índice de carga, el código de velocidad y otras marcas. Así se ve en un neumático real:
+          </SectionHead>
           <figure className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl shadow-navy-900/10">
-            <Image src={FLANCO_PHOTO} alt={FLANCO_ALT} width={1400} height={1901} sizes="(max-width: 1024px) 100vw, 45vw" className="h-auto w-full" />
-            <figcaption className="px-5 py-3 text-sm text-slate-500">Ejemplo real: 195/65 R15 95T XL, moldeado en relieve sobre el flanco. Cada color marca un dato distinto.</figcaption>
+            <Image src={FLANCO_PHOTO} alt={FLANCO_ALT} width={1600} height={1093} sizes="(max-width: 1024px) 100vw, 1024px" className="h-auto w-full" />
+            <figcaption className="px-5 py-3 text-sm text-slate-500">Ejemplo real: 195/65 R15 95T XL, moldeado en relieve sobre el flanco. Cada número de la foto se explica en el cuadro.</figcaption>
           </figure>
-          <div>
-            <p className="text-sm font-black uppercase tracking-widest text-orange-600">Dónde mirarlo</p>
-            <h2 className="mt-2 text-3xl font-black tracking-tight text-navy-900 md:text-4xl">El flanco es tu punto de partida</h2>
-            <p className="mt-4 text-lg leading-relaxed text-slate-600">
-              La medida está moldeada en relieve sobre el <strong className="text-navy-900">flanco</strong>, la pared lateral del neumático, junto al índice de carga, el código de velocidad y la fecha de fabricación.
-            </p>
-            <ul className="mt-5 space-y-3 text-slate-600">
+          <div className="mt-8 grid gap-6 md:grid-cols-2">
+            <ul className="space-y-3 text-slate-600">
               <li className="flex gap-3"><span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-orange-500" />En el neumático montado: agachate y mirá el costado de la cubierta.</li>
               <li className="flex gap-3"><span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-orange-500" />En la etiqueta del marco de la puerta del conductor, con las presiones recomendadas.</li>
               <li className="flex gap-3"><span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-orange-500" />En el manual del vehículo, en la tapa de combustible o en la guantera.</li>
             </ul>
-            <div className="mt-6 rounded-2xl border border-orange-200 bg-orange-50 p-5">
+            <div className="rounded-2xl border border-orange-200 bg-orange-50 p-5">
               <p className="font-black text-orange-800">Tip Trivium</p>
               <p className="mt-1 text-sm leading-relaxed text-orange-900">No elijas un neumático sólo porque “parece del mismo tamaño”. La medida, el índice de carga y el de velocidad deben respetar la especificación del vehículo.</p>
             </div>
