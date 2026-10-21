@@ -40,10 +40,12 @@ const HEADERS = {
 
 export async function GET(request: Request) {
   const query = new URL(request.url).searchParams.get("q")?.trim() ?? "";
-  if (!query) return Response.json({ results: [], total: 0 });
-  if (query.length > 80) return Response.json({ results: [], total: 0 });
+  if (!query || query.length > 80) return Response.json({ results: [], matches: [], total: 0 });
 
-  const norm = query.toLowerCase().replace(/\s+/g, " ");
+  // `full=1` es para /busqueda: devuelve los productos completos (sin recorte)
+  // para que la página los dibuje en el cliente en vez de renderizarlos en el Worker.
+  const full = new URL(request.url).searchParams.get("full") === "1";
+  const norm = (full ? "full:" : "") + query.toLowerCase().replace(/\s+/g, " ");
   const hit = cache.get(norm);
   if (hit && hit.expires > Date.now()) return new Response(hit.body, { headers: HEADERS });
 
@@ -65,8 +67,9 @@ export async function GET(request: Request) {
   const sucursal = await getSelectedBranchSlug();
   const [productos, accesorios] = await Promise.all([getProductosDesdePOS(sucursal), getAccesoriosDesdePOS(sucursal)]);
   const matches = searchCatalog(query, productos, accesorios);
-  const results = matches.slice(0, PREVIEW_LIMIT).map(toSearchResult);
-  const body = JSON.stringify({ results, total: matches.length });
+  const body = full
+    ? JSON.stringify({ matches: matches.map(({ type, item }) => ({ type, item })), total: matches.length })
+    : JSON.stringify({ results: matches.slice(0, PREVIEW_LIMIT).map(toSearchResult), total: matches.length });
 
   // Catálogo vacío = falla del POS, no "sin resultados": no se cachea.
   if (productos.length > 0) {
