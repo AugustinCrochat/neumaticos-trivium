@@ -18,6 +18,12 @@ export type MedidaCatalogo = {
   r: number;
   /** Neumático de carga (serie C): misma medida nominal, otra landing. */
   c: boolean;
+  /**
+   * Tipo: "n" calle, "a" A/T (todo terreno) o "c" carga. Una misma medida
+   * puede venir en más de un tipo (175/65 R14 calle y carga), y ahí el buscador
+   * le pregunta a la persona cuál busca.
+   */
+  t: "n" | "a" | "c";
   /** Modelos en catálogo. */
   n: number;
   /** Modelos con stock. */
@@ -31,10 +37,11 @@ export async function GET() {
   const mapa = new Map<string, MedidaCatalogo>();
   for (const prod of productos) {
     const c = Boolean(prod.isCarga);
-    const key = `${prod.size.width}-${prod.size.profile}-${prod.size.rim}${c ? "c" : ""}`;
+    const t: MedidaCatalogo["t"] = c ? "c" : prod.isAT ? "a" : "n";
+    const key = `${prod.size.width}-${prod.size.profile}-${prod.size.rim}${t}`;
     const e =
       mapa.get(key) ??
-      { w: prod.size.width, p: prod.size.profile, r: prod.size.rim, c, n: 0, s: 0, d: null };
+      { w: prod.size.width, p: prod.size.profile, r: prod.size.rim, c, t, n: 0, s: 0, d: null };
     e.n += 1;
     if (prod.enStock) {
       e.s += 1;

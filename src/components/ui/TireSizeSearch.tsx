@@ -26,7 +26,15 @@ function cargarMedidas(): Promise<MedidaCatalogo[] | null> {
   });
 }
 
-type Opcion = { w: string; p: string; r: string; c: boolean; info?: MedidaCatalogo };
+type Opcion = { w: string; p: string; r: string; c: boolean; t: MedidaCatalogo["t"]; info?: MedidaCatalogo };
+
+const TIPO_NOMBRE = { n: "Auto / calle", a: "A/T (todo terreno)", c: "Carga (serie C)" } as const;
+const TIPO_AYUDA = {
+  n: "Para autos y SUV en asfalto",
+  a: "Para camionetas con ripio, barro o campo",
+  c: "Para furgones y utilitarios, con más capacidad de carga",
+} as const;
+const TIPO_ORDEN = { n: 0, a: 1, c: 2 } as const;
 
 const diametroMm = (w: number, p: number, r: number) => r * 25.4 + (2 * w * p) / 100;
 const formatPrecio = (n: number) => `$${n.toLocaleString("es-AR")}`;
@@ -154,8 +162,8 @@ export function TireSizeSearch({
   const opciones: Opcion[] = catalogo
     ? [...catalogo]
         .sort((a, b) => Number(b.s > 0) - Number(a.s > 0) || b.n - a.n || a.r - b.r || a.w - b.w)
-        .map((m) => ({ w: String(m.w), p: String(m.p), r: String(m.r), c: m.c, info: m }))
-    : POPULAR_SIZES.map((m) => ({ ...m, c: false }));
+        .map((m) => ({ w: String(m.w), p: String(m.p), r: String(m.r), c: m.c, t: m.t, info: m }))
+    : POPULAR_SIZES.map((m) => ({ ...m, c: false, t: "n" as const }));
 
   const filteredSizes = opciones
     .filter((o) => !(width === o.w && profile === o.p && rim === o.r) && prefijoCoincide(o))
@@ -307,22 +315,23 @@ export function TireSizeSearch({
     : width.length === 3 && profile.length === 2 && rim.length === 2
       ? { w: Number(width), p: Number(profile), r: Number(rim) }
       : null;
-  const sinCatalogo =
-    catalogo !== null &&
-    medidaObjetivo !== null &&
-    !catalogo.some((m) => !m.c && m.w === medidaObjetivo.w && m.p === medidaObjetivo.p && m.r === medidaObjetivo.r);
-  const medidaInfo =
+  // Todas las versiones de esta medida (calle, A/T, carga) que tenemos.
+  const entradas = (
     catalogo && medidaObjetivo
-      ? catalogo.find((m) => !m.c && m.w === medidaObjetivo.w && m.p === medidaObjetivo.p && m.r === medidaObjetivo.r)
-      : undefined;
-  const sinStock = !!medidaInfo && medidaInfo.s === 0;
+      ? catalogo.filter((m) => m.w === medidaObjetivo.w && m.p === medidaObjetivo.p && m.r === medidaObjetivo.r)
+      : []
+  ).sort((a, b) => TIPO_ORDEN[a.t] - TIPO_ORDEN[b.t]);
+  const sinCatalogo = catalogo !== null && medidaObjetivo !== null && entradas.length === 0;
+  const stockTotal = entradas.reduce((acc, m) => acc + m.s, 0);
+  const sinStock = entradas.length > 0 && stockTotal === 0;
   // La vista previa aparece sólo cuando la medida se escribió (no cuando vino prellenada).
-  const previewOk = !!medidaInfo && !shouldClearInitialOnEdit;
+  const previewOk = entradas.length > 0 && !shouldClearInitialOnEdit;
   const alternativas = (sinCatalogo || sinStock) && medidaObjetivo && catalogo
     ? (() => {
         const d0 = diametroMm(medidaObjetivo.w, medidaObjetivo.p, medidaObjetivo.r);
         return catalogo
           .filter((m) => !m.c && m.s > 0 && m.r === medidaObjetivo.r)
+          .filter((m, i, todas) => todas.findIndex((o) => o.w === m.w && o.p === m.p) === i)
           .map((m) => ({ m, dif: Math.abs(diametroMm(m.w, m.p, m.r) - d0) / d0 }))
           .filter((x) => x.dif <= 0.03)
           .sort((a, b) => a.dif - b.dif)
@@ -403,7 +412,7 @@ export function TireSizeSearch({
     return [...mapa.entries()].sort((a, b) => a[0] - b[0]);
   })();
 
-  const performSearch = (w: string, p: string, rVal: string) => {
+  const performSearch = (w: string, p: string, rVal: string, tipo?: "calle" | "at") => {
     if (!w && !p && !rVal) return;
     if (document.activeElement instanceof HTMLElement) {
       document.activeElement.blur();
@@ -416,8 +425,22 @@ export function TireSizeSearch({
         // Sin localStorage: no se recuerda, no es crítico.
       }
     }
-    router.push(sizeSearchHref(w, p, rVal, economicosRef.current));
+    const href = sizeSearchHref(w, p, rVal, economicosRef.current);
+    // El #tipo le dice a la landing de la medida qué versión mostrar primero.
+    router.push(tipo && href.startsWith("/neumaticos/") ? `${href}#tipo=${tipo}` : href);
   };
+
+  // Elegir una versión concreta de la medida (calle, A/T o carga).
+  function irATipo(m: MedidaCatalogo, variasVersiones: boolean) {
+    if (flotationEquivalent) rememberFlotationOrigin();
+    if (m.t === "c") {
+      if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+      setShowPopular(false);
+      router.push(`/neumaticos/carga/${m.w}-${m.p}-r${m.r}c`);
+      return;
+    }
+    performSearch(String(m.w), String(m.p), String(m.r), variasVersiones ? (m.t === "a" ? "at" : "calle") : undefined);
+  }
 
   function executeSearch() {
     if (flotationEquivalent) {
@@ -458,7 +481,9 @@ export function TireSizeSearch({
       router.push(`/neumaticos/carga/${s.w}-${s.p}-r${s.r}c`);
       return;
     }
-    performSearch(s.w, s.p, s.r);
+    // Si la medida viene también en otra versión, la elegida se marca en la landing.
+    const varias = (catalogo ?? []).filter((m) => String(m.w) === s.w && String(m.p) === s.p && String(m.r) === s.r).length > 1;
+    performSearch(s.w, s.p, s.r, varias ? (s.t === "a" ? "at" : "calle") : undefined);
   }
 
   const clearInitialMeasureForEdit = () => {
@@ -942,28 +967,58 @@ export function TireSizeSearch({
             </div>
           )}
 
-          {previewOk && medidaInfo && medidaInfo.s > 0 && medidaObjetivo && (
+          {previewOk && stockTotal > 0 && medidaObjetivo && (
             <div role="status" className="mt-2 rounded-xl border border-emerald-200 bg-emerald-50 p-4 shadow-lg">
               <p className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
                 <span className="text-xl font-black text-navy-900">
                   {medidaObjetivo.w}/{medidaObjetivo.p} R{medidaObjetivo.r}
+                  {entradas.length === 1 && entradas[0].t === "c" ? "C" : ""}
                 </span>
-                <span className="text-sm font-bold text-emerald-700">
-                  {medidaInfo.s} {medidaInfo.s === 1 ? "modelo" : "modelos"} con stock · desde {formatPrecio(medidaInfo.d ?? 0)}
-                </span>
+                {entradas.length === 1 && (
+                  <span className="text-sm font-bold text-emerald-700">
+                    {entradas[0].s} {entradas[0].s === 1 ? "modelo" : "modelos"} con stock · desde {formatPrecio(entradas[0].d ?? 0)}
+                    {entradas[0].t === "a" ? " · A/T" : entradas[0].t === "c" ? " · carga" : ""}
+                  </span>
+                )}
               </p>
               {vehiculos.length > 0 && (
                 <p className="mt-1 text-sm text-slate-600">
                   Es la medida de: <strong className="text-navy-900">{vehiculos.map((v) => `${v.brand} ${v.model}`).join(", ")}</strong>
                 </p>
               )}
-              <button
-                type="button"
-                onClick={executeSearch}
-                className="mt-3 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-orange-500 px-4 text-sm font-black text-white shadow-md shadow-orange-500/20 transition-colors hover:bg-orange-600"
-              >
-                Ver neumáticos {medidaObjetivo.w}/{medidaObjetivo.p} R{medidaObjetivo.r} →
-              </button>
+              {entradas.length > 1 ? (
+                // Sólo se pregunta cuando la medida existe en más de una versión.
+                <div className="mt-3">
+                  <p className="text-sm font-black text-navy-900">Esta medida viene en más de un tipo. ¿Cuál buscás?</p>
+                  <div className="mt-2 grid gap-2">
+                    {entradas.map((m) => (
+                      <button
+                        key={m.t}
+                        type="button"
+                        onClick={() => irATipo(m, true)}
+                        className="flex items-center justify-between gap-3 rounded-xl border border-slate-300 bg-white px-4 py-3 text-left transition-colors hover:border-orange-400 hover:bg-orange-50"
+                      >
+                        <span>
+                          <span className="block font-black text-navy-900">{TIPO_NOMBRE[m.t]}</span>
+                          <span className="block text-xs text-slate-500">{TIPO_AYUDA[m.t]}</span>
+                        </span>
+                        <span className={`shrink-0 text-right text-xs font-bold ${m.s > 0 ? "text-emerald-700" : "text-slate-500"}`}>
+                          {m.s > 0 ? `${m.s} ${m.s === 1 ? "modelo" : "modelos"} · desde ${formatPrecio(m.d ?? 0)}` : "Sin stock hoy"}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => irATipo(entradas[0], false)}
+                  className="mt-3 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-orange-500 px-4 text-sm font-black text-white shadow-md shadow-orange-500/20 transition-colors hover:bg-orange-600"
+                >
+                  Ver neumáticos {medidaObjetivo.w}/{medidaObjetivo.p} R{medidaObjetivo.r}
+                  {entradas[0].t === "c" ? "C" : ""} →
+                </button>
+              )}
             </div>
           )}
 
@@ -1042,7 +1097,7 @@ export function TireSizeSearch({
               <div className="max-h-[240px] overflow-y-auto">
                 {filteredSizes.map((s, i) => (
                   <button
-                    key={`${s.w}-${s.p}-${s.r}${s.c ? "c" : ""}`}
+                    key={`${s.w}-${s.p}-${s.r}${s.t}`}
                     type="button"
                     role="option"
                     aria-selected={i === activeOption}
@@ -1054,7 +1109,7 @@ export function TireSizeSearch({
                     className={`w-full px-4 py-3 text-left hover:bg-orange-50 transition-colors flex items-center justify-between group border-b border-slate-100 last:border-0 ${i === activeOption ? "bg-orange-50" : ""}`}
                   >
                     <span className="text-navy-900 font-bold">
-                      {s.w} / {s.p} <span className="text-slate-500 font-medium">R</span>{s.r}{s.c ? "C" : ""}
+                      {s.w} / {s.p} <span className="text-slate-500 font-medium">R</span>{s.r}{s.c ? "C" : ""}{s.t === "a" ? " A/T" : ""}
                     </span>
                     {s.info && (
                       s.info.s > 0 ? (

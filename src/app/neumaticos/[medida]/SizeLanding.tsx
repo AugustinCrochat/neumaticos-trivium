@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { TireProduct, TireSize } from "@/lib/types";
 import { BRANCHES, FREE_SHIPPING_THRESHOLD, SHIPPING_FLAT_RATE } from "@/lib/config";
 import { esRangoFlotation, formatFlotationEquivalent, metricToFlotation } from "@/lib/flotation";
-import { SortedProductGrid } from "@/components/ui/SortedProductGrid";
+import { SizeProductsGrid } from "@/components/ui/SizeProductsGrid";
 import { bestPriceByGroup, peersByGroup } from "@/lib/best-price";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 import { SizeHeader } from "./SizeHeader";
@@ -170,7 +170,7 @@ export function SizeLanding({
           <h2 className="mb-5 text-2xl font-black text-navy-900">
             Cubiertas {label} disponibles
           </h2>
-          <SortedProductGrid
+          <SizeProductsGrid
             className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 md:gap-6"
             items={ordenados.map((product) => ({ product, isCheapest: mejores.has(product.id), cheapestLabel: mejores.get(product.id), peers: peers.get(product.id) }))}
           />

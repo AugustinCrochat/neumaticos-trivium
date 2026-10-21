@@ -1,24 +1,146 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { sizeSearchHref } from "@/lib/size-href";
 
 /**
- * "¿Dónde veo mi medida?": abre sobre el buscador la foto real del flanco con
- * cada código numerado, para que quien no sabe qué escribir lo resuelva sin
- * irse de la página. El link a la guía completa queda adentro.
+ * "¿Dónde veo mi medida?": muestra la foto real del flanco con cada código
+ * numerado y, ahí mismo, tres campos para buscar con lo que se lee.
  *
- * <dialog> nativo: trae foco atrapado, Esc y fondo bloqueado sin código extra.
+ * En computadora se abre al pasar el mouse (anclado al botón, con posición fija
+ * para que ningún contenedor con overflow-hidden lo recorte). En celular, donde
+ * no hay hover, se abre al tocar y ocupa la pantalla. Esc o tocar afuera cierra.
  */
 export function MedidaHelpDialog({ compact = false }: { compact?: boolean }) {
-  const ref = useRef<HTMLDialogElement>(null);
+  const router = useRouter();
+  const [open, setOpen] = useState(false);
+  // null = pantalla completa (celular); con valores = anclado al botón (mouse).
+  const [pos, setPos] = useState<{ top: number; left: number } | null>(null);
+  const [w, setW] = useState("");
+  const [p, setP] = useState("");
+  const [r, setR] = useState("");
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const btnRef = useRef<HTMLButtonElement>(null);
+  const pRef = useRef<HTMLInputElement>(null);
+  const rRef = useRef<HTMLInputElement>(null);
+  const wInputRef = useRef<HTMLInputElement>(null);
+  const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+
+  const conMouse = () => window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+  function abrir() {
+    clearTimeout(timer.current);
+    if (conMouse() && btnRef.current) {
+      const rect = btnRef.current.getBoundingClientRect();
+      const vw = document.documentElement.clientWidth;
+      const ancho = Math.min(704, vw - 16);
+      setPos({ top: rect.bottom, left: Math.max(8, Math.min(rect.left, vw - ancho - 8)) });
+    } else {
+      setPos(null);
+    }
+    setOpen(true);
+  }
+  function cerrarConDemora() {
+    clearTimeout(timer.current);
+    timer.current = setTimeout(() => setOpen(false), 250);
+  }
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    const onScroll = () => pos && setOpen(false); // anclado: al scrollear se descoloca
+    window.addEventListener("keydown", onKey);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, [open, pos]);
+
+  const digits = (v: string, max: number) => v.replace(/\D/g, "").slice(0, max);
+  const campo = "h-11 w-full min-w-0 rounded-xl border-2 border-slate-300 bg-white text-center text-lg font-black text-navy-950 outline-none focus:border-orange-500";
+
+  function buscar(e: React.FormEvent) {
+    e.preventDefault();
+    if (w.length < 3) return wInputRef.current?.focus();
+    if (p.length < 2) return pRef.current?.focus();
+    if (r.length < 2) return rRef.current?.focus();
+    setOpen(false);
+    router.push(sizeSearchHref(w, p, r));
+  }
+
+  const tarjeta = (
+    <div className="rounded-3xl bg-white p-4 text-slate-900 shadow-2xl ring-1 ring-black/10 sm:p-5">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <p className="text-xs font-black uppercase tracking-widest text-orange-600">Tu medida está en el flanco</p>
+          <h2 className="mt-0.5 text-xl font-black text-navy-900">¿Dónde veo mi medida?</h2>
+        </div>
+        <button
+          type="button"
+          onClick={() => setOpen(false)}
+          aria-label="Cerrar"
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-100 text-xl font-black text-slate-600 hover:bg-slate-200"
+        >
+          ×
+        </button>
+      </div>
+
+      <div className="mt-3 overflow-hidden rounded-2xl border border-slate-200">
+        <Image
+          src="/donde-encontrar-la-medida-en-el-flanco-del-neumatico.webp"
+          alt="Flanco de un neumático 195/65 R15 95T XL con cada código numerado: 1 ancho, 2 perfil, 3 construcción radial, 4 rodado, 5 índice de carga, 6 velocidad, 7 XL, 8 M+S y 9 tubeless"
+          width={1600}
+          height={1093}
+          sizes="(max-width: 760px) 92vw, 44rem"
+          className="h-auto w-full"
+        />
+      </div>
+
+      <form onSubmit={buscar} className="mt-4">
+        <p className="text-sm font-bold text-navy-900">
+          Escribí los números{" "}
+          <span className="text-[#ff1e00]">1</span>, <span className="text-[#3d80c8]">2</span> y <span className="text-[#e8532e]">4</span> (ancho, perfil y rodado):
+        </p>
+        <div className="mt-2 flex items-center gap-2">
+          <input ref={wInputRef} aria-label="Ancho" inputMode="numeric" autoComplete="off" placeholder="195" value={w} className={campo}
+            onChange={(e) => { const v = digits(e.target.value, 3); setW(v); if (v.length === 3) pRef.current?.focus(); }} />
+          <span aria-hidden="true" className="font-black text-slate-400">/</span>
+          <input ref={pRef} aria-label="Perfil" inputMode="numeric" autoComplete="off" placeholder="65" value={p} className={campo}
+            onChange={(e) => { const v = digits(e.target.value, 2); setP(v); if (v.length === 2) rRef.current?.focus(); }} />
+          <span aria-hidden="true" className="font-black text-slate-400">R</span>
+          <input ref={rRef} aria-label="Rodado" inputMode="numeric" autoComplete="off" placeholder="15" value={r} className={campo}
+            onChange={(e) => setR(digits(e.target.value, 2))} />
+          <button type="submit" className="h-11 shrink-0 rounded-xl bg-orange-500 px-4 text-sm font-black text-white hover:bg-orange-600">
+            Buscar
+          </button>
+        </div>
+      </form>
+
+      <p className="mt-3 text-xs leading-relaxed text-slate-500">
+        También figura en la etiqueta del marco de la puerta del conductor y en el manual. Si no la encontrás, buscá en la pestaña “Por mi auto”.{" "}
+        <Link href="/blog/como-leer-medida-neumatico" className="font-black text-navy-800 underline decoration-orange-500 decoration-2 underline-offset-2">
+          Leer la guía completa →
+        </Link>
+      </p>
+    </div>
+  );
 
   return (
-    <>
+    <div
+      ref={wrapRef}
+      className="inline-block"
+      onMouseEnter={() => conMouse() && abrir()}
+      onMouseLeave={() => conMouse() && cerrarConDemora()}
+    >
       <button
+        ref={btnRef}
         type="button"
-        onClick={() => ref.current?.showModal()}
+        aria-expanded={open}
+        onClick={() => (open && !conMouse() ? setOpen(false) : abrir())}
         className={`inline-flex items-center gap-1.5 font-bold text-red-600 underline underline-offset-2 hover:text-red-700 ${compact ? "text-xs" : "text-sm"}`}
       >
         <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -28,69 +150,24 @@ export function MedidaHelpDialog({ compact = false }: { compact?: boolean }) {
         ¿Dónde veo mi medida?
       </button>
 
-      <dialog
-        ref={ref}
-        aria-labelledby="medida-help-title"
-        onClick={(e) => {
-          // Clic en el fondo (el propio <dialog>, fuera del contenido) cierra.
-          if (e.target === ref.current) ref.current?.close();
-        }}
-        className="m-auto w-[min(96vw,56rem)] max-h-[92vh] overflow-y-auto rounded-3xl bg-white p-0 text-slate-900 shadow-2xl backdrop:bg-black/70"
-      >
-        <div className="p-4 sm:p-6">
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <p className="text-xs font-black uppercase tracking-widest text-orange-600">Tu medida está en el flanco</p>
-              <h2 id="medida-help-title" className="mt-1 text-2xl font-black text-navy-900">¿Dónde veo mi medida?</h2>
-            </div>
-            <button
-              type="button"
-              onClick={() => ref.current?.close()}
-              aria-label="Cerrar"
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-100 text-xl font-black text-slate-600 hover:bg-slate-200"
-            >
-              ×
-            </button>
+      {open &&
+        (pos ? (
+          // Con mouse: anclado justo debajo del botón, sin hueco (así el puntero no "se sale").
+          <div role="dialog" aria-label="¿Dónde veo mi medida?" className="fixed z-[100] w-[min(44rem,calc(100vw-1rem))]" style={{ top: pos.top, left: pos.left }}>
+            <div className="pt-2">{tarjeta}</div>
           </div>
-
-          <p className="mt-3 text-slate-600">
-            Mirá el costado del neumático: la medida es el primer código grande, por ejemplo <strong className="text-navy-900">195/65 R15</strong>. Escribí los
-            números <strong className="text-navy-900">1, 2 y 4</strong> (ancho, perfil y rodado).
-          </p>
-
-          <div className="mt-4 overflow-hidden rounded-2xl border border-slate-200">
-            <Image
-              src="/donde-encontrar-la-medida-en-el-flanco-del-neumatico.webp"
-              alt="Flanco de un neumático 195/65 R15 95T XL con cada código numerado: 1 ancho, 2 perfil, 3 construcción radial, 4 rodado, 5 índice de carga, 6 velocidad, 7 XL, 8 M+S y 9 tubeless"
-              width={1600}
-              height={1093}
-              sizes="(max-width: 900px) 96vw, 56rem"
-              className="h-auto w-full"
-            />
+        ) : (
+          // Sin mouse (celular): ocupa la pantalla; tocar el fondo cierra.
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="¿Dónde veo mi medida?"
+            className="fixed inset-0 z-[100] overflow-y-auto bg-black/70 p-3"
+            onClick={(e) => e.target === e.currentTarget && setOpen(false)}
+          >
+            <div className="mx-auto my-4 max-w-3xl">{tarjeta}</div>
           </div>
-
-          <ul className="mt-4 space-y-2 text-sm text-slate-600">
-            <li>También figura en la etiqueta del marco de la puerta del conductor y en el manual del vehículo.</li>
-            <li>Si no la encontrás, buscá por tu auto en la pestaña <strong className="text-navy-900">“Por mi auto”</strong>.</li>
-          </ul>
-
-          <div className="mt-5 flex flex-wrap items-center gap-3">
-            <Link
-              href="/blog/como-leer-medida-neumatico"
-              className="rounded-xl bg-orange-500 px-5 py-3 text-sm font-black text-white transition-colors hover:bg-orange-600"
-            >
-              Leer la guía completa →
-            </Link>
-            <button
-              type="button"
-              onClick={() => ref.current?.close()}
-              className="rounded-xl border border-slate-300 px-5 py-3 text-sm font-black text-slate-700 hover:border-slate-500"
-            >
-              Ya la encontré
-            </button>
-          </div>
-        </div>
-      </dialog>
-    </>
+        ))}
+    </div>
   );
 }
