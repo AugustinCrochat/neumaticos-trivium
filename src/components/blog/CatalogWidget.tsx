@@ -4,6 +4,7 @@ import { ProductCard } from '@/components/ui/ProductCard';
 import type { TireSize } from '@/lib/types';
 import type { VehicleTireProfile } from '@/lib/vehicles';
 import Link from 'next/link';
+import { peersByGroup } from '@/lib/best-price';
 
 interface CatalogWidgetProps {
   size?: TireSize;
@@ -55,6 +56,7 @@ export async function CatalogWidget({ size, loadIndex, speedRating, vehicleProfi
   filtered.sort((a, b) => a.price - b.price);
 
   const displayProducts = filtered.slice(0, limit);
+  const peers = peersByGroup(allProducts);
 
   if (displayProducts.length === 0) {
     return null; // Don't show the widget if no stock
@@ -65,7 +67,7 @@ export async function CatalogWidget({ size, loadIndex, speedRating, vehicleProfi
       {title && <h3 className="text-2xl font-black text-navy-900 mb-6">{title}</h3>}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {displayProducts.map(p => (
-          <ProductCard key={p.id} product={p} />
+          <ProductCard key={p.id} product={p} peers={peers.get(p.id)} />
         ))}
       </div>
       {size && (

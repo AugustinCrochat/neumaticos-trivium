@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ProductCard } from "@/components/ui/ProductCard";
 import { FEATURED_TIRE_IDS } from "@/lib/featured";
+import { peersByGroup } from "@/lib/best-price";
 import type { TireProduct } from "@/lib/types";
 
 /**
@@ -15,6 +16,8 @@ export function FeaturedProductsSection({ productos }: { productos: TireProduct[
   );
 
   if (destacados.length === 0) return null;
+  // El tag "Mejor precio" se decide contra todo el catálogo, no sólo los destacados.
+  const peers = peersByGroup(productos);
 
   return (
     <section className="bg-white py-16">
@@ -33,7 +36,7 @@ export function FeaturedProductsSection({ productos }: { productos: TireProduct[
 
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 md:gap-6">
           {destacados.map((producto) => (
-            <ProductCard key={producto.id} product={producto} />
+            <ProductCard key={producto.id} product={producto} peers={peers.get(producto.id)} />
           ))}
         </div>
       </div>

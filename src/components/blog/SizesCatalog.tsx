@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getProductosDesdePOS } from "@/lib/pos-api";
 import { ProductCard } from "@/components/ui/ProductCard";
 import { sizeSearchHref } from "@/lib/size-href";
+import { peersByGroup } from "@/lib/best-price";
 import type { TireSize } from "@/lib/types";
 
 const money = (n: number) =>
@@ -14,7 +15,9 @@ const money = (n: number) =>
  * ni promete algo que no hay; se actualiza con cada deploy (ver sitemap.ts).
  */
 export async function SizesCatalog({ sizes, limit = 8, branch = "arguello" }: { sizes: TireSize[]; limit?: number; branch?: string }) {
-  const productos = (await getProductosDesdePOS(branch)).filter((p) => p.enStock && !p.isCarga);
+  const catalogo = await getProductosDesdePOS(branch);
+  const peers = peersByGroup(catalogo);
+  const productos = catalogo.filter((p) => p.enStock && !p.isCarga);
 
   const rows = sizes
     .map((size) => {
@@ -34,7 +37,7 @@ export async function SizesCatalog({ sizes, limit = 8, branch = "arguello" }: { 
     <div className="not-prose [&_a]:!no-underline">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {rows.slice(0, limit).map(({ size, items }) => (
-          <ProductCard key={items[0].id} product={items[0]} />
+          <ProductCard key={items[0].id} product={items[0]} peers={peers.get(items[0].id)} />
         ))}
       </div>
       <ul className="mt-6 flex flex-wrap gap-2">

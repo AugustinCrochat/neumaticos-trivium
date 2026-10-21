@@ -129,7 +129,8 @@ export function equivalentSizes(size: TireSize, tolerance = 3): TireSize[] {
     for (const profile of COMMERCIAL_PROFILES) {
       const candidate = { width, profile, rim: size.rim };
       if (sizesEqual(candidate, size)) continue;
-      if (Math.abs(diameterDiffPercent(candidate, size)) <= tolerance) {
+      // Redondeado a un decimal, como se muestra: +3,0013 % es +3,0 %.
+      if (Math.round(Math.abs(diameterDiffPercent(candidate, size)) * 10) / 10 <= tolerance) {
         result.push(candidate);
       }
     }

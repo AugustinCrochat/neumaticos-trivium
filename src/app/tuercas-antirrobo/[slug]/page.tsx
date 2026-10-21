@@ -70,7 +70,7 @@ export default async function AccessoryPage({ params }: Props) {
         Volver a Tuercas Antirrobo
       </Link>
 
-      <div className="grid md:grid-cols-2 gap-4 md:gap-12">
+      <div className="grid grid-cols-[minmax(0,1fr)] md:grid-cols-2 gap-4 md:gap-12">
         <div className="bg-slate-50 rounded-2xl aspect-square flex items-center justify-center p-8 relative">
           {accessory.imageUrl ? (
             <div className="relative w-full h-full">

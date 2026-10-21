@@ -95,19 +95,19 @@ export async function GET(request: Request) {
                     gap: 8,
                     padding: "6px 14px",
                     borderRadius: 9999,
-                    background: Math.abs(diff) <= 3 ? "rgba(52, 211, 153, 0.1)" : "rgba(239, 68, 68, 0.1)",
-                    border: Math.abs(diff) <= 3 ? "1px solid rgba(52, 211, 153, 0.2)" : "1px solid rgba(239, 68, 68, 0.2)",
+                    background: Math.round(Math.abs(diff) * 10) / 10 <= 3 ? "rgba(52, 211, 153, 0.1)" : "rgba(239, 68, 68, 0.1)",
+                    border: Math.round(Math.abs(diff) * 10) / 10 <= 3 ? "1px solid rgba(52, 211, 153, 0.2)" : "1px solid rgba(239, 68, 68, 0.2)",
                   }}
                 >
                   <span
                     style={{
                       fontSize: 12,
                       fontWeight: 900,
-                      color: Math.abs(diff) <= 3 ? "#34d399" : "#ef4444",
+                      color: Math.round(Math.abs(diff) * 10) / 10 <= 3 ? "#34d399" : "#ef4444",
                       letterSpacing: 1.5,
                     }}
                   >
-                    {Math.abs(diff) <= 3 ? "COMPATIBLE" : "NO RECOMENDADO"} · {diff >= 0 ? "+" : ""}{diff.toFixed(1)}%
+                    {Math.round(Math.abs(diff) * 10) / 10 <= 3 ? "COMPATIBLE" : "NO RECOMENDADO"} · {diff >= 0 ? "+" : ""}{diff.toFixed(1)}%
                   </span>
                 </div>
               </div>

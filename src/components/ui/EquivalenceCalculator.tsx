@@ -7,6 +7,10 @@ import type { TireProduct, TireSize } from "@/lib/types";
 // Tolerancia estándar de la industria: más de ±3% de diámetro desvía el
 // velocímetro y puede interferir con el ABS y el control de estabilidad.
 const TOLERANCE = 3;
+// Se compara la diferencia redondeada a un decimal, que es la que se muestra:
+// 175/70 R14 vs 175/65 R14 da +3,0013 % y en pantalla dice +3,00 %, así que
+// marcarlo "no equivalente" por una milésima sería incoherente.
+const within = (d: number) => Math.round(Math.abs(d) * 10) / 10 <= TOLERANCE;
 
 // Medidas comerciales reales, para sugerir equivalentes que existen en el
 // mercado y no cualquier combinación aritmética. Se repiten acá (y no se
@@ -89,7 +93,7 @@ function SizeInput({ title, tone, value, onChange, placeholder, widthRef, onDone
 function Gauge({ diff }: { diff: number }) {
   const clamped = Math.max(-5, Math.min(5, diff));
   const left = ((clamped + 5) / 10) * 100;
-  const ok = Math.abs(diff) <= TOLERANCE;
+  const ok = within(diff);
   return (
     <div className="mt-4" role="img" aria-label={`Diferencia de diámetro ${signed(diff)} por ciento; tolerancia de más o menos 3 por ciento`}>
       <div className="relative h-3 rounded-full bg-red-200">
@@ -168,7 +172,7 @@ export function EquivalenceCalculator({ products }: { products: TireProduct[] })
     const rows = stock
       .filter((e) => !same(e.size, s1))
       .map((e): Row => ({ ...e, diff: diffPercent(s1, e.size) }))
-      .filter((r) => Math.abs(r.diff) <= TOLERANCE)
+      .filter((r) => within(r.diff))
       .sort((x, y) => Math.abs(x.diff) - Math.abs(y.diff));
     const sameRim = rows.filter((r) => r.size.rim === s1.rim);
     const otherRim = rows.filter((r) => r.size.rim !== s1.rim);
@@ -176,7 +180,7 @@ export function EquivalenceCalculator({ products }: { products: TireProduct[] })
     const noStock: TireSize[] = [];
     for (const width of COMMERCIAL_WIDTHS) for (const profile of COMMERCIAL_PROFILES) {
       const c = { width, profile, rim: s1.rim };
-      if (!same(c, s1) && nearWidth(c, s1) && !inStock.has(slug(c)) && Math.abs(diffPercent(s1, c)) <= TOLERANCE) noStock.push(c);
+      if (!same(c, s1) && nearWidth(c, s1) && !inStock.has(slug(c)) && within(diffPercent(s1, c))) noStock.push(c);
     }
     noStock.sort((x, y) => Math.abs(diffPercent(s1, x)) - Math.abs(diffPercent(s1, y)));
     return { sameRim, otherRim, noStock: noStock.slice(0, 10) };
@@ -188,14 +192,14 @@ export function EquivalenceCalculator({ products }: { products: TireProduct[] })
     const out: TireSize[] = [];
     for (const width of COMMERCIAL_WIDTHS) for (const profile of COMMERCIAL_PROFILES) {
       const c = { width, profile, rim: s1.rim };
-      if (!same(c, s1) && nearWidth(c, s1) && Math.abs(diffPercent(s1, c)) <= TOLERANCE) out.push(c);
+      if (!same(c, s1) && nearWidth(c, s1) && within(diffPercent(s1, c))) out.push(c);
     }
     return out.sort((x, y) => Math.abs(diffPercent(s1, x)) - Math.abs(diffPercent(s1, y))).slice(0, 6);
   }, [s1]);
 
   const diff = s1 && s2 ? diffPercent(s1, s2) : null;
   const sameRim = !!s1 && !!s2 && s1.rim === s2.rim;
-  const inTolerance = diff !== null && Math.abs(diff) <= TOLERANCE;
+  const inTolerance = diff !== null && within(diff);
   const verdict: "ok" | "rim" | "no" | null = diff === null ? null : inTolerance && sameRim ? "ok" : inTolerance ? "rim" : "no";
 
   async function share() {

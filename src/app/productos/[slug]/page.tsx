@@ -321,7 +321,7 @@ export default async function ProductPage({ params }: Props) {
         </ol>
       </nav>
 
-      <div className="grid md:grid-cols-2 gap-4 md:gap-12">
+      <div className="grid grid-cols-[minmax(0,1fr)] md:grid-cols-2 gap-4 md:gap-12">
         {/* Image */}
         <div>
           <ProductImageGallery product={product} extraPhotos={extraPhotos} label={tireLabel} utqg={utqg} />

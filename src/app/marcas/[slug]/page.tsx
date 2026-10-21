@@ -2,6 +2,7 @@ import { BRANDS } from "@/lib/data";
 import { getProductosDesdePOS } from "@/lib/pos-api";
 import { getSelectedBranchSlug } from "@/lib/branch-server";
 import { ProductCard } from "@/components/ui/ProductCard";
+import { peersByGroup } from "@/lib/best-price";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Metadata } from "next";
@@ -52,7 +53,12 @@ export default async function BrandPage({ params }: Props) {
   if (!brand) notFound();
 
   const productos = await getProductosDesdePOS(await getSelectedBranchSlug());
-  const brandProducts = productos.filter((p) => p.brandId === brand.id);
+  // Con stock primero y los agotados abajo; a igualdad, el más barato.
+  const brandProducts = productos
+    .filter((p) => p.brandId === brand.id)
+    .sort((a, b) => Number(b.enStock) - Number(a.enStock) || a.price - b.price);
+  // El tag "Mejor precio" se decide contra todo el catálogo, no sólo contra esta marca.
+  const peers = peersByGroup(productos);
   const brandLogo = getBrandLogo(brand.id);
 
   return (
@@ -162,7 +168,7 @@ export default async function BrandPage({ params }: Props) {
         {brandProducts.length > 0 ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8">
             {brandProducts.map(product => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard key={product.id} product={product} peers={peers.get(product.id)} />
             ))}
           </div>
         ) : (

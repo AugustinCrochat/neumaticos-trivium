@@ -251,7 +251,7 @@ export default async function CalculadoraEquivalenciaNeumaticosPage({ searchPara
             {[
               ["1", "Flanco", "ancho × perfil ÷ 100", `${fmt(EX_A)}: ${mm(EX_A.width * EX_A.profile / 100)} mm\n${fmt(EX_B)}: ${mm(EX_B.width * EX_B.profile / 100)} mm`],
               ["2", "Diámetro total", "rodado × 25,4 + 2 × flanco", `${fmt(EX_A)}: ${mm(outerDiameterMm(EX_A))} mm\n${fmt(EX_B)}: ${mm(outerDiameterMm(EX_B))} mm`],
-              ["3", "Diferencia", "(nuevo − original) ÷ original", `${pct(exDiff)} → ${Math.abs(exDiff) <= 3 ? "dentro de ±3 %: equivalente" : "fuera de ±3 %"}`],
+              ["3", "Diferencia", "(nuevo − original) ÷ original", `${pct(exDiff)} → ${Math.round(Math.abs(exDiff) * 10) / 10 <= 3 ? "dentro de ±3 %: equivalente" : "fuera de ±3 %"}`],
             ].map(([n, name, formula, result]) => (
               <div key={n} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
                 <p className="flex h-9 w-9 items-center justify-center rounded-full bg-orange-500 text-lg font-black text-white">{n}</p>

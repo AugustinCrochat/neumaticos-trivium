@@ -86,7 +86,7 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
     vehicleSize.rim === product.size.rim;
 
   const diffPercent = vehicleSize ? diameterDiffPercent(product.size, vehicleSize) : 0;
-  const isCompatible = vehicleSize && Math.abs(diffPercent) <= 3;
+  const isCompatible = vehicleSize && Math.round(Math.abs(diffPercent) * 10) / 10 <= 3;
 
   const getBenefits = () => {
     if (!vehicleSize) return [];
