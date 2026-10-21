@@ -1,6 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { TRIVIUM_WORDMARK_SVG_BASE64, TRIVIUM_ICON_SVG_BASE64 } from "./og-assets-data";
+import { BRANDS } from "./data";
 
 // El wordmark y el ícono de Trivium van embebidos como constantes (ver
 // og-assets-data.ts) en vez de leerse con fs.readFile: una ruta API dinámica
@@ -31,7 +32,13 @@ const brandLogoCache = new Map<string, string | null>();
 export async function getTireBrandLogoDataUri(brandId: string): Promise<string | null> {
   if (brandLogoCache.has(brandId)) return brandLogoCache.get(brandId) ?? null;
   try {
-    const svg = await readFile(join(process.cwd(), "public", "brands", `${brandId}.svg`), "utf-8");
+    const logoUrl = BRANDS.find((b) => b.id === brandId)?.logoUrl;
+    // next/og sólo decodifica SVG/PNG/JPEG de forma confiable: el resto (webp) cae al nombre en texto.
+    if (!logoUrl?.endsWith(".svg")) {
+      brandLogoCache.set(brandId, null);
+      return null;
+    }
+    const svg = await readFile(join(process.cwd(), "public", logoUrl), "utf-8");
     const dataUri = `data:image/svg+xml;base64,${Buffer.from(svg).toString("base64")}`;
     brandLogoCache.set(brandId, dataUri);
     return dataUri;
