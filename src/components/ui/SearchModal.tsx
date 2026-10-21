@@ -20,6 +20,7 @@ export function SearchModal({ onClose }: { onClose: () => void }) {
   const [results, setResults] = useState<SearchResult[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [failed, setFailed] = useState(false);
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -41,20 +42,36 @@ export function SearchModal({ onClose }: { onClose: () => void }) {
     // el usuario deja de tipear, en vez de pegarle a la API en cada tecla.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setLoading(true);
+    // `cancelled` descarta respuestas de una búsqueda vieja que llegan después
+    // de que el usuario siguió escribiendo.
+    let cancelled = false;
     const timeout = setTimeout(() => {
       fetch(`/api/search?q=${encodeURIComponent(query)}`)
-        .then((res) => res.json())
+        .then((res) => {
+          if (!res.ok) throw new Error(String(res.status));
+          return res.json();
+        })
         .then((data: { results: SearchResult[]; total: number }) => {
+          if (cancelled) return;
+          setFailed(false);
           setResults(data.results);
           setTotal(data.total);
+          setLoading(false);
         })
         .catch(() => {
+          if (cancelled) return;
+          // Un error de red o del servidor no es "sin resultados": se avisa
+          // aparte y se ofrece la página completa de búsqueda.
+          setFailed(true);
           setResults([]);
           setTotal(0);
-        })
-        .finally(() => setLoading(false));
+          setLoading(false);
+        });
     }, 250);
-    return () => clearTimeout(timeout);
+    return () => {
+      cancelled = true;
+      clearTimeout(timeout);
+    };
   }, [query]);
 
   function goToResultsPage() {
@@ -96,7 +113,13 @@ export function SearchModal({ onClose }: { onClose: () => void }) {
         <div className="overflow-y-auto">
           {loading && <p className="p-6 text-center text-sm text-slate-400">Buscando…</p>}
 
-          {!loading && query.trim().length > 0 && results.length === 0 && (
+          {!loading && failed && (
+            <button onClick={goToResultsPage} className="w-full p-6 text-center text-sm text-slate-500 hover:bg-slate-50">
+              No pudimos buscar ahora. Tocá acá para ver los resultados de &quot;{query}&quot;.
+            </button>
+          )}
+
+          {!loading && !failed && query.trim().length > 0 && results.length === 0 && (
             <p className="p-6 text-center text-sm text-slate-400">No encontramos nada para &quot;{query}&quot;.</p>
           )}
 
