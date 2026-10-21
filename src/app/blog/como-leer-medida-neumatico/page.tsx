@@ -89,7 +89,7 @@ export const metadata: Metadata = {
     url: absoluteUrl(`/blog/${SLUG}`),
     publishedTime: PUBLISHED,
     modifiedTime: MODIFIED,
-    images: [{ url: absoluteUrl(INFOGRAPHIC), width: 1600, height: 1200, alt: INFOGRAPHIC_ALT }],
+    images: [{ url: absoluteUrl(INFOGRAPHIC), width: 1600, height: 1260, alt: INFOGRAPHIC_ALT }],
   },
   twitter: { card: "summary_large_image", title: TITLE, description: DESCRIPTION, images: [absoluteUrl(INFOGRAPHIC)] },
 };
@@ -130,7 +130,7 @@ export default function ComoLeerMedidaPage() {
         contentUrl: absoluteUrl(INFOGRAPHIC),
         url: absoluteUrl(INFOGRAPHIC),
         width: 1600,
-        height: 1200,
+        height: 1260,
         name: "Cómo leer la medida 205/55 R16",
         caption: INFOGRAPHIC_ALT,
         creator: { "@id": ORGANIZATION_ID },
@@ -185,7 +185,7 @@ export default function ComoLeerMedidaPage() {
             </div>
           </div>
           <figure className="overflow-hidden rounded-3xl border border-white/10 shadow-2xl shadow-black/40">
-            <Image src={INFOGRAPHIC} alt={INFOGRAPHIC_ALT} width={1600} height={1200} priority sizes="(max-width: 1024px) 100vw, 55vw" className="h-auto w-full" />
+            <Image src={INFOGRAPHIC} alt={INFOGRAPHIC_ALT} width={1600} height={1260} priority sizes="(max-width: 1024px) 100vw, 55vw" className="h-auto w-full" />
           </figure>
         </div>
       </section>
