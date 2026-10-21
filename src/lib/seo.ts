@@ -184,6 +184,9 @@ export function siteGraphJsonLd() {
           areaServed: "AR",
           availableLanguage: "Spanish",
         })),
+        // Trivium Center S.A. (trivium.ar) es el grupo; su @id es el mismo que
+        // declara el institucional, así Google une las tres entidades en un grafo.
+        parentOrganization: { "@id": "https://trivium.ar/#organization" },
         // Sin subOrganization, cada ficha local queda huérfana del nodo de marca
         // y Google no puede unificar la entidad "Neumáticos Trivium".
         subOrganization: BRANCHES.map((branch) => ({ "@id": branchNodeId(branch) })),
