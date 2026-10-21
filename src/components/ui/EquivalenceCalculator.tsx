@@ -8,11 +8,6 @@ import type { TireProduct, TireSize } from "@/lib/types";
 // velocímetro y puede interferir con el ABS y el control de estabilidad.
 const TOLERANCE = 3;
 
-const PRESETS: [string, string, string][] = [
-  ["165", "70", "13"], ["175", "65", "14"], ["185", "65", "15"], ["195", "65", "15"],
-  ["205", "55", "16"], ["205", "60", "16"], ["215", "65", "16"], ["225", "45", "17"], ["265", "65", "17"],
-];
-
 // Medidas comerciales reales, para sugerir equivalentes que existen en el
 // mercado y no cualquier combinación aritmética. Se repiten acá (y no se
 // importan de tire-sizes) porque ese módulo arrastra VEHICLE_DB al bundle.
@@ -55,11 +50,14 @@ function benefit(original: TireSize, alt: TireSize): string {
   return "Diámetro equivalente al original.";
 }
 
-function SizeInput({ title, tone, value, onChange }: { title: string; tone: "red" | "navy"; value: Fields; onChange: (f: Fields) => void }) {
+function SizeInput({ title, tone, value, onChange, placeholder, widthRef, onDone }: {
+  title: string; tone: "red" | "navy"; value: Fields; onChange: (f: Fields) => void;
+  placeholder: Fields; widthRef?: React.Ref<HTMLInputElement>; onDone?: () => void;
+}) {
   const pRef = useRef<HTMLInputElement>(null);
   const rRef = useRef<HTMLInputElement>(null);
   const digits = (s: string, max: number) => s.replace(/\D/g, "").slice(0, max);
-  const field = "w-full rounded-xl border-2 border-slate-200 bg-white px-2 py-2 text-center text-xl font-black text-navy-900 outline-none transition-colors focus:border-orange-500 focus:ring-4 focus:ring-orange-500/15 sm:text-2xl";
+  const field = "w-full rounded-xl border-2 border-slate-200 bg-white px-2 py-2 text-center text-xl font-black text-navy-900 outline-none transition-colors focus:border-orange-500 focus:ring-4 focus:ring-orange-500/15 placeholder:text-slate-300 focus:placeholder:text-transparent sm:text-2xl";
   const onPaste = (e: React.ClipboardEvent) => {
     const parsed = parsePasted(e.clipboardData.getData("text"));
     if (parsed) { e.preventDefault(); onChange(parsed); }
@@ -68,17 +66,17 @@ function SizeInput({ title, tone, value, onChange }: { title: string; tone: "red
     <div className={`rounded-2xl border-t-4 bg-slate-50 p-3 sm:p-4 ${tone === "red" ? "border-orange-500" : "border-navy-700"}`}>
       <p className="mb-2 text-center text-xs font-black uppercase tracking-widest text-slate-500">{title}</p>
       <div className="grid grid-cols-[1.25fr_auto_1fr_auto_1fr] items-center gap-1.5 sm:gap-2" onPaste={onPaste}>
-        <input aria-label={`${title}: ancho en milímetros`} inputMode="numeric" autoComplete="off" value={value.w} placeholder="195" className={field}
+        <input aria-label={`${title}: ancho en milímetros`} inputMode="numeric" autoComplete="off" ref={widthRef} value={value.w} placeholder={placeholder.w} className={field}
           onFocus={(e) => e.target.select()}
           onChange={(e) => { const w = digits(e.target.value, 3); onChange({ ...value, w }); if (w.length === 3) pRef.current?.focus(); }} />
         <span className="text-2xl font-black text-slate-300">/</span>
-        <input ref={pRef} aria-label={`${title}: perfil`} inputMode="numeric" autoComplete="off" value={value.p} placeholder="65" className={field}
+        <input ref={pRef} aria-label={`${title}: perfil`} inputMode="numeric" autoComplete="off" value={value.p} placeholder={placeholder.p} className={field}
           onFocus={(e) => e.target.select()}
           onChange={(e) => { const p = digits(e.target.value, 2); onChange({ ...value, p }); if (p.length === 2) rRef.current?.focus(); }} />
         <span className="text-2xl font-black text-slate-300">R</span>
-        <input ref={rRef} aria-label={`${title}: rodado en pulgadas`} inputMode="numeric" autoComplete="off" value={value.r} placeholder="15" className={field}
+        <input ref={rRef} aria-label={`${title}: rodado en pulgadas`} inputMode="numeric" autoComplete="off" value={value.r} placeholder={placeholder.r} className={field}
           onFocus={(e) => e.target.select()}
-          onChange={(e) => onChange({ ...value, r: digits(e.target.value, 2) })} />
+          onChange={(e) => { const r = digits(e.target.value, 2); onChange({ ...value, r }); if (r.length === 2) onDone?.(); }} />
       </div>
       <div className="mt-1.5 grid grid-cols-[1.25fr_auto_1fr_auto_1fr] gap-1.5 text-center text-[10px] font-bold uppercase tracking-wide text-slate-400 sm:gap-2">
         <span>Ancho</span><span className="w-3" /><span>Perfil</span><span className="w-3" /><span>Rodado</span>
@@ -127,9 +125,10 @@ function RowLink({ row, original }: { row: Row; original: TireSize }) {
 
 export function EquivalenceCalculator({ products }: { products: TireProduct[] }) {
   const [mode, setMode] = useState<"check" | "list">("check");
-  const [a, setA] = useState<Fields>({ w: "195", p: "65", r: "15" });
-  const [b, setB] = useState<Fields>({ w: "205", p: "60", r: "15" });
+  const [a, setA] = useState<Fields>({ w: "", p: "", r: "" });
+  const [b, setB] = useState<Fields>({ w: "", p: "", r: "" });
   const [copied, setCopied] = useState(false);
+  const w2Ref = useRef<HTMLInputElement>(null);
 
   // Link compartido: ?modo=check|list&original=195-65-15&equivalente=205-60-15
   useEffect(() => {
@@ -230,38 +229,23 @@ export function EquivalenceCalculator({ products }: { products: TireProduct[] })
       </div>
 
       <div className="mt-3 grid items-center gap-3 md:grid-cols-[1fr_auto_1fr]">
-        <SizeInput title="Tu medida actual" tone="red" value={a} onChange={setA} />
+        <SizeInput title="Tu medida actual" tone="red" value={a} onChange={setA} placeholder={{ w: "195", p: "65", r: "15" }} onDone={() => mode === "check" && w2Ref.current?.focus()} />
         {mode === "check" ? (
           <button type="button" aria-label="Intercambiar las dos medidas" onClick={() => { setA(b); setB(a); }}
             className="mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-navy-900 text-white shadow-md transition-transform hover:rotate-180 hover:bg-orange-500">
             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
           </button>
         ) : <span className="hidden md:block" />}
-        {mode === "check" ? <SizeInput title="Medida a verificar" tone="navy" value={b} onChange={setB} /> : (
+        {mode === "check" ? <SizeInput title="Medida a verificar" tone="navy" value={b} onChange={setB} placeholder={{ w: "205", p: "60", r: "15" }} widthRef={w2Ref} /> : (
           <p className="rounded-2xl border border-dashed border-slate-300 p-5 text-sm leading-relaxed text-slate-500">
             Mostramos todas las medidas con el mismo diámetro (±3 %) que hay en stock, y cuáles existen aunque hoy no las tengamos.
           </p>
         )}
       </div>
 
-      <details className="group mt-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2">
-        <summary className="flex cursor-pointer list-none items-center justify-between text-sm font-black text-navy-800 marker:hidden">
-          Atajos: medidas frecuentes y equivalentes
-          <span aria-hidden="true" className="text-lg text-orange-500 transition-transform group-open:rotate-45">+</span>
-        </summary>
-        <div className="mt-3">
-        <div className="flex flex-wrap gap-1.5" aria-label="Medidas frecuentes">
-          {PRESETS.map(([w, p, r]) => (
-            <button key={w + p + r} type="button" onClick={() => setA({ w, p, r })}
-              className={`rounded-full border px-3 py-1 text-sm font-black transition-colors ${a.w === w && a.p === p && a.r === r ? "border-orange-500 bg-orange-500 text-white" : "border-slate-200 bg-white text-navy-800 hover:border-orange-400 hover:text-orange-600"}`}>
-              {w}/{p} R{r}
-            </button>
-          ))}
-        </div>
-        </div>
-        {mode === "check" && s1 && suggestions.length > 0 && (
+      {mode === "check" && s1 && suggestions.length > 0 && (
             <div className="mt-3">
-              <p className="mb-1.5 text-xs font-black uppercase tracking-widest text-slate-400">Equivalentes de {label(s1)}: tocá para comparar</p>
+              <p className="mb-1.5 text-xs font-black uppercase tracking-widest text-slate-400">Posibles equivalencias de {label(s1)}: tocá una para comparar</p>
               <div className="flex flex-wrap gap-1.5">
                 {suggestions.map((s) => (
                   <button key={slug(s)} type="button" onClick={() => setB({ w: String(s.width), p: String(s.profile), r: String(s.rim) })}
@@ -272,9 +256,8 @@ export function EquivalenceCalculator({ products }: { products: TireProduct[] })
               </div>
             </div>
         )}
-      </details>
 
-      {!s1 && <p className="mt-6 rounded-xl bg-slate-50 p-4 text-sm text-slate-500">Completá ancho, perfil y rodado de tu medida actual (por ejemplo 195 / 65 R15). También podés pegar la medida completa en cualquier campo.</p>}
+      {!s1 && <p className="mt-3 rounded-xl bg-slate-50 p-4 text-sm text-slate-500">Escribí la medida que figura en el flanco de tu neumático. También podés pegarla completa.</p>}
 
       {/* Modo comparar */}
       {mode === "check" && s1 && (
