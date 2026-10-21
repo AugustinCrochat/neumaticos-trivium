@@ -654,5 +654,53 @@
     "noiseDb": 73,
     "noiseClass": "B",
     "tyreDesignation": "215/75R17.5 135/133 J"
+  },
+  "arivo-premio-eco-6-215-65-r16-98h": {
+    "eprelId": "2586146",
+    "energyClass": "C",
+    "wetGripClass": "A",
+    "noiseDb": 68,
+    "noiseClass": "A",
+    "tyreDesignation": "215/65R16 98 H"
+  },
+  "arivo-premio-eco-6-205-65-r15-94v": {
+    "eprelId": "2555292",
+    "energyClass": "C",
+    "wetGripClass": "A",
+    "noiseDb": 68,
+    "noiseClass": "A",
+    "tyreDesignation": "205/65R15 94 V"
+  },
+  "arivo-premio-eco-6-195-55-r16-91v": {
+    "eprelId": "2586144",
+    "energyClass": "C",
+    "wetGripClass": "A",
+    "noiseDb": 69,
+    "noiseClass": "A",
+    "tyreDesignation": "195/55R16 91 V XL"
+  },
+  "arivo-premio-eco-6-195-65-r15-95t": {
+    "eprelId": "2586126",
+    "energyClass": "C",
+    "wetGripClass": "A",
+    "noiseDb": 69,
+    "noiseClass": "A",
+    "tyreDesignation": "195/65R15 95 T XL"
+  },
+  "yokohama-g018-275-60-r20-115h": {
+    "eprelId": "2812073",
+    "energyClass": "D",
+    "wetGripClass": "D",
+    "noiseDb": 73,
+    "noiseClass": "B",
+    "tyreDesignation": "275/60R20 116 H XL"
+  },
+  "arivo-premio-eco-6-205-60-r16-96v": {
+    "eprelId": "2586127",
+    "energyClass": "C",
+    "wetGripClass": "A",
+    "noiseDb": 69,
+    "noiseClass": "A",
+    "tyreDesignation": "205/60R16 96 V XL"
   }
 }
