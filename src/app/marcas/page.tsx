@@ -93,7 +93,7 @@ export default async function MarcasPage() {
                   <img
                     src={logo}
                     alt={brand.name}
-                    className="h-9 w-auto max-w-[150px] rounded-md object-contain"
+                    className={`h-9 w-auto max-w-[150px] ${brand.id === "pirelli" ? "" : "rounded-md"} object-contain`}
                   />
                 ) : (
                   <span className="text-2xl font-black uppercase tracking-tight text-navy-900">

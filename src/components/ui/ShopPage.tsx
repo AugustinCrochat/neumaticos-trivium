@@ -13,6 +13,7 @@ import { bestPriceByGroup } from "@/lib/best-price";
 import { SizeOrVehicleSearch } from "@/components/ui/SizeOrVehicleSearch";
 import { useBranch } from "@/contexts/branch-context";
 import { useVehicle } from "@/contexts/vehicle-context";
+import { useLiveStockMap } from "@/contexts/live-stock-context";
 import { getCompatibleAccessory } from "@/lib/tuercas-vehiculos";
 import { goToWhatsApp } from "@/lib/gtag";
 import type { Accessory, TireProduct, TireSize, VehicleType } from "@/lib/types";
@@ -372,6 +373,7 @@ export function ShopPage({
 }) {
   const { selectedBranch, hasConfirmedBranch, openModalForAction } = useBranch();
   const { selectedVehicle } = useVehicle();
+  const liveStock = useLiveStockMap();
   const searchParams = useSearchParams();
   const medida = searchParams.get("medida") ?? undefined;
   const vehiculoMarca = searchParams.get("marca") ?? selectedVehicle?.marca ?? null;
@@ -398,6 +400,10 @@ export function ShopPage({
   const parsed = useMemo(() => (medida ? parseMedida(medida) : null), [medida]);
 
   const { exactResults, compatibleResults, allProducts } = useMemo(() => {
+    // Stock real: el vivo del POS (LiveStockProvider) si ya llegó, si no el
+    // horneado en el build. Lo que se agotó desde el build va al fondo.
+    const enStock = (p: TireProduct) => liveStock[p.id]?.enStock ?? !!p.enStock;
+    const stockPrimero = (a: TireProduct, b: TireProduct) => Number(enStock(b)) - Number(enStock(a));
     const ok = (p: TireProduct) => {
       if (brandFilter !== "todos" && p.brandId !== brandFilter) return false;
       if (p.price > maxPrice) return false;
@@ -413,18 +419,27 @@ export function ShopPage({
       // encontrables buscando por medida o entrando por marca (ver
       // isExactMatch/isCompatibleSize más abajo y /marcas/[slug], que no
       // filtran por stock).
-      return { exactResults: [], compatibleResults: [], allProducts: products.filter(ok).filter((p) => p.enStock).sort(porPopularidad) };
+      // Con stock vivo: entra lo que tenía stock en el build o lo tiene ahora,
+      // y los sin stock quedan abajo de todo.
+      return {
+        exactResults: [],
+        compatibleResults: [],
+        allProducts: products
+          .filter(ok)
+          .filter((p) => p.enStock || enStock(p))
+          .sort((a, b) => stockPrimero(a, b) || porPopularidad(a, b)),
+      };
     }
 
     // Los resultados exactos se recortan a 5 más abajo, así que el stock
     // manda antes que el precio — si no, un modelo sin stock más barato le
     // saca el lugar a uno disponible más caro y el cliente no lo ve.
     const exact = products.filter(p => isExactMatch(p, parsed) && ok(p))
-      .sort((a, b) => Number(!!b.enStock) - Number(!!a.enStock) || getUnitPrice(a) - getUnitPrice(b));
-    const compatible = products.filter(p => isCompatibleSize(p, parsed) && ok(p));
+      .sort((a, b) => stockPrimero(a, b) || getUnitPrice(a) - getUnitPrice(b));
+    const compatible = products.filter(p => isCompatibleSize(p, parsed) && ok(p)).sort(stockPrimero);
 
     return { exactResults: exact, compatibleResults: compatible, allProducts: [] };
-  }, [parsed, brandFilter, maxPrice, onlyEconomic, onlyCarga, onlyAT, products]);
+  }, [parsed, brandFilter, maxPrice, onlyEconomic, onlyCarga, onlyAT, products, liveStock]);
 
   // Catálogo sin medida en la URL: si ya sabemos la medida del auto elegido,
   // recomendamos esos neumáticos arriba de todo, sin esperar a que busquen.

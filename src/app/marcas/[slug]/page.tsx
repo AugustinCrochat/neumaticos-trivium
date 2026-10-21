@@ -90,11 +90,12 @@ export default async function BrandPage({ params }: Props) {
                 // El `rounded-xl` es por el logo de Grenlander, que trae una
                 // placa de fondo sólida en vez de fondo transparente: sin
                 // redondear se ve como un rectángulo cortado sobre el fondo
-                // claro de la cabecera. En los logos transparentes no se nota.
+                // claro de la cabecera. En los logos transparentes no se nota. Pirelli va
+                // sin redondear a pedido (su placa amarilla es de esquinas rectas).
                 <img
                   src={brandLogo}
                   alt={brand.name}
-                  className="h-16 md:h-24 w-auto max-w-[260px] md:max-w-[380px] rounded-xl object-contain"
+                  className={`h-16 md:h-24 w-auto max-w-[260px] md:max-w-[380px] ${brand.id === "pirelli" ? "" : "rounded-xl"} object-contain`}
                 />
               ) : (
                 <div className="py-4">

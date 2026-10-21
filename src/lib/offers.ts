@@ -5,7 +5,7 @@
  * tres lean la misma lista en vez de cada uno la suya.
  */
 export const OFFER_TIRE_SLUGS = [
-  "grenlander-colo-h02-175-65-r14-86t",
+  "grenlander-kingpro-one-175-65-r14-82t",
   "grenlander-maga-a-t-two-235-75-r15-101s",
   "grenlander-colo-h02-185-65-r14-86h",
   "grenlander-colo-h02-175-70-r13-82t",

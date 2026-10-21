@@ -49,3 +49,8 @@ export function LiveStockProvider({ children }: { children: ReactNode }) {
 export function useLiveStock(id: string): LiveEntry | undefined {
   return useContext(LiveStockContext)[id];
 }
+
+/** Mapa completo id → stock vivo, para listados que ordenan por disponibilidad. */
+export function useLiveStockMap(): Record<string, LiveEntry> {
+  return useContext(LiveStockContext);
+}
