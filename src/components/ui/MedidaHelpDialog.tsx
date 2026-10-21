@@ -5,7 +5,7 @@ import { createPortal } from "react-dom";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { sizeSearchHref } from "@/lib/size-href";
+import { sizeCatalogHref } from "@/lib/size-href";
 
 /**
  * "¿Dónde veo mi medida?": muestra la foto real del flanco con cada código
@@ -79,7 +79,7 @@ export function MedidaHelpDialog({ compact = false }: { compact?: boolean }) {
     if (p.length < 2) return pRef.current?.focus();
     if (r.length < 2) return rRef.current?.focus();
     setOpen(false);
-    router.push(sizeSearchHref(w, p, r));
+    router.push(sizeCatalogHref(w, p, r));
   }
 
   const tarjeta = (

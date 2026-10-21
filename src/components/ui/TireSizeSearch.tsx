@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect, useMemo, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { sizeSearchHref } from "@/lib/size-href";
+import { sizeCatalogHref } from "@/lib/size-href";
 import { flotationToMetric, formatFlotationLabel } from "@/lib/flotation";
 import { TireDiagram } from "./TireDiagram";
 import { MedidaHelpDialog } from "./MedidaHelpDialog";
@@ -412,7 +412,7 @@ export function TireSizeSearch({
     return [...mapa.entries()].sort((a, b) => a[0] - b[0]);
   })();
 
-  const performSearch = (w: string, p: string, rVal: string, tipo?: "calle" | "at") => {
+  const performSearch = (w: string, p: string, rVal: string) => {
     if (!w && !p && !rVal) return;
     if (document.activeElement instanceof HTMLElement) {
       document.activeElement.blur();
@@ -425,9 +425,8 @@ export function TireSizeSearch({
         // Sin localStorage: no se recuerda, no es crítico.
       }
     }
-    const href = sizeSearchHref(w, p, rVal, economicosRef.current);
-    // El #tipo le dice a la landing de la medida qué versión mostrar primero.
-    router.push(tipo && href.startsWith("/neumaticos/") ? `${href}#tipo=${tipo}` : href);
+    const href = sizeCatalogHref(w, p, rVal, economicosRef.current);
+    router.push(href);
   };
 
   // Elegir una versión concreta de la medida (calle, A/T o carga).
@@ -439,7 +438,7 @@ export function TireSizeSearch({
       router.push(`/neumaticos/carga/${m.w}-${m.p}-r${m.r}c`);
       return;
     }
-    performSearch(String(m.w), String(m.p), String(m.r), variasVersiones ? (m.t === "a" ? "at" : "calle") : undefined);
+    performSearch(String(m.w), String(m.p), String(m.r));
   }
 
   function executeSearch() {
@@ -481,9 +480,7 @@ export function TireSizeSearch({
       router.push(`/neumaticos/carga/${s.w}-${s.p}-r${s.r}c`);
       return;
     }
-    // Si la medida viene también en otra versión, la elegida se marca en la landing.
-    const varias = (catalogo ?? []).filter((m) => String(m.w) === s.w && String(m.p) === s.p && String(m.r) === s.r).length > 1;
-    performSearch(s.w, s.p, s.r, varias ? (s.t === "a" ? "at" : "calle") : undefined);
+    performSearch(s.w, s.p, s.r);
   }
 
   const clearInitialMeasureForEdit = () => {
@@ -651,7 +648,7 @@ export function TireSizeSearch({
       if (!w || !p || !rVal) return;
       hasNavigated = true;
       if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
-      router.push(sizeSearchHref(w, p, rVal, economicosRef.current));
+      router.push(sizeCatalogHref(w, p, rVal, economicosRef.current));
     };
 
     r.onresult = (ev) => {
@@ -1071,7 +1068,7 @@ export function TireSizeSearch({
                   Consultar por WhatsApp
                 </WhatsAppLink>
                 <Link
-                  href={sizeSearchHref(String(medidaObjetivo.w), String(medidaObjetivo.p), String(medidaObjetivo.r), economicos)}
+                  href={sizeCatalogHref(String(medidaObjetivo.w), String(medidaObjetivo.p), String(medidaObjetivo.r), economicos)}
                   className="inline-flex min-h-10 items-center justify-center rounded-lg border border-slate-300 px-4 text-sm font-bold text-slate-700 hover:border-slate-500"
                 >
                   Ver igual esta medida

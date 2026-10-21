@@ -26,3 +26,13 @@ export function sizeSearchHref(width: string, profile: string, rim: string, econ
   if (economicos) return `/buscar?medida=${medida}&economicos=1`;
   return completa ? `/neumaticos/${medida}` : `/buscar?medida=${medida}`;
 }
+
+/**
+ * Destino de las búsquedas hechas a mano en el buscador interactivo: la vista
+ * catálogo (/buscar) con la medida como filtro y las equivalencias abajo.
+ * Los bots no usan el buscador; la landing indexable sigue siendo el canonical
+ * de /buscar y el destino de los enlaces de las notas (sizeSearchHref).
+ */
+export function sizeCatalogHref(width: string, profile: string, rim: string, economicos = false): string {
+  return `/buscar?medida=${width}-${profile}-r${rim}${economicos ? "&economicos=1" : ""}`;
+}

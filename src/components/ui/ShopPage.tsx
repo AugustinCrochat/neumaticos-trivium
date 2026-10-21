@@ -238,6 +238,33 @@ function getUnitPrice(product: TireProduct) {
   return product.price;
 }
 
+type SizeFilter = { w: string; p: string; r: string };
+
+/** Ancho / perfil / rodado sueltos: filtran el catálogo por cualquiera de los tres. */
+function SizeInputs({ value, onChange, className = "" }: { value: SizeFilter; onChange: (v: SizeFilter) => void; className?: string }) {
+  const campo = (k: keyof SizeFilter, max: number, placeholder: string) => (
+    <input
+      type="text"
+      inputMode="numeric"
+      maxLength={max}
+      value={value[k]}
+      placeholder={placeholder}
+      aria-label={k === "w" ? "Ancho" : k === "p" ? "Perfil" : "Rodado"}
+      onChange={(e) => onChange({ ...value, [k]: e.target.value.replace(/\D/g, "").slice(0, max) })}
+      className="w-16 rounded-lg border border-slate-200 bg-white px-2 py-2 text-center text-sm font-bold text-slate-800 placeholder:font-medium placeholder:text-slate-400 focus:border-navy-500 focus:outline-none focus:ring-2 focus:ring-navy-100"
+    />
+  );
+  return (
+    <div className={`flex items-center gap-1.5 ${className}`}>
+      {campo("w", 3, "Ancho")}
+      <span className="font-black text-slate-300">/</span>
+      {campo("p", 2, "Perfil")}
+      <span className="font-black text-slate-300">R</span>
+      {campo("r", 2, "Rodado")}
+    </div>
+  );
+}
+
 function FilterBar({
   brandFilter, setBrandFilter,
   availableBrandIds,
@@ -246,6 +273,7 @@ function FilterBar({
   onlyCarga, setOnlyCarga,
   onlyAT, setOnlyAT,
   hasActiveFilters, clearFilters,
+  sizeFilter, setSizeFilter,
   layout,
 }: {
   availableBrandIds: Set<string>;
@@ -261,11 +289,17 @@ function FilterBar({
   setOnlyAT: (v: boolean) => void;
   hasActiveFilters: boolean;
   clearFilters: () => void;
+  sizeFilter: SizeFilter;
+  setSizeFilter: (v: SizeFilter) => void;
   layout: "horizontal" | "vertical";
 }) {
   if (layout === "horizontal") {
     return (
       <div className="flex items-center gap-4 flex-wrap bg-white rounded-2xl border border-slate-100 px-5 py-4 shadow-sm mb-6">
+        <SizeInputs value={sizeFilter} onChange={setSizeFilter} />
+
+        <div className="w-px h-8 bg-slate-100 mx-1 shrink-0" />
+
         <BrandDropdown
           value={brandFilter}
           onChange={setBrandFilter}
@@ -314,6 +348,11 @@ function FilterBar({
 
   return (
     <div className="bg-white rounded-2xl border border-slate-100 p-6 space-y-8 shadow-sm">
+      <div>
+        <p className="text-xs font-black text-slate-400 uppercase tracking-[0.15em] mb-4">Medida</p>
+        <SizeInputs value={sizeFilter} onChange={setSizeFilter} />
+      </div>
+
       <div>
         <p className="text-xs font-black text-slate-400 uppercase tracking-[0.15em] mb-4">Marca</p>
         <BrandDropdown value={brandFilter} onChange={setBrandFilter} availableBrandIds={availableBrandIds} className="w-full" />
@@ -394,6 +433,7 @@ export function ShopPage({
   }
   const [onlyCarga, setOnlyCarga] = useState(false);
   const [onlyAT, setOnlyAT] = useState(false);
+  const [sizeFilter, setSizeFilter] = useState<SizeFilter>({ w: "", p: "", r: "" });
   const [showFilters, setShowFilters] = useState(false);
   const [visibleCount, setVisibleCount] = useState(24);
 
@@ -410,6 +450,12 @@ export function ShopPage({
       if (onlyEconomic && !p.isEconomic) return false;
       if (onlyCarga && !p.isCarga) return false;
       if (onlyAT && !p.isAT) return false;
+      // Con una medida en la URL manda esa; los campos sueltos filtran el catálogo.
+      if (!parsed) {
+        if (sizeFilter.w && !String(p.size.width).startsWith(sizeFilter.w)) return false;
+        if (sizeFilter.p && !String(p.size.profile).startsWith(sizeFilter.p)) return false;
+        if (sizeFilter.r && !String(p.size.rim).startsWith(sizeFilter.r)) return false;
+      }
       return true;
     };
 
@@ -439,7 +485,7 @@ export function ShopPage({
     const compatible = products.filter(p => isCompatibleSize(p, parsed) && ok(p)).sort(stockPrimero);
 
     return { exactResults: exact, compatibleResults: compatible, allProducts: [] };
-  }, [parsed, brandFilter, maxPrice, onlyEconomic, onlyCarga, onlyAT, products, liveStock]);
+  }, [parsed, brandFilter, maxPrice, onlyEconomic, onlyCarga, onlyAT, sizeFilter, products, liveStock]);
 
   // Catálogo sin medida en la URL: si ya sabemos la medida del auto elegido,
   // recomendamos esos neumáticos arriba de todo, sin esperar a que busquen.
@@ -461,7 +507,7 @@ export function ShopPage({
   const mejoresCatalogo = useMemo(() => bestPriceByGroup(allProducts), [allProducts]);
   const peersCatalogo = useMemo(() => peersByGroup(allProducts), [allProducts]);
   const hasActiveFilters =
-    brandFilter !== "todos" || maxPrice < MAX_POSSIBLE_PRICE || onlyEconomic || onlyCarga || onlyAT;
+    brandFilter !== "todos" || maxPrice < MAX_POSSIBLE_PRICE || onlyEconomic || onlyCarga || onlyAT || !!(sizeFilter.w || sizeFilter.p || sizeFilter.r);
 
   const handleWhatsApp = (waLabel: string | null) => {
     const waUrl = (branch: typeof selectedBranch) =>
@@ -494,7 +540,10 @@ export function ShopPage({
     onlyCarga, setOnlyCarga,
     onlyAT, setOnlyAT,
     hasActiveFilters,
+    sizeFilter,
+    setSizeFilter,
     clearFilters() {
+      setSizeFilter({ w: "", p: "", r: "" });
       setBrandFilter("todos");
       setMaxPrice(MAX_POSSIBLE_PRICE);
       setOnlyEconomic(false);
