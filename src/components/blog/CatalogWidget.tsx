@@ -1,6 +1,6 @@
 import React from 'react';
 import { getProductosDesdePOS } from '@/lib/pos-api';
-import { ProductCard } from '@/components/ui/ProductCard';
+import { SortedProductGrid } from '@/components/ui/SortedProductGrid';
 import type { TireSize } from '@/lib/types';
 import type { VehicleTireProfile } from '@/lib/vehicles';
 import Link from 'next/link';
@@ -65,11 +65,10 @@ export async function CatalogWidget({ size, loadIndex, speedRating, vehicleProfi
   return (
     <div className="my-10 bg-slate-50 p-6 rounded-2xl border border-slate-100 not-prose [&_a]:!no-underline">
       {title && <h3 className="text-2xl font-black text-navy-900 mb-6">{title}</h3>}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {displayProducts.map(p => (
-          <ProductCard key={p.id} product={p} peers={peers.get(p.id)} />
-        ))}
-      </div>
+      <SortedProductGrid
+        className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+        items={displayProducts.map((p) => ({ product: p, peers: peers.get(p.id) }))}
+      />
       {size && (
         <div className="mt-6 text-center">
           <Link href={`/neumaticos/${size.width}-${size.profile}-r${size.rim}`} className="text-sm font-bold text-navy-700 hover:text-navy-900 underline underline-offset-4">

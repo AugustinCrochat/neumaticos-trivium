@@ -3,6 +3,8 @@
 import { useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { ProductCard } from "@/components/ui/ProductCard";
+import { useLiveStockMap } from "@/contexts/live-stock-context";
+import { sortInStockFirst } from "@/components/ui/SortedProductGrid";
 import type { TireProduct } from "@/lib/types";
 
 /**
@@ -30,7 +32,9 @@ export function LocalProductCarousel({
     () => [...new Set(productos.map((p) => p.size.rim))].sort((a, b) => a - b),
     [productos]
   );
-  const lista = rim === null ? productos : productos.filter((p) => p.size.rim === rim);
+  const liveStock = useLiveStockMap();
+  const filtrada = rim === null ? productos : productos.filter((p) => p.size.rim === rim);
+  const lista = useMemo(() => sortInStockFirst(filtrada, (p) => p.id, (p) => p.enStock, liveStock), [filtrada, liveStock]);
 
   const mover = (dir: 1 | -1) => {
     const el = scroller.current;

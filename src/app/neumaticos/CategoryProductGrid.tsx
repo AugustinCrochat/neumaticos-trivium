@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import Image from "next/image";
 import type { TireProduct } from "@/lib/types";
-import { ProductCard } from "@/components/ui/ProductCard";
+import { SortedProductGrid } from "@/components/ui/SortedProductGrid";
 import { getBrandLogo } from "@/lib/brand-utils";
 import { bestPriceByGroup, peersByGroup } from "@/lib/best-price";
 
@@ -135,11 +135,10 @@ export function CategoryProductGrid({ productos }: { productos: TireProduct[] })
       </div>
 
       {lista.length > 0 ? (
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6 lg:grid-cols-4">
-          {lista.map((p) => (
-            <ProductCard key={p.id} product={p} isCheapest={mejores.has(p.id)} cheapestLabel={mejores.get(p.id)} peers={peers.get(p.id)} />
-          ))}
-        </div>
+        <SortedProductGrid
+          className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6 lg:grid-cols-4"
+          items={lista.map((p) => ({ product: p, isCheapest: mejores.has(p.id), cheapestLabel: mejores.get(p.id), peers: peers.get(p.id) }))}
+        />
       ) : (
         <p className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-6 text-center text-slate-600">
           No hay modelos con esa combinación. Probá sacar algún filtro.

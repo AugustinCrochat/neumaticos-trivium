@@ -5,7 +5,6 @@ import { BlogShopLinks } from "@/components/blog/BlogShop";
 import { SizesCatalog } from "@/components/blog/SizesCatalog";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { TireSizeSearch } from "@/components/ui/TireSizeSearch";
-import { blogMeta } from "@/lib/blog-meta";
 import { absoluteUrl, canonical, ORGANIZATION_ID } from "@/lib/seo";
 import { sizeSearchHref } from "@/lib/size-href";
 
@@ -17,6 +16,11 @@ const PUBLISHED = "2025-03-28";
 const MODIFIED = "2026-10-21";
 
 const INFOGRAPHIC = "/como-leer-medida-neumatico-205-55-r16.webp";
+// Foto real del flanco con cada código señalado (ver "Dónde mirarlo").
+const FLANCO_PHOTO = "/donde-encontrar-la-medida-en-el-flanco-del-neumatico.webp";
+const FLANCO_ALT =
+  "Flanco de un neumático 195/65 R15 95T XL con cada código señalado: ancho 195 mm, perfil 65, construcción radial R, llanta de 15 pulgadas, índice de carga 95, código de velocidad T, XL, M+S y tubeless";
+
 const INFOGRAPHIC_ALT =
   "Infografía de cómo leer la medida 205/55 R16 en el flanco de un neumático: 205 es el ancho en milímetros, 55 el perfil, R la construcción radial y 16 el diámetro de la llanta en pulgadas";
 
@@ -106,7 +110,6 @@ function SectionHead({ kicker, title, children }: { kicker: string; title: strin
 
 export default function ComoLeerMedidaPage() {
   const url = absoluteUrl(`/blog/${SLUG}`);
-  const figure = blogMeta(SLUG).figure;
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
@@ -225,8 +228,8 @@ export default function ComoLeerMedidaPage() {
       <section id="flanco" className="scroll-mt-16 bg-slate-50 py-14 md:py-20">
         <div className="mx-auto grid max-w-6xl gap-9 px-4 lg:grid-cols-[.9fr_1.1fr] lg:items-center">
           <figure className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl shadow-navy-900/10">
-            <Image src={figure.src} alt={figure.alt} width={1200} height={1600} sizes="(max-width: 1024px) 100vw, 45vw" className="h-auto max-h-[560px] w-full object-cover" />
-            <figcaption className="px-5 py-3 text-sm text-slate-500">{figure.caption}</figcaption>
+            <Image src={FLANCO_PHOTO} alt={FLANCO_ALT} width={1400} height={1901} sizes="(max-width: 1024px) 100vw, 45vw" className="h-auto w-full" />
+            <figcaption className="px-5 py-3 text-sm text-slate-500">Ejemplo real: 195/65 R15 95T XL, moldeado en relieve sobre el flanco. Cada color marca un dato distinto.</figcaption>
           </figure>
           <div>
             <p className="text-sm font-black uppercase tracking-widest text-orange-600">Dónde mirarlo</p>

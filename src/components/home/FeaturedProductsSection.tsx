@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ProductCard } from "@/components/ui/ProductCard";
+import { SortedProductGrid } from "@/components/ui/SortedProductGrid";
 import { FEATURED_TIRE_IDS } from "@/lib/featured";
 import { peersByGroup } from "@/lib/best-price";
 import type { TireProduct } from "@/lib/types";
@@ -34,11 +34,10 @@ export function FeaturedProductsSection({ productos }: { productos: TireProduct[
           </Link>
         </div>
 
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 md:gap-6">
-          {destacados.map((producto) => (
-            <ProductCard key={producto.id} product={producto} peers={peers.get(producto.id)} />
-          ))}
-        </div>
+        <SortedProductGrid
+          className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 md:gap-6"
+          items={destacados.map((producto) => ({ product: producto, peers: peers.get(producto.id) }))}
+        />
       </div>
     </section>
   );

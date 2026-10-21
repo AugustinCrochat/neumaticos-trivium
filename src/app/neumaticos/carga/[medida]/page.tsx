@@ -16,7 +16,7 @@ import { formatSize, sizeSlug } from "@/lib/tire-sizes";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { FaqSection } from "@/components/seo/FaqSection";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { ProductCard } from "@/components/ui/ProductCard";
+import { SortedProductGrid } from "@/components/ui/SortedProductGrid";
 import { bestPriceByGroup, peersByGroup } from "@/lib/best-price";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 
@@ -187,11 +187,10 @@ export default async function CargaMedidaPage({ params }: Props) {
 
       <section className="mb-12">
         <h2 className="mb-5 text-2xl font-black text-navy-900">Cubiertas {label} disponibles</h2>
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6 lg:grid-cols-4">
-          {ordenados.map((p) => (
-            <ProductCard key={p.id} product={p} isCheapest={mejores.has(p.id)} cheapestLabel={mejores.get(p.id)} peers={peers.get(p.id)} />
-          ))}
-        </div>
+        <SortedProductGrid
+          className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6 lg:grid-cols-4"
+          items={ordenados.map((p) => ({ product: p, isCheapest: mejores.has(p.id), cheapestLabel: mejores.get(p.id), peers: peers.get(p.id) }))}
+        />
       </section>
 
       {capacidades.length > 0 && (

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { TireProduct } from "@/lib/types";
 import { BRANCHES } from "@/lib/config";
-import { ProductCard } from "@/components/ui/ProductCard";
+import { SortedProductGrid } from "@/components/ui/SortedProductGrid";
 import { bestPriceByGroup, peersByGroup } from "@/lib/best-price";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { FaqSection } from "@/components/seo/FaqSection";
@@ -94,11 +94,10 @@ export function RimLanding({ rim, productos }: { rim: number; productos: TirePro
           )}
         </div>
         {ordenados.length > 0 ? (
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 md:gap-6">
-            {ordenados.map((product) => (
-              <ProductCard key={product.id} product={product} isCheapest={mejores.has(product.id)} cheapestLabel={mejores.get(product.id)} peers={peers.get(product.id)} />
-            ))}
-          </div>
+          <SortedProductGrid
+            className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 md:gap-6"
+            items={ordenados.map((product) => ({ product, isCheapest: mejores.has(product.id), cheapestLabel: mejores.get(product.id), peers: peers.get(product.id) }))}
+          />
         ) : (
           <p className="max-w-2xl leading-relaxed text-slate-600">
             Ahora mismo no tenemos stock en rodado {rim}, pero recibimos mercadería todas las

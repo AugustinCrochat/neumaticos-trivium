@@ -1,7 +1,7 @@
 import { BRANDS } from "@/lib/data";
 import { getProductosDesdePOS } from "@/lib/pos-api";
 import { getSelectedBranchSlug } from "@/lib/branch-server";
-import { ProductCard } from "@/components/ui/ProductCard";
+import { SortedProductGrid } from "@/components/ui/SortedProductGrid";
 import { peersByGroup } from "@/lib/best-price";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -166,11 +166,10 @@ export default async function BrandPage({ params }: Props) {
         </div>
         
         {brandProducts.length > 0 ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8">
-            {brandProducts.map(product => (
-              <ProductCard key={product.id} product={product} peers={peers.get(product.id)} />
-            ))}
-          </div>
+          <SortedProductGrid
+            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8"
+            items={brandProducts.map((product) => ({ product, peers: peers.get(product.id) }))}
+          />
         ) : (
           <div className="py-32 flex flex-col items-center justify-center text-center bg-slate-50 rounded-[3rem] border-2 border-dashed border-slate-200">
             <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center text-slate-200 mb-6 shadow-sm">

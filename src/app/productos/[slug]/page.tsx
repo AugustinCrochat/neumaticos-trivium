@@ -19,7 +19,7 @@ import {
   sizeSlug,
   vehiclesUsingSize,
 } from "@/lib/tire-sizes";
-import { ProductCard } from "@/components/ui/ProductCard";
+import { SortedProductGrid } from "@/components/ui/SortedProductGrid";
 import { groupLabel, peersByGroup } from "@/lib/best-price";
 import { CompatibleAccessorySection } from "@/components/ui/CompatibleAccessorySection";
 import { getTireLabel } from "@/lib/tire-labels";
@@ -520,11 +520,10 @@ export default async function ProductPage({ params }: Props) {
           <p className="text-sm text-slate-600 mb-6">
             Misma medida, con stock disponible ahora en otras marcas:
           </p>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {otrasMarcasMismaMedida.map((p) => (
-              <ProductCard key={p.id} product={p} />
-            ))}
-          </div>
+          <SortedProductGrid
+            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+            items={otrasMarcasMismaMedida.map((p) => ({ product: p }))}
+          />
         </div>
       )}
 
@@ -543,11 +542,10 @@ export default async function ProductPage({ params }: Props) {
               </Link>
             )}
           </p>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {mismoRodado.map((p) => (
-              <ProductCard key={p.id} product={p} />
-            ))}
-          </div>
+          <SortedProductGrid
+            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+            items={mismoRodado.map((p) => ({ product: p }))}
+          />
         </div>
       )}
 
