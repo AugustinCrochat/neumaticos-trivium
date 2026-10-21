@@ -4,9 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { getBrandLogo } from "@/lib/brand-utils";
 import { ProductNameWithHighlightedSize } from "@/components/ui/ProductNameWithHighlightedSize";
-import { PriceTagIcon } from "@/components/ui/PriceTagIcon";
+import { BestPriceBadge } from "@/components/ui/BestPriceBadge";
 import { isLowStock, stockLabel } from "@/lib/stock";
-import { useLiveStock } from "@/contexts/live-stock-context";
+import { useLiveStock, useLiveStockMap } from "@/contexts/live-stock-context";
+import { groupLabel, isBestPriceLive, type PricePeer } from "@/lib/best-price";
 import type { TireProduct } from "@/lib/types";
 import type { ReactNode } from "react";
 
@@ -39,6 +40,7 @@ export function ProductCard({
   imageFooter,
   isCheapest,
   cheapestLabel,
+  peers,
   note,
 }: {
   product: TireProduct;
@@ -46,6 +48,8 @@ export function ProductCard({
   isCheapest?: boolean;
   /** Medida a la que se refiere el tag, para listados con medidas mezcladas. */
   cheapestLabel?: string;
+  /** Productos de su mismo grupo: con esto el tag se recalcula con stock y precio vivos. */
+  peers?: PricePeer[];
   note?: ReactNode;
 }) {
   const hasImage =
@@ -58,21 +62,15 @@ export function ProductCard({
   const price = live?.price ?? product.price;
   const stock = live?.stock ?? product.stock;
   const enStock = live?.enStock ?? product.enStock;
+  const liveMap = useLiveStockMap();
+  const best = peers ? isBestPriceLive(product.id, peers, liveMap) : !!isCheapest;
 
   return (
-    <article className={`group bg-white rounded-2xl border transition-all duration-300 overflow-hidden flex flex-col ${isCheapest ? "border-emerald-500 shadow-2xl shadow-emerald-500/20 scale-[1.02] relative z-20 ring-4 ring-emerald-500/10" : "border-slate-100 hover:border-navy-200 hover:shadow-xl"}`}>
+    <article className={`group bg-white rounded-2xl border transition-all duration-300 overflow-hidden flex flex-col ${best ? "border-emerald-500 shadow-2xl shadow-emerald-500/20 scale-[1.02] relative z-20 ring-4 ring-emerald-500/10" : "border-slate-100 hover:border-navy-200 hover:shadow-xl"}`}>
       {/* Image */}
       <Link href={`/productos/${product.slug}`} className="relative bg-white pt-[108%] md:pt-[95%] overflow-hidden block">
         <div className="absolute top-3 left-3 z-10 flex flex-col gap-2 items-start">
-          {isCheapest && (
-            <span className="flex max-w-[11rem] items-center gap-1.5 rounded-lg bg-gradient-to-r from-emerald-600 to-emerald-500 py-1 pl-1.5 pr-2.5 text-white shadow-lg shadow-emerald-600/30 ring-2 ring-white">
-              <PriceTagIcon className="h-7 w-5 shrink-0" />
-              <span className="flex flex-col leading-none">
-                <span className="text-[11px] font-black uppercase tracking-wider">Mejor precio</span>
-                {cheapestLabel && <span className="mt-0.5 text-[10px] font-bold text-emerald-50">{cheapestLabel}</span>}
-              </span>
-            </span>
-          )}
+          {best && <BestPriceBadge label={cheapestLabel ?? groupLabel(product)} />}
           {product.priceOld && (
             <span className="bg-red-600 text-white text-[10px] font-black px-2.5 py-1 rounded-md shadow-lg uppercase tracking-tighter">
               {discount(price, product.priceOld)}% OFF

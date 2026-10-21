@@ -5,7 +5,7 @@ import Image from "next/image";
 import type { TireProduct } from "@/lib/types";
 import { ProductCard } from "@/components/ui/ProductCard";
 import { getBrandLogo } from "@/lib/brand-utils";
-import { bestPriceByGroup } from "@/lib/best-price";
+import { bestPriceByGroup, peersByGroup } from "@/lib/best-price";
 
 /**
  * Listado de una landing de categoría con filtros de aro, marca y "sólo en
@@ -43,6 +43,7 @@ export function CategoryProductGrid({ productos }: { productos: TireProduct[] })
   // Mejor precio por medida y tipo, sobre el listado completo (no sobre el
   // filtrado) así el tag no salta de producto al filtrar. El tag aclara medida y tipo.
   const mejores = useMemo(() => bestPriceByGroup(productos), [productos]);
+  const peers = useMemo(() => peersByGroup(productos), [productos]);
   const lista = filtrados;
 
   const pill = (activo: boolean) =>
@@ -136,7 +137,7 @@ export function CategoryProductGrid({ productos }: { productos: TireProduct[] })
       {lista.length > 0 ? (
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6 lg:grid-cols-4">
           {lista.map((p) => (
-            <ProductCard key={p.id} product={p} isCheapest={mejores.has(p.id)} cheapestLabel={mejores.get(p.id)} />
+            <ProductCard key={p.id} product={p} isCheapest={mejores.has(p.id)} cheapestLabel={mejores.get(p.id)} peers={peers.get(p.id)} />
           ))}
         </div>
       ) : (

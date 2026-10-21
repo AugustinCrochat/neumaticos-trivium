@@ -3,6 +3,7 @@ import type { TireProduct, TireSize } from "@/lib/types";
 import { BRANCHES, FREE_SHIPPING_THRESHOLD, SHIPPING_FLAT_RATE } from "@/lib/config";
 import { esRangoFlotation, formatFlotationEquivalent, metricToFlotation } from "@/lib/flotation";
 import { ProductCard } from "@/components/ui/ProductCard";
+import { bestPriceByGroup, peersByGroup } from "@/lib/best-price";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 import { SizeHeader } from "./SizeHeader";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
@@ -115,6 +116,8 @@ export function SizeLanding({
   const label = formatSize(size);
   const slug = sizeSlug(size);
   const enStock = productos.filter((p) => p.enStock);
+  const mejores = bestPriceByGroup(productos);
+  const peers = peersByGroup(productos);
   const ordenados = [...productos].sort(
     (a, b) => Number(b.enStock) - Number(a.enStock) || a.price - b.price
   );
@@ -169,7 +172,7 @@ export function SizeLanding({
           </h2>
           <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 md:gap-6">
             {ordenados.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard key={product.id} product={product} isCheapest={mejores.has(product.id)} cheapestLabel={mejores.get(product.id)} peers={peers.get(product.id)} />
             ))}
           </div>
         </section>

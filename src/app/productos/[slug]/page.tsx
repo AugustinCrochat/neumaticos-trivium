@@ -20,6 +20,7 @@ import {
   vehiclesUsingSize,
 } from "@/lib/tire-sizes";
 import { ProductCard } from "@/components/ui/ProductCard";
+import { groupLabel, peersByGroup } from "@/lib/best-price";
 import { CompatibleAccessorySection } from "@/components/ui/CompatibleAccessorySection";
 import { getTireLabel } from "@/lib/tire-labels";
 import { getUtqg } from "@/lib/utqg";
@@ -204,6 +205,8 @@ export default async function ProductPage({ params }: Props) {
   const loadKg = product.loadIndex ? LOAD_INDEX_KG[product.loadIndex] : undefined;
   const loadDualKg = product.loadIndexDual ? LOAD_INDEX_KG[product.loadIndexDual] : undefined;
   const vehiculos = vehiclesUsingSize(product.size);
+  // Mismo criterio que los listados: el más barato con stock de su medida y tipo.
+  const peers = peersByGroup(productos).get(product.id) ?? [];
 
   // Una tarjeta por marca (la más barata en stock), no cada SKU — mostrar
   // 3 modelos de la misma marca en distinto precio es ruido, lo que importa
@@ -359,7 +362,7 @@ export default async function ProductPage({ params }: Props) {
 
           {/* Price */}
           <div className="border-t border-slate-100 pt-4 mt-2">
-            <LivePrice id={product.id} price={product.price} priceOld={product.priceOld} />
+            <LivePrice id={product.id} price={product.price} priceOld={product.priceOld} peers={peers} groupLabel={groupLabel(product)} />
 
             {/* Client component handles branch-specific WhatsApp link */}
             <ProductPageClient product={product} />

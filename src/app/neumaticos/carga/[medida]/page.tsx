@@ -17,6 +17,7 @@ import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { FaqSection } from "@/components/seo/FaqSection";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { ProductCard } from "@/components/ui/ProductCard";
+import { bestPriceByGroup, peersByGroup } from "@/lib/best-price";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 
 /**
@@ -85,6 +86,8 @@ export default async function CargaMedidaPage({ params }: Props) {
   const branch = BRANCHES[0];
   const ordenados = [...productos].sort((a, b) => Number(b.enStock) - Number(a.enStock) || a.price - b.price);
   const enStock = ordenados.filter((p) => p.enStock);
+  const mejores = bestPriceByGroup(ordenados);
+  const peers = peersByGroup(ordenados);
   const desde = enStock.length ? Math.min(...enStock.map((p) => p.price)) : null;
   const marcas = [...new Set(productos.map((p) => p.brand))];
   const capacidades = [...new Set(ordenados.map(cargaCapacityLabel).filter((c): c is string => !!c))];
@@ -186,7 +189,7 @@ export default async function CargaMedidaPage({ params }: Props) {
         <h2 className="mb-5 text-2xl font-black text-navy-900">Cubiertas {label} disponibles</h2>
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6 lg:grid-cols-4">
           {ordenados.map((p) => (
-            <ProductCard key={p.id} product={p} />
+            <ProductCard key={p.id} product={p} isCheapest={mejores.has(p.id)} cheapestLabel={mejores.get(p.id)} peers={peers.get(p.id)} />
           ))}
         </div>
       </section>

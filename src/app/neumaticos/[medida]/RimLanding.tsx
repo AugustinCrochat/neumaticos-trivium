@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { TireProduct } from "@/lib/types";
 import { BRANCHES } from "@/lib/config";
 import { ProductCard } from "@/components/ui/ProductCard";
+import { bestPriceByGroup, peersByGroup } from "@/lib/best-price";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { FaqSection } from "@/components/seo/FaqSection";
 import type { Faq } from "@/lib/seo";
@@ -51,6 +52,8 @@ function buildFaqs(rim: number, desde: number | null): Faq[] {
 
 export function RimLanding({ rim, productos }: { rim: number; productos: TireProduct[] }) {
   const delRodado = productos.filter((p) => p.size.rim === rim);
+  const mejores = bestPriceByGroup(delRodado);
+  const peers = peersByGroup(delRodado);
   const enStock = delRodado.filter((p) => p.enStock);
   const desde = enStock.length ? Math.min(...enStock.map((p) => p.price)) : null;
   const branch = BRANCHES[0];
@@ -93,7 +96,7 @@ export function RimLanding({ rim, productos }: { rim: number; productos: TirePro
         {ordenados.length > 0 ? (
           <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 md:gap-6">
             {ordenados.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard key={product.id} product={product} isCheapest={mejores.has(product.id)} cheapestLabel={mejores.get(product.id)} peers={peers.get(product.id)} />
             ))}
           </div>
         ) : (

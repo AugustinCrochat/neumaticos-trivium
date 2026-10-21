@@ -9,7 +9,7 @@ import { getBrandLogo } from "@/lib/brand-utils";
 import { EconomicChip } from "@/components/ui/EconomicChip";
 import { PriceTagIcon } from "@/components/ui/PriceTagIcon";
 import { ProductCard } from "@/components/ui/ProductCard";
-import { bestPriceByGroup } from "@/lib/best-price";
+import { bestPriceByGroup, peersByGroup } from "@/lib/best-price";
 import { SizeOrVehicleSearch } from "@/components/ui/SizeOrVehicleSearch";
 import { useBranch } from "@/contexts/branch-context";
 import { useVehicle } from "@/contexts/vehicle-context";
@@ -459,6 +459,7 @@ export function ShopPage({
       : null;
   const mejoresExactos = useMemo(() => bestPriceByGroup(exactResults), [exactResults]);
   const mejoresCatalogo = useMemo(() => bestPriceByGroup(allProducts), [allProducts]);
+  const peersCatalogo = useMemo(() => peersByGroup(allProducts), [allProducts]);
   const hasActiveFilters =
     brandFilter !== "todos" || maxPrice < MAX_POSSIBLE_PRICE || onlyEconomic || onlyCarga || onlyAT;
 
@@ -596,7 +597,7 @@ export function ShopPage({
                   <>
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                       {allProducts.slice(0, visibleCount).map(product => (
-                        <ProductCard key={product.id} product={product} isCheapest={mejoresCatalogo.has(product.id)} cheapestLabel={mejoresCatalogo.get(product.id)} />
+                        <ProductCard key={product.id} product={product} isCheapest={mejoresCatalogo.has(product.id)} cheapestLabel={mejoresCatalogo.get(product.id)} peers={peersCatalogo.get(product.id)} />
                       ))}
                     </div>
                     {visibleCount < allProducts.length && (
@@ -707,7 +708,7 @@ export function ShopPage({
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                   {exactResults.map(product => (
-                    <ProductCard key={product.id} product={product} isCheapest={mejoresExactos.has(product.id)} cheapestLabel={mejoresExactos.get(product.id)} />
+                    <ProductCard key={product.id} product={product} isCheapest={mejoresExactos.has(product.id)} cheapestLabel={mejoresExactos.get(product.id)} peers={peersCatalogo.get(product.id)} />
                   ))}
                 </div>
               </section>
