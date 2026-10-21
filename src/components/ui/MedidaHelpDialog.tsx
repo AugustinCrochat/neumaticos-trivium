@@ -33,8 +33,11 @@ export function MedidaHelpDialog({ compact = false }: { compact?: boolean }) {
   const conMouse = () => window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
   function abrir() {
-    if (conMouse() && btnRef.current) {
-      const rect = btnRef.current.getBoundingClientRect();
+    const rect = btnRef.current?.getBoundingClientRect();
+    // Anclado sólo si la tarjeta entera entra debajo del botón (alta: ~45 rem);
+    // si no (el botón está abajo en la pantalla, como en el catálogo), se abre
+    // centrada con su propio scroll, así se ve completa sin tocar la página.
+    if (conMouse() && rect && window.innerHeight - rect.bottom >= 740) {
       const vw = document.documentElement.clientWidth;
       const ancho = Math.min(704, vw - 16);
       setPos({ top: rect.bottom, left: Math.max(8, Math.min(rect.left, vw - ancho - 8)) });
@@ -56,10 +59,14 @@ export function MedidaHelpDialog({ compact = false }: { compact?: boolean }) {
     const onScroll = () => pos && setOpen(false); // anclado: al scrollear se descoloca
     window.addEventListener("keydown", onKey);
     window.addEventListener("scroll", onScroll, { passive: true });
+    // Centrada: la página de atrás no se mueve mientras se mira.
+    const overflow = document.body.style.overflow;
+    if (!pos) document.body.style.overflow = "hidden";
     return () => {
       window.removeEventListener("keydown", onKey);
       window.removeEventListener("mousedown", onDown);
       window.removeEventListener("scroll", onScroll);
+      document.body.style.overflow = overflow;
     };
   }, [open, pos]);
 
