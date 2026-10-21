@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -10,9 +11,9 @@ import { sizeSearchHref } from "@/lib/size-href";
  * "¿Dónde veo mi medida?": muestra la foto real del flanco con cada código
  * numerado y, ahí mismo, tres campos para buscar con lo que se lee.
  *
- * En computadora se abre al pasar el mouse (anclado al botón, con posición fija
- * para que ningún contenedor con overflow-hidden lo recorte). En celular, donde
- * no hay hover, se abre al tocar y ocupa la pantalla. Esc o tocar afuera cierra.
+ * Se abre con un clic. En computadora queda anclado debajo del botón (posición
+ * fija, para que ningún contenedor con overflow-hidden lo recorte); en celular
+ * ocupa la pantalla. Se cierra con la ×, con Esc o haciendo clic afuera.
  */
 export function MedidaHelpDialog({ compact = false }: { compact?: boolean }) {
   const router = useRouter();
@@ -23,16 +24,15 @@ export function MedidaHelpDialog({ compact = false }: { compact?: boolean }) {
   const [p, setP] = useState("");
   const [r, setR] = useState("");
   const wrapRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
   const btnRef = useRef<HTMLButtonElement>(null);
   const pRef = useRef<HTMLInputElement>(null);
   const rRef = useRef<HTMLInputElement>(null);
   const wInputRef = useRef<HTMLInputElement>(null);
-  const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const conMouse = () => window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
   function abrir() {
-    clearTimeout(timer.current);
     if (conMouse() && btnRef.current) {
       const rect = btnRef.current.getBoundingClientRect();
       const vw = document.documentElement.clientWidth;
@@ -43,19 +43,22 @@ export function MedidaHelpDialog({ compact = false }: { compact?: boolean }) {
     }
     setOpen(true);
   }
-  function cerrarConDemora() {
-    clearTimeout(timer.current);
-    timer.current = setTimeout(() => setOpen(false), 250);
-  }
 
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    // Anclado: un clic fuera del botón y de la tarjeta lo cierra.
+    const onDown = (e: MouseEvent) => {
+      const dentro = wrapRef.current?.contains(e.target as Node) || panelRef.current?.contains(e.target as Node);
+      if (pos && !dentro) setOpen(false);
+    };
+    window.addEventListener("mousedown", onDown);
     const onScroll = () => pos && setOpen(false); // anclado: al scrollear se descoloca
     window.addEventListener("keydown", onKey);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => {
       window.removeEventListener("keydown", onKey);
+      window.removeEventListener("mousedown", onDown);
       window.removeEventListener("scroll", onScroll);
     };
   }, [open, pos]);
@@ -130,17 +133,12 @@ export function MedidaHelpDialog({ compact = false }: { compact?: boolean }) {
   );
 
   return (
-    <div
-      ref={wrapRef}
-      className="inline-block"
-      onMouseEnter={() => conMouse() && abrir()}
-      onMouseLeave={() => conMouse() && cerrarConDemora()}
-    >
+    <div ref={wrapRef} className="inline-block">
       <button
         ref={btnRef}
         type="button"
         aria-expanded={open}
-        onClick={() => (open && !conMouse() ? setOpen(false) : abrir())}
+        onClick={() => (open ? setOpen(false) : abrir())}
         className={`inline-flex items-center gap-1.5 font-bold text-red-600 underline underline-offset-2 hover:text-red-700 ${compact ? "text-xs" : "text-sm"}`}
       >
         <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -151,9 +149,12 @@ export function MedidaHelpDialog({ compact = false }: { compact?: boolean }) {
       </button>
 
       {open &&
-        (pos ? (
-          // Con mouse: anclado justo debajo del botón, sin hueco (así el puntero no "se sale").
-          <div role="dialog" aria-label="¿Dónde veo mi medida?" className="fixed z-[100] w-[min(44rem,calc(100vw-1rem))]" style={{ top: pos.top, left: pos.left }}>
+        // Portal al <body>: dentro del buscador quedaba detrás de las tarjetas del
+        // catálogo (que crean su propia capa con z-index y escala).
+        createPortal(
+          pos ? (
+          // Con mouse: anclado justo debajo del botón.
+          <div ref={panelRef} role="dialog" aria-label="¿Dónde veo mi medida?" className="fixed z-[1000] w-[min(44rem,calc(100vw-1rem))]" style={{ top: pos.top, left: pos.left }}>
             <div className="pt-2">{tarjeta}</div>
           </div>
         ) : (
@@ -162,12 +163,14 @@ export function MedidaHelpDialog({ compact = false }: { compact?: boolean }) {
             role="dialog"
             aria-modal="true"
             aria-label="¿Dónde veo mi medida?"
-            className="fixed inset-0 z-[100] overflow-y-auto bg-black/70 p-3"
+            className="fixed inset-0 z-[1000] overflow-y-auto bg-black/70 p-3"
             onClick={(e) => e.target === e.currentTarget && setOpen(false)}
           >
             <div className="mx-auto my-4 max-w-3xl">{tarjeta}</div>
           </div>
-        ))}
+        ),
+          document.body
+        )}
     </div>
   );
 }

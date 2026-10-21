@@ -217,9 +217,11 @@ export function TireDiagram({
           );
         })}
       </div>
-      <p className={`mt-1.5 w-full max-w-lg text-center leading-snug text-slate-600 ${compact ? "text-[11px]" : "text-xs"}`} aria-live="polite">
-        {focused ? AYUDA[focused] : "Tocá un número o escribilo abajo."}
-      </p>
+      {focused && (
+        <p className={`mt-1.5 w-full max-w-lg text-center leading-snug text-slate-600 ${compact ? "text-[11px]" : "text-xs"}`} aria-live="polite">
+          {AYUDA[focused]}
+        </p>
+      )}
     </div>
   );
 }
