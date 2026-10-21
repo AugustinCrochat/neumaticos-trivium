@@ -244,7 +244,12 @@ export function EquivalenceCalculator({ products }: { products: TireProduct[] })
         )}
       </div>
 
-      <div className="mt-3">
+      <details className="group mt-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2">
+        <summary className="flex cursor-pointer list-none items-center justify-between text-sm font-black text-navy-800 marker:hidden">
+          Atajos: medidas frecuentes y equivalentes
+          <span aria-hidden="true" className="text-lg text-orange-500 transition-transform group-open:rotate-45">+</span>
+        </summary>
+        <div className="mt-3">
         <div className="flex flex-wrap gap-1.5" aria-label="Medidas frecuentes">
           {PRESETS.map(([w, p, r]) => (
             <button key={w + p + r} type="button" onClick={() => setA({ w, p, r })}
@@ -253,15 +258,9 @@ export function EquivalenceCalculator({ products }: { products: TireProduct[] })
             </button>
           ))}
         </div>
-      </div>
-
-      {!s1 && <p className="mt-6 rounded-xl bg-slate-50 p-4 text-sm text-slate-500">Completá ancho, perfil y rodado de tu medida actual (por ejemplo 195 / 65 R15). También podés pegar la medida completa en cualquier campo.</p>}
-
-      {/* Modo comparar */}
-      {mode === "check" && s1 && (
-        <div className="mt-3">
-          {suggestions.length > 0 && (
-            <div>
+        </div>
+        {mode === "check" && s1 && suggestions.length > 0 && (
+            <div className="mt-3">
               <p className="mb-1.5 text-xs font-black uppercase tracking-widest text-slate-400">Equivalentes de {label(s1)}: tocá para comparar</p>
               <div className="flex flex-wrap gap-1.5">
                 {suggestions.map((s) => (
@@ -272,8 +271,14 @@ export function EquivalenceCalculator({ products }: { products: TireProduct[] })
                 ))}
               </div>
             </div>
-          )}
+        )}
+      </details>
 
+      {!s1 && <p className="mt-6 rounded-xl bg-slate-50 p-4 text-sm text-slate-500">Completá ancho, perfil y rodado de tu medida actual (por ejemplo 195 / 65 R15). También podés pegar la medida completa en cualquier campo.</p>}
+
+      {/* Modo comparar */}
+      {mode === "check" && s1 && (
+        <div className="mt-3">
           {s2 && diff !== null && verdict && (
             <div className={`mt-4 rounded-2xl border-2 p-4 sm:p-5 ${verdict === "ok" ? "border-emerald-300 bg-emerald-50" : verdict === "rim" ? "border-orange-300 bg-orange-50" : "border-red-300 bg-red-50"}`} aria-live="polite">
               <div className="flex items-start gap-4">
