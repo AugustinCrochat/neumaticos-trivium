@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useRef, useEffect, useMemo } from "react";
+import { useState, useRef, useEffect, useMemo, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { sizeSearchHref } from "@/lib/size-href";
 import { flotationToMetric, formatFlotationLabel } from "@/lib/flotation";
 import { TireDiagram } from "./TireDiagram";
+import { MedidaHelpDialog } from "./MedidaHelpDialog";
 import { WhatsAppLink } from "./WhatsAppLink";
 import { BRANCHES } from "@/lib/config";
 import type { MedidaCatalogo } from "@/app/api/medidas/route";
@@ -110,6 +111,22 @@ export function TireSizeSearch({
   // Atado a lo escrito: al cambiar la medida la lista se filtra y el índice viejo deja de valer.
   const [activeState, setActiveState] = useState({ key: "", index: -1 });
   const containerRef = useRef<HTMLDivElement>(null);
+  // Autos que vienen con la medida completa (para confirmar que es la correcta).
+  const [vehiculos, setVehiculos] = useState<{ brand: string; model: string }[]>([]);
+  const [voiceError, setVoiceError] = useState<string | null>(null);
+  // Última medida buscada en este navegador ("195-65-15"), para repetirla con un
+  // toque. En el servidor es null, así no hay diferencia de hidratación.
+  const ultima = useSyncExternalStore(
+    () => () => {},
+    () => {
+      try {
+        return localStorage.getItem("trivium:ultima-medida");
+      } catch {
+        return null; // Sin localStorage (modo privado): no se ofrece.
+      }
+    },
+    () => null
+  );
 
   const POPULAR_SIZES = [
     { w: "205", p: "55", r: "16" }, // Muy popular (Cruze, Corolla, Focus, etc)
@@ -217,6 +234,25 @@ export function TireSizeSearch({
     return null;
   }, [isFlotation, width, profile, rim]);
 
+  // Si lo escrito no es una medida estándar, la más cercana que sí lo es.
+  const sizeFix = useMemo(() => {
+    if (isFlotation) return null;
+    const cerca = (n: number, paso: number, min: number, max: number) => Math.min(max, Math.max(min, Math.round(n / paso) * paso));
+    if (width.length >= 3) {
+      const w = Number(width);
+      if (w < 135 || w > 355 || w % 5 !== 0) return { seg: "width" as const, value: String(cerca(w, 5, 135, 355)) };
+    }
+    if (profile.length >= 2) {
+      const pr = Number(profile);
+      if (pr < 25 || pr > 85 || pr % 5 !== 0) return { seg: "aspect" as const, value: String(cerca(pr, 5, 25, 85)) };
+    }
+    if (rim.length >= 2) {
+      const r = Number(rim);
+      if (r < 13 || r > 24) return { seg: "rim" as const, value: String(cerca(r, 1, 13, 24)) };
+    }
+    return null;
+  }, [isFlotation, width, profile, rim]);
+
   const widthRef = useRef<HTMLInputElement | null>(null);
   const profileRef = useRef<HTMLInputElement | null>(null);
   const rimRef = useRef<HTMLInputElement | null>(null);
@@ -275,7 +311,14 @@ export function TireSizeSearch({
     catalogo !== null &&
     medidaObjetivo !== null &&
     !catalogo.some((m) => !m.c && m.w === medidaObjetivo.w && m.p === medidaObjetivo.p && m.r === medidaObjetivo.r);
-  const alternativas = sinCatalogo && medidaObjetivo && catalogo
+  const medidaInfo =
+    catalogo && medidaObjetivo
+      ? catalogo.find((m) => !m.c && m.w === medidaObjetivo.w && m.p === medidaObjetivo.p && m.r === medidaObjetivo.r)
+      : undefined;
+  const sinStock = !!medidaInfo && medidaInfo.s === 0;
+  // La vista previa aparece sólo cuando la medida se escribió (no cuando vino prellenada).
+  const previewOk = !!medidaInfo && !shouldClearInitialOnEdit;
+  const alternativas = (sinCatalogo || sinStock) && medidaObjetivo && catalogo
     ? (() => {
         const d0 = diametroMm(medidaObjetivo.w, medidaObjetivo.p, medidaObjetivo.r);
         return catalogo
@@ -288,25 +331,77 @@ export function TireSizeSearch({
       })()
     : [];
 
-  // Auto-search cuando los tres campos están completos, adivinando el
-  // formato por la cantidad de dígitos del primero (ver isFlotation).
+  // La medida completa ya no navega sola a los 300 ms (se perdía lo escrito si
+  // alguien corregía un dígito): se muestra una vista previa y se va con el
+  // botón o Enter. Ver la tarjeta "previewOk" más abajo.
+  const mw = medidaObjetivo?.w;
+  const mp = medidaObjetivo?.p;
+  const mr = medidaObjetivo?.r;
+
+  // Autos que traen esta medida: confirma que la leyó bien.
   useEffect(() => {
-    if (shouldClearInitialOnEdit) return; // values came from the initialMedida prop
-    const metricComplete = width.length === 3 && profile.length === 2 && rim.length === 2;
-    if (!metricComplete && !flotationEquivalent) return;
-    if (sinCatalogo) return;
+    if (!mw || !mp || !mr || shouldClearInitialOnEdit) return;
+    let vivo = true;
     const t = setTimeout(() => {
-      if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
-      setShowPopular(false);
-      if (flotationEquivalent) rememberFlotationOrigin();
-      const href = flotationEquivalent
-        ? sizeSearchHref(String(flotationEquivalent.width), String(flotationEquivalent.profile), String(flotationEquivalent.rim), economicosRef.current)
-        : sizeSearchHref(width, profile, rim, economicosRef.current);
-      router.push(href);
-    }, 300);
+      fetch(`/api/medida-vehiculos?w=${mw}&p=${mp}&r=${mr}`)
+        .then((res) => (res.ok ? res.json() : { vehiculos: [] }))
+        .then((d: { vehiculos?: { brand: string; model: string }[] }) => {
+          if (vivo) setVehiculos(d.vehiculos ?? []);
+        })
+        .catch(() => {});
+    }, 250);
+    return () => {
+      vivo = false;
+      clearTimeout(t);
+      setVehiculos([]);
+    };
+  }, [mw, mp, mr, shouldClearInitialOnEdit]);
+
+  // Registro de búsquedas sin resultado (no está en catálogo o no tiene stock):
+  // dice qué medidas piden y no tenemos. Una vez por medida y por sesión, y con
+  // un respiro para no anotar lo que se corrige enseguida. Ver la ruta de la API.
+  const tipoSinResultado = sinCatalogo ? "sin_catalogo" : sinStock ? "sin_stock" : null;
+  const huboAdvertencia = !!sizeWarning;
+  const esFlotation = !!flotationEquivalent;
+  useEffect(() => {
+    if (!tipoSinResultado || !mw || !mp || !mr || shouldClearInitialOnEdit) return;
+    const medida = `${mw}-${mp}-r${mr}`;
+    const t = setTimeout(() => {
+      const key = `trivium:sin-resultado:${tipoSinResultado}:${medida}`;
+      try {
+        if (sessionStorage.getItem(key)) return;
+        sessionStorage.setItem(key, "1");
+      } catch {
+        // Sin sessionStorage: se anota igual (puede repetirse en la sesión).
+      }
+      fetch("/api/busqueda-sin-resultado", {
+        method: "POST",
+        keepalive: true,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ medida, tipo: tipoSinResultado, estandar: !huboAdvertencia, flotation: esFlotation, origen: window.location.pathname }),
+      }).catch(() => {});
+    }, 1500);
     return () => clearTimeout(t);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [width, profile, rim, flotationEquivalent, sinCatalogo]);
+  }, [tipoSinResultado, mw, mp, mr, shouldClearInitialOnEdit, huboAdvertencia, esFlotation]);
+
+  // Perfiles y rodados que existen para lo ya escrito, con stock marcado.
+  const perfilesConStock = new Map<number, boolean>(); // perfil -> ¿hay stock con este ancho?
+  if (catalogo && !isFlotation && width.length === 3) {
+    for (const m of catalogo) if (!m.c && String(m.w) === width) perfilesConStock.set(m.p, (perfilesConStock.get(m.p) ?? false) || m.s > 0);
+  }
+  const rodadosDisponibles = (() => {
+    const mapa = new Map<number, { s: number; n: number }>();
+    if (catalogo && !isFlotation && width.length === 3 && profile.length === 2) {
+      for (const m of catalogo) {
+        if (m.c || String(m.w) !== width || String(m.p) !== profile) continue;
+        const e = mapa.get(m.r) ?? { s: 0, n: 0 };
+        e.s += m.s;
+        e.n += m.n;
+        mapa.set(m.r, e);
+      }
+    }
+    return [...mapa.entries()].sort((a, b) => a[0] - b[0]);
+  })();
 
   const performSearch = (w: string, p: string, rVal: string) => {
     if (!w && !p && !rVal) return;
@@ -314,6 +409,13 @@ export function TireSizeSearch({
       document.activeElement.blur();
     }
     setShowPopular(false); // Ocultar dropdown después de búsqueda
+    if (w.length === 3 && p.length === 2 && rVal.length === 2) {
+      try {
+        localStorage.setItem("trivium:ultima-medida", `${w}-${p}-${rVal}`);
+      } catch {
+        // Sin localStorage: no se recuerda, no es crítico.
+      }
+    }
     router.push(sizeSearchHref(w, p, rVal, economicosRef.current));
   };
 
@@ -476,6 +578,17 @@ export function TireSizeSearch({
     }
   };
 
+  // Pegar "205/55R16", "205 55 16" o "205-55-R16" en cualquier campo carga los tres.
+  function handlePaste(e: React.ClipboardEvent) {
+    const m = e.clipboardData.getData("text").match(/(\d{3})\s*[/\-x ]\s*(\d{2})\s*(?:zr|r|-)?\s*(\d{2})/i);
+    if (!m) return;
+    e.preventDefault();
+    setShouldClearInitialOnEdit(false);
+    setWidth(m[1]);
+    setProfile(m[2]);
+    setRim(m[3]);
+  }
+
   const measureInputClass = "w-full min-w-0 bg-white border-2 border-slate-300 rounded-xl px-2 sm:px-3 py-3 text-navy-950 font-black text-center shadow-sm transition-all outline-none placeholder:text-slate-600 focus:bg-white focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20 focus:shadow-lg focus:shadow-orange-500/10";
   const measureSeparatorClass = "flex h-[52px] items-center justify-center text-lg font-black text-slate-500";
   
@@ -492,12 +605,16 @@ export function TireSizeSearch({
   };
 
   function startVoiceForMeasure() {
-    // Borrar todos los valores cuando se activa el reconocimiento de voz
-    setWidth(""); setProfile(""); setRim("");
-    
     const Speech = (window as SpeechRecognitionWindow).SpeechRecognition || (window as SpeechRecognitionWindow).webkitSpeechRecognition;
-    if (!Speech) return alert('Tu navegador no soporta reconocimiento de voz');
+    if (!Speech) {
+      // Antes era un alert() que bloqueaba la página (y ya había borrado lo escrito).
+      setVoiceError("Tu navegador no permite ingresar la medida por voz. Escribila o buscá por tu auto.");
+      return;
+    }
+    setVoiceError(null);
     if (recognitionRef.current) { recognitionRef.current.stop(); recognitionRef.current = null; setListening(false); return; }
+    // Lo escrito se reemplaza recién cuando llega algo dicho, no al tocar el micrófono.
+    let limpiado = false;
     const r = new Speech(); r.lang = 'es-AR'; r.interimResults = false; r.maxAlternatives = 1;
     r.continuous = true;
     
@@ -513,6 +630,7 @@ export function TireSizeSearch({
     };
 
     r.onresult = (ev) => {
+      if (!limpiado) { limpiado = true; setWidth(""); setProfile(""); setRim(""); }
       let fullTranscript = '';
       for (let i = 0; i < ev.results.length; i++) {
         fullTranscript += (ev.results[i][0].transcript || '') + ' ';
@@ -564,12 +682,9 @@ export function TireSizeSearch({
         </p>
       )}
       {!hideLearnLink && (
-        <p className={`text-slate-600 ${compact ? 'text-xs mb-2' : 'text-sm mb-3'}`}>
-          ¿No sabés tu medida?{" "}
-          <Link href="/blog/como-leer-medida-neumatico" className="font-bold text-red-600 underline underline-offset-2 hover:text-red-700">
-            Aprendé a leerla acá
-          </Link>
-        </p>
+        <div className={compact ? "mb-2" : "mb-3"}>
+          <MedidaHelpDialog compact={compact} />
+        </div>
       )}
 
       <div
@@ -595,8 +710,24 @@ export function TireSizeSearch({
         />
       </div>
 
+      {ultima && !hasInput && /^\d{3}-\d{2}-\d{2}$/.test(ultima) && (
+        <button
+          type="button"
+          onClick={() => {
+            const [w, p, r] = ultima.split("-");
+            setShouldClearInitialOnEdit(false);
+            setWidth(w);
+            setProfile(p);
+            setRim(r);
+          }}
+          className="mb-3 inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-3.5 py-1.5 text-sm font-bold text-navy-800 hover:border-orange-400 hover:text-orange-600"
+        >
+          <span aria-hidden="true">↺</span> Tu última medida: {ultima.split("-")[0]}/{ultima.split("-")[1]} R{ultima.split("-")[2]}
+        </button>
+      )}
+
       <div className="flex flex-col gap-3">
-        <div ref={containerRef} className="relative">
+        <div ref={containerRef} className="relative" onPaste={handlePaste}>
           {compact ? (
             // Compact: single DOM — 3-column + button on mobile, stacked on desktop
             <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)_auto_minmax(0,1fr)_auto] lg:grid-cols-1 gap-2">
@@ -767,15 +898,88 @@ export function TireSizeSearch({
             </div>
           )}
 
-          {sinCatalogo && medidaObjetivo && (
+          {perfilesConStock.size > 0 && profile.length < 2 && (
+            <div className="mt-2" aria-label={`Perfiles disponibles con ancho ${width}`}>
+              <p className="mb-1 text-[10px] font-black uppercase tracking-widest text-slate-500">Perfiles que hay con {width}</p>
+              <div className="flex flex-wrap gap-1.5">
+                {[...perfilesConStock.entries()].sort((a, b) => a[0] - b[0]).map(([pf, hay]) => (
+                  <button
+                    key={pf}
+                    type="button"
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() => {
+                      setProfile(String(pf));
+                      if (rimRef.current) { autoAdvancingRef.current = true; rimRef.current.focus(); }
+                    }}
+                    className="inline-flex items-center gap-1.5 rounded-full border border-slate-300 bg-white px-3 py-1 text-sm font-black text-navy-800 hover:border-orange-400 hover:text-orange-600"
+                  >
+                    <span aria-hidden="true" className={`h-1.5 w-1.5 rounded-full ${hay ? "bg-emerald-500" : "bg-slate-300"}`} />
+                    {pf}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {rodadosDisponibles.length > 0 && rim.length < 2 && (
+            <div className="mt-2" aria-label={`Rodados disponibles para ${width}/${profile}`}>
+              <p className="mb-1 text-[10px] font-black uppercase tracking-widest text-slate-500">Rodados para {width}/{profile}</p>
+              <div className="flex flex-wrap gap-1.5">
+                {rodadosDisponibles.map(([rd, e]) => (
+                  <button
+                    key={rd}
+                    type="button"
+                    onMouseDown={(ev) => ev.preventDefault()}
+                    onClick={() => setRim(String(rd))}
+                    className="inline-flex items-center gap-1.5 rounded-full border border-slate-300 bg-white px-3 py-1 text-sm font-black text-navy-800 hover:border-orange-400 hover:text-orange-600"
+                  >
+                    <span aria-hidden="true" className={`h-1.5 w-1.5 rounded-full ${e.s > 0 ? "bg-emerald-500" : "bg-slate-300"}`} />
+                    R{rd}
+                    <span className="text-xs font-bold text-slate-500">{e.s > 0 ? `${e.s} con stock` : "sin stock"}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {previewOk && medidaInfo && medidaInfo.s > 0 && medidaObjetivo && (
+            <div role="status" className="mt-2 rounded-xl border border-emerald-200 bg-emerald-50 p-4 shadow-lg">
+              <p className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                <span className="text-xl font-black text-navy-900">
+                  {medidaObjetivo.w}/{medidaObjetivo.p} R{medidaObjetivo.r}
+                </span>
+                <span className="text-sm font-bold text-emerald-700">
+                  {medidaInfo.s} {medidaInfo.s === 1 ? "modelo" : "modelos"} con stock · desde {formatPrecio(medidaInfo.d ?? 0)}
+                </span>
+              </p>
+              {vehiculos.length > 0 && (
+                <p className="mt-1 text-sm text-slate-600">
+                  Es la medida de: <strong className="text-navy-900">{vehiculos.map((v) => `${v.brand} ${v.model}`).join(", ")}</strong>
+                </p>
+              )}
+              <button
+                type="button"
+                onClick={executeSearch}
+                className="mt-3 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-orange-500 px-4 text-sm font-black text-white shadow-md shadow-orange-500/20 transition-colors hover:bg-orange-600"
+              >
+                Ver neumáticos {medidaObjetivo.w}/{medidaObjetivo.p} R{medidaObjetivo.r} →
+              </button>
+            </div>
+          )}
+
+          {(sinCatalogo || (sinStock && previewOk)) && medidaObjetivo && (
             <div role="status" className="mt-2 rounded-xl border border-slate-200 bg-white p-4 text-sm shadow-lg">
               <p className="font-black text-navy-900">
-                Hoy no tenemos la {medidaObjetivo.w}/{medidaObjetivo.p} R{medidaObjetivo.r} en catálogo
+                {sinCatalogo
+                  ? `Hoy no tenemos la ${medidaObjetivo.w}/${medidaObjetivo.p} R${medidaObjetivo.r} en catálogo`
+                  : `La ${medidaObjetivo.w}/${medidaObjetivo.p} R${medidaObjetivo.r} no tiene stock hoy`}
               </p>
               <p className="mt-1 text-slate-600">
                 {sizeWarning
                   ? "Además, no parece una medida estándar: revisá en el lateral del neumático o en la calcomanía de la puerta del conductor que la hayas leído bien."
-                  : "Es una medida válida, pero no está entre las que vendemos ahora. Podemos consultarla o conseguirla."}
+                  : sinCatalogo
+                    ? "Es una medida válida, pero no está entre las que vendemos ahora. Podemos consultarla o conseguirla."
+                    : "La tenemos en catálogo pero hoy está agotada. Podemos conseguirla; mientras tanto, estas equivalentes sí tienen stock."}
               </p>
               {alternativas.length > 0 && (
                 <div className="mt-3">
@@ -912,6 +1116,26 @@ export function TireSizeSearch({
               <path fillRule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
             </svg>
             {sizeWarning}
+          </p>
+        )}
+
+        {sizeFix && (
+          <button
+            type="button"
+            onClick={() => {
+              if (sizeFix.seg === "width") setWidth(sizeFix.value);
+              else if (sizeFix.seg === "aspect") setProfile(sizeFix.value);
+              else setRim(sizeFix.value);
+            }}
+            className="self-start rounded-full border border-orange-300 bg-orange-50 px-3 py-1 text-xs font-black text-orange-800 hover:bg-orange-100"
+          >
+            ¿Quisiste decir {sizeFix.value}? Corregir
+          </button>
+        )}
+
+        {voiceError && (
+          <p role="alert" className="text-xs font-medium leading-snug text-red-700">
+            {voiceError}
           </p>
         )}
 
