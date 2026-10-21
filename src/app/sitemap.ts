@@ -35,11 +35,13 @@ function url(
   path: string,
   priority: number,
   changeFrequency: Entry["changeFrequency"],
-  lastModified?: Date | string
+  lastModified?: Date | string,
+  images?: string[]
 ): Entry {
   return {
     url: `${SITE_URL}${path}`,
     ...(lastModified ? { lastModified } : {}),
+    ...(images ? { images } : {}),
     changeFrequency,
     priority,
   };
@@ -125,8 +127,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const servicios: Entry[] = [...SERVICES, ROTACION_SERVICE].map((s) => url(`/servicios/${s.id}`, 0.7, "monthly"));
 
+  // Imágenes propias que queremos que se descubran en la búsqueda de imágenes.
+  const POST_IMAGES: Record<string, string[]> = {
+    "como-leer-medida-neumatico": [`${SITE_URL}/como-leer-medida-neumatico-205-55-r16.webp`],
+  };
   const posts: Entry[] = BLOG_POSTS.map((p) =>
-    url(`/blog/${p.slug}`, 0.6, "monthly", p.date)
+    url(`/blog/${p.slug}`, 0.6, "monthly", p.date, POST_IMAGES[p.slug])
   );
 
   const fichasProducto: Entry[] = productos.map((p) =>

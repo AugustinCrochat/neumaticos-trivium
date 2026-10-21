@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { BlogShopLinks } from "@/components/blog/BlogShop";
-import { CatalogWidget } from "@/components/blog/CatalogWidget";
+import { SizesCatalog } from "@/components/blog/SizesCatalog";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { TireSizeSearch } from "@/components/ui/TireSizeSearch";
 import { blogMeta } from "@/lib/blog-meta";
@@ -61,6 +61,9 @@ const CATALOG_BY_USE = [
   { title: "Sedanes y compactos", sizes: [["185", "65", "15"], ["195", "65", "15"], ["195", "55", "16"], ["205", "55", "16"]] },
   { title: "SUV y pickups", sizes: [["215", "65", "16"], ["225", "65", "17"], ["245", "70", "16"], ["265", "65", "17"]] },
 ] as const;
+
+// Medidas que muestra la vidriera; las que no tengan stock se omiten solas.
+const CATALOG_SIZES = CATALOG_BY_USE.flatMap((g) => g.sizes.map(([width, profile, rim]) => ({ width: Number(width), profile: Number(profile), rim: Number(rim) })));
 
 const RIMS = [13, 14, 15, 16, 17, 18];
 
@@ -359,25 +362,9 @@ export default function ComoLeerMedidaPage() {
             <TireSizeSearch compact hideLearnLink />
           </div>
 
-          <div className="mt-8">
-            <CatalogWidget size={{ width: 205, profile: 55, rim: 16 }} title="En stock en 205/55 R16" limit={4} />
-          </div>
-
-          <div className="mt-10 grid gap-4 md:grid-cols-3">
-            {CATALOG_BY_USE.map((group) => (
-              <div key={group.title} className="rounded-2xl border border-white/10 bg-white/[.06] p-5">
-                <h3 className="text-lg font-black">{group.title}</h3>
-                <ul className="mt-4 grid grid-cols-2 gap-2">
-                  {group.sizes.map(([w, p, r]) => (
-                    <li key={`${w}${p}${r}`}>
-                      <Link href={sizeSearchHref(w, p, r)} className="block rounded-xl border border-white/15 bg-white/10 px-3 py-2.5 text-center text-sm font-black !text-white !no-underline transition-colors hover:border-orange-400 hover:bg-orange-500">
-                        {w}/{p} R{r}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+          <div className="mt-10">
+            <h3 className="mb-5 text-2xl font-black">Lo más barato en stock, medida por medida</h3>
+            <SizesCatalog sizes={CATALOG_SIZES} />
           </div>
 
           <div className="mt-6">
