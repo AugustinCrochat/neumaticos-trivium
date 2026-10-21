@@ -9,7 +9,7 @@ const money = (n: number) =>
 
 /**
  * Vidriera de varias medidas a la vez: de cada una muestra la cubierta más
- * barata con stock, y debajo un atajo por medida con la cantidad de opciones.
+ * barata con stock firme, y debajo un atajo por medida con la cantidad de opciones.
  * Las medidas sin stock se omiten solas, así la sección nunca queda con huecos
  * ni promete algo que no hay; se actualiza con cada deploy (ver sitemap.ts).
  */
@@ -20,7 +20,10 @@ export async function SizesCatalog({ sizes, limit = 8, branch = "arguello" }: { 
     .map((size) => {
       const items = productos
         .filter((p) => p.size.width === size.width && p.size.profile === size.profile && p.size.rim === size.rim)
-        .sort((a, b) => a.price - b.price);
+        // Primero los que tienen colchón de stock (3 o más): el catálogo se
+        // congela en cada build y uno con 1 unidad puede agotarse antes del
+        // próximo, dejando una tarjeta "Sin stock" en una vidriera de stock.
+        .sort((a, b) => Number((b.stock ?? 0) >= 3) - Number((a.stock ?? 0) >= 3) || a.price - b.price);
       return { size, items };
     })
     .filter((r) => r.items.length > 0);
@@ -43,7 +46,7 @@ export async function SizesCatalog({ sizes, limit = 8, branch = "arguello" }: { 
             >
               {size.width}/{size.profile} R{size.rim}
               <span className="text-xs font-bold text-slate-300">
-                {items.length} {items.length === 1 ? "opción" : "opciones"} · desde {money(items[0].price)}
+                {items.length} {items.length === 1 ? "opción" : "opciones"} · desde {money(Math.min(...items.map((i) => i.price)))}
               </span>
             </Link>
           </li>
