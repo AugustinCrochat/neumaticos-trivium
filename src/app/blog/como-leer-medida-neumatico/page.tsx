@@ -170,8 +170,7 @@ export default function ComoLeerMedidaPage() {
       <JsonLd data={jsonLd} />
 
       {/* Hero: respuesta directa + infografía */}
-      <section className="relative isolate overflow-hidden bg-navy-950 py-12 text-white md:py-20">
-        <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_85%_5%,rgba(255,30,0,.35),transparent_31%),radial-gradient(circle_at_10%_80%,rgba(61,128,200,.22),transparent_32%)]" />
+      <section className="relative isolate overflow-hidden bg-black py-12 text-white md:py-20">
         <div className="mx-auto grid max-w-6xl gap-10 px-4 lg:grid-cols-[.9fr_1.1fr] lg:items-center">
           <div>
             <p className="mb-4 text-xs font-black uppercase tracking-[0.22em] text-orange-400">Guía práctica de neumáticos</p>
@@ -254,7 +253,7 @@ export default function ComoLeerMedidaPage() {
           <SectionHead kicker="Más allá de la medida" title="205/55 R16 91V: el código completo del flanco">
             Después de la medida vienen otros códigos. Estos son los que más vas a ver y qué significan.
           </SectionHead>
-          <div className="rounded-3xl bg-navy-950 p-6 text-white shadow-2xl sm:p-8">
+          <div className="rounded-3xl bg-black p-6 text-white shadow-2xl sm:p-8">
             <p className="text-center text-4xl font-black italic tracking-tight sm:text-6xl">
               <span className="text-orange-500">205</span><span className="text-slate-500">/</span><span className="text-navy-300">55</span> <span className="text-slate-300">R</span><span className="text-orange-300">16</span> <span className="text-white">91V</span>
             </p>
@@ -300,7 +299,7 @@ export default function ComoLeerMedidaPage() {
           <div className="mt-8 overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
             <table className="w-full min-w-[520px] text-left text-sm">
               <caption className="sr-only">Altura de flanco y diámetro total de medidas de neumáticos comunes</caption>
-              <thead className="bg-navy-950 text-white">
+              <thead className="bg-black text-white">
                 <tr>
                   <th scope="col" className="px-5 py-3 font-black">Medida</th>
                   <th scope="col" className="px-5 py-3 font-black">Flanco</th>
@@ -348,7 +347,7 @@ export default function ComoLeerMedidaPage() {
       </section>
 
       {/* Catálogo */}
-      <section id="catalogo" className="scroll-mt-16 bg-navy-950 py-14 text-white md:py-20">
+      <section id="catalogo" className="scroll-mt-16 bg-black py-14 text-white md:py-20">
         <div className="mx-auto max-w-6xl px-4">
           <div className="flex flex-wrap items-end justify-between gap-5">
             <div className="max-w-2xl">
