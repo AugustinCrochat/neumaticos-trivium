@@ -41,7 +41,7 @@ export function Header() {
       {/* Main nav */}
       <nav className="bg-black shadow-lg">
         <div className="max-w-7xl 2xl:max-w-[96rem] mx-auto px-4">
-          <div className="flex items-center h-14 gap-6 md:h-[4.5rem]">
+          <div className="flex items-center h-14 gap-6 md:h-[4.5rem] md:gap-12 lg:gap-16">
             {/* Logo */}
             <Link href="/" className="flex-shrink-0">
               <Image
@@ -55,7 +55,7 @@ export function Header() {
             </Link>
 
             {/* Desktop nav links */}
-            <div className="hidden md:flex items-center gap-1 flex-1">
+            <div className="hidden md:flex items-center gap-1.5 flex-1">
               {NAV_LINKS.map((link) => {
                 const active = isActive(pathname, link.match);
                 return (
@@ -68,10 +68,12 @@ export function Header() {
                         ? `px-4 py-2 rounded-lg text-sm font-black text-white transition-colors ${
                             active ? "bg-white !text-[#ff1e00]" : "bg-[#ff1e00] hover:bg-[#cc1800]"
                           }`
-                        : `px-4 py-2 rounded-lg text-sm transition-colors ${
+                        : // Seleccionado: fondo tenue, texto blanco en negrita y barra roja
+                          // debajo; al pasar el mouse la barra crece desde la izquierda.
+                          `relative rounded-lg px-5 py-2 text-sm transition-colors after:absolute after:inset-x-5 after:bottom-0.5 after:h-0.5 after:origin-left after:rounded-full after:bg-[#ff1e00] after:transition-transform after:duration-200 ${
                             active
-                              ? "bg-white font-bold text-black"
-                              : "font-medium text-zinc-200 hover:text-white hover:bg-zinc-900"
+                              ? "bg-white/10 font-bold text-white after:scale-x-100"
+                              : "font-medium text-zinc-300 hover:bg-white/5 hover:text-white after:scale-x-0 hover:after:scale-x-100"
                           }`
                     }
                   >
@@ -141,10 +143,10 @@ export function Header() {
                       ? `block px-4 py-2.5 rounded-lg text-sm font-black text-white transition-colors ${
                           active ? "bg-white !text-[#ff1e00]" : "bg-[#ff1e00] hover:bg-[#cc1800]"
                         }`
-                      : `block px-4 py-2.5 rounded-lg text-sm transition-colors ${
+                      : `block rounded-lg border-l-4 px-4 py-2.5 text-sm transition-colors ${
                           active
-                            ? "bg-white font-bold text-black"
-                            : "font-medium text-zinc-200 hover:text-white hover:bg-zinc-900"
+                            ? "border-[#ff1e00] bg-white/10 font-bold text-white"
+                            : "border-transparent font-medium text-zinc-300 hover:bg-white/5 hover:text-white"
                         }`
                   }
                   onClick={() => setMenuOpen(false)}
