@@ -38,7 +38,7 @@ export function SearchModal({ onClose }: { onClose: () => void }) {
 
   useEffect(() => {
     if (!query.trim()) return;
-    // Debounce: sincroniza con el endpoint de búsqueda 250ms después de que
+    // Debounce: sincroniza con el endpoint de búsqueda 400ms después de que
     // el usuario deja de tipear, en vez de pegarle a la API en cada tecla.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setLoading(true);
@@ -67,7 +67,7 @@ export function SearchModal({ onClose }: { onClose: () => void }) {
           setTotal(0);
           setLoading(false);
         });
-    }, 250);
+    }, 400);
     return () => {
       cancelled = true;
       clearTimeout(timeout);
