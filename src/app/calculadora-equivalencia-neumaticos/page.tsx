@@ -200,29 +200,16 @@ export default async function CalculadoraEquivalenciaNeumaticosPage({ searchPara
     <div className="overflow-hidden bg-white">
       <JsonLd data={jsonLd} />
 
-      <section className="relative isolate bg-navy-950 pb-14 pt-10 text-white md:pb-20 md:pt-14">
+      <section className="relative isolate bg-navy-950 pb-8 pt-6 text-white md:pb-12 md:pt-8">
         <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_88%_0%,rgba(255,30,0,.32),transparent_32%),radial-gradient(circle_at_8%_90%,rgba(61,128,200,.22),transparent_34%)]" />
         <div className="mx-auto max-w-5xl px-4">
-          <nav aria-label="Migas de pan" className="mb-6 text-sm text-slate-400">
+          <nav aria-label="Migas de pan" className="mb-3 text-sm text-slate-400">
             <Link href="/" className="hover:text-white">Inicio</Link> <span aria-hidden="true">/</span> <span className="text-slate-200">Calculadora de equivalencias</span>
           </nav>
-          <div className="max-w-3xl">
-            <p className="mb-3 text-sm font-black uppercase tracking-widest text-orange-400">{shared ? "Equivalencia compartida" : "Herramienta gratuita"}</p>
-            <h1 className="text-4xl font-black leading-[1.02] tracking-tight md:text-6xl">
-              {shared ? <>¿{from} es compatible con {to}?</> : <>Calculadora de equivalencias de neumáticos</>}
-            </h1>
-            <p className="mt-5 text-lg leading-relaxed text-slate-300">
-              {shared
-                ? `Te compartieron esta comparación. Mirá el resultado abajo y, si son compatibles, buscá stock de ${to}.`
-                : "Escribí tu medida y mirá al instante si otra es equivalente: diferencia de diámetro, error del velocímetro y alternativas con stock y precio."}
-            </p>
-            <ul className="mt-6 flex flex-wrap gap-2 text-sm font-black">
-              {["Resultado inmediato", "Con precio y stock real", "Sin registrarte"].map((t) => (
-                <li key={t} className="rounded-full border border-white/15 bg-white/10 px-4 py-1.5">✓ {t}</li>
-              ))}
-            </ul>
-          </div>
-          <div id="calculadora" className="mt-8 scroll-mt-20">
+          <h1 className="text-3xl font-black leading-tight tracking-tight md:text-4xl">
+            {shared ? <>¿{from} es compatible con {to}?</> : <>Calculadora de equivalencias de neumáticos</>}
+          </h1>
+          <div id="calculadora" className="mt-5 scroll-mt-20">
             <EquivalenceCalculator products={productos} />
           </div>
         </div>

@@ -59,14 +59,14 @@ function SizeInput({ title, tone, value, onChange }: { title: string; tone: "red
   const pRef = useRef<HTMLInputElement>(null);
   const rRef = useRef<HTMLInputElement>(null);
   const digits = (s: string, max: number) => s.replace(/\D/g, "").slice(0, max);
-  const field = "w-full rounded-xl border-2 border-slate-200 bg-white px-2 py-3 text-center text-2xl font-black text-navy-900 outline-none transition-colors focus:border-orange-500 focus:ring-4 focus:ring-orange-500/15 sm:text-3xl";
+  const field = "w-full rounded-xl border-2 border-slate-200 bg-white px-2 py-2 text-center text-xl font-black text-navy-900 outline-none transition-colors focus:border-orange-500 focus:ring-4 focus:ring-orange-500/15 sm:text-2xl";
   const onPaste = (e: React.ClipboardEvent) => {
     const parsed = parsePasted(e.clipboardData.getData("text"));
     if (parsed) { e.preventDefault(); onChange(parsed); }
   };
   return (
-    <div className={`rounded-2xl border-t-4 bg-slate-50 p-4 sm:p-5 ${tone === "red" ? "border-orange-500" : "border-navy-700"}`}>
-      <p className="mb-3 text-center text-xs font-black uppercase tracking-widest text-slate-500">{title}</p>
+    <div className={`rounded-2xl border-t-4 bg-slate-50 p-3 sm:p-4 ${tone === "red" ? "border-orange-500" : "border-navy-700"}`}>
+      <p className="mb-2 text-center text-xs font-black uppercase tracking-widest text-slate-500">{title}</p>
       <div className="grid grid-cols-[1.25fr_auto_1fr_auto_1fr] items-center gap-1.5 sm:gap-2" onPaste={onPaste}>
         <input aria-label={`${title}: ancho en milímetros`} inputMode="numeric" autoComplete="off" value={value.w} placeholder="195" className={field}
           onFocus={(e) => e.target.select()}
@@ -93,7 +93,7 @@ function Gauge({ diff }: { diff: number }) {
   const left = ((clamped + 5) / 10) * 100;
   const ok = Math.abs(diff) <= TOLERANCE;
   return (
-    <div className="mt-5" role="img" aria-label={`Diferencia de diámetro ${signed(diff)} por ciento; tolerancia de más o menos 3 por ciento`}>
+    <div className="mt-4" role="img" aria-label={`Diferencia de diámetro ${signed(diff)} por ciento; tolerancia de más o menos 3 por ciento`}>
       <div className="relative h-3 rounded-full bg-red-200">
         <div className="absolute inset-y-0 rounded-full bg-emerald-400" style={{ left: "20%", width: "60%" }} />
         <div className={`absolute top-1/2 h-6 w-6 -translate-x-1/2 -translate-y-1/2 rounded-full border-4 border-white shadow-md ${ok ? "bg-emerald-600" : "bg-red-600"}`} style={{ left: `${left}%` }} />
@@ -217,19 +217,19 @@ export function EquivalenceCalculator({ products }: { products: TireProduct[] })
 
   const tab = (m: "check" | "list", text: string) => (
     <button type="button" role="tab" aria-selected={mode === m} onClick={() => setMode(m)}
-      className={`flex-1 rounded-xl px-3 py-3 text-sm font-black transition-all sm:text-base ${mode === m ? "bg-navy-900 text-white shadow-md" : "text-slate-600 hover:bg-white hover:text-slate-900"}`}>
+      className={`flex-1 rounded-xl px-3 py-2 text-sm font-black transition-all sm:text-base ${mode === m ? "bg-navy-900 text-white shadow-md" : "text-slate-600 hover:bg-white hover:text-slate-900"}`}>
       {text}
     </button>
   );
 
   return (
-    <div className="rounded-3xl bg-white p-4 text-slate-900 shadow-2xl shadow-black/30 sm:p-7">
+    <div className="rounded-3xl bg-white p-3 text-slate-900 shadow-2xl shadow-black/30 sm:p-5">
       <div role="tablist" aria-label="Modo de cálculo" className="flex gap-1.5 rounded-2xl bg-slate-100 p-1.5">
         {tab("check", "Comparar 2 medidas")}
         {tab("list", "Ver equivalentes en stock")}
       </div>
 
-      <div className="mt-6 grid items-center gap-4 md:grid-cols-[1fr_auto_1fr]">
+      <div className="mt-3 grid items-center gap-3 md:grid-cols-[1fr_auto_1fr]">
         <SizeInput title="Tu medida actual" tone="red" value={a} onChange={setA} />
         {mode === "check" ? (
           <button type="button" aria-label="Intercambiar las dos medidas" onClick={() => { setA(b); setB(a); }}
@@ -244,12 +244,11 @@ export function EquivalenceCalculator({ products }: { products: TireProduct[] })
         )}
       </div>
 
-      <div className="mt-4">
-        <p className="mb-2 text-xs font-black uppercase tracking-widest text-slate-400">Medidas frecuentes</p>
-        <div className="flex flex-wrap gap-2">
+      <div className="mt-3">
+        <div className="flex flex-wrap gap-1.5" aria-label="Medidas frecuentes">
           {PRESETS.map(([w, p, r]) => (
             <button key={w + p + r} type="button" onClick={() => setA({ w, p, r })}
-              className={`rounded-full border px-3.5 py-1.5 text-sm font-black transition-colors ${a.w === w && a.p === p && a.r === r ? "border-orange-500 bg-orange-500 text-white" : "border-slate-200 bg-white text-navy-800 hover:border-orange-400 hover:text-orange-600"}`}>
+              className={`rounded-full border px-3 py-1 text-sm font-black transition-colors ${a.w === w && a.p === p && a.r === r ? "border-orange-500 bg-orange-500 text-white" : "border-slate-200 bg-white text-navy-800 hover:border-orange-400 hover:text-orange-600"}`}>
               {w}/{p} R{r}
             </button>
           ))}
@@ -260,14 +259,14 @@ export function EquivalenceCalculator({ products }: { products: TireProduct[] })
 
       {/* Modo comparar */}
       {mode === "check" && s1 && (
-        <div className="mt-5">
+        <div className="mt-3">
           {suggestions.length > 0 && (
             <div>
-              <p className="mb-2 text-xs font-black uppercase tracking-widest text-slate-400">Equivalentes de {label(s1)}: tocá para comparar</p>
-              <div className="flex flex-wrap gap-2">
+              <p className="mb-1.5 text-xs font-black uppercase tracking-widest text-slate-400">Equivalentes de {label(s1)}: tocá para comparar</p>
+              <div className="flex flex-wrap gap-1.5">
                 {suggestions.map((s) => (
                   <button key={slug(s)} type="button" onClick={() => setB({ w: String(s.width), p: String(s.profile), r: String(s.rim) })}
-                    className="rounded-full border border-navy-200 bg-navy-50 px-3.5 py-1.5 text-sm font-black text-navy-800 transition-colors hover:border-navy-700 hover:bg-navy-900 hover:text-white">
+                    className="rounded-full border border-navy-200 bg-navy-50 px-3 py-1 text-sm font-black text-navy-800 transition-colors hover:border-navy-700 hover:bg-navy-900 hover:text-white">
                     {label(s)}
                   </button>
                 ))}
@@ -276,7 +275,7 @@ export function EquivalenceCalculator({ products }: { products: TireProduct[] })
           )}
 
           {s2 && diff !== null && verdict && (
-            <div className={`mt-6 rounded-2xl border-2 p-5 sm:p-6 ${verdict === "ok" ? "border-emerald-300 bg-emerald-50" : verdict === "rim" ? "border-orange-300 bg-orange-50" : "border-red-300 bg-red-50"}`} aria-live="polite">
+            <div className={`mt-4 rounded-2xl border-2 p-4 sm:p-5 ${verdict === "ok" ? "border-emerald-300 bg-emerald-50" : verdict === "rim" ? "border-orange-300 bg-orange-50" : "border-red-300 bg-red-50"}`} aria-live="polite">
               <div className="flex items-start gap-4">
                 <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-white ${verdict === "ok" ? "bg-emerald-600" : verdict === "rim" ? "bg-orange-500" : "bg-red-600"}`}>
                   {verdict === "ok" ? <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
@@ -301,7 +300,7 @@ export function EquivalenceCalculator({ products }: { products: TireProduct[] })
 
               <Gauge diff={diff} />
 
-              <dl className="mt-5 grid grid-cols-2 gap-3 text-sm sm:grid-cols-4">
+              <dl className="mt-4 grid grid-cols-2 gap-3 text-sm sm:grid-cols-4">
                 {[
                   ["Ancho", `${s1.width} → ${s2.width} mm`],
                   ["Flanco", `${num(sidewall(s1))} → ${num(sidewall(s2))} mm`],
@@ -315,7 +314,7 @@ export function EquivalenceCalculator({ products }: { products: TireProduct[] })
                 ))}
               </dl>
 
-              <div className="mt-5 flex flex-wrap items-center gap-3">
+              <div className="mt-4 flex flex-wrap items-center gap-3">
                 <Link href={`/neumaticos/${slug(s2)}`} className="rounded-xl bg-orange-500 px-5 py-3 text-sm font-black text-white transition-colors hover:bg-orange-600">
                   Ver neumáticos {label(s2)} →
                 </Link>
