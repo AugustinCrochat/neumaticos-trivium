@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
@@ -15,6 +15,15 @@ const NAV_LINKS = [
   { href: "/contacto", label: "Contacto", match: ["/contacto"] },
 ];
 
+// Enlaces del pie que no están en la barra principal, bajo "Más".
+const MORE_LINKS = [
+  { href: "/neumaticos-baratos", label: "Neumáticos baratos" },
+  { href: "/neumaticos", label: "Neumáticos por medida" },
+  { href: "/neumaticos/at", label: "Neumáticos A/T" },
+  { href: "/neumaticos/carga", label: "Neumáticos de carga" },
+  { href: "/blog", label: "Blog" },
+];
+
 const isActive = (pathname: string, match: string[]) =>
   match.some((m) => pathname === m || pathname.startsWith(`${m}/`));
 
@@ -27,6 +36,23 @@ export function Header() {
   // Histéresis: se achica pasados 60px y vuelve a crecer recién cerca del tope,
   // porque el cambio de alto mueve el contenido y de otro modo parpadearía.
   const [compact, setCompact] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
+  const moreRef = useRef<HTMLDivElement | null>(null);
+  const [mobileMoreOpen, setMobileMoreOpen] = useState(false);
+  useEffect(() => {
+    if (!moreOpen) return;
+    const close = (e: MouseEvent | KeyboardEvent) => {
+      if (e instanceof KeyboardEvent) {
+        if (e.key === "Escape") setMoreOpen(false);
+      } else if (!moreRef.current?.contains(e.target as Node)) setMoreOpen(false);
+    };
+    document.addEventListener("mousedown", close);
+    document.addEventListener("keydown", close);
+    return () => {
+      document.removeEventListener("mousedown", close);
+      document.removeEventListener("keydown", close);
+    };
+  }, [moreOpen]);
   useEffect(() => {
     const onScroll = () => {
       const y = window.scrollY;
@@ -98,6 +124,47 @@ export function Header() {
                   </Link>
                 );
               })}
+
+              <div
+                ref={moreRef}
+                className="relative"
+                onMouseEnter={() => setMoreOpen(true)}
+                onMouseLeave={() => setMoreOpen(false)}
+              >
+                <button
+                  type="button"
+                  onClick={() => setMoreOpen((o) => !o)}
+                  aria-haspopup="menu"
+                  aria-expanded={moreOpen}
+                  className={`flex items-center gap-1 rounded-lg px-5 py-2 text-sm font-medium transition-colors ${
+                    moreOpen || isActive(pathname, ["/blog", "/neumaticos-baratos"])
+                      ? "bg-white/10 text-white"
+                      : "text-zinc-300 hover:bg-white/5 hover:text-white"
+                  }`}
+                >
+                  Más
+                  <svg className={`h-3.5 w-3.5 transition-transform ${moreOpen ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {moreOpen && (
+                  <div role="menu" className="absolute left-0 top-full z-50 w-60 pt-2">
+                    <div className="overflow-hidden rounded-xl border border-white/10 bg-black py-1.5 shadow-2xl">
+                      {MORE_LINKS.map((l) => (
+                        <Link
+                          key={l.href}
+                          href={l.href}
+                          role="menuitem"
+                          onClick={() => setMoreOpen(false)}
+                          className="block px-4 py-2.5 text-sm font-medium text-zinc-300 transition-colors hover:bg-white/10 hover:text-white"
+                        >
+                          {l.label}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
 
             <div className="flex items-center gap-3 ml-auto md:ml-0">
@@ -172,6 +239,28 @@ export function Header() {
                 </Link>
               );
             })}
+            <button
+              type="button"
+              onClick={() => setMobileMoreOpen((o) => !o)}
+              aria-expanded={mobileMoreOpen}
+              className="flex w-full items-center justify-between rounded-lg border-l-4 border-transparent px-4 py-2.5 text-sm font-medium text-zinc-300 hover:bg-white/5 hover:text-white"
+            >
+              Más
+              <svg className={`h-4 w-4 transition-transform ${mobileMoreOpen ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            {mobileMoreOpen &&
+              MORE_LINKS.map((l) => (
+                <Link
+                  key={l.href}
+                  href={l.href}
+                  onClick={() => setMenuOpen(false)}
+                  className="block rounded-lg border-l-4 border-transparent py-2.5 pl-8 pr-4 text-sm text-zinc-400 hover:bg-white/5 hover:text-white"
+                >
+                  {l.label}
+                </Link>
+              ))}
           </div>
         )}
       </nav>
