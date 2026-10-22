@@ -67,8 +67,11 @@ function SizeInput({ title, tone, value, onChange, placeholder, widthRef, onDone
     if (parsed) { e.preventDefault(); onChange(parsed); }
   };
   return (
-    <div className={`rounded-2xl border-t-4 bg-slate-50 p-3 sm:p-4 ${tone === "red" ? "border-orange-500" : "border-navy-700"}`}>
-      <p className="mb-2 text-center text-xs font-black uppercase tracking-widest text-slate-500">{title}</p>
+    <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3 shadow-sm ring-1 ring-inset ring-white sm:p-4">
+      <p className="mb-3 flex items-center justify-center gap-2 text-xs font-black uppercase tracking-widest text-slate-600">
+        <span aria-hidden="true" className={`h-2.5 w-2.5 rounded-full ${tone === "red" ? "bg-orange-500" : "bg-navy-700"}`} />
+        {title}
+      </p>
       <div className="grid grid-cols-[minmax(0,1.25fr)_auto_minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-1.5 sm:gap-2" onPaste={onPaste}>
         <input aria-label={`${title}: ancho en milímetros`} inputMode="numeric" autoComplete="off" ref={widthRef} value={value.w} placeholder={placeholder.w} className={field}
           onFocus={(e) => e.target.select()}
