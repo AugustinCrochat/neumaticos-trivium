@@ -63,8 +63,11 @@ body {
   color: var(--color-foreground);
   /* Cualquier elemento que se pase por unos px del viewport en mobile no
      debe agrandar toda la página — mejor recortarlo que dejar un espacio
-     vacío a la derecha. No afecta el header sticky (eso depende de overflow-y). */
+     vacío a la derecha. Con `hidden` el body pasa a ser un contenedor de
+     scroll (overflow-y se vuelve auto) y el header sticky deja de pegarse
+     al viewport; `clip` recorta igual sin crear contenedor de scroll. */
   overflow-x: hidden;
+  overflow-x: clip;
 }
 
 html {
@@ -73,6 +76,7 @@ html {
      hay que cortar el overflow horizontal en los dos para que valga en todos
      los navegadores. */
   overflow-x: hidden;
+  overflow-x: clip;
 }
 
 .trivium-user-pin {

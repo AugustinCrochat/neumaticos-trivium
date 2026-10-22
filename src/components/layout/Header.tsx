@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
@@ -23,6 +23,19 @@ export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const pathname = usePathname();
+  // Al bajar el header se achica (sin la franja roja, barra y logo más bajos).
+  // Histéresis: se achica pasados 60px y vuelve a crecer recién cerca del tope,
+  // porque el cambio de alto mueve el contenido y de otro modo parpadearía.
+  const [compact, setCompact] = useState(false);
+  useEffect(() => {
+    const onScroll = () => {
+      const y = window.scrollY;
+      setCompact((c) => (c ? y > 12 : y > 80));
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
     <header className="sticky top-0 z-40 w-full">
@@ -31,7 +44,11 @@ export function Header() {
           a comprar en otro lado sin taller propio. */}
       <Link
         href="/servicios"
-        className="block bg-[#ff1e00] px-4 py-1 text-center text-[11px] font-bold text-white transition-colors hover:bg-[#cc1800] md:text-xs"
+        aria-hidden={compact}
+        tabIndex={compact ? -1 : 0}
+        className={`block overflow-hidden bg-[#ff1e00] px-4 text-center text-[11px] font-bold text-white transition-all duration-200 hover:bg-[#cc1800] md:text-xs ${
+          compact ? "max-h-0 py-0" : "max-h-8 py-1"
+        }`}
       >
         {selectedBranch.apertura
           ? `Neumáticos Trivium ${selectedBranch.shortName} abre ${selectedBranch.apertura}`
@@ -41,7 +58,7 @@ export function Header() {
       {/* Main nav */}
       <nav className="bg-black shadow-lg">
         <div className="max-w-7xl 2xl:max-w-[96rem] mx-auto px-4">
-          <div className="flex items-center h-14 gap-6 md:h-[4.5rem] md:gap-12 lg:gap-16">
+          <div className={`flex items-center gap-6 transition-[height] duration-200 md:gap-12 lg:gap-16 ${compact ? "h-12 md:h-14" : "h-14 md:h-[4.5rem]"}`}>
             {/* Logo */}
             <Link href="/" className="flex-shrink-0">
               <Image
@@ -49,7 +66,7 @@ export function Header() {
                 alt="Neumáticos Trivium"
                 width={175}
                 height={60}
-                className="h-9 md:h-16 w-auto"
+                className={`w-auto transition-[height] duration-200 ${compact ? "h-7 md:h-11" : "h-9 md:h-16"}`}
                 priority
               />
             </Link>
