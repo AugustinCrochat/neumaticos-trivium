@@ -168,6 +168,7 @@ export default async function MapaDelSitioPage() {
         <div aria-hidden className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-black/30" />
         <div className="relative mx-auto max-w-6xl px-4 py-10 md:py-16">
           <Breadcrumbs
+            dark
             crumbs={[
               { name: "Inicio", path: "/" },
               { name: "Mapa del sitio", path: "/mapa-del-sitio" },
