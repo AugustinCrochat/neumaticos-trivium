@@ -745,7 +745,7 @@ export function ShopPage({
 
             {parsed && exactResults.length > 0 && (
               <section className="mb-12">
-                <div className="flex items-baseline flex-wrap gap-x-3 gap-y-1 mb-6">
+                <div className="flex items-center flex-wrap gap-x-3 gap-y-1 mb-6">
                   <h2 className="flex items-center gap-2 text-2xl font-black text-navy-900">
                     <PriceTagIcon className="h-9 w-6 shrink-0" />
                     Medida buscada

@@ -200,8 +200,7 @@ export default async function CalculadoraEquivalenciaNeumaticosPage({ searchPara
     <div className="overflow-hidden bg-white">
       <JsonLd data={jsonLd} />
 
-      <section className="relative isolate bg-navy-950 pb-8 pt-6 text-white md:pb-12 md:pt-8">
-        <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_88%_0%,rgba(255,30,0,.32),transparent_32%),radial-gradient(circle_at_8%_90%,rgba(61,128,200,.22),transparent_34%)]" />
+      <section className="relative isolate bg-black pb-8 pt-6 text-white md:pb-12 md:pt-8">
         <div className="mx-auto max-w-5xl px-4">
           <nav aria-label="Migas de pan" className="mb-3 text-sm text-slate-400">
             <Link href="/" className="hover:text-white">Inicio</Link> <span aria-hidden="true">/</span> <span className="text-slate-200">Calculadora de equivalencias</span>
@@ -262,7 +261,7 @@ export default async function CalculadoraEquivalenciaNeumaticosPage({ searchPara
             ))}
           </div>
 
-          <div className="mt-10 rounded-3xl bg-navy-950 p-6 text-white sm:p-8">
+          <div className="mt-10 rounded-3xl bg-black p-6 text-white sm:p-8">
             <h3 className="text-xl font-black">¿Cuánto se desvía el velocímetro?</h3>
             <p className="mt-2 text-sm text-slate-300">Velocidad real cuando el tablero marca cada valor, si el diámetro es 3 % menor o 3 % mayor que el original.</p>
             <div className="mt-5 overflow-x-auto">
@@ -298,7 +297,7 @@ export default async function CalculadoraEquivalenciaNeumaticosPage({ searchPara
           <div className="overflow-x-auto rounded-2xl border border-slate-200 shadow-sm">
             <table className="w-full min-w-[640px] text-left text-sm">
               <caption className="sr-only">Medidas de neumáticos y sus equivalentes con el mismo rodado</caption>
-              <thead className="bg-navy-950 text-white">
+              <thead className="bg-black text-white">
                 <tr>
                   <th scope="col" className="px-5 py-3 font-black">Medida original</th>
                   <th scope="col" className="px-5 py-3 font-black">Equivalentes (diferencia de diámetro)</th>
@@ -357,7 +356,7 @@ export default async function CalculadoraEquivalenciaNeumaticosPage({ searchPara
       </section>
 
       {/* Catálogo */}
-      <section id="catalogo" className="scroll-mt-20 bg-navy-950 py-14 text-white md:py-20">
+      <section id="catalogo" className="scroll-mt-20 bg-black py-14 text-white md:py-20">
         <div className="mx-auto max-w-6xl px-4">
           <div className="flex flex-wrap items-end justify-between gap-5">
             <Head kicker="Catálogo" title="Neumáticos en stock, medida por medida" dark>
