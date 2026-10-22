@@ -58,7 +58,7 @@ export function Header() {
       {/* Main nav */}
       <nav className="bg-black shadow-lg">
         <div className="max-w-7xl 2xl:max-w-[96rem] mx-auto px-4">
-          <div className={`flex items-center gap-6 transition-[height] duration-200 md:gap-12 lg:gap-16 ${compact ? "h-12 md:h-14" : "h-14 md:h-[4.5rem]"}`}>
+          <div className={`flex items-center gap-6 transition-[height] duration-200 md:gap-12 lg:gap-16 ${compact ? "h-[3.25rem] md:h-14" : "h-14 md:h-[4.5rem]"}`}>
             {/* Logo */}
             <Link href="/" className="flex-shrink-0">
               <Image
@@ -66,7 +66,7 @@ export function Header() {
                 alt="Neumáticos Trivium"
                 width={175}
                 height={60}
-                className={`w-auto transition-[height] duration-200 ${compact ? "h-7 md:h-11" : "h-9 md:h-16"}`}
+                className={`w-auto transition-[height] duration-200 ${compact ? "h-9 md:h-11" : "h-10 md:h-16"}`}
                 priority
               />
             </Link>
