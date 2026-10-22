@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { Callout } from "@/components/blog/Callout";
@@ -98,6 +99,18 @@ export default function Page() {
         Para entender qué factores mueven esa duración, mirá <Link href="/blog/cuanto-duran-los-neumaticos-economicos">cuánto duran los neumáticos económicos</Link> y
         la nota de <Link href="/blog/precio-calidad-neumaticos-costo-por-km">precio y calidad</Link>.
       </p>
+
+      <figure className="my-10">
+        <Image
+          src="/marca-premium-vs-alternativa-homologada-neumaticos.webp"
+          alt="Tabla comparativa de neumáticos de marca premium contra alternativa homologada: seguridad estructural, frenado en mojado, ruido, consistencia, durabilidad, garantía y precio"
+          width={1600}
+          height={1200}
+          sizes="(min-width: 768px) 768px, 100vw"
+          className="h-auto w-full rounded-2xl border border-slate-100"
+        />
+        <figcaption className="mt-2 text-sm text-slate-500">Resumen de la comparación. Es orientativo: cada modelo varía, por eso conviene mirar la etiqueta del neumático concreto.</figcaption>
+      </figure>
 
       <h2>Dónde la diferencia es real</h2>
       <ul>

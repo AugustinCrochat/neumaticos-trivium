@@ -130,6 +130,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Imágenes propias que queremos que se descubran en la búsqueda de imágenes.
   const POST_IMAGES: Record<string, string[]> = {
     "como-leer-medida-neumatico": [`${SITE_URL}/como-leer-medida-neumatico-205-55-r16.webp`],
+    "neumaticos-de-marca-vs-importados-cual-conviene": [`${SITE_URL}/marca-premium-vs-alternativa-homologada-neumaticos.webp`],
   };
   const posts: Entry[] = BLOG_POSTS.map((p) =>
     url(`/blog/${p.slug}`, 0.6, "monthly", p.date, POST_IMAGES[p.slug])
