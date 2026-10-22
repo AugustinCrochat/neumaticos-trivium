@@ -98,8 +98,14 @@ function Gauge({ diff }: { diff: number }) {
   const left = ((clamped + 5) / 10) * 100;
   const ok = within(diff);
   return (
-    <div className="mt-4" role="img" aria-label={`Diferencia de diámetro ${signed(diff)} por ciento; tolerancia de más o menos 3 por ciento`}>
+    <div className="mt-10" role="img" aria-label={`Diferencia de diámetro ${signed(diff)} por ciento; tolerancia de más o menos 3 por ciento`}>
       <div className="relative h-3 rounded-full bg-red-200">
+        <span
+          className={`absolute -top-10 -translate-x-1/2 whitespace-nowrap rounded-lg px-2 py-0.5 text-sm font-black text-white shadow ${ok ? "bg-emerald-600" : "bg-red-600"}`}
+          style={{ left: `${Math.max(8, Math.min(92, left))}%` }}
+        >
+          {signed(diff)}%
+        </span>
         <div className="absolute inset-y-0 rounded-full bg-emerald-400" style={{ left: "20%", width: "60%" }} />
         <div className={`absolute top-1/2 h-6 w-6 -translate-x-1/2 -translate-y-1/2 rounded-full border-4 border-white shadow-md ${ok ? "bg-emerald-600" : "bg-red-600"}`} style={{ left: `${left}%` }} />
       </div>
