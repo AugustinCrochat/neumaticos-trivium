@@ -4,6 +4,7 @@ import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { Callout } from "@/components/blog/Callout";
 import { ClusterLinks } from "@/components/blog/ClusterLinks";
 import { canonical } from "@/lib/seo";
+import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "diferencia-neumatico-caro-y-barato";
 const TITLE = "Neumático caro vs. barato: qué cambia de verdad";
@@ -11,6 +12,7 @@ const SUBTITLE =
   "Compuesto, frenado en mojado, ruido, consistencia y garantía: las diferencias reales entre una marca premium y una alternativa, y las que son puro marketing.";
 
 export const metadata: Metadata = {
+  ...blogShare("diferencia-neumatico-caro-y-barato"),
   title: TITLE,
   description:
     "Diferencia entre un neumático caro y uno barato: frenado en mojado, ruido, consistencia, durabilidad y garantía. Qué diferencias son reales y cuáles son marketing, con una tabla comparativa.",

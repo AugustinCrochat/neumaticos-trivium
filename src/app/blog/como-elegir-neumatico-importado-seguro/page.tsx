@@ -4,6 +4,7 @@ import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { Callout } from "@/components/blog/Callout";
 import { ClusterLinks } from "@/components/blog/ClusterLinks";
 import { canonical } from "@/lib/seo";
+import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "como-elegir-neumatico-importado-seguro";
 const TITLE = "Cómo elegir un neumático importado seguro: checklist de 8 puntos";
@@ -11,6 +12,7 @@ const SUBTITLE =
   "Antes de comprar una marca que no conocés, estos ocho controles te dicen si el neumático es confiable: homologación, fecha, índices, etiqueta, garantía y montaje.";
 
 export const metadata: Metadata = {
+  ...blogShare("como-elegir-neumatico-importado-seguro"),
   title: TITLE,
   description:
     "Checklist de 8 puntos para elegir un neumático importado seguro: homologación ECE/DOT, fecha de fabricación (código DOT), medida, índices de carga y velocidad, etiqueta, garantía y montaje.",

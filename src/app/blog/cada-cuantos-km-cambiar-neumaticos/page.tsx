@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { canonical } from "@/lib/seo";
+import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "cada-cuantos-km-cambiar-neumaticos";
 const TITLE = "¿Cada cuántos kilómetros hay que cambiar los neumáticos?";
@@ -9,6 +10,7 @@ const SUBTITLE =
   "No hay un número único: depende del desgaste, de la antigüedad y de cómo usás el auto. Te explicamos las tres señales que sí sirven para decidir.";
 
 export const metadata: Metadata = {
+  ...blogShare("cada-cuantos-km-cambiar-neumaticos"),
   title: TITLE,
   description:
     "Cuándo cambiar los neumáticos: profundidad mínima legal de 1,6 mm, antigüedad del compuesto y kilometraje real. Guía práctica para autos en Argentina.",

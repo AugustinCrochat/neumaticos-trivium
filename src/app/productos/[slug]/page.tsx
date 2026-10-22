@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { Metadata } from "next";
+import { productShare } from "@/lib/share-image";
 import { getProductosDesdePOS, esRodadoCamion } from "@/lib/pos-api";
 import { getSelectedBranchSlug } from "@/lib/branch-server";
 import { getBrandLogo } from "@/lib/brand-utils";
@@ -55,10 +56,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const fullTitle = `Neumático ${product.model} — Neumáticos Trivium`;
   const description = `Comprá el neumático ${product.model} al mejor precio. Outlet de neumáticos importados en Argentina.`;
   const pageUrl = `${SITE_URL}/productos/${product.slug}`;
-  // La imagen de OG/Twitter la arma opengraph-image.tsx en esta misma carpeta
-  // (compone la foto del producto sobre el fondo de marca en vez de compartir
-  // la foto cruda del POS, que tiene relaciones de aspecto variadas y quedaba
-  // recortada al compartir el link).
+  // Al compartir se ve la foto del neumático tal cual (JPEG liviano que arma el
+  // prebuild); si el producto no tiene foto local queda la imagen del sitio.
+  const share = productShare(product.imageUrl);
   return {
     title: fullTitle,
     description,
@@ -69,11 +69,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       url: pageUrl,
       siteName: "Neumáticos Trivium",
       type: "website",
+      ...share?.openGraph,
     },
     twitter: {
       card: "summary_large_image",
       title: fullTitle,
       description,
+      ...(share && { images: share.twitter.images }),
     },
   };
 }

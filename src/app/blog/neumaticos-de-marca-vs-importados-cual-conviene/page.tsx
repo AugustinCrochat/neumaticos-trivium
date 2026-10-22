@@ -6,6 +6,7 @@ import { Callout } from "@/components/blog/Callout";
 import { ClusterLinks } from "@/components/blog/ClusterLinks";
 import { CostPerKmCalculator } from "@/components/blog/CostPerKmCalculator";
 import { canonical } from "@/lib/seo";
+import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "neumaticos-de-marca-vs-importados-cual-conviene";
 const TITLE = "Neumáticos de marca vs. importados: ¿cuál conviene?";
@@ -13,6 +14,7 @@ const SUBTITLE =
   "Una comparación honesta entre las marcas premium y las alternativas importadas: qué se paga de más, qué se gana de verdad y cuándo conviene cada una.";
 
 export const metadata: Metadata = {
+  ...blogShare("neumaticos-de-marca-vs-importados-cual-conviene"),
   title: TITLE,
   description:
     "Neumáticos de marca (Michelin, Pirelli) vs. importados económicos: costo por kilómetro, frenado en mojado, ruido, garantía y uso. Cuándo conviene cada uno, con una calculadora para comparar.",

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { canonical } from "@/lib/seo";
+import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "presion-de-neumaticos";
 const TITLE = "Presión de neumáticos: cuánto inflar y cada cuánto revisarla";
@@ -9,6 +10,7 @@ const SUBTITLE =
   "La presión correcta no está escrita en el neumático: está en la puerta de tu auto. Te explicamos dónde mirarla, cómo medirla bien y qué pasa cuando está mal.";
 
 export const metadata: Metadata = {
+  ...blogShare("presion-de-neumaticos"),
   title: TITLE,
   description:
     "Cuánta presión llevan los neumáticos de tu auto, dónde encontrar el valor correcto, cómo medirla en frío y qué consecuencias tiene inflar de menos o de más.",

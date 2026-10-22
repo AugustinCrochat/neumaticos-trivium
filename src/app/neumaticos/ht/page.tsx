@@ -3,6 +3,7 @@ import { DEFAULT_BRANCH_ID } from "@/lib/config";
 import { getProductosDesdePOS } from "@/lib/pos-api";
 import { canonical, SITE_NAME } from "@/lib/seo";
 import { CategoryLanding } from "../CategoryLanding";
+import { poolShare } from "@/lib/share-image";
 
 export const metadata: Metadata = {
   title: "Neumáticos H/T en Córdoba: precios y medidas",
@@ -12,7 +13,9 @@ export const metadata: Metadata = {
   openGraph: {
     title: `Neumáticos H/T (Highway Terrain) — ${SITE_NAME}`,
     url: "/neumaticos/ht",
+    ...poolShare("ht").openGraph,
   },
+    twitter: poolShare("ht").twitter,
 };
 
 const FAQS = [

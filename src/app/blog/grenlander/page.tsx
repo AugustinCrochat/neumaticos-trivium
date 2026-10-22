@@ -3,8 +3,10 @@ import type { Metadata } from "next";
 import { breadcrumbJsonLd, canonical } from "@/lib/seo";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { BlogCoverStrip, BlogSearchStrip } from "@/components/blog/BlogShop";
+import { blogShare } from "@/lib/blog-meta";
 
 export const metadata: Metadata = {
+  ...blogShare("grenlander"),
   title: "Grenlander: ¿Son buenos los neumáticos? Análisis y comparativa — Trivium",
   description:
     "Analizamos la marca Grenlander en profundidad: homologación europea, agarre en curvas, evacuación de agua, tecnología, comparación con Zmax, Pirelli y BFGoodrich, y cuándo conviene elegirlos.",

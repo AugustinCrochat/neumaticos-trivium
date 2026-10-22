@@ -4,6 +4,7 @@ import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { LOAD_SPEED_CODES } from "@/lib/load-speed";
 import { canonical } from "@/lib/seo";
 import { LOAD_INDEX_KG, SPEED_RATING_KMH } from "@/lib/tire-sizes";
+import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "indice-de-carga-y-velocidad";
 const TITLE = "Índice de carga y velocidad: qué significan el 91 y la V del flanco";
@@ -11,6 +12,7 @@ const SUBTITLE =
   "Después de la medida vienen dos códigos que casi nadie mira y que definen cuánto peso aguanta y a qué velocidad puede rodar tu neumático. Con las tablas completas.";
 
 export const metadata: Metadata = {
+  ...blogShare("indice-de-carga-y-velocidad"),
   title: TITLE,
   description:
     "Qué significan el índice de carga y el índice de velocidad de un neumático, tablas de equivalencia en kg y km/h, y por qué no conviene bajar de los valores originales.",

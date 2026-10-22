@@ -3,6 +3,7 @@ import { DEFAULT_BRANCH_ID } from "@/lib/config";
 import { getProductosDesdePOS } from "@/lib/pos-api";
 import { canonical, SITE_NAME } from "@/lib/seo";
 import { CategoryLanding } from "../CategoryLanding";
+import { poolShare } from "@/lib/share-image";
 
 export const metadata: Metadata = {
   title: "Neumáticos A/T en Córdoba: precios y medidas",
@@ -12,7 +13,9 @@ export const metadata: Metadata = {
   openGraph: {
     title: `Neumáticos A/T (All Terrain) — ${SITE_NAME}`,
     url: "/neumaticos/at",
+    ...poolShare("at").openGraph,
   },
+    twitter: poolShare("at").twitter,
 };
 
 const FAQS = [

@@ -4,6 +4,7 @@ import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { Callout } from "@/components/blog/Callout";
 import { ClusterLinks } from "@/components/blog/ClusterLinks";
 import { canonical } from "@/lib/seo";
+import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "alternativas-a-michelin-y-pirelli";
 const TITLE = "Alternativas a Michelin y Pirelli: qué marcas comparar";
@@ -11,6 +12,7 @@ const SUBTITLE =
   "Cómo ubicar cada marca por segmento y qué mirar para elegir una alternativa más económica sin resignar seguridad.";
 
 export const metadata: Metadata = {
+  ...blogShare("alternativas-a-michelin-y-pirelli"),
   title: TITLE,
   description:
     "Alternativas a Michelin y Pirelli: segmentos de marcas (premium, intermedias, económicas homologadas), qué comparar y cómo elegir un neumático más barato sin resignar seguridad.",

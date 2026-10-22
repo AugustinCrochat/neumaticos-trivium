@@ -9,6 +9,7 @@ import { getProductosDesdePOS } from "@/lib/pos-api";
 import { DEFAULT_BRANCH_ID } from "@/lib/config";
 import { formatSize, sizeSlug, sizesEqual } from "@/lib/tire-sizes";
 import type { TireProduct } from "@/lib/types";
+import { poolShare } from "@/lib/share-image";
 
 /**
  * Ficha por vehículo (/vehiculos/toyota-hilux): captura "neumáticos para
@@ -82,7 +83,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title,
     description,
     alternates: canonical(`/vehiculos/${slug}`),
-    openGraph: { title, description, url: `/vehiculos/${slug}` },
+    openGraph: { title, description, url: `/vehiculos/${slug}`, ...poolShare(slug).openGraph },
+    twitter: poolShare(slug).twitter,
   };
 }
 

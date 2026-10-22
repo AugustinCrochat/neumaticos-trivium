@@ -1,3 +1,5 @@
+import { siteShare } from "./share-image";
+
 /**
  * Imágenes y atajos de compra de cada nota del blog.
  *
@@ -298,4 +300,9 @@ export const DEFAULT_BLOG_META: BlogMeta = {
 
 export function blogMeta(slug: string): BlogMeta {
   return BLOG_META[slug] ?? DEFAULT_BLOG_META;
+}
+
+/** Miniatura al compartir la nota: la foto de portada, o la del sitio si no tiene propia. */
+export function blogShare(slug: string) {
+  return siteShare(blogMeta(slug).cover.src) ?? {};
 }

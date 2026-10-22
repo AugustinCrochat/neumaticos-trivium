@@ -4,6 +4,7 @@ import { getProductosDesdePOS } from "@/lib/pos-api";
 import { canonical, SITE_NAME } from "@/lib/seo";
 import { CategoryLanding } from "../neumaticos/CategoryLanding";
 import { BaratosExtra } from "./BaratosExtra";
+import { poolShare } from "@/lib/share-image";
 
 // Landing para "neumáticos baratos", "cubiertas baratas" y "mejor precio en
 // neumáticos". Como el resto de las landings de SEO, usa DEFAULT_BRANCH_ID y no
@@ -20,7 +21,8 @@ export async function generateMetadata(): Promise<Metadata> {
     description:
       "Cubiertas nuevas al mejor precio: importación directa, precio publicado igual al del local, un año de garantía y colocación sin cargo en Córdoba. Mirá el neumático más barato de cada rodado y comprá con envío a todo el país.",
     alternates: canonical("/neumaticos-baratos"),
-    openGraph: { title: `Neumáticos baratos en Córdoba — ${SITE_NAME}`, url: "/neumaticos-baratos" },
+    openGraph: { title: `Neumáticos baratos en Córdoba — ${SITE_NAME}`, url: "/neumaticos-baratos", ...poolShare("baratos").openGraph },
+    twitter: poolShare("baratos").twitter,
   };
 }
 

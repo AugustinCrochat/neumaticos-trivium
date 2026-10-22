@@ -19,6 +19,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { SortedProductGrid } from "@/components/ui/SortedProductGrid";
 import { bestPriceByGroup, peersByGroup } from "@/lib/best-price";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
+import { poolShare } from "@/lib/share-image";
 
 /**
  * Landing por medida de carga (/neumaticos/carga/195-70-r15c).
@@ -67,7 +68,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       `Cubiertas de carga (serie C) para furgones y utilitarios, de importación directa, con garantía de 1 año. ` +
       `Colocación sin cargo en Córdoba y envío a todo el país.`,
     alternates: canonical(path),
-    openGraph: { title: `${title} — ${SITE_NAME}`, url: path },
+    openGraph: { title: `${title} — ${SITE_NAME}`, url: path, ...poolShare(medida).openGraph },
+    twitter: poolShare(medida).twitter,
   };
 }
 

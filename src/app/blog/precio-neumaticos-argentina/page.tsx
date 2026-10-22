@@ -5,6 +5,7 @@ import { canonical } from "@/lib/seo";
 import { DEFAULT_BRANCH_ID, FREE_SHIPPING_THRESHOLD, SHIPPING_FLAT_RATE } from "@/lib/config";
 import { getProductosDesdePOS } from "@/lib/pos-api";
 import { formatSize, sizeSlug } from "@/lib/tire-sizes";
+import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "precio-neumaticos-argentina";
 // El título original ("¿Cuánto sale un neumático en Argentina?") es correcto
@@ -20,6 +21,7 @@ const SUBTITLE =
 // Los precios se leen del catálogo en vivo: una nota de precios con números
 // escritos a mano queda desactualizada en semanas y termina siendo un pasivo.
 export const metadata: Metadata = {
+  ...blogShare("precio-neumaticos-argentina"),
   title: TITLE,
   description:
     "Cuánto sale un neumático barato o económico en Argentina según rodado y marca, qué hace que el precio varíe entre negocios y cómo comparar sin que te vendan humo. Con precios reales actualizados.",

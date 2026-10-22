@@ -5,13 +5,15 @@ import { ZonasAgrupadas } from "@/components/seo/ZonasAgrupadas";
 import { LOCALIDADES, getBranchForLocalidad } from "@/lib/localidades";
 import { canonical, SITE_NAME } from "@/lib/seo";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
+import { poolShare } from "@/lib/share-image";
 
 export const metadata: Metadata = {
   title: "Zonas donde atendemos — neumáticos baratos en Córdoba y Sierras Chicas",
   description:
     "Vendemos neumáticos baratos, a precio de outlet, en Córdoba Capital, Argüello, Villa Allende, Saldán, La Calera, Mendiolaza, Unquillo y Río Ceballos, con gomería propia y taller de alineación y balanceo.",
   alternates: canonical("/neumaticos-en"),
-  openGraph: { title: `Zonas donde atendemos — ${SITE_NAME}`, url: "/neumaticos-en" },
+  openGraph: { title: `Zonas donde atendemos — ${SITE_NAME}`, url: "/neumaticos-en", ...poolShare("zonas").openGraph },
+    twitter: poolShare("zonas").twitter,
 };
 
 export default function ZonasPage() {

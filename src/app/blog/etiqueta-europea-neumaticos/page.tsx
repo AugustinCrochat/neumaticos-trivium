@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { canonical } from "@/lib/seo";
+import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "etiqueta-europea-neumaticos";
 const TITLE = "Etiqueta europea de neumáticos: qué significan las letras y colores";
@@ -9,6 +10,7 @@ const SUBTITLE =
   "La misma etiqueta que trae pegada cada neumático en el flanco, con el QR que la vincula a un registro oficial verificable. Qué mide cada letra y por qué importa al elegir.";
 
 export const metadata: Metadata = {
+  ...blogShare("etiqueta-europea-neumaticos"),
   title: TITLE,
   description:
     "Qué es la etiqueta europea de eficiencia de neumáticos (Reglamento UE 2020/740): eficiencia de combustible, frenado en mojado, ruido externo y el registro EPREL que la respalda.",

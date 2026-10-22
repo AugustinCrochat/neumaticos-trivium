@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { canonical } from "@/lib/seo";
+import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "utqg-desgaste-traccion-temperatura";
 const TITLE = "UTQG: qué significan el desgaste, la tracción y la temperatura";
@@ -9,6 +10,7 @@ const SUBTITLE =
   "El código de EE. UU. que a veces aparece junto a la etiqueta europea, con un número y dos letras — por ejemplo 400 A A. Qué mide cada dato, cómo se prueba y por qué no todos los neumáticos lo tienen.";
 
 export const metadata: Metadata = {
+  ...blogShare("utqg-desgaste-traccion-temperatura"),
   title: TITLE,
   description:
     "Qué es el UTQG (Uniform Tire Quality Grading): desgaste relativo (treadwear), tracción y temperatura. Cómo leerlo, sus límites y en qué se diferencia de la etiqueta europea.",

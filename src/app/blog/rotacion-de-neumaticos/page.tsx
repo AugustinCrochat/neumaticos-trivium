@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { canonical } from "@/lib/seo";
+import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "rotacion-de-neumaticos";
 const TITLE = "Rotación de neumáticos: cada cuánto y en qué orden se cambian de lugar";
@@ -9,6 +10,7 @@ const SUBTITLE =
   "Las ruedas de adelante se gastan más rápido que las de atrás. Rotarlas reparte ese desgaste y alarga la vida del juego completo. Te explicamos cada cuánto hacerlo y qué esquema usar según tu auto.";
 
 export const metadata: Metadata = {
+  ...blogShare("rotacion-de-neumaticos"),
   title: TITLE,
   description:
     "Cada cuánto rotar los neumáticos, en qué orden pasarlos de lugar según tracción delantera, trasera o 4x4, cuándo no se puede rotar y qué revisar en el mismo turno.",

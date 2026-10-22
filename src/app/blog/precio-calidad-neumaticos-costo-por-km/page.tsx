@@ -4,8 +4,10 @@ import { breadcrumbJsonLd, canonical } from "@/lib/seo";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { ClusterLinks } from "@/components/blog/ClusterLinks";
 import { BlogCoverStrip, BlogSearchStrip } from "@/components/blog/BlogShop";
+import { blogShare } from "@/lib/blog-meta";
 
 export const metadata: Metadata = {
+  ...blogShare("precio-calidad-neumaticos-costo-por-km"),
   title: "Precio y calidad en neumáticos: cuánto sale cada kilómetro — Trivium",
   description:
     "El precio de lista no dice nada solo: lo que importa es cuánto cuesta cada kilómetro recorrido. Comparamos Grenlander contra otras marcas por costo/km, estándares de fabricación y homologación en Europa, Estados Unidos y Argentina.",

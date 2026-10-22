@@ -9,6 +9,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { equivalentSizes, MEDIDAS_PRIORITARIAS, outerDiameterMm } from "@/lib/tire-sizes";
 import { sizeSearchHref } from "@/lib/size-href";
 import type { TireSize } from "@/lib/types";
+import { poolShare } from "@/lib/share-image";
 
 const pageUrl = `${SITE_URL}/calculadora-equivalencia-neumaticos`;
 
@@ -32,9 +33,10 @@ export async function generateMetadata(): Promise<Metadata> {
       url: pageUrl,
       locale: "es_AR",
       type: "website",
+      ...poolShare("calculadora").openGraph,
     },
     twitter: {
-      card: "summary",
+      ...poolShare("calculadora").twitter,
       title: "Calculadora de equivalencias de neumáticos | Trivium",
       description:
         "Verificá medidas compatibles de neumáticos y alternativas en stock.",

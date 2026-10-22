@@ -14,6 +14,7 @@ import {
   sizesFromCatalog,
 } from "@/lib/tire-sizes";
 import type { TireSize } from "@/lib/types";
+import { poolShare } from "@/lib/share-image";
 
 export const metadata: Metadata = {
   title: "Neumáticos por medida en Córdoba: precios y stock",
@@ -23,7 +24,9 @@ export const metadata: Metadata = {
   openGraph: {
     title: `Neumáticos económicos por medida — ${SITE_NAME}`,
     url: "/neumaticos",
+    ...poolShare("neumaticos").openGraph,
   },
+    twitter: poolShare("neumaticos").twitter,
 };
 
 const FAQS = [

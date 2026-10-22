@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { poolShare } from "@/lib/share-image";
 import { notFound } from "next/navigation";
 import { DEFAULT_BRANCH_ID, TIRE_RIMS } from "@/lib/config";
 import { getProductosDesdePOS } from "@/lib/pos-api";
@@ -53,7 +54,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title,
       description: `Todas las medidas de neumáticos rodado ${rim} con stock y precio actualizado. Cubiertas R${rim} de importación directa para auto y camioneta, con envío a todo el país.`,
       alternates: canonical(`/neumaticos/${rimSlug(rim)}`),
-      openGraph: { title: `${title} — ${SITE_NAME}`, url: `/neumaticos/${rimSlug(rim)}` },
+      openGraph: { title: `${title} — ${SITE_NAME}`, url: `/neumaticos/${rimSlug(rim)}`, ...poolShare(medida).openGraph },
+      twitter: poolShare(medida).twitter,
     };
   }
 
@@ -88,7 +90,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title,
     description: partesDescripcion.join(" ").slice(0, 300),
     alternates: canonical(`/neumaticos/${sizeSlug(size)}`),
-    openGraph: { title: `${title} — ${SITE_NAME}`, url: `/neumaticos/${sizeSlug(size)}` },
+    openGraph: { title: `${title} — ${SITE_NAME}`, url: `/neumaticos/${sizeSlug(size)}`, ...poolShare(medida).openGraph },
+    twitter: poolShare(medida).twitter,
   };
 }
 

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { canonical } from "@/lib/seo";
+import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "presion-neumaticos-utilitarios-con-carga";
 const TITLE = "Presión de neumáticos en utilitarios con carga: cómo calibrar según el peso";
@@ -9,6 +10,7 @@ const SUBTITLE =
   "La presión correcta de un furgón vacío no es la misma que con la caja llena. Dónde encontrar el dato, cada cuánto controlarlo y qué pasa cuando se anda con menos aire del que corresponde.";
 
 export const metadata: Metadata = {
+  ...blogShare("presion-neumaticos-utilitarios-con-carga"),
   title: TITLE,
   description:
     "Cómo calibrar la presión de los neumáticos de un utilitario o furgón con carga: dónde está la tabla, por qué cambia con el peso, cada cuánto controlarla y los riesgos de andar con poco aire.",

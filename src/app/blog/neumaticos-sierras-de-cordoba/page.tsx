@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { canonical } from "@/lib/seo";
+import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "neumaticos-sierras-de-cordoba";
 const TITLE = "Neumáticos para las sierras de Córdoba: qué llevar antes de salir a ruta";
@@ -9,6 +10,7 @@ const SUBTITLE =
   "Altas Cumbres, Punilla, Traslasierra y los caminos de montaña exigen más a los neumáticos. Qué revisar y qué tipo de cubierta conviene.";
 
 export const metadata: Metadata = {
+  ...blogShare("neumaticos-sierras-de-cordoba"),
   title: TITLE,
   description:
     "Qué neumáticos usar para manejar en las sierras de Córdoba: curvas, pendientes, lluvia y caminos de tierra. Qué revisar antes de un viaje y cuándo conviene una cubierta H/T o A/T.",

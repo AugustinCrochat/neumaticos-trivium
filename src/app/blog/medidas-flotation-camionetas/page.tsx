@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { canonical } from "@/lib/seo";
+import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "medidas-flotation-camionetas";
 const TITLE = "Medidas flotation: qué significa 31x10.5R15 y cómo pasarlo a métrico";
@@ -9,6 +10,7 @@ const SUBTITLE =
   "Los neumáticos LT, A/T y M/T de camioneta a veces vienen marcados en pulgadas en vez de en milímetros. Te explicamos el formato, la fórmula de conversión y una tabla con las medidas más comunes en Argentina.";
 
 export const metadata: Metadata = {
+  ...blogShare("medidas-flotation-camionetas"),
   title: TITLE,
   description:
     "Qué es una medida flotation (31x10.5R15), en qué se diferencia del sistema métrico (265/75R15), cómo convertir una a la otra y tabla de equivalencias más usadas.",

@@ -5,6 +5,7 @@ import { canonical, SITE_NAME } from "@/lib/seo";
 import { cargaSlug, formatCargaSize } from "@/lib/carga";
 import { CategoryLanding } from "../CategoryLanding";
 import { CargaExtra } from "./CargaExtra";
+import { poolShare } from "@/lib/share-image";
 
 export async function generateMetadata(): Promise<Metadata> {
   const productos = await getProductosDesdePOS(DEFAULT_BRANCH_ID);
@@ -20,7 +21,8 @@ export async function generateMetadata(): Promise<Metadata> {
     description:
       "Neumáticos de carga (serie C) para furgones, utilitarios y camiones livianos: precios bajos por importación directa, stock real por medida, garantía de 1 año y colocación sin cargo en Córdoba. Envío a todo el país.",
     alternates: canonical("/neumaticos/carga"),
-    openGraph: { title: `Neumáticos de carga — ${SITE_NAME}`, url: "/neumaticos/carga" },
+    openGraph: { title: `Neumáticos de carga — ${SITE_NAME}`, url: "/neumaticos/carga", ...poolShare("carga").openGraph },
+    twitter: poolShare("carga").twitter,
   };
 }
 

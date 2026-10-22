@@ -7,6 +7,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { TireSizeSearch } from "@/components/ui/TireSizeSearch";
 import { absoluteUrl, canonical, ORGANIZATION_ID } from "@/lib/seo";
 import { sizeSearchHref } from "@/lib/size-href";
+import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "como-leer-medida-neumatico";
 const TITLE = "Cómo leer la medida de un neumático: 205/55 R16 explicado";
@@ -83,6 +84,7 @@ const FAQS: [string, string][] = [
 ];
 
 export const metadata: Metadata = {
+  ...blogShare("como-leer-medida-neumatico"),
   title: TITLE,
   description: DESCRIPTION,
   alternates: canonical(`/blog/${SLUG}`),

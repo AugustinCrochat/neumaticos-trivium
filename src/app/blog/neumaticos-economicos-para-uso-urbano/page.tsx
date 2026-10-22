@@ -4,6 +4,7 @@ import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { Callout } from "@/components/blog/Callout";
 import { ClusterLinks } from "@/components/blog/ClusterLinks";
 import { canonical } from "@/lib/seo";
+import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "neumaticos-economicos-para-uso-urbano";
 const TITLE = "Neumáticos económicos para uso urbano: cuándo no necesitás una marca premium";
@@ -11,6 +12,7 @@ const SUBTITLE =
   "En ciudad, a velocidad moderada y con pocos kilómetros al año, una alternativa económica homologada suele ser suficiente. Qué conviene cuidar igual.";
 
 export const metadata: Metadata = {
+  ...blogShare("neumaticos-economicos-para-uso-urbano"),
   title: TITLE,
   description:
     "¿Conviene un neumático económico para la ciudad? Cuándo alcanza una alternativa importada homologada, qué cuidar igual (frenado en mojado, índices, presión) y cuándo conviene subir de gama.",

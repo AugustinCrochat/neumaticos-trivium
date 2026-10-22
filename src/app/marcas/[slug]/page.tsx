@@ -11,6 +11,7 @@ import { DEFAULT_BRANCH_ID } from "@/lib/config";
 import { canonical, itemListJsonLd, SITE_NAME } from "@/lib/seo";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbJsonLd } from "@/lib/seo";
+import { poolShare } from "@/lib/share-image";
 
 // El set de marcas se conoce en build time (BRANDS es estático). Sin esto la
 // ruta sale con `no-cache, no-store` y hace SSR en cada request — ver el
@@ -43,7 +44,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: `Neumáticos ${brand.name} — ${SITE_NAME}`,
       url: `/marcas/${brand.id}`,
+      ...poolShare(brand.id).openGraph,
     },
+    twitter: poolShare(brand.id).twitter,
   };
 }
 

@@ -21,6 +21,7 @@ import { PreselectBranch } from "@/components/ui/PreselectBranch";
 import { LocalProductCarousel } from "../LocalProductCarousel";
 import { LocalPhotos } from "../LocalPhotos";
 import { ZonasAgrupadas } from "@/components/seo/ZonasAgrupadas";
+import { poolShare } from "@/lib/share-image";
 
 /**
  * Landings de SEO local: "neumáticos en Villa Allende", "gomería en Saldán".
@@ -84,7 +85,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: `${title} — ${SITE_NAME}`,
       description,
       url: `/neumaticos-en/${localidad.slug}`,
+      ...poolShare(localidad.slug).openGraph,
     },
+    twitter: poolShare(localidad.slug).twitter,
   };
 }
 

@@ -4,6 +4,7 @@ import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { Callout } from "@/components/blog/Callout";
 import { ClusterLinks } from "@/components/blog/ClusterLinks";
 import { canonical } from "@/lib/seo";
+import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "cuatro-economicos-o-dos-de-marca";
 const TITLE = "¿Conviene poner 4 neumáticos económicos o 2 de marca?";
@@ -11,6 +12,7 @@ const SUBTITLE =
   "Mezclar marcas o desgastes entre ejes tiene consecuencias. Cuándo conviene cambiar los cuatro, cuándo solo dos y en qué eje van los nuevos.";
 
 export const metadata: Metadata = {
+  ...blogShare("cuatro-economicos-o-dos-de-marca"),
   title: TITLE,
   description:
     "¿4 neumáticos económicos o 2 de marca? Cuándo cambiar los cuatro, cuándo dos, en qué eje colocar los nuevos y qué pasa en autos con tracción integral. Con ejemplos de la cuenta.",

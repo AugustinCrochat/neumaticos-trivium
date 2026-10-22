@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { canonical } from "@/lib/seo";
+import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "comprar-neumaticos-en-cordoba";
 const TITLE = "Comprar neumáticos en Córdoba: qué comparar además del precio";
@@ -9,6 +10,7 @@ const SUBTITLE =
   "Dos presupuestos con el mismo precio pueden no ser lo mismo. Qué preguntar para comparar bien antes de comprar un juego de cubiertas.";
 
 export const metadata: Metadata = {
+  ...blogShare("comprar-neumaticos-en-cordoba"),
   title: TITLE,
   description:
     "Guía para comprar neumáticos en Córdoba: cómo comparar presupuestos, qué incluye la colocación, cómo leer la fecha de fabricación (DOT), la garantía y el stock real.",

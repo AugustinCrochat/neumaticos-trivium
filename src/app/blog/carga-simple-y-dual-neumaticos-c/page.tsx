@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { canonical } from "@/lib/seo";
+import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "carga-simple-y-dual-neumaticos-c";
 const TITLE = "Carga simple y dual en neumáticos C: qué significa el 90/88 del flanco";
@@ -9,6 +10,7 @@ const SUBTITLE =
   "En un utilitario, el índice de carga casi nunca es un solo número. Por qué los neumáticos C traen dos cifras separadas por una barra, cuál corresponde a tu vehículo y qué pasa si las confundís.";
 
 export const metadata: Metadata = {
+  ...blogShare("carga-simple-y-dual-neumaticos-c"),
   title: TITLE,
   description:
     "Los neumáticos C (comerciales, para utilitarios y furgones) llevan dos índices de carga: uno para montaje simple y otro para rodado dual. Qué significa cada número, tabla de conversión a kilos y medidas habituales en Argentina.",

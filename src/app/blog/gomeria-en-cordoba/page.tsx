@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { canonical } from "@/lib/seo";
+import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "gomeria-en-cordoba";
 const TITLE = "Gomería en Córdoba: qué servicios hacen y cómo elegir una buena";
@@ -9,6 +10,7 @@ const SUBTITLE =
   "Pinchadura, balanceo, alineación, rotación, válvulas: qué hace una gomería, qué conviene hacer junto y qué mirar antes de dejar el auto.";
 
 export const metadata: Metadata = {
+  ...blogShare("gomeria-en-cordoba"),
   title: TITLE,
   description:
     "Qué servicios hace una gomería en Córdoba, cuáles conviene combinar, cuándo hace falta alinear o balancear y cómo reconocer un taller serio. Con la experiencia de nuestro taller en Argüello.",

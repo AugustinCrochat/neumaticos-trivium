@@ -13,6 +13,7 @@ import { BranchMiniMap } from "./BranchMiniMap";
 import { SetActiveBranch } from "./SetActiveBranch";
 import { DirectionsButton } from "./DirectionsButton";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
+import { poolShare } from "@/lib/share-image";
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -41,7 +42,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       url: `${SITE_URL}/sucursales/${branch.id}`,
       siteName: SITE_NAME,
       locale: "es_AR",
+      ...poolShare(branch.id).openGraph,
     },
+    twitter: poolShare(branch.id).twitter,
   };
 }
 

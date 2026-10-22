@@ -9,6 +9,7 @@ import {
   type Branch,
 } from "./config";
 import { SERVICES } from "./data";
+import { DEFAULT_SHARE_URL } from "./share-image";
 import { ROTACION_SERVICE } from "./servicios-seo";
 
 /** Nombre comercial — el que Google tiene que asociar a la marca. */
@@ -66,7 +67,7 @@ export function tireShopJsonLd(branch: Branch) {
     "@id": branchNodeId(branch),
     name: `${SITE_NAME} ${branch.shortName}`,
     url: absoluteUrl(`/sucursales/${branch.id}`),
-    image: absoluteUrl("/opengraph-image"),
+    image: DEFAULT_SHARE_URL,
     logo: absoluteUrl("/logo-neumaticos-trivium.svg"),
     telephone: branch.phone,
     email: CONTACT_EMAIL,
@@ -164,7 +165,7 @@ export function siteGraphJsonLd() {
           "@type": "ImageObject",
           url: absoluteUrl("/logo-neumaticos-trivium.svg"),
         },
-        image: absoluteUrl("/opengraph-image"),
+        image: DEFAULT_SHARE_URL,
         email: CONTACT_EMAIL,
         sameAs: [INSTAGRAM_URL, FACEBOOK_URL],
         areaServed: { "@type": "Country", name: "Argentina" },

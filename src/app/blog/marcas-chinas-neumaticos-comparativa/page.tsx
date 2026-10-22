@@ -2,8 +2,10 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { ClusterLinks } from "@/components/blog/ClusterLinks";
 import { BlogCoverStrip, BlogSearchStrip } from "@/components/blog/BlogShop";
+import { blogShare } from "@/lib/blog-meta";
 
 export const metadata: Metadata = {
+  ...blogShare("marcas-chinas-neumaticos-comparativa"),
   title: "Marcas chinas de neumáticos: ¿cuál es la mejor? — Trivium",
   description:
     "Comparamos las distintas franjas de calidad de los neumáticos chinos —de entrada, intermedios y de calidad real— y por qué Grenlander (Zodo Tyre) lidera el ranking.",

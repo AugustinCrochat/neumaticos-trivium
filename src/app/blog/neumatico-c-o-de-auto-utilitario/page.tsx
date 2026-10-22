@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { canonical } from "@/lib/seo";
+import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "neumatico-c-o-de-auto-utilitario";
 const TITLE = "¿Neumático C o de auto en un utilitario? Las diferencias y cuándo no se puede cambiar";
@@ -9,6 +10,7 @@ const SUBTITLE =
   "Mismo ancho, mismo perfil, mismo rodado: ¿da igual poner un neumático de auto en un utilitario? No. Qué cambia en la construcción, cuánto pesa en la seguridad y en qué casos hay margen.";
 
 export const metadata: Metadata = {
+  ...blogShare("neumatico-c-o-de-auto-utilitario"),
   title: TITLE,
   description:
     "Diferencias entre un neumático C (de carga) y uno de auto en la misma medida: carcasa, índice de carga, presión y riesgos de reemplazar uno por otro en un utilitario o furgón.",

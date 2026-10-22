@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { canonical } from "@/lib/seo";
+import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "alineacion-y-balanceo";
 const TITLE = "Alineación y balanceo: qué es cada cosa y cada cuánto se hacen";
@@ -9,6 +10,7 @@ const SUBTITLE =
   "Se nombran juntos pero resuelven problemas distintos. Uno corrige hacia dónde apuntan las ruedas; el otro, cómo giran. Acá va la diferencia en criollo.";
 
 export const metadata: Metadata = {
+  ...blogShare("alineacion-y-balanceo"),
   title: TITLE,
   description:
     "Diferencia entre alineación y balanceo, síntomas de cada problema, cada cuántos kilómetros conviene hacerlos y qué pasa si los postergás.",

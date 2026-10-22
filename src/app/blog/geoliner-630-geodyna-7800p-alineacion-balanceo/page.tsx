@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { canonical } from "@/lib/seo";
+import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "geoliner-630-geodyna-7800p-alineacion-balanceo";
 const TITLE = "Alineación con Geoliner 630 y balanceo con Geodyna 7800P: el equipo hace la diferencia";
@@ -10,6 +11,7 @@ const SUBTITLE =
   "Una alineación o un balanceo mal hechos no se notan en el momento, se notan en el desgaste. Por qué elegimos estos dos equipos Hofmann y qué ventaja concreta le dan a tu auto.";
 
 export const metadata: Metadata = {
+  ...blogShare("geoliner-630-geodyna-7800p-alineacion-balanceo"),
   title: TITLE,
   description:
     "Cómo funciona la alineadora 3D Hofmann Geoliner 630 y la balanceadora Hofmann Geodyna 7800P que usamos en nuestro taller, y qué diferencia hacen en la precisión, la duración de los neumáticos y la ausencia de vibraciones.",

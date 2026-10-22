@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { CatalogWidget } from "@/components/blog/CatalogWidget";
 import { canonical } from "@/lib/seo";
+import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "neumaticos-para-utilitarios-furgones-reparto";
 const TITLE = "Neumáticos para utilitarios, furgones y reparto: cómo elegirlos sin pagar de más";
@@ -10,6 +11,7 @@ const SUBTITLE =
   "Un vehículo de trabajo gasta neumáticos más rápido que un auto. Qué medida usar, qué índice de carga exigir y cómo comparar precios cuando el neumático es una herramienta de laburo.";
 
 export const metadata: Metadata = {
+  ...blogShare("neumaticos-para-utilitarios-furgones-reparto"),
   title: TITLE,
   description:
     "Guía para elegir neumáticos de carga (serie C) en utilitarios, furgones y vehículos de reparto: medida, índice de carga, simple o dual, cada cuánto cambiarlos y cómo ahorrar sin comprometer la seguridad.",

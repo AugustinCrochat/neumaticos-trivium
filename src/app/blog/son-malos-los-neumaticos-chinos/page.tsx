@@ -4,6 +4,7 @@ import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { Callout } from "@/components/blog/Callout";
 import { ClusterLinks } from "@/components/blog/ClusterLinks";
 import { canonical } from "@/lib/seo";
+import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "son-malos-los-neumaticos-chinos";
 const TITLE = "¿Son malos los neumáticos chinos? Mitos y realidad";
@@ -11,6 +12,7 @@ const SUBTITLE =
   "El país de fabricación no define la calidad de un neumático. Lo que sí la define es la homologación, la trazabilidad y el control de calidad. Cómo separar lo bueno de lo malo.";
 
 export const metadata: Metadata = {
+  ...blogShare("son-malos-los-neumaticos-chinos"),
   title: TITLE,
   description:
     "¿Son malos los neumáticos chinos? Mitos y realidad: dónde fabrican también las marcas premium, qué homologaciones exigir (ECE, DOT) y qué señales distinguen un buen neumático importado de uno dudoso.",
