@@ -18,7 +18,7 @@ export default async function Page() {
     .filter((p) => p.enStock && !p.isCarga)
     .map((p) => ({
       id: p.id,
-      label: `${p.brand} ${p.model}${p.loadIndex ? ` ${p.loadIndex}${p.speedRating ?? ""}` : ""}`,
+      label: `${p.brand} ${p.modeloBase} ${p.size.width}/${p.size.profile} R${p.size.rim}${p.loadIndex ? ` ${p.loadIndex}${p.speedRating ?? ""}` : ""}`,
       brand: p.brand,
       price: p.price,
       w: p.size.width,
