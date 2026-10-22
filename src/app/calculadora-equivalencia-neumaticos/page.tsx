@@ -12,51 +12,7 @@ import type { TireSize } from "@/lib/types";
 
 const pageUrl = `${SITE_URL}/calculadora-equivalencia-neumaticos`;
 
-type Props = { searchParams: Promise<{ modo?: string; original?: string; equivalente?: string }> };
-
-function parseSize(value?: string) {
-  if (!value) return null;
-  const m = value.match(/^(\d+)-(\d+)-(\d+)$/);
-  return m ? { width: m[1], profile: m[2], rim: m[3] } : null;
-}
-
-export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
-  const { modo, original, equivalente } = await searchParams;
-  const s1 = parseSize(original);
-  const s2 = modo === "check" ? parseSize(equivalente) : null;
-
-  // Con las dos medidas de un link compartido armamos un título/thumbnail
-  // puntual ("de 195/65 R15 a 205/60 R15") en vez del genérico de la
-  // calculadora, para que el preview al compartir muestre el cambio real.
-  if (s1 && s2) {
-    const from = `${s1.width}/${s1.profile} R${s1.rim}`;
-    const to = `${s2.width}/${s2.profile} R${s2.rim}`;
-    const title = `¿${from} es compatible con ${to}? | Trivium`;
-    const description = `Verificamos la equivalencia de diámetro entre ${from} y ${to}. Mirá el resultado y buscá stock disponible en Trivium.`;
-    const ogImage = `${SITE_URL}/api/og/equivalencia?original=${original}&equivalente=${equivalente}`;
-    const pageUrlWithParams = `${pageUrl}?modo=check&original=${original}&equivalente=${equivalente}`;
-
-    return {
-      title,
-      description,
-      alternates: { canonical: pageUrlWithParams },
-      openGraph: {
-        title,
-        description,
-        url: pageUrlWithParams,
-        locale: "es_AR",
-        type: "website",
-        images: [{ url: ogImage, width: 1200, height: 630, alt: `${from} → ${to}` }],
-      },
-      twitter: {
-        card: "summary_large_image",
-        title,
-        description,
-        images: [ogImage],
-      },
-    };
-  }
-
+export async function generateMetadata(): Promise<Metadata> {
   return {
     title: "Calculadora de equivalencias de neumáticos: medidas compatibles ±3% | Trivium",
     description:
@@ -186,15 +142,9 @@ function Head({ kicker, title, children, dark }: { kicker: string; title: string
   );
 }
 
-export default async function CalculadoraEquivalenciaNeumaticosPage({ searchParams }: Props) {
+export default async function CalculadoraEquivalenciaNeumaticosPage() {
   const branch = await getSelectedBranchSlug();
   const productos = await getProductosDesdePOS(branch);
-  const { modo, original, equivalente } = await searchParams;
-  const s1 = parseSize(original);
-  const s2 = modo === "check" ? parseSize(equivalente) : null;
-  const from = s1 ? `${s1.width}/${s1.profile} R${s1.rim}` : null;
-  const to = s2 ? `${s2.width}/${s2.profile} R${s2.rim}` : null;
-  const shared = !!(from && to);
 
   return (
     <div className="overflow-hidden bg-white">
@@ -206,7 +156,7 @@ export default async function CalculadoraEquivalenciaNeumaticosPage({ searchPara
             <Link href="/" className="hover:text-white">Inicio</Link> <span aria-hidden="true">/</span> <span className="text-slate-200">Calculadora de equivalencias</span>
           </nav>
           <h1 className="text-3xl font-black leading-tight tracking-tight md:text-4xl">
-            {shared ? <>¿{from} es compatible con {to}?</> : <>Calculadora de equivalencias de neumáticos</>}
+            Calculadora de equivalencias de neumáticos
           </h1>
           <div id="calculadora" className="mt-5 scroll-mt-20">
             <EquivalenceCalculator products={productos} />
