@@ -241,32 +241,6 @@ function getUnitPrice(product: TireProduct) {
 type SizeFilter = { w: string; p: string; r: string };
 
 /** Ancho / perfil / rodado sueltos: filtran el catálogo por cualquiera de los tres. */
-function SizeInputs({ value, onChange, className = "" }: { value: SizeFilter; onChange: (v: SizeFilter) => void; className?: string }) {
-  const campo = (k: keyof SizeFilter, max: number, label: string, placeholder: string) => (
-    <label className="flex w-24 flex-col items-center gap-1">
-      <span className="text-center text-[11px] font-black uppercase leading-tight tracking-wide text-slate-500">{label}</span>
-      <input
-        type="text"
-        inputMode="numeric"
-        maxLength={max}
-        value={value[k]}
-        placeholder={placeholder}
-        onChange={(e) => onChange({ ...value, [k]: e.target.value.replace(/\D/g, "").slice(0, max) })}
-        className="w-full rounded-lg border-2 border-slate-200 bg-white px-2 py-2.5 text-center text-base font-black text-slate-800 placeholder:font-medium placeholder:text-slate-300 focus:border-navy-500 focus:outline-none focus:ring-2 focus:ring-navy-100"
-      />
-    </label>
-  );
-  return (
-    <div className={`flex items-end gap-2 ${className}`}>
-      {campo("w", 3, "Buscar por ancho", "205")}
-      <span className="pb-2.5 text-lg font-black text-slate-300">/</span>
-      {campo("p", 2, "Buscar por perfil", "55")}
-      <span className="pb-2.5 text-lg font-black text-slate-300">R</span>
-      {campo("r", 2, "Buscar por rodado", "16")}
-    </div>
-  );
-}
-
 function FilterBar({
   brandFilter, setBrandFilter,
   availableBrandIds,
@@ -275,7 +249,6 @@ function FilterBar({
   onlyCarga, setOnlyCarga,
   onlyAT, setOnlyAT,
   hasActiveFilters, clearFilters,
-  sizeFilter, setSizeFilter,
   layout,
 }: {
   availableBrandIds: Set<string>;
@@ -291,17 +264,11 @@ function FilterBar({
   setOnlyAT: (v: boolean) => void;
   hasActiveFilters: boolean;
   clearFilters: () => void;
-  sizeFilter: SizeFilter;
-  setSizeFilter: (v: SizeFilter) => void;
   layout: "horizontal" | "vertical";
 }) {
   if (layout === "horizontal") {
     return (
       <div className="flex items-center gap-4 flex-wrap bg-white rounded-2xl border border-slate-100 px-5 py-4 shadow-sm mb-6">
-        <SizeInputs value={sizeFilter} onChange={setSizeFilter} />
-
-        <div className="w-px h-8 bg-slate-100 mx-1 shrink-0" />
-
         <BrandDropdown
           value={brandFilter}
           onChange={setBrandFilter}
@@ -350,11 +317,6 @@ function FilterBar({
 
   return (
     <div className="bg-white rounded-2xl border border-slate-100 p-6 space-y-8 shadow-sm">
-      <div>
-        <p className="text-xs font-black text-slate-400 uppercase tracking-[0.15em] mb-4">Medida</p>
-        <SizeInputs value={sizeFilter} onChange={setSizeFilter} />
-      </div>
-
       <div>
         <p className="text-xs font-black text-slate-400 uppercase tracking-[0.15em] mb-4">Marca</p>
         <BrandDropdown value={brandFilter} onChange={setBrandFilter} availableBrandIds={availableBrandIds} className="w-full" />
@@ -444,6 +406,7 @@ export function ShopPage({
   // completa muestra exactos y compatibles. Se descarta cuando la URL cambia
   // (Enter, un link, otra búsqueda), que remonta el buscador.
   const [live, setLive] = useState<SizeFilter | null>(null);
+  const [searchResetKey, setSearchResetKey] = useState(0);
   const [prevMedida, setPrevMedida] = useState(medida);
   if (prevMedida !== medida) {
     setPrevMedida(medida);
@@ -562,10 +525,11 @@ export function ShopPage({
     onlyCarga, setOnlyCarga,
     onlyAT, setOnlyAT,
     hasActiveFilters,
-    sizeFilter,
-    setSizeFilter,
     clearFilters() {
       setSizeFilter({ w: "", p: "", r: "" });
+      // Vacía también lo escrito en el buscador de la barra lateral.
+      setLive(null);
+      setSearchResetKey((k) => k + 1);
       setBrandFilter("todos");
       setMaxPrice(MAX_POSSIBLE_PRICE);
       setOnlyEconomic(false);
@@ -581,7 +545,7 @@ export function ShopPage({
 
           {/* Sidebar — search widget only */}
           <aside className="w-full lg:w-72 shrink-0 lg:sticky lg:top-32 lg:self-start lg:max-h-[calc(100dvh-9rem)] lg:overflow-y-auto lg:overscroll-contain">
-            <SizeOrVehicleSearch key={`${medida ?? "empty"}-${economicosParam}`} compact initialMedida={medida} forceVoiceButton initialEconomicos={economicosParam} onLiveChange={onLiveSize} />
+            <SizeOrVehicleSearch key={`${medida ?? "empty"}-${economicosParam}-${searchResetKey}`} compact initialMedida={medida} forceVoiceButton initialEconomicos={economicosParam} onLiveChange={onLiveSize} />
           </aside>
 
           {/* Main content */}
