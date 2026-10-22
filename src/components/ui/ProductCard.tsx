@@ -8,6 +8,7 @@ import { BestPriceBadge } from "@/components/ui/BestPriceBadge";
 import { isLowStock, stockLabel } from "@/lib/stock";
 import { useLiveStock, useLiveStockMap } from "@/contexts/live-stock-context";
 import { groupLabel, isBestPriceLive, type PricePeer } from "@/lib/best-price";
+import { productAlt, productThumb } from "@/lib/image-seo";
 import type { TireProduct } from "@/lib/types";
 import type { ReactNode } from "react";
 
@@ -91,8 +92,8 @@ export function ProductCard({
           {hasImage ? (
             <div className="relative w-full h-full">
               <Image
-                src={product.imageUrl}
-                alt={`${product.brand} ${product.model}`}
+                src={productThumb(product.imageUrl)}
+                alt={productAlt(product)}
                 fill
                 className="object-contain group-hover:scale-105 transition-transform duration-300"
                 sizes="(max-width: 768px) 100vw, 33vw"

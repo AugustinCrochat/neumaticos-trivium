@@ -6,6 +6,8 @@ import { LOCALIDADES } from "@/lib/localidades";
 import { cargaSlug } from "@/lib/carga";
 import { LOAD_SPEED_CODES } from "@/lib/load-speed";
 import { POPULAR_VEHICLES, vehicleSlug } from "@/lib/vehicles";
+import { productImagePaths } from "@/lib/image-seo";
+import { blogMeta } from "@/lib/blog-meta";
 import { getProductosDesdePOS, getAccesoriosDesdePOS } from "@/lib/pos-api";
 import {
   MEDIDAS_PRIORITARIAS,
@@ -56,8 +58,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     getAccesoriosDesdePOS(DEFAULT_BRANCH_ID),
   ]);
 
+  const abs = (src: string) => (src.startsWith("http") ? src : `${SITE_URL}${src}`);
+
   const estaticas: Entry[] = [
-    url("", 1, "daily"),
+    url("", 1, "daily", undefined, [abs("/images/branches/arguello-fachada.webp"), abs("/images/local/fachada-local-neumaticos-trivium-cordoba.webp")]),
     url("/catalogo", 0.9, "daily"),
     url("/neumaticos", 0.9, "weekly"),
     url("/neumaticos/ht", 0.7, "weekly"),
@@ -116,7 +120,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   );
 
   const sucursales: Entry[] = BRANCHES.map((b) =>
-    url(`/sucursales/${b.id}`, 0.9, "monthly")
+    url(`/sucursales/${b.id}`, 0.9, "monthly", undefined, b.id === "arguello" ? [abs("/images/branches/arguello-fachada.webp")] : undefined)
   );
 
   // Sólo marcas con productos: una página de marca vacía es contenido delgado y
@@ -126,7 +130,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url(`/marcas/${b.id}`, 0.7, "weekly")
   );
 
-  const servicios: Entry[] = [...SERVICES, ROTACION_SERVICE].map((s) => url(`/servicios/${s.id}`, 0.7, "monthly"));
+  // Fotos propias del taller, por servicio.
+  const SERVICE_IMAGES: Record<string, string[]> = {
+    alineacion: ["/images/servicios/alineacion.webp", "/images/local/tecnicos-alineando-auto-elevador-gomeria-trivium-cordoba.webp", "/images/local/alineadora-geoliner-630-taller-neumaticos-trivium-cordoba.webp"],
+    balanceo: ["/images/servicios/balanceo.webp", "/images/local/tecnico-balanceando-rueda-balanceadora-trivium-cordoba.webp"],
+    montaje: ["/images/servicios/arme-desarme.webp"],
+    "rotacion-de-ruedas": ["/images/local/rotacion-de-neumaticos-pirelli-rueda-desmontada-trivium.webp"],
+  };
+  const servicios: Entry[] = [...SERVICES, ROTACION_SERVICE].map((s) => url(`/servicios/${s.id}`, 0.7, "monthly", undefined, SERVICE_IMAGES[s.id]?.map(abs)));
 
   // Imágenes propias que queremos que se descubran en la búsqueda de imágenes.
   const POST_IMAGES: Record<string, string[]> = {
@@ -134,15 +145,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "neumaticos-de-marca-vs-importados-cual-conviene": [`${SITE_URL}/marca-premium-vs-alternativa-homologada-neumaticos.webp`],
   };
   const posts: Entry[] = BLOG_POSTS.map((p) =>
-    url(`/blog/${p.slug}`, 0.6, "monthly", p.date, POST_IMAGES[p.slug])
+    url(`/blog/${p.slug}`, 0.6, "monthly", p.date, [
+      ...new Set([...(POST_IMAGES[p.slug] ?? []), abs(blogMeta(p.slug).cover.src), abs(blogMeta(p.slug).figure.src)]),
+    ])
   );
 
   const fichasProducto: Entry[] = productos.map((p) =>
-    url(`/productos/${p.slug}`, p.enStock ? 0.8 : 0.4, "daily")
+    url(`/productos/${p.slug}`, p.enStock ? 0.8 : 0.4, "daily", undefined, productImagePaths(p).map(abs))
   );
 
   const fichasAccesorio: Entry[] = accesorios.map((a) =>
-    url(`/tuercas-antirrobo/${a.slug}`, a.enStock ? 0.6 : 0.3, "weekly")
+    url(`/tuercas-antirrobo/${a.slug}`, a.enStock ? 0.6 : 0.3, "weekly", undefined, a.imageUrl ? [abs(a.imageUrl)] : undefined)
   );
 
   return [

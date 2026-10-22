@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { productShare } from "@/lib/share-image";
+import { productImagePaths } from "@/lib/image-seo";
 import { getProductosDesdePOS, esRodadoCamion } from "@/lib/pos-api";
 import { getSelectedBranchSlug } from "@/lib/branch-server";
 import { getBrandLogo } from "@/lib/brand-utils";
@@ -90,12 +91,14 @@ function vehicleLabel(product: { vehicleType: string[]; size?: { rim: number } }
 }
 
 function buildProductJsonLd(product: {
-  id: string; slug: string; brand: string; model: string; imageUrl: string; price: number; enStock?: boolean;
+  id: string; slug: string; brand: string; brandId: string; model: string; modeloBase: string; imageUrl: string; price: number; enStock?: boolean;
   size: { width: number; profile: number; rim: number }; loadIndex?: string; loadIndexDual?: string; speedRating?: string;
   vehicleType: string[];
 }) {
   const url = `${SITE_URL}/productos/${product.slug}`;
-  const image = product.imageUrl.startsWith("http") ? product.imageUrl : `${SITE_URL}${product.imageUrl}`;
+  // Todas las fotos del producto (principal, banda y otros ángulos): Google
+  // elige entre ellas para Imágenes y para el rich result.
+  const image = productImagePaths(product).map((src) => (src.startsWith("http") ? src : `${SITE_URL}${src}`));
   // Google exige priceValidUntil para mostrar el precio en rich results. Con
   // precios que se mueven por inflación y tipo de cambio, 30 días es un
   // compromiso razonable: no promete un precio viejo ni obliga a rearmar el

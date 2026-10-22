@@ -7,6 +7,7 @@
 // La salida NO se commitea; se regenera en cada build (ver "prebuild").
 //
 // - products/<archivo>.jpg: la foto del neumático tal cual, sin recortar.
+// - ../thumbs/products/<archivo>.webp: miniaturas de 480 px para las grillas.
 // - site/<carpeta>/<archivo>.jpg: fotos del local y el taller en 1200x630, para
 //   notas del blog y páginas sin foto propia.
 
@@ -18,12 +19,13 @@ import sharp from "sharp";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const IMAGES = join(ROOT, "public", "images");
 const OUT = join(ROOT, "public", "og-cache", "share");
+const THUMBS = join(ROOT, "public", "og-cache", "thumbs", "products");
 
-async function convert(srcDir, outDir, pipeline) {
+async function convert(srcDir, outDir, pipeline, ext = ".jpg") {
   await mkdir(outDir, { recursive: true });
   const files = (await readdir(srcDir)).filter((f) => f.toLowerCase().endsWith(".webp"));
   for (const f of files) {
-    await pipeline(sharp(join(srcDir, f))).toFile(join(outDir, f.replace(/\.webp$/i, ".jpg")));
+    await pipeline(sharp(join(srcDir, f))).toFile(join(outDir, f.replace(/\.webp$/i, ext)));
   }
   return files.length;
 }
@@ -33,7 +35,11 @@ const product = (img) =>
 const site = (img) =>
   img.resize(1200, 630, { fit: "cover", position: sharp.strategy.attention }).jpeg({ quality: 80, mozjpeg: true });
 
+// Miniatura para las grillas del catálogo: las fotos originales son de 1200 px.
+const thumb = (img) => img.resize(480, 480, { fit: "inside", withoutEnlargement: true }).webp({ quality: 78 });
+
 async function main() {
+  await convert(join(IMAGES, "products"), THUMBS, thumb, ".webp");
   const p = await convert(join(IMAGES, "products"), join(OUT, "products"), product);
   let s = 0;
   for (const dir of ["local", "blog", "servicios", "branches"]) {

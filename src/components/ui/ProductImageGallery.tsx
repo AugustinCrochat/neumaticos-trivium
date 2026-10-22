@@ -9,6 +9,7 @@ import { useBranch } from "@/contexts/branch-context";
 import { isVisaMasterPromoDay } from "@/lib/promo-day";
 import { ImageLightbox } from "./ImageLightbox";
 import { ZoomPanel } from "./ZoomPanel";
+import { productAlt, productExtraAlt } from "@/lib/image-seo";
 
 const ZOOM_FACTOR = 2.5;
 
@@ -61,8 +62,8 @@ export function ProductImageGallery({
   }
 
   const slides: Slide[] = [
-    ...(hasImage ? [{ kind: "foto" as const, src: product.imageUrl, alt: `${product.brand} ${product.model}` }] : []),
-    ...extraPhotos.map((src) => ({ kind: "foto" as const, src, alt: `${product.brand} ${product.modeloBase} — otro ángulo` })),
+    ...(hasImage ? [{ kind: "foto" as const, src: product.imageUrl, alt: productAlt(product) }] : []),
+    ...extraPhotos.map((src, i) => ({ kind: "foto" as const, src, alt: productExtraAlt(product, src, i) })),
     ...(label
       ? [{ kind: "etiqueta" as const, src: label.imagePath, thumbSrc: label.thumbPath, alt: `Etiqueta de eficiencia energética UE — ${product.brand} ${product.modeloBase}, ${label.tyreDesignation}` }]
       : []),
