@@ -31,7 +31,7 @@ export function DotGuia() {
             height={1280}
             sizes="(min-width: 768px) 520px, 100vw"
             className="absolute max-w-none"
-            style={{ width: "369.2%", left: "-126.9%", top: "-612.5%" }}
+            style={{ width: "369.2%", left: "-126.9%", top: "-637.5%" }}
           />
           <div className="absolute rounded-md border-[3px] border-orange-500 bg-orange-500/15" style={{ left: "17%", top: "24%", width: "29%", height: "56%" }} />
           <div className="absolute rounded-md border-[3px] border-white bg-white/10" style={{ left: "50%", top: "24%", width: "32%", height: "56%" }} />
