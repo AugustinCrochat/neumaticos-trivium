@@ -37,6 +37,12 @@ const MAP_LOCALE = {
   "CooperativeGesturesHandler.MobileHelpText": "Usa dos dedos para mover el mapa",
 };
 
+// Valor por defecto estable: un `= []` en los parámetros crea un array nuevo en
+// cada render, y como `comingSoon` está en las dependencias del efecto que crea
+// el mapa, cada cambio de estado (p. ej. al ubicar la sucursal más cercana)
+// destruía el mapa y lo recreaba centrado en la sucursal inicial.
+const NO_COMING_SOON: ComingSoonBranch[] = [];
+
 function getDistanceInKm(from: UserLocation, to: UserLocation) {
   const earthRadiusKm = 6371;
   const latDelta = ((to.lat - from.lat) * Math.PI) / 180;
@@ -228,8 +234,8 @@ function BranchSummary({
   );
 }
 
-export function BranchesMap({ branches, comingSoon = [] }: BranchesMapProps) {
-  const { selectedBranch } = useBranch();
+export function BranchesMap({ branches, comingSoon = NO_COMING_SOON }: BranchesMapProps) {
+  const { selectedBranch, hasConfirmedBranch } = useBranch();
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<Map | null>(null);
   const userMarkerRef = useRef<Marker | null>(null);
@@ -545,10 +551,17 @@ export function BranchesMap({ branches, comingSoon = [] }: BranchesMapProps) {
             <button
               type="button"
               onClick={locateNearestBranch}
-              className="absolute left-4 top-4 z-10 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-bold text-navy-900 shadow-lg transition-colors hover:bg-navy-50 disabled:cursor-wait disabled:opacity-70"
+              className={`absolute left-4 top-4 z-10 inline-flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-black shadow-xl transition-all active:scale-[0.98] disabled:cursor-wait disabled:opacity-80 ${
+                hasConfirmedBranch
+                  ? "bg-black text-white hover:bg-zinc-800"
+                  : "bg-[#ff1e00] text-white ring-4 ring-[#ff1e00]/30 hover:bg-[#cc1800]"
+              }`}
               disabled={geoStatus === "loading"}
             >
-              {geoStatus === "loading" ? "Buscando..." : "Sucursal mas cercana"}
+              <svg className="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 8a4 4 0 100 8 4 4 0 000-8zm8.94 3A8.994 8.994 0 0013 3.06V1h-2v2.06A8.994 8.994 0 003.06 11H1v2h2.06A8.994 8.994 0 0011 20.94V23h2v-2.06A8.994 8.994 0 0020.94 13H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z" />
+              </svg>
+              {geoStatus === "loading" ? "Buscando..." : "Sucursal más cercana"}
             </button>
             {/* Mobile: popup compacto con "Cómo llegar" a mano apenas se toca un
                 pin — antes solo existía la tarjeta completa de abajo (hidden
