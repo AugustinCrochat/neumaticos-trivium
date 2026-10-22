@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { breadcrumbJsonLd, canonical } from "@/lib/seo";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { ClusterLinks } from "@/components/blog/ClusterLinks";
 import { BlogCoverStrip, BlogSearchStrip } from "@/components/blog/BlogShop";
 
 export const metadata: Metadata = {
@@ -323,6 +324,10 @@ export default function PrecioCalidadNeumaticosPage() {
           </div>
 
         </div>
+      </div>
+
+            <div className="max-w-3xl mx-auto px-4 pb-10">
+        <ClusterLinks current="precio-calidad-neumaticos-costo-por-km" />
       </div>
 
       <BlogSearchStrip slug="precio-calidad-neumaticos-costo-por-km" />

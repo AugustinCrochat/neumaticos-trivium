@@ -232,6 +232,60 @@ export const BLOG_META: Record<string, BlogMeta> = {
     shopIntro: "Si al rotar viste desgaste de más:",
     shopLinks: [L.todos, L.servicios, L.ofertas],
   },
+  "neumaticos-de-marca-vs-importados-cual-conviene": {
+    cover: { src: IMG.rotacion, alt: "Auto con una rueda desmontada y la cubierta Pirelli al lado", portrait: true },
+    figure: { src: IMG.kingpro, alt: "Cubierta Grenlander Kingpro One apoyada junto a una pickup", portrait: true, caption: "Una cubierta importada lista para colocar en el taller." },
+    shopIntro: "Mirá marcas y alternativas en tu medida:",
+    shopLinks: [L.todos, L.marcas, L.ofertas],
+  },
+  "son-malos-los-neumaticos-chinos": {
+    cover: { src: IMG.fachada, alt: "Frente del local de Neumáticos Trivium" },
+    figure: { src: IMG.grenlanderPerfilBajo, alt: "Cubierta Grenlander de perfil bajo ya colocada", caption: "Una Grenlander colocada: la homologación ECE R30 va grabada en el flanco." },
+    shopIntro: "Cubiertas importadas con homologación:",
+    shopLinks: [L.grenlander, L.todos, L.ofertas],
+  },
+  "cuanto-duran-los-neumaticos-economicos": {
+    cover: { src: IMG.taxi, alt: "Taxi dentro del taller de Neumáticos Trivium" },
+    figure: { src: IMG.tecnicosAlineando, alt: "Técnicos alineando un auto sobre el elevador", caption: "La alineación y la presión cuidan la vida útil más que la marca." },
+    shopIntro: "Compará precios en tu medida:",
+    shopLinks: [L.ofertas, L.servicios, L.todos],
+  },
+  "neumaticos-economicos-para-uso-urbano": {
+    cover: { src: IMG.taxi, alt: "Taxi dentro del taller de Neumáticos Trivium" },
+    figure: { src: IMG.montaje, alt: "Montaje de un neumático en el taller", caption: "Colocación y balanceo en el taller del local." },
+    shopIntro: "Medidas más pedidas para ciudad:",
+    shopLinks: [L.m175, L.m185, L.m205],
+  },
+  "diferencia-neumatico-caro-y-barato": {
+    cover: { src: IMG.rotacion, alt: "Auto con una rueda desmontada y la cubierta Pirelli al lado", portrait: true },
+    figure: { src: IMG.balanceando, alt: "Técnico de Trivium balanceando una rueda", portrait: true, caption: "El balanceo importa tanto como la marca." },
+    shopIntro: "Compará marcas en tu medida:",
+    shopLinks: [L.marcas, L.todos, L.ofertas],
+  },
+  "cuatro-economicos-o-dos-de-marca": {
+    cover: { src: IMG.pickup4x4, alt: "Pickup 4x4 sobre el elevador del taller" },
+    figure: { src: IMG.tecnicosAlineando, alt: "Técnicos alineando un auto sobre el elevador", caption: "Cuatro iguales y alineados: la base de un buen resultado." },
+    shopIntro: "Armá el juego completo:",
+    shopLinks: [L.todos, L.ofertas, L.servicios],
+  },
+  "como-elegir-neumatico-importado-seguro": {
+    cover: { src: IMG.kingpro, alt: "Cubierta Grenlander Kingpro One junto a una pickup", portrait: true },
+    figure: { src: IMG.rotacion, alt: "Rueda desmontada con la cubierta al lado", portrait: true, caption: "Antes de comprar, mirá el flanco: homologación y fecha DOT." },
+    shopIntro: "Cubiertas con homologación verificable:",
+    shopLinks: [L.grenlander, L.indice, L.todos],
+  },
+  "marca-o-importado-camioneta-at-carga": {
+    cover: { src: IMG.pickup4x4, alt: "Pickup 4x4 sobre el elevador del taller" },
+    figure: { src: IMG.atClasica, alt: "Camioneta clásica con neumáticos A/T Grenlander", caption: "Neumáticos A/T para uso mixto de ruta y tierra." },
+    shopIntro: "Para camioneta, A/T y carga:",
+    shopLinks: [L.at, L.carga, L.ht],
+  },
+  "alternativas-a-michelin-y-pirelli": {
+    cover: { src: IMG.rotacion, alt: "Auto con una rueda desmontada y la cubierta Pirelli al lado", portrait: true },
+    figure: { src: IMG.kingpro, alt: "Cubierta Grenlander Kingpro One junto a una pickup", portrait: true, caption: "Una alternativa importada junto a una pickup." },
+    shopIntro: "Mirá las marcas disponibles:",
+    shopLinks: [L.pirelli, L.michelin, L.marcas],
+  },
 };
 
 /** Respaldo para una nota nueva que todavía no está cargada arriba. */

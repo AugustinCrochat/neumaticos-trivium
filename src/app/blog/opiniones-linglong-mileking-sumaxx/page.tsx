@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { canonical } from "@/lib/seo";
+import { ClusterLinks } from "@/components/blog/ClusterLinks";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 
 export const metadata: Metadata = {
@@ -132,6 +133,7 @@ export default function OpinionesNeumaticosPage() {
         ruido de rodadura o unos metros extra de distancia de frenado en mojado extremo. En términos
         de costo por kilómetro recorrido, estas opciones asiáticas son imbatibles.
       </p>
+      <ClusterLinks current="opiniones-linglong-mileking-sumaxx" />
     </ArticleLayout>
   );
 }

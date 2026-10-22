@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { ClusterLinks } from "@/components/blog/ClusterLinks";
 import { BlogCoverStrip, BlogSearchStrip } from "@/components/blog/BlogShop";
 
 export const metadata: Metadata = {
@@ -270,6 +271,10 @@ export default function MarcasChinasComparativaPage() {
           </div>
 
         </div>
+      </div>
+
+            <div className="max-w-3xl mx-auto px-4 pb-10">
+        <ClusterLinks current="marcas-chinas-neumaticos-comparativa" />
       </div>
 
       <BlogSearchStrip slug="marcas-chinas-neumaticos-comparativa" />

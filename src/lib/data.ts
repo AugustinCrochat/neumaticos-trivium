@@ -396,4 +396,94 @@ export const BLOG_POSTS: BlogPost[] = [
     slug: "etiqueta-europea-neumaticos",
     category: "Guías",
   },
+  {
+    id: "27",
+    title: "Neumáticos de marca vs. importados: ¿cuál conviene?",
+    excerpt:
+      "Costo por kilómetro, frenado en mojado, ruido, garantía y uso real: cuándo vale la pena pagar una marca premium y cuándo una alternativa importada rinde igual de bien.",
+    imageUrl: "/images/blog-1.webp",
+    date: "2026-10-21",
+    slug: "neumaticos-de-marca-vs-importados-cual-conviene",
+    category: "Marcas",
+  },
+  {
+    id: "28",
+    title: "¿Son malos los neumáticos chinos? Mitos y realidad",
+    excerpt:
+      "Muchas marcas premium también fabrican en China. Lo que separa un buen neumático de uno malo no es el país: es la homologación, la trazabilidad y el control de calidad.",
+    imageUrl: "/images/blog-2.webp",
+    date: "2026-10-21",
+    slug: "son-malos-los-neumaticos-chinos",
+    category: "Marcas",
+  },
+  {
+    id: "29",
+    title: "¿Cuánto duran los neumáticos económicos?",
+    excerpt:
+      "La vida útil depende más del uso, la presión y la alineación que de la marca. Qué factores la definen y cómo estimarla sin inventar números.",
+    imageUrl: "/images/blog-1.webp",
+    date: "2026-10-21",
+    slug: "cuanto-duran-los-neumaticos-economicos",
+    category: "Guías",
+  },
+  {
+    id: "30",
+    title: "Neumáticos económicos para uso urbano: cuándo no necesitás premium",
+    excerpt:
+      "Si manejás en ciudad y a velocidades moderadas, la diferencia con una marca premium se achica. Qué conviene cuidar igual y qué podés ahorrarte.",
+    imageUrl: "/images/blog-2.webp",
+    date: "2026-10-21",
+    slug: "neumaticos-economicos-para-uso-urbano",
+    category: "Guías",
+  },
+  {
+    id: "31",
+    title: "Neumático caro vs. barato: qué cambia de verdad",
+    excerpt:
+      "Compuesto, frenado en mojado, ruido, consistencia y garantía: las diferencias reales entre una marca premium y una alternativa, y las que son puro marketing.",
+    imageUrl: "/images/blog-1.webp",
+    date: "2026-10-21",
+    slug: "diferencia-neumatico-caro-y-barato",
+    category: "Guías",
+  },
+  {
+    id: "32",
+    title: "¿Conviene poner 4 neumáticos económicos o 2 de marca?",
+    excerpt:
+      "Cuatro iguales casi siempre es mejor que mezclar. La cuenta, el criterio del eje trasero y cuándo conviene cambiar solo dos.",
+    imageUrl: "/images/blog-2.webp",
+    date: "2026-10-21",
+    slug: "cuatro-economicos-o-dos-de-marca",
+    category: "Guías",
+  },
+  {
+    id: "33",
+    title: "Cómo elegir un neumático importado seguro: checklist de 8 puntos",
+    excerpt:
+      "Homologación ECE o DOT, fecha de fabricación, índices de carga y velocidad, etiqueta, garantía y quién lo monta: qué verificar antes de comprar una marca que no conocés.",
+    imageUrl: "/images/blog-1.webp",
+    date: "2026-10-21",
+    slug: "como-elegir-neumatico-importado-seguro",
+    category: "Guías",
+  },
+  {
+    id: "34",
+    title: "Marca o importado en camioneta, A/T y carga: qué conviene",
+    excerpt:
+      "En uso exigente —carga, ruta, tierra— las diferencias pesan más. Dónde sí conviene mirar la marca y dónde una buena alternativa alcanza.",
+    imageUrl: "/images/blog-2.webp",
+    date: "2026-10-21",
+    slug: "marca-o-importado-camioneta-at-carga",
+    category: "Marcas",
+  },
+  {
+    id: "35",
+    title: "Alternativas a Michelin y Pirelli: qué marcas comparar",
+    excerpt:
+      "Cómo ubicar cada marca por segmento y qué mirar para elegir una alternativa más económica sin resignar seguridad.",
+    imageUrl: "/images/blog-1.webp",
+    date: "2026-10-21",
+    slug: "alternativas-a-michelin-y-pirelli",
+    category: "Marcas",
+  },
 ];
