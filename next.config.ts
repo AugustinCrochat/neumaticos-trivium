@@ -14,6 +14,8 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      // El índice de /indice-carga-velocidad/[codigo] nunca existió: la guía vive en el blog.
+      { source: "/indice-carga-velocidad", destination: "/blog/indice-de-carga-y-velocidad", permanent: true },
       {
         source: "/blog/neumaticos-chinos-mitos-y-verdades",
         destination: "/blog/marcas-chinas-neumaticos-comparativa",
