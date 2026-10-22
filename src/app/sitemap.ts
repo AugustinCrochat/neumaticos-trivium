@@ -72,6 +72,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url("/cotizador", 0.7, "monthly"),
     url("/servicios", 0.7, "monthly"),
     url("/sucursales", 0.8, "monthly"),
+    url("/mapa-del-sitio", 0.3, "monthly"),
     url("/tuercas-antirrobo", 0.7, "weekly"),
     url("/contacto", 0.5, "yearly"),
     url("/blog", 0.6, "weekly"),

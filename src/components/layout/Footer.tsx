@@ -87,6 +87,7 @@ export function Footer() {
                 { href: "/blog", label: "Blog" },
                 { href: "/sucursales", label: "Sucursales" },
                 { href: "/contacto", label: "Contacto" },
+                { href: "/mapa-del-sitio", label: "Todas las páginas →" },
               ].map((link) => (
                 <li key={link.href}>
                   <Link
