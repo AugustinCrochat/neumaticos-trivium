@@ -61,7 +61,7 @@ function SizeInput({ title, tone, value, onChange, placeholder, widthRef, onDone
   const pRef = useRef<HTMLInputElement>(null);
   const rRef = useRef<HTMLInputElement>(null);
   const digits = (s: string, max: number) => s.replace(/\D/g, "").slice(0, max);
-  const field = "w-full rounded-xl border-2 border-slate-200 bg-white px-2 py-2 text-center text-xl font-black text-navy-900 outline-none transition-colors focus:border-orange-500 focus:ring-4 focus:ring-orange-500/15 placeholder:text-slate-300 focus:placeholder:text-transparent sm:text-2xl";
+  const field = "w-full min-w-0 rounded-xl border-2 border-slate-200 bg-white px-2 py-2 text-center text-xl font-black text-navy-900 outline-none transition-colors focus:border-orange-500 focus:ring-4 focus:ring-orange-500/15 placeholder:text-slate-300 focus:placeholder:text-transparent sm:text-2xl";
   const onPaste = (e: React.ClipboardEvent) => {
     const parsed = parsePasted(e.clipboardData.getData("text"));
     if (parsed) { e.preventDefault(); onChange(parsed); }
@@ -69,7 +69,7 @@ function SizeInput({ title, tone, value, onChange, placeholder, widthRef, onDone
   return (
     <div className={`rounded-2xl border-t-4 bg-slate-50 p-3 sm:p-4 ${tone === "red" ? "border-orange-500" : "border-navy-700"}`}>
       <p className="mb-2 text-center text-xs font-black uppercase tracking-widest text-slate-500">{title}</p>
-      <div className="grid grid-cols-[1.25fr_auto_1fr_auto_1fr] items-center gap-1.5 sm:gap-2" onPaste={onPaste}>
+      <div className="grid grid-cols-[minmax(0,1.25fr)_auto_minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-1.5 sm:gap-2" onPaste={onPaste}>
         <input aria-label={`${title}: ancho en milímetros`} inputMode="numeric" autoComplete="off" ref={widthRef} value={value.w} placeholder={placeholder.w} className={field}
           onFocus={(e) => e.target.select()}
           onChange={(e) => { const w = digits(e.target.value, 3); onChange({ ...value, w }); if (w.length === 3) pRef.current?.focus(); }} />
@@ -82,7 +82,7 @@ function SizeInput({ title, tone, value, onChange, placeholder, widthRef, onDone
           onFocus={(e) => e.target.select()}
           onChange={(e) => { const r = digits(e.target.value, 2); onChange({ ...value, r }); if (r.length === 2) onDone?.(); }} />
       </div>
-      <div className="mt-1.5 grid grid-cols-[1.25fr_auto_1fr_auto_1fr] gap-1.5 text-center text-[10px] font-bold uppercase tracking-wide text-slate-400 sm:gap-2">
+      <div className="mt-1.5 grid grid-cols-[minmax(0,1.25fr)_auto_minmax(0,1fr)_auto_minmax(0,1fr)] gap-1.5 text-center text-[10px] font-bold uppercase tracking-wide text-slate-400 sm:gap-2">
         <span>Ancho</span><span className="w-3" /><span>Perfil</span><span className="w-3" /><span>Rodado</span>
       </div>
     </div>
@@ -100,8 +100,10 @@ function Gauge({ diff }: { diff: number }) {
         <div className="absolute inset-y-0 rounded-full bg-emerald-400" style={{ left: "20%", width: "60%" }} />
         <div className={`absolute top-1/2 h-6 w-6 -translate-x-1/2 -translate-y-1/2 rounded-full border-4 border-white shadow-md ${ok ? "bg-emerald-600" : "bg-red-600"}`} style={{ left: `${left}%` }} />
       </div>
-      <div className="mt-2 flex justify-between text-[11px] font-bold text-slate-500">
-        <span>-5%</span><span>-3%</span><span>0</span><span>+3%</span><span>+5%</span>
+      <div className="relative mt-2 h-4 text-[11px] font-bold text-slate-500">
+        {[[-5, "-5%"], [-3, "-3%"], [0, "0"], [3, "+3%"], [5, "+5%"]].map(([v, t]) => (
+          <span key={t} className={`absolute ${v === -5 ? "" : v === 5 ? "-translate-x-full" : "-translate-x-1/2"}`} style={{ left: `${((Number(v) + 5) / 10) * 100}%` }}>{t}</span>
+        ))}
       </div>
     </div>
   );

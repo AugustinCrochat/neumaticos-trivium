@@ -231,7 +231,7 @@ export default function ComoLeerMedidaPage() {
           </SectionHead>
           <figure className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl shadow-navy-900/10">
             <Image src={FLANCO_PHOTO} alt={FLANCO_ALT} width={1600} height={1093} sizes="(max-width: 1024px) 100vw, 1024px" className="h-auto w-full" />
-            <figcaption className="px-5 py-3 text-sm text-slate-500">Ejemplo real: 195/65 R15 95T XL, moldeado en relieve sobre el flanco. Cada número de la foto se explica en el cuadro.</figcaption>
+            <figcaption className="px-2.5 py-3 sm:px-5 text-sm text-slate-500">Ejemplo real: 195/65 R15 95T XL, moldeado en relieve sobre el flanco. Cada número de la foto se explica en el cuadro.</figcaption>
           </figure>
           <div className="mt-8 grid gap-6 md:grid-cols-2">
             <ul className="space-y-3 text-slate-600">
@@ -297,25 +297,25 @@ export default function ComoLeerMedidaPage() {
           </div>
 
           <div className="mt-8 overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
-            <table className="w-full min-w-[520px] text-left text-sm">
+            <table className="w-full text-left text-sm">
               <caption className="sr-only">Altura de flanco y diámetro total de medidas de neumáticos comunes</caption>
               <thead className="bg-black text-white">
                 <tr>
-                  <th scope="col" className="px-5 py-3 font-black">Medida</th>
-                  <th scope="col" className="px-5 py-3 font-black">Flanco</th>
-                  <th scope="col" className="px-5 py-3 font-black">Diámetro total</th>
-                  <th scope="col" className="px-5 py-3 font-black">Uso habitual</th>
+                  <th scope="col" className="px-2.5 py-3 sm:px-5 font-black">Medida</th>
+                  <th scope="col" className="px-2.5 py-3 sm:px-5 font-black">Flanco</th>
+                  <th scope="col" className="px-2.5 py-3 sm:px-5 font-black">Diámetro total</th>
+                  <th scope="col" className="px-2.5 py-3 sm:px-5 font-black">Uso habitual</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {EXAMPLES.map((e) => (
                   <tr key={e.size} className={e.size === "205/55 R16" ? "bg-orange-50" : ""}>
-                    <th scope="row" className="px-5 py-3 font-black text-navy-900">
+                    <th scope="row" className="px-2.5 py-3 sm:px-5 font-black text-navy-900">
                       <Link href={sizeSearchHref(...(e.size.match(/\d+/g) as [string, string, string]))} className="underline decoration-orange-500 decoration-2 underline-offset-4 hover:text-orange-600">{e.size}</Link>
                     </th>
-                    <td className="px-5 py-3 text-slate-600">{e.sidewall}</td>
-                    <td className="px-5 py-3 text-slate-600">{e.total}</td>
-                    <td className="px-5 py-3 text-slate-600">{e.note}</td>
+                    <td className="px-2.5 py-3 sm:px-5 text-slate-600">{e.sidewall}</td>
+                    <td className="px-2.5 py-3 sm:px-5 text-slate-600">{e.total}</td>
+                    <td className="px-2.5 py-3 sm:px-5 text-slate-600">{e.note}</td>
                   </tr>
                 ))}
               </tbody>

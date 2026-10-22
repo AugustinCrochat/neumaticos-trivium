@@ -25,8 +25,8 @@ const TYPO = `
   [&_p]:mb-5 [&_p]:text-lg [&_p]:leading-relaxed [&_p]:text-slate-600
   [&_strong]:font-bold [&_strong]:text-navy-900
   [&_table]:mb-6 [&_table]:w-full [&_table]:text-left [&_table]:text-sm
-  [&_td]:border-t [&_td]:border-slate-100 [&_td]:px-3 [&_td]:py-2.5 [&_td]:text-slate-600
-  [&_th]:bg-slate-50 [&_th]:px-3 [&_th]:py-2.5 [&_th]:font-black [&_th]:text-navy-900
+  [&_td]:border-t [&_td]:border-slate-100 [&_td]:px-2 sm:[&_td]:px-3 [&_td]:py-2.5 [&_td]:text-slate-600
+  [&_th]:bg-slate-50 [&_th]:px-2 sm:[&_th]:px-3 [&_th]:py-2.5 [&_th]:font-black [&_th]:text-navy-900
   [&_ul]:mb-5 [&_ul]:list-disc [&_ul]:space-y-2 [&_ul]:pl-6
 `;
 

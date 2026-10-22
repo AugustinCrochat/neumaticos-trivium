@@ -265,7 +265,7 @@ export default async function CalculadoraEquivalenciaNeumaticosPage({ searchPara
             <h3 className="text-xl font-black">¿Cuánto se desvía el velocímetro?</h3>
             <p className="mt-2 text-sm text-slate-300">Velocidad real cuando el tablero marca cada valor, si el diámetro es 3 % menor o 3 % mayor que el original.</p>
             <div className="mt-5 overflow-x-auto">
-              <table className="w-full min-w-[420px] text-left text-sm">
+              <table className="w-full text-left text-sm">
                 <thead>
                   <tr className="text-xs uppercase tracking-widest text-slate-400">
                     <th scope="col" className="py-2 pr-4 font-black">El tablero marca</th>
@@ -295,22 +295,22 @@ export default async function CalculadoraEquivalenciaNeumaticosPage({ searchPara
             Con el mismo rodado y hasta ±3 % de diferencia de diámetro. Tocá una medida para ver precios y stock.
           </Head>
           <div className="overflow-x-auto rounded-2xl border border-slate-200 shadow-sm">
-            <table className="w-full min-w-[640px] text-left text-sm">
+            <table className="w-full text-left text-sm">
               <caption className="sr-only">Medidas de neumáticos y sus equivalentes con el mismo rodado</caption>
               <thead className="bg-black text-white">
                 <tr>
-                  <th scope="col" className="px-5 py-3 font-black">Medida original</th>
-                  <th scope="col" className="px-5 py-3 font-black">Equivalentes (diferencia de diámetro)</th>
-                  <th scope="col" className="px-5 py-3 font-black"><span className="sr-only">Calcular</span></th>
+                  <th scope="col" className="px-2.5 py-3 sm:px-5 font-black">Medida original</th>
+                  <th scope="col" className="px-2.5 py-3 sm:px-5 font-black">Equivalentes (diferencia de diámetro)</th>
+                  <th scope="col" className="px-2.5 py-3 sm:px-5 font-black"><span className="sr-only">Calcular</span></th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {POPULAR.map(({ size, equivalents }) => (
                   <tr key={fmt(size)} className="align-top">
-                    <th scope="row" className="px-5 py-4 text-base font-black text-navy-900">
+                    <th scope="row" className="px-2.5 py-4 sm:px-5 text-base font-black text-navy-900">
                       <Link href={sizeSearchHref(String(size.width), String(size.profile), String(size.rim))} className="underline decoration-orange-500 decoration-2 underline-offset-4 hover:text-orange-600">{fmt(size)}</Link>
                     </th>
-                    <td className="px-5 py-4">
+                    <td className="px-2.5 py-4 sm:px-5">
                       <ul className="flex flex-wrap gap-2">
                         {equivalents.map((e) => (
                           <li key={fmt(e.size)}>
@@ -321,7 +321,7 @@ export default async function CalculadoraEquivalenciaNeumaticosPage({ searchPara
                         ))}
                       </ul>
                     </td>
-                    <td className="px-5 py-4 text-right">
+                    <td className="px-2.5 py-4 sm:px-5 text-right">
                       <Link href={`/calculadora-equivalencia-neumaticos?modo=list&original=${size.width}-${size.profile}-${size.rim}#calculadora`} className="whitespace-nowrap text-xs font-black text-navy-800 underline decoration-orange-500 decoration-2 underline-offset-4 hover:text-orange-600">Ver en stock →</Link>
                     </td>
                   </tr>

@@ -41,26 +41,26 @@ export function CargaExtra({ productos }: { productos: TireProduct[] }) {
             catálogo del local.
           </p>
           <div className="overflow-x-auto rounded-2xl border border-slate-200">
-            <table className="w-full min-w-[520px] text-left text-sm">
+            <table className="w-full text-left text-sm">
               <thead className="bg-slate-50 text-xs font-black uppercase tracking-wide text-slate-500">
                 <tr>
-                  <th className="px-4 py-3">Medida</th>
-                  <th className="px-4 py-3">Desde</th>
-                  <th className="px-4 py-3">Capacidad por rueda</th>
-                  <th className="px-4 py-3">Con stock</th>
+                  <th className="px-2.5 py-3 sm:px-4">Medida</th>
+                  <th className="px-2.5 py-3 sm:px-4">Desde</th>
+                  <th className="px-2.5 py-3 sm:px-4">Capacidad por rueda</th>
+                  <th className="px-2.5 py-3 sm:px-4">Con stock</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {porMedida.map(({ size, desde, barato, conStock }) => (
                   <tr key={cargaSlug(size)}>
-                    <td className="px-4 py-3 font-black text-slate-900">
+                    <td className="px-2.5 py-3 sm:px-4 font-black text-slate-900">
                       <Link href={`/neumaticos/carga/${cargaSlug(size)}`} className="hover:text-[#ff1e00]">
                         {formatCargaSize(size)}
                       </Link>
                     </td>
-                    <td className="px-4 py-3 font-bold">{desde ? formatPrice(desde) : "Consultar"}</td>
-                    <td className="px-4 py-3 text-slate-600">{cargaCapacityLabel(barato) ?? "—"}</td>
-                    <td className="px-4 py-3 text-slate-600">
+                    <td className="px-2.5 py-3 sm:px-4 font-bold">{desde ? formatPrice(desde) : "Consultar"}</td>
+                    <td className="px-2.5 py-3 sm:px-4 text-slate-600">{cargaCapacityLabel(barato) ?? "—"}</td>
+                    <td className="px-2.5 py-3 sm:px-4 text-slate-600">
                       {conStock > 0 ? `${conStock} ${conStock === 1 ? "modelo" : "modelos"}` : "Sin stock"}
                     </td>
                   </tr>
@@ -76,39 +76,39 @@ export function CargaExtra({ productos }: { productos: TireProduct[] }) {
           Neumático de carga vs. de auto
         </h2>
         <div className="overflow-x-auto rounded-2xl border border-slate-200">
-          <table className="w-full min-w-[520px] text-left text-sm">
+          <table className="w-full text-left text-sm">
             <thead className="bg-slate-50 text-xs font-black uppercase tracking-wide text-slate-500">
               <tr>
-                <th className="px-4 py-3"> </th>
-                <th className="px-4 py-3">De carga (C)</th>
-                <th className="px-4 py-3">De auto</th>
+                <th className="px-2.5 py-3 sm:px-4"> </th>
+                <th className="px-2.5 py-3 sm:px-4">De carga (C)</th>
+                <th className="px-2.5 py-3 sm:px-4">De auto</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 text-slate-700">
               <tr>
-                <td className="px-4 py-3 font-bold">Medida</td>
-                <td className="px-4 py-3">195/70 R15C</td>
-                <td className="px-4 py-3">195/70 R15</td>
+                <td className="px-2.5 py-3 sm:px-4 font-bold">Medida</td>
+                <td className="px-2.5 py-3 sm:px-4">195/70 R15C</td>
+                <td className="px-2.5 py-3 sm:px-4">195/70 R15</td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-bold">Carcasa</td>
-                <td className="px-4 py-3">Reforzada, más lonas</td>
-                <td className="px-4 py-3">Estándar</td>
+                <td className="px-2.5 py-3 sm:px-4 font-bold">Carcasa</td>
+                <td className="px-2.5 py-3 sm:px-4">Reforzada, más lonas</td>
+                <td className="px-2.5 py-3 sm:px-4">Estándar</td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-bold">Índice de carga</td>
-                <td className="px-4 py-3">Dos números (simple/dual), ej. 104/102</td>
-                <td className="px-4 py-3">Un solo número, ej. 91</td>
+                <td className="px-2.5 py-3 sm:px-4 font-bold">Índice de carga</td>
+                <td className="px-2.5 py-3 sm:px-4">Dos números (simple/dual), ej. 104/102</td>
+                <td className="px-2.5 py-3 sm:px-4">Un solo número, ej. 91</td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-bold">Presión de trabajo</td>
-                <td className="px-4 py-3">Más alta, según la carga</td>
-                <td className="px-4 py-3">Más baja</td>
+                <td className="px-2.5 py-3 sm:px-4 font-bold">Presión de trabajo</td>
+                <td className="px-2.5 py-3 sm:px-4">Más alta, según la carga</td>
+                <td className="px-2.5 py-3 sm:px-4">Más baja</td>
               </tr>
               <tr>
-                <td className="px-4 py-3 font-bold">Uso</td>
-                <td className="px-4 py-3">Furgones, utilitarios, reparto</td>
-                <td className="px-4 py-3">Autos de pasajeros</td>
+                <td className="px-2.5 py-3 sm:px-4 font-bold">Uso</td>
+                <td className="px-2.5 py-3 sm:px-4">Furgones, utilitarios, reparto</td>
+                <td className="px-2.5 py-3 sm:px-4">Autos de pasajeros</td>
               </tr>
             </tbody>
           </table>

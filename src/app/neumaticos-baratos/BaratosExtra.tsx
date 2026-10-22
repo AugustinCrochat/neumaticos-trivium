@@ -32,30 +32,30 @@ export function BaratosExtra({ productos }: { productos: TireProduct[] }) {
             precio que se cobra en el local de Córdoba.
           </p>
           <div className="overflow-x-auto rounded-2xl border border-slate-200">
-            <table className="w-full min-w-[520px] text-left text-sm">
+            <table className="w-full text-left text-sm">
               <thead className="bg-slate-50 text-xs font-black uppercase tracking-wide text-slate-500">
                 <tr>
-                  <th className="px-4 py-3">Rodado</th>
-                  <th className="px-4 py-3">Desde</th>
-                  <th className="px-4 py-3">Modelo más económico</th>
-                  <th className="px-4 py-3">Modelos con stock</th>
+                  <th className="px-2.5 py-3 sm:px-4">Rodado</th>
+                  <th className="px-2.5 py-3 sm:px-4">Desde</th>
+                  <th className="px-2.5 py-3 sm:px-4">Modelo más económico</th>
+                  <th className="px-2.5 py-3 sm:px-4">Modelos con stock</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {porRodado.map(({ rim, barato, cantidad }) => (
                   <tr key={rim}>
-                    <td className="px-4 py-3 font-black text-slate-900">
+                    <td className="px-2.5 py-3 sm:px-4 font-black text-slate-900">
                       <Link href={`/neumaticos/${rimSlug(rim)}`} className="hover:text-[#ff1e00]">
                         Rodado {rim}
                       </Link>
                     </td>
-                    <td className="px-4 py-3 font-black text-slate-900">{formatPrice(barato.price)}</td>
-                    <td className="px-4 py-3 text-slate-600">
+                    <td className="px-2.5 py-3 sm:px-4 font-black text-slate-900">{formatPrice(barato.price)}</td>
+                    <td className="px-2.5 py-3 sm:px-4 text-slate-600">
                       <Link href={`/productos/${barato.slug}`} className="hover:text-[#ff1e00]">
                         {barato.brand} {barato.model}
                       </Link>
                     </td>
-                    <td className="px-4 py-3 text-slate-600">{cantidad}</td>
+                    <td className="px-2.5 py-3 sm:px-4 text-slate-600">{cantidad}</td>
                   </tr>
                 ))}
               </tbody>
