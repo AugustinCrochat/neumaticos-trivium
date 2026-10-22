@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { DesgasteFoto } from "@/components/tools/DesgasteFoto";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { canonical } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
@@ -62,6 +63,7 @@ export default function Page() {
         si nunca las cambiás de lugar, esas dos llegan al límite legal mientras las otras dos
         todavía tienen goma de sobra. Rotar es la forma de que las cuatro lleguen juntas.
       </p>
+      <DesgasteFoto className="my-8" />
 
       <h2>Por qué se desgastan distinto</h2>
       <p>

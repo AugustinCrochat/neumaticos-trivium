@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { DesgasteFoto } from "@/components/tools/DesgasteFoto";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { canonical } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
@@ -62,6 +63,7 @@ export default function Page() {
         siquiera se parecen. Entender cuál es cuál te sirve para dos cosas: describir bien el
         síntoma cuando llegás al taller, y no pagar por algo que no necesitás.
       </p>
+      <DesgasteFoto className="my-8" />
 
       <h2>Balanceo: que la rueda gire sin vibrar</h2>
       <p>

@@ -20,7 +20,7 @@ export const TOOLS: Tool[] = [
     metaTitle: "¿Cuándo cambiar los neumáticos? Calculadora de desgaste y antigüedad",
     metaDescription:
       "Medí la profundidad del dibujo, ingresá el código DOT y los kilómetros: la herramienta te dice si tus neumáticos están bien, para vigilar o para cambiar ya.",
-    image: { src: "/images/products-tread/1011137-265-65r17-112t-terra-xplorer-c2-a-t-terra-xplorer-c2-a-t-x1.webp", alt: "Primer plano del dibujo de un neumático para medir su profundidad" },
+    image: { src: "/images/herramientas/neumatico-desgastado-testigo.webp", alt: "Neumático gastado hasta los testigos de desgaste" },
   },
   {
     slug: "codigo-dot",

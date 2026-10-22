@@ -1,4 +1,5 @@
 import { ToolPage, toolMetadata } from "@/components/tools/ToolPage";
+import { DesgasteFoto } from "@/components/tools/DesgasteFoto";
 import { CuandoCambiar } from "@/components/tools/CuandoCambiar";
 
 export const metadata = toolMetadata("cuando-cambiar-neumaticos");
@@ -38,6 +39,7 @@ export default function Page() {
       }
     >
       <CuandoCambiar />
+      <DesgasteFoto className="mt-8 border-t border-slate-200 pt-6" />
     </ToolPage>
   );
 }

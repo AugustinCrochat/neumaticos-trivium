@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { DesgasteFoto } from "@/components/tools/DesgasteFoto";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { canonical } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
@@ -58,6 +59,7 @@ export default function Page() {
         llegar con neumáticos en estados completamente distintos según cómo se manejaron, con qué
         presión anduvieron y si alguna vez pasaron por una alineación.
       </p>
+      <DesgasteFoto className="my-8" />
       <p>
         Dicho eso, sí hay un rango de referencia: <strong>entre 40.000 y 60.000 kilómetros</strong>{" "}
         para un neumático de uso urbano y mixto en condiciones razonables. Lo que sigue son las

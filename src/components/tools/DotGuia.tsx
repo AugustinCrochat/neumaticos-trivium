@@ -13,8 +13,8 @@ export function DotGuia() {
       <figure>
         <div className="relative aspect-[3/4] overflow-hidden rounded-2xl border-2 border-slate-300 bg-slate-100">
           <Image src={FOTO} alt="Flanco de un neumático con el código DOT de fabricación marcado" fill sizes="(min-width: 768px) 260px, 100vw" className="object-cover" priority />
-          <div className="absolute rounded-lg border-[3px] border-orange-500 shadow-[0_0_0_9999px_rgba(0,0,0,0.35)]" style={{ left: "35%", top: "58%", width: "25%", height: "7.5%" }} />
-          <span className="absolute rounded-md bg-orange-500 px-2 py-1 text-xs font-black uppercase tracking-wide text-white" style={{ left: "35%", top: "50.5%" }}>
+          <div className="absolute rounded-lg border-[3px] border-orange-500 shadow-[0_0_0_9999px_rgba(0,0,0,0.35)]" style={{ left: "37%", top: "60.8%", width: "21%", height: "6.8%" }} />
+          <span className="absolute rounded-md bg-orange-500 px-2 py-1 text-xs font-black uppercase tracking-wide text-white" style={{ left: "37%", top: "54%" }}>
             Acá está el DOT
           </span>
         </div>
