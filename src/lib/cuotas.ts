@@ -28,6 +28,9 @@ export function esNaranja(grupo: string): boolean {
 export function esGrupoObsoleto(grupo: string): boolean {
   // El viejo grupo dedicado de "3 cuotas sin interés" (ver aplicarOverrides).
   if (/sin\s*inter[eé]s/i.test(grupo)) return true;
+  // "Promoción Especial": grupo cargado en el POS sin coeficiente (no hay tasa
+  // que calcular), que acá aparecía como un medio de pago sin explicación.
+  if (/promoci[oó]n\s*especial/i.test(grupo)) return true;
   // "Cuotas" a secas es el genérico que en el POS es sólo la fuente de la
   // que Visa/Master "toma prestada" la tasa a 12 cuotas (ver planesParaGrupo)
   // — no es un medio de pago que el cliente pueda elegir por su cuenta acá,
