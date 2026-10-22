@@ -17,11 +17,11 @@ export function Velocimetro() {
     <div className="space-y-6">
       <div className="grid gap-5 md:grid-cols-2">
         <div className="rounded-2xl border-2 border-slate-300 bg-slate-100 p-4">
-          <p className="mb-2 font-black text-navy-900">Medida original (la del auto)</p>
+          <p className="mb-2 font-black text-tire-950">Medida original (la del auto)</p>
           <MedidaFields id="vel-a" value={a} onChange={setA} />
         </div>
         <div className="rounded-2xl border-2 border-slate-300 bg-slate-100 p-4">
-          <p className="mb-2 font-black text-navy-900">Medida nueva</p>
+          <p className="mb-2 font-black text-tire-950">Medida nueva</p>
           <MedidaFields id="vel-b" value={b} onChange={setB} />
         </div>
       </div>
@@ -49,8 +49,8 @@ export function Velocimetro() {
               <tbody className="divide-y divide-slate-100">
                 {VELOCIDADES.map((v) => (
                   <tr key={v}>
-                    <td className="px-3 py-2.5 font-black text-navy-900">{v} km/h</td>
-                    <td className="px-3 py-2.5 font-black text-navy-900">{num(v * ratio)} km/h</td>
+                    <td className="px-3 py-2.5 font-black text-tire-950">{v} km/h</td>
+                    <td className="px-3 py-2.5 font-black text-tire-950">{num(v * ratio)} km/h</td>
                     <td className="px-3 py-2.5 text-slate-600">{v * ratio - v >= 0 ? "+" : ""}{num(v * ratio - v)} km/h</td>
                   </tr>
                 ))}

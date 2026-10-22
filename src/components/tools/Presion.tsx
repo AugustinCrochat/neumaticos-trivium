@@ -53,13 +53,13 @@ export function Presion() {
       </Result>
 
       <div className="rounded-2xl border border-slate-200 p-4">
-        <p className="font-black text-navy-900">Conversor PSI a bar</p>
+        <p className="font-black text-tire-950">Conversor PSI a bar</p>
         <div className="mt-3 grid max-w-md grid-cols-2 items-end gap-3">
           <div>
             <label className={labelCls} htmlFor="psi">PSI (libras)</label>
             <input id="psi" inputMode="decimal" value={psi} onChange={(e) => setPsi(e.target.value)} className={inputCls} />
           </div>
-          <p className="pb-2 text-2xl font-black text-navy-900">= {Number.isNaN(p) ? "—" : bar(p)} bar</p>
+          <p className="pb-2 text-2xl font-black text-tire-950">= {Number.isNaN(p) ? "—" : bar(p)} bar</p>
         </div>
       </div>
     </div>

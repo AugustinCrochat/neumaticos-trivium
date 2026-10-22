@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 
 /** Piezas de formulario compartidas por las herramientas. */
 export const inputCls =
-  "w-full min-w-0 rounded-xl border-2 border-slate-300 bg-white px-3 py-2.5 text-base font-bold text-navy-900 outline-none focus:border-orange-500";
+  "w-full min-w-0 rounded-xl border-2 border-slate-300 bg-white px-3 py-2.5 text-base font-bold text-tire-950 outline-none focus:border-orange-500";
 export const labelCls = "mb-1 block text-xs font-black uppercase tracking-wide text-slate-500";
 
 export function Result({ tone, title, children }: { tone: "ok" | "warn" | "bad" | "info"; title: string; children?: ReactNode }) {

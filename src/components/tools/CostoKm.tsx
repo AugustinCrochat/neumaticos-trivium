@@ -9,7 +9,7 @@ const limpiar = (v: string) => Number(v.replace(/\D/g, ""));
 function Columna({ titulo, precio, setPrecio, km, setKm }: { titulo: string; precio: string; setPrecio: (v: string) => void; km: string; setKm: (v: string) => void }) {
   return (
     <div className="rounded-2xl border-2 border-slate-300 bg-slate-100 p-4">
-      <p className="mb-3 font-black text-navy-900">{titulo}</p>
+      <p className="mb-3 font-black text-tire-950">{titulo}</p>
       <label className={labelCls} htmlFor={`${titulo}-p`}>Precio por neumático ($)</label>
       <input id={`${titulo}-p`} inputMode="numeric" value={precio} onChange={(e) => setPrecio(e.target.value)} className={inputCls} />
       <label className={`${labelCls} mt-3`} htmlFor={`${titulo}-k`}>Vida útil estimada (km)</label>
@@ -52,7 +52,7 @@ export function CostoKm() {
             {([["A", A], ["B", B]] as const).map(([n, x]) => (
               <div key={n} className={`rounded-2xl border-2 p-4 ${mejor === n ? "border-emerald-300 bg-emerald-50" : "border-slate-200 bg-white"}`}>
                 <p className="text-xs font-black uppercase tracking-wide text-slate-500">Neumático {n}</p>
-                <p className="text-3xl font-black text-navy-900">{peso(por1000(x))}</p>
+                <p className="text-3xl font-black text-tire-950">{peso(por1000(x))}</p>
                 <p className="text-sm text-slate-600">cada 1.000 km{kmAnual > 0 && <> · dura unos {(x.km / kmAnual).toFixed(1).replace(".", ",")} años</>}</p>
               </div>
             ))}

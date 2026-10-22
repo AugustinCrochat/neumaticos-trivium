@@ -24,7 +24,7 @@ export function ConversorFlotation() {
   return (
     <div className="space-y-8">
       <section>
-        <h2 className="mb-3 text-lg font-black text-navy-900">De flotation (pulgadas) a métrica</h2>
+        <h2 className="mb-3 text-lg font-black text-tire-950">De flotation (pulgadas) a métrica</h2>
         <div className="flex max-w-lg gap-2">
           <div className="min-w-0 flex-1"><label className={labelCls} htmlFor="fd">Diámetro (pulg.)</label><input id="fd" inputMode="decimal" value={d} onChange={(e) => setD(e.target.value)} className={inputCls} /></div>
           <div className="min-w-0 flex-1"><label className={labelCls} htmlFor="fa">Ancho (pulg.)</label><input id="fa" inputMode="decimal" value={ancho} onChange={(e) => setAncho(e.target.value)} className={inputCls} /></div>
@@ -42,7 +42,7 @@ export function ConversorFlotation() {
       </section>
 
       <section>
-        <h2 className="mb-3 text-lg font-black text-navy-900">De métrica a flotation</h2>
+        <h2 className="mb-3 text-lg font-black text-tire-950">De métrica a flotation</h2>
         <div className="max-w-lg"><MedidaFields id="cm" value={m} onChange={setM} /></div>
         <div className="mt-4">
           {flDeM ? (

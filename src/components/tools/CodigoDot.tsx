@@ -54,15 +54,15 @@ export function CodigoDot() {
             <div className="grid gap-3 sm:grid-cols-3">
               <div className="rounded-2xl bg-slate-50 p-4">
                 <p className={labelCls}>Semana</p>
-                <p className="text-3xl font-black text-navy-900">{semana}</p>
+                <p className="text-3xl font-black text-tire-950">{semana}</p>
               </div>
               <div className="rounded-2xl bg-slate-50 p-4">
                 <p className={labelCls}>Año</p>
-                <p className="text-3xl font-black text-navy-900">{anio}</p>
+                <p className="text-3xl font-black text-tire-950">{anio}</p>
               </div>
               <div className="rounded-2xl bg-slate-50 p-4">
                 <p className={labelCls}>Antigüedad</p>
-                <p className="text-3xl font-black text-navy-900">{edadTxt}</p>
+                <p className="text-3xl font-black text-tire-950">{edadTxt}</p>
               </div>
             </div>
             <div className="mt-4">

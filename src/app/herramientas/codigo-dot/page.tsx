@@ -1,4 +1,5 @@
 import { ToolPage, toolMetadata } from "@/components/tools/ToolPage";
+import { DotGuia } from "@/components/tools/DotGuia";
 import { CodigoDot } from "@/components/tools/CodigoDot";
 
 export const metadata = toolMetadata("codigo-dot");
@@ -15,6 +16,7 @@ export default function Page() {
   return (
     <ToolPage
       slug="codigo-dot"
+      hero={false}
       intro="Escribí los 4 números del código DOT del flanco y te decimos en qué semana y año se fabricó el neumático, cuántos años tiene y si conviene cambiarlo."
       faqs={FAQS}
       guides={[
@@ -38,6 +40,10 @@ export default function Page() {
         </>
       }
     >
+      <h2 className="mb-4 text-xl font-black text-tire-950">Dónde está el código</h2>
+      <DotGuia />
+      <hr className="my-6 border-slate-200" />
+      <h2 className="mb-4 text-xl font-black text-tire-950">Probá con el tuyo</h2>
       <CodigoDot />
     </ToolPage>
   );

@@ -27,7 +27,8 @@ export const metadata: Metadata = {
 };
 
 type Item = { href: string; label: string; hint: string };
-type Section = { id: string; title: string; lead: string; icon: typeof ShoppingBag; tone: string; items: Item[] };
+type Foto = { src: string; alt: string };
+type Section = { id: string; title: string; lead: string; icon: typeof ShoppingBag; tone: string; foto: Foto; items: Item[] };
 
 const SECTIONS: Section[] = [
   {
@@ -36,6 +37,7 @@ const SECTIONS: Section[] = [
     lead: "Todo el stock, por medida, por tipo o por marca.",
     icon: ShoppingBag,
     tone: "bg-orange-500",
+    foto: { src: "/images/local/neumatico-grenlander-kingpro-one-pickup-trivium.webp", alt: "Neumático Grenlander Kingpro One colocado en una pick-up" },
     items: [
       { href: "/catalogo", label: "Catálogo de neumáticos", hint: "Todo el stock con filtros por medida, marca y precio." },
       { href: "/neumaticos", label: "Neumáticos por medida", hint: "Buscá por ancho, perfil y rodado." },
@@ -53,7 +55,8 @@ const SECTIONS: Section[] = [
     title: "Herramientas",
     lead: "Para decidir con datos antes de comprar.",
     icon: Calculator,
-    tone: "bg-navy-900",
+    tone: "bg-black",
+    foto: { src: "/images/local/target-alineadora-rueda-auto-elevador-trivium-cordoba.webp", alt: "Target de la alineadora 3D en la rueda de un auto sobre el elevador" },
     items: [
       { href: "/herramientas", label: "Todas las herramientas", hint: "Calculadoras y conversores gratis." },
       { href: "/calculadora-equivalencia-neumaticos", label: "Calculadora de equivalencias", hint: "Verificá si otra medida es compatible con la tuya." },
@@ -67,7 +70,8 @@ const SECTIONS: Section[] = [
     title: "Gomería y servicios",
     lead: "El taller donde te colocamos las cubiertas.",
     icon: Wrench,
-    tone: "bg-emerald-600",
+    tone: "bg-tire-700",
+    foto: { src: "/images/local/tecnicos-alineando-auto-elevador-gomeria-trivium-cordoba.webp", alt: "Técnicos alineando un auto en el elevador del taller de Trivium" },
     items: [
       { href: "/servicios", label: "Gomería y servicios", hint: "Todo lo que hacemos en el taller." },
       { href: "/servicios/alineacion", label: "Alineación", hint: "Las ruedas apuntando donde deben." },
@@ -82,7 +86,8 @@ const SECTIONS: Section[] = [
     title: "Ayuda y contacto",
     lead: "Dónde estamos y cómo hablar con nosotros.",
     icon: MapPin,
-    tone: "bg-sky-600",
+    tone: "bg-tire-500",
+    foto: { src: "/images/local/fachada-local-neumaticos-trivium-cordoba.webp", alt: "Fachada del local de Neumáticos Trivium en Argüello, Córdoba" },
     items: [
       { href: "/sucursales", label: "Sucursales", hint: "Direcciones, horarios y cómo llegar." },
       { href: "/neumaticos-en", label: "Zonas donde atendemos", hint: "Localidades y barrios de Córdoba." },
@@ -151,8 +156,17 @@ export default async function MapaDelSitioPage() {
     <div className="min-h-screen bg-slate-50">
       <JsonLd data={collectionJsonLd} />
 
-      <header className="bg-gradient-to-br from-navy-900 via-navy-900 to-navy-800 text-white">
-        <div className="mx-auto max-w-6xl px-4 py-10 md:py-16">
+      <header className="relative overflow-hidden bg-black text-white">
+        <Image
+          src="/images/local/fachada-local-neumaticos-trivium-cordoba.webp"
+          alt="Fachada del local de Neumáticos Trivium en Argüello, Córdoba"
+          fill
+          sizes="100vw"
+          priority
+          className="object-cover opacity-30"
+        />
+        <div aria-hidden className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-black/30" />
+        <div className="relative mx-auto max-w-6xl px-4 py-10 md:py-16">
           <Breadcrumbs
             crumbs={[
               { name: "Inicio", path: "/" },
@@ -188,7 +202,7 @@ export default async function MapaDelSitioPage() {
               <a
                 key={a.id}
                 href={`#${a.id}`}
-                className="rounded-full border border-white/20 px-3.5 py-1.5 text-sm font-bold text-white transition-colors hover:bg-white hover:text-navy-900"
+                className="rounded-full border border-white/20 px-3.5 py-1.5 text-sm font-bold text-white transition-colors hover:bg-white hover:text-tire-950"
               >
                 {a.title}
               </a>
@@ -202,13 +216,18 @@ export default async function MapaDelSitioPage() {
           {SECTIONS.map((section) => {
             const Icon = section.icon;
             return (
-              <section key={section.id} id={section.id} className="scroll-mt-24 rounded-3xl border border-slate-200 bg-white p-5 shadow-sm md:p-6">
+              <section key={section.id} id={section.id} className="scroll-mt-24 overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+                <div className="relative aspect-[16/6] w-full bg-slate-200">
+                  <Image src={section.foto.src} alt={section.foto.alt} fill sizes="(min-width: 768px) 50vw, 100vw" className="object-cover" />
+                  <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                </div>
+                <div className="p-5 md:p-6">
                 <div className="flex items-center gap-3">
                   <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl text-white ${section.tone}`}>
                     <Icon className="h-5 w-5" aria-hidden />
                   </span>
                   <div>
-                    <h2 className="text-xl font-black text-navy-900">{section.title}</h2>
+                    <h2 className="text-xl font-black text-tire-950">{section.title}</h2>
                     <p className="text-sm text-slate-500">{section.lead}</p>
                   </div>
                 </div>
@@ -216,19 +235,20 @@ export default async function MapaDelSitioPage() {
                   {section.items.map((item) => (
                     <li key={item.href}>
                       <Link href={item.href} className="group block h-full rounded-xl px-3 py-2.5 transition-colors hover:bg-slate-50">
-                        <span className="font-black text-navy-900 group-hover:text-orange-600">{item.label}</span>
+                        <span className="font-black text-tire-950 group-hover:text-orange-600">{item.label}</span>
                         <span className="block text-sm leading-snug text-slate-500">{item.hint}</span>
                       </Link>
                     </li>
                   ))}
                 </ul>
+                </div>
               </section>
             );
           })}
         </div>
 
         <section id="medidas" className="scroll-mt-24">
-          <h2 className="text-2xl font-black text-navy-900 md:text-3xl">Medidas de neumáticos con stock</h2>
+          <h2 className="text-2xl font-black text-tire-950 md:text-3xl">Medidas de neumáticos con stock</h2>
           <p className="mt-2 max-w-3xl text-slate-600">
             Cada medida lleva a su página con los modelos, precios y los autos que la usan. Ordenadas por rodado, con el
             precio desde por unidad.
@@ -244,7 +264,7 @@ export default async function MapaDelSitioPage() {
                         href={`/neumaticos/${sizeSlug(size)}`}
                         className="flex flex-col rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 transition-colors hover:border-orange-500 hover:bg-white"
                       >
-                        <span className="text-sm font-black text-navy-900">
+                        <span className="text-sm font-black text-tire-950">
                           {size.width}/{size.profile} R{size.rim}
                         </span>
                         <span className="text-xs text-slate-500">desde ${desde.toLocaleString("es-AR")}</span>
@@ -258,7 +278,7 @@ export default async function MapaDelSitioPage() {
         </section>
 
         <section id="marcas" className="scroll-mt-24">
-          <h2 className="text-2xl font-black text-navy-900 md:text-3xl">Marcas que vendemos</h2>
+          <h2 className="text-2xl font-black text-tire-950 md:text-3xl">Marcas que vendemos</h2>
           <ul className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
             {marcas.map(({ brand, total }) => (
               <li key={brand.id}>
@@ -271,7 +291,7 @@ export default async function MapaDelSitioPage() {
                       <Image src={brand.logoUrl} alt={`Logo de ${brand.name}`} width={120} height={48} className="max-h-12 w-auto object-contain" />
                     ) : null}
                   </span>
-                  <span className="text-sm font-black text-navy-900">{brand.name}</span>
+                  <span className="text-sm font-black text-tire-950">{brand.name}</span>
                   <span className="text-xs text-slate-500">{total} {total === 1 ? "modelo" : "modelos"}</span>
                 </Link>
               </li>
@@ -281,12 +301,27 @@ export default async function MapaDelSitioPage() {
 
         <section id="blog" className="scroll-mt-24">
           <div className="flex items-center gap-3">
-            <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-violet-600 text-white">
+            <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-tire-700 text-white">
               <CircleHelp className="h-5 w-5" aria-hidden />
             </span>
-            <h2 className="text-2xl font-black text-navy-900 md:text-3xl">Guías y notas del blog</h2>
+            <h2 className="text-2xl font-black text-tire-950 md:text-3xl">Guías y notas del blog</h2>
           </div>
-          <div className="mt-6 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          <ul className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-3">
+            {posts.slice(0, 3).map((p) => (
+              <li key={p.slug}>
+                <Link href={`/blog/${p.slug}`} className="group block overflow-hidden rounded-2xl border border-slate-200 bg-white">
+                  <span className="relative block aspect-[16/9] bg-slate-200">
+                    <Image src={p.imageUrl} alt={p.title} fill sizes="(min-width: 768px) 33vw, 50vw" className="object-cover transition-transform group-hover:scale-105" />
+                  </span>
+                  <span className="block p-3">
+                    <span className="block text-xs font-black uppercase tracking-wide text-orange-600">{p.category}</span>
+                    <span className="block text-sm font-black leading-snug text-tire-950">{p.title}</span>
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
             {categorias.map((cat) => (
               <div key={cat} className="rounded-3xl border border-slate-200 bg-white p-5">
                 <h3 className="mb-2 text-sm font-black uppercase tracking-widest text-slate-500">{cat}</h3>
@@ -296,7 +331,7 @@ export default async function MapaDelSitioPage() {
                     .map((p) => (
                       <li key={p.slug}>
                         <Link href={`/blog/${p.slug}`} className="group block">
-                          <span className="font-bold leading-snug text-navy-900 group-hover:text-orange-600">{p.title}</span>
+                          <span className="font-bold leading-snug text-tire-950 group-hover:text-orange-600">{p.title}</span>
                           <span className="block text-xs text-slate-400">{fecha(p.date)}</span>
                         </Link>
                       </li>
@@ -308,7 +343,7 @@ export default async function MapaDelSitioPage() {
         </section>
 
         <section id="zonas" className="scroll-mt-24">
-          <h2 className="text-2xl font-black text-navy-900 md:text-3xl">Zonas que atendemos</h2>
+          <h2 className="text-2xl font-black text-tire-950 md:text-3xl">Zonas que atendemos</h2>
           <p className="mt-2 max-w-3xl text-slate-600">
             {LOCALIDADES.length} localidades y barrios con su página: cómo llegar al local, tiempos y qué hacemos en cada zona.
           </p>

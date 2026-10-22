@@ -56,7 +56,7 @@ export function ArmaTuJuego({ productos }: { productos: JuegoProducto[] }) {
   return (
     <div className="space-y-6">
       <div>
-        <p className="mb-2 font-black text-navy-900">1. ¿Qué auto tenés? <span className="font-normal text-slate-500">(o escribí la medida abajo)</span></p>
+        <p className="mb-2 font-black text-tire-950">1. ¿Qué auto tenés? <span className="font-normal text-slate-500">(o escribí la medida abajo)</span></p>
         <div className="grid gap-3 sm:grid-cols-2">
           <div>
             <label className={labelCls} htmlFor="aj-marca">Marca</label>
@@ -82,7 +82,7 @@ export function ArmaTuJuego({ productos }: { productos: JuegoProducto[] }) {
                   key={`${m.w}-${m.p}-${m.r}`}
                   type="button"
                   onClick={() => { setMedida({ w: m.w, p: m.p, r: m.r }); setElegido(null); }}
-                  className={`rounded-xl border-2 px-3 py-2 text-sm font-black ${medida.w === m.w && medida.p === m.p && medida.r === m.r ? "border-orange-500 bg-orange-50 text-orange-700" : "border-slate-300 bg-white text-navy-900"}`}
+                  className={`rounded-xl border-2 px-3 py-2 text-sm font-black ${medida.w === m.w && medida.p === m.p && medida.r === m.r ? "border-orange-500 bg-orange-50 text-orange-700" : "border-slate-300 bg-white text-tire-950"}`}
                 >
                   {m.w}/{m.p} R{m.r}
                 </button>
@@ -101,7 +101,7 @@ export function ArmaTuJuego({ productos }: { productos: JuegoProducto[] }) {
 
       {medidaCompleta(medida) && (
         <div>
-          <p className="mb-2 font-black text-navy-900">2. Elegí un neumático con stock</p>
+          <p className="mb-2 font-black text-tire-950">2. Elegí un neumático con stock</p>
           {lista.length === 0 ? (
             <Result tone="warn" title={`No tenemos ${medida.w}/${medida.p} R${medida.r} con stock hoy`}>
               Escribinos por WhatsApp y te avisamos cuándo entra o te sugerimos una medida equivalente.
@@ -119,8 +119,8 @@ export function ArmaTuJuego({ productos }: { productos: JuegoProducto[] }) {
                     {x.img && <Image src={x.img} alt={x.label} width={64} height={64} className="h-16 w-16 shrink-0 rounded-lg object-contain" />}
                     <span className="min-w-0">
                       <span className="block truncate text-xs font-black uppercase text-slate-500">{x.brand}</span>
-                      <span className="block text-sm font-bold leading-snug text-navy-900">{x.label}</span>
-                      <span className="block text-lg font-black text-navy-900">{peso(x.price)} <span className="text-xs font-normal text-slate-500">c/u</span></span>
+                      <span className="block text-sm font-bold leading-snug text-tire-950">{x.label}</span>
+                      <span className="block text-lg font-black text-tire-950">{peso(x.price)} <span className="text-xs font-normal text-slate-500">c/u</span></span>
                     </span>
                   </button>
                 </li>
@@ -131,11 +131,11 @@ export function ArmaTuJuego({ productos }: { productos: JuegoProducto[] }) {
       )}
 
       {producto && (
-        <div className="rounded-2xl border-2 border-navy-900 bg-slate-50 p-4">
-          <p className="mb-3 font-black text-navy-900">3. Tu presupuesto</p>
+        <div className="rounded-2xl border-2 border-tire-950 bg-slate-50 p-4">
+          <p className="mb-3 font-black text-tire-950">3. Tu presupuesto</p>
           <div className="flex flex-wrap items-center gap-2">
             {[2, 4].map((n) => (
-              <button key={n} type="button" onClick={() => setCantidad(n)} className={`rounded-xl border-2 px-4 py-2 text-sm font-black ${cantidad === n ? "border-orange-500 bg-orange-50 text-orange-700" : "border-slate-300 bg-white text-navy-900"}`}>
+              <button key={n} type="button" onClick={() => setCantidad(n)} className={`rounded-xl border-2 px-4 py-2 text-sm font-black ${cantidad === n ? "border-orange-500 bg-orange-50 text-orange-700" : "border-slate-300 bg-white text-tire-950"}`}>
                 {n === 4 ? "Juego de 4" : "2 neumáticos"}
               </button>
             ))}
@@ -149,7 +149,7 @@ export function ArmaTuJuego({ productos }: { productos: JuegoProducto[] }) {
           <dl className="mt-4 space-y-1 text-sm">
             <div className="flex justify-between"><dt>{cantidad} × {peso(producto.price)}</dt><dd className="font-bold">{peso(subtotal)}</dd></div>
             {servicio > 0 && <div className="flex justify-between"><dt>Servicio</dt><dd className="font-bold">{peso(servicio)}</dd></div>}
-            <div className="flex justify-between border-t border-slate-300 pt-2 text-xl font-black text-navy-900"><dt>Total</dt><dd>{peso(total)}</dd></div>
+            <div className="flex justify-between border-t border-slate-300 pt-2 text-xl font-black text-tire-950"><dt>Total</dt><dd>{peso(total)}</dd></div>
           </dl>
           <a
             href={`https://wa.me/${selectedBranch.whatsapp}?text=${encodeURIComponent(texto)}`}

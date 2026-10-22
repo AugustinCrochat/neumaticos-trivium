@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
@@ -33,6 +34,7 @@ export function ToolPage({
   article,
   faqs,
   guides = [],
+  hero = true,
 }: {
   slug: string;
   intro: string;
@@ -41,6 +43,8 @@ export function ToolPage({
   article?: ReactNode;
   faqs: Faq[];
   guides?: { href: string; label: string }[];
+  /** Foto de la herramienta junto al título. */
+  hero?: boolean;
 }) {
   const tool = TOOLS.find((t) => t.slug === slug) as Tool;
   const path = toolPath(slug);
@@ -71,22 +75,31 @@ export function ToolPage({
             { name: tool.name, path },
           ]}
         />
-        <h1 className="text-3xl font-black leading-tight text-navy-900 md:text-5xl">{tool.name}</h1>
-        <p className="mt-3 max-w-2xl text-lg leading-relaxed text-slate-600">{intro}</p>
+        <div className={hero ? "grid items-center gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,320px)]" : ""}>
+          <div>
+            <h1 className="text-3xl font-black leading-tight text-tire-950 md:text-5xl">{tool.name}</h1>
+            <p className="mt-3 max-w-2xl text-lg leading-relaxed text-slate-600">{intro}</p>
+          </div>
+          {hero && (
+            <div className="relative aspect-[16/10] overflow-hidden rounded-3xl border border-slate-200 bg-slate-200 shadow-sm">
+              <Image src={tool.image.src} alt={tool.image.alt} fill sizes="(min-width: 768px) 320px, 100vw" className="object-cover" priority />
+            </div>
+          )}
+        </div>
 
         <div className="mt-8 rounded-3xl border border-slate-200 bg-white p-4 shadow-sm md:p-6">{children}</div>
 
-        {article && <div className="prose-tool mt-10 max-w-3xl space-y-4 leading-relaxed text-slate-700 [&_h2]:mt-8 [&_h2]:text-2xl [&_h2]:font-black [&_h2]:text-navy-900 [&_li]:ml-5 [&_li]:list-disc [&_strong]:text-slate-900">{article}</div>}
+        {article && <div className="prose-tool mt-10 max-w-3xl space-y-4 leading-relaxed text-slate-700 [&_h2]:mt-8 [&_h2]:text-2xl [&_h2]:font-black [&_h2]:text-tire-950 [&_li]:ml-5 [&_li]:list-disc [&_strong]:text-slate-900">{article}</div>}
 
         <FaqSection faqs={faqs} />
 
         {guides.length > 0 && (
           <section className="mt-10">
-            <h2 className="mb-3 text-xl font-black text-navy-900">Para leer también</h2>
+            <h2 className="mb-3 text-xl font-black text-tire-950">Para leer también</h2>
             <ul className="flex flex-wrap gap-2">
               {guides.map((g) => (
                 <li key={g.href}>
-                  <Link href={g.href} className="inline-block rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-navy-900 hover:border-orange-500 hover:text-orange-600">
+                  <Link href={g.href} className="inline-block rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-tire-950 hover:border-orange-500 hover:text-orange-600">
                     {g.label}
                   </Link>
                 </li>
@@ -96,13 +109,18 @@ export function ToolPage({
         )}
 
         <section className="mt-12">
-          <h2 className="mb-4 text-xl font-black text-navy-900">Otras herramientas</h2>
+          <h2 className="mb-4 text-xl font-black text-tire-950">Otras herramientas</h2>
           <ul className="grid gap-3 sm:grid-cols-2">
             {otras.map((t) => (
               <li key={t.slug}>
-                <Link href={toolPath(t.slug)} className="block h-full rounded-2xl border border-slate-200 bg-white p-4 transition-colors hover:border-orange-500">
-                  <span className="block font-black text-navy-900">{t.name}</span>
-                  <span className="mt-1 block text-sm text-slate-500">{t.short}</span>
+                <Link href={toolPath(t.slug)} className="flex h-full items-center gap-3 rounded-2xl border border-slate-200 bg-white p-3 transition-colors hover:border-orange-500">
+                  <span className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-slate-200">
+                    <Image src={t.image.src} alt={t.image.alt} fill sizes="64px" className="object-cover" />
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block font-black text-tire-950">{t.name}</span>
+                    <span className="mt-0.5 block text-sm leading-snug text-slate-500">{t.short}</span>
+                  </span>
                 </Link>
               </li>
             ))}

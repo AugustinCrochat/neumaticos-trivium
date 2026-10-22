@@ -8,6 +8,8 @@ export type Tool = {
   /** <title> */
   metaTitle: string;
   metaDescription: string;
+  /** Foto de la tarjeta y del encabezado. */
+  image: { src: string; alt: string };
 };
 
 export const TOOLS: Tool[] = [
@@ -18,6 +20,7 @@ export const TOOLS: Tool[] = [
     metaTitle: "¿Cuándo cambiar los neumáticos? Calculadora de desgaste y antigüedad",
     metaDescription:
       "Medí la profundidad del dibujo, ingresá el código DOT y los kilómetros: la herramienta te dice si tus neumáticos están bien, para vigilar o para cambiar ya.",
+    image: { src: "/images/products-tread/1011137-265-65r17-112t-terra-xplorer-c2-a-t-terra-xplorer-c2-a-t-x1.webp", alt: "Primer plano del dibujo de un neumático para medir su profundidad" },
   },
   {
     slug: "codigo-dot",
@@ -26,6 +29,7 @@ export const TOOLS: Tool[] = [
     metaTitle: "Código DOT del neumático: cómo saber la fecha de fabricación",
     metaDescription:
       "Ingresá los 4 dígitos del código DOT de tu neumático y conocé la semana y el año de fabricación, cuántos años tiene y si conviene cambiarlo.",
+    image: { src: "/images/herramientas/codigo-dot-flanco-neumatico.webp", alt: "Flanco de un neumático con el código DOT de fabricación grabado" },
   },
   {
     slug: "presion-neumaticos",
@@ -34,6 +38,7 @@ export const TOOLS: Tool[] = [
     metaTitle: "Presión de neumáticos: cuántas libras poner según tu vehículo",
     metaDescription:
       "Rangos de presión en frío en PSI y bar según el tipo de vehículo y si viajás cargado. Conversor PSI a bar y cómo leer la calcomanía del auto.",
+    image: { src: "/images/local/camionetas-en-elevador-taller-neumaticos-trivium-cordoba.webp", alt: "Camionetas sobre los elevadores del taller de Neumáticos Trivium" },
   },
   {
     slug: "velocimetro-neumaticos",
@@ -42,6 +47,7 @@ export const TOOLS: Tool[] = [
     metaTitle: "Velocímetro con otra medida de neumático: error y velocidad real",
     metaDescription:
       "Calculá cuánto cambia el velocímetro y el cuentakilómetros al usar una medida de neumático distinta: tabla de velocidad marcada contra velocidad real.",
+    image: { src: "/images/local/cubierta-perfil-bajo-grenlander-colocada-neumaticos-trivium.webp", alt: "Cubierta de perfil bajo recién colocada en una llanta" },
   },
   {
     slug: "costo-por-kilometro",
@@ -50,6 +56,7 @@ export const TOOLS: Tool[] = [
     metaTitle: "Costo por kilómetro de un neumático: calculadora para comparar",
     metaDescription:
       "Compará un neumático de marca contra uno económico por costo cada 1.000 km y por año, según el precio, la vida útil estimada y tus kilómetros anuales.",
+    image: { src: "/images/local/neumatico-grenlander-kingpro-one-pickup-trivium.webp", alt: "Neumático Grenlander Kingpro One colocado en una pick-up" },
   },
   {
     slug: "conversor-flotation",
@@ -58,6 +65,7 @@ export const TOOLS: Tool[] = [
     metaTitle: "Conversor de medidas flotation a métricas: 31x10.5 R15 y más",
     metaDescription:
       "Convertí medidas en pulgadas (31x10.5 R15, 33x12.5 R15) a medida métrica y viceversa. Mirá el equivalente y buscalo con stock en el catálogo.",
+    image: { src: "/images/local/neumatico-at-grenlander-maga-at-two-camioneta-clasica-trivium.webp", alt: "Neumático A/T de medida flotation en una camioneta" },
   },
   {
     slug: "arma-tu-juego",
@@ -66,6 +74,7 @@ export const TOOLS: Tool[] = [
     metaTitle: "Armá tu juego de 4 neumáticos con alineación y balanceo — presupuesto al instante",
     metaDescription:
       "Elegí tu auto o tu medida, un neumático en stock y mirá el total del juego de 4 con colocación, alineación y balanceo. Enviá el presupuesto por WhatsApp.",
+    image: { src: "/images/local/tecnicos-alineando-auto-elevador-gomeria-trivium-cordoba.webp", alt: "Técnicos alineando un auto en el elevador del taller de Trivium" },
   },
 ];
 
