@@ -62,7 +62,6 @@ const SECTIONS: Section[] = [
       { href: "/calculadora-equivalencia-neumaticos", label: "Calculadora de equivalencias", hint: "Verificá si otra medida es compatible con la tuya." },
       ...TOOLS.map((t) => ({ href: toolPath(t.slug), label: t.name, hint: t.short })),
       { href: "/cotizador", label: "Cotizador de neumáticos", hint: "Armá tu presupuesto y mandalo por WhatsApp." },
-      { href: "/blog/indice-de-carga-y-velocidad", label: "Índice de carga y velocidad", hint: "Qué significan los números del final de la medida." },
     ],
   },
   {

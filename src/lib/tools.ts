@@ -59,6 +59,15 @@ export const TOOLS: Tool[] = [
     image: { src: "/images/local/neumatico-grenlander-kingpro-one-pickup-trivium.webp", alt: "Neumático Grenlander Kingpro One colocado en una pick-up" },
   },
   {
+    slug: "indice-carga-velocidad",
+    name: "Índice de carga y velocidad",
+    short: "Escribí 91V y mirá cuántos kg soporta cada neumático y a qué velocidad máxima.",
+    metaTitle: "Índice de carga y velocidad: cuántos kg soporta y qué velocidad máxima (91V, 94H…)",
+    metaDescription:
+      "Escribí el índice de tu neumático (91V, 95H, 104R…) y mirá cuánto peso soporta cada uno, el total del juego y su velocidad máxima. Con tabla completa y cálculo inverso.",
+    image: { src: "/images/local/balanceadora-y-alineadora-utilitario-taller-trivium-cordoba.webp", alt: "Utilitario en el taller de Trivium, donde importa el índice de carga" },
+  },
+  {
     slug: "conversor-flotation",
     name: "Conversor de medidas flotation",
     short: "Pasá 31x10.5 R15 a medida métrica (y al revés) para buscarla en stock.",

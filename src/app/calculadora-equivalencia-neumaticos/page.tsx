@@ -85,7 +85,7 @@ const GUIDES = [
   ["/blog/equivalencias", "Equivalencias de neumáticos: qué son y cómo funcionan", "Guía"],
   ["/blog/como-leer-medida-neumatico", "Cómo leer la medida de un neumático (205/55 R16)", "Guía"],
   ["/blog/indice-de-carga-y-velocidad", "Índice de carga y velocidad: qué significan", "Guía"],
-  ["/blog/indice-de-carga-y-velocidad", "Tabla de índices de carga y velocidad", "Guía"],
+  ["/herramientas/indice-carga-velocidad", "Tabla de índices de carga y velocidad", "Herramienta"],
   ["/vehiculos", "Medidas de neumáticos por auto y modelo", "Herramienta"],
   ["/blog/presion-de-neumaticos", "Presión de neumáticos: cuánto ponerles", "Guía"],
   ["/servicios", "Colocación, alineación y balanceo en Córdoba", "Servicio"],

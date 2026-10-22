@@ -75,7 +75,7 @@ const L = {
   michelin: { label: "Michelin", href: "/marcas/michelin" },
   servicios: { label: "Alineación y balanceo", href: "/servicios" },
   equivalencias: { label: "Calculadora de equivalencias", href: "/calculadora-equivalencia-neumaticos" },
-  indice: { label: "Tabla de índice de carga y velocidad", href: "/blog/indice-de-carga-y-velocidad" },
+  indice: { label: "Tabla de índice de carga y velocidad", href: "/herramientas/indice-carga-velocidad" },
   m205: { label: "205/55 R16", href: "/neumaticos/205-55-r16" },
   m185: { label: "185/65 R15", href: "/neumaticos/185-65-r15" },
   m175: { label: "175/65 R14", href: "/neumaticos/175-65-r14" },
