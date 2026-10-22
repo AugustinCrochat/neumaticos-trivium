@@ -11,12 +11,15 @@ export function ZonasAgrupadas({
   variant,
   actual,
   prefijo = false,
+  branchId,
 }: {
   variant: "dark" | "light";
   /** slug de la página actual: se muestra sin enlace. */
   actual?: string;
   /** "Neumáticos en X" en vez del nombre solo (anchor text del footer). */
   prefijo?: boolean;
+  /** Sólo las zonas que atiende esta sucursal. */
+  branchId?: string;
 }) {
   const dark = variant === "dark";
   const linkCls = dark
@@ -45,7 +48,7 @@ export function ZonasAgrupadas({
 
   return (
     <ul className="grid grid-cols-1 items-start gap-x-6 gap-y-3 sm:grid-cols-2 lg:grid-cols-3">
-      {localidadesAgrupadas().map(({ ciudad, barrios }) => (
+      {localidadesAgrupadas().filter(({ ciudad }) => !branchId || ciudad.branchId === branchId).map(({ ciudad, barrios }) => (
         <li key={ciudad.slug}>
           <div className="flex items-center gap-2">
             {item(ciudad.slug, ciudad.name, ciudadCls, prefijo ? `Neumáticos en ${ciudad.name}` : ciudad.name)}

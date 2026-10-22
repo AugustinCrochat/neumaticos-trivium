@@ -13,9 +13,9 @@ import { sizeSlug, sizesFromCatalog } from "@/lib/tire-sizes";
 import { LOCALIDADES } from "@/lib/localidades";
 import { poolShare } from "@/lib/share-image";
 
-const TITLE = "Mapa del sitio: neumáticos, medidas, marcas y servicios en Córdoba";
+const TITLE = "Mapa del sitio: neumáticos, medidas, marcas y servicios";
 const DESCRIPTION =
-  "Todo Neumáticos Trivium en un solo lugar: catálogo por medida y marca, neumáticos A/T y de carga, calculadoras, gomería (alineación, balanceo, rotación), notas del blog y las zonas de Córdoba que atendemos.";
+  "Todo Neumáticos Trivium en un solo lugar: catálogo por medida y marca, neumáticos A/T y de carga, calculadoras, gomería (alineación, balanceo, rotación), notas del blog y las zonas que atendemos en Córdoba y Buenos Aires.";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -87,6 +87,11 @@ const SECTIONS: Section[] = [
       { href: "/politica-de-devoluciones", label: "Garantía y devoluciones", hint: "Un año por defecto de fabricación." },
     ],
   },
+];
+
+const ZONAS = [
+  { branchId: "arguello", titulo: "Sucursal Argüello · Córdoba" },
+  { branchId: "san-justo", titulo: "Sucursal San Justo · Buenos Aires" },
 ];
 
 const fecha = (iso: string) =>
@@ -300,12 +305,17 @@ export default async function MapaDelSitioPage() {
         </section>
 
         <section id="zonas" className="scroll-mt-24">
-          <h2 className="text-2xl font-black text-navy-900 md:text-3xl">Zonas de Córdoba que atendemos</h2>
+          <h2 className="text-2xl font-black text-navy-900 md:text-3xl">Zonas que atendemos</h2>
           <p className="mt-2 max-w-3xl text-slate-600">
             {LOCALIDADES.length} localidades y barrios con su página: cómo llegar al local, tiempos y qué hacemos en cada zona.
           </p>
-          <div className="mt-6 rounded-3xl border border-slate-200 bg-white p-5">
-            <ZonasAgrupadas variant="light" prefijo />
+          <div className="mt-6 grid gap-5 lg:grid-cols-2">
+            {ZONAS.map((z) => (
+              <div key={z.branchId} className="rounded-3xl border border-slate-200 bg-white p-5">
+                <h3 className="mb-4 text-sm font-black uppercase tracking-widest text-slate-500">{z.titulo}</h3>
+                <ZonasAgrupadas variant="light" prefijo branchId={z.branchId} />
+              </div>
+            ))}
           </div>
         </section>
       </main>
