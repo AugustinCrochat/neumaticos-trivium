@@ -57,7 +57,10 @@ export function SizeOrVehicleSearch({
         </button>
       </div>
 
-      <EconomicChip checked={economicos} onChange={setEconomicos} />
+      {/* En el catálogo (compact) el filtro ya está en los filtros del escritorio. */}
+      <div className={compact ? "lg:hidden" : undefined}>
+        <EconomicChip checked={economicos} onChange={setEconomicos} />
+      </div>
       </div>
 
       {mode === "medida" ? (

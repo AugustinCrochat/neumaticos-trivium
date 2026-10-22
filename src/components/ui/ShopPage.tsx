@@ -242,25 +242,27 @@ type SizeFilter = { w: string; p: string; r: string };
 
 /** Ancho / perfil / rodado sueltos: filtran el catálogo por cualquiera de los tres. */
 function SizeInputs({ value, onChange, className = "" }: { value: SizeFilter; onChange: (v: SizeFilter) => void; className?: string }) {
-  const campo = (k: keyof SizeFilter, max: number, placeholder: string) => (
-    <input
-      type="text"
-      inputMode="numeric"
-      maxLength={max}
-      value={value[k]}
-      placeholder={placeholder}
-      aria-label={k === "w" ? "Ancho" : k === "p" ? "Perfil" : "Rodado"}
-      onChange={(e) => onChange({ ...value, [k]: e.target.value.replace(/\D/g, "").slice(0, max) })}
-      className="w-16 rounded-lg border border-slate-200 bg-white px-2 py-2 text-center text-sm font-bold text-slate-800 placeholder:font-medium placeholder:text-slate-400 focus:border-navy-500 focus:outline-none focus:ring-2 focus:ring-navy-100"
-    />
+  const campo = (k: keyof SizeFilter, max: number, label: string, placeholder: string) => (
+    <label className="flex w-24 flex-col items-center gap-1">
+      <span className="text-center text-[11px] font-black uppercase leading-tight tracking-wide text-slate-500">{label}</span>
+      <input
+        type="text"
+        inputMode="numeric"
+        maxLength={max}
+        value={value[k]}
+        placeholder={placeholder}
+        onChange={(e) => onChange({ ...value, [k]: e.target.value.replace(/\D/g, "").slice(0, max) })}
+        className="w-full rounded-lg border-2 border-slate-200 bg-white px-2 py-2.5 text-center text-base font-black text-slate-800 placeholder:font-medium placeholder:text-slate-300 focus:border-navy-500 focus:outline-none focus:ring-2 focus:ring-navy-100"
+      />
+    </label>
   );
   return (
-    <div className={`flex items-center gap-1.5 ${className}`}>
-      {campo("w", 3, "Ancho")}
-      <span className="font-black text-slate-300">/</span>
-      {campo("p", 2, "Perfil")}
-      <span className="font-black text-slate-300">R</span>
-      {campo("r", 2, "Rodado")}
+    <div className={`flex items-end gap-2 ${className}`}>
+      {campo("w", 3, "Buscar por ancho", "205")}
+      <span className="pb-2.5 text-lg font-black text-slate-300">/</span>
+      {campo("p", 2, "Buscar por perfil", "55")}
+      <span className="pb-2.5 text-lg font-black text-slate-300">R</span>
+      {campo("r", 2, "Buscar por rodado", "16")}
     </div>
   );
 }

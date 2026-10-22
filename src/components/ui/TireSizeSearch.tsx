@@ -732,22 +732,6 @@ export function TireSizeSearch({
         />
       </div>
 
-      {ultima && !hasInput && /^\d{3}-\d{2}-\d{2}$/.test(ultima) && (
-        <button
-          type="button"
-          onClick={() => {
-            const [w, p, r] = ultima.split("-");
-            setShouldClearInitialOnEdit(false);
-            setWidth(w);
-            setProfile(p);
-            setRim(r);
-          }}
-          className="mb-3 inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-3.5 py-1.5 text-sm font-bold text-navy-800 hover:border-orange-400 hover:text-orange-600"
-        >
-          <span aria-hidden="true">↺</span> Tu última medida: {ultima.split("-")[0]}/{ultima.split("-")[1]} R{ultima.split("-")[2]}
-        </button>
-      )}
-
       <div className="flex flex-col gap-3">
         <div ref={containerRef} className="relative" onPaste={handlePaste}>
           {compact ? (
@@ -918,6 +902,22 @@ export function TireSizeSearch({
                 </button>
               )}
             </div>
+          )}
+
+          {ultima && !hasInput && /^\d{3}-\d{2}-\d{2}$/.test(ultima) && (
+            <button
+              type="button"
+              onClick={() => {
+                const [w, p, r] = ultima.split("-");
+                setShouldClearInitialOnEdit(false);
+                setWidth(w);
+                setProfile(p);
+                setRim(r);
+              }}
+              className="mt-3 inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-3.5 py-1.5 text-sm font-bold text-navy-800 hover:border-orange-400 hover:text-orange-600"
+            >
+              <span aria-hidden="true">↺</span> Tu última medida: {ultima.split("-")[0]}/{ultima.split("-")[1]} R{ultima.split("-")[2]}
+            </button>
           )}
 
           {perfilesConStock.size > 0 && profile.length < 2 && (
