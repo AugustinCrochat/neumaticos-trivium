@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import { ProductCard } from "@/components/ui/ProductCard";
 import type { TireProduct, TireSize } from "@/lib/types";
 
 // Tolerancia estándar de la industria: más de ±3% de diámetro desvía el
@@ -61,13 +62,13 @@ function SizeInput({ title, tone, value, onChange, placeholder, widthRef, onDone
   const pRef = useRef<HTMLInputElement>(null);
   const rRef = useRef<HTMLInputElement>(null);
   const digits = (s: string, max: number) => s.replace(/\D/g, "").slice(0, max);
-  const field = "w-full min-w-0 rounded-xl border-2 border-slate-200 bg-white px-2 py-2 text-center text-xl font-black text-navy-900 outline-none transition-colors focus:border-orange-500 focus:ring-4 focus:ring-orange-500/15 placeholder:text-slate-300 focus:placeholder:text-transparent sm:text-2xl";
+  const field = "w-full min-w-0 rounded-xl border-2 border-slate-300 bg-white px-2 py-2 text-center text-xl font-black text-navy-900 outline-none transition-colors focus:border-orange-500 focus:ring-4 focus:ring-orange-500/15 placeholder:text-slate-300 focus:placeholder:text-transparent sm:text-2xl";
   const onPaste = (e: React.ClipboardEvent) => {
     const parsed = parsePasted(e.clipboardData.getData("text"));
     if (parsed) { e.preventDefault(); onChange(parsed); }
   };
   return (
-    <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3 shadow-sm ring-1 ring-inset ring-white sm:p-4">
+    <div className="rounded-2xl border-2 border-slate-300 bg-slate-100 p-3 shadow-md sm:p-4">
       <p className="mb-3 flex items-center justify-center gap-2 text-xs font-black uppercase tracking-widest text-slate-600">
         <span aria-hidden="true" className={`h-2.5 w-2.5 rounded-full ${tone === "red" ? "bg-orange-500" : "bg-navy-700"}`} />
         {title}
@@ -177,6 +178,19 @@ export function EquivalenceCalculator({ products }: { products: TireProduct[] })
     }
     return [...map.values()];
   }, [products]);
+
+  // Productos disponibles de las medidas equivalentes, tipo catálogo: primero
+  // las de diámetro más parecido y, dentro de cada medida, las más baratas.
+  const equivalentProducts = useMemo(() => {
+    if (!s1) return [];
+    const out: { product: TireProduct; diff: number }[] = [];
+    for (const p of products) {
+      if (p.enStock === false || p.isCarga || p.size.rim !== s1.rim || same(p.size, s1)) continue;
+      const d = diffPercent(s1, p.size);
+      if (within(d)) out.push({ product: p, diff: d });
+    }
+    return out.sort((x, y) => Math.abs(x.diff) - Math.abs(y.diff) || x.product.price - y.product.price);
+  }, [products, s1]);
 
   const groups = useMemo(() => {
     if (!s1) return null;
@@ -339,9 +353,13 @@ export function EquivalenceCalculator({ products }: { products: TireProduct[] })
       {mode === "list" && s1 && groups && (
         <div className="mt-6 space-y-6" aria-live="polite">
           <div>
-            <h3 className="text-lg font-black text-navy-900">Mismo rodado, en stock ({groups.sameRim.length})</h3>
-            {groups.sameRim.length > 0 ? (
-              <div className="mt-3 grid gap-2.5 sm:grid-cols-2">{groups.sameRim.map((r) => <RowLink key={slug(r.size)} row={r} original={s1} />)}</div>
+            <h3 className="text-lg font-black text-navy-900">Mismo rodado, en stock ({equivalentProducts.length})</h3>
+            {equivalentProducts.length > 0 ? (
+              <div className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4">
+                {equivalentProducts.slice(0, 12).map(({ product, diff }) => (
+                  <ProductCard key={product.id} product={product} note={`${label(product.size)} · ${signed(diff)}% de diámetro`} />
+                ))}
+              </div>
             ) : (
               <p className="mt-3 rounded-xl bg-slate-50 p-4 text-sm text-slate-600">Hoy no tenemos equivalentes de {label(s1)} en stock. Mirá las que existen más abajo o consultanos: podemos conseguirlas.</p>
             )}
