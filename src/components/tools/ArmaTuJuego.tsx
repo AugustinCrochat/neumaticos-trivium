@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import Image from "next/image";
 import { BRANCHES, DEFAULT_BRANCH_ID } from "@/lib/config";
 import { useUpsellCombo } from "@/hooks/use-upsell-combo";
+import { matchScore } from "@/lib/fuzzy-search";
 import { getAllVehicleOptions, getSizesForVehicle } from "@/lib/vehicles";
 import { MedidaFields, Result, inputCls, labelCls, medidaCompleta, type Medida } from "./ui";
 
@@ -25,18 +26,46 @@ export function ArmaTuJuego({ productos }: { productos: JuegoProducto[] }) {
   const selectedBranch = BRANCHES.find((b) => b.id === DEFAULT_BRANCH_ID) ?? BRANCHES[0];
   const combo = useUpsellCombo();
   const opciones = useMemo(() => getAllVehicleOptions(), []);
-  const marcas = useMemo(() => [...new Set(opciones.map((o) => o.marca))], [opciones]);
 
-  const [marca, setMarca] = useState("");
-  const [modelo, setModelo] = useState("");
+  const [query, setQuery] = useState("");
+  const [abierto, setAbierto] = useState(false);
+  const [activo, setActivo] = useState(0);
+  const [auto, setAuto] = useState<{ marca: string; modelo: string } | null>(null);
+  const marca = auto?.marca ?? "";
+  const modelo = auto?.modelo ?? "";
   const [medida, setMedida] = useState<Medida>({ w: "", p: "", r: "" });
   const [elegido, setElegido] = useState<string | null>(null);
   const [cantidad, setCantidad] = useState(4);
   const [conServicio, setConServicio] = useState(true);
 
-  const modelos = opciones.filter((o) => o.marca === marca);
+  // Búsqueda libre: "corsa" encuentra "Chevrolet Corsa" (y sus variantes), tolerando errores de tipeo.
+  const sugerencias = useMemo(() => {
+    const q = query.trim();
+    if (q.length < 2) return [];
+    return opciones
+      .map((o) => ({ o, score: matchScore(q, `${o.marca} ${o.modelo}`) }))
+      .filter((x) => x.score > 0)
+      .sort((a, b) => b.score - a.score || a.o.label.localeCompare(b.o.label))
+      .slice(0, 8)
+      .map((x) => x.o);
+  }, [query, opciones]);
+
+  function elegirAuto(o: { marca: string; modelo: string }) {
+    setAuto({ marca: o.marca, modelo: o.modelo });
+    setQuery("");
+    setAbierto(false);
+    setElegido(null);
+    // Si tiene una sola medida, ya la carga.
+    const ms = getSizesForVehicle(o.marca, o.modelo);
+    const unicasM = (ms ?? []).filter((m, i, a) => a.findIndex((x) => x.w === m.w && x.p === m.p && x.r === m.r) === i);
+    setMedida(unicasM.length === 1 ? { w: unicasM[0].w, p: unicasM[0].p, r: unicasM[0].r } : { w: "", p: "", r: "" });
+  }
+
   const medidasAuto = marca && modelo ? getSizesForVehicle(marca, modelo) : null;
-  const unicas = (medidasAuto ?? []).filter((m, i, a) => a.findIndex((x) => x.w === m.w && x.p === m.p && x.r === m.r) === i);
+  // Una opción por versión/generación: ayuda a aclarar cuál es el auto cuando la medida cambia.
+  const unicas = (medidasAuto ?? []).filter(
+    (m, i, a) => a.findIndex((x) => x.w === m.w && x.p === m.p && x.r === m.r && x.generation === m.generation && x.version === m.version) === i
+  );
 
   const lista = medidaCompleta(medida)
     ? productos
@@ -56,37 +85,77 @@ export function ArmaTuJuego({ productos }: { productos: JuegoProducto[] }) {
   return (
     <div className="space-y-6">
       <div>
-        <p className="mb-2 font-black text-tire-950">1. ¿Qué auto tenés? <span className="font-normal text-slate-500">(o escribí la medida abajo)</span></p>
-        <div className="grid gap-3 sm:grid-cols-2">
-          <div>
-            <label className={labelCls} htmlFor="aj-marca">Marca</label>
-            <select id="aj-marca" value={marca} onChange={(e) => { setMarca(e.target.value); setModelo(""); setElegido(null); }} className={inputCls}>
-              <option value="">Elegí una marca</option>
-              {marcas.map((m) => <option key={m} value={m}>{m}</option>)}
-            </select>
+        <p className="mb-2 font-black text-tire-950">1. ¿Qué auto tenés? <span className="font-normal text-slate-500">(o escribí la medida más abajo)</span></p>
+        {auto ? (
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="rounded-xl bg-black px-3 py-2 text-sm font-black text-white">{auto.marca} {auto.modelo}</span>
+            <button type="button" onClick={() => { setAuto(null); setMedida({ w: "", p: "", r: "" }); setElegido(null); }} className="text-sm font-bold text-orange-600 underline">
+              Cambiar auto
+            </button>
           </div>
-          <div>
-            <label className={labelCls} htmlFor="aj-modelo">Modelo</label>
-            <select id="aj-modelo" value={modelo} disabled={!marca} onChange={(e) => { setModelo(e.target.value); setElegido(null); }} className={inputCls}>
-              <option value="">Elegí un modelo</option>
-              {modelos.map((o) => <option key={o.modelo} value={o.modelo}>{o.modelo}</option>)}
-            </select>
+        ) : (
+          <div className="relative">
+            <label className={labelCls} htmlFor="aj-auto">Marca y modelo</label>
+            <input
+              id="aj-auto"
+              role="combobox"
+              aria-expanded={abierto && sugerencias.length > 0}
+              aria-controls="aj-auto-lista"
+              autoComplete="off"
+              placeholder="Escribí: corsa, hilux, 208, vento…"
+              value={query}
+              onChange={(e) => { setQuery(e.target.value); setAbierto(true); setActivo(0); }}
+              onFocus={() => setAbierto(true)}
+              onBlur={() => setTimeout(() => setAbierto(false), 150)}
+              onKeyDown={(e) => {
+                if (e.key === "ArrowDown") { e.preventDefault(); setActivo((i) => Math.min(i + 1, sugerencias.length - 1)); }
+                else if (e.key === "ArrowUp") { e.preventDefault(); setActivo((i) => Math.max(i - 1, 0)); }
+                else if (e.key === "Enter" && sugerencias[activo]) { e.preventDefault(); elegirAuto(sugerencias[activo]); }
+                else if (e.key === "Escape") setAbierto(false);
+              }}
+              className={inputCls}
+            />
+            {abierto && sugerencias.length > 0 && (
+              <ul id="aj-auto-lista" role="listbox" className="absolute z-20 mt-1 max-h-72 w-full overflow-auto rounded-xl border-2 border-slate-300 bg-white shadow-xl">
+                {sugerencias.map((o, i) => (
+                  <li key={o.label} role="option" aria-selected={i === activo}>
+                    <button
+                      type="button"
+                      onMouseDown={(e) => e.preventDefault()}
+                      onClick={() => elegirAuto(o)}
+                      className={`block w-full px-4 py-2.5 text-left ${i === activo ? "bg-orange-50" : ""}`}
+                    >
+                      <span className="text-xs font-black uppercase tracking-wide text-slate-500">{o.marca}</span>
+                      <span className="block font-bold text-tire-950">{o.modelo}</span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+            {abierto && query.trim().length >= 2 && sugerencias.length === 0 && (
+              <p className="mt-2 text-sm text-slate-500">No encontramos ese auto: escribí la medida de tu neumático abajo.</p>
+            )}
           </div>
-        </div>
+        )}
         {unicas.length > 0 && (
           <div className="mt-3">
-            <p className={labelCls}>Medidas de fábrica</p>
+            <p className={labelCls}>{unicas.length > 1 ? "Elegí la versión de tu auto" : "Medida de fábrica"}</p>
             <div className="flex flex-wrap gap-2">
-              {unicas.map((m) => (
-                <button
-                  key={`${m.w}-${m.p}-${m.r}`}
-                  type="button"
-                  onClick={() => { setMedida({ w: m.w, p: m.p, r: m.r }); setElegido(null); }}
-                  className={`rounded-xl border-2 px-3 py-2 text-sm font-black ${medida.w === m.w && medida.p === m.p && medida.r === m.r ? "border-orange-500 bg-orange-50 text-orange-700" : "border-slate-300 bg-white text-tire-950"}`}
-                >
-                  {m.w}/{m.p} R{m.r}
-                </button>
-              ))}
+              {unicas.map((m) => {
+                const detalle = [m.generation, m.years, m.version].filter(Boolean).join(" · ");
+                const activa = medida.w === m.w && medida.p === m.p && medida.r === m.r;
+                return (
+                  <button
+                    key={`${m.w}-${m.p}-${m.r}-${m.generation ?? ""}-${m.version ?? ""}`}
+                    type="button"
+                    onClick={() => { setMedida({ w: m.w, p: m.p, r: m.r }); setElegido(null); }}
+                    className={`rounded-xl border-2 px-3 py-2 text-left ${activa ? "border-orange-500 bg-orange-50" : "border-slate-300 bg-white"}`}
+                  >
+                    <span className="block text-sm font-black text-tire-950">{m.w}/{m.p} R{m.r}</span>
+                    {detalle && <span className="block text-xs text-slate-500">{detalle}</span>}
+                  </button>
+                );
+              })}
             </div>
           </div>
         )}
