@@ -179,18 +179,24 @@ export function EquivalenceCalculator({ products }: { products: TireProduct[] })
     return [...map.values()];
   }, [products]);
 
-  // Productos disponibles de las medidas equivalentes, tipo catálogo: primero
-  // las de diámetro más parecido y, dentro de cada medida, las más baratas.
-  const equivalentProducts = useMemo(() => {
+  // Productos disponibles de las medidas equivalentes, agrupados por medida:
+  // primero las de diámetro más parecido y, dentro de cada una, las más baratas.
+  const equivalentGroups = useMemo(() => {
     if (!s1) return [];
-    const out: { product: TireProduct; diff: number }[] = [];
+    const map = new Map<string, { size: TireSize; diff: number; items: TireProduct[] }>();
     for (const p of products) {
       if (p.enStock === false || p.isCarga || p.size.rim !== s1.rim || same(p.size, s1)) continue;
       const d = diffPercent(s1, p.size);
-      if (within(d)) out.push({ product: p, diff: d });
+      if (!within(d)) continue;
+      const g = map.get(slug(p.size));
+      if (g) g.items.push(p);
+      else map.set(slug(p.size), { size: p.size, diff: d, items: [p] });
     }
-    return out.sort((x, y) => Math.abs(x.diff) - Math.abs(y.diff) || x.product.price - y.product.price);
+    const out = [...map.values()].sort((x, y) => Math.abs(x.diff) - Math.abs(y.diff));
+    for (const g of out) g.items.sort((x, y) => x.price - y.price);
+    return out;
   }, [products, s1]);
+  const equivalentCount = equivalentGroups.reduce((n, g) => n + g.items.length, 0);
 
   const groups = useMemo(() => {
     if (!s1) return null;
@@ -353,11 +359,20 @@ export function EquivalenceCalculator({ products }: { products: TireProduct[] })
       {mode === "list" && s1 && groups && (
         <div className="mt-6 space-y-6" aria-live="polite">
           <div>
-            <h3 className="text-lg font-black text-navy-900">Mismo rodado, en stock ({equivalentProducts.length})</h3>
-            {equivalentProducts.length > 0 ? (
-              <div className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4">
-                {equivalentProducts.slice(0, 12).map(({ product, diff }) => (
-                  <ProductCard key={product.id} product={product} note={`${label(product.size)} · ${signed(diff)}% de diámetro`} />
+            <h3 className="text-lg font-black text-navy-900">Mismo rodado, en stock ({equivalentCount})</h3>
+            {equivalentCount > 0 ? (
+              <div className="mt-3 space-y-6">
+                {equivalentGroups.map((g) => (
+                  <div key={slug(g.size)}>
+                    <p className="mb-2 flex flex-wrap items-center gap-2">
+                      <span className="text-base font-black text-navy-900">{label(g.size)}</span>
+                      <span className="rounded-md bg-emerald-100 px-2 py-0.5 text-xs font-black text-emerald-800">{signed(g.diff)}%</span>
+                      <span className="text-xs font-semibold text-slate-500">{benefit(s1, g.size)}</span>
+                    </p>
+                    <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4">
+                      {g.items.map((product) => <ProductCard key={product.id} product={product} />)}
+                    </div>
+                  </div>
                 ))}
               </div>
             ) : (

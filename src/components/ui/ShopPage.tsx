@@ -558,7 +558,7 @@ export function ShopPage({
         <div className="flex flex-col lg:flex-row gap-8 items-stretch lg:items-start">
 
           {/* Sidebar — search widget only */}
-          <aside className="w-full lg:w-72 shrink-0 lg:sticky lg:top-32 lg:self-start">
+          <aside className="w-full lg:w-72 shrink-0 lg:sticky lg:top-32 lg:self-start lg:max-h-[calc(100dvh-9rem)] lg:overflow-y-auto lg:overscroll-contain">
             <SizeOrVehicleSearch key={`${medida ?? "empty"}-${economicosParam}`} compact initialMedida={medida} forceVoiceButton initialEconomicos={economicosParam} />
           </aside>
 

@@ -59,7 +59,7 @@ export function TireDiagram({
     return {
       fontSize: isFocused ? `${100 * 1.12}px` : "100px",
       fontWeight: isFocused ? "800" : "700",
-      fill: isFocused ? theme.accent : isPlaceholder ? "#7f898e" : "#ffffff",
+      fill: isFocused || !isPlaceholder ? COLOR[segment] : "#7f898e",
       opacity: isFocused ? 1 : isPlaceholder ? 0.88 : 1,
       transition: "font-size 0.2s, fill 0.2s",
       letterSpacing: "0.04em",
