@@ -84,6 +84,7 @@ export function Footer() {
                 { href: "/neumaticos/at", label: "Neumáticos A/T" },
                 { href: "/neumaticos/carga", label: "Neumáticos de carga" },
                 { href: "/servicios", label: "Gomería y servicios" },
+                { href: "/herramientas", label: "Herramientas" },
                 { href: "/blog", label: "Blog" },
                 { href: "/sucursales", label: "Sucursales" },
                 { href: "/contacto", label: "Contacto" },

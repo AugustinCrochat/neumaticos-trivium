@@ -7,6 +7,7 @@ import { cargaSlug } from "@/lib/carga";
 import { LOAD_SPEED_CODES } from "@/lib/load-speed";
 import { POPULAR_VEHICLES, vehicleSlug } from "@/lib/vehicles";
 import { productImagePaths } from "@/lib/image-seo";
+import { TOOLS, toolPath } from "@/lib/tools";
 import { blogMeta } from "@/lib/blog-meta";
 import { getProductosDesdePOS, getAccesoriosDesdePOS } from "@/lib/pos-api";
 import {
@@ -74,6 +75,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...POPULAR_VEHICLES.map((v) => url(`/vehiculos/${vehicleSlug(v.brand, v.model)}`, 0.8, "weekly")),
     url("/calculadora-equivalencia-neumaticos", 0.8, "monthly"),
     url("/cotizador", 0.7, "monthly"),
+    url("/herramientas", 0.7, "monthly"),
+    ...TOOLS.map((t) => url(toolPath(t.slug), 0.7, "monthly")),
     url("/servicios", 0.7, "monthly"),
     url("/sucursales", 0.8, "monthly"),
     url("/mapa-del-sitio", 0.3, "monthly"),

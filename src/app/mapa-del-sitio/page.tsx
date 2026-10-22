@@ -11,6 +11,7 @@ import { getProductosDesdePOS } from "@/lib/pos-api";
 import { canonical, absoluteUrl, SITE_NAME } from "@/lib/seo";
 import { sizeSlug, sizesFromCatalog } from "@/lib/tire-sizes";
 import { LOCALIDADES } from "@/lib/localidades";
+import { TOOLS, toolPath } from "@/lib/tools";
 import { poolShare } from "@/lib/share-image";
 
 const TITLE = "Mapa del sitio: neumáticos, medidas, marcas y servicios";
@@ -54,9 +55,11 @@ const SECTIONS: Section[] = [
     icon: Calculator,
     tone: "bg-navy-900",
     items: [
+      { href: "/herramientas", label: "Todas las herramientas", hint: "Calculadoras y conversores gratis." },
       { href: "/calculadora-equivalencia-neumaticos", label: "Calculadora de equivalencias", hint: "Verificá si otra medida es compatible con la tuya." },
+      ...TOOLS.map((t) => ({ href: toolPath(t.slug), label: t.name, hint: t.short })),
       { href: "/cotizador", label: "Cotizador de neumáticos", hint: "Armá tu presupuesto y mandalo por WhatsApp." },
-      { href: "/indice-de-carga-y-velocidad", label: "Índice de carga y velocidad", hint: "Qué significan los números del final de la medida." },
+      { href: "/indice-carga-velocidad", label: "Índice de carga y velocidad", hint: "Qué significan los números del final de la medida." },
     ],
   },
   {
