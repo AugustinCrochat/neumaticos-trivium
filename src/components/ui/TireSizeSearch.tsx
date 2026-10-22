@@ -192,10 +192,10 @@ export function TireSizeSearch({
 
   useEffect(() => {
     const interval = window.setInterval(() => {
-      setPlaceholderIndex((index) => (index + 1) % POPULAR_SIZES.length);
+      setPlaceholderIndex((index) => index + 1);
     }, 1800);
     return () => window.clearInterval(interval);
-  }, [POPULAR_SIZES.length]);
+  }, []);
 
   useEffect(() => {
     if (!showPopular || catalogo) return;
@@ -219,7 +219,13 @@ export function TireSizeSearch({
   }, []);
 
   const hasInput = width.trim() !== "" || profile.trim() !== "" || rim.trim() !== "";
-  const placeholderSize = POPULAR_SIZES[placeholderIndex];
+  // Las medidas de ejemplo que giran en el diagrama respetan lo ya escrito: con
+  // 235 en el ancho sólo rotan combinaciones que existen con ese ancho.
+  const ejemplos = (() => {
+    const lista = hasInput ? opciones.filter((o) => !o.c && prefijoCoincide(o)).slice(0, 12) : [];
+    return lista.length > 0 ? lista : POPULAR_SIZES;
+  })();
+  const placeholderSize = ejemplos[placeholderIndex % ejemplos.length];
 
   // Adivinamos el formato por la cantidad de dígitos del primer campo: un
   // ancho métrico real siempre tiene 3 cifras (125 a 355 mm), un diámetro
