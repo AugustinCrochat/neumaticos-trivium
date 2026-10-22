@@ -78,6 +78,7 @@ export function TireSizeSearch({
   hideLearnLink = false,
   embedded = false,
   economicos = false,
+  onLiveChange,
 }: {
   initialMedida?: string;
   compact?: boolean;
@@ -87,6 +88,8 @@ export function TireSizeSearch({
   embedded?: boolean;
   /** Si está activo, la búsqueda va a /buscar con el filtro de económicos. */
   economicos?: boolean;
+  /** Se llama a cada tecla con lo escrito, para listados que filtran en vivo (catálogo). */
+  onLiveChange?: (v: { w: string; p: string; r: string }) => void;
 }) {
   const router = useRouter();
   // Ref y no closure: el reconocimiento de voz y el auto-search capturan la
@@ -110,6 +113,18 @@ export function TireSizeSearch({
   const [width, setWidth] = useState(init.w);
   const [profile, setProfile] = useState(init.p);
   const [rim, setRim] = useState(init.r);
+  // Avisa cada cambio al listado, salvo lo que vino de la URL: ahí el listado ya
+  // está filtrado y avisarle de nuevo lo pisaría con lo mismo.
+  const onLiveChangeRef = useRef(onLiveChange);
+  useEffect(() => {
+    onLiveChangeRef.current = onLiveChange;
+  }, [onLiveChange]);
+  const liveInitial = useRef(init);
+  useEffect(() => {
+    const i = liveInitial.current;
+    if (width === i.w && profile === i.p && rim === i.r) return;
+    onLiveChangeRef.current?.({ w: width, p: profile, r: rim });
+  }, [width, profile, rim]);
   const [shouldClearInitialOnEdit, setShouldClearInitialOnEdit] = useState(Boolean(initialMedida));
   const [placeholderIndex, setPlaceholderIndex] = useState(0);
 

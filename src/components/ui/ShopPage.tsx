@@ -439,7 +439,27 @@ export function ShopPage({
   const [showFilters, setShowFilters] = useState(false);
   const [visibleCount, setVisibleCount] = useState(24);
 
-  const parsed = useMemo(() => (medida ? parseMedida(medida) : null), [medida]);
+  // Lo que se escribe en el buscador de la barra lateral filtra en vivo: con la
+  // medida incompleta actúa como los filtros (por prefijo) y con la medida
+  // completa muestra exactos y compatibles. Se descarta cuando la URL cambia
+  // (Enter, un link, otra búsqueda), que remonta el buscador.
+  const [live, setLive] = useState<SizeFilter | null>(null);
+  const [prevMedida, setPrevMedida] = useState(medida);
+  if (prevMedida !== medida) {
+    setPrevMedida(medida);
+    setLive(null);
+  }
+  const liveComplete = !!live && live.w.length === 3 && live.p.length === 2 && live.r.length === 2;
+  const onLiveSize = (v: SizeFilter) => {
+    setLive(v);
+    setSizeFilter(v.w.length === 3 && v.p.length === 2 && v.r.length === 2 ? { w: "", p: "", r: "" } : v);
+    setVisibleCount(24);
+  };
+
+  const parsed = useMemo(() => {
+    if (live) return liveComplete ? { width: Number(live.w), profile: Number(live.p), rim: Number(live.r) } : null;
+    return medida ? parseMedida(medida) : null;
+  }, [medida, live, liveComplete]);
 
   const { exactResults, compatibleResults, allProducts } = useMemo(() => {
     // Stock real: el vivo del POS (LiveStockProvider) si ya llegó, si no el
@@ -561,7 +581,7 @@ export function ShopPage({
 
           {/* Sidebar — search widget only */}
           <aside className="w-full lg:w-72 shrink-0 lg:sticky lg:top-32 lg:self-start lg:max-h-[calc(100dvh-9rem)] lg:overflow-y-auto lg:overscroll-contain">
-            <SizeOrVehicleSearch key={`${medida ?? "empty"}-${economicosParam}`} compact initialMedida={medida} forceVoiceButton initialEconomicos={economicosParam} />
+            <SizeOrVehicleSearch key={`${medida ?? "empty"}-${economicosParam}`} compact initialMedida={medida} forceVoiceButton initialEconomicos={economicosParam} onLiveChange={onLiveSize} />
           </aside>
 
           {/* Main content */}
@@ -593,7 +613,7 @@ export function ShopPage({
             </div>
 
             {/* ── Catalog mode (no medida) ── */}
-            {!parsed && showCatalogTitle && (
+            {!parsed && (showCatalogTitle || live !== null) && (
               <>
                 {selectedVehicle?.size && recommendedProducts.length > 0 && (
                   <div className="mb-10 rounded-[2rem] border border-orange-100 bg-orange-50/50 p-6 md:p-8">
@@ -667,7 +687,7 @@ export function ShopPage({
             )}
 
             {/* ── Buscar mode — no medida entered ── */}
-            {!parsed && !showCatalogTitle && (
+            {!parsed && !showCatalogTitle && live === null && (
               <div className="flex flex-col items-center justify-center py-24 text-center">
                 <p className="text-slate-400 text-lg font-medium">Ingresá una medida para buscar.</p>
               </div>

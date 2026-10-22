@@ -12,12 +12,14 @@ export function SizeOrVehicleSearch({
   forceVoiceButton = false,
   hideLearnLink = false,
   initialEconomicos = false,
+  onLiveChange,
 }: {
   compact?: boolean;
   initialMedida?: string;
   forceVoiceButton?: boolean;
   hideLearnLink?: boolean;
   initialEconomicos?: boolean;
+  onLiveChange?: (v: { w: string; p: string; r: string }) => void;
 }) {
   const { selectedVehicle, loadVehiculos } = useVehicle();
   // null = sin elección manual: sigue el default (pestaña "Por mi auto" si ya
@@ -71,6 +73,7 @@ export function SizeOrVehicleSearch({
           forceVoiceButton={forceVoiceButton}
           hideLearnLink={hideLearnLink}
           economicos={economicos}
+          onLiveChange={onLiveChange}
         />
       ) : (
         <VehicleSizeSearch initialMedida={initialMedida} economicos={economicos} />
