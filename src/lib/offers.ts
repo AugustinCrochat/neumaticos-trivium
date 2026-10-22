@@ -18,3 +18,9 @@ export const OFFER_ACCESSORY_SLUGS = ["antirrobo-fiesta-ka-premium-z3-66160"];
 export function withOfferPrice(price: number): number {
   return Math.round((price * 1.1) / 100) * 100;
 }
+
+// Todas las tuercas antirrobo se muestran con 15% de descuento: el precio del POS
+// es el que ya tiene el descuento y el tachado se deriva de él (49.000 → 57.650).
+export function accessoryPriceOld(price: number): number {
+  return Math.round(price / 0.85 / 50) * 50;
+}

@@ -92,6 +92,14 @@ export default async function AccessoryPage({ params }: Props) {
           <h1 className="text-2xl md:text-3xl font-black text-navy-900 mb-6 leading-tight">{accessory.nombre}</h1>
 
           <div className="border-t border-slate-100 pt-6 mt-auto">
+            {accessory.priceOld && (
+              <div className="mb-1 flex items-center gap-2">
+                <span className="text-slate-400 line-through text-base">{formatPrice(accessory.priceOld)}</span>
+                <span className="rounded bg-red-600 px-2 py-0.5 text-xs font-black text-white">
+                  {Math.round(((accessory.priceOld - accessory.price) / accessory.priceOld) * 100)}% OFF
+                </span>
+              </div>
+            )}
             <span className="text-4xl font-black text-red-600">{formatPrice(accessory.price)}</span>
             <p className="text-xs text-slate-400 mt-1 mb-4">Precio por juego · IVA incluido</p>
             <AccessoryConsult accessory={accessory} />

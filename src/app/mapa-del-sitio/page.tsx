@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
-import { Calculator, CircleHelp, MapPin, ShoppingBag, Wrench } from "lucide-react";
+import { Calculator, CircleHelp, MapPin, Wrench } from "lucide-react";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { ZonasAgrupadas } from "@/components/seo/ZonasAgrupadas";
@@ -28,15 +28,19 @@ export const metadata: Metadata = {
 
 type Item = { href: string; label: string; hint: string };
 type Foto = { src: string; alt: string };
-type Section = { id: string; title: string; lead: string; icon: typeof ShoppingBag; tone: string; foto: Foto; items: Item[] };
+type Section = { id: string; title: string; lead: string; icon: typeof Wrench; tone: string; foto: Foto; items: Item[] };
+
+function TriviumIcon({ className }: { className?: string }) {
+  return <Image src="/images/trivium-icon.svg" alt="" width={20} height={20} className={className} />;
+}
 
 const SECTIONS: Section[] = [
   {
     id: "neumaticos",
     title: "Neumáticos",
     lead: "Todo el stock, por medida, por tipo o por marca.",
-    icon: ShoppingBag,
-    tone: "bg-orange-500",
+    icon: TriviumIcon as typeof Wrench,
+    tone: "bg-white ring-1 ring-slate-200",
     foto: { src: "/images/local/neumatico-grenlander-kingpro-one-pickup-trivium.webp", alt: "Neumático Grenlander Kingpro One colocado en una pick-up" },
     items: [
       { href: "/catalogo", label: "Catálogo de neumáticos", hint: "Todo el stock con filtros por medida, marca y precio." },
