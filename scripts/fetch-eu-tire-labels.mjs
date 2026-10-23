@@ -144,14 +144,11 @@ async function downloadLabel(registrationNumber, destSlug) {
   mkdirSync(tmpDir, { recursive: true });
   const zipPath = path.join(tmpDir, "label.zip");
   writeFileSync(zipPath, buffer);
-  execFileSync("unzip", ["-o", "-j", zipPath, `Label_${registrationNumber}.png`, `Label_${registrationNumber}_thumb.png`, "-d", tmpDir]);
+  execFileSync("unzip", ["-o", "-j", zipPath, `Label_${registrationNumber}.png`, "-d", tmpDir]);
 
   const pngSrc = path.join(tmpDir, `Label_${registrationNumber}.png`);
-  const thumbSrc = path.join(tmpDir, `Label_${registrationNumber}_thumb.png`);
   const pngDest = path.join(OUT_DIR, `${destSlug}.png`);
-  const thumbDest = path.join(OUT_DIR, `${destSlug}-thumb.png`);
   execFileSync("cp", [pngSrc, pngDest]);
-  execFileSync("cp", [thumbSrc, thumbDest]);
   rmSync(tmpDir, { recursive: true, force: true });
 }
 
