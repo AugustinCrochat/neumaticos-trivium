@@ -97,6 +97,16 @@ export default function Page() {
         juntas.
       </p>
 
+      <h3>Pinchaduras, tuercas de seguridad y espárragos</h3>
+      <p>
+        También resolvemos pinchaduras (con parche si la cubierta se puede reparar:{" "}
+        <Link href="/blog/reparacion-de-pinchaduras-parche-mecha">parche, mecha o cambio</Link>), tuercas
+        antirrobo sin llave (<Link href="/blog/extraccion-de-tuercas-de-seguridad">cómo se extraen</Link>)
+        y espárragos o roscas dañadas (<Link href="/blog/esparrago-de-maza-roto-reparacion-de-rosca">guía</Link>).
+        Y si querés saber con qué máquinas trabajamos, mirá{" "}
+        <Link href="/blog/maquinas-hofmann-y-elevadores-rotary-lift-gomeria">Hofmann y Rotary Lift</Link>.
+      </p>
+
       <h2>Qué conviene hacer junto</h2>
       <p>
         Si vas a cambiar neumáticos, el paquete lógico es: arme y desarme, válvulas nuevas, balanceo y

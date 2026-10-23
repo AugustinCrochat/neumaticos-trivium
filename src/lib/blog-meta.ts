@@ -84,6 +84,48 @@ const L = {
 } satisfies Record<string, ShopLink>;
 
 export const BLOG_META: Record<string, BlogMeta> = {
+  "reparacion-de-pinchaduras-parche-mecha": {
+    cover: { src: IMG.taxi, alt: "Taxi en el taller de Neumáticos Trivium durante el cambio de cubiertas" },
+    figure: { src: IMG.rotacion, alt: "Rueda Pirelli desmontada de un auto en el taller", caption: "Con la rueda afuera se revisa la cubierta por dentro antes de reparar." },
+    shopIntro: "Si la cubierta no se puede reparar, mirá las medidas:",
+    shopLinks: [L.todos, L.ofertas, L.servicios],
+  },
+  "arme-y-desarme-de-neumaticos": {
+    cover: { src: IMG.montaje, alt: "Cubierta montada en la desmontadora del taller", position: "center 55%" },
+    figure: { src: IMG.grenlanderPerfilBajo, alt: "Cubierta de perfil bajo recién colocada en una llanta", caption: "Una llanta de perfil bajo recién armada, sin marcas." },
+    shopIntro: "Comprá las cubiertas y colocalas en el local:",
+    shopLinks: [L.todos, L.servicios, L.ofertas],
+  },
+  "tuercas-y-bulones-de-seguridad": {
+    cover: { src: IMG.grenlanderPerfilBajo, alt: "Cubierta de perfil bajo colocada en una llanta de aleación" },
+    figure: { src: IMG.rotacion, alt: "Rueda desmontada durante una rotación", caption: "La rueda se desmonta con la llave de la tuerca de seguridad." },
+    shopIntro: "Mirá el juego que corresponde a tu auto:",
+    shopLinks: [L.tuercas, L.todos, L.servicios],
+  },
+  "extraccion-de-tuercas-de-seguridad": {
+    cover: { src: IMG.grenlanderPerfilBajo, alt: "Llanta de aleación con cubierta colocada" },
+    figure: { src: IMG.rotacion, alt: "Rueda desmontada en el taller", caption: "Una rueda sin llave es un problema que tiene solución en la gomería." },
+    shopIntro: "Si necesitás un juego nuevo:",
+    shopLinks: [L.tuercas, L.servicios, L.todos],
+  },
+  "esparrago-de-maza-roto-reparacion-de-rosca": {
+    cover: { src: IMG.rotacion, alt: "Rueda desmontada en el taller de Neumáticos Trivium" },
+    figure: { src: IMG.camionetas, alt: "Camionetas sobre los elevadores del taller", caption: "Con la rueda afuera se revisan los espárragos y las roscas." },
+    shopIntro: "Servicios y neumáticos:",
+    shopLinks: [L.servicios, L.tuercas, L.todos],
+  },
+  "maquinas-hofmann-y-elevadores-rotary-lift-gomeria": {
+    cover: { src: IMG.geoliner630, alt: "Alineadora Hofmann Geoliner 630 en el taller de Neumáticos Trivium" },
+    figure: { src: IMG.geodyna, alt: "Balanceadora Hofmann Geodyna 7800P del taller", caption: "La Geodyna 7800P balancea cada rueda antes de que vuelva al auto." },
+    shopIntro: "Nuestros servicios de gomería:",
+    shopLinks: [L.servicios, L.todos, L.ofertas],
+  },
+  "gomeria-en-san-justo-buenos-aires": {
+    cover: { src: IMG.fachada, alt: "Fachada del local de Neumáticos Trivium" },
+    figure: { src: IMG.camionetas, alt: "Camionetas en el taller de Neumáticos Trivium", caption: "Así trabaja la gomería de Argüello; San Justo abre en diciembre." },
+    shopIntro: "Mirá el stock mientras abrimos:",
+    shopLinks: [L.todos, L.ofertas, L.servicios],
+  },
   "neumaticos-para-utilitarios-furgones-reparto": {
     cover: { src: IMG.camionetas, alt: "Dos camionetas en el taller de Neumáticos Trivium, una sobre el elevador" },
     figure: { src: IMG.utilitario, alt: "Utilitario sobre el elevador de alineación, con la balanceadora en primer plano", portrait: true, caption: "Un utilitario en el elevador: la alineación y el balanceo cuidan las cubiertas de trabajo." },

@@ -38,4 +38,12 @@ export const SERVICIOS_FOTOS: Record<string, { principal: FotoServicio; galeria:
     principal: F.camionetas,
     galeria: [F.rotacion, F.taxi, F.balanceando],
   },
+  "reparacion-de-pinchaduras": {
+    principal: F.taxi,
+    galeria: [F.rotacion, F.camionetas, F.balanceando],
+  },
+  "tuercas-de-seguridad": {
+    principal: F.perfilBajo,
+    galeria: [F.rotacion, F.camionetas, F.kingpro],
+  },
 };

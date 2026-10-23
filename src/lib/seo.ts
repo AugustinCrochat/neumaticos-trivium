@@ -10,7 +10,7 @@ import {
 } from "./config";
 import { SERVICES } from "./data";
 import { DEFAULT_SHARE_URL } from "./share-image";
-import { ROTACION_SERVICE } from "./servicios-seo";
+import { EXTRA_SERVICES } from "./servicios-seo";
 
 /** Nombre comercial — el que Google tiene que asociar a la marca. */
 export const SITE_NAME = "Neumáticos Trivium";
@@ -112,7 +112,7 @@ export function tireShopJsonLd(branch: Branch) {
           name: "Neumáticos",
           url: absoluteUrl("/neumaticos-baratos"),
         },
-        ...[...SERVICES, ROTACION_SERVICE].map((service) => ({
+        ...[...SERVICES, ...EXTRA_SERVICES].map((service) => ({
           "@type": "Offer",
           itemOffered: {
             "@type": "Service",

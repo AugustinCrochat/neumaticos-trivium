@@ -33,6 +33,39 @@ export const ROTACION_SERVICE: Service = {
   ],
 };
 
+/** Pinchaduras: servicio de gomería sin precio propio en el POS (se consulta). */
+export const PINCHADURAS_SERVICE: Service = {
+  id: "reparacion-de-pinchaduras",
+  title: "Reparación de pinchaduras",
+  description:
+    "Reparación de pinchaduras en nuestra gomería de Córdoba: revisamos la cubierta por dentro y te decimos si se repara con parche o si conviene cambiarla.",
+  icon: "rubber",
+  features: [
+    "Cubierta desmontada y revisada por dentro",
+    "Parche con hongo en pinchaduras reparables",
+    "Te decimos cuándo no se puede reparar",
+    "Atención por orden de llegada, sin turno",
+  ],
+};
+
+/** Tuercas y bulones de seguridad, extracción y espárragos: también se consulta. */
+export const TUERCAS_SERVICE: Service = {
+  id: "tuercas-de-seguridad",
+  title: "Tuercas de seguridad y espárragos",
+  description:
+    "Colocación y extracción de tuercas antirrobo, y reparación de espárragos y roscas dañadas, en nuestra gomería de Córdoba.",
+  icon: "wrench",
+  features: [
+    "Colocación de tuercas y bulones antirrobo",
+    "Extracción de tuercas de seguridad sin llave",
+    "Cambio de espárrago de maza roto",
+    "Reparación de rosca dañada",
+  ],
+};
+
+/** Páginas de servicio fuera del listado y sin precio propio en el POS. */
+export const EXTRA_SERVICES: Service[] = [ROTACION_SERVICE, PINCHADURAS_SERVICE, TUERCAS_SERVICE];
+
 export const SERVICIOS_SEO: Record<string, ServicioSeo> = {
   alineacion: {
     title: "Alineación computarizada 3D en Córdoba",
@@ -225,6 +258,102 @@ export const SERVICIOS_SEO: Record<string, ServicioSeo> = {
     relacionados: [
       ["rotacion-de-neumaticos", "Rotación de neumáticos: cada cuánto y en qué orden"],
       ["alineacion-y-balanceo", "Alineación y balanceo: cuándo hacer cada una"],
+    ],
+  },
+  "reparacion-de-pinchaduras": {
+    title: "Reparación de pinchaduras en Córdoba",
+    metaDescription:
+      "Reparación de pinchaduras en Córdoba (Argüello): desmontamos la cubierta, la revisamos por dentro y reparamos con parche si se puede. Si no, te decimos por qué conviene cambiarla.",
+    h1: "Reparación de pinchaduras en Córdoba",
+    intro: [
+      "Una pinchadura bien reparada deja la cubierta lista para seguir rodando; una mal reparada pierde aire de nuevo o falla en ruta. La diferencia está en revisar el neumático por dentro, no en tapar el agujero que se ve por fuera.",
+      "En nuestra gomería de Argüello, Córdoba, desmontamos la cubierta, la inspeccionamos y reparamos con parche las pinchaduras que son reparables. Cuando no lo son, te lo decimos y te mostramos el motivo.",
+    ],
+    secciones: [
+      {
+        titulo: "Qué se puede reparar",
+        items: [
+          "Pinchaduras chicas en la banda de rodamiento (la parte que toca el piso).",
+          "Cubiertas sin daño interno ni desgaste excesivo.",
+        ],
+      },
+      {
+        titulo: "Qué no se puede reparar",
+        items: [
+          "Pinchaduras en el flanco o el hombro de la cubierta.",
+          "Orificios grandes, cortes y daño en la estructura interna.",
+          "Cubiertas que rodaron mucho tiempo sin aire.",
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: "¿Cuánto sale reparar una pinchadura?",
+        answer:
+          "Consultanos por WhatsApp. Depende de si el neumático se repara o conviene cambiarlo, y eso se define con la cubierta desmontada.",
+      },
+      {
+        question: "¿Parche o mecha?",
+        answer:
+          "El parche con hongo desde adentro es la reparación definitiva. La mecha desde afuera es un arreglo de emergencia para llegar a una gomería.",
+      },
+      {
+        question: "¿Hace falta turno?",
+        answer: "No, atendemos por orden de llegada.",
+      },
+    ],
+    relacionados: [
+      ["reparacion-de-pinchaduras-parche-mecha", "Pinchaduras: parche, mecha o cambio de neumático"],
+      ["gomeria-en-cordoba", "Gomería en Córdoba: qué servicios hacen y cómo elegir una buena"],
+    ],
+  },
+  "tuercas-de-seguridad": {
+    title: "Tuercas de seguridad y espárragos en Córdoba",
+    metaDescription:
+      "Tuercas antirrobo en Córdoba: colocación, extracción sin llave y reparación de espárragos de maza rotos o roscas dañadas, en nuestra gomería de Argüello.",
+    h1: "Tuercas antirrobo, extracción y reparación de espárragos en Córdoba",
+    intro: [
+      "Las tuercas de seguridad protegen las llantas de aleación, pero si la llave se pierde o se daña, la rueda queda trabada. También pasa que un espárrago se corta o una rosca se pasa por apretar de más.",
+      "En nuestra gomería de Argüello, Córdoba, colocamos tuercas y bulones antirrobo, extraemos las que quedaron sin llave y reparamos espárragos y roscas dañadas, cuidando de no arruinar la llanta ni la maza.",
+    ],
+    secciones: [
+      {
+        titulo: "Qué hacemos",
+        items: [
+          "Colocación de juegos de tuercas y bulones antirrobo.",
+          "Extracción de tuercas de seguridad cuando no hay llave.",
+          "Cambio de espárragos de maza rotos.",
+          "Reparación y repaso de roscas dañadas.",
+        ],
+      },
+      {
+        titulo: "Antes de venir",
+        items: [
+          "Si tenés el código del juego de tuercas, traelo: se puede pedir una llave nueva.",
+          "Si ya intentaron sacarla a golpes, avisá, así se revisa el espárrago.",
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: "¿Pueden sacar una tuerca antirrobo sin la llave?",
+        answer:
+          "Sí, con herramienta de extracción, sin dañar el espárrago ni la llanta. La tuerca queda inutilizable y se reemplaza.",
+      },
+      {
+        question: "¿Se puede reparar un espárrago roto?",
+        answer:
+          "Se reemplaza por uno nuevo de la misma medida. Si la rosca está solo sucia o apenas dañada, se repasa.",
+      },
+      {
+        question: "¿Venden tuercas antirrobo?",
+        answer: "Sí, tenemos juegos para distintos vehículos en la sección de tuercas antirrobo.",
+      },
+    ],
+    relacionados: [
+      ["tuercas-y-bulones-de-seguridad", "Tuercas y bulones de seguridad: cómo funcionan y cómo cuidarlos"],
+      ["extraccion-de-tuercas-de-seguridad", "Extracción de tuercas de seguridad sin llave"],
+      ["esparrago-de-maza-roto-reparacion-de-rosca", "Espárrago de maza roto o rosca dañada"],
     ],
   },
 };

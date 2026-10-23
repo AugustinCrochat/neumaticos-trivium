@@ -8,7 +8,7 @@ import { getServiciosPrecios } from "@/lib/pos-api";
 import { getSelectedBranchSlug } from "@/lib/branch-server";
 import { formatPrecio, splitAutoCamioneta } from "@/lib/servicios";
 import { FaqSection } from "@/components/seo/FaqSection";
-import { ROTACION_SERVICE, SERVICIOS_SEO } from "@/lib/servicios-seo";
+import { EXTRA_SERVICES, SERVICIOS_SEO } from "@/lib/servicios-seo";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { SERVICIOS_FOTOS } from "@/lib/servicios-fotos";
 import { breadcrumbJsonLd, canonical, serviceJsonLd } from "@/lib/seo";
@@ -17,10 +17,10 @@ type Props = { params: Promise<{ id: string }> };
 
 // La rotación de ruedas tiene página propia (se busca aparte) pero no figura en
 // el listado de servicios: comparte grupo de precios con "Balanceo y Rotación".
-const findService = (id: string) => [...SERVICES, ROTACION_SERVICE].find((s) => s.id === id);
+const findService = (id: string) => [...SERVICES, ...EXTRA_SERVICES].find((s) => s.id === id);
 
 export async function generateStaticParams() {
-  return [...SERVICES, ROTACION_SERVICE].map((s) => ({ id: s.id }));
+  return [...SERVICES, ...EXTRA_SERVICES].map((s) => ({ id: s.id }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -42,7 +42,7 @@ export default async function ServicioPage({ params }: Props) {
   const seo = SERVICIOS_SEO[service.id];
 
   const precios =
-    service.id === ROTACION_SERVICE.id ? [] : await getServiciosPrecios(id, await getSelectedBranchSlug());
+    EXTRA_SERVICES.some((e) => e.id === service.id) ? [] : await getServiciosPrecios(id, await getSelectedBranchSlug());
   const { auto, camioneta } = splitAutoCamioneta(precios);
   const fotos = SERVICIOS_FOTOS[service.id];
 
@@ -171,7 +171,7 @@ export default async function ServicioPage({ params }: Props) {
                     </Link>
                   </li>
                 ))}
-                {[...SERVICES, ROTACION_SERVICE]
+                {[...SERVICES, ...EXTRA_SERVICES]
                   .filter((other) => other.id !== service.id)
                   .map((other) => (
                     <li key={other.id}>

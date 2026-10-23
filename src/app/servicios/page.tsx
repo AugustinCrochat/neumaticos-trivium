@@ -3,6 +3,8 @@ import { FaqSection } from "@/components/seo/FaqSection";
 import { JsonLd } from "@/components/seo/JsonLd";
 import type { Metadata } from "next";
 import { SERVICES } from "@/lib/data";
+import Link from "next/link";
+import { EXTRA_SERVICES, SERVICIOS_SEO } from "@/lib/servicios-seo";
 import { breadcrumbJsonLd, canonical, serviceJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = {
@@ -47,6 +49,28 @@ export default function ServiciosPage() {
         <JsonLd key={service.id} data={serviceJsonLd(service)} />
       ))}
       <ServicesSection />
+      <section className="mx-auto max-w-4xl px-4 pb-10">
+        <h2 className="mb-3 text-xl font-black text-tire-950">Más servicios de gomería</h2>
+        <ul className="grid gap-2 sm:grid-cols-2">
+          {EXTRA_SERVICES.map((s) => (
+            <li key={s.id}>
+              <Link href={`/servicios/${s.id}`} className="font-bold text-orange-700 underline underline-offset-4">
+                {SERVICIOS_SEO[s.id]?.h1 ?? s.title}
+              </Link>
+            </li>
+          ))}
+          <li>
+            <Link href="/blog/maquinas-hofmann-y-elevadores-rotary-lift-gomeria" className="font-bold text-orange-700 underline underline-offset-4">
+              Las máquinas de nuestra gomería: Hofmann y Rotary Lift
+            </Link>
+          </li>
+          <li>
+            <Link href="/blog/gomeria-en-san-justo-buenos-aires" className="font-bold text-orange-700 underline underline-offset-4">
+              Gomería en San Justo y La Matanza (abre en diciembre)
+            </Link>
+          </li>
+        </ul>
+      </section>
       <div className="mx-auto max-w-4xl px-4 pb-16">
         <FaqSection faqs={FAQS} />
       </div>

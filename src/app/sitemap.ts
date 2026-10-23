@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL, BRANCHES, DEFAULT_BRANCH_ID, TIRE_RIMS } from "@/lib/config";
 import { BRANDS, SERVICES, BLOG_POSTS } from "@/lib/data";
-import { ROTACION_SERVICE } from "@/lib/servicios-seo";
+import { EXTRA_SERVICES } from "@/lib/servicios-seo";
 import { LOCALIDADES } from "@/lib/localidades";
 import { cargaSlug } from "@/lib/carga";
 import { LOAD_SPEED_CODES } from "@/lib/load-speed";
@@ -138,9 +138,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     alineacion: ["/images/servicios/alineacion.webp", "/images/local/tecnicos-alineando-auto-elevador-gomeria-trivium-cordoba.webp", "/images/local/alineadora-geoliner-630-taller-neumaticos-trivium-cordoba.webp"],
     balanceo: ["/images/servicios/balanceo.webp", "/images/local/tecnico-balanceando-rueda-balanceadora-trivium-cordoba.webp"],
     montaje: ["/images/servicios/arme-desarme.webp"],
+    "reparacion-de-pinchaduras": ["/images/local/taxi-en-el-taller-neumaticos-trivium-cordoba.webp"],
+    "tuercas-de-seguridad": ["/images/local/cubierta-perfil-bajo-grenlander-colocada-neumaticos-trivium.webp"],
     "rotacion-de-ruedas": ["/images/local/rotacion-de-neumaticos-pirelli-rueda-desmontada-trivium.webp"],
   };
-  const servicios: Entry[] = [...SERVICES, ROTACION_SERVICE].map((s) => url(`/servicios/${s.id}`, 0.7, "monthly", undefined, SERVICE_IMAGES[s.id]?.map(abs)));
+  const servicios: Entry[] = [...SERVICES, ...EXTRA_SERVICES].map((s) => url(`/servicios/${s.id}`, 0.7, "monthly", undefined, SERVICE_IMAGES[s.id]?.map(abs)));
 
   // Imágenes propias que queremos que se descubran en la búsqueda de imágenes.
   const POST_IMAGES: Record<string, string[]> = {
