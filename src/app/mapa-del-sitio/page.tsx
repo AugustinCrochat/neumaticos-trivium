@@ -14,6 +14,9 @@ import { LOCALIDADES } from "@/lib/localidades";
 import { TOOLS, toolPath } from "@/lib/tools";
 import { poolShare } from "@/lib/share-image";
 
+/** Notas que se ven de cada categoría antes del desplegable, para que las tarjetas queden parejas. */
+const NOTAS_VISIBLES = 4;
+
 const TITLE = "Mapa del sitio: neumáticos, medidas, marcas y servicios";
 const DESCRIPTION =
   "Todo Neumáticos Trivium en un solo lugar: catálogo por medida y marca, neumáticos A/T y de carga, calculadoras, gomería (alineación, balanceo, rotación), notas del blog y las zonas que atendemos en Córdoba y Buenos Aires.";
@@ -328,23 +331,36 @@ export default async function MapaDelSitioPage() {
             ))}
           </ul>
           <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {categorias.map((cat) => (
-              <div key={cat} className="rounded-3xl border border-slate-200 bg-white p-5">
-                <h3 className="mb-2 text-sm font-black uppercase tracking-widest text-slate-500">{cat}</h3>
-                <ul className="space-y-2">
-                  {posts
-                    .filter((p) => p.category === cat)
-                    .map((p) => (
-                      <li key={p.slug}>
-                        <Link href={`/blog/${p.slug}`} className="group block">
-                          <span className="font-bold leading-snug text-tire-950 group-hover:text-orange-600">{p.title}</span>
-                          <span className="block text-xs text-slate-400">{fecha(p.date)}</span>
-                        </Link>
-                      </li>
-                    ))}
-                </ul>
-              </div>
-            ))}
+            {categorias.map((cat) => {
+              const delCat = posts.filter((p) => p.category === cat);
+              const visibles = delCat.slice(0, NOTAS_VISIBLES);
+              const resto = delCat.slice(NOTAS_VISIBLES);
+              const item = (p: (typeof posts)[number]) => (
+                <li key={p.slug}>
+                  <Link href={`/blog/${p.slug}`} className="group block">
+                    <span className="font-bold leading-snug text-tire-950 group-hover:text-orange-600">{p.title}</span>
+                    <span className="block text-xs text-slate-400">{fecha(p.date)}</span>
+                  </Link>
+                </li>
+              );
+              return (
+                <div key={cat} className="rounded-3xl border border-slate-200 bg-white p-5">
+                  <h3 className="mb-2 text-sm font-black uppercase tracking-widest text-slate-500">
+                    {cat} <span className="font-bold text-slate-400">({delCat.length})</span>
+                  </h3>
+                  <ul className="space-y-2">{visibles.map(item)}</ul>
+                  {resto.length > 0 && (
+                    <details className="group/mas mt-3">
+                      <summary className="cursor-pointer list-none text-sm font-black text-orange-600 hover:text-orange-700 [&::-webkit-details-marker]:hidden">
+                        <span className="group-open/mas:hidden">Ver las {resto.length} restantes ▾</span>
+                        <span className="hidden group-open/mas:inline">Ver menos ▴</span>
+                      </summary>
+                      <ul className="mt-3 space-y-2">{resto.map(item)}</ul>
+                    </details>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </section>
 
