@@ -212,8 +212,8 @@ export const BLOG_POSTS: BlogPost[] = [
   },
   {
     id: "27",
-    title: "Reparación de pinchaduras: parche, mecha o cambio de neumático",
-    excerpt: "Cómo se repara bien una pinchadura, diferencia entre parche y mecha, cuándo no se puede reparar.",
+    title: "Reparación de pinchaduras: parche, tarugo o cambio de neumático",
+    excerpt: "Cómo se repara bien una pinchadura, diferencia entre parche, minicompi y tarugo, cuándo no se puede reparar.",
     imageUrl: "/images/local/taxi-en-el-taller-neumaticos-trivium-cordoba.webp",
     date: "2026-10-23",
     slug: "reparacion-de-pinchaduras-parche-mecha",

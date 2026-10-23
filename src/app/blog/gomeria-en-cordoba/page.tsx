@@ -100,7 +100,7 @@ export default function Page() {
       <h3>Pinchaduras, tuercas de seguridad y espárragos</h3>
       <p>
         También resolvemos pinchaduras (con parche si la cubierta se puede reparar:{" "}
-        <Link href="/blog/reparacion-de-pinchaduras-parche-mecha">parche, mecha o cambio</Link>), tuercas
+        <Link href="/blog/reparacion-de-pinchaduras-parche-mecha">parche, tarugo o cambio</Link>), tuercas
         antirrobo sin llave (<Link href="/blog/extraccion-de-tuercas-de-seguridad">cómo se extraen</Link>)
         y espárragos o roscas dañadas (<Link href="/blog/esparrago-de-maza-roto-reparacion-de-rosca">guía</Link>).
         Y si querés saber con qué máquinas trabajamos, mirá{" "}

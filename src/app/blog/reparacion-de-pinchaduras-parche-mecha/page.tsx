@@ -5,23 +5,28 @@ import { canonical } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "reparacion-de-pinchaduras-parche-mecha";
-const TITLE = "Reparación de pinchaduras: parche, mecha o cambio de neumático";
+const TITLE = "Reparación de pinchaduras: parche, tarugo o cambio de neumático";
 const SUBTITLE =
-  "Cómo se repara bien un neumático pinchado, en qué se diferencia el parche de la mecha, cuándo no se puede reparar y qué pasa si manejás con la rueda baja.";
+  "Cómo se repara bien un neumático pinchado, en qué se diferencia el parche del tarugo y del minicompi, cuándo no se puede reparar y qué pasa si manejás con la rueda baja.";
 
 export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Cómo se repara una pinchadura en la gomería: parche con hongo desde adentro, mecha de emergencia, zonas que no se reparan y cuándo hay que cambiar el neumático. Córdoba y Buenos Aires.",
+    "Cómo se repara una pinchadura en la gomería: parche común, minicompi, tarugo de emergencia, zonas que no se reparan y cuándo hay que cambiar el neumático. Córdoba y Buenos Aires.",
   alternates: canonical(`/blog/${SLUG}`),
 };
 
 const FAQS = [
   {
-    question: "¿Es lo mismo el parche que la mecha?",
+    question: "¿Cuánto sale reparar una pinchadura?",
     answer:
-      "No. La mecha es una tira de goma que se mete desde afuera con el neumático puesto: sirve para llegar a una gomería, pero no revisa el interior de la cubierta. El parche (o parche con hongo) se coloca desde adentro, con el neumático desmontado de la llanta, y es la reparación que se considera definitiva.",
+      "El parche común, que es la reparación más habitual, sale $20.000. Se hace con el neumático desmontado de la llanta, revisándolo por dentro. Si la cubierta no se puede reparar, te lo decimos antes de cobrar.",
+  },
+  {
+    question: "¿Cuál es la diferencia entre parche, minicompi y tarugo?",
+    answer:
+      "El parche común y el minicompi (parche con hongo) se colocan desde adentro, con el neumático desmontado de la llanta, y son reparaciones firmes. El tarugo es una tira de goma que se mete desde afuera con la cubierta puesta en el auto: sirve para llegar a una gomería, pero no permite revisar el interior.",
   },
   {
     question: "¿Qué pinchaduras no se pueden reparar?",
@@ -50,7 +55,7 @@ export default function Page() {
         perder aire de nuevo o, peor, fallar en ruta. Acá explicamos cómo se hace bien.
       </p>
 
-      <h2>Parche con hongo: la reparación que se considera definitiva</h2>
+      <h2>Parche común: la reparación que más hacemos</h2>
       <p>
         El procedimiento correcto empieza por sacar la rueda del auto y desmontar el neumático de la
         llanta. Con la cubierta abierta se revisa el interior completo: la pinchadura que se ve por
@@ -58,19 +63,27 @@ export default function Page() {
         mientras el auto seguía andando.
       </p>
       <p>
-        Si el daño es reparable, se retira el objeto, se limpia y se escarifica la zona interior, se
-        rellena el orificio y se pega un parche con hongo que sella tanto el agujero como la tela
-        interna. Después se vuelve a armar, se <Link href="/blog/alineacion-y-balanceo">balancea la rueda</Link>{" "}
-        y se controla la presión.
+        Si el daño es reparable, se retira el objeto, se limpia y se escarifica la zona interior y se
+        pega el parche. Después se vuelve a armar, se{" "}
+        <Link href="/blog/alineacion-y-balanceo">balancea la rueda</Link> y se controla la presión. Es lo que
+        más hacemos y sale <strong>$20.000</strong>.
       </p>
 
-      <h2>La mecha: un arreglo de emergencia</h2>
+      <h2>Minicompi: el parche con hongo</h2>
       <p>
-        La mecha es una tira de goma con pegamento que se introduce desde afuera con la cubierta
-        puesta en el auto. Es rápida y alcanza para llegar a una gomería, pero tiene un límite: no
-        permite ver el interior del neumático. Por eso la consideramos una solución provisoria, no
-        la reparación final. Si te pusieron una mecha en la ruta, conviene pasar por una gomería para
-        revisar la cubierta por dentro y, si corresponde, hacer el parche.
+        El minicompi es un parche con un hongo (un vástago de goma) que rellena el orificio y sella
+        también la tela interna. Se coloca igual que el parche común, desde adentro y con la cubierta
+        desmontada. Se usa cuando el orificio es algo más grande o cuando conviene reforzar el sellado.
+        Consultanos por WhatsApp y te decimos cuál corresponde según la pinchadura.
+      </p>
+
+      <h2>El tarugo: un arreglo de emergencia</h2>
+      <p>
+        El tarugo (en otros lados le dicen mecha) es una tira de goma con pegamento que se introduce
+        desde afuera con la cubierta puesta en el auto. Es rápido y alcanza para llegar a una gomería,
+        pero no permite ver el interior del neumático. Por eso lo consideramos una solución
+        provisoria, no la reparación final. Si te pusieron un tarugo en la ruta, conviene pasar por una
+        gomería para revisar la cubierta por dentro y, si corresponde, hacer el parche.
       </p>
 
       <h2>Cuándo no se puede reparar</h2>
@@ -111,7 +124,7 @@ export default function Page() {
       <p>
         En Argüello, Córdoba, revisamos el neumático desmontado y te decimos si se repara o conviene
         cambiarlo. Es un servicio que no es el centro de nuestro trabajo, pero lo hacemos bien porque
-        una gomería seria resuelve el problema completo. Podés ver todo lo que hacemos en{" "}
+        una gomería seria resuelve el problema completo. El parche común sale $20.000. Podés ver todo lo que hacemos en{" "}
         <Link href="/servicios">servicios</Link> y la guía{" "}
         <Link href="/blog/gomeria-en-cordoba">Gomería en Córdoba</Link>.
       </p>

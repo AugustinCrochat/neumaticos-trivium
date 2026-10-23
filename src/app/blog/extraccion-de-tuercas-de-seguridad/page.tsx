@@ -74,7 +74,7 @@ export default function Page() {
         <li><strong>Martillo y cincel:</strong> golpea el espárrago y la llanta.</li>
         <li><strong>Pistola de impacto con dado común:</strong> redondea la cabeza y empeora la situación.</li>
         <li><strong>Soldar una tuerca encima:</strong> el calor daña la llanta de aleación y la goma del neumático.</li>
-        <li><strong>Taladrar sin guía:</strong> se corre la mecha y se estropea la rosca.</li>
+        <li><strong>Taladrar sin guía:</strong> se corre la broca y se estropea la rosca.</li>
       </ul>
 
       <h2>Qué hacer en la gomería</h2>

@@ -42,7 +42,7 @@ export const PINCHADURAS_SERVICE: Service = {
   icon: "rubber",
   features: [
     "Cubierta desmontada y revisada por dentro",
-    "Parche con hongo en pinchaduras reparables",
+    "Parche común y minicompi en pinchaduras reparables",
     "Te decimos cuándo no se puede reparar",
     "Atención por orden de llegada, sin turno",
   ],
@@ -267,7 +267,7 @@ export const SERVICIOS_SEO: Record<string, ServicioSeo> = {
     h1: "Reparación de pinchaduras en Córdoba",
     intro: [
       "Una pinchadura bien reparada deja la cubierta lista para seguir rodando; una mal reparada pierde aire de nuevo o falla en ruta. La diferencia está en revisar el neumático por dentro, no en tapar el agujero que se ve por fuera.",
-      "En nuestra gomería de Argüello, Córdoba, desmontamos la cubierta, la inspeccionamos y reparamos con parche las pinchaduras que son reparables. Cuando no lo son, te lo decimos y te mostramos el motivo.",
+      "En nuestra gomería de Argüello, Córdoba, desmontamos la cubierta, la inspeccionamos y reparamos con parche común o minicompi las pinchaduras que son reparables. Cuando no lo son, te lo decimos y te mostramos el motivo.",
     ],
     secciones: [
       {
@@ -290,12 +290,12 @@ export const SERVICIOS_SEO: Record<string, ServicioSeo> = {
       {
         question: "¿Cuánto sale reparar una pinchadura?",
         answer:
-          "Consultanos por WhatsApp. Depende de si el neumático se repara o conviene cambiarlo, y eso se define con la cubierta desmontada.",
+          "El parche común, que es la reparación que más hacemos, sale $20.000. Antes se desmonta la cubierta y se revisa por dentro; si no se puede reparar, te lo decimos.",
       },
       {
-        question: "¿Parche o mecha?",
+        question: "¿Parche, minicompi o tarugo?",
         answer:
-          "El parche con hongo desde adentro es la reparación definitiva. La mecha desde afuera es un arreglo de emergencia para llegar a una gomería.",
+          "El parche común y el minicompi (parche con hongo) se colocan desde adentro, con la cubierta desmontada, y son reparaciones firmes. El tarugo, que se mete desde afuera, es un arreglo de emergencia para llegar a una gomería.",
       },
       {
         question: "¿Hace falta turno?",
@@ -303,7 +303,7 @@ export const SERVICIOS_SEO: Record<string, ServicioSeo> = {
       },
     ],
     relacionados: [
-      ["reparacion-de-pinchaduras-parche-mecha", "Pinchaduras: parche, mecha o cambio de neumático"],
+      ["reparacion-de-pinchaduras-parche-mecha", "Pinchaduras: parche, tarugo o cambio de neumático"],
       ["gomeria-en-cordoba", "Gomería en Córdoba: qué servicios hacen y cómo elegir una buena"],
     ],
   },
