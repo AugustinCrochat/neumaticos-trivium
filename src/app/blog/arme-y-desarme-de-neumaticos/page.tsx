@@ -67,10 +67,13 @@ export default function Page() {
         flanco muy rígido, directamente necesitan una máquina preparada para ellos.
       </p>
       <p>
-        Las desmontadoras profesionales que distribuye <strong>Trivium Pro</strong>, como las{" "}
-        <a href="https://pro.trivium.ar/guias/desarmadoras-de-neumaticos/">desarmadoras Hofmann Monty</a>,
-        son del tipo que usan los talleres que cuidan la llanta. Si querés ver cómo elegir una para un
-        taller propio, esa guía lo explica en detalle.
+        En Argüello usamos una{" "}
+        <a href="https://pro.trivium.ar/producto/desarmadora-de-ruedas-con-brazo-auxiliar-pl-1256s-trivium-center/">desarmadora con brazo auxiliar PL-1256S</a>,
+        de la línea de <strong>Trivium Pro</strong>: el brazo auxiliar sostiene el flanco mientras se monta y permite
+        trabajar perfil bajo y run flat sin forzar la cubierta. Para quien arma un taller y busca la
+        línea Hofmann están las{" "}
+        <a href="https://pro.trivium.ar/guias/desarmadoras-de-neumaticos/">desarmadoras Hofmann Monty</a>; esa guía
+        explica cómo elegir una.
       </p>
 
       <h2>El balanceo, siempre después del arme</h2>

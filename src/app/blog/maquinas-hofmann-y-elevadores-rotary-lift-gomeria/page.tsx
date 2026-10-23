@@ -7,13 +7,13 @@ import { blogShare } from "@/lib/blog-meta";
 const SLUG = "maquinas-hofmann-y-elevadores-rotary-lift-gomeria";
 const TITLE = "Máquinas Hofmann y elevadores Rotary Lift: el equipamiento de una gomería seria";
 const SUBTITLE =
-  "Alineadoras y balanceadoras Hofmann, elevadores Rotary Lift y desmontadoras: qué hace cada máquina y por qué cambia la calidad del trabajo.";
+  "Alineadoras y balanceadoras Hofmann, elevadores (Rotary Lift y Trivium Pro) y desarmadoras: qué hace cada máquina y por qué cambia la calidad del trabajo.";
 
 export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Qué máquinas hay detrás de una buena gomería: alineadora 3D Hofmann Geoliner, balanceadora Hofmann Geodyna, elevadores Rotary Lift y desmontadoras. Y dónde conseguirlas para tu taller.",
+    "Qué máquinas hay detrás de una buena gomería: alineadora 3D Hofmann Geoliner, balanceadora Hofmann Geodyna, elevadores Rotary Lift y Trivium Pro y desarmadoras. Y dónde conseguirlas.",
   alternates: canonical(`/blog/${SLUG}`),
 };
 
@@ -26,7 +26,7 @@ const FAQS = [
   {
     question: "¿Quién fabrica las máquinas Hofmann y los elevadores Rotary Lift?",
     answer:
-      "Hofmann es una marca de equipos para taller (alineadoras, balanceadoras y desmontadoras) y Rotary Lift es una marca de elevadores para vehículos. Las dos se consiguen a través de Trivium Pro, nuestra unidad de equipamiento para talleres y gomerías.",
+      "Hofmann es una marca de equipos para taller (alineadoras, balanceadoras y desarmadoras) y Rotary Lift es una marca de elevadores para vehículos. Las dos se consiguen a través de Trivium Pro, nuestra unidad de equipamiento para talleres y gomerías.",
   },
   {
     question: "¿Puedo comprar estos equipos para mi taller?",
@@ -48,9 +48,9 @@ export default function Page() {
       <h2>Alineadora 3D Hofmann Geoliner</h2>
       <p>
         La alineadora mide los ángulos de las cuatro ruedas (camber, caster y convergencia) y guía la
-        corrección con precisión. Nuestro taller trabaja con una{" "}
+        corrección con precisión. En Argüello trabajamos con una{" "}
         <a href="https://pro.trivium.ar/producto/alineadora-3d-hofmann-geoliner-630/">Hofmann Geoliner 630</a>,
-        una alineadora 3D compacta. Para talleres de más volumen está la{" "}
+        una alineadora 3D compacta con cámaras y targets en las ruedas. Para talleres de más volumen está la{" "}
         <a href="https://pro.trivium.ar/producto/alineadora-3d-hofmann-geoliner-880/">Geoliner 880</a>. Más
         sobre cómo se hace un trabajo con ella en{" "}
         <Link href="/blog/geoliner-630-geodyna-7800p-alineacion-balanceo">esta nota</Link>.
@@ -59,29 +59,41 @@ export default function Page() {
       <h2>Balanceadora Hofmann Geodyna</h2>
       <p>
         La balanceadora detecta el desequilibrio de peso del conjunto rueda-neumático y calcula
-        dónde poner los contrapesos. Usamos una{" "}
-        <a href="https://pro.trivium.ar/producto/balanceadora-de-ruedas-hofmann-geodyna-7800-2p/">Hofmann Geodyna 7800P</a>.
-        La familia Geodyna incluye modelos para autos, camionetas y camiones; en{" "}
+        dónde poner los contrapesos. Usamos una balanceadora de la familia Hofmann Geodyna, que
+        incluye modelos para autos, camionetas y camiones; en{" "}
         <a href="https://pro.trivium.ar/blog/balanceadoras-hofmann-geodyna-cual-elegir-7100-7400l-7600p-7800-9000p-980l/">esta guía</a>{" "}
         explicamos cuál conviene según el taller.
       </p>
 
-      <h2>Elevadores Rotary Lift</h2>
+      <h2>Elevadores: tijera para alinear y plancha para gomería</h2>
       <p>
         El elevador es la base del trabajo: sostiene el vehículo para desmontar ruedas, alinear y
-        revisar la suspensión. <a href="https://pro.trivium.ar/marca/rotary-lift/">Rotary Lift</a> es una
-        marca de elevadores de dos y cuatro columnas, de tijera y para motos, de uso extendido en
-        talleres. Para alineación hace falta un elevador nivelado y preparado; la guía{" "}
+        revisar la suspensión. Para alinear usamos un{" "}
+        <a href="https://pro.trivium.ar/producto/elevador-tijera-largo-5500-kg-con-kit-de-alineacion/">elevador tijera largo con kit de alineación</a>,
+        y para rotación y cambio de neumáticos una{" "}
+        <a href="https://pro.trivium.ar/producto/elevador-tijera-gomeria-4500-kg-pl-45h/">plancha de gomería PL-45H</a>,
+        que queda al ras del piso. Los dos son de la línea Trivium Pro; el recorrido completo del taller
+        está en{" "}
+        <a href="https://pro.trivium.ar/blog/las-maquinas-del-taller-de-neumaticos-trivium-arguello/">las máquinas del taller de Argüello</a>.
+      </p>
+      <p>
+        Para quien busca una marca premium, <a href="https://pro.trivium.ar/marca/rotary-lift/">Rotary Lift</a>{" "}
+        es una línea de elevadores de dos y cuatro columnas, de tijera y para motos, con certificación
+        ALI y de uso extendido en talleres. La guía{" "}
         <a href="https://pro.trivium.ar/guias/elevadores-para-taller/">Elevadores para taller</a> explica
-        cómo elegir capacidad y tipo.
+        cómo elegir capacidad y tipo, y{" "}
+        <a href="https://pro.trivium.ar/blog/rotary-lift-o-trivium-pro-que-linea-conviene-segun-tu-taller/">Rotary Lift o Trivium Pro</a>{" "}
+        compara las dos líneas.
       </p>
 
-      <h2>Desmontadoras de neumáticos</h2>
+      <h2>Desarmadora de neumáticos</h2>
       <p>
-        La desmontadora saca y coloca el neumático en la llanta. Una automática, como las{" "}
-        <a href="https://pro.trivium.ar/producto/desarmadora-de-neumaticos-hofmann-monty-3300-20/">Hofmann Monty</a>,
-        protege la llanta de aleación y el talón del neumático, algo clave en perfil bajo y run flat.
-        Mirá cómo funciona en{" "}
+        La desarmadora saca y coloca el neumático en la llanta. En Argüello usamos una{" "}
+        <a href="https://pro.trivium.ar/producto/desarmadora-de-ruedas-con-brazo-auxiliar-pl-1256s-trivium-center/">desarmadora con brazo auxiliar PL-1256S</a>,
+        que sostiene el flanco mientras se monta y protege la llanta de aleación, algo clave en perfil
+        bajo y run flat. Si buscás la línea Hofmann, están las{" "}
+        <a href="https://pro.trivium.ar/producto/desarmadora-de-neumaticos-hofmann-monty-3300-20/">Hofmann Monty</a>.
+        Mirá cómo se hace el trabajo en{" "}
         <Link href="/blog/arme-y-desarme-de-neumaticos">arme y desarme de neumáticos</Link>.
       </p>
 
