@@ -418,7 +418,10 @@ export default async function ProductPage({ params }: Props) {
               </>
             )}
           </p>
-          {tireLabel && <EuLabelBlock label={tireLabel} />}
+          {tireLabel && <EuLabelBlock
+              label={tireLabel}
+              alt={`Etiqueta de eficiencia energética UE — ${product.brand} ${product.modeloBase}, ${tireLabel.tyreDesignation}`}
+            />}
           {utqg && (
             <p className="mt-3 rounded-xl bg-slate-50 px-4 py-3 text-xs leading-relaxed text-slate-500">
               <strong className="text-slate-700">UTQG {utqg.treadwear} {utqg.traction} {utqg.temperature}:</strong>{" "}

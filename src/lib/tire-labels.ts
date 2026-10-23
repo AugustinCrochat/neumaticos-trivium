@@ -20,11 +20,13 @@ export type TireLabel = {
   tyreDesignation: string;
   /** Imagen oficial completa (PNG de EPREL), para la galería del producto. */
   imagePath: string;
+  /** Etiqueta oficial en SVG liviano (scripts/build-eu-label-svgs.mjs), para la ficha. */
+  svgPath: string;
   /** Miniatura oficial (más liviana), para el selector de la galería. */
   thumbPath: string;
 };
 
-const TIRE_LABELS = labelsMap as Record<string, Omit<TireLabel, "imagePath" | "thumbPath">>;
+const TIRE_LABELS = labelsMap as Record<string, Omit<TireLabel, "imagePath" | "svgPath" | "thumbPath">>;
 
 export function getTireLabel(slug: string): TireLabel | null {
   const data = TIRE_LABELS[slug];
@@ -32,6 +34,7 @@ export function getTireLabel(slug: string): TireLabel | null {
   return {
     ...data,
     imagePath: `/images/eu-labels/${slug}.png`,
+    svgPath: `/images/eu-labels/${slug}.svg`,
     thumbPath: `/images/eu-labels/${slug}-thumb.png`,
   };
 }
