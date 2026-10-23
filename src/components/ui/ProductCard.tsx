@@ -5,6 +5,7 @@ import Link from "next/link";
 import { getBrandLogo } from "@/lib/brand-utils";
 import { ProductNameWithHighlightedSize } from "@/components/ui/ProductNameWithHighlightedSize";
 import { BestPriceBadge } from "@/components/ui/BestPriceBadge";
+import { EuLabelBadge } from "@/components/ui/EuLabelBadge";
 import { isLowStock, stockLabel } from "@/lib/stock";
 import { useLiveStock, useLiveStockMap } from "@/contexts/live-stock-context";
 import { groupLabel, isBestPriceLive, type PricePeer } from "@/lib/best-price";
@@ -82,6 +83,7 @@ export function ProductCard({
               Carga
             </span>
           )}
+          {product.euLabel && <EuLabelBadge />}
           {product.isAT && (
             <span className="bg-emerald-700 text-white text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-md shadow-md">
               A/T

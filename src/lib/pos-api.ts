@@ -2,6 +2,7 @@ import type { Accessory, TireProduct } from "./types";
 import { DEFAULT_BRANCH_ID } from "./config";
 import productImagesManifest from "./product-images-manifest.json";
 import { getAllVehicleOptions } from "./vehicles";
+import { getTireLabel } from "./tire-labels";
 import { OFFER_TIRE_SLUGS, withOfferPrice, accessoryPriceOld } from "./offers";
 
 const AVAILABLE_IMAGES = new Set(productImagesManifest);
@@ -261,6 +262,7 @@ function toTireProduct(p: PosProducto): TireProduct | null {
     // la casilla de carga (si se marcara, cambiaría el slug y la medida con "C").
     isCarga: p.es_carga || esRodadoCamion(p.neumatico_diametro),
     isAT: p.es_at,
+    euLabel: getTireLabel(slug) !== null,
     slug,
     enStock: p.en_stock,
     vendidos: p.vendidos ?? 0,

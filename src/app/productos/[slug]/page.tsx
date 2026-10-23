@@ -24,7 +24,8 @@ import {
 import { SortedProductGrid } from "@/components/ui/SortedProductGrid";
 import { groupLabel, peersByGroup } from "@/lib/best-price";
 import { CompatibleAccessorySection } from "@/components/ui/CompatibleAccessorySection";
-import { getTireLabel } from "@/lib/tire-labels";
+import { getTireLabel, type TireLabel } from "@/lib/tire-labels";
+import { EuLabelBlock } from "@/components/ui/EuLabelBadge";
 import { getUtqg } from "@/lib/utqg";
 import { getExtraPhotos } from "@/lib/product-extra-photos";
 import { getTreadCloseup } from "@/lib/tread-closeups";
@@ -94,7 +95,7 @@ function buildProductJsonLd(product: {
   id: string; slug: string; brand: string; brandId: string; model: string; modeloBase: string; imageUrl: string; price: number; enStock?: boolean;
   size: { width: number; profile: number; rim: number }; loadIndex?: string; loadIndexDual?: string; speedRating?: string;
   vehicleType: string[];
-}) {
+}, label: TireLabel | null) {
   const url = `${SITE_URL}/productos/${product.slug}`;
   // Todas las fotos del producto (principal, banda y otros ángulos): Google
   // elige entre ellas para Imágenes y para el rich result.
@@ -143,6 +144,14 @@ function buildProductJsonLd(product: {
         : []),
       ...(product.speedRating
         ? [{ "@type": "PropertyValue", name: "Índice de velocidad", value: product.speedRating }]
+        : []),
+      ...(label
+        ? [
+            { "@type": "PropertyValue", name: "Eficiencia de combustible (etiqueta UE)", value: label.energyClass },
+            { "@type": "PropertyValue", name: "Frenado en mojado (etiqueta UE)", value: label.wetGripClass },
+            { "@type": "PropertyValue", name: "Ruido externo (etiqueta UE)", value: `${label.noiseDb} dB`, unitText: "dB" },
+            { "@type": "PropertyValue", name: "Registro EPREL", value: label.eprelId },
+          ]
         : []),
     ],
     offers: {
@@ -285,7 +294,7 @@ export default async function ProductPage({ params }: Props) {
 
   return (
     <div className="max-w-5xl mx-auto px-4 pt-3 pb-4 md:pt-4 md:pb-6">
-      <JsonLd data={buildProductJsonLd(product)} />
+      <JsonLd data={buildProductJsonLd(product, tireLabel)} />
       <JsonLd
         data={breadcrumbJsonLd([
           { name: "Inicio", path: "/" },
@@ -347,6 +356,8 @@ export default async function ProductPage({ params }: Props) {
               </h2>
             )}
           </Link>
+
+          {tireLabel && <EuLabelBlock label={tireLabel} />}
 
           {product.tags.length > 0 && (
             <div className="flex flex-wrap gap-2 mb-6">
