@@ -157,6 +157,24 @@ export const SERVICES: Service[] = [
 // actual. Las más útiles para alguien que está por comprar van arriba.
 export const BLOG_POSTS: BlogPost[] = [
   {
+    id: "35",
+    title: "Cómo hacer durar los neumáticos de un taxi o un remis",
+    excerpt: "Presión, alineación, rotación y manejo: los hábitos que más kilómetros le sacan a un juego cuando el auto trabaja todo el día.",
+    imageUrl: "/images/local/alineacion-3d-de-auto-rojo-target-en-la-rueda-trivium-cordoba.webp",
+    date: "2026-10-23",
+    slug: "como-hacer-durar-los-neumaticos-de-taxis-y-remises",
+    category: "Guías",
+  },
+  {
+    id: "34",
+    title: "Neumáticos para Uber, DiDi y Cabify: cuáles elegir para gastar menos",
+    excerpt: "Medida, índice de carga con pasajeros y GNC, costo por kilómetro y cuándo cambiarlos si manejás para una aplicación.",
+    imageUrl: "/images/local/remis-cambio-de-cuatro-neumaticos-con-alineacion-y-balanceo-trivium-cordoba.webp",
+    date: "2026-10-23",
+    slug: "neumaticos-para-uber-didi-cabify",
+    category: "Guías",
+  },
+  {
     id: "33",
     title: "Gomería en San Justo y La Matanza: servicios y qué mirar antes de elegir",
     excerpt: "Alineación, balanceo, rotación y arme y desarme en el oeste del Gran Buenos Aires, y cuándo abre Neumáticos Trivium San Justo.",
@@ -169,7 +187,7 @@ export const BLOG_POSTS: BlogPost[] = [
     id: "32",
     title: "Máquinas Hofmann y elevadores Rotary Lift: el equipamiento de una gomería seria",
     excerpt: "Alineadora Geoliner, balanceadora Geodyna, elevadores Rotary Lift y desmontadoras: qué hace cada máquina y por qué importa.",
-    imageUrl: "/images/local/alineadora-geoliner-630-taller-neumaticos-trivium-cordoba.webp",
+    imageUrl: "/images/local/alineadora-3d-hofmann-geoliner-630-con-target-en-la-rueda-trivium-cordoba.webp",
     date: "2026-10-23",
     slug: "maquinas-hofmann-y-elevadores-rotary-lift-gomeria",
     category: "Guías",

@@ -110,11 +110,12 @@ export function BaratosExtra({ productos }: { productos: TireProduct[] }) {
         <h2 className="font-display mb-4 text-3xl font-bold uppercase tracking-wide text-slate-900">
           Otras formas de ahorrar
         </h2>
-        <ul className="grid gap-3 md:grid-cols-2 lg:grid-cols-4">
+        <ul className="grid gap-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
           {[
             ["/ofertas", "Ofertas de neumáticos", "Precios especiales por tiempo limitado."],
             ["/neumaticos/carga", "Neumáticos de carga", "Para furgones y utilitarios, a precio bajo."],
             ["/neumaticos/at", "Neumáticos A/T", "All Terrain para camionetas y 4x4."],
+            ["/neumaticos-para-remises-taxis-y-uber", "Remises, taxis y Uber", "Medidas por modelo y costo por kilómetro."],
             ["/servicios", "Gomería en Córdoba", "Alineación, balanceo y rotación por orden de llegada."],
           ].map(([href, titulo, detalle]) => (
             <li key={href}>

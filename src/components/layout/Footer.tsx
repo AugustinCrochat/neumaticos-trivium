@@ -80,6 +80,7 @@ export function Footer() {
               {[
                 { href: "/catalogo", label: "Catálogo de neumáticos" },
                 { href: "/neumaticos-baratos", label: "Neumáticos baratos" },
+                { href: "/neumaticos-para-remises-taxis-y-uber", label: "Para remises, taxis y Uber" },
                 { href: "/neumaticos", label: "Neumáticos por medida" },
                 { href: "/neumaticos/at", label: "Neumáticos A/T" },
                 { href: "/neumaticos/carga", label: "Neumáticos de carga" },

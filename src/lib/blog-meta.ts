@@ -58,6 +58,14 @@ const IMG = {
   balanceando: `${LOCAL}/tecnico-balanceando-rueda-balanceadora-trivium-cordoba.webp`,
   target: `${LOCAL}/target-alineadora-rueda-auto-elevador-trivium-cordoba.webp`,
   kingpro: `${LOCAL}/neumatico-grenlander-kingpro-one-pickup-trivium.webp`,
+  alineadora3d: `${LOCAL}/alineadora-3d-hofmann-geoliner-630-con-target-en-la-rueda-trivium-cordoba.webp`,
+  antirrobo: `${LOCAL}/tuerca-antirrobo-de-seguridad-en-llanta-de-aleacion-trivium-cordoba.webp`,
+  balanceandoCamioneta: `${LOCAL}/balanceadora-hofmann-geodyna-7800p-balanceando-rueda-de-camioneta-trivium-cordoba.webp`,
+  cambioCamioneta: `${LOCAL}/cambio-de-cubiertas-en-camioneta-pickup-con-balanceadora-hofmann-trivium-cordoba.webp`,
+  colocandoTarget: `${LOCAL}/tecnico-colocando-target-de-alineacion-3d-en-auto-trivium-cordoba.webp`,
+  tallerCuatroAutos: `${LOCAL}/taller-de-gomeria-con-cuatro-autos-neumaticos-trivium-arguello-cordoba.webp`,
+  remis: `${LOCAL}/remis-cambio-de-cuatro-neumaticos-con-alineacion-y-balanceo-trivium-cordoba.webp`,
+  autoRojoTarget: `${LOCAL}/alineacion-3d-de-auto-rojo-target-en-la-rueda-trivium-cordoba.webp`,
 };
 
 const L = {
@@ -76,6 +84,7 @@ const L = {
   pirelli: { label: "Pirelli", href: "/marcas/pirelli" },
   michelin: { label: "Michelin", href: "/marcas/michelin" },
   servicios: { label: "Alineación y balanceo", href: "/servicios" },
+  remises: { label: "Neumáticos para remises, taxis y Uber", href: "/neumaticos-para-remises-taxis-y-uber" },
   equivalencias: { label: "Calculadora de equivalencias", href: "/calculadora-equivalencia-neumaticos" },
   indice: { label: "Tabla de índice de carga y velocidad", href: "/herramientas/indice-carga-velocidad" },
   m205: { label: "205/55 R16", href: "/neumaticos/205-55-r16" },
@@ -94,19 +103,19 @@ export const BLOG_META: Record<string, BlogMeta> = {
   },
   "arme-y-desarme-de-neumaticos": {
     cover: { src: IMG.montaje, alt: "Cubierta montada en la desmontadora del taller", position: "center 55%" },
-    figure: { src: IMG.grenlanderPerfilBajo, alt: "Cubierta de perfil bajo recién colocada en una llanta", caption: "Una llanta de perfil bajo recién armada, sin marcas." },
+    figure: { src: IMG.cambioCamioneta, alt: "Cambio de cubiertas de una camioneta en el taller de Neumáticos Trivium, con la balanceadora Hofmann al lado", caption: "Cambio de cubiertas de una camioneta: se desarma, se arma y se balancea en el mismo taller." },
     shopIntro: "Comprá las cubiertas y colocalas en el local:",
     shopLinks: [L.todos, L.servicios, L.ofertas],
   },
   "tuercas-y-bulones-de-seguridad": {
-    cover: { src: IMG.grenlanderPerfilBajo, alt: "Cubierta de perfil bajo colocada en una llanta de aleación" },
+    cover: { src: IMG.antirrobo, alt: "Llanta de aleación con una tuerca de seguridad entre las cuatro tuercas comunes", tall: true, position: "center 45%" },
     figure: { src: IMG.rotacion, alt: "Rueda desmontada durante una rotación", caption: "La rueda se desmonta con la llave de la tuerca de seguridad." },
     shopIntro: "Mirá el juego que corresponde a tu auto:",
     shopLinks: [L.tuercas, L.todos, L.servicios],
   },
   "extraccion-de-tuercas-de-seguridad": {
     cover: { src: IMG.grenlanderPerfilBajo, alt: "Llanta de aleación con cubierta colocada" },
-    figure: { src: IMG.rotacion, alt: "Rueda desmontada en el taller", caption: "Una rueda sin llave es un problema que tiene solución en la gomería." },
+    figure: { src: IMG.antirrobo, alt: "Tuerca antirrobo colocada en una llanta de aleación", portrait: true, caption: "La tuerca de seguridad se distingue de las comunes por su forma y necesita su llave." },
     shopIntro: "Si necesitás un juego nuevo:",
     shopLinks: [L.tuercas, L.servicios, L.todos],
   },
@@ -116,15 +125,27 @@ export const BLOG_META: Record<string, BlogMeta> = {
     shopIntro: "Servicios y neumáticos:",
     shopLinks: [L.servicios, L.tuercas, L.todos],
   },
+  "neumaticos-para-uber-didi-cabify": {
+    cover: { src: IMG.remis, alt: "Remis sobre el elevador del taller de Neumáticos Trivium durante el cambio de las cuatro cubiertas", tall: true, position: "center 55%" },
+    figure: { src: IMG.tallerCuatroAutos, alt: "Interior del taller de Neumáticos Trivium en Argüello con cuatro autos en servicio", caption: "Colocación, balanceo y alineación en el mismo taller de Argüello." },
+    shopIntro: "Para quien trabaja con el auto:",
+    shopLinks: [L.remises, L.r14, L.r15],
+  },
+  "como-hacer-durar-los-neumaticos-de-taxis-y-remises": {
+    cover: { src: IMG.autoRojoTarget, alt: "Auto sobre el elevador con el target de la alineadora 3D colocado en la rueda", tall: true, position: "center 50%" },
+    figure: { src: IMG.alineadora3d, alt: "Alineadora 3D Hofmann Geoliner 630 del taller, con el monitor y el travesaño con las cámaras", caption: "La alineación 3D es lo que más kilómetros le devuelve a un juego en un auto de trabajo." },
+    shopIntro: "Cuando llega el momento de cambiarlas:",
+    shopLinks: [L.remises, L.servicios, L.todos],
+  },
   "maquinas-hofmann-y-elevadores-rotary-lift-gomeria": {
-    cover: { src: IMG.geoliner630, alt: "Alineadora Hofmann Geoliner 630 en el taller de Neumáticos Trivium", position: "center 41%", tall: true },
-    figure: { src: IMG.geodyna, alt: "Balanceadora Hofmann Geodyna 7800P del taller", caption: "La Geodyna 7800P balancea cada rueda antes de que vuelva al auto." },
+    cover: { src: IMG.alineadora3d, alt: "Alineadora 3D Hofmann Geoliner 630 del taller de Neumáticos Trivium, con el monitor, el travesaño con las cámaras y el target en la rueda" },
+    figure: { src: IMG.balanceandoCamioneta, alt: "Técnico balanceando una rueda de camioneta en la balanceadora Hofmann Geodyna 7800P del taller", portrait: true, caption: "La Geodyna 7800P del taller balanceando una rueda de camioneta antes de volver a montarla." },
     shopIntro: "Nuestros servicios de gomería:",
     shopLinks: [L.servicios, L.todos, L.ofertas],
   },
   "gomeria-en-san-justo-buenos-aires": {
     cover: { src: IMG.fachada, alt: "Fachada del local de Neumáticos Trivium" },
-    figure: { src: IMG.camionetas, alt: "Camionetas en el taller de Neumáticos Trivium", caption: "Así trabaja la gomería de Argüello; San Justo abre en diciembre." },
+    figure: { src: IMG.tallerCuatroAutos, alt: "Interior del taller de Neumáticos Trivium en Argüello con cuatro autos en servicio", caption: "Así trabaja la gomería de Argüello; San Justo abre en diciembre." },
     shopIntro: "Mirá el stock mientras abrimos:",
     shopLinks: [L.todos, L.ofertas, L.servicios],
   },
@@ -153,7 +174,7 @@ export const BLOG_META: Record<string, BlogMeta> = {
     shopLinks: [L.todos, L.ofertas, L.marcas, L.servicios],
   },
   "gomeria-en-cordoba": {
-    cover: { src: IMG.local, alt: "Frente del local de Neumáticos Trivium", position: "center 55%" },
+    cover: { src: IMG.tallerCuatroAutos, alt: "Interior del taller de gomería de Neumáticos Trivium en Argüello, Córdoba, con cuatro autos en servicio", position: "center 60%" },
     figure: { src: IMG.balanceando, alt: "Técnico de Trivium balanceando una rueda", portrait: true, caption: "Balanceo de una rueda con la balanceadora del taller." },
     shopIntro: "Comprá las cubiertas y colocalas en el local:",
     shopLinks: [L.todos, L.servicios, L.ofertas],
@@ -184,7 +205,7 @@ export const BLOG_META: Record<string, BlogMeta> = {
   },
   "precio-calidad-neumaticos-costo-por-km": {
     cover: { src: IMG.kingpro, alt: "Cubierta Grenlander Kingpro One apoyada junto a una pickup sin la rueda", portrait: true, position: "center 60%" },
-    figure: { src: IMG.taxi, alt: "Taxi dentro del taller de Neumáticos Trivium", caption: "Un taxi hace muchísimos kilómetros por año: ahí se ve el costo por km." },
+    figure: { src: IMG.remis, alt: "Remis en el taller de Neumáticos Trivium durante el cambio de cubiertas", portrait: true, caption: "Un remis hace muchísimos kilómetros por año: ahí se ve el costo por km." },
     shopIntro: "Compará precios en tu medida:",
     shopLinks: [L.ofertas, L.todos, L.marcas],
   },
@@ -232,7 +253,7 @@ export const BLOG_META: Record<string, BlogMeta> = {
   },
   "alineacion-y-balanceo": {
     cover: { src: IMG.tecnicosAlineando, alt: "Dos técnicos de Trivium trabajando bajo un auto en el elevador", portrait: true, position: "center 40%" },
-    figure: { src: IMG.target, alt: "Sensor de la alineadora colocado en la rueda de un auto sobre el elevador", portrait: true, caption: "El sensor de la alineadora colocado en la rueda mide los ángulos del tren delantero." },
+    figure: { src: IMG.colocandoTarget, alt: "Técnico colocando el target de la alineadora 3D en la rueda de un auto", portrait: true, caption: "El técnico coloca el target en la rueda: las cámaras de la alineadora lo leen y miden los ángulos del tren delantero." },
     shopIntro: "Estrená cubiertas y alineá en el mismo turno:",
     shopLinks: [L.servicios, L.todos, L.ofertas],
   },
@@ -291,13 +312,13 @@ export const BLOG_META: Record<string, BlogMeta> = {
     shopLinks: [L.grenlander, L.todos, L.ofertas],
   },
   "cuanto-duran-los-neumaticos-economicos": {
-    cover: { src: IMG.taxi, alt: "Taxi dentro del taller de Neumáticos Trivium" },
+    cover: { src: IMG.remis, alt: "Remis sobre el elevador del taller durante el cambio de las cuatro cubiertas", tall: true, position: "center 55%" },
     figure: { src: IMG.tecnicosAlineando, alt: "Técnicos alineando un auto sobre el elevador", caption: "La alineación y la presión cuidan la vida útil más que la marca." },
     shopIntro: "Compará precios en tu medida:",
     shopLinks: [L.ofertas, L.servicios, L.todos],
   },
   "neumaticos-economicos-para-uso-urbano": {
-    cover: { src: IMG.taxi, alt: "Taxi dentro del taller de Neumáticos Trivium" },
+    cover: { src: IMG.remis, alt: "Remis sobre el elevador del taller durante el cambio de las cuatro cubiertas", tall: true, position: "center 55%" },
     figure: { src: IMG.montaje, alt: "Montaje de un neumático en el taller", caption: "Colocación y balanceo en el taller del local." },
     shopIntro: "Medidas más pedidas para ciudad:",
     shopLinks: [L.m175, L.m185, L.m205],
@@ -310,7 +331,7 @@ export const BLOG_META: Record<string, BlogMeta> = {
   },
   "cuatro-economicos-o-dos-de-marca": {
     cover: { src: IMG.pickup4x4, alt: "Pickup 4x4 sobre el elevador del taller" },
-    figure: { src: IMG.tecnicosAlineando, alt: "Técnicos alineando un auto sobre el elevador", caption: "Cuatro iguales y alineados: la base de un buen resultado." },
+    figure: { src: IMG.autoRojoTarget, alt: "Auto rojo sobre el elevador con el target de la alineadora 3D colocado en la rueda", portrait: true, caption: "Cuatro cubiertas iguales y alineadas: la base de un buen resultado." },
     shopIntro: "Armá el juego completo:",
     shopLinks: [L.todos, L.ofertas, L.servicios],
   },

@@ -64,6 +64,20 @@ export default function Page() {
         <a href="https://pro.trivium.ar/blog/balanceadoras-hofmann-geodyna-cual-elegir-7100-7400l-7600p-7800-9000p-980l/">esta guía</a>{" "}
         explicamos cuál conviene según el taller.
       </p>
+      <p>
+        La foto de arriba es una rueda de camioneta A/T en nuestra Geodyna: un neumático grande y
+        pesado como ese pide una balanceadora con la capacidad y el centrado correctos. Si estás
+        armando o renovando una gomería y vas a balancear ruedas de camioneta, en pro.trivium.ar
+        está la guía{" "}
+        <a href="https://pro.trivium.ar/blog/como-elegir-una-balanceadora-de-ruedas-capacidad-tecnologia-y-modelos/">
+          cómo elegir una balanceadora de ruedas
+        </a>
+        , y{" "}
+        <a href="https://pro.trivium.ar/blog/como-centrar-una-rueda-en-la-balanceadora-conos-tuercas-rapidas-y-adaptadores/">
+          cómo centrar la rueda
+        </a>{" "}
+        con conos y adaptadores, que es donde más se nota el trabajo bien hecho.
+      </p>
 
       <h2>Elevadores: tijera para alinear y plancha para gomería</h2>
       <p>

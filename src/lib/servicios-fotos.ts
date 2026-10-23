@@ -18,32 +18,40 @@ const F = {
   at: { src: `${L}/neumatico-at-grenlander-maga-at-two-camioneta-clasica-trivium.webp`, alt: "Neumático A/T Grenlander Maga A/T Two colocado en una camioneta clásica" },
   kingpro: { src: `${L}/neumatico-grenlander-kingpro-one-pickup-trivium.webp`, alt: "Neumático Grenlander Kingpro One colocado en una pick-up" },
   rotacion: { src: `${L}/rotacion-de-neumaticos-pirelli-rueda-desmontada-trivium.webp`, alt: "Rueda Pirelli desmontada durante una rotación de neumáticos" },
+  alineadora3d: { src: `${L}/alineadora-3d-hofmann-geoliner-630-con-target-en-la-rueda-trivium-cordoba.webp`, alt: "Alineadora 3D Hofmann Geoliner 630 con el monitor, las cámaras en el travesaño y el target en la rueda de un auto" },
+  colocandoTarget: { src: `${L}/tecnico-colocando-target-de-alineacion-3d-en-auto-trivium-cordoba.webp`, alt: "Técnico colocando el target de la alineadora 3D en la rueda de un auto sobre el elevador" },
+  autoRojoTarget: { src: `${L}/alineacion-3d-de-auto-rojo-target-en-la-rueda-trivium-cordoba.webp`, alt: "Auto rojo en el elevador con el target de la alineadora 3D colocado en la rueda delantera" },
+  balanceandoCamioneta: { src: `${L}/balanceadora-hofmann-geodyna-7800p-balanceando-rueda-de-camioneta-trivium-cordoba.webp`, alt: "Técnico balanceando una rueda de camioneta A/T en la balanceadora Hofmann Geodyna 7800P" },
+  cambioCamioneta: { src: `${L}/cambio-de-cubiertas-en-camioneta-pickup-con-balanceadora-hofmann-trivium-cordoba.webp`, alt: "Cambio de cubiertas de una camioneta en el taller de Neumáticos Trivium, con la balanceadora Hofmann al lado" },
+  antirrobo: { src: `${L}/tuerca-antirrobo-de-seguridad-en-llanta-de-aleacion-trivium-cordoba.webp`, alt: "Llanta de aleación con una tuerca antirrobo entre las tuercas comunes" },
+  tallerCuatroAutos: { src: `${L}/taller-de-gomeria-con-cuatro-autos-neumaticos-trivium-arguello-cordoba.webp`, alt: "Taller de Neumáticos Trivium en Argüello con cuatro autos en servicio" },
+  remis: { src: `${L}/remis-cambio-de-cuatro-neumaticos-con-alineacion-y-balanceo-trivium-cordoba.webp`, alt: "Remis en el elevador durante el cambio de las cuatro cubiertas, con la balanceadora al fondo" },
   taxi: { src: `${L}/taxi-en-el-taller-neumaticos-trivium-cordoba.webp`, alt: "Taxi en el taller de Neumáticos Trivium durante el cambio de cubiertas" },
 } satisfies Record<string, FotoServicio>;
 
 export const SERVICIOS_FOTOS: Record<string, { principal: FotoServicio; galeria: FotoServicio[] }> = {
   alineacion: {
     principal: { src: "/images/servicios/alineacion.webp", alt: "Alineación de un auto en el taller de Neumáticos Trivium, Córdoba" },
-    galeria: [F.alineando, F.pickup, F.target],
+    galeria: [F.alineadora3d, F.colocandoTarget, F.autoRojoTarget],
   },
   balanceo: {
     principal: { src: "/images/servicios/balanceo.webp", alt: "Balanceo de una rueda en el taller de Neumáticos Trivium, Córdoba" },
-    galeria: [F.balanceando, F.balanceadora, F.camionetas],
+    galeria: [F.balanceandoCamioneta, F.balanceando, F.balanceadora],
   },
   montaje: {
     principal: { src: "/images/servicios/arme-desarme.webp", alt: "Arme y desarme de un neumático en el taller de Neumáticos Trivium, Córdoba" },
-    galeria: [F.perfilBajo, F.at, F.kingpro],
+    galeria: [F.cambioCamioneta, F.perfilBajo, F.at],
   },
   "rotacion-de-ruedas": {
     principal: F.camionetas,
-    galeria: [F.rotacion, F.taxi, F.balanceando],
+    galeria: [F.rotacion, F.tallerCuatroAutos, F.balanceando],
   },
   "reparacion-de-pinchaduras": {
     principal: F.taxi,
-    galeria: [F.rotacion, F.camionetas, F.balanceando],
+    galeria: [F.rotacion, F.remis, F.cambioCamioneta],
   },
   "tuercas-de-seguridad": {
-    principal: F.perfilBajo,
-    galeria: [F.rotacion, F.camionetas, F.kingpro],
+    principal: F.antirrobo,
+    galeria: [F.perfilBajo, F.rotacion, F.camionetas],
   },
 };

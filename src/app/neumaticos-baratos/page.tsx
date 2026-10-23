@@ -94,7 +94,7 @@ export default async function NeumaticosBaratosPage() {
         idealPara: [
           "Autos y camionetas de uso diario en ciudad y ruta",
           "Quien quiere cambiar el juego completo sin pasarse del presupuesto",
-          "Flotas y remises que cambian cubiertas seguido",
+          "Flotas, taxis y remises que cambian cubiertas seguido",
         ],
         noIdealPara: [
           "Furgones y utilitarios cargados: mirá los neumáticos de carga",

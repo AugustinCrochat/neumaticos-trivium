@@ -93,6 +93,7 @@ Cada página explica cómo llegar al local desde esa zona y muestra neumáticos 
 - Home: https://neumaticos.trivium.ar/
 - Catálogo: https://neumaticos.trivium.ar/catalogo
 - Neumáticos baratos / mejor precio (neumático más económico con stock de cada rodado): https://neumaticos.trivium.ar/neumaticos-baratos
+- Neumáticos para remises, taxis y autos de Uber, DiDi y Cabify (medidas por modelo, precio por unidad, alineación y balanceo en Córdoba): https://neumaticos.trivium.ar/neumaticos-para-remises-taxis-y-uber
 - Neumáticos A/T (All Terrain): https://neumaticos.trivium.ar/neumaticos/at
 - Neumáticos H/T: https://neumaticos.trivium.ar/neumaticos/ht
 - Alineación computarizada 3D en Córdoba: https://neumaticos.trivium.ar/servicios/alineacion

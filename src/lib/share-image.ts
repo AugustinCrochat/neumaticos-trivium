@@ -19,6 +19,9 @@ const POOL = [
   "local/rotacion-de-neumaticos-pirelli-rueda-desmontada-trivium",
   "local/cubierta-perfil-bajo-grenlander-colocada-neumaticos-trivium",
   "local/neumatico-grenlander-kingpro-one-pickup-trivium",
+  "local/taller-de-gomeria-con-cuatro-autos-neumaticos-trivium-arguello-cordoba",
+  "local/cambio-de-cubiertas-en-camioneta-pickup-con-balanceadora-hofmann-trivium-cordoba",
+  "local/remis-cambio-de-cuatro-neumaticos-con-alineacion-y-balanceo-trivium-cordoba",
 ];
 
 function withImage(url: string, size?: { width: number; height: number }) {

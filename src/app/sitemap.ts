@@ -69,6 +69,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url("/neumaticos/at", 0.7, "weekly"),
     url("/neumaticos/carga", 0.7, "weekly"),
     url("/neumaticos-baratos", 0.9, "daily"),
+    url("/neumaticos-para-remises-taxis-y-uber", 0.9, "daily", undefined, [abs("/images/local/remis-cambio-de-cuatro-neumaticos-con-alineacion-y-balanceo-trivium-cordoba.webp")]),
     url("/neumaticos-en", 0.7, "monthly"),
     url("/marcas", 0.7, "weekly"),
     url("/vehiculos", 0.8, "weekly"),
@@ -135,11 +136,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Fotos propias del taller, por servicio.
   const SERVICE_IMAGES: Record<string, string[]> = {
-    alineacion: ["/images/servicios/alineacion.webp", "/images/local/tecnicos-alineando-auto-elevador-gomeria-trivium-cordoba.webp", "/images/local/alineadora-geoliner-630-taller-neumaticos-trivium-cordoba.webp"],
-    balanceo: ["/images/servicios/balanceo.webp", "/images/local/tecnico-balanceando-rueda-balanceadora-trivium-cordoba.webp"],
-    montaje: ["/images/servicios/arme-desarme.webp"],
+    alineacion: ["/images/servicios/alineacion.webp", "/images/local/tecnicos-alineando-auto-elevador-gomeria-trivium-cordoba.webp", "/images/local/alineadora-geoliner-630-taller-neumaticos-trivium-cordoba.webp", "/images/local/alineadora-3d-hofmann-geoliner-630-con-target-en-la-rueda-trivium-cordoba.webp", "/images/local/tecnico-colocando-target-de-alineacion-3d-en-auto-trivium-cordoba.webp", "/images/local/alineacion-3d-de-auto-rojo-target-en-la-rueda-trivium-cordoba.webp"],
+    balanceo: ["/images/servicios/balanceo.webp", "/images/local/tecnico-balanceando-rueda-balanceadora-trivium-cordoba.webp", "/images/local/balanceadora-hofmann-geodyna-7800p-balanceando-rueda-de-camioneta-trivium-cordoba.webp"],
+    montaje: ["/images/servicios/arme-desarme.webp", "/images/local/cambio-de-cubiertas-en-camioneta-pickup-con-balanceadora-hofmann-trivium-cordoba.webp"],
     "reparacion-de-pinchaduras": ["/images/local/taxi-en-el-taller-neumaticos-trivium-cordoba.webp"],
-    "tuercas-de-seguridad": ["/images/local/cubierta-perfil-bajo-grenlander-colocada-neumaticos-trivium.webp"],
+    "tuercas-de-seguridad": ["/images/local/tuerca-antirrobo-de-seguridad-en-llanta-de-aleacion-trivium-cordoba.webp", "/images/local/cubierta-perfil-bajo-grenlander-colocada-neumaticos-trivium.webp"],
     "rotacion-de-ruedas": ["/images/local/rotacion-de-neumaticos-pirelli-rueda-desmontada-trivium.webp"],
   };
   const servicios: Entry[] = [...SERVICES, ...EXTRA_SERVICES].map((s) => url(`/servicios/${s.id}`, 0.7, "monthly", undefined, SERVICE_IMAGES[s.id]?.map(abs)));
