@@ -17,6 +17,8 @@ export type BlogImage = {
   /** Foto vertical: en la nota se muestra angosta y centrada en vez de recortada. */
   portrait?: boolean;
   fit?: "cover" | "contain";
+  /** Portada en cuadro 4:3 en vez de apaisado, para fotos verticales donde importa ver más alto. */
+  tall?: boolean;
   /** object-position CSS para encuadrar la foto en formato apaisado. */
   position?: string;
 };
@@ -115,7 +117,7 @@ export const BLOG_META: Record<string, BlogMeta> = {
     shopLinks: [L.servicios, L.tuercas, L.todos],
   },
   "maquinas-hofmann-y-elevadores-rotary-lift-gomeria": {
-    cover: { src: IMG.geoliner630, alt: "Alineadora Hofmann Geoliner 630 en el taller de Neumáticos Trivium", position: "center 29%" },
+    cover: { src: IMG.geoliner630, alt: "Alineadora Hofmann Geoliner 630 en el taller de Neumáticos Trivium", position: "center 41%", tall: true },
     figure: { src: IMG.geodyna, alt: "Balanceadora Hofmann Geodyna 7800P del taller", caption: "La Geodyna 7800P balancea cada rueda antes de que vuelva al auto." },
     shopIntro: "Nuestros servicios de gomería:",
     shopLinks: [L.servicios, L.todos, L.ofertas],

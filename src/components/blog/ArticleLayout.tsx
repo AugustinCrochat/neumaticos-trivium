@@ -161,7 +161,7 @@ export function ArticleLayout({
           image={meta.cover}
           priority
           sizes="(min-width: 768px) 768px, 100vw"
-          className="aspect-[16/9] rounded-2xl sm:aspect-[2/1]"
+          className={`rounded-2xl ${meta.cover.tall ? "aspect-[4/3]" : "aspect-[16/9] sm:aspect-[2/1]"}`}
         />
         <div className="mt-5">
           <BlogShopLinks slug={slug} />
