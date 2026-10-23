@@ -76,7 +76,7 @@ export default function Page() {
         </li>
         <li>
           <strong>Pinchaduras:</strong> cómo se repara y cuándo no se puede, en{" "}
-          <Link href="/blog/reparacion-de-pinchaduras-parche-mecha">parche, minicompi o tarugo</Link>.
+          <Link href="/blog/reparacion-de-pinchaduras-parche-mecha">parche, minicombi o tarugo</Link>.
         </li>
         <li>
           <strong>Tuercas de seguridad:</strong> uso, cuidado y extracción en{" "}

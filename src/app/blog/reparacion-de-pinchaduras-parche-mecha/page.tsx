@@ -7,13 +7,13 @@ import { blogShare } from "@/lib/blog-meta";
 const SLUG = "reparacion-de-pinchaduras-parche-mecha";
 const TITLE = "Reparación de pinchaduras: parche, tarugo o cambio de neumático";
 const SUBTITLE =
-  "Cómo se repara bien un neumático pinchado, en qué se diferencia el parche del tarugo y del minicompi, cuándo no se puede reparar y qué pasa si manejás con la rueda baja.";
+  "Cómo se repara bien un neumático pinchado, en qué se diferencia el parche del tarugo y del minicombi, cuándo no se puede reparar y qué pasa si manejás con la rueda baja.";
 
 export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Cómo se repara una pinchadura en la gomería: parche común, minicompi, tarugo de emergencia, zonas que no se reparan y cuándo hay que cambiar el neumático. Córdoba y Buenos Aires.",
+    "Cómo se repara una pinchadura en la gomería: parche común, minicombi, tarugo de emergencia, zonas que no se reparan y cuándo hay que cambiar el neumático. Córdoba y Buenos Aires.",
   alternates: canonical(`/blog/${SLUG}`),
 };
 
@@ -24,9 +24,9 @@ const FAQS = [
       "El parche común, que es la reparación más habitual, sale $20.000. Se hace con el neumático desmontado de la llanta, revisándolo por dentro. Si la cubierta no se puede reparar, te lo decimos antes de cobrar.",
   },
   {
-    question: "¿Cuál es la diferencia entre parche, minicompi y tarugo?",
+    question: "¿Cuál es la diferencia entre parche, minicombi y tarugo?",
     answer:
-      "El parche común y el minicompi (parche con hongo) se colocan desde adentro, con el neumático desmontado de la llanta, y son reparaciones firmes. El tarugo es una tira de goma que se mete desde afuera con la cubierta puesta en el auto: sirve para llegar a una gomería, pero no permite revisar el interior.",
+      "El parche común y el minicombi (parche con hongo) se colocan desde adentro, con el neumático desmontado de la llanta, y son reparaciones firmes. El tarugo es una tira de goma que se mete desde afuera con la cubierta puesta en el auto: sirve para llegar a una gomería, pero no permite revisar el interior.",
   },
   {
     question: "¿Qué pinchaduras no se pueden reparar?",
@@ -69,9 +69,9 @@ export default function Page() {
         más hacemos y sale <strong>$20.000</strong>.
       </p>
 
-      <h2>Minicompi: el parche con hongo</h2>
+      <h2>Minicombi: el parche con hongo</h2>
       <p>
-        El minicompi es un parche con un hongo (un vástago de goma) que rellena el orificio y sella
+        El minicombi es un parche con un hongo (un vástago de goma) que rellena el orificio y sella
         también la tela interna. Se coloca igual que el parche común, desde adentro y con la cubierta
         desmontada. Se usa cuando el orificio es algo más grande o cuando conviene reforzar el sellado.
         Consultanos por WhatsApp y te decimos cuál corresponde según la pinchadura.
