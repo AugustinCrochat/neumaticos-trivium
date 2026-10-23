@@ -16,24 +16,62 @@ function EuStars({ className }: { className?: string }) {
   );
 }
 
-/** Chip chico para la tarjeta del listado. */
+/** Marca chica pegada al nombre del neumático en las tarjetas del listado. */
 export function EuLabelBadge() {
   return (
-    <span className="inline-flex items-center gap-1 rounded-md bg-white px-2 py-1 text-[10px] font-black uppercase tracking-tight text-navy-900 shadow-md ring-1 ring-slate-200">
+    <span
+      className="ml-1.5 inline-flex items-center gap-1 align-middle text-[10px] font-bold uppercase tracking-tight text-navy-700"
+      title="Tiene etiqueta europea registrada en EPREL"
+    >
       <EuStars className="h-3.5 w-3.5" />
-      Etiqueta europea
+      Etiqueta UE
     </span>
   );
 }
 
-/** Bloque de la ficha: arriba del precio, con las tres letras de la etiqueta. */
+// Colores de la escala oficial de la etiqueta (A verde oscuro → E rojo).
+const CLASS_COLORS: Record<string, string> = {
+  A: "#00a651",
+  B: "#52b948",
+  C: "#bfd730",
+  D: "#f7b500",
+  E: "#ee7203",
+};
+
+function LetterTile({ title, letter }: { title: string; letter: string }) {
+  return (
+    <div className="flex flex-1 flex-col items-center rounded-lg bg-white px-2 py-2 ring-1 ring-slate-200">
+      <span className="text-[10px] font-bold uppercase tracking-wide text-slate-500">{title}</span>
+      <span
+        className="mt-1 flex h-7 w-9 items-center justify-center rounded text-base font-black text-slate-900"
+        style={{ backgroundColor: CLASS_COLORS[letter] ?? "#e2e8f0" }}
+      >
+        {letter}
+      </span>
+    </div>
+  );
+}
+
+/** Bloque de la ficha: las tres clases de la etiqueta y el registro que las respalda. */
 export function EuLabelBlock({ label }: { label: TireLabel }) {
   return (
-    <div className="mb-4 flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5">
-      <EuStars className="h-8 w-8 shrink-0" />
-      <p className="text-xs leading-snug text-slate-600">
-        <strong className="block text-sm text-slate-900">Neumático con etiqueta europea</strong>
-        Combustible {label.energyClass} · Mojado {label.wetGripClass} · {label.noiseDb} dB.{" "}
+    <section className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
+      <div className="flex items-center gap-3">
+        <EuStars className="h-9 w-9 shrink-0" />
+        <div>
+          <h3 className="text-sm font-black text-navy-900">Etiqueta europea de neumáticos</h3>
+          <p className="text-xs text-slate-500">Registrada en EPREL, la base de datos oficial de la Unión Europea.</p>
+        </div>
+      </div>
+      <div className="mt-3 flex gap-2">
+        <LetterTile title="Combustible" letter={label.energyClass} />
+        <LetterTile title="Frenado en mojado" letter={label.wetGripClass} />
+        <div className="flex flex-1 flex-col items-center rounded-lg bg-white px-2 py-2 ring-1 ring-slate-200">
+          <span className="text-[10px] font-bold uppercase tracking-wide text-slate-500">Ruido externo</span>
+          <span className="mt-1 flex h-7 items-center text-base font-black text-slate-900">{label.noiseDb} dB</span>
+        </div>
+      </div>
+      <p className="mt-3 text-xs text-slate-500">
         <a
           href={`https://eprel.ec.europa.eu/screen/product/tyres/${label.eprelId}`}
           target="_blank"
@@ -44,9 +82,9 @@ export function EuLabelBlock({ label }: { label: TireLabel }) {
         </a>
         {" · "}
         <Link href="/blog/etiqueta-europea-neumaticos" className="font-bold text-navy-700 underline decoration-navy-300 hover:decoration-navy-900">
-          Qué significa
+          Qué significa cada dato
         </Link>
       </p>
-    </div>
+    </section>
   );
 }

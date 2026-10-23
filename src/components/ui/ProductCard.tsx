@@ -83,7 +83,6 @@ export function ProductCard({
               Carga
             </span>
           )}
-          {product.euLabel && <EuLabelBadge />}
           {product.isAT && (
             <span className="bg-emerald-700 text-white text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-md shadow-md">
               A/T
@@ -142,6 +141,7 @@ export function ProductCard({
           <Link href={`/productos/${product.slug}`} className="hover:text-navy-700 transition-colors">
             <ProductNameWithHighlightedSize product={product} />
           </Link>
+          {product.euLabel && <EuLabelBadge />}
         </h3>
 
         {note && (

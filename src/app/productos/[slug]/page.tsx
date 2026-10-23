@@ -357,8 +357,6 @@ export default async function ProductPage({ params }: Props) {
             )}
           </Link>
 
-          {tireLabel && <EuLabelBlock label={tireLabel} />}
-
           {product.tags.length > 0 && (
             <div className="flex flex-wrap gap-2 mb-6">
               {product.tags.map((tag) => (
@@ -420,22 +418,7 @@ export default async function ProductPage({ params }: Props) {
               </>
             )}
           </p>
-          {tireLabel && (
-            <p className="mt-4 rounded-xl bg-slate-50 px-4 py-3 text-xs leading-relaxed text-slate-500">
-              <strong className="text-slate-700">Certificado en la UE:</strong> eficiencia de
-              combustible {tireLabel.energyClass}, frenado en mojado {tireLabel.wetGripClass} y{" "}
-              {tireLabel.noiseDb} dB de ruido externo, con registro público verificable en{" "}
-              <a
-                href={`https://eprel.ec.europa.eu/screen/product/tyres/${tireLabel.eprelId}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-bold text-navy-700 underline decoration-navy-300 hover:decoration-navy-900"
-              >
-                EPREL
-              </a>
-              . <Link href="/blog/etiqueta-europea-neumaticos" className="font-bold text-navy-700 underline decoration-navy-300 hover:decoration-navy-900">Qué significa cada dato.</Link>
-            </p>
-          )}
+          {tireLabel && <EuLabelBlock label={tireLabel} />}
           {utqg && (
             <p className="mt-3 rounded-xl bg-slate-50 px-4 py-3 text-xs leading-relaxed text-slate-500">
               <strong className="text-slate-700">UTQG {utqg.treadwear} {utqg.traction} {utqg.temperature}:</strong>{" "}
