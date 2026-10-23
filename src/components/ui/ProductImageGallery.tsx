@@ -65,7 +65,7 @@ export function ProductImageGallery({
     ...(hasImage ? [{ kind: "foto" as const, src: product.imageUrl, alt: productAlt(product) }] : []),
     ...extraPhotos.map((src, i) => ({ kind: "foto" as const, src, alt: productExtraAlt(product, src, i) })),
     ...(label
-      ? [{ kind: "etiqueta" as const, src: label.imagePath, thumbSrc: label.thumbPath, alt: `Etiqueta de eficiencia energética UE — ${product.brand} ${product.modeloBase}, ${label.tyreDesignation}` }]
+      ? [{ kind: "etiqueta" as const, src: label.svgPath, thumbSrc: label.svgPath, alt: `Etiqueta de eficiencia energética UE — ${product.brand} ${product.modeloBase}, ${label.tyreDesignation}` }]
       : []),
     ...(selectedBranch.facadePhoto
       ? [{
