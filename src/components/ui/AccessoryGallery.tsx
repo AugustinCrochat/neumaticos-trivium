@@ -1,9 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 import { useBranch } from "@/contexts/branch-context";
 import { ImageLightbox } from "./ImageLightbox";
+import { ZoomPanel } from "./ZoomPanel";
+
+// Mismo zoom que la galería de neumáticos (ProductImageGallery).
+const ZOOM_FACTOR = 2.5;
 
 type Slide =
   | { kind: "foto" | "tarjeta"; src: string; alt: string; label: string }
@@ -27,11 +31,13 @@ export function AccessoryGallery({
   imageUrl,
   cardSrc,
   tallerFoto,
+  llavesFoto,
 }: {
   nombre: string;
   imageUrl: string | null;
   cardSrc: string | null;
   tallerFoto: { src: string; alt: string };
+  llavesFoto: { src: string; alt: string };
 }) {
   const { selectedBranch } = useBranch();
 
@@ -40,6 +46,7 @@ export function AccessoryGallery({
     ...(cardSrc
       ? [{ kind: "tarjeta" as const, src: cardSrc, alt: `${nombre}: vehículos compatibles. Incluye 2 llaves`, label: "Ver vehículos compatibles" }]
       : []),
+    { kind: "foto" as const, src: llavesFoto.src, alt: llavesFoto.alt, label: "Ver las dos llaves" },
     { kind: "foto" as const, src: tallerFoto.src, alt: tallerFoto.alt, label: "Ver foto del taller" },
     ...(selectedBranch.facadePhoto
       ? [
@@ -60,8 +67,35 @@ export function AccessoryGallery({
 
   const [index, setIndex] = useState(0);
   const [lightbox, setLightbox] = useState(false);
+  const [zoomed, setZoomed] = useState(false);
+  const [lensStyle, setLensStyle] = useState({ left: 0, top: 0, width: 0, height: 0 });
+  const [focal, setFocal] = useState({ x: 0.5, y: 0.5 });
+  const [frameRect, setFrameRect] = useState<DOMRect | null>(null);
+  // Aspect real de la imagen: la lente respeta lo que object-contain dibuja.
+  const [imgAspect, setImgAspect] = useState(1);
+  const boxRef = useRef<HTMLButtonElement>(null);
   const current = slides[Math.min(index, slides.length - 1)];
-  const go = (i: number) => setIndex((i + slides.length) % slides.length);
+  const go = (i: number) => {
+    setIndex((i + slides.length) % slides.length);
+    setImgAspect(1);
+  };
+  const isTouch = () => typeof window !== "undefined" && window.matchMedia("(hover: none)").matches;
+
+  function handleMouseMove(e: React.MouseEvent<HTMLButtonElement>) {
+    const rect = boxRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    const frameAspect = rect.width / rect.height;
+    const w = imgAspect > frameAspect ? rect.width : rect.height * imgAspect;
+    const hh = imgAspect > frameAspect ? rect.width / imgAspect : rect.height;
+    const img = { left: (rect.width - w) / 2, top: (rect.height - hh) / 2, width: w, height: hh };
+    const lensW = img.width / ZOOM_FACTOR;
+    const lensH = img.height / ZOOM_FACTOR;
+    const left = Math.min(Math.max(e.clientX - rect.left - lensW / 2, img.left), img.left + img.width - lensW);
+    const top = Math.min(Math.max(e.clientY - rect.top - lensH / 2, img.top), img.top + img.height - lensH);
+    setLensStyle({ left, top, width: lensW, height: lensH });
+    setFocal({ x: (left - img.left + lensW / 2) / img.width, y: (top - img.top + lensH / 2) / img.height });
+    setFrameRect(rect);
+  }
 
   return (
     <div>
@@ -96,8 +130,15 @@ export function AccessoryGallery({
           </div>
         ) : (
           <button
+            ref={boxRef}
             type="button"
             onClick={() => setLightbox(true)}
+            onMouseEnter={() => !isTouch() && setZoomed(true)}
+            onMouseLeave={() => {
+              setZoomed(false);
+              setFrameRect(null);
+            }}
+            onMouseMove={handleMouseMove}
             className="relative block h-full w-full cursor-zoom-in"
             aria-label="Ampliar imagen"
           >
@@ -107,8 +148,20 @@ export function AccessoryGallery({
               fill
               priority={index === 0}
               sizes="(max-width: 768px) 100vw, 50vw"
-              className={current.kind === "tarjeta" || current.src === tallerFoto.src ? "object-cover" : "object-contain"}
+              className="object-contain"
+              onLoad={(e) => setImgAspect(e.currentTarget.naturalWidth / e.currentTarget.naturalHeight)}
             />
+            {zoomed && (
+              <span
+                className="pointer-events-none absolute hidden border-2 border-white bg-white/30 shadow-[0_0_0_1px_rgba(0,0,0,0.15)] lg:block"
+                style={{ left: lensStyle.left, top: lensStyle.top, width: lensStyle.width, height: lensStyle.height }}
+              />
+            )}
+            <span className="absolute bottom-3 right-3 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-slate-500 opacity-0 shadow-md transition-opacity group-hover:opacity-100">
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16zM11 8v6M8 11h6" />
+              </svg>
+            </span>
           </button>
         )}
 
@@ -117,20 +170,20 @@ export function AccessoryGallery({
             <button
               type="button"
               onClick={() => go(index - 1)}
-              className="absolute left-2 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-slate-700 shadow-md transition-colors hover:bg-white"
+              className="absolute left-1 top-1/2 flex h-6 w-6 -translate-y-1/2 items-center justify-center rounded-full bg-black/25 text-white transition-opacity hover:bg-black/55 md:opacity-0 md:group-hover:opacity-100"
               aria-label="Imagen anterior"
             >
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
               </svg>
             </button>
             <button
               type="button"
               onClick={() => go(index + 1)}
-              className="absolute right-2 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-slate-700 shadow-md transition-colors hover:bg-white"
+              className="absolute right-1 top-1/2 flex h-6 w-6 -translate-y-1/2 items-center justify-center rounded-full bg-black/25 text-white transition-opacity hover:bg-black/55 md:opacity-0 md:group-hover:opacity-100"
               aria-label="Imagen siguiente"
             >
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
               </svg>
             </button>
@@ -139,6 +192,18 @@ export function AccessoryGallery({
 
         {slides.length === 0 && <div className="mx-auto h-48 w-48">{LOCK_SVG}</div>}
       </div>
+
+      {zoomed && frameRect && current.kind !== "sucursal" && (
+        <ZoomPanel
+          src={current.src}
+          alt={current.alt}
+          zoomFactor={ZOOM_FACTOR}
+          aspect={imgAspect}
+          focal={focal}
+          anchorRect={frameRect}
+          utqg={null}
+        />
+      )}
 
       {lightbox && current.kind !== "sucursal" && (
         <ImageLightbox src={current.src} alt={current.alt} onClose={() => setLightbox(false)} />

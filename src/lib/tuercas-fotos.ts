@@ -15,3 +15,9 @@ export const TUERCA_FOTO_TALLER = {
   src: "/images/local/tuerca-antirrobo-de-seguridad-en-llanta-de-aleacion-trivium-cordoba.webp",
   alt: "Tuerca antirrobo colocada entre las tuercas comunes de una llanta de aleación, en el taller de Neumáticos Trivium",
 };
+
+/** Las dos llaves que trae cada juego, con el cartel "x2" (scripts/build-tuercas-dos-llaves.mjs). */
+export const TUERCA_FOTO_LLAVES = {
+  src: "/images/tuercas-antirrobo/dos-llaves-incluidas-tuercas-antirrobo-trivium-cordoba.webp",
+  alt: "Las dos llaves que trae el juego de tuercas antirrobo: una para usar y otra de repuesto",
+};

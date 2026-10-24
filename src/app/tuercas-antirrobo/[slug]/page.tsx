@@ -8,7 +8,8 @@ import { AccessoryConsult } from "@/components/ui/AccessoryConsult";
 import { AccessoryGallery } from "@/components/ui/AccessoryGallery";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { ORGANIZATION_ID } from "@/lib/seo";
-import { TUERCA_FOTO_TALLER, tuercaCardPath } from "@/lib/tuercas-fotos";
+import Image from "next/image";
+import { TUERCA_FOTO_LLAVES, TUERCA_FOTO_TALLER, tuercaCardPath } from "@/lib/tuercas-fotos";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -61,7 +62,7 @@ export default async function AccessoryPage({ params }: Props) {
     "@type": "Product",
     name: accessory.nombre,
     description: `${accessory.nombre}.${accessory.descripcion ? ` Compatible con: ${accessory.descripcion}.` : ""} Incluye 2 llaves.`,
-    image: [accessory.imageUrl, card, TUERCA_FOTO_TALLER.src].filter((x): x is string => !!x).map(abs),
+    image: [accessory.imageUrl, card, TUERCA_FOTO_LLAVES.src, TUERCA_FOTO_TALLER.src].filter((x): x is string => !!x).map(abs),
     sku: accessory.codigoTango ?? accessory.id,
     mpn: accessory.codigoTango ?? accessory.id,
     url: `${SITE_URL}/tuercas-antirrobo/${accessory.slug}`,
@@ -96,15 +97,16 @@ export default async function AccessoryPage({ params }: Props) {
           imageUrl={accessory.imageUrl}
           cardSrc={card}
           tallerFoto={TUERCA_FOTO_TALLER}
+          llavesFoto={TUERCA_FOTO_LLAVES}
         />
 
         <div className="flex flex-col">
           <h1 className="text-2xl md:text-3xl font-black text-navy-900 mb-4 leading-tight">{accessory.nombre}</h1>
 
-          <p className="mb-6 inline-flex items-start gap-2 self-start rounded-xl bg-red-50 px-3 py-2 text-sm font-bold text-red-700">
-            <svg className="mt-0.5 h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 7a4 4 0 11-7.9 1L2 13v3h3v-2h2v-2h2l1.6-1.6A4 4 0 0015 7z" />
-            </svg>
+          <p className="mb-6 inline-flex items-center gap-3 self-start rounded-xl bg-red-50 py-2 pl-2 pr-4 text-sm font-bold text-red-700">
+            <span className="flex h-9 min-w-9 items-center justify-center rounded-lg bg-red-600 px-1.5 text-lg font-black leading-none text-white">
+              ×2
+            </span>
             <span>
               Incluye 2 llaves
               <span className="block text-xs font-semibold text-red-600">Una de repuesto por si perdés la otra.</span>
@@ -129,7 +131,16 @@ export default async function AccessoryPage({ params }: Props) {
 
       <div className="mt-14 pt-10 border-t border-slate-100">
         <h2 className="text-lg font-black text-navy-900 mb-4 uppercase tracking-wide">Qué incluye</h2>
-        <p className="text-slate-600 leading-relaxed">
+        <div className="mb-6 grid items-center gap-6 md:grid-cols-[240px_1fr]">
+          <Image
+            src={TUERCA_FOTO_LLAVES.src}
+            alt={TUERCA_FOTO_LLAVES.alt}
+            width={480}
+            height={480}
+            sizes="(max-width: 768px) 100vw, 240px"
+            className="w-full max-w-60 rounded-2xl"
+          />
+          <p className="text-slate-600 leading-relaxed">
           El juego viene con <strong>2 llaves</strong>: usás una y guardás la otra de repuesto, así que si perdés la
           llave no te quedás sin poder sacar las ruedas. Si igual te pasa, mirá{" "}
           <Link href="/blog/extraccion-de-tuercas-de-seguridad" className="font-bold text-navy-700 underline">
@@ -140,7 +151,8 @@ export default async function AccessoryPage({ params }: Props) {
             tuercas y bulones de seguridad
           </Link>
           .
-        </p>
+          </p>
+        </div>
       </div>
 
       {accessory.descripcion && (

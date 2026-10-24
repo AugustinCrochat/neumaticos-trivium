@@ -4,11 +4,12 @@ import { BRANDS, SERVICES, BLOG_POSTS } from "@/lib/data";
 import { EXTRA_SERVICES } from "@/lib/servicios-seo";
 import { LOCALIDADES } from "@/lib/localidades";
 import { OTRAS_MARCAS } from "@/lib/marcas-chinas";
-import { TUERCA_FOTO_TALLER, tuercaCardPath } from "@/lib/tuercas-fotos";
+import { TUERCA_FOTO_LLAVES, TUERCA_FOTO_TALLER, tuercaCardPath } from "@/lib/tuercas-fotos";
 import { MARCAS_PREMIUM } from "@/lib/marcas-premium";
 import { cargaSlug } from "@/lib/carga";
 import { LOAD_SPEED_CODES } from "@/lib/load-speed";
 import { POPULAR_VEHICLES, vehicleSlug } from "@/lib/vehicles";
+import { marcaSlug } from "@/lib/marcas-autos";
 import { productImagePaths } from "@/lib/image-seo";
 import { TOOLS, toolPath } from "@/lib/tools";
 import { blogMeta } from "@/lib/blog-meta";
@@ -80,6 +81,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...MARCAS_PREMIUM.map((m) => url(`/alternativas/${m.slug}`, 0.7, "weekly")),
     ...OTRAS_MARCAS.map((m) => url(`/marcas-de-neumaticos-chinos/${m.slug}`, 0.7, "weekly")),
     url("/vehiculos", 0.8, "weekly"),
+    ...[...new Set(POPULAR_VEHICLES.map((v) => v.brand))].map((b) => url(`/vehiculos/marca/${marcaSlug(b)}`, 0.7, "weekly")),
     ...POPULAR_VEHICLES.map((v) => url(`/vehiculos/${vehicleSlug(v.brand, v.model)}`, 0.8, "weekly")),
     url("/calculadora-equivalencia-neumaticos", 0.8, "monthly"),
     url("/cotizador", 0.7, "monthly"),
@@ -171,6 +173,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url(`/tuercas-antirrobo/${a.slug}`, a.enStock ? 0.6 : 0.3, "weekly", undefined, [
       ...(a.imageUrl ? [abs(a.imageUrl)] : []),
       ...(tuercaCardPath(a.codigoTango, a.slug) ? [abs(tuercaCardPath(a.codigoTango, a.slug)!)] : []),
+      abs(TUERCA_FOTO_LLAVES.src),
       abs(TUERCA_FOTO_TALLER.src),
     ])
   );

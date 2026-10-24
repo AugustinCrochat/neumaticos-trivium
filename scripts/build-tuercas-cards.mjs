@@ -35,6 +35,18 @@ const { outputText } = ts.transpileModule(readFileSync(path.join(ROOT, "src/lib/
 });
 const { TUERCAS_VEHICULOS } = await import(`data:text/javascript;base64,${Buffer.from(outputText).toString("base64")}`);
 
+// Logos de marca (en blanco, para el fondo oscuro de la tarjeta).
+const { outputText: marcasJs } = ts.transpileModule(readFileSync(path.join(ROOT, "src/lib/marcas-autos.ts"), "utf-8"), {
+  compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 },
+});
+const { marcaLogo } = await import(`data:text/javascript;base64,${Buffer.from(marcasJs).toString("base64")}`);
+const logoBlanco = (marca) => {
+  const rel = marcaLogo(marca === "Citroën" ? "Citroen" : marca);
+  if (!rel) return null;
+  const svg = readFileSync(path.join(ROOT, "public", rel), "utf-8").replace(/fill="#1e293b"/, 'fill="#ffffff"');
+  return `data:image/svg+xml;base64,${Buffer.from(svg).toString("base64")}`;
+};
+
 const slugify = (t) =>
   t.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
 
@@ -87,14 +99,15 @@ function tarjeta({ nombre, codigo, grupos, notas }) {
   const fila = (etiqueta, texto) =>
     h(
       "div",
-      { style: { display: "flex", flexWrap: "wrap", alignItems: "baseline", marginBottom: gap } },
+      { style: { display: "flex", flexWrap: "wrap", alignItems: "center", marginBottom: gap } },
+      logoBlanco(etiqueta) ? h("img", { src: logoBlanco(etiqueta), width: Math.round(fs * 1.15), height: Math.round(fs * 0.85), style: { marginRight: 18, objectFit: "contain" } }) : null,
       h("span", { style: { fontSize: fs, fontWeight: 700, color: "#ff1e00", textTransform: "uppercase", marginRight: 18, letterSpacing: 1 } }, etiqueta),
       h("span", { style: { fontSize: fs, fontWeight: 600, color: "#ffffff" } }, texto),
     );
 
   return h(
     "div",
-    { style: { width: "100%", height: "100%", display: "flex", flexDirection: "column", background: "#050505", position: "relative", padding: "64px 72px 56px", fontFamily: "Barlow" } },
+    { style: { width: "100%", height: "100%", display: "flex", flexDirection: "column", background: "#050505", position: "relative", padding: "64px 92px 56px", fontFamily: "Barlow" } },
     h("div", { style: { display: "flex", position: "absolute", top: 0, left: 0, right: 0, height: 10, background: "#ff1e00" } }),
     h("img", { src: ICON, width: 640, height: 640, style: { position: "absolute", right: -150, bottom: -140, opacity: 0.1 } }),
 

@@ -10,6 +10,8 @@ import { DEFAULT_BRANCH_ID } from "@/lib/config";
 import { formatSize, sizeSlug, sizesEqual } from "@/lib/tire-sizes";
 import type { TireProduct } from "@/lib/types";
 import { poolShare } from "@/lib/share-image";
+import { MarcaLogo } from "@/components/ui/MarcaLogo";
+import { marcaLogo, marcaSlug } from "@/lib/marcas-autos";
 
 /**
  * Ficha por vehículo (/vehiculos/toyota-hilux): captura "neumáticos para
@@ -133,6 +135,7 @@ export default async function VehiclePage({ params }: Props) {
         data={breadcrumbJsonLd([
           { name: "Inicio", path: "/" },
           { name: "Neumáticos por vehículo", path: "/vehiculos" },
+          { name: vehicle.brand, path: `/vehiculos/marca/${marcaSlug(vehicle.brand)}` },
           { name: name, path: `/vehiculos/${slug}` },
         ])}
       />
@@ -140,6 +143,15 @@ export default async function VehiclePage({ params }: Props) {
 
       <div className="bg-navy-950 px-4 py-16">
         <div className="mx-auto max-w-4xl text-center">
+          {marcaLogo(vehicle.brand) && (
+            <Link
+              href={`/vehiculos/marca/${marcaSlug(vehicle.brand)}`}
+              className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-white"
+              aria-label={`Neumáticos para ${vehicle.brand}`}
+            >
+              <MarcaLogo brand={vehicle.brand} className="h-10 w-10" />
+            </Link>
+          )}
           <span className="mb-4 block text-sm font-bold uppercase tracking-widest text-orange-400">
             Guía de medidas por vehículo
           </span>
@@ -233,6 +245,11 @@ export default async function VehiclePage({ params }: Props) {
                   </Link>
                 </li>
               ))}
+              <li>
+                <Link href={`/vehiculos/marca/${marcaSlug(vehicle.brand)}`} className="inline-block rounded-xl bg-navy-50 px-3.5 py-2 text-sm font-bold text-navy-700 hover:bg-navy-100">
+                  Todos los {vehicle.brand} →
+                </Link>
+              </li>
               <li>
                 <Link href="/vehiculos" className="inline-block rounded-xl bg-navy-50 px-3.5 py-2 text-sm font-bold text-navy-700 hover:bg-navy-100">
                   Ver todos →
