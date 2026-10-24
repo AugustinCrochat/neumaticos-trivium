@@ -49,6 +49,7 @@ const SECTIONS: Section[] = [
       { href: "/catalogo", label: "Catálogo de neumáticos", hint: "Todo el stock con filtros por medida, marca y precio." },
       { href: "/neumaticos", label: "Neumáticos por medida", hint: "Buscá por ancho, perfil y rodado." },
       { href: "/neumaticos-baratos", label: "Neumáticos baratos", hint: "El mejor precio en cada rodado." },
+      { href: "/opiniones-y-comparativas", label: "Opiniones y comparativas", hint: "Comparativas por medida con etiqueta europea y guías de marcas." },
       { href: "/neumaticos-para-remises-taxis-y-uber", label: "Para remises, taxis y Uber", hint: "Medidas por modelo y costo por kilómetro." },
       { href: "/marcas-de-neumaticos-chinos", label: "Marcas de neumáticos chinos", hint: "Kpatos, Sailun, Goodride, Westlake y más." },
       { href: "/alternativas", label: "Alternativas a marcas premium", hint: "Michelin, Bridgestone, Goodyear, Fate y más." },

@@ -157,6 +157,15 @@ export const SERVICES: Service[] = [
 // actual. Las más útiles para alguien que está por comprar van arriba.
 export const BLOG_POSTS: BlogPost[] = [
   {
+    id: "40",
+    title: "Cómo comparar neumáticos antes de comprar: 7 puntos para no equivocarte",
+    excerpt: "Medida e índices, etiqueta europea, fecha de fabricación, garantía y qué incluye el precio: una lista para comparar dos cubiertas con los mismos criterios.",
+    imageUrl: "/images/local/fachada-local-neumaticos-trivium-cordoba.webp",
+    date: "2026-10-24",
+    slug: "como-comparar-neumaticos-antes-de-comprar",
+    category: "Opiniones y Comparativas",
+  },
+  {
     id: "39",
     title: "Neumáticos japoneses, europeos, americanos y chinos: de dónde es cada marca",
     excerpt: "El país de la marca no siempre es el de la fábrica: un mapa de las marcas que se venden en Argentina y cómo saber dónde se hizo la tuya.",

@@ -143,6 +143,12 @@ export const BLOG_META: Record<string, BlogMeta> = {
     shopIntro: "Cuidá tus cubiertas:",
     shopLinks: [L.servicios, L.todos, L.ofertas],
   },
+  "como-comparar-neumaticos-antes-de-comprar": {
+    cover: { src: IMG.tallerCuatroAutos, alt: "Interior del taller de Neumáticos Trivium en Argüello con cuatro autos en servicio", tall: true },
+    figure: { src: IMG.montaje, alt: "Cubierta montada en la desmontadora del taller", caption: "Con la misma medida y los mismos índices, la comparación es justa." },
+    shopIntro: "Mirá las medidas y comparalas:",
+    shopLinks: [L.todos, L.equivalencias, L.ofertas],
+  },
   "cambio-de-valvulas-de-neumaticos": {
     cover: { src: IMG.montaje, alt: "Cubierta montada en la desmontadora del taller", position: "center 55%" },
     figure: { src: IMG.balanceandoCamioneta, alt: "Técnico balanceando una rueda de camioneta en la balanceadora Hofmann del taller", portrait: true, caption: "Con la cubierta nueva y la válvula nueva, la rueda se balancea antes de volver al auto." },

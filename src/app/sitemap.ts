@@ -9,6 +9,7 @@ import { MARCAS_PREMIUM } from "@/lib/marcas-premium";
 import { cargaSlug } from "@/lib/carga";
 import { LOAD_SPEED_CODES } from "@/lib/load-speed";
 import { POPULAR_VEHICLES, vehicleSlug } from "@/lib/vehicles";
+import { medidasConComparativa } from "@/lib/comparativas";
 import { marcaSlug } from "@/lib/marcas-autos";
 import { productImagePaths } from "@/lib/image-seo";
 import { TOOLS, toolPath } from "@/lib/tools";
@@ -73,6 +74,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url("/neumaticos/at", 0.7, "weekly"),
     url("/neumaticos/carga", 0.7, "weekly"),
     url("/neumaticos-baratos", 0.9, "daily"),
+    url("/opiniones-y-comparativas", 0.8, "weekly"),
     url("/neumaticos-para-remises-taxis-y-uber", 0.9, "daily", undefined, [abs("/images/local/remis-cambio-de-cuatro-neumaticos-con-alineacion-y-balanceo-trivium-cordoba.webp")]),
     url("/neumaticos-en", 0.7, "monthly"),
     url("/marcas", 0.7, "weekly"),
@@ -169,6 +171,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url(`/productos/${p.slug}`, p.enStock ? 0.8 : 0.4, "daily", undefined, productImagePaths(p).map(abs))
   );
 
+  const comparativas: Entry[] = (await medidasConComparativa()).map((m) => url(`/comparativas/${m.slug}`, 0.7, "weekly"));
+
   const fichasAccesorio: Entry[] = accesorios.map((a) =>
     url(`/tuercas-antirrobo/${a.slug}`, a.enStock ? 0.6 : 0.3, "weekly", undefined, [
       ...(a.imageUrl ? [abs(a.imageUrl)] : []),
@@ -180,6 +184,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [
     ...estaticas,
+    ...comparativas,
     ...medidas.values(),
     ...medidasCarga,
     ...rodados,
