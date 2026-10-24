@@ -125,6 +125,12 @@ export const BLOG_META: Record<string, BlogMeta> = {
     shopIntro: "Servicios y neumáticos:",
     shopLinks: [L.servicios, L.tuercas, L.todos],
   },
+  "que-incluye-el-presupuesto-de-neumaticos": {
+    cover: { src: IMG.fachada, alt: "Frente del local de Neumáticos Trivium en Córdoba", position: "center 45%" },
+    figure: { src: IMG.cambioCamioneta, alt: "Cambio de cubiertas de una camioneta en el taller de Neumáticos Trivium, con la balanceadora Hofmann al lado", caption: "Colocación, válvulas y balanceo: lo que tiene que figurar en un presupuesto." },
+    shopIntro: "Mirá los precios publicados:",
+    shopLinks: [L.todos, L.ofertas, L.servicios],
+  },
   "nitrogeno-en-neumaticos-vale-la-pena": {
     cover: { src: IMG.cambioCamioneta, alt: "Cambio de cubiertas de una camioneta en el taller de Neumáticos Trivium, con la balanceadora Hofmann al lado" },
     figure: { src: IMG.grenlanderPerfilBajo, alt: "Cubierta de perfil bajo recién colocada en una llanta", caption: "Con aire o con nitrógeno, la presión se controla todos los meses." },

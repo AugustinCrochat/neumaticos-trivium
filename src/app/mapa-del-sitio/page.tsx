@@ -50,6 +50,7 @@ const SECTIONS: Section[] = [
       { href: "/neumaticos", label: "Neumáticos por medida", hint: "Buscá por ancho, perfil y rodado." },
       { href: "/neumaticos-baratos", label: "Neumáticos baratos", hint: "El mejor precio en cada rodado." },
       { href: "/neumaticos-para-remises-taxis-y-uber", label: "Para remises, taxis y Uber", hint: "Medidas por modelo y costo por kilómetro." },
+      { href: "/marcas-de-neumaticos-chinos", label: "Marcas de neumáticos chinos", hint: "Kpatos, Sailun, Goodride, Westlake y más." },
       { href: "/neumaticos/at", label: "Neumáticos A/T", hint: "Todo terreno para camionetas y 4x4." },
       { href: "/neumaticos/ht", label: "Neumáticos H/T", hint: "Para ruta y uso mixto." },
       { href: "/neumaticos/carga", label: "Neumáticos de carga", hint: "Para utilitarios, furgones y camiones livianos." },

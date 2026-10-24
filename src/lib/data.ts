@@ -157,6 +157,15 @@ export const SERVICES: Service[] = [
 // actual. Las más útiles para alguien que está por comprar van arriba.
 export const BLOG_POSTS: BlogPost[] = [
   {
+    id: "38",
+    title: "Qué incluye el presupuesto de neumáticos: cómo comparar sin sorpresas",
+    excerpt: "Colocación, válvulas, balanceo, alineación, nitrógeno, IVA y garantía: qué mirar para que dos presupuestos sean comparables.",
+    imageUrl: "/images/local/fachada-local-neumaticos-trivium-cordoba.webp",
+    date: "2026-10-24",
+    slug: "que-incluye-el-presupuesto-de-neumaticos",
+    category: "Guías",
+  },
+  {
     id: "37",
     title: "Cambio de válvulas de neumáticos: cuándo hacerlo y qué incluye",
     excerpt: "Por qué se cambia la válvula al colocar cubiertas nuevas, cómo saber si pierde aire y qué cambia con los sensores de presión.",

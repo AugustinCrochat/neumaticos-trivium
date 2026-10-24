@@ -78,6 +78,13 @@ export default async function MarcasPage() {
           en mojado a alta velocidad. Abajo está cada marca con su origen y lo que hay en stock; en
           cada ficha explicamos para qué tipo de uso conviene.
         </p>
+        <p className="mt-3 max-w-3xl text-slate-600">
+          ¿Buscás otra marca china? Mirá{" "}
+          <Link href="/marcas-de-neumaticos-chinos" className="font-bold text-orange-600 underline underline-offset-4">
+            las marcas de neumáticos chinos que se venden en Argentina
+          </Link>
+          : Kpatos, Sailun, Goodride, Westlake y más.
+        </p>
       </header>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
