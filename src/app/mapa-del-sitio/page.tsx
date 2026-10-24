@@ -43,7 +43,7 @@ const SECTIONS: Section[] = [
     title: "Neumáticos",
     lead: "Todo el stock, por medida, por tipo o por marca.",
     icon: TriviumIcon as typeof Wrench,
-    tone: "bg-white ring-1 ring-slate-200",
+    tone: "bg-tire-950",
     foto: { src: "/images/local/neumatico-grenlander-kingpro-one-pickup-trivium.webp", alt: "Neumático Grenlander Kingpro One colocado en una pick-up" },
     items: [
       { href: "/catalogo", label: "Catálogo de neumáticos", hint: "Todo el stock con filtros por medida, marca y precio." },
