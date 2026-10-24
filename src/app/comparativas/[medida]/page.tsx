@@ -54,7 +54,7 @@ export default async function ComparativaPage({ params }: Props) {
   const mejorMojado = Math.min(...filas.map((f) => ESCALA.indexOf(f.label.wetGripClass)));
   const conMejorMojado = filas.filter((f) => ESCALA.indexOf(f.label.wetGripClass) === mejorMojado);
   const silencioso = [...filas].sort((a, b) => a.label.noiseDb - b.label.noiseDb)[0];
-  const modeloDe = (f: (typeof filas)[number]) => `${f.product.brand} ${f.product.model}`;
+  const modeloDe = (f: (typeof filas)[number]) => `${f.product.brand} ${f.product.modeloBase}`;
 
   const faqs: Faq[] = [
     {
