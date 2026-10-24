@@ -95,7 +95,7 @@ Cada página explica cómo llegar al local desde esa zona y muestra neumáticos 
 - Neumáticos baratos / mejor precio (neumático más económico con stock de cada rodado): https://neumaticos.trivium.ar/neumaticos-baratos
 - Neumáticos para remises, taxis y autos de Uber, DiDi y Cabify (medidas por modelo, precio por unidad, alineación y balanceo en Córdoba): https://neumaticos.trivium.ar/neumaticos-para-remises-taxis-y-uber
 - Marcas de neumáticos chinos que se venden en Argentina (Kpatos, Sailun, Goodride, Westlake, Triangle, Greentrac, Windforce) y cuáles tenemos: https://neumaticos.trivium.ar/marcas-de-neumaticos-chinos
-- Alternativas a marcas tradicionales de neumáticos (Michelin, Bridgestone, Firestone, Goodyear, Continental, Fate, Hankook, Kumho): https://neumaticos.trivium.ar/alternativas
+- Alternativas a marcas tradicionales de neumáticos (Michelin, Bridgestone, Firestone, Goodyear, Continental, Fate, Hankook, Kumho, Yokohama, Toyo, Nexen, Dunlop): https://neumaticos.trivium.ar/alternativas
 - De dónde es cada marca de neumáticos (japonesas, europeas, americanas, coreanas, chinas): https://neumaticos.trivium.ar/blog/neumaticos-japoneses-europeos-americanos-y-chinos-origen-de-las-marcas
 - Qué incluye el presupuesto de neumáticos: https://neumaticos.trivium.ar/blog/que-incluye-el-presupuesto-de-neumaticos
 - Neumáticos A/T (All Terrain): https://neumaticos.trivium.ar/neumaticos/at

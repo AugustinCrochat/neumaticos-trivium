@@ -60,13 +60,39 @@ export const MARCAS_PREMIUM: MarcaPremium[] = [
     name: "Fate",
     origen: "Argentina",
     datos: [
-      "En febrero de 2026 la empresa anunció el cierre de su planta de San Fernando y el despido de 920 trabajadores, según informaron varios medios. Para saber cómo está la situación hoy, conviene consultar fuentes recientes.",
+      "Fate cerró su única fábrica, la de San Fernando: en febrero de 2026 la empresa anunció el cierre definitivo y el despido de sus 920 trabajadores, según informaron varios medios.",
+      "Desde el cierre ya no se fabrican neumáticos Fate en Argentina, pero es una marca que mucha gente sigue buscando.",
     ],
   },
   {
     slug: "hankook",
     name: "Hankook",
     origen: "Corea del Sur",
+  },
+  {
+    slug: "yokohama",
+    name: "Yokohama",
+    origen: "Japón",
+    datos: ["Yokohama Rubber es una empresa japonesa fundada en 1917."],
+  },
+  {
+    slug: "toyo",
+    name: "Toyo",
+    origen: "Japón",
+  },
+  {
+    slug: "nexen",
+    name: "Nexen",
+    origen: "Corea del Sur",
+  },
+  {
+    slug: "dunlop",
+    name: "Dunlop",
+    origen: "Reino Unido (origen histórico)",
+    datos: [
+      "Los derechos de la marca Dunlop se repartieron durante años entre Sumitomo Rubber (Japón) y Goodyear (Estados Unidos) según la región; en enero de 2025 Sumitomo acordó comprar los derechos de Goodyear para neumáticos de auto en Europa, Norteamérica y Oceanía.",
+      "Por eso un neumático Dunlop puede venir de fabricantes y orígenes distintos según el modelo y el mercado.",
+    ],
   },
   {
     slug: "kumho",

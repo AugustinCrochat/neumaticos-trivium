@@ -31,7 +31,7 @@ const FAQS = [
   {
     question: "¿Hay neumáticos que se fabriquen en Argentina?",
     answer:
-      "Sí: Pirelli tiene una planta en Merlo y Bridgestone (que también tiene Firestone) en Llavallol. Fate anunció en febrero de 2026 el cierre de su planta de San Fernando, según informaron varios medios. La situación de las plantas cambia, así que conviene consultar noticias recientes.",
+      "Sí: Pirelli sigue fabricando en su planta de Merlo, y Bridgestone (que también tiene Firestone) tiene una planta en Llavallol. Fate, en cambio, cerró en 2026 su única fábrica, la de San Fernando, y sus neumáticos ya no se fabrican en Argentina. La mayoría de los neumáticos que se venden hoy son importados, de todas las marcas.",
   },
   {
     question: "¿Un neumático japonés o europeo es mejor que uno chino?",
@@ -59,16 +59,19 @@ export default function Page() {
       <p>
         <strong>Bridgestone</strong> es la marca japonesa más conocida en Argentina, y es dueña de{" "}
         <strong>Firestone</strong>, una marca de origen estadounidense que se fusionó con Bridgestone en 1988.
-        <strong> Yokohama</strong> es otra marca japonesa de primera línea. En Argentina, Bridgestone y Firestone
+        <strong> Yokohama</strong> (una empresa fundada en 1917) y <strong>Toyo</strong> son otras marcas japonesas
+        de primera línea; <strong>Dunlop</strong>, de origen británico, hoy tiene derechos repartidos entre
+        Sumitomo Rubber, de Japón, y Goodyear según la región. En Argentina, Bridgestone y Firestone
         comparten una planta en Llavallol, la primera fábrica de neumáticos del país. Mirá las{" "}
-        <Link href="/alternativas/bridgestone">alternativas a Bridgestone</Link> y a{" "}
-        <Link href="/alternativas/firestone">Firestone</Link>.
+        <Link href="/alternativas/bridgestone">alternativas a Bridgestone</Link>, a{" "}
+        <Link href="/alternativas/firestone">Firestone</Link>, <Link href="/alternativas/yokohama">Yokohama</Link>,{" "}
+        <Link href="/alternativas/toyo">Toyo</Link> y <Link href="/alternativas/dunlop">Dunlop</Link>.
       </p>
 
       <h2>Marcas europeas</h2>
       <p>
         <strong>Michelin</strong> es de origen francés y también es dueña de BFGoodrich;{" "}
-        <strong>Pirelli</strong> es italiana y tiene una planta en Merlo; <strong>Continental</strong> es alemana.
+        <strong>Pirelli</strong> es italiana y sigue fabricando en su planta de Merlo; <strong>Continental</strong> es alemana.
         En <Link href="/marcas/pirelli">nuestro catálogo tenemos Pirelli</Link>. Más en{" "}
         <Link href="/alternativas/michelin">alternativas a Michelin</Link> y{" "}
         <Link href="/alternativas/continental">a Continental</Link>.
@@ -87,15 +90,16 @@ export default function Page() {
         <strong>Hankook</strong>, <strong>Kumho</strong> y <strong>Nexen</strong> son las marcas coreanas que
         más se ven. Un dato curioso: en 2018 la china Doublestar compró el 45% de Kumho Tire y quedó como
         accionista controlante, así que una marca coreana tiene hoy un dueño chino. Mirá{" "}
-        <Link href="/alternativas/hankook">Hankook</Link> y <Link href="/alternativas/kumho">Kumho</Link>.
+        <Link href="/alternativas/hankook">Hankook</Link>, <Link href="/alternativas/kumho">Kumho</Link> y{" "}
+        <Link href="/alternativas/nexen">Nexen</Link>.
       </p>
 
       <h2>La marca argentina</h2>
       <p>
         <strong>Fate</strong> fue durante décadas la marca nacional de referencia. En febrero de 2026 la empresa
-        anunció el cierre definitivo de su planta de San Fernando y el despido de 920 trabajadores, según
-        informaron varios medios. La situación se sigue moviendo, así que para saber cómo está hoy conviene
-        buscar noticias recientes. Si estabas buscando una medida de Fate, acá están las{" "}
+        cerró su única fábrica, la de San Fernando, y despidió a sus 920 trabajadores, según informaron varios
+        medios: desde entonces ya no se fabrican neumáticos Fate en Argentina, aunque la marca sigue siendo muy
+        buscada. Si estabas buscando una medida de Fate, acá están las{" "}
         <Link href="/alternativas/fate">alternativas</Link>.
       </p>
 

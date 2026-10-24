@@ -65,12 +65,21 @@ export default async function AlternativaPage({ params }: Props) {
       answer:
         "Está en el flanco del neumático que tenés puesto, con el formato 185/65 R15 (ancho, perfil y rodado), y también en la calcomanía de la puerta del conductor. Si no la encontrás, buscá tu auto en la sección Por vehículo.",
     },
+    ...(marca.slug === "dunlop"
+      ? [
+          {
+            question: "¿De quién es Dunlop?",
+            answer:
+              "Depende de la región y del momento. Durante años los derechos de la marca estuvieron repartidos entre Sumitomo Rubber, de Japón, y Goodyear, de Estados Unidos. En enero de 2025 Sumitomo acordó comprar los derechos de Goodyear para neumáticos de auto en Europa, Norteamérica y Oceanía. Por eso conviene mirar en el flanco dónde se fabricó cada neumático.",
+          },
+        ]
+      : []),
     ...(marca.slug === "fate"
       ? [
           {
             question: "¿Qué pasó con Fate?",
             answer:
-              "En febrero de 2026 Fate anunció el cierre definitivo de su planta de San Fernando y el despido de 920 trabajadores, según informaron varios medios, y atribuyó la decisión a la caída del consumo, la apertura de importaciones y los conflictos gremiales. Si querés saber cómo está la situación hoy, consultá noticias recientes. Si buscabas una cubierta de esa medida, acá ves lo que tenemos.",
+              "Fate cerró su única fábrica, la de San Fernando: en febrero de 2026 anunció el cierre definitivo y el despido de sus 920 trabajadores, según informaron varios medios, y atribuyó la decisión a la caída del consumo, la apertura de importaciones y los conflictos gremiales. Desde entonces ya no se fabrican neumáticos Fate en Argentina, aunque mucha gente sigue buscando la marca. Si buscabas una cubierta de esa medida, acá ves lo que tenemos.",
           },
         ]
       : []),
