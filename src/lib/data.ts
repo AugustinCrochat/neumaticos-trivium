@@ -157,6 +157,15 @@ export const SERVICES: Service[] = [
 // actual. Las más útiles para alguien que está por comprar van arriba.
 export const BLOG_POSTS: BlogPost[] = [
   {
+    id: "39",
+    title: "Neumáticos japoneses, europeos, americanos y chinos: de dónde es cada marca",
+    excerpt: "El país de la marca no siempre es el de la fábrica: un mapa de las marcas que se venden en Argentina y cómo saber dónde se hizo la tuya.",
+    imageUrl: "/images/local/fachada-local-neumaticos-trivium-cordoba.webp",
+    date: "2026-10-24",
+    slug: "neumaticos-japoneses-europeos-americanos-y-chinos-origen-de-las-marcas",
+    category: "Guías",
+  },
+  {
     id: "38",
     title: "Qué incluye el presupuesto de neumáticos: cómo comparar sin sorpresas",
     excerpt: "Colocación, válvulas, balanceo, alineación, nitrógeno, IVA y garantía: qué mirar para que dos presupuestos sean comparables.",

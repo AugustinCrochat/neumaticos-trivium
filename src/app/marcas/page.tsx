@@ -83,7 +83,11 @@ export default async function MarcasPage() {
           <Link href="/marcas-de-neumaticos-chinos" className="font-bold text-orange-600 underline underline-offset-4">
             las marcas de neumáticos chinos que se venden en Argentina
           </Link>
-          : Kpatos, Sailun, Goodride, Westlake y más.
+          : Kpatos, Sailun, Goodride, Westlake y más. Y si buscás una marca tradicional, mirá las{" "}
+          <Link href="/alternativas" className="font-bold text-orange-600 underline underline-offset-4">
+            alternativas a Michelin, Bridgestone, Goodyear y otras
+          </Link>
+          .
         </p>
       </header>
 

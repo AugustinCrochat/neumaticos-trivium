@@ -34,6 +34,13 @@ export const OTRAS_MARCAS: OtraMarca[] = [
     mismoFabricante: "firemax",
   },
   {
+    slug: "linglong",
+    name: "Linglong",
+    empresa: "Shandong Linglong Tire Co., Ltd.",
+    sede: "Zhaoyuan, provincia de Shandong",
+    dato: "La empresa tiene sus orígenes en 1975 y, además de sus fábricas en China, tiene una planta en Tailandia.",
+  },
+  {
     slug: "sailun",
     name: "Sailun",
     empresa: "Sailun Group",

@@ -82,6 +82,7 @@ export function Footer() {
                 { href: "/neumaticos-baratos", label: "Neumáticos baratos" },
                 { href: "/neumaticos-para-remises-taxis-y-uber", label: "Para remises, taxis y Uber" },
                 { href: "/marcas-de-neumaticos-chinos", label: "Marcas de neumáticos chinos" },
+                { href: "/alternativas", label: "Alternativas a marcas premium" },
                 { href: "/neumaticos", label: "Neumáticos por medida" },
                 { href: "/neumaticos/at", label: "Neumáticos A/T" },
                 { href: "/neumaticos/carga", label: "Neumáticos de carga" },

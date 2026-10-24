@@ -125,6 +125,12 @@ export const BLOG_META: Record<string, BlogMeta> = {
     shopIntro: "Servicios y neumáticos:",
     shopLinks: [L.servicios, L.tuercas, L.todos],
   },
+  "neumaticos-japoneses-europeos-americanos-y-chinos-origen-de-las-marcas": {
+    cover: { src: IMG.fachada, alt: "Frente del local de Neumáticos Trivium en Córdoba", position: "center 45%" },
+    figure: { src: IMG.tallerCuatroAutos, alt: "Interior del taller de Neumáticos Trivium en Argüello con cuatro autos en servicio", caption: "Un neumático se elige por sus datos, no solo por el país de la marca." },
+    shopIntro: "Mirá las marcas que tenemos:",
+    shopLinks: [L.marcas, L.todos, L.ofertas],
+  },
   "que-incluye-el-presupuesto-de-neumaticos": {
     cover: { src: IMG.fachada, alt: "Frente del local de Neumáticos Trivium en Córdoba", position: "center 45%" },
     figure: { src: IMG.cambioCamioneta, alt: "Cambio de cubiertas de una camioneta en el taller de Neumáticos Trivium, con la balanceadora Hofmann al lado", caption: "Colocación, válvulas y balanceo: lo que tiene que figurar en un presupuesto." },

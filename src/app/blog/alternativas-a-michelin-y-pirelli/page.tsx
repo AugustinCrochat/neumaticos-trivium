@@ -95,7 +95,10 @@ export default function Page() {
       <p>
         En el catálogo vas a ver las marcas disponibles hoy con precio y stock en tu medida. Podés empezar por{" "}
         <Link href="/marcas/pirelli">Pirelli</Link>, <Link href="/marcas/michelin">Michelin</Link> o{" "}
-        <Link href="/marcas/grenlander">Grenlander</Link>, o ver <Link href="/marcas">todas las marcas</Link>.
+        <Link href="/marcas/grenlander">Grenlander</Link>, o ver <Link href="/marcas">todas las marcas</Link>. También tenemos una página por marca con lo que
+        se sabe de cada una: <Link href="/alternativas/michelin">Michelin</Link>,{" "}
+        <Link href="/alternativas/bridgestone">Bridgestone</Link>, <Link href="/alternativas/goodyear">Goodyear</Link>{" "}
+        y <Link href="/alternativas">otras</Link>.
       </p>
 
       <ClusterLinks current={SLUG} />
