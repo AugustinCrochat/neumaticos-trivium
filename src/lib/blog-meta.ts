@@ -383,6 +383,48 @@ export const BLOG_META: Record<string, BlogMeta> = {
     shopIntro: "Mirá las marcas disponibles:",
     shopLinks: [L.pirelli, L.michelin, L.marcas],
   },
+  "at-o-ht-cual-conviene-para-tu-camioneta": {
+    cover: { src: IMG.atClasica, alt: "Camioneta clásica con neumáticos A/T Grenlander Maga A/T Two" },
+    figure: { src: IMG.pickup4x4, alt: "Pickup 4x4 sobre el elevador del taller de Neumáticos Trivium", caption: "Con la camioneta sobre el elevador se elige y se verifica la medida." },
+    shopIntro: "Mirá las dos opciones:",
+    shopLinks: [L.at, L.ht, L.carga],
+  },
+  "perfil-bajo-o-perfil-alto": {
+    cover: { src: IMG.grenlanderPerfilBajo, alt: "Cubierta de perfil bajo recién colocada en una llanta" },
+    figure: { src: IMG.balanceando, alt: "Técnico balanceando una rueda en la balanceadora del taller", caption: "Al cambiar de rodado la rueda nueva se balancea antes de volver al auto." },
+    shopIntro: "Verificá la equivalencia y mirá las medidas:",
+    shopLinks: [L.equivalencias, L.todos, L.indice],
+  },
+  "desgaste-irregular-de-neumaticos": {
+    cover: { src: IMG.alineadora3d, alt: "Alineadora 3D Hofmann Geoliner 630 con target en la rueda" },
+    figure: { src: IMG.rotacion, alt: "Rueda desmontada durante una rotación en el taller", caption: "Con la rueda afuera se ve mejor el patrón de desgaste." },
+    shopIntro: "Corregí la causa y renová las cubiertas:",
+    shopLinks: [L.servicios, L.todos, L.ofertas],
+  },
+  "antiguedad-del-neumatico-codigo-dot": {
+    cover: { src: IMG.rotacion, alt: "Auto con una rueda desmontada y la cubierta Pirelli al lado" },
+    figure: { src: IMG.montaje, alt: "Cubierta montada en la desmontadora del taller", caption: "Antes de montar una cubierta se controla su estado y su fecha de fabricación." },
+    shopIntro: "Mirá las medidas disponibles:",
+    shopLinks: [L.todos, L.ofertas, L.servicios],
+  },
+  "rueda-de-auxilio-como-revisarla": {
+    cover: { src: IMG.cambioCamioneta, alt: "Cambio de cubiertas de una camioneta en el taller de Neumáticos Trivium" },
+    figure: { src: IMG.camionetas, alt: "Camionetas sobre los elevadores del taller", caption: "Con la rueda afuera se controla también el auxilio." },
+    shopIntro: "Si necesitás una llave o un juego nuevo:",
+    shopLinks: [L.tuercas, L.servicios, L.todos],
+  },
+  "sintomas-alineacion-balanceo-o-rotacion": {
+    cover: { src: IMG.colocandoTarget, alt: "Técnico colocando el target de alineación 3D en la rueda de un auto" },
+    figure: { src: IMG.autoRojoTarget, alt: "Auto con el target de la alineadora 3D colocado en la rueda", caption: "La alineadora 3D mide los ángulos de cada rueda." },
+    shopIntro: "Mirá los servicios del taller:",
+    shopLinks: [L.servicios, L.todos, L.ofertas],
+  },
+  "como-preparar-el-cambio-de-neumaticos": {
+    cover: { src: IMG.montaje, alt: "Cubierta montada en la desmontadora del taller" },
+    figure: { src: IMG.utilitario, alt: "Balanceadora y alineadora junto a un utilitario en el taller", caption: "Colocación, válvulas y balanceo en el mismo taller." },
+    shopIntro: "Elegí las cubiertas y colocalas en el local:",
+    shopLinks: [L.todos, L.servicios, L.ofertas],
+  },
 };
 
 /** Respaldo para una nota nueva que todavía no está cargada arriba. */

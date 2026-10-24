@@ -21,6 +21,8 @@ const NOTAS = [
   "marcas-chinas-neumaticos-comparativa",
   "neumaticos-de-marca-vs-importados-cual-conviene",
   "diferencia-neumatico-caro-y-barato",
+  "at-o-ht-cual-conviene-para-tu-camioneta",
+  "perfil-bajo-o-perfil-alto",
   "precio-calidad-neumaticos-costo-por-km",
   "alternativas-a-michelin-y-pirelli",
   "neumaticos-japoneses-europeos-americanos-y-chinos-origen-de-las-marcas",

@@ -99,6 +99,13 @@ Cada página explica cómo llegar al local desde esa zona y muestra neumáticos 
 - Alternativas a marcas tradicionales de neumáticos (Michelin, Bridgestone, Firestone, Goodyear, Continental, Fate, Hankook, Kumho, Yokohama, Toyo, Nexen, Dunlop): https://neumaticos.trivium.ar/alternativas
 - De dónde es cada marca de neumáticos (japonesas, europeas, americanas, coreanas, chinas): https://neumaticos.trivium.ar/blog/neumaticos-japoneses-europeos-americanos-y-chinos-origen-de-las-marcas
 - Qué incluye el presupuesto de neumáticos: https://neumaticos.trivium.ar/blog/que-incluye-el-presupuesto-de-neumaticos
+- A/T o H/T: cuál conviene para tu camioneta: https://neumaticos.trivium.ar/blog/at-o-ht-cual-conviene-para-tu-camioneta
+- Perfil bajo o perfil alto: qué ganás y qué perdés al cambiar de rodado: https://neumaticos.trivium.ar/blog/perfil-bajo-o-perfil-alto
+- Desgaste irregular de neumáticos: qué te dice cada patrón: https://neumaticos.trivium.ar/blog/desgaste-irregular-de-neumaticos
+- Cuántos años tiene tu neumático: cómo leer el código DOT: https://neumaticos.trivium.ar/blog/antiguedad-del-neumatico-codigo-dot
+- Rueda de auxilio: cómo revisarla para que sirva cuando la necesitás: https://neumaticos.trivium.ar/blog/rueda-de-auxilio-como-revisarla
+- Tu auto vibra o tira para un lado: ¿alineación, balanceo o rotación?: https://neumaticos.trivium.ar/blog/sintomas-alineacion-balanceo-o-rotacion
+- Cambio de neumáticos en el taller: qué llevar y qué pedir: https://neumaticos.trivium.ar/blog/como-preparar-el-cambio-de-neumaticos
 - Neumáticos A/T (All Terrain): https://neumaticos.trivium.ar/neumaticos/at
 - Neumáticos H/T: https://neumaticos.trivium.ar/neumaticos/ht
 - Alineación computarizada 3D en Córdoba: https://neumaticos.trivium.ar/servicios/alineacion

@@ -612,4 +612,74 @@ export const BLOG_POSTS: BlogPost[] = [
     slug: "alternativas-a-michelin-y-pirelli",
     category: "Marcas",
   },
+  {
+    id: "36",
+    title: "A/T o H/T: cuál conviene para tu camioneta",
+    excerpt:
+      "Dos neumáticos para la misma medida que se comportan distinto: ruido, desgaste, consumo y agarre en tierra, y cuál elegir según cómo usás la camioneta.",
+    imageUrl: "/images/local/neumatico-at-grenlander-maga-at-two-camioneta-clasica-trivium.webp",
+    date: "2026-10-24",
+    slug: "at-o-ht-cual-conviene-para-tu-camioneta",
+    category: "Opiniones y Comparativas",
+  },
+  {
+    id: "37",
+    title: "Perfil bajo o perfil alto: qué ganás y qué perdés al cambiar de rodado",
+    excerpt:
+      "Dirección más directa contra confort y protección de la llanta. Cómo cambiar de rodado manteniendo el diámetro, con ejemplos de medidas.",
+    imageUrl: "/images/local/cubierta-perfil-bajo-grenlander-colocada-neumaticos-trivium.webp",
+    date: "2026-10-24",
+    slug: "perfil-bajo-o-perfil-alto",
+    category: "Opiniones y Comparativas",
+  },
+  {
+    id: "38",
+    title: "Desgaste irregular de neumáticos: qué te dice cada patrón",
+    excerpt:
+      "Bordes, centro, un solo lado, plumas o manchones: qué causa cada desgaste y qué corregir antes de comprar neumáticos nuevos.",
+    imageUrl: "/images/herramientas/neumatico-desgastado-testigo.webp",
+    date: "2026-10-24",
+    slug: "desgaste-irregular-de-neumaticos",
+    category: "Mantenimiento",
+  },
+  {
+    id: "39",
+    title: "Cuántos años tiene tu neumático: cómo leer el código DOT",
+    excerpt:
+      "El caucho envejece aunque no se use. Cómo leer semana y año de fabricación en el flanco y desde cuándo conviene revisarlo o reemplazarlo.",
+    imageUrl: "/images/herramientas/codigo-dot-flanco-neumatico.webp",
+    date: "2026-10-24",
+    slug: "antiguedad-del-neumatico-codigo-dot",
+    category: "Mantenimiento",
+  },
+  {
+    id: "40",
+    title: "Rueda de auxilio: cómo revisarla para que sirva cuando la necesitás",
+    excerpt:
+      "Presión, edad, estado del caucho y lo que tiene que haber en el baúl, incluida la llave de la tuerca de seguridad.",
+    imageUrl: "/images/local/cambio-de-cubiertas-en-camioneta-pickup-con-balanceadora-hofmann-trivium-cordoba.webp",
+    date: "2026-10-24",
+    slug: "rueda-de-auxilio-como-revisarla",
+    category: "Mantenimiento",
+  },
+  {
+    id: "41",
+    title: "Tu auto vibra o tira para un lado: ¿alineación, balanceo o rotación?",
+    excerpt:
+      "Cada síntoma apunta a un servicio distinto. Una tabla para reconocer qué le pasa al auto antes de ir al taller.",
+    imageUrl: "/images/local/tecnico-colocando-target-de-alineacion-3d-en-auto-trivium-cordoba.webp",
+    date: "2026-10-24",
+    slug: "sintomas-alineacion-balanceo-o-rotacion",
+    category: "Servicios",
+  },
+  {
+    id: "42",
+    title: "Cambio de neumáticos en el taller: qué llevar y qué pedir",
+    excerpt:
+      "Qué llevar, qué tiene que incluir el servicio y qué revisar antes de retirar el auto, para evitar sorpresas.",
+    imageUrl: "/images/servicios/arme-desarme.webp",
+    date: "2026-10-24",
+    slug: "como-preparar-el-cambio-de-neumaticos",
+    category: "Servicios",
+  },
 ];
