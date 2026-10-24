@@ -66,6 +66,9 @@ export function AccessoryCard({ accessory, priceOld = accessory.priceOld }: { ac
             <span className="text-slate-400 line-through text-xs block break-words">{formatPrice(priceOld)}</span>
           )}
           <span className="text-2xl font-black text-red-600 block mb-1.5 break-words">{formatPrice(accessory.price)}</span>
+          <span className="mb-2 inline-block rounded bg-red-50 px-2 py-0.5 text-[11px] font-black uppercase tracking-wide text-red-700">
+            Incluye 2 llaves
+          </span>
           <Link
             href={`/tuercas-antirrobo/${accessory.slug}`}
             className="block w-full text-center bg-black hover:bg-neutral-800 text-white font-semibold py-2.5 rounded-xl text-sm transition-colors"

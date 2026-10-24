@@ -4,6 +4,7 @@ import { BRANDS, SERVICES, BLOG_POSTS } from "@/lib/data";
 import { EXTRA_SERVICES } from "@/lib/servicios-seo";
 import { LOCALIDADES } from "@/lib/localidades";
 import { OTRAS_MARCAS } from "@/lib/marcas-chinas";
+import { TUERCA_FOTO_TALLER, tuercaCardPath } from "@/lib/tuercas-fotos";
 import { MARCAS_PREMIUM } from "@/lib/marcas-premium";
 import { cargaSlug } from "@/lib/carga";
 import { LOAD_SPEED_CODES } from "@/lib/load-speed";
@@ -167,7 +168,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   );
 
   const fichasAccesorio: Entry[] = accesorios.map((a) =>
-    url(`/tuercas-antirrobo/${a.slug}`, a.enStock ? 0.6 : 0.3, "weekly", undefined, a.imageUrl ? [abs(a.imageUrl)] : undefined)
+    url(`/tuercas-antirrobo/${a.slug}`, a.enStock ? 0.6 : 0.3, "weekly", undefined, [
+      ...(a.imageUrl ? [abs(a.imageUrl)] : []),
+      ...(tuercaCardPath(a.codigoTango, a.slug) ? [abs(tuercaCardPath(a.codigoTango, a.slug)!)] : []),
+      abs(TUERCA_FOTO_TALLER.src),
+    ])
   );
 
   return [

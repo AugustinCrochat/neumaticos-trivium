@@ -31,7 +31,7 @@ const FAQS = [
   {
     question: "¿Dónde conviene guardar la llave?",
     answer:
-      "En la guantera o junto al auxilio, nunca en la gomería ni en la tapa del baúl. Anotá el código que viene en el juego: si perdés la llave, con el código se puede pedir otra al fabricante.",
+      "Como el juego trae dos llaves, guardá una en la guantera o junto al auxilio y la otra en tu casa: así, si perdés una, tenés la de repuesto. Nunca la dejes en la gomería ni en la tapa del baúl. Anotá el código que viene en el juego: si perdés la llave, con el código se puede pedir otra al fabricante.",
   },
   {
     question: "¿Qué pasa si pierdo la llave?",
@@ -52,9 +52,10 @@ export default function Page() {
 
       <h2>Cómo funcionan</h2>
       <p>
-        Cada juego trae cuatro tuercas (o bulones) con una cabeza de dibujo único y una llave con el
-        negativo de ese dibujo. Se coloca una por rueda, en lugar de una de las tuercas comunes. Sin
-        la llave, la tuerca queda sin forma de agarre para una herramienta normal.
+        Cada juego trae cuatro tuercas (o bulones) con una cabeza de dibujo único y dos llaves con el
+        negativo de ese dibujo: una para usar y otra de repuesto. Se coloca una por rueda, en lugar de
+        una de las tuercas comunes. Sin la llave, la tuerca queda sin forma de agarre para una
+        herramienta normal.
       </p>
       <p>
         Hay modelos de cabeza con estrías, con dibujo asimétrico y tuercas con anillo giratorio, y
