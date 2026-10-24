@@ -61,7 +61,7 @@ export const MARCAS_PREMIUM: MarcaPremium[] = [
     origen: "Argentina",
     datos: [
       "Fate cerró su única fábrica, la de San Fernando: en febrero de 2026 la empresa anunció el cierre definitivo y el despido de sus 920 trabajadores, según informaron varios medios.",
-      "Desde el cierre ya no se fabrican neumáticos Fate en Argentina, pero es una marca que mucha gente sigue buscando.",
+      "Hoy los neumáticos Fate no se fabrican en Argentina ni se importan, así que no se consiguen cubiertas nuevas de la marca; igual, mucha gente que todavía las lleva puestas sigue buscándola.",
     ],
   },
   {

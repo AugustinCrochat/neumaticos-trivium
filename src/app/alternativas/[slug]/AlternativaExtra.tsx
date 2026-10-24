@@ -32,6 +32,47 @@ export function AlternativaExtra({ marca }: { marca: MarcaPremium }) {
         </p>
       </section>
 
+      {marca.slug === "fate" && (
+        <section className="mb-14 max-w-3xl space-y-3 rounded-3xl border border-[#ff1e00]/30 bg-red-50/40 p-6 leading-relaxed text-slate-700 md:p-8">
+          <h2 className={h2}>Tenés cubiertas Fate: qué comprar para reemplazarlas</h2>
+          <ol className="list-decimal space-y-2 pl-5">
+            <li>
+              <strong>Leé la medida en el flanco.</strong> Tiene el formato 185/65 R15 (ancho, perfil y rodado). Es la
+              que tenés que buscar, sin importar la marca.
+            </li>
+            <li>
+              <strong>Anotá los índices de carga y velocidad</strong> (por ejemplo 88H): no pueden ser menores a los
+              originales.{" "}
+              <Link href="/blog/indice-de-carga-y-velocidad" className={link}>
+                Cómo leerlos
+              </Link>
+              .
+            </li>
+            <li>
+              <strong>Filtrá por tu medida</strong> en esta página, o mirá la{" "}
+              <Link href="/calculadora-equivalencia-neumaticos" className={link}>
+                calculadora de equivalencias
+              </Link>{" "}
+              si no está exacta.
+            </li>
+            <li>
+              <strong>Cambiá el juego completo si podés</strong>, así se gastan parejo:{" "}
+              <Link href="/blog/cuatro-economicos-o-dos-de-marca" className={link}>
+                4 económicos o 2 de marca
+              </Link>
+              .
+            </li>
+          </ol>
+          <p>
+            Si no sabés la medida, buscá tu auto en{" "}
+            <Link href="/vehiculos" className={link}>
+              medida por vehículo
+            </Link>
+            .
+          </p>
+        </section>
+      )}
+
       <section className="mb-14 max-w-3xl space-y-3 leading-relaxed text-slate-700">
         <h2 className={h2}>Cuándo conviene una premium y cuándo una alternativa</h2>
         <p>

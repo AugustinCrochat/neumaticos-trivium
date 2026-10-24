@@ -79,7 +79,12 @@ export default async function AlternativaPage({ params }: Props) {
           {
             question: "¿Qué pasó con Fate?",
             answer:
-              "Fate cerró su única fábrica, la de San Fernando: en febrero de 2026 anunció el cierre definitivo y el despido de sus 920 trabajadores, según informaron varios medios, y atribuyó la decisión a la caída del consumo, la apertura de importaciones y los conflictos gremiales. Desde entonces ya no se fabrican neumáticos Fate en Argentina, aunque mucha gente sigue buscando la marca. Si buscabas una cubierta de esa medida, acá ves lo que tenemos.",
+              "Fate cerró su única fábrica, la de San Fernando: en febrero de 2026 anunció el cierre definitivo y el despido de sus 920 trabajadores, según informaron varios medios, y atribuyó la decisión a la caída del consumo, la apertura de importaciones y los conflictos gremiales. Hoy los neumáticos Fate no se fabrican en Argentina ni se importan, así que no hay cubiertas nuevas de la marca. Si tenés Fate puestas, mirá la medida en el flanco y acá ves lo que tenemos en esa misma medida.",
+          },
+          {
+            question: "¿Se consiguen neumáticos Fate nuevos?",
+            answer:
+              "No: la marca ya no se fabrica en Argentina ni se importa. Para reemplazar tus Fate buscá una cubierta de la misma medida e índices de carga y velocidad; en esta página podés filtrar por medida y ver precio y stock.",
           },
         ]
       : []),
@@ -96,7 +101,10 @@ export default async function AlternativaPage({ params }: Props) {
       hero={{
         headline: `¿Buscás ${marca.name}?`,
         accent: "Mirá estas opciones.",
-        bajada: `${marca.name} no está en nuestro catálogo, pero tenemos neumáticos nuevos de primera línea y de importación, por medida y con precio publicado.`,
+        bajada:
+          marca.slug === "fate"
+            ? "Fate ya no se fabrica ni se importa. Si tenés cubiertas Fate y necesitás reemplazarlas, buscá tu medida y mirá qué tenemos con precio publicado."
+            : `${marca.name} no está en nuestro catálogo, pero tenemos neumáticos nuevos de primera línea y de importación, por medida y con precio publicado.`,
         highlights: [
           { titulo: "Precio publicado", detalle: "El de la web es el del mostrador, con IVA incluido y por unidad." },
           { titulo: "Garantía", detalle: "Un año por defecto de fabricación." },

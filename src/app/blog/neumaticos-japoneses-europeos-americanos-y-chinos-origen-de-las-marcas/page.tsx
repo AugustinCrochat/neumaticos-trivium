@@ -31,7 +31,7 @@ const FAQS = [
   {
     question: "¿Hay neumáticos que se fabriquen en Argentina?",
     answer:
-      "Sí: Pirelli sigue fabricando en su planta de Merlo, y Bridgestone (que también tiene Firestone) tiene una planta en Llavallol. Fate, en cambio, cerró en 2026 su única fábrica, la de San Fernando, y sus neumáticos ya no se fabrican en Argentina. La mayoría de los neumáticos que se venden hoy son importados, de todas las marcas.",
+      "Sí: Pirelli sigue fabricando en su planta de Merlo, y Bridgestone (que también tiene Firestone) tiene una planta en Llavallol. Fate, en cambio, cerró en 2026 su única fábrica, la de San Fernando, y sus neumáticos ya no se fabrican en Argentina ni se importan. La mayoría de los neumáticos que se venden hoy son importados, de todas las marcas.",
   },
   {
     question: "¿Un neumático japonés o europeo es mejor que uno chino?",
@@ -98,8 +98,8 @@ export default function Page() {
       <p>
         <strong>Fate</strong> fue durante décadas la marca nacional de referencia. En febrero de 2026 la empresa
         cerró su única fábrica, la de San Fernando, y despidió a sus 920 trabajadores, según informaron varios
-        medios: desde entonces ya no se fabrican neumáticos Fate en Argentina, aunque la marca sigue siendo muy
-        buscada. Si estabas buscando una medida de Fate, acá están las{" "}
+        medios: hoy los neumáticos Fate no se fabrican en Argentina ni se importan, aunque mucha gente que los
+        lleva puestos sigue buscando la marca. Si necesitás reemplazar tus Fate, acá están las{" "}
         <Link href="/alternativas/fate">alternativas</Link>.
       </p>
 
