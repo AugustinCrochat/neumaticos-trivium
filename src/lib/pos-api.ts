@@ -262,7 +262,10 @@ function toTireProduct(p: PosProducto): TireProduct | null {
     // la casilla de carga (si se marcara, cambiaría el slug y la medida con "C").
     isCarga: p.es_carga || esRodadoCamion(p.neumatico_diametro),
     isAT: p.es_at,
-    euLabel: getTireLabel(slug) !== null,
+    euLabel: (() => {
+      const l = getTireLabel(slug);
+      return l ? { energy: l.energyClass, wet: l.wetGripClass } : undefined;
+    })(),
     slug,
     enStock: p.en_stock,
     vendidos: p.vendidos ?? 0,

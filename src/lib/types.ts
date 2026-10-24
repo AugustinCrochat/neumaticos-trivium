@@ -35,7 +35,7 @@ export type TireProduct = {
   /** Neumático todo terreno (A/T). */
   isAT?: boolean;
   /** Tiene etiqueta europea registrada en EPREL (ver tire-labels.ts). */
-  euLabel?: boolean;
+  euLabel?: { energy: string; wet: string };
   slug: string;
   enStock?: boolean;
   /** Cantidad disponible en la sucursal. */

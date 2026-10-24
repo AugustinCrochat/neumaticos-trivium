@@ -107,6 +107,12 @@ export function ProductCard({
           )}
         </div>
 
+        {product.euLabel && (
+          <div className="absolute bottom-2 right-2 z-10">
+            <EuLabelBadge energy={product.euLabel.energy} wet={product.euLabel.wet} />
+          </div>
+        )}
+
         {imageFooter && (
           <div className="absolute bottom-2 left-0 right-0 z-10 flex justify-center px-3">
             {imageFooter}
@@ -141,7 +147,6 @@ export function ProductCard({
           <Link href={`/productos/${product.slug}`} className="hover:text-navy-700 transition-colors">
             <ProductNameWithHighlightedSize product={product} />
           </Link>
-          {product.euLabel && <EuLabelBadge />}
         </h3>
 
         {note && (
