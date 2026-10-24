@@ -125,6 +125,18 @@ export const BLOG_META: Record<string, BlogMeta> = {
     shopIntro: "Servicios y neumáticos:",
     shopLinks: [L.servicios, L.tuercas, L.todos],
   },
+  "nitrogeno-en-neumaticos-vale-la-pena": {
+    cover: { src: IMG.cambioCamioneta, alt: "Cambio de cubiertas de una camioneta en el taller de Neumáticos Trivium, con la balanceadora Hofmann al lado" },
+    figure: { src: IMG.grenlanderPerfilBajo, alt: "Cubierta de perfil bajo recién colocada en una llanta", caption: "Con aire o con nitrógeno, la presión se controla todos los meses." },
+    shopIntro: "Cuidá tus cubiertas:",
+    shopLinks: [L.servicios, L.todos, L.ofertas],
+  },
+  "cambio-de-valvulas-de-neumaticos": {
+    cover: { src: IMG.montaje, alt: "Cubierta montada en la desmontadora del taller", position: "center 55%" },
+    figure: { src: IMG.balanceandoCamioneta, alt: "Técnico balanceando una rueda de camioneta en la balanceadora Hofmann del taller", portrait: true, caption: "Con la cubierta nueva y la válvula nueva, la rueda se balancea antes de volver al auto." },
+    shopIntro: "Comprá las cubiertas y colocalas en el local:",
+    shopLinks: [L.todos, L.servicios, L.ofertas],
+  },
   "neumaticos-para-uber-didi-cabify": {
     cover: { src: IMG.remis, alt: "Remis sobre el elevador del taller de Neumáticos Trivium durante el cambio de las cuatro cubiertas", tall: true, position: "center 55%" },
     figure: { src: IMG.tallerCuatroAutos, alt: "Interior del taller de Neumáticos Trivium en Argüello con cuatro autos en servicio", caption: "Colocación, balanceo y alineación en el mismo taller de Argüello." },

@@ -96,7 +96,8 @@ export default function Page() {
       <p>
         Si comprás los neumáticos en Neumáticos Trivium, la colocación y el cambio de válvulas van sin
         cargo. Atendemos por orden de llegada en Argüello, Córdoba. Mirá el servicio de{" "}
-        <Link href="/servicios/montaje">arme y desarme</Link> y buscá tu medida en el{" "}
+        <Link href="/servicios/montaje">arme y desarme</Link>, la nota sobre el{" "}
+        <Link href="/blog/cambio-de-valvulas-de-neumaticos">cambio de válvulas</Link> y buscá tu medida en el{" "}
         <Link href="/catalogo">catálogo</Link>.
       </p>
     </ArticleLayout>

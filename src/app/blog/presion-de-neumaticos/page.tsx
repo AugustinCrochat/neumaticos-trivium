@@ -210,7 +210,8 @@ export default function Page() {
         En el local te controlamos la presión sin cargo, vengas o no a comprar. Si de paso notás que
         el auto tira para un lado o sentís vibración en el volante, avisanos:{" "}
         <Link href="/servicios">eso ya es alineación o balanceo</Link>, y conviene resolverlo antes
-        de que se coma un juego entero.
+        de que se coma un juego entero. Y si te ofrecen inflar con nitrógeno, mirá{" "}
+        <Link href="/blog/nitrogeno-en-neumaticos-vale-la-pena">qué mejora de verdad y cuánto conviene pagar</Link>.
       </p>
     </ArticleLayout>
   );

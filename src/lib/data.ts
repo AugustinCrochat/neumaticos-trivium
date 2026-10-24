@@ -157,6 +157,24 @@ export const SERVICES: Service[] = [
 // actual. Las más útiles para alguien que está por comprar van arriba.
 export const BLOG_POSTS: BlogPost[] = [
   {
+    id: "37",
+    title: "Cambio de válvulas de neumáticos: cuándo hacerlo y qué incluye",
+    excerpt: "Por qué se cambia la válvula al colocar cubiertas nuevas, cómo saber si pierde aire y qué cambia con los sensores de presión.",
+    imageUrl: "/images/servicios/arme-desarme.webp",
+    date: "2026-10-24",
+    slug: "cambio-de-valvulas-de-neumaticos",
+    category: "Guías",
+  },
+  {
+    id: "36",
+    title: "Nitrógeno en los neumáticos: ¿vale la pena o es un mito?",
+    excerpt: "Qué mejora de verdad el inflado con nitrógeno, qué se exagera y cuánto conviene pagar si te lo incluyen en el presupuesto.",
+    imageUrl: "/images/local/cambio-de-cubiertas-en-camioneta-pickup-con-balanceadora-hofmann-trivium-cordoba.webp",
+    date: "2026-10-24",
+    slug: "nitrogeno-en-neumaticos-vale-la-pena",
+    category: "Guías",
+  },
+  {
     id: "35",
     title: "Cómo hacer durar los neumáticos de un taxi o un remis",
     excerpt: "Presión, alineación, rotación y manejo: los hábitos que más kilómetros le sacan a un juego cuando el auto trabaja todo el día.",
