@@ -5,7 +5,6 @@ import Link from "next/link";
 import { getBrandLogo } from "@/lib/brand-utils";
 import { ProductNameWithHighlightedSize } from "@/components/ui/ProductNameWithHighlightedSize";
 import { BestPriceBadge } from "@/components/ui/BestPriceBadge";
-import { EuLabelBadge } from "@/components/ui/EuLabelBadge";
 import { isLowStock, stockLabel } from "@/lib/stock";
 import { useLiveStock, useLiveStockMap } from "@/contexts/live-stock-context";
 import { groupLabel, isBestPriceLive, type PricePeer } from "@/lib/best-price";
@@ -106,12 +105,6 @@ export function ProductCard({
             </div>
           )}
         </div>
-
-        {product.euLabel && (
-          <div className="absolute bottom-2 right-2 z-10">
-            <EuLabelBadge energy={product.euLabel.energy} wet={product.euLabel.wet} />
-          </div>
-        )}
 
         {imageFooter && (
           <div className="absolute bottom-2 left-0 right-0 z-10 flex justify-center px-3">

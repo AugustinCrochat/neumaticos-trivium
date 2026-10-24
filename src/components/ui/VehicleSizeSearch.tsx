@@ -35,24 +35,36 @@ export function VehicleSizeSearch({ initialMedida, economicos = false }: { initi
   // Prioridad para la versión inicial: la medida de la URL actual (por si
   // vino de un link puntual) y si no, la última versión que el usuario
   // eligió y quedó guardada (ej. Golf Comfortline en vez de Trendline).
-  const [versionIndex, setVersionIndexState] = useState(() => {
+  // null = todavía no eligió versión (el modelo tiene varias): se le abre la
+  // lista para que elija, en vez de asumir la primera.
+  const [versionIndex, setVersionIndexState] = useState<number | null>(() => {
     const byUrl = findVersionIndexByMedida(sizes, initialMedida);
     if (byUrl >= 0) return byUrl;
     const bySaved = findVersionIndexBySize(sizes, selectedVehicle?.size);
-    return bySaved >= 0 ? bySaved : 0;
+    if (bySaved >= 0) return bySaved;
+    return sizes && sizes.length === 1 ? 0 : null;
   });
-  const selectedSize = sizes?.[versionIndex];
+  const [pickingVersion, setPickingVersion] = useState(false);
+  const selectedSize = versionIndex !== null ? sizes?.[versionIndex] : undefined;
 
   function selectVehicle(vehicle: VehiculoOption) {
     const newSizes = getSizesForVehicle(vehicle.marca, vehicle.modelo);
-    setSelectedVehicle(vehicle, newSizes?.[0]);
-    setVersionIndexState(0);
+    const single = newSizes && newSizes.length === 1 ? newSizes[0] : undefined;
+    setSelectedVehicle(vehicle, single);
+    setVersionIndexState(single ? 0 : null);
+    setPickingVersion(!!newSizes && newSizes.length > 1);
   }
 
   function changeVersion(index: number) {
     setVersionIndexState(index);
+    setPickingVersion(false);
     if (selectedVehicle && sizes?.[index]) setSelectedVehicle(selectedVehicle, sizes[index]);
   }
+
+  const versionLabel = (s: Sizes[number]) => {
+    const gen = [s.generation, s.years && `(${s.years})`].filter(Boolean).join(" ");
+    return [gen, s.version].filter(Boolean).join(" — ") || `${s.w}/${s.p} R${s.r}`;
+  };
 
   function verNeumaticos() {
     if (!selectedVehicle || !selectedSize) return;
@@ -90,26 +102,44 @@ export function VehicleSizeSearch({ initialMedida, economicos = false }: { initi
       {sizes && sizes.length > 0 ? (
         <>
           {sizes.length > 1 && (
-            <select
-              value={versionIndex}
-              onChange={(e) => changeVersion(Number(e.target.value))}
-              className="w-full mb-3 bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm font-medium text-slate-700 focus:ring-2 focus:ring-navy-500/10 outline-none"
-            >
-              {sizes.map((s, i) => {
-                const gen = [s.generation, s.years && `(${s.years})`].filter(Boolean).join(" ");
-                const label = [gen, s.version].filter(Boolean).join(" — ") || `${s.w}/${s.p} R${s.r}`;
-                return (
-                  <option key={i} value={i}>{label}</option>
-                );
-              })}
-            </select>
+            <div className="mb-3">
+              {pickingVersion || !selectedSize ? (
+                <div className="rounded-xl border-2 border-orange-500 bg-white overflow-hidden">
+                  <p className="px-4 pt-3 pb-1 text-xs font-bold uppercase tracking-wide text-orange-600">Elegí la versión de tu auto</p>
+                  <ul className="max-h-64 overflow-y-auto py-1">
+                    {sizes.map((s, i) => (
+                      <li key={i}>
+                        <button
+                          type="button"
+                          onClick={() => changeVersion(i)}
+                          className={`w-full px-4 py-2.5 text-left text-sm transition-colors hover:bg-orange-50 ${i === versionIndex ? "bg-orange-50 font-bold text-navy-900" : "text-slate-700"}`}
+                        >
+                          {versionLabel(s)}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setPickingVersion(true)}
+                  className="flex w-full items-center justify-between gap-3 bg-white border border-slate-200 rounded-xl px-4 py-3 text-left text-sm font-medium text-slate-700"
+                >
+                  <span className="truncate">{versionLabel(selectedSize)}</span>
+                  <span className="text-xs font-bold text-slate-500 shrink-0">Cambiar</span>
+                </button>
+              )}
+            </div>
           )}
-          <button
-            onClick={verNeumaticos}
-            className="w-full bg-orange-500 hover:bg-orange-600 text-white font-black py-3.5 rounded-xl text-base transition-colors"
-          >
-            Ver neumáticos {selectedSize!.w}/{selectedSize!.p} R{selectedSize!.r}
-          </button>
+          {selectedSize && (
+            <button
+              onClick={verNeumaticos}
+              className="w-full bg-orange-500 hover:bg-orange-600 text-white font-black py-3.5 rounded-xl text-base transition-colors"
+            >
+              Ver neumáticos {selectedSize.w}/{selectedSize.p} R{selectedSize.r}
+            </button>
+          )}
         </>
       ) : (
         <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 text-center">

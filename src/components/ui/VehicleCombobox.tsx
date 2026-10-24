@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useLayoutEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import type { VehiculoOption } from "@/lib/pos-api";
 
 function normalize(text: string): string {
@@ -46,6 +47,27 @@ export function VehicleCombobox({
   const [isOpen, setIsOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
+  const inputWrapRef = useRef<HTMLDivElement>(null);
+  const [rect, setRect] = useState<{ top: number; left: number; width: number } | null>(null);
+  const showList = isOpen && query.trim().length > 0;
+
+  // La lista se dibuja en el body con posición fija: así ningún contenedor
+  // con overflow (hero, widget flotante, tarjeta del buscador) la recorta.
+  useLayoutEffect(() => {
+    if (!showList) return;
+    const update = () => {
+      const r = inputWrapRef.current?.getBoundingClientRect();
+      if (r) setRect({ top: r.bottom + 8, left: r.left, width: r.width });
+    };
+    update();
+    window.addEventListener("scroll", update, true);
+    window.addEventListener("resize", update);
+    return () => {
+      window.removeEventListener("scroll", update, true);
+      window.removeEventListener("resize", update);
+    };
+  }, [showList, query]);
+
   const matches = useMemo(() => matchVehiculos(vehiculos, query), [vehiculos, query]);
 
   function select(vehicle: VehiculoOption) {
@@ -80,7 +102,7 @@ export function VehicleCombobox({
 
   return (
     <div className="relative">
-      <div className="relative">
+      <div className="relative" ref={inputWrapRef}>
         <svg
           className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none"
           fill="none"
@@ -102,8 +124,11 @@ export function VehicleCombobox({
         />
       </div>
 
-      {isOpen && query.trim().length > 0 && (
-        <div className="absolute top-full left-0 right-0 mt-2 z-50 bg-white border border-slate-100 rounded-xl shadow-2xl overflow-hidden py-1 max-h-72 overflow-y-auto">
+      {showList && rect && createPortal(
+        <div
+          style={{ position: "fixed", top: rect.top, left: rect.left, width: rect.width, maxHeight: Math.max(120, Math.min(288, window.innerHeight - rect.top - 8)) }}
+          className="z-[1000] bg-white border border-slate-100 rounded-xl shadow-2xl overflow-hidden py-1 overflow-y-auto"
+        >
           {matches.length > 0 ? (
             matches.map((v, idx) => (
               <button
@@ -124,7 +149,8 @@ export function VehicleCombobox({
           ) : (
             <p className="px-4 py-3 text-sm text-slate-400">No encontramos ese modelo. Podés buscar por la medida grabada en tu neumático.</p>
           )}
-        </div>
+        </div>,
+        document.body,
       )}
     </div>
   );
