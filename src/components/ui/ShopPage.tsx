@@ -375,7 +375,7 @@ export function ShopPage({
   accesorios?: Accessory[];
 }) {
   const { selectedBranch, hasConfirmedBranch, openModalForAction } = useBranch();
-  const { selectedVehicle } = useVehicle();
+  const { selectedVehicle, openModal: openVehicleModal } = useVehicle();
   const liveStock = useLiveStockMap();
   const searchParams = useSearchParams();
   const medida = searchParams.get("medida") ?? undefined;
@@ -586,12 +586,21 @@ export function ShopPage({
                         <p className="text-xs font-black text-orange-600 uppercase tracking-wide mb-1">Recomendado para vos</p>
                         <h2 className="text-xl font-black text-navy-900">Neumáticos para tu {selectedVehicle.marca} {selectedVehicle.modelo}</h2>
                       </div>
-                      <Link
-                        href={`/buscar?medida=${selectedVehicle.size.w}-${selectedVehicle.size.p}-r${selectedVehicle.size.r}&marca=${encodeURIComponent(selectedVehicle.marca)}&modelo=${encodeURIComponent(selectedVehicle.modelo)}`}
-                        className="text-sm font-bold text-orange-700 hover:text-orange-800 underline underline-offset-4 shrink-0"
-                      >
-                        Ver medida {selectedVehicle.size.w}/{selectedVehicle.size.p} R{selectedVehicle.size.r}
-                      </Link>
+                      <div className="flex shrink-0 items-center gap-4">
+                        <button
+                          type="button"
+                          onClick={openVehicleModal}
+                          className="text-sm font-bold text-slate-600 hover:text-slate-900 underline underline-offset-4"
+                        >
+                          Cambiar vehículo
+                        </button>
+                        <Link
+                          href={`/buscar?medida=${selectedVehicle.size.w}-${selectedVehicle.size.p}-r${selectedVehicle.size.r}&marca=${encodeURIComponent(selectedVehicle.marca)}&modelo=${encodeURIComponent(selectedVehicle.modelo)}`}
+                          className="text-sm font-bold text-orange-700 hover:text-orange-800 underline underline-offset-4"
+                        >
+                          Ver medida {selectedVehicle.size.w}/{selectedVehicle.size.p} R{selectedVehicle.size.r}
+                        </Link>
+                      </div>
                     </div>
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                       {recommendedProducts.map((product) => (
