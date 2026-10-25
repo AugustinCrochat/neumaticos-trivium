@@ -6,6 +6,10 @@
  *   GA4_PROPERTY_ID=123456789 GA4_KEY_FILE=/ruta/clave.json \
  *     node scripts/ga4-report.mjs [paginas|eventos|fuentes|diario] [--dias=28] [--limite=30]
  *
+ * Autenticación: GA4_KEY_FILE (cuenta de servicio) o GA4_OAUTH_FILE (token de
+ * usuario generado con scripts/ga4-auth.mjs, para cuando la organización bloquea
+ * las claves de servicio).
+ *
  * GA4_PROPERTY_ID es el ID numérico de la propiedad (Admin > Configuración de
  * la propiedad), no el G-XXXX de la etiqueta. La clave es la de una cuenta de
  * servicio con rol Lector en esa propiedad; vive fuera del repo.
@@ -15,8 +19,9 @@ import { createSign } from "node:crypto";
 
 const PROPERTY = process.env.GA4_PROPERTY_ID;
 const KEY_FILE = process.env.GA4_KEY_FILE;
-if (!PROPERTY || !KEY_FILE) {
-  console.error("Faltan GA4_PROPERTY_ID y/o GA4_KEY_FILE.");
+const OAUTH_FILE = process.env.GA4_OAUTH_FILE;
+if (!PROPERTY || (!KEY_FILE && !OAUTH_FILE)) {
+  console.error("Faltan GA4_PROPERTY_ID y GA4_KEY_FILE (cuenta de servicio) o GA4_OAUTH_FILE (ver scripts/ga4-auth.mjs).");
   process.exit(1);
 }
 
@@ -29,6 +34,17 @@ const limite = opt("limite", 30);
 const b64 = (x) => Buffer.from(x).toString("base64url");
 
 async function token() {
+  if (OAUTH_FILE) {
+    const saved = JSON.parse(readFileSync(OAUTH_FILE, "utf-8"));
+    const res = await fetch("https://oauth2.googleapis.com/token", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({ client_id: saved.client_id, client_secret: saved.client_secret, refresh_token: saved.refresh_token, grant_type: "refresh_token" }),
+    });
+    const data = await res.json();
+    if (!data.access_token) throw new Error(`No se pudo renovar el token: ${JSON.stringify(data)}`);
+    return data.access_token;
+  }
   const key = JSON.parse(readFileSync(KEY_FILE, "utf-8"));
   const now = Math.floor(Date.now() / 1000);
   const unsigned = `${b64(JSON.stringify({ alg: "RS256", typ: "JWT" }))}.${b64(
