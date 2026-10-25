@@ -54,8 +54,8 @@ export type CotizadorHandle = {
   openConUnaUnidad: () => void;
 };
 
-export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: QuoteProduct; compact?: boolean }>(
-  function CotizadorClient({ initialProduct, compact = false }, ref) {
+export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: QuoteProduct; /** Unidades del ítem precargado (4 = juego de neumáticos). */ initialQuantity?: number; compact?: boolean }>(
+  function CotizadorClient({ initialProduct, initialQuantity = 4, compact = false }, ref) {
   const { selectedBranch } = useBranch();
   const { addTireLine, addService, openCart } = useCart();
   // En Córdoba (Argüello) se dice "alineado y balanceado"; "alineación y
@@ -73,7 +73,7 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
   const [isOpen, setIsOpen] = useState(false);
   const [results, setResults] = useState<QuoteProduct[]>([]);
   const [items, setItems] = useState<QuoteItem[]>(
-    initialProduct ? [{ product: initialProduct, quantity: 4 }] : []
+    initialProduct ? [{ product: initialProduct, quantity: initialQuantity }] : []
   );
   const [includeCombo, setIncludeCombo] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);

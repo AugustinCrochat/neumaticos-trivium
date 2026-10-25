@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useBranch } from "@/contexts/branch-context";
 import { BranchStatusBadge } from "@/app/sucursales/[id]/BranchStatusBadge";
 import { PaymentMethodsSection } from "@/components/ui/PaymentMethodsSection";
+import { CotizadorClient, type CotizadorHandle } from "@/app/cotizador/CotizadorClient";
 import { getPickupLabel, type PickupTiming } from "@/lib/branch-status";
 import type { Accessory } from "@/lib/types";
 import { isLowStock, stockLabel } from "@/lib/stock";
@@ -18,6 +19,7 @@ export function AccessoryConsult({ accessory }: { accessory: Accessory }) {
     const timer = setInterval(update, 60_000);
     return () => clearInterval(timer);
   }, [selectedBranch]);
+  const cotizadorRef = useRef<CotizadorHandle>(null);
   const waText = encodeURIComponent(`Hola, quiero consultar por ${accessory.nombre}`);
 
   return (
@@ -72,7 +74,22 @@ export function AccessoryConsult({ accessory }: { accessory: Accessory }) {
         </div>
       </div>
 
-      <PaymentMethodsSection basePrice={accessory.price} />
+      <PaymentMethodsSection basePrice={accessory.price} onCalcularCuotas={() => cotizadorRef.current?.openConUnaUnidad()} />
+
+      {/* Mismo presupuesto que en neumáticos. Quien viene por la tuerca suele
+          tener las cubiertas en la cabeza: el buscador del cotizador permite
+          sumarlas al mismo presupuesto. */}
+      <div className="rounded-xl border border-slate-200 bg-white p-4">
+        <p className="mb-3 text-xs text-slate-600 leading-snug">
+          ¿Cambiás también las cubiertas? <span className="font-bold">Sumalas al presupuesto</span> buscando tu medida o marca.
+        </p>
+        <CotizadorClient
+          ref={cotizadorRef}
+          compact
+          initialQuantity={1}
+          initialProduct={{ id: accessory.id, label: accessory.nombre, price: accessory.price, imageUrl: accessory.imageUrl ?? null }}
+        />
+      </div>
     </div>
   );
 }
