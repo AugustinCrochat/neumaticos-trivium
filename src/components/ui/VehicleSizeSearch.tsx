@@ -6,6 +6,7 @@ import { useBranch } from "@/contexts/branch-context";
 import { useVehicle } from "@/contexts/vehicle-context";
 import { getSizesForVehicle, type VehicleDBEntry } from "@/lib/vehicles";
 import { VehicleCombobox } from "@/components/ui/VehicleCombobox";
+import { VersionSelect } from "@/components/ui/VersionSelect";
 import type { VehiculoOption } from "@/lib/pos-api";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 
@@ -44,7 +45,8 @@ export function VehicleSizeSearch({ initialMedida, economicos = false }: { initi
     if (bySaved >= 0) return bySaved;
     return sizes && sizes.length === 1 ? 0 : null;
   });
-  const [pickingVersion, setPickingVersion] = useState(false);
+  // Cambia al elegir otro auto para que el selector se vuelva a montar y se abra solo.
+  const [versionKey, setVersionKey] = useState(0);
   const selectedSize = versionIndex !== null ? sizes?.[versionIndex] : undefined;
 
   function selectVehicle(vehicle: VehiculoOption) {
@@ -52,12 +54,11 @@ export function VehicleSizeSearch({ initialMedida, economicos = false }: { initi
     const single = newSizes && newSizes.length === 1 ? newSizes[0] : undefined;
     setSelectedVehicle(vehicle, single);
     setVersionIndexState(single ? 0 : null);
-    setPickingVersion(!!newSizes && newSizes.length > 1);
+    setVersionKey((k) => k + 1);
   }
 
   function changeVersion(index: number) {
     setVersionIndexState(index);
-    setPickingVersion(false);
     if (selectedVehicle && sizes?.[index]) setSelectedVehicle(selectedVehicle, sizes[index]);
   }
 
@@ -103,33 +104,13 @@ export function VehicleSizeSearch({ initialMedida, economicos = false }: { initi
         <>
           {sizes.length > 1 && (
             <div className="mb-3">
-              {pickingVersion || !selectedSize ? (
-                <div className="rounded-xl border-2 border-orange-500 bg-white overflow-hidden">
-                  <p className="px-4 pt-3 pb-1 text-xs font-bold uppercase tracking-wide text-orange-600">Elegí la versión de tu auto</p>
-                  <ul className="max-h-64 overflow-y-auto py-1">
-                    {sizes.map((s, i) => (
-                      <li key={i}>
-                        <button
-                          type="button"
-                          onClick={() => changeVersion(i)}
-                          className={`w-full px-4 py-2.5 text-left text-sm transition-colors hover:bg-orange-50 ${i === versionIndex ? "bg-orange-50 font-bold text-navy-900" : "text-slate-700"}`}
-                        >
-                          {versionLabel(s)}
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => setPickingVersion(true)}
-                  className="flex w-full items-center justify-between gap-3 bg-white border border-slate-200 rounded-xl px-4 py-3 text-left text-sm font-medium text-slate-700"
-                >
-                  <span className="truncate">{versionLabel(selectedSize)}</span>
-                  <span className="text-xs font-bold text-slate-500 shrink-0">Cambiar</span>
-                </button>
-              )}
+              <VersionSelect
+                key={versionKey}
+                options={sizes.map(versionLabel)}
+                value={versionIndex}
+                onChange={changeVersion}
+                autoOpen={versionIndex === null}
+              />
             </div>
           )}
           {selectedSize && (
