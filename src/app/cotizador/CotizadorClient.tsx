@@ -56,8 +56,8 @@ export type CotizadorHandle = {
   agregarCombo: () => void;
 };
 
-export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: QuoteProduct; /** Unidades del ítem precargado (4 = juego de neumáticos). */ initialQuantity?: number; compact?: boolean }>(
-  function CotizadorClient({ initialProduct, initialQuantity = 4, compact = false }, ref) {
+export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: QuoteProduct; /** Unidades del ítem precargado (4 = juego de neumáticos). */ initialQuantity?: number; compact?: boolean; /** Avisa si el presupuesto incluye alineación + balanceo. */ onComboChange?: (incluido: boolean) => void }>(
+  function CotizadorClient({ initialProduct, initialQuantity = 4, compact = false, onComboChange }, ref) {
   const { selectedBranch } = useBranch();
   const { addTireLine, addService, openCart } = useCart();
   // En Córdoba (Argüello) se dice "alineado y balanceado"; "alineación y
@@ -79,6 +79,9 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
   );
   const [includeCombo, setIncludeCombo] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    onComboChange?.(includeCombo);
+  }, [includeCombo, onComboChange]);
 
   useImperativeHandle(ref, () => ({
     openConUnaUnidad() {

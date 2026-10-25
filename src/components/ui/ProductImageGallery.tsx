@@ -279,8 +279,13 @@ export function ProductImageGallery({
             {peek.kind === "etiqueta" ? (
               <EuLabelCard src={peek.src} alt="" utqg={null} sizes="(max-width: 768px) 100vw, 50vw" />
             ) : (
-              <div className={`relative h-full w-full ${peek.kind === "sucursal" ? "" : "p-1 md:p-2"}`}>
-                <Image src={peek.src} alt="" fill className={peek.kind === "sucursal" ? "object-cover" : "object-contain"} sizes="(max-width: 768px) 100vw, 50vw" />
+              // El padding va en un contenedor aparte: una <Image fill> ignora el
+              // padding de su padre y, sin esto, la vecina se dibuja más grande
+              // que la definitiva y al soltar la imagen "salta".
+              <div className={`h-full w-full ${peek.kind === "sucursal" ? "" : "p-1 md:p-2"}`}>
+                <div className="relative h-full w-full">
+                  <Image src={peek.src} alt="" fill className={peek.kind === "sucursal" ? "object-cover" : "object-contain"} sizes="(max-width: 768px) 100vw, 50vw" />
+                </div>
               </div>
             )}
           </div>

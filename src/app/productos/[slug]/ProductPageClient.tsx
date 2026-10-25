@@ -43,6 +43,8 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
   const cotizadorRef = useRef<CotizadorHandle | null>(null);
   const price = useLiveStock(product.id)?.price ?? product.price;
   const combo = useUpsellCombo();
+  // Si el presupuesto ya incluye el servicio, se oculta la sección que lo ofrece.
+  const [comboEnPresupuesto, setComboEnPresupuesto] = useState(false);
   // En Córdoba (Argüello) se dice "alineado y balanceado"; en Buenos Aires,
   // "alineación y balanceo" (mismo criterio que el cotizador).
   const servicioLabel = selectedBranch.id === "arguello" ? "Alineado y balanceado" : "Alineación y balanceo";
@@ -271,7 +273,7 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
         onCalcularCuotas={() => cotizadorRef.current?.openConUnaUnidad()}
       />
 
-      {combo && (
+      {combo && !comboEnPresupuesto && (
         <div className="flex items-center gap-4 rounded-xl border border-orange-200 bg-orange-50 p-4">
           <AlineacionBalanceoIcon size={40} />
           <div className="min-w-0 flex-1">
@@ -295,6 +297,7 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
         <CotizadorClient
           ref={cotizadorRef}
           compact
+          onComboChange={setComboEnPresupuesto}
           initialProduct={{ id: product.id, label: `${product.brand} ${product.model}`, price, imageUrl: product.imageUrl, brand: product.brand, model: product.model, slug: product.slug }}
         />
       </div>
