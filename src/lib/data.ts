@@ -682,4 +682,14 @@ export const BLOG_POSTS: BlogPost[] = [
     slug: "como-preparar-el-cambio-de-neumaticos",
     category: "Servicios",
   },
+  {
+    id: "43",
+    title: "Neumáticos Double King: quién los fabrica, opiniones y alternativas",
+    excerpt:
+      "Qué se sabe de la empresa detrás de Double King, qué mirar antes de comprar y qué alternativas nuevas tenemos en stock.",
+    imageUrl: "/images/local/cubierta-perfil-bajo-grenlander-colocada-neumaticos-trivium.webp",
+    date: "2026-10-25",
+    slug: "neumaticos-double-king-quien-los-fabrica",
+    category: "Marcas",
+  },
 ];

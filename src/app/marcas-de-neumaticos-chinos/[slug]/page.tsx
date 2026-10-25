@@ -52,7 +52,7 @@ export default async function OtraMarcaPage({ params }: Props) {
     },
     {
       question: `¿Quién fabrica ${marca.name}?`,
-      answer: `Según los datos públicos, la marca pertenece a ${marca.empresa}.${marca.hermanas ? ` Del mismo grupo son ${marca.hermanas.join(" y ")}.` : ""}`,
+      answer: `Según los datos públicos, la marca pertenece a ${marca.empresa}.${marca.hermanas ? ` Del mismo grupo son ${marca.hermanas.join(", ")}.` : ""}`,
     },
     {
       question: `¿Venden neumáticos ${marca.name}?`,

@@ -239,6 +239,12 @@ export const BLOG_META: Record<string, BlogMeta> = {
     shopIntro: "Compará precios en tu medida:",
     shopLinks: [L.ofertas, L.todos, L.marcas],
   },
+  "neumaticos-double-king-quien-los-fabrica": {
+    cover: { src: IMG.grenlanderPerfilBajo, alt: "Cubierta Grenlander de perfil bajo recién colocada en un auto rojo", portrait: true, position: "center 60%" },
+    figure: { src: IMG.kingpro, alt: "Cubierta Grenlander Kingpro One apoyada junto a una pickup sin la rueda", portrait: true, caption: "Grenlander Kingpro One, una de las alternativas que tenemos en stock." },
+    shopIntro: "Las que sí tenemos en stock, con precio publicado:",
+    shopLinks: [L.grenlander, L.todos, L.ofertas],
+  },
   "utqg-desgaste-traccion-temperatura": {
     cover: { src: IMG.rotacion, alt: "Auto con una rueda desmontada y la cubierta Pirelli al lado, durante una rotación", portrait: true, position: "center 55%" },
     figure: { src: IMG.kingpro, alt: "Cubierta Grenlander Kingpro One apoyada junto a una pickup sin la rueda", portrait: true, caption: "El UTQG califica el desgaste, la tracción y la temperatura de la banda." },

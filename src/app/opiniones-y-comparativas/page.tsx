@@ -18,6 +18,7 @@ export const metadata: Metadata = {
 const NOTAS = [
   "como-comparar-neumaticos-antes-de-comprar",
   "opiniones-linglong-mileking-sumaxx",
+  "neumaticos-double-king-quien-los-fabrica",
   "son-malos-los-neumaticos-chinos",
   "marcas-chinas-neumaticos-comparativa",
   "neumaticos-de-marca-vs-importados-cual-conviene",

@@ -88,6 +88,15 @@ export function OtraMarcaExtra({ marca, productos }: { marca: OtraMarca; product
             </li>
           )}
           {marca.dato && <li>{marca.dato}</li>}
+          {marca.nota && (
+            <li>
+              Más detalle en la nota{" "}
+              <Link href={`/blog/${marca.nota}`} className={link}>
+                Neumáticos {marca.name}: quién los fabrica, opiniones y alternativas
+              </Link>
+              .
+            </li>
+          )}
           <li>Se comercializa en Argentina a través de importadores y de publicaciones online.</li>
         </ul>
         <p>

@@ -23,6 +23,8 @@ export type OtraMarca = {
   mismoFabricante?: string;
   /** Cómo se produce, solo cuando una fuente pública lo documenta: la marca encarga a terceros. */
   produccion?: string;
+  /** Slug de una nota del blog dedicada a la marca. */
+  nota?: string;
 };
 
 export const OTRAS_MARCAS: OtraMarca[] = [
@@ -94,9 +96,11 @@ export const OTRAS_MARCAS: OtraMarca[] = [
   {
     slug: "doubleking",
     name: "Double King",
-    empresa: "Shandong Double King Rubber Co., Ltd.",
-    sede: "provincia de Shandong",
-    dato: "Figura como titular de la marca registrada Double King. Algunos distribuidores la vinculan con el grupo Shuangwang, de Dongying, pero esa relación no está confirmada en fuentes oficiales.",
+    empresa: "Shandong Doubleking Tyre Co., Ltd.",
+    sede: "Dongying, provincia de Shandong",
+    hermanas: ["Luistone", "Alfamotors", "STMotors"],
+    dato: "Según su perfil corporativo, el grupo incluye a Shandong Shuangwang Rubber y produce neumáticos de auto, SUV, todo terreno y camión. La marca figura registrada a nombre de Shandong Double King Rubber Co., Ltd.",
+    nota: "neumaticos-double-king-quien-los-fabrica",
   },
   {
     slug: "mileking",
