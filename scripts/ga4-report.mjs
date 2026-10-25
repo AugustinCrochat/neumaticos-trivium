@@ -4,7 +4,7 @@
  *
  * Uso:
  *   GA4_PROPERTY_ID=123456789 GA4_KEY_FILE=/ruta/clave.json \
- *     node scripts/ga4-report.mjs [paginas|eventos|fuentes|diario] [--dias=28] [--limite=30]
+ *     node scripts/ga4-report.mjs [paginas|eventos|fuentes|contactos|diario] [--dias=28] [--limite=30]
  *
  * Autenticación: GA4_KEY_FILE (cuenta de servicio) o GA4_OAUTH_FILE (token de
  * usuario generado con scripts/ga4-auth.mjs, para cuando la organización bloquea
@@ -79,6 +79,13 @@ const REPORTES = {
     metrics: ["sessions", "activeUsers", "keyEvents", "engagementRate"],
     orderBy: "sessions",
   },
+  // Clics de contacto por página: dónde se genera el WhatsApp / "cómo llegar".
+  contactos: {
+    dimensions: ["pagePath", "eventName"],
+    metrics: ["eventCount", "activeUsers"],
+    orderBy: "eventCount",
+    eventos: ["click_whatsapp", "como_llegar", "ads_conversion_Contactar_1"],
+  },
   diario: { dimensions: ["date"], metrics: ["sessions", "activeUsers", "screenPageViews", "keyEvents"], orderBy: null },
 };
 
@@ -93,6 +100,9 @@ const body = {
   dimensions: def.dimensions.map((name) => ({ name })),
   metrics: def.metrics.map((name) => ({ name })),
   limit: limite,
+  ...(def.eventos
+    ? { dimensionFilter: { filter: { fieldName: "eventName", inListFilter: { values: def.eventos } } } }
+    : {}),
   ...(def.orderBy
     ? { orderBys: [{ metric: { metricName: def.orderBy }, desc: true }] }
     : { orderBys: [{ dimension: { dimensionName: "date" } }] }),
