@@ -1,3 +1,4 @@
+import { TUERCAS_VEHICULOS } from "./tuercas-vehiculos";
 import allVehicles from "./vehiculos.json";
 
 export type VehicleDBEntry = {
@@ -685,6 +686,16 @@ export function getAllVehicleOptions(): { marca: string; modelo: string; label: 
   if (cachedOptions) return cachedOptions;
 
   const mergedMap = new Map<string, { marca: string; modelo: string; label: string }>();
+
+  // Autos que una tuerca antirrobo declara compatibles aunque no tengan medida
+  // cargada ni estén en la lista del POS (C5 Picasso, 407, Volvo 850...): sin
+  // esto no se podrían elegir en el buscador de tuercas.
+  for (const lista of Object.values(TUERCAS_VEHICULOS)) {
+    for (const c of lista) {
+      if (!c.modelo) continue;
+      mergedMap.set(`${c.marca.toLowerCase()}-${c.modelo.toLowerCase()}`, { marca: c.marca, modelo: c.modelo, label: `${c.marca} ${c.modelo}` });
+    }
+  }
 
   // Agregar primero los vehículos con medidas mapeadas (VEHICLE_DB)
   for (const v of VEHICLE_DB) {

@@ -42,12 +42,13 @@ export const TUERCAS_VEHICULOS: Record<string, TuercaVehiculo[]> = {
     { marca: "BMW" },
     { marca: "Mercedes-Benz" },
   ],
-  // ANTIRROBO RENAULT PREMIUM Z3 (66040) — la descripción también menciona
-  // "Volvo 850", pero ese modelo no existe en la lista de vehículos del POS.
+  // ANTIRROBO RENAULT PREMIUM Z3 (66040) — "Volvo 850" no está en la lista del
+  // POS; se agrega igual y getAllVehicleOptions lo suma al desplegable.
   "4020005": [
     { marca: "Renault", modelo: "Clio" },
     { marca: "Renault", modelo: "Megane" },
     { marca: "Renault", modelo: "Logan" },
+    { marca: "Volvo", modelo: "850" },
   ],
   // ANTIRROBO CORSA PREMIUM Z3 (66080) — Corsa figura en el nombre del producto
   // pero no en la descripción del POS, por eso se agrega acá a mano.
@@ -114,6 +115,7 @@ export const TUERCAS_VEHICULOS: Record<string, TuercaVehiculo[]> = {
   // ANTIRROBO ONIX/RANGER NVA PREMIUM Z3 (66281)
   "4020014": [
     { marca: "Ford", modelo: "Ranger" },
+    { marca: "Chevrolet", modelo: "Onix" },
     { marca: "Chevrolet", modelo: "S10" },
   ],
   // ANTIRROBO TRACKER M/NUEVO (66282)
@@ -137,11 +139,12 @@ export const TUERCAS_VEHICULOS: Record<string, TuercaVehiculo[]> = {
     { marca: "Seat", modelo: "Leon" },
     { marca: "Seat", modelo: "Toledo" },
   ],
-  // ANTIRROBO JOURNEY/KIA/ PREMIUM Z3 (66300) — la descripción también
-  // menciona "Rover", pero esa marca no existe en la lista del POS.
+  // ANTIRROBO JOURNEY/KIA/ PREMIUM Z3 (66300) — "Rover" es toda la marca y no
+  // existe en la lista del POS.
   "4020017": [
     { marca: "Chery", modelo: "Tiggo" },
     { marca: "Dodge", modelo: "Journey" },
+    { marca: "Rover" },
     { marca: "Kia" },
   ],
   // ANTIRROBO RANGER PREMIUM Z3 (66310)
