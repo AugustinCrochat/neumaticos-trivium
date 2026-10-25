@@ -4,7 +4,11 @@
  * escritorio, flujo con redirección a localhost) y guarda el refresh token.
  * Sirve cuando la organización bloquea las claves de cuentas de servicio.
  *
- * Uso: node scripts/ga4-auth.mjs /ruta/oauth-client.json [/ruta/salida-token.json]
+ * Uso: node scripts/ga4-auth.mjs /ruta/oauth-client.json [/ruta/salida-token.json] [--scope=adwords]
+ *
+ * Con --scope=adwords pide el permiso de Google Ads (lectura y gestión de la API)
+ * en vez del de Analytics; conviene guardarlo en otro archivo, por ejemplo
+ * ~/.config/trivium/gads-token.json.
  *
  * El client.json es el que se descarga al crear un "ID de cliente de OAuth"
  * de tipo Aplicación de escritorio. Ambos archivos viven fuera del repo.
@@ -15,12 +19,15 @@ import { createServer } from "node:http";
 import { homedir } from "node:os";
 import path from "node:path";
 
-const clientFile = process.argv[2];
+const clientFile = process.argv.slice(2).find((a) => !a.startsWith("--"));
 if (!clientFile) {
   console.error("Uso: node scripts/ga4-auth.mjs /ruta/oauth-client.json [salida-token.json]");
   process.exit(1);
 }
-const out = process.argv[3] ?? path.join(homedir(), ".config/trivium/ga4-token.json");
+const posicionales = process.argv.slice(2).filter((a) => !a.startsWith("--"));
+const scopeArg = process.argv.find((a) => a.startsWith("--scope="))?.slice("--scope=".length);
+const SCOPE = scopeArg === "adwords" ? "https://www.googleapis.com/auth/adwords" : "https://www.googleapis.com/auth/analytics.readonly";
+const out = posicionales[1] ?? path.join(homedir(), ".config/trivium/ga4-token.json");
 const raw = JSON.parse(readFileSync(clientFile, "utf-8"));
 const client = raw.installed ?? raw.web;
 if (!client) throw new Error("El JSON no parece un cliente OAuth de escritorio.");
@@ -34,7 +41,7 @@ url.search = new URLSearchParams({
   client_id: client.client_id,
   redirect_uri: redirect,
   response_type: "code",
-  scope: "https://www.googleapis.com/auth/analytics.readonly",
+  scope: SCOPE,
   access_type: "offline",
   prompt: "consent",
 }).toString();
