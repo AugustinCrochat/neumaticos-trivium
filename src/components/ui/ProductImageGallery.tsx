@@ -27,6 +27,14 @@ type Slide =
   | { kind: "etiqueta"; src: string; thumbSrc: string; alt: string }
   | { kind: "sucursal"; src: string; alt: string; branchName: string; address: string; city: string; hours: string; mapUrl: string };
 
+/** Los enlaces internos del overlay bajan con scroll suave al bloque (sin el salto seco del ancla). */
+function scrollSuave(e: React.MouseEvent<HTMLAnchorElement>, id: string) {
+  const destino = document.getElementById(id);
+  if (!destino) return;
+  e.preventDefault();
+  destino.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
 export function ProductImageGallery({
   product,
   extraPhotos = [],
@@ -251,6 +259,7 @@ export function ProductImageGallery({
   const warrantyBadge = (
     <a
       href="#garantia"
+      onClick={(e) => scrollSuave(e, "garantia")}
       className={`absolute right-4 z-10 flex items-center gap-2 rounded-full bg-amber-500 py-1.5 pl-1.5 pr-4 text-sm font-black uppercase tracking-tight text-white shadow-lg ring-2 ring-white/80 transition-colors hover:bg-amber-600 ${isPromoDay ? "bottom-16 sm:bottom-4" : "bottom-4"}`}
     >
       <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-amber-600">
@@ -272,6 +281,7 @@ export function ProductImageGallery({
   const promoBadge = isPromoDay && (
     <a
       href="#metodos-pago"
+      onClick={(e) => scrollSuave(e, "metodos-pago")}
       className={`absolute left-4 z-10 flex items-center gap-2 rounded-lg bg-navy-900 px-3 py-2 text-xs font-black text-white shadow-lg ring-2 ring-white/80 transition-colors hover:bg-navy-800 ${label ? "bottom-12" : "bottom-4"}`}
     >
       <span className="flex shrink-0 items-center gap-1.5 rounded bg-white px-1.5 py-1">
