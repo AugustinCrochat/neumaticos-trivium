@@ -8,10 +8,16 @@ import type { TireProduct } from "@/lib/types";
 import { SITE_URL } from "@/lib/config";
 import { isLowStock, stockLabel } from "@/lib/stock";
 import { BranchStatusBadge } from "@/app/sucursales/[id]/BranchStatusBadge";
+import { AlineacionBalanceoIcon } from "@/components/ui/AlineacionBalanceoIcon";
+import { useUpsellCombo } from "@/hooks/use-upsell-combo";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 import { PaymentMethodsSection } from "@/components/ui/PaymentMethodsSection";
 import { CotizadorClient, type CotizadorHandle } from "@/app/cotizador/CotizadorClient";
 import { getPickupLabel, type PickupTiming } from "@/lib/branch-status";
+
+function formatPrice(price: number) {
+  return new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 }).format(price);
+}
 
 // Diámetro en mm: rodado en pulgadas * 25.4 + 2 * (ancho * perfil / 100)
 function outerDiameterMm(size: { width: number; profile: number; rim: number }): number {
@@ -36,6 +42,10 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
   const { selectedVehicle } = useVehicle();
   const cotizadorRef = useRef<CotizadorHandle | null>(null);
   const price = useLiveStock(product.id)?.price ?? product.price;
+  const combo = useUpsellCombo();
+  // En Córdoba (Argüello) se dice "alineado y balanceado"; en Buenos Aires,
+  // "alineación y balanceo" (mismo criterio que el cotizador).
+  const servicioLabel = selectedBranch.id === "arguello" ? "Alineado y balanceado" : "Alineación y balanceo";
 
   // El stock de `product` viene horneado en el HTML del último build (el
   // sitio es 100% estático, sin ISR — ver memoria del proyecto), así que
@@ -260,6 +270,26 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
         basePrice={price}
         onCalcularCuotas={() => cotizadorRef.current?.openConUnaUnidad()}
       />
+
+      {combo && (
+        <div className="flex items-center gap-4 rounded-xl border border-orange-200 bg-orange-50 p-4">
+          <AlineacionBalanceoIcon size={40} />
+          <div className="min-w-0 flex-1">
+            <p className="text-base font-black leading-snug text-navy-900">{servicioLabel} de las 4 ruedas</p>
+            <p className="mt-0.5 text-sm text-slate-600">
+              Sumalo a tu compra y salís con el auto listo.{" "}
+              <span className="font-black text-orange-700">+{formatPrice(combo.precio)}</span>
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => cotizadorRef.current?.agregarCombo()}
+            className="shrink-0 rounded-full bg-orange-500 px-4 py-2 text-xs font-black text-white shadow-md shadow-orange-500/30 transition-colors hover:bg-orange-600"
+          >
+            Agregar
+          </button>
+        </div>
+      )}
 
       <div className="rounded-xl border border-slate-200 bg-white p-4">
         <CotizadorClient

@@ -6,7 +6,7 @@ import { useCart } from "@/contexts/cart-context";
 import { useBranch } from "@/contexts/branch-context";
 import { useUpsellCombo } from "@/hooks/use-upsell-combo";
 import { AlineacionBalanceoIcon } from "@/components/ui/AlineacionBalanceoIcon";
-import { InstallmentCalculator } from "@/components/ui/InstallmentCalculator";
+import { InstallmentCalculator, type PagoElegido } from "@/components/ui/InstallmentCalculator";
 import { goToWhatsApp, trackEvent } from "@/lib/gtag";
 
 function formatPrice(price: number) {
@@ -52,6 +52,8 @@ export type CotizadorHandle = {
       PaymentMethodsSection, que quiere ver el precio de 1 sola cubierta, no
       el juego de 4 que carga por defecto al embeber el cotizador. */
   openConUnaUnidad: () => void;
+  /** Expande el cotizador y suma alineación + balanceo al presupuesto. */
+  agregarCombo: () => void;
 };
 
 export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: QuoteProduct; /** Unidades del ítem precargado (4 = juego de neumáticos). */ initialQuantity?: number; compact?: boolean }>(
@@ -81,6 +83,11 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
   useImperativeHandle(ref, () => ({
     openConUnaUnidad() {
       if (initialProduct) setItems([{ product: initialProduct, quantity: 1 }]);
+      setExpanded(true);
+      containerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    },
+    agregarCombo() {
+      setIncludeCombo(true);
       setExpanded(true);
       containerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     },
@@ -152,7 +159,7 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
     openCart();
   }
 
-  function shareByWhatsApp() {
+  function shareByWhatsApp(pago?: PagoElegido) {
     const lineas = items.map(
       (it) => `• ${it.quantity} x ${it.product.label} — ${formatPrice(it.product.price * it.quantity)}`
     );
@@ -165,6 +172,7 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
       ...lineas,
       "",
       `Total: ${formatPrice(total)}`,
+      ...(pago?.esEfectivo ? [`Pagando en efectivo (10% de descuento): ${formatPrice(pago.total)}`] : []),
       `Sucursal: ${selectedBranch.shortName}`,
     ].join("\n");
     goToWhatsApp(`https://wa.me/${selectedBranch.whatsapp}?text=${encodeURIComponent(mensaje)}`);

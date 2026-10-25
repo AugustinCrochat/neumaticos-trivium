@@ -93,8 +93,14 @@ export function ProductImageGallery({
   // La etiqueta UE se muestra completa en su panel cuadrado (sin lente).
   const [imgAspect, setImgAspect] = useState(1);
   const boxRef = useRef<HTMLButtonElement>(null);
-  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const touchStartRef = useRef<{ x: number; y: number; w: number; axis: "x" | "y" | null } | null>(null);
   const didSwipeRef = useRef(false);
+  // Arrastre en touch: la imagen sigue al dedo (dragX en px) y la vecina se
+  // asoma por el costado. `settling` activa la transición al soltar.
+  const [dragX, setDragX] = useState(0);
+  const [settling, setSettling] = useState(false);
+  const settleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => () => { if (settleTimerRef.current) clearTimeout(settleTimerRef.current); }, []);
   const current = slides[index];
   const labelUtqg = current?.kind === "etiqueta" ? utqg : null;
   const eprelUrl = label ? `https://eprel.ec.europa.eu/screen/product/tyres/${label.eprelId}` : undefined;
@@ -155,32 +161,53 @@ export function ProductImageGallery({
     setLightboxOpen(true);
   }
 
-  const SWIPE_THRESHOLD = 40;
-
   function goToSlide(nextIndex: number) {
     setIndex(((nextIndex % slides.length) + slides.length) % slides.length);
     setImgAspect(1);
   }
 
   function handleTouchStart(e: React.TouchEvent<HTMLButtonElement>) {
+    if (settling) return;
     const t = e.touches[0];
-    touchStartRef.current = { x: t.clientX, y: t.clientY };
+    touchStartRef.current = { x: t.clientX, y: t.clientY, w: boxRef.current?.offsetWidth ?? 320, axis: null };
   }
 
-  function handleTouchEnd(e: React.TouchEvent<HTMLButtonElement>) {
+  function handleTouchMove(e: React.TouchEvent<HTMLButtonElement>) {
+    const start = touchStartRef.current;
+    if (!start || slides.length < 2) return;
+    const t = e.touches[0];
+    const dx = t.clientX - start.x;
+    const dy = t.clientY - start.y;
+    // El eje se decide una sola vez: si el gesto arranca vertical es scroll de
+    // la página y no se toca; si arranca horizontal, la imagen sigue al dedo.
+    if (!start.axis && (Math.abs(dx) > 8 || Math.abs(dy) > 8)) {
+      start.axis = Math.abs(dx) > Math.abs(dy) ? "x" : "y";
+    }
+    if (start.axis === "x") setDragX(dx);
+  }
+
+  function handleTouchEnd() {
     const start = touchStartRef.current;
     touchStartRef.current = null;
-    if (!start || slides.length < 2) return;
-    const t = e.changedTouches[0];
-    const deltaX = t.clientX - start.x;
-    const deltaY = t.clientY - start.y;
-    // Sólo cuenta como swipe de galería si el movimiento es sobre todo
-    // horizontal — si no, sería pisar un scroll vertical de la página.
-    if (Math.abs(deltaX) > SWIPE_THRESHOLD && Math.abs(deltaX) > Math.abs(deltaY) * 1.5) {
-      didSwipeRef.current = true;
-      goToSlide(deltaX < 0 ? index + 1 : index - 1);
-    }
+    if (!start || start.axis !== "x") return;
+    // Soltar un gesto horizontal también dispara el click: se ignora para no
+    // abrir el lightbox o el link de EPREL.
+    didSwipeRef.current = true;
+    const passed = Math.abs(dragX) > Math.min(start.w * 0.2, 80);
+    const dir = dragX < 0 ? 1 : -1;
+    setSettling(true);
+    setDragX(passed ? -dir * start.w : 0);
+    settleTimerRef.current = setTimeout(() => {
+      if (passed) goToSlide(index + dir);
+      setSettling(false);
+      setDragX(0);
+    }, 220);
   }
+
+  // Slide vecina que se asoma mientras se arrastra con el dedo.
+  const peek = dragX !== 0 && slides.length > 1
+    ? slides[(((index + (dragX < 0 ? 1 : -1)) % slides.length) + slides.length) % slides.length]
+    : null;
 
   const badges = (
     <div className="absolute top-4 left-4 z-10 flex flex-col gap-2 items-start">
@@ -242,7 +269,26 @@ export function ProductImageGallery({
 
   return (
     <div>
-      <div className={`${current?.kind === "etiqueta" ? "bg-white ring-1 ring-slate-200" : "bg-slate-50"} rounded-2xl aspect-square flex items-center justify-center relative group overflow-hidden ${current?.kind === "sucursal" ? "" : current?.kind === "etiqueta" ? "" : "p-1 md:p-2"}`}>
+      <div className={`${current?.kind === "etiqueta" ? "bg-white ring-1 ring-slate-200" : "bg-slate-50"} rounded-2xl aspect-square relative group overflow-hidden`}>
+        {peek && (
+          <div
+            aria-hidden
+            className={`pointer-events-none absolute inset-0 ${peek.kind === "etiqueta" ? "bg-white" : "bg-slate-50"}`}
+            style={{ transform: `translateX(calc(${dragX < 0 ? "100%" : "-100%"} + ${dragX}px))`, transition: settling ? "transform 220ms ease-out" : "none" }}
+          >
+            {peek.kind === "etiqueta" ? (
+              <EuLabelCard src={peek.src} alt="" utqg={null} sizes="(max-width: 768px) 100vw, 50vw" />
+            ) : (
+              <div className={`relative h-full w-full ${peek.kind === "sucursal" ? "" : "p-1 md:p-2"}`}>
+                <Image src={peek.src} alt="" fill className={peek.kind === "sucursal" ? "object-cover" : "object-contain"} sizes="(max-width: 768px) 100vw, 50vw" />
+              </div>
+            )}
+          </div>
+        )}
+        <div
+          className="absolute inset-0"
+          style={{ transform: dragX ? `translateX(${dragX}px)` : undefined, transition: settling ? "transform 220ms ease-out" : "none" }}
+        >
         {current?.kind === "foto" && index === 0 && (
           <>
             {badges}
@@ -250,6 +296,7 @@ export function ProductImageGallery({
             {promoBadge}
           </>
         )}
+        <div className={`flex h-full w-full items-center justify-center ${current?.kind === "sucursal" || current?.kind === "etiqueta" ? "" : "p-1 md:p-2"}`}>
         {current ? (
           <button
             ref={boxRef}
@@ -262,7 +309,9 @@ export function ProductImageGallery({
             }}
             onMouseMove={(e) => current.kind !== "sucursal" && handleMouseMove(e)}
             onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
+            onTouchCancel={handleTouchEnd}
             aria-label={
               current.kind === "etiqueta"
                 ? "Ver registro oficial en EPREL"
@@ -270,7 +319,7 @@ export function ProductImageGallery({
                 ? `Sucursal ${current.branchName}`
                 : "Ampliar imagen"
             }
-            className={`relative h-full w-full ${current.kind === "sucursal" ? "cursor-default" : "cursor-zoom-in"} `}
+            className={`relative h-full w-full touch-pan-y ${current.kind === "sucursal" ? "cursor-default" : "cursor-zoom-in"} `}
           >
             {current.kind === "etiqueta" ? (
               <EuLabelCard src={current.src} alt={current.alt} utqg={labelUtqg} sizes="(max-width: 768px) 100vw, 50vw" />
@@ -306,6 +355,7 @@ export function ProductImageGallery({
         ) : (
           <div className="w-48 h-48">{TIRE_SVG}</div>
         )}
+        </div>
         {current?.kind === "sucursal" && (
           <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent px-5 pb-5 pt-16 text-left text-white">
             <p className="text-2xl font-black">{current.branchName}</p>
@@ -342,6 +392,7 @@ export function ProductImageGallery({
             </div>
           </div>
         )}
+        </div>
       </div>
 
       {zoomed && frameRect && current && current.kind !== "sucursal" && (

@@ -13,7 +13,17 @@ import {
   esNaranja,
   logosDelGrupo,
   planesParaGrupo,
+  type Plan,
 } from "@/lib/cuotas";
+
+/** Pago en efectivo en el local: no viene del POS, es un descuento fijo sobre
+    el precio publicado. Se modela como un "grupo" más para reutilizar el
+    acordeón de medios de pago. */
+export const EFECTIVO_GRUPO = "Efectivo";
+export const DESCUENTO_EFECTIVO = 0.1;
+const EFECTIVO_PLAN: Plan = { id: "efectivo", cuotas: "Un pago", coeficiente: 1 - DESCUENTO_EFECTIVO };
+
+export type PagoElegido = { total: number; medio: string; cuotas: string; esEfectivo: boolean };
 
 function formatPrice(price: number) {
   return new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 }).format(price);
@@ -34,6 +44,7 @@ function logoClassName(logo: string): string {
 /** Orden en que se muestran los medios: banco, Mercado Pago, Naranja,
     GOcuotas y, si el POS carga alguno más, al final. */
 function ordenGrupo(grupo: string): number {
+  if (grupo === EFECTIVO_GRUPO) return -1;
   if (esBanco(grupo)) return 0;
   if (grupo === MERCADO_PAGO_GRUPO) return 1;
   if (esNaranja(grupo)) return 2;
@@ -56,7 +67,7 @@ export function InstallmentCalculator({
 }: {
   basePrice: number;
   notaPrecio?: string;
-  onShare?: () => void;
+  onShare?: (pago: PagoElegido) => void;
   /** Agrega el presupuesto al carrito y abre el pago con Mercado Pago. */
   onBuy?: () => void;
 }) {
@@ -79,14 +90,19 @@ export function InstallmentCalculator({
     if (!recargos) return [];
     return Array.from(new Set(recargos.map((r) => r.grupo).filter((g) => !esGrupoObsoleto(g))));
   }, [recargos]);
-  const grupos = [MERCADO_PAGO_GRUPO, GOCUOTAS_GRUPO, ...gruposPOS].sort((a, b) => ordenGrupo(a) - ordenGrupo(b));
+  const grupos = [EFECTIVO_GRUPO, MERCADO_PAGO_GRUPO, GOCUOTAS_GRUPO, ...gruposPOS].sort((a, b) => ordenGrupo(a) - ordenGrupo(b));
+  const planesDe = (g: string) => (g === EFECTIVO_GRUPO ? [EFECTIVO_PLAN] : planesParaGrupo(g, basePrice, recargos, esDiaPromo));
 
-  const grupoActual = grupoSel && grupos.includes(grupoSel) ? grupoSel : grupos[0];
-  const planesDelGrupo = planesParaGrupo(grupoActual, basePrice, recargos, esDiaPromo);
+  // Por defecto queda elegido el primer medio con cuotas (no el efectivo): el
+  // total inicial es el precio publicado, y el descuento se ve al elegirlo.
+  const grupoActual = grupoSel && grupos.includes(grupoSel) ? grupoSel : grupos.find((g) => g !== EFECTIVO_GRUPO)!;
+  const esEfectivo = grupoActual === EFECTIVO_GRUPO;
+  const planesDelGrupo = planesDe(grupoActual);
   const planActual = planesDelGrupo.find((p) => p.id === cuotaId) ?? planesDelGrupo[0];
   const coeficiente = planActual.coeficiente ?? 1;
   const total = Math.round(basePrice * coeficiente);
   const recargo = total - basePrice;
+  const descuento = basePrice - total;
   const nCuotas = parseInt(planActual.cuotas, 10) || 1;
   const sinInteres = nCuotas > 1 && recargo === 0;
 
@@ -96,7 +112,7 @@ export function InstallmentCalculator({
 
       <div className="mt-3 space-y-3">
         {grupos.map((g) => {
-          const planes = planesParaGrupo(g, basePrice, recargos, esDiaPromo);
+          const planes = planesDe(g);
           const activo = g === grupoActual;
           return (
             <section
@@ -119,7 +135,14 @@ export function InstallmentCalculator({
                 }}
                 className="flex min-h-9 w-full items-center justify-between gap-2 text-left"
               >
-                <span className="text-sm font-bold text-navy-900">{displayGrupoLabel(g)}</span>
+                <span className="flex items-center gap-2 text-sm font-bold text-navy-900">
+                  {g === EFECTIVO_GRUPO ? "Efectivo" : displayGrupoLabel(g)}
+                  {g === EFECTIVO_GRUPO && (
+                    <span className="rounded-full bg-emerald-600 px-2 py-0.5 text-[11px] font-black uppercase tracking-wide text-white">
+                      10% OFF
+                    </span>
+                  )}
+                </span>
                 <span className="flex items-center gap-2">
                   {logosDelGrupo(g).map((logo) => (
                     <Image key={logo} src={logo} alt="" width={140} height={40} className={logoClassName(logo)} />
@@ -136,7 +159,7 @@ export function InstallmentCalculator({
                   </svg>
                 </span>
               </button>
-              <div hidden={abierto !== g} role="radiogroup" aria-label={displayGrupoLabel(g)} className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-3 [&[hidden]]:hidden">
+              <div hidden={abierto !== g} role="radiogroup" aria-label={g === EFECTIVO_GRUPO ? "Efectivo" : displayGrupoLabel(g)} className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-3 [&[hidden]]:hidden">
                 {planes.map((p) => {
                   const seleccionado = activo && p.id === planActual.id;
                   const n = parseInt(p.cuotas, 10) || 1;
@@ -160,7 +183,7 @@ export function InstallmentCalculator({
                     >
                       <span className="block text-xs font-bold leading-tight">{p.coeficiente == null ? `${p.cuotas} (consultar)` : p.cuotas}</span>
                       <span className={`mt-0.5 block text-xs ${seleccionado ? "text-white/80" : "text-slate-500"}`}>
-                        {n > 1 ? `${formatPrice(t / n)} c/u` : formatPrice(t)}
+                        {n > 1 ? `${formatPrice(t / n)} c/u` : g === EFECTIVO_GRUPO ? `${formatPrice(t)} en el local` : formatPrice(t)}
                       </span>
                     </button>
                   );
@@ -175,7 +198,7 @@ export function InstallmentCalculator({
         <div className="flex items-center justify-between gap-3 border-b border-white/10 px-4 py-2.5">
           <span className="text-xs font-bold uppercase tracking-wide text-white/70">Total a pagar</span>
           <span className="text-xs font-semibold text-white/90">
-            {displayGrupoLabel(grupoActual)} · {planActual.cuotas}
+            {esEfectivo ? "Efectivo" : displayGrupoLabel(grupoActual)} · {planActual.cuotas}
           </span>
         </div>
         <div className="px-4 py-4">
@@ -195,15 +218,25 @@ export function InstallmentCalculator({
               <dt>Precio</dt>
               <dd>{formatPrice(basePrice)}</dd>
             </div>
-            <div className="flex justify-between">
-              <dt>Recargo por financiación</dt>
-              <dd>{recargo > 0 ? formatPrice(recargo) : "Sin recargo"}</dd>
-            </div>
+            {esEfectivo ? (
+              <div className="flex justify-between text-emerald-300">
+                <dt>Descuento por pago en efectivo (10%)</dt>
+                <dd>−{formatPrice(descuento)}</dd>
+              </div>
+            ) : (
+              <div className="flex justify-between">
+                <dt>Recargo por financiación</dt>
+                <dd>{recargo > 0 ? formatPrice(recargo) : "Sin recargo"}</dd>
+              </div>
+            )}
           </dl>
           {notaPrecio && <p className="mt-3 text-xs text-slate-400">{notaPrecio}</p>}
-          {(onShare || onBuy) && (
+          {esEfectivo && (
+            <p className="mt-2 text-xs text-slate-400">El descuento por efectivo aplica pagando en el local.</p>
+          )}
+          {(onShare || (onBuy && !esEfectivo)) && (
             <div className="mt-4 flex flex-col gap-2">
-              {onBuy && (
+              {onBuy && !esEfectivo && (
                 <button
                   type="button"
                   onClick={onBuy}
@@ -217,7 +250,9 @@ export function InstallmentCalculator({
               {onShare && (
             <button
               type="button"
-              onClick={onShare}
+              onClick={() =>
+                onShare({ total, medio: esEfectivo ? EFECTIVO_GRUPO : displayGrupoLabel(grupoActual), cuotas: planActual.cuotas, esEfectivo })
+              }
               className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#25D366] px-3 py-3.5 text-center text-sm font-black leading-snug text-white transition-colors hover:bg-[#1ebe57] sm:text-base"
             >
               <svg className="h-5 w-5 shrink-0" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
