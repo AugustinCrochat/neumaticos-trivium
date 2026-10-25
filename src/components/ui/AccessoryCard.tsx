@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Accessory } from "@/lib/types";
+import { isLowStock, stockLabel } from "@/lib/stock";
 
 function formatPrice(price: number) {
   return new Intl.NumberFormat("es-AR", {
@@ -28,7 +29,7 @@ const LOCK_SVG = (
 
 export function AccessoryCard({ accessory, priceOld = accessory.priceOld }: { accessory: Accessory; priceOld?: number }) {
   return (
-    <article className="group bg-white rounded-2xl border border-slate-100 hover:border-navy-200 hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col">
+    <article className={`group bg-white rounded-2xl border border-slate-100 hover:border-navy-200 hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col ${accessory.enStock ? "" : "opacity-70"}`}>
       <Link href={`/tuercas-antirrobo/${accessory.slug}`} className="relative bg-white pt-[95%] overflow-hidden block">
         {priceOld && (
           <div className="absolute top-3 left-3 z-10">
@@ -66,6 +67,14 @@ export function AccessoryCard({ accessory, priceOld = accessory.priceOld }: { ac
             <span className="text-slate-400 line-through text-xs block break-words">{formatPrice(priceOld)}</span>
           )}
           <span className="text-2xl font-black text-red-600 block mb-1.5 break-words">{formatPrice(accessory.price)}</span>
+          {accessory.enStock ? (
+            <p className={`mb-2 flex items-center gap-1.5 text-xs font-bold ${isLowStock(accessory.stock) ? "text-amber-600" : "text-emerald-600"}`}>
+              <span className={`h-1.5 w-1.5 rounded-full ${isLowStock(accessory.stock) ? "bg-amber-500" : "bg-emerald-500"}`} />
+              {stockLabel(accessory.stock)}
+            </p>
+          ) : (
+            <p className="mb-2 text-xs font-bold text-red-600">Sin stock</p>
+          )}
           <span className="mb-2 inline-block rounded bg-red-50 px-2 py-0.5 text-[11px] font-black uppercase tracking-wide text-red-700">
             Incluye 2 llaves
           </span>

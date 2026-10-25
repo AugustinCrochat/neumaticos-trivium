@@ -13,7 +13,10 @@ export const metadata: Metadata = {
 };
 
 export default async function TuercasAntirroboPage() {
-  const accesorios = await getAccesoriosDesdePOS(await getSelectedBranchSlug());
+  // Con stock primero; a igual disponibilidad, el más barato.
+  const accesorios = [...(await getAccesoriosDesdePOS(await getSelectedBranchSlug()))].sort(
+    (a, b) => Number(b.enStock) - Number(a.enStock) || a.price - b.price
+  );
 
   return (
     <div className="max-w-7xl 2xl:max-w-[96rem] mx-auto px-4 py-8">

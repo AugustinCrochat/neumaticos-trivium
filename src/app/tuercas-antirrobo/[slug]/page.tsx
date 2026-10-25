@@ -9,6 +9,7 @@ import { AccessoryGallery } from "@/components/ui/AccessoryGallery";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { ORGANIZATION_ID } from "@/lib/seo";
 import Image from "next/image";
+import { modelosCompatibles } from "@/lib/tuercas-vehiculos";
 import { TUERCA_FOTO_LLAVES, TUERCA_FOTO_TALLER, tuercaCardPath } from "@/lib/tuercas-fotos";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -55,6 +56,9 @@ export default async function AccessoryPage({ params }: Props) {
   const accessory = accesorios.find((a) => a.slug === slug);
   if (!accessory) notFound();
 
+  const compatibles = modelosCompatibles(accessory.codigoTango);
+  // Aclaraciones del POS que no son la lista de autos (ej. "Kit activo de 5 piezas").
+  const notaDescripcion = compatibles.length > 0 && accessory.descripcion ? accessory.descripcion.split(/\.\s+/).slice(1).join(". ") : "";
   const card = tuercaCardPath(accessory.codigoTango, accessory.slug);
   const abs = (src: string) => (src.startsWith("http") ? src : `${SITE_URL}${src}`);
   const productJsonLd = {
@@ -158,10 +162,22 @@ export default async function AccessoryPage({ params }: Props) {
         </div>
       </div>
 
-      {accessory.descripcion && (
+      {(compatibles.length > 0 || accessory.descripcion) && (
         <div className="mt-10 pt-10 border-t border-slate-100">
           <h2 className="text-lg font-black text-navy-900 mb-4 uppercase tracking-wide">Compatible con</h2>
-          <p className="text-slate-600 leading-relaxed">{accessory.descripcion}</p>
+          {compatibles.length > 0 ? (
+            <ul className="grid gap-x-8 gap-y-2 sm:grid-cols-2">
+              {compatibles.map((c) => (
+                <li key={c.marca} className="text-slate-600 leading-relaxed">
+                  <span className="font-black text-navy-900">{c.marca}</span>{" "}
+                  {c.modelos.length > 0 ? c.modelos.join(", ") : "(toda la marca)"}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-slate-600 leading-relaxed">{accessory.descripcion}</p>
+          )}
+          {notaDescripcion && <p className="mt-3 text-sm text-slate-500">{notaDescripcion}</p>}
         </div>
       )}
     </div>

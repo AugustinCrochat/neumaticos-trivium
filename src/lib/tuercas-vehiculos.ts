@@ -49,13 +49,15 @@ export const TUERCAS_VEHICULOS: Record<string, TuercaVehiculo[]> = {
     { marca: "Renault", modelo: "Megane" },
     { marca: "Renault", modelo: "Logan" },
   ],
-  // ANTIRROBO CORSA PREMIUM Z3 (66080)
+  // ANTIRROBO CORSA PREMIUM Z3 (66080) — Corsa figura en el nombre del producto
+  // pero no en la descripción del POS, por eso se agrega acá a mano.
   "4020006": [
     { marca: "Suzuki", modelo: "Fun" },
     { marca: "Renault", modelo: "Clio" },
     { marca: "Renault", modelo: "Megane" },
     { marca: "Renault", modelo: "Sandero" },
     { marca: "Renault", modelo: "Duster" },
+    { marca: "Chevrolet", modelo: "Corsa" },
     { marca: "Chevrolet", modelo: "Celta" },
     { marca: "Chevrolet", modelo: "Agile" },
     { marca: "Chevrolet", modelo: "Vectra" },
@@ -101,6 +103,7 @@ export const TUERCAS_VEHICULOS: Record<string, TuercaVehiculo[]> = {
   // lista de vehículos del POS.
   "4020013": [
     { marca: "Chevrolet", modelo: "Sonic" },
+    { marca: "Chevrolet", modelo: "Spark" },
     { marca: "Chevrolet", modelo: "Cruze" },
     { marca: "Chevrolet", modelo: "Aveo" },
     { marca: "Chevrolet", modelo: "Spin" },
@@ -188,20 +191,39 @@ export const TUERCAS_VEHICULOS: Record<string, TuercaVehiculo[]> = {
   ],
 };
 
-/** Todas las tuercas que declaran compatibilidad con el auto (puede haber más de una). */
+/**
+ * El modelo del auto coincide con el de la tuerca si es el mismo o una variante
+ * suya ("Corsa Classic" y "Corsa Wagon" cuentan para "Corsa"); una entrada sin
+ * modelo vale para toda la marca.
+ */
+function coincide(c: TuercaVehiculo, marca: string, modelo: string): boolean {
+  if (c.marca !== marca) return false;
+  return !c.modelo || c.modelo === modelo || modelo.startsWith(`${c.modelo} `);
+}
+
+/** Todas las tuercas que declaran compatibilidad con el auto, con stock primero. */
 export function getCompatibleAccessories(marca: string, modelo: string, accesorios: Accessory[]): Accessory[] {
-  return accesorios.filter((accessory) => {
-    const compatibles = accessory.codigoTango ? TUERCAS_VEHICULOS[accessory.codigoTango] : undefined;
-    return !!compatibles?.some((c) => c.marca === marca && (!c.modelo || c.modelo === modelo));
-  });
+  return accesorios
+    .filter((accessory) => {
+      const compatibles = accessory.codigoTango ? TUERCAS_VEHICULOS[accessory.codigoTango] : undefined;
+      return !!compatibles?.some((c) => coincide(c, marca, modelo));
+    })
+    .sort((a, b) => Number(b.enStock) - Number(a.enStock) || a.price - b.price);
 }
 
 export function getCompatibleAccessory(marca: string, modelo: string, accesorios: Accessory[]): Accessory | null {
-  for (const accessory of accesorios) {
-    const compatibles = accessory.codigoTango ? TUERCAS_VEHICULOS[accessory.codigoTango] : undefined;
-    if (!compatibles) continue;
-    const match = compatibles.some((c) => c.marca === marca && (!c.modelo || c.modelo === modelo));
-    if (match) return accessory;
+  return getCompatibleAccessories(marca, modelo, accesorios)[0] ?? null;
+}
+
+/** Modelos compatibles de una tuerca, agrupados por marca, para mostrarlos en su ficha. */
+export function modelosCompatibles(codigoTango: string | null | undefined): { marca: string; modelos: string[] }[] {
+  const lista = codigoTango ? TUERCAS_VEHICULOS[codigoTango] : undefined;
+  if (!lista) return [];
+  const porMarca = new Map<string, string[]>();
+  for (const c of lista) {
+    const actuales = porMarca.get(c.marca) ?? [];
+    if (c.modelo) actuales.push(c.modelo);
+    porMarca.set(c.marca, actuales);
   }
-  return null;
+  return [...porMarca.entries()].map(([marca, modelos]) => ({ marca, modelos }));
 }

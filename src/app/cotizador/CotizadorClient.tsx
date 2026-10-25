@@ -2,11 +2,12 @@
 
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { useCart } from "@/contexts/cart-context";
 import { useBranch } from "@/contexts/branch-context";
 import { useUpsellCombo } from "@/hooks/use-upsell-combo";
 import { AlineacionBalanceoIcon } from "@/components/ui/AlineacionBalanceoIcon";
+import { TuercaPicker } from "@/components/ui/TuercaPicker";
+import type { Accessory } from "@/lib/types";
 import { InstallmentCalculator, type PagoElegido } from "@/components/ui/InstallmentCalculator";
 import { goToWhatsApp, trackEvent } from "@/lib/gtag";
 
@@ -60,7 +61,7 @@ export type CotizadorHandle = {
 export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: QuoteProduct; /** Unidades del ítem precargado (4 = juego de neumáticos). */ initialQuantity?: number; compact?: boolean; /** Avisa si el presupuesto incluye alineación + balanceo. */ onComboChange?: (incluido: boolean) => void }>(
   function CotizadorClient({ initialProduct, initialQuantity = 4, compact = false, onComboChange }, ref) {
   const { selectedBranch } = useBranch();
-  const { addTireLine, addService, openCart } = useCart();
+  const { addTireLine, addService, addAccessory, openCart } = useCart();
   // En Córdoba (Argüello) se dice "alineado y balanceado"; "alineación y
   // balanceo" es como se lo llama en Buenos Aires. El nombre del servicio en
   // el POS (combo.nombre) queda fijo con una sola forma, así que la variante
@@ -79,6 +80,8 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
     initialProduct ? [{ product: initialProduct, quantity: initialQuantity }] : []
   );
   const [includeCombo, setIncludeCombo] = useState(false);
+  const [tuercas, setTuercas] = useState<Accessory[]>([]);
+  const [buscandoTuerca, setBuscandoTuerca] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
     onComboChange?.(includeCombo);
@@ -96,9 +99,8 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
       // La tarjeta de alineado de arriba se oculta al agregarlo y el presupuesto
       // se expande: se espera al nuevo layout para frenar en el inicio de la
       // sección, sin bajar hasta el servicio agregado.
-      requestAnimationFrame(() =>
-        requestAnimationFrame(() => containerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }))
-      );
+      // (El aviso al padre para ocultar la tarjeta llega un render después.)
+      setTimeout(() => containerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 150);
     },
   }));
 
@@ -151,7 +153,8 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
 
   const itemsTotal = items.reduce((sum, it) => sum + it.product.price * it.quantity, 0);
   const comboTotal = includeCombo && combo ? combo.precio : 0;
-  const total = itemsTotal + comboTotal;
+  const tuercasTotal = tuercas.reduce((sum, t) => sum + t.price, 0);
+  const total = itemsTotal + comboTotal + tuercasTotal;
   const hasItems = items.length > 0;
   const canAddCombo = hasItems && !!combo;
 
@@ -164,6 +167,7 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
       addTireLine({ id: it.product.id, brand, model, slug, price: it.product.price, imageUrl: it.product.imageUrl ?? "" }, it.quantity);
     }
     if (includeCombo && combo) addService({ id: combo.id, nombre: combo.nombre, price: combo.precio }, 1);
+    for (const t of tuercas) addAccessory(t, 1);
     trackEvent("begin_checkout", { currency: "ARS", value: total });
     openCart();
   }
@@ -175,6 +179,7 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
     if (includeCombo && combo) {
       lineas.push(`• ${combo.nombre} — ${formatPrice(combo.precio)}`);
     }
+    for (const t of tuercas) lineas.push(`• ${t.nombre} — ${formatPrice(t.price)}`);
     const mensaje = [
       "Hola! Arme este presupuesto en la web y quiero coordinar:",
       "",
@@ -188,7 +193,7 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
   }
 
   return (
-    <div ref={containerRef} className={compact ? "space-y-4" : "space-y-6"}>
+    <div ref={containerRef} className={`scroll-mt-28 ${compact ? "space-y-4" : "space-y-6"}`}>
       {compact && (
         <button
           type="button"
@@ -342,16 +347,35 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
                 </button>
               </div>
             )}
-            <Link
-              href="/tuercas-antirrobo#buscar"
-              className="flex items-center gap-3 p-4 text-sm transition-colors hover:bg-slate-50"
+            {tuercas.map((t) => (
+              <div key={t.id} className="flex items-center gap-4 bg-emerald-50 p-4">
+                <span className="flex-1 text-sm">
+                  <span className="block text-base font-black text-navy-900">{t.nombre}</span>
+                  <span className="font-black text-emerald-700">+{formatPrice(t.price)}</span>
+                </span>
+                <button onClick={() => setTuercas((prev) => prev.filter((x) => x.id !== t.id))} className="shrink-0 text-xs font-bold text-slate-400 hover:text-red-600">
+                  Quitar
+                </button>
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={() => setBuscandoTuerca((v) => !v)}
+              aria-expanded={buscandoTuerca}
+              className="flex w-full items-center gap-3 p-4 text-left text-sm transition-colors hover:bg-slate-50"
             >
               <span className="flex-1">
                 <span className="block font-black text-navy-900">¿Sumás tuercas antirrobo?</span>
-                <span className="text-slate-500">Buscá la que lleva tu auto por modelo.</span>
+                <span className="text-slate-500">Elegí tu auto y agregá la que le corresponde.</span>
               </span>
-              <span className="shrink-0 text-xs font-black text-orange-600">Buscar &rarr;</span>
-            </Link>
+              <span className="shrink-0 text-xs font-black text-orange-600">{buscandoTuerca ? "Cerrar" : "Buscar"}</span>
+            </button>
+            {buscandoTuerca && (
+              <TuercaPicker
+                agregadas={tuercas.map((t) => t.id)}
+                onAdd={(a) => setTuercas((prev) => (prev.some((x) => x.id === a.id) ? prev : [...prev, a]))}
+              />
+            )}
           </div>
         )}
       </div>
