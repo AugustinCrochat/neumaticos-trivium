@@ -168,9 +168,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ])
   );
 
-  const fichasProducto: Entry[] = productos.map((p) =>
-    url(`/productos/${p.slug}`, p.enStock ? 0.8 : 0.4, "daily", undefined, productImagePaths(p).map(abs))
-  );
+  const fichasProducto: Entry[] = productos.flatMap((p) => [
+    url(`/productos/${p.slug}`, p.enStock ? 0.8 : 0.4, "daily", undefined, productImagePaths(p).map(abs)),
+    url(`/productos/${p.slug}/ficha-tecnica.pdf`, p.enStock ? 0.4 : 0.2, "monthly"),
+  ]);
 
   const comparativas: Entry[] = (await medidasConComparativa()).map((m) => url(`/comparativas/${m.slug}`, 0.7, "weekly"));
 

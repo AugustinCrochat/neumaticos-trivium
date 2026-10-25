@@ -1,6 +1,5 @@
 "use client";
 
-import { EuStars } from "@/components/ui/EuLabelBadge";
 import { EuLabelCard } from "@/components/ui/EuLabelCard";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
@@ -275,7 +274,7 @@ export function ProductImageGallery({
               <EuLabelCard src={current.src} alt={current.alt} utqg={labelUtqg} sizes="(max-width: 768px) 100vw, 50vw" />
             ) : (
               <>
-                <div className={`relative w-full ${label && current.kind === "foto" ? "h-[calc(100%-2rem)]" : "h-full"}`}>
+                <div className="relative h-full w-full">
                   <Image
                     src={current.src}
                     alt={current.alt}
@@ -286,12 +285,6 @@ export function ProductImageGallery({
                     onLoad={(e) => setImgAspect(e.currentTarget.naturalWidth / e.currentTarget.naturalHeight)}
                   />
                 </div>
-                {label && current.kind === "foto" && (
-                  <span className="absolute inset-x-0 bottom-0 flex h-8 items-center justify-center gap-2 border-t border-slate-200 bg-white px-2 text-[11px] font-black uppercase tracking-wide text-navy-900">
-                    <EuStars className="h-5 w-5 shrink-0" />
-                    Homologadas en Europa
-                  </span>
-                )}
               </>
             )}
             {zoomed && current.kind !== "etiqueta" && current.kind !== "sucursal" && (
@@ -301,7 +294,7 @@ export function ProductImageGallery({
               />
             )}
             {current.kind !== "sucursal" && (
-              <span className={`absolute right-3 ${label && current.kind === "foto" ? "bottom-11" : "bottom-3"} w-8 h-8 rounded-full bg-white/90 shadow-md flex items-center justify-center text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity`}>
+              <span className={`absolute right-3 bottom-3 w-8 h-8 rounded-full bg-white/90 shadow-md flex items-center justify-center text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity`}>
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16zM11 8v6M8 11h6" />
                 </svg>

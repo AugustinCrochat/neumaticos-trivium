@@ -455,11 +455,47 @@ export default async function ProductPage({ params }: Props) {
             </p>
           )}
 
-          <div id="garantia" className="mt-3 scroll-mt-24 rounded-xl bg-amber-50 px-4 py-3 text-xs leading-relaxed text-amber-900">
-            <strong className="text-amber-900">Garantía de 1 año:</strong> cubre fallas de fabricación
-            del neumático desde la fecha de compra. No cubre desgaste por uso, pinchaduras, cortes ni
-            daños por golpes, baches o falta de alineación. Se gestiona directamente en el local,
-            presentando la factura de compra.
+          <a
+            href={`/productos/${product.slug}/ficha-tecnica.pdf`}
+            target="_blank"
+            rel="noopener"
+            className="mt-4 flex items-center justify-between gap-3 rounded-xl border-2 border-navy-900 bg-white px-4 py-3 text-sm font-black text-navy-900 transition-colors hover:bg-navy-900 hover:text-white"
+          >
+            <span className="flex items-center gap-2">
+              <svg className="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2" />
+              </svg>
+              Descargar ficha técnica completa (PDF)
+            </span>
+            <span className="text-xs font-bold opacity-70">PDF</span>
+          </a>
+
+          <div id="garantia" className="mt-4 scroll-mt-24 overflow-hidden rounded-2xl border-2 border-amber-400 bg-gradient-to-br from-amber-50 to-orange-50 shadow-md">
+            <div className="flex items-center gap-3 bg-amber-500 px-4 py-3 text-white">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-amber-600">
+                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9.5 12l1.75 1.75L14.5 10" />
+                </svg>
+              </span>
+              <div className="leading-tight">
+                <p className="text-lg font-black uppercase tracking-tight">Garantía de 1 año</p>
+                <p className="text-xs font-bold text-amber-50">Por defecto de fabricación, gestionada directo con nosotros</p>
+              </div>
+            </div>
+            <div className="grid gap-3 p-4 text-sm leading-snug sm:grid-cols-2">
+              <div>
+                <p className="mb-1 text-xs font-black uppercase tracking-wide text-emerald-700">&#10003; Cubre</p>
+                <p className="text-slate-700">Fallas de fabricación del neumático desde la fecha de compra.</p>
+              </div>
+              <div>
+                <p className="mb-1 text-xs font-black uppercase tracking-wide text-red-700">&#10005; No cubre</p>
+                <p className="text-slate-700">Desgaste por uso, pinchaduras, cortes ni daños por golpes, baches o falta de alineación.</p>
+              </div>
+              <p className="border-t border-amber-200 pt-3 text-xs font-bold text-amber-900 sm:col-span-2">
+                Se gestiona en el local presentando la factura de compra.
+              </p>
+            </div>
           </div>
         </div>
       </div>
