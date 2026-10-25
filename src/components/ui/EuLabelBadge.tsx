@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { TireLabel } from "@/lib/tire-labels";
 
-function EuStars({ className }: { className?: string }) {
+export function EuStars({ className }: { className?: string }) {
   // Cinco puntas: radio exterior r, interior 0.382 r (estrella regular).
   const star = (cx: number, cy: number, r: number) =>
     Array.from({ length: 10 }, (_, i) => {

@@ -1,5 +1,6 @@
 "use client";
 
+import { EuStars } from "@/components/ui/EuLabelBadge";
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
@@ -50,6 +51,12 @@ export function ImageLightbox({
         {utqg && (
           <p className="w-full max-w-md rounded-sm border border-slate-200 bg-white px-4 py-2 text-center text-sm font-black tracking-wide text-navy-900">
             UTQG {utqg.treadwear} {utqg.traction} {utqg.temperature}
+          </p>
+        )}
+        {eprelUrl && (
+          <p className="flex items-center gap-2 text-sm font-black uppercase tracking-wide text-white">
+            <EuStars className="h-6 w-6 shrink-0" />
+            Homologadas en Europa
           </p>
         )}
         {eprelUrl && (

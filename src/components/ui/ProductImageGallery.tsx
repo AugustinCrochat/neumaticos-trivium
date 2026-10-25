@@ -1,5 +1,6 @@
 "use client";
 
+import { EuStars } from "@/components/ui/EuLabelBadge";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import type { TireProduct } from "@/lib/types";
@@ -269,7 +270,17 @@ export function ProductImageGallery({
             }
             className={`relative h-full w-full ${current.kind === "sucursal" ? "cursor-default" : "cursor-zoom-in"} ${current.kind === "etiqueta" ? "p-4" : ""}`}
           >
-            <div className={`relative w-full ${labelUtqg ? "h-[calc(100%-3rem)]" : "h-full"}`}>
+            {current.kind === "etiqueta" && (
+              <span className="absolute inset-x-0 top-0 flex h-9 items-center justify-center gap-2 border-b border-slate-200 bg-white px-2 text-xs font-black uppercase tracking-wide text-navy-900">
+                <EuStars className="h-5 w-5 shrink-0" />
+                Homologadas en Europa
+              </span>
+            )}
+            <div
+              className={`relative w-full ${current.kind === "etiqueta" ? "mt-9" : ""} ${
+                labelUtqg && current.kind === "etiqueta" ? "h-[calc(100%-5.25rem)]" : labelUtqg ? "h-[calc(100%-3rem)]" : current.kind === "etiqueta" ? "h-[calc(100%-2.25rem)]" : "h-full"
+              }`}
+            >
               <Image
                 src={current.src}
                 alt={current.alt}
