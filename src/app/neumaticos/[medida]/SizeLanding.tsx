@@ -1,12 +1,13 @@
 import Link from "next/link";
 import type { TireProduct, TireSize } from "@/lib/types";
-import { BRANCHES, FREE_SHIPPING_THRESHOLD, SHIPPING_FLAT_RATE } from "@/lib/config";
+import { BRANCHES } from "@/lib/config";
 import { esRangoFlotation, formatFlotationEquivalent, metricToFlotation } from "@/lib/flotation";
 import { SizeProductsGrid } from "@/components/ui/SizeProductsGrid";
 import { bestPriceByGroup, peersByGroup } from "@/lib/best-price";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 import { SizeHeader } from "./SizeHeader";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
+import { LocalProductCarousel } from "@/app/neumaticos-en/LocalProductCarousel";
 import { FaqSection } from "@/components/seo/FaqSection";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { itemListJsonLd, type Faq } from "@/lib/seo";
@@ -73,11 +74,10 @@ function buildFaqs(size: TireSize, productos: TireProduct[], desde: number | nul
           `Lo más seguro es respetar la medida original que indica el manual del vehículo.`,
     },
     {
-      question: `¿Puedo comprar neumáticos ${label} online y recibirlos en casa?`,
+      question: `¿Dónde puedo retirar los neumáticos ${label}?`,
       answer:
-        `Sí. Podés comprar por la web y elegir envío a domicilio a cualquier punto del país: gratis desde ${formatPrice(FREE_SHIPPING_THRESHOLD)} ` +
-        `de compra, o ${formatPrice(SHIPPING_FLAT_RATE)} fijos por debajo de eso, sin importar la provincia. La otra opción es retirar sin cargo en el local de ${branch.address}, ` +
-        `${branch.city}, donde además hacemos la colocación y el balanceo.`,
+        `En el local de ${branch.address}, ${branch.city}. Podés ver el precio y el stock en la web, reservar por WhatsApp y ` +
+        `retirarlo sin cargo; ahí mismo hacemos la colocación y el balanceo.`,
     },
     {
       question: `¿La colocación de los neumáticos ${label} tiene costo?`,
@@ -124,6 +124,23 @@ export function SizeLanding({
   const desde = enStock.length ? Math.min(...enStock.map((p) => p.price)) : null;
   const vehiculos = sortVehiclesByPopularity(vehiclesUsingSize(size));
   const branch = BRANCHES[0];
+
+  // Alternativas con stock para que nadie se quede sólo con "sin stock":
+  // primero las del mismo rodado (sirven con las mismas llantas), con el
+  // diámetro más cercano, después el resto, y a igual cercanía el más barato. Los de carga sólo si esta medida lo es.
+  const alternativas = todos
+    .filter((p) => p.enStock && !sizesEqual(p.size, size) && !!p.isCarga === productos.some((x) => x.isCarga))
+    .map((p) => ({ p, diff: Math.abs(diameterDiffPercent(p.size, size)) }))
+    .sort(
+      (a, b) =>
+        Number(a.p.size.rim !== size.rim) - Number(b.p.size.rim !== size.rim) ||
+        Number(a.diff > 3) - Number(b.diff > 3) ||
+        Math.round(a.diff) - Math.round(b.diff) ||
+        a.p.price - b.p.price
+    )
+    .slice(0, 24)
+    .map(({ p }) => p);
+  const mejoresAlternativas = [...bestPriceByGroup(alternativas)];
 
   // Sólo se ofrecen como alternativa las equivalencias que además tienen stock:
   // mandar al visitante a otra página vacía es peor que no ofrecer nada.
@@ -194,6 +211,12 @@ export function SizeLanding({
           </WhatsAppLink>
         </section>
       )}
+
+      <LocalProductCarousel
+        productos={alternativas}
+        mejores={mejoresAlternativas}
+        titulo={enStock.length > 0 ? "Otros neumáticos con stock hoy" : `Sin ${label}: estos sí tenemos en stock hoy`}
+      />
 
       {productos.some((p) => p.isCarga) && (
         <p className="mb-10 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700">
@@ -382,9 +405,7 @@ export function SizeLanding({
       <section className="mt-14 overflow-hidden rounded-2xl bg-gradient-to-br from-navy-950 to-black p-8 text-white">
         <h2 className="text-2xl font-black">Dónde comprar neumáticos {label}</h2>
         <p className="mt-3 max-w-2xl leading-relaxed text-slate-300">
-          Podés comprar online y recibirlo en tu casa en cualquier punto del país: gratis desde{" "}
-          {formatPrice(FREE_SHIPPING_THRESHOLD)} de compra, o {formatPrice(SHIPPING_FLAT_RATE)} fijos
-          por debajo de eso. También podés retirarlo sin cargo en {branch.address},{" "}
+          Podés retirarlo sin cargo en {branch.address},{" "}
           {branch.city}. Si retirás, la colocación y el cambio de válvulas van sin cargo, y tenés
           alineación y balanceo en el mismo local para dejar el auto listo en una sola visita.
         </p>
