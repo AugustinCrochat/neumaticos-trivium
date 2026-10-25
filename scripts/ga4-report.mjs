@@ -92,7 +92,7 @@ const body = {
   dateRanges: [{ startDate: `${dias}daysAgo`, endDate: "today" }],
   dimensions: def.dimensions.map((name) => ({ name })),
   metrics: def.metrics.map((name) => ({ name })),
-  limit,
+  limit: limite,
   ...(def.orderBy
     ? { orderBys: [{ metric: { metricName: def.orderBy }, desc: true }] }
     : { orderBys: [{ dimension: { dimensionName: "date" } }] }),
