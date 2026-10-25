@@ -64,10 +64,12 @@ export function ProductImageGallery({
 
   const slides: Slide[] = [
     ...(hasImage ? [{ kind: "foto" as const, src: product.imageUrl, alt: productAlt(product) }] : []),
-    ...extraPhotos.map((src, i) => ({ kind: "foto" as const, src, alt: productExtraAlt(product, src, i) })),
+    // La etiqueta UE (homologación europea) va segunda, justo después de la
+    // principal: es de lo que más se consulta antes de comprar.
     ...(label
       ? [{ kind: "etiqueta" as const, src: label.svgPath, thumbSrc: label.svgPath, alt: `Etiqueta de eficiencia energética UE — ${product.brand} ${product.modeloBase}, ${label.tyreDesignation}` }]
       : []),
+    ...extraPhotos.map((src, i) => ({ kind: "foto" as const, src, alt: productExtraAlt(product, src, i) })),
     ...(selectedBranch.facadePhoto
       ? [{
           kind: "sucursal" as const,
@@ -99,7 +101,16 @@ export function ProductImageGallery({
   // asoma por el costado. `settling` activa la transición al soltar.
   const [dragX, setDragX] = useState(0);
   const [settling, setSettling] = useState(false);
+  const thumbsRef = useRef<HTMLDivElement>(null);
   const settleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Al cambiar de slide (swipe o miniatura), la tira de miniaturas se
+  // desplaza para que la activa quede entera a la vista, sin mover la página.
+  useEffect(() => {
+    const box = thumbsRef.current;
+    const thumb = box?.children[index] as HTMLElement | undefined;
+    if (!box || !thumb) return;
+    box.scrollTo({ left: thumb.offsetLeft - (box.clientWidth - thumb.offsetWidth) / 2, behavior: "smooth" });
+  }, [index]);
   useEffect(() => () => { if (settleTimerRef.current) clearTimeout(settleTimerRef.current); }, []);
   const current = slides[index];
   const labelUtqg = current?.kind === "etiqueta" ? utqg : null;
@@ -277,7 +288,7 @@ export function ProductImageGallery({
             style={{ transform: `translateX(calc(${dragX < 0 ? "100%" : "-100%"} + ${dragX}px))`, transition: settling ? "transform 220ms ease-out" : "none" }}
           >
             {peek.kind === "etiqueta" ? (
-              <EuLabelCard src={peek.src} alt="" utqg={null} sizes="(max-width: 768px) 100vw, 50vw" />
+              <EuLabelCard src={peek.src} alt="" utqg={utqg} sizes="(max-width: 768px) 100vw, 50vw" />
             ) : (
               // El padding va en un contenedor aparte: una <Image fill> ignora el
               // padding de su padre y, sin esto, la vecina se dibuja más grande
@@ -424,7 +435,7 @@ export function ProductImageGallery({
       )}
 
       {slides.length > 1 && (
-        <div className="mt-3 flex gap-3 overflow-x-auto overscroll-x-contain pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" style={{ touchAction: "pan-x" }}>
+        <div ref={thumbsRef} className="relative mt-3 flex gap-3 overflow-x-auto overscroll-x-contain pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" style={{ touchAction: "pan-x" }}>
           {slides.map((slide, i) => (
             <button
               key={i}

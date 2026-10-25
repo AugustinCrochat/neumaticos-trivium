@@ -71,7 +71,7 @@ export function ProductCard({
       {/* Image */}
       <Link href={`/productos/${product.slug}`} className="relative bg-white pt-[108%] md:pt-[95%] overflow-hidden block">
         <div className="absolute top-3 left-3 z-10 flex flex-col gap-2 items-start">
-          {best && <BestPriceBadge label={cheapestLabel ?? groupLabel(product)} />}
+          {best && <BestPriceBadge label={cheapestLabel ?? groupLabel(product)} className="hidden md:flex" />}
           {product.priceOld && (
             <span className="bg-red-600 text-white text-[10px] font-black px-2.5 py-1 rounded-md shadow-lg uppercase tracking-tighter">
               {discount(price, product.priceOld)}% OFF
@@ -88,6 +88,12 @@ export function ProductCard({
             </span>
           )}
         </div>
+        {/* En móvil el badge baja a la esquina inferior derecha para no tapar la foto. */}
+        {best && (
+          <div className="absolute bottom-3 right-3 z-10 md:hidden">
+            <BestPriceBadge label={cheapestLabel ?? groupLabel(product)} />
+          </div>
+        )}
         <div className="absolute inset-0 p-1 pt-6 md:pt-1">
           {hasImage ? (
             <div className="relative w-full h-full">

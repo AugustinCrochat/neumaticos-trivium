@@ -32,6 +32,7 @@ import { getTreadCloseup } from "@/lib/tread-closeups";
 import { ProductNameWithHighlightedSize } from "@/components/ui/ProductNameWithHighlightedSize";
 import { ProductImageGallery } from "@/components/ui/ProductImageGallery";
 import { ProductPageClient } from "./ProductPageClient";
+import { CompatibilidadVehiculo } from "./CompatibilidadVehiculo";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -499,6 +500,9 @@ export default async function ProductPage({ params }: Props) {
           </div>
         </div>
       </div>
+
+      {/* Si hay un auto elegido: aviso de compatibilidad, antes de la lista de modelos */}
+      <CompatibilidadVehiculo product={product} />
 
       {/* Modelos de autos compatibles con esta medida */}
       {vehiculos.length > 0 && (
