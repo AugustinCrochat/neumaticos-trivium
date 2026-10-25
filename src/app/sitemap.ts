@@ -88,6 +88,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url("/calculadora-equivalencia-neumaticos", 0.8, "monthly"),
     url("/cotizador", 0.7, "monthly"),
     url("/herramientas", 0.7, "monthly"),
+    url("/utqg", 0.8, "weekly"),
     ...TOOLS.map((t) => url(toolPath(t.slug), 0.7, "monthly")),
     url("/servicios", 0.7, "monthly"),
     url("/sucursales", 0.8, "monthly"),

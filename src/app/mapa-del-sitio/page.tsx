@@ -56,6 +56,7 @@ const SECTIONS: Section[] = [
       { href: "/neumaticos/at", label: "Neumáticos A/T", hint: "Todo terreno para camionetas y 4x4." },
       { href: "/neumaticos/ht", label: "Neumáticos H/T", hint: "Para ruta y uso mixto." },
       { href: "/neumaticos/carga", label: "Neumáticos de carga", hint: "Para utilitarios, furgones y camiones livianos." },
+      { href: "/utqg", label: "UTQG: qué significa", hint: "Cómo leer 400 A A y qué neumáticos lo tienen." },
       { href: "/marcas", label: "Marcas", hint: "Cada marca con sus modelos y medidas." },
       { href: "/vehiculos", label: "Por vehículo", hint: "La medida que lleva tu auto o camioneta." },
       { href: "/ofertas", label: "Ofertas", hint: "Precios especiales por tiempo limitado." },

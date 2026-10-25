@@ -62,7 +62,8 @@ export default function Page() {
         <strong>UTQG</strong>, con un número y dos letras — por ejemplo <strong>420 A A</strong>. Es
         un código distinto, de otro país y otra norma, que muchos fabricantes imprimen en el mismo
         flanco porque venden el mismo neumático en los dos mercados. Esta nota explica qué significa
-        cada parte, cómo se calcula y por qué no aparece en todos los modelos del catálogo.
+        cada parte, cómo se calcula y por qué no aparece en todos los modelos del catálogo. Si buscás la lista de neumáticos que lo
+        tienen, está en <Link href="/utqg">UTQG: qué significa y qué modelos lo declaran</Link>.
       </p>
 
       <h2>Qué es UTQG</h2>

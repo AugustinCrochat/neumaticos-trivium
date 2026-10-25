@@ -427,7 +427,7 @@ export default async function ProductPage({ params }: Props) {
               <strong className="text-slate-700">UTQG {utqg.treadwear} {utqg.traction} {utqg.temperature}:</strong>{" "}
               desgaste relativo {utqg.treadwear}, tracción {utqg.traction} y temperatura {utqg.temperature}, norma de
               EE. UU. (no forma parte de la etiqueta europea).{" "}
-              <Link href="/blog/utqg-desgaste-traccion-temperatura" className="font-bold text-navy-700 underline decoration-navy-300 hover:decoration-navy-900">Qué significa.</Link>
+              <Link href="/utqg" className="font-bold text-navy-700 underline decoration-navy-300 hover:decoration-navy-900">Qué significa.</Link>
             </p>
           )}
         </div>
