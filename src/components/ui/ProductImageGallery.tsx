@@ -1,6 +1,7 @@
 "use client";
 
 import { EuStars } from "@/components/ui/EuLabelBadge";
+import { EuLabelCard } from "@/components/ui/EuLabelCard";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import type { TireProduct } from "@/lib/types";
@@ -240,7 +241,7 @@ export function ProductImageGallery({
 
   return (
     <div>
-      <div className={`bg-slate-50 rounded-2xl aspect-square flex items-center justify-center relative group overflow-hidden ${current?.kind === "sucursal" ? "" : current?.kind === "etiqueta" ? "p-8" : "p-1 md:p-2"}`}>
+      <div className={`${current?.kind === "etiqueta" ? "bg-white ring-1 ring-slate-200" : "bg-slate-50"} rounded-2xl aspect-square flex items-center justify-center relative group overflow-hidden ${current?.kind === "sucursal" ? "" : current?.kind === "etiqueta" ? "" : "p-1 md:p-2"}`}>
         {current?.kind === "foto" && index === 0 && (
           <>
             {badges}
@@ -268,33 +269,30 @@ export function ProductImageGallery({
                 ? `Sucursal ${current.branchName}`
                 : "Ampliar imagen"
             }
-            className={`relative h-full w-full ${current.kind === "sucursal" ? "cursor-default" : "cursor-zoom-in"} ${current.kind === "etiqueta" ? "p-4" : ""}`}
+            className={`relative h-full w-full ${current.kind === "sucursal" ? "cursor-default" : "cursor-zoom-in"} `}
           >
-            {current.kind === "etiqueta" && (
-              <span className="absolute inset-x-0 top-0 flex h-9 items-center justify-center gap-2 border-b border-slate-200 bg-white px-2 text-xs font-black uppercase tracking-wide text-navy-900">
-                <EuStars className="h-5 w-5 shrink-0" />
-                Homologadas en Europa
-              </span>
-            )}
-            <div
-              className={`relative w-full ${current.kind === "etiqueta" ? "mt-9" : ""} ${
-                labelUtqg && current.kind === "etiqueta" ? "h-[calc(100%-5.25rem)]" : labelUtqg ? "h-[calc(100%-3rem)]" : current.kind === "etiqueta" ? "h-[calc(100%-2.25rem)]" : "h-full"
-              }`}
-            >
-              <Image
-                src={current.src}
-                alt={current.alt}
-                fill
-                className={current.kind === "sucursal" ? "object-cover" : "object-contain"}
-                sizes="(max-width: 768px) 100vw, 50vw"
-                priority={index === 0}
-                onLoad={(e) => setImgAspect(e.currentTarget.naturalWidth / e.currentTarget.naturalHeight)}
-              />
-            </div>
-            {labelUtqg && (
-              <span className="absolute inset-x-0 bottom-0 flex h-10 items-center justify-center border-t border-slate-200 bg-white px-2 text-center text-xs font-black tracking-wide text-navy-900">
-                UTQG {labelUtqg.treadwear} {labelUtqg.traction} {labelUtqg.temperature}
-              </span>
+            {current.kind === "etiqueta" ? (
+              <EuLabelCard src={current.src} alt={current.alt} utqg={labelUtqg} sizes="(max-width: 768px) 100vw, 50vw" />
+            ) : (
+              <>
+                <div className={`relative w-full ${label && current.kind === "foto" ? "h-[calc(100%-2rem)]" : "h-full"}`}>
+                  <Image
+                    src={current.src}
+                    alt={current.alt}
+                    fill
+                    className={current.kind === "sucursal" ? "object-cover" : "object-contain"}
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    priority={index === 0}
+                    onLoad={(e) => setImgAspect(e.currentTarget.naturalWidth / e.currentTarget.naturalHeight)}
+                  />
+                </div>
+                {label && current.kind === "foto" && (
+                  <span className="absolute inset-x-0 bottom-0 flex h-8 items-center justify-center gap-2 border-t border-slate-200 bg-white px-2 text-[11px] font-black uppercase tracking-wide text-navy-900">
+                    <EuStars className="h-5 w-5 shrink-0" />
+                    Homologadas en Europa
+                  </span>
+                )}
+              </>
             )}
             {zoomed && current.kind !== "etiqueta" && current.kind !== "sucursal" && (
               <span
@@ -302,14 +300,8 @@ export function ProductImageGallery({
                 style={{ left: lensStyle.left, top: lensStyle.top, width: lensStyle.width, height: lensStyle.height }}
               />
             )}
-            {label && current.kind === "foto" && (
-              <span className="absolute bottom-3 left-3 flex items-center gap-1.5 rounded-full bg-white/95 py-1 pl-1.5 pr-3 text-[11px] font-black uppercase tracking-wide text-navy-900 shadow-md ring-1 ring-slate-200">
-                <EuStars className="h-5 w-5 shrink-0" />
-                Homologadas en Europa
-              </span>
-            )}
             {current.kind !== "sucursal" && (
-              <span className="absolute bottom-3 right-3 w-8 h-8 rounded-full bg-white/90 shadow-md flex items-center justify-center text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity">
+              <span className={`absolute right-3 ${label && current.kind === "foto" ? "bottom-11" : "bottom-3"} w-8 h-8 rounded-full bg-white/90 shadow-md flex items-center justify-center text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity`}>
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16zM11 8v6M8 11h6" />
                 </svg>

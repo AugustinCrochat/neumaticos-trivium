@@ -2,6 +2,7 @@
 
 import { createPortal } from "react-dom";
 import type { Utqg } from "@/lib/utqg";
+import { EuLabelCard } from "@/components/ui/EuLabelCard";
 
 export function ZoomPanel({
   src,
@@ -60,19 +61,19 @@ export function ZoomPanel({
         top: anchorRect.top,
         width: panelSize,
         height: panelSize,
-        backgroundImage: `url(${src})`,
-        backgroundRepeat: "no-repeat",
-        backgroundSize: showEntireImage ? (utqg ? "auto calc(100% - 3rem)" : "contain") : `${scaledWidth}px ${scaledHeight}px`,
-        backgroundPosition: showEntireImage ? (utqg ? "center top" : "center") : `${backgroundX}px ${backgroundY}px`,
+        ...(showEntireImage
+          ? {}
+          : {
+              backgroundImage: `url(${src})`,
+              backgroundRepeat: "no-repeat",
+              backgroundSize: `${scaledWidth}px ${scaledHeight}px`,
+              backgroundPosition: `${backgroundX}px ${backgroundY}px`,
+            }),
       }}
       role="img"
       title={alt}
     >
-      {utqg && (
-        <span className="absolute inset-x-0 bottom-0 flex h-9 items-center justify-center border-t border-slate-200 bg-white px-2 text-center text-xs font-black tracking-wide text-navy-900">
-          UTQG {utqg.treadwear} {utqg.traction} {utqg.temperature}
-        </span>
-      )}
+      {showEntireImage && <EuLabelCard src={src} alt={alt} utqg={utqg} sizes="40vw" />}
     </div>,
     document.body
   );
