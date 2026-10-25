@@ -1,21 +1,10 @@
 "use client";
 
-import { usePathname } from "next/navigation";
 import { useBranch } from "@/contexts/branch-context";
 import { goToWhatsApp } from "@/lib/gtag";
 
-// Las fichas de producto y de accesorio ya traen su propio CTA de WhatsApp
-// contextual (con el nombre del producto en el mensaje) — mostrar además el
-// flotante ahí sería un botón repetido pisando al que ya hace ese trabajo
-// mejor. Se muestra en el resto del sitio: home, listados, medida, rodado,
-// categorías, blog, etc.
-const OCULTAR_EN = [/^\/productos\//, /^\/tuercas-antirrobo\/./];
-
 export function FloatingWhatsAppButton() {
-  const pathname = usePathname();
   const { selectedBranch } = useBranch();
-
-  if (OCULTAR_EN.some((re) => re.test(pathname))) return null;
 
   const waText = encodeURIComponent("Hola! Estoy mirando la web y quería hacer una consulta");
   const href = `https://wa.me/${selectedBranch.whatsapp}?text=${waText}`;

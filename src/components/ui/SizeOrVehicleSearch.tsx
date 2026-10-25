@@ -76,7 +76,9 @@ export function SizeOrVehicleSearch({
           onLiveChange={onLiveChange}
         />
       ) : (
-        <VehicleSizeSearch initialMedida={initialMedida} economicos={economicos} />
+        // Al quitar el auto se queda en esta pestaña (sin esto el modo por defecto
+        // vuelve a "Por medida" porque ya no hay vehículo).
+        <VehicleSizeSearch initialMedida={initialMedida} economicos={economicos} onClear={() => setManualMode("vehiculo")} />
       )}
     </div>
   );

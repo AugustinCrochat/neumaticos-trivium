@@ -26,7 +26,7 @@ function findVersionIndexBySize(sizes: Sizes | null, size?: Sizes[number]): numb
   return sizes.findIndex((s) => s.w === size.w && s.p === size.p && s.r === size.r);
 }
 
-export function VehicleSizeSearch({ initialMedida, economicos = false }: { initialMedida?: string; economicos?: boolean }) {
+export function VehicleSizeSearch({ initialMedida, economicos = false, onClear }: { initialMedida?: string; economicos?: boolean; onClear?: () => void }) {
   const router = useRouter();
   const { selectedBranch } = useBranch();
   const { vehiculos, selectedVehicle, setSelectedVehicle, clearSelectedVehicle } = useVehicle();
@@ -96,7 +96,10 @@ export function VehicleSizeSearch({ initialMedida, economicos = false }: { initi
           <p className="text-base font-bold text-navy-900 truncate">{selectedVehicle.marca} {selectedVehicle.modelo}</p>
         </div>
         <button
-          onClick={clearSelectedVehicle}
+          onClick={() => {
+            onClear?.();
+            clearSelectedVehicle();
+          }}
           className="text-xs font-bold text-slate-500 hover:text-slate-700 transition-colors shrink-0"
         >
           Cambiar
