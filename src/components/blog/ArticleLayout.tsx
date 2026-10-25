@@ -187,8 +187,7 @@ export function ArticleLayout({
           </h2>
           <p className="!text-slate-300">
             Buscá tu medida y mirá precio y stock al instante. Importamos directo de fábrica, así
-            que el precio no arrastra el margen de tres intermediarios. Envío a todo el país o
-            retiro sin cargo en {branch.address}, {branch.city}.
+            que el precio no arrastra el margen de tres intermediarios. Retiro sin cargo en {branch.address}, {branch.city}.
           </p>
           <div className="flex flex-wrap gap-3">
             <Link

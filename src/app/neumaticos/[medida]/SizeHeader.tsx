@@ -74,8 +74,7 @@ export function SizeHeader({
                 desde <strong className="text-navy-900">{formatPrice(desde)}</strong> por unidad
               </>
             )}
-            . Son cubiertas de importación directa, con stock físico en el local de {branchCity} y
-            envío a todo el país. El precio que ves es el que pagás: sin sorpresas al llegar al
+            . Son cubiertas de importación directa, con stock físico en el local de {branchCity}. El precio que ves es el que pagás: sin sorpresas al llegar al
             mostrador.
           </>
         ) : (

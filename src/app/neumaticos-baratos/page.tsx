@@ -48,11 +48,6 @@ const FAQS = [
       "Los precios publicados incluyen IVA y son por unidad. La colocación y el cambio de válvulas no tienen cargo si comprás las cubiertas en el local; el balanceo y la alineación se cotizan aparte.",
   },
   {
-    question: "¿Hacen envíos o tengo que ir al local?",
-    answer:
-      "Podés retirar en el local de Córdoba o pedir envío a todo el país. El costo del envío figura al finalizar el pedido y es gratis a partir de cierto monto.",
-  },
-  {
     question: "¿Cómo sé qué medida de cubierta necesito?",
     answer:
       "Está en el flanco del neumático que tenés puesto, con el formato 205/55 R16 (ancho, perfil y rodado), y también en la calcomanía de la puerta del conductor. Si no la encontrás, buscá por marca y modelo de tu auto en la sección Por mi auto.",

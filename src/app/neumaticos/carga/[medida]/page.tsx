@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { BRANCHES, DEFAULT_BRANCH_ID, FREE_SHIPPING_THRESHOLD, SHIPPING_FLAT_RATE } from "@/lib/config";
+import { BRANCHES, DEFAULT_BRANCH_ID } from "@/lib/config";
 import { getProductosDesdePOS } from "@/lib/pos-api";
 import { absoluteUrl, canonical, itemListJsonLd, SITE_NAME, type Faq } from "@/lib/seo";
 import {
@@ -66,7 +66,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description:
       `${desde ? `Neumáticos ${label} desde $${desde.toLocaleString("es-AR")} con stock.` : `Neumáticos ${label}.`} ` +
       `Cubiertas de carga (serie C) para furgones y utilitarios, de importación directa, con garantía de 1 año. ` +
-      `Colocación sin cargo en Córdoba y envío a todo el país.`,
+      `Colocación sin cargo en Córdoba.`,
     alternates: canonical(path),
     openGraph: { title: `${title} — ${SITE_NAME}`, url: path, ...poolShare(medida).openGraph },
     twitter: poolShare(medida).twitter,
@@ -124,10 +124,6 @@ export default async function CargaMedidaPage({ params }: Props) {
     {
       question: `¿Qué marcas de ${label} tienen?`,
       answer: `Hoy tenemos ${marcas.join(", ")} en esta medida. Todas con garantía de un año por defecto de fábrica.`,
-    },
-    {
-      question: `¿Puedo comprar ${label} online y recibirlos en casa?`,
-      answer: `Sí. Enviamos a todo el país: gratis desde ${formatPrice(FREE_SHIPPING_THRESHOLD)} de compra, o ${formatPrice(SHIPPING_FLAT_RATE)} fijos por debajo de eso. También podés retirar sin cargo en ${branch.address}, ${branch.city}, donde hacemos la colocación sin costo.`,
     },
   ];
 

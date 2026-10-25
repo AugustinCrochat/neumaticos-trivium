@@ -52,7 +52,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const title = `Neumáticos baratos rodado ${rim} — precios y medidas R${rim}`;
     return {
       title,
-      description: `Todas las medidas de neumáticos rodado ${rim} con stock y precio actualizado. Cubiertas R${rim} de importación directa para auto y camioneta, con envío a todo el país.`,
+      description: `Todas las medidas de neumáticos rodado ${rim} con stock y precio actualizado. Cubiertas R${rim} de importación directa para auto y camioneta, con retiro en Córdoba.`,
       alternates: canonical(`/neumaticos/${rimSlug(rim)}`),
       openGraph: { title: `${title} — ${SITE_NAME}`, url: `/neumaticos/${rimSlug(rim)}`, ...poolShare(medida).openGraph },
       twitter: poolShare(medida).twitter,
@@ -79,7 +79,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     vehiculos.length
       ? `Medida original de ${sortVehiclesByPopularity(vehiculos).slice(0, 3).map((v) => `${v.brand} ${v.model}`).join(", ")} y otros.`
       : "",
-    "Envío a todo el país o retiro sin cargo en Córdoba.",
+    "Retiro sin cargo en Córdoba.",
   ].filter(Boolean);
 
   const title = desde

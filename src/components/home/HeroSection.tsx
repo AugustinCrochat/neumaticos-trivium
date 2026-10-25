@@ -34,7 +34,7 @@ export function HeroSection() {
             <p className="mt-5 max-w-lg text-lg leading-relaxed text-slate-300">
               Cubiertas al mejor precio para auto, camioneta, A/T y carga, de importación directa,
               con stock real y precio publicado. Retiro en nuestro local de Córdoba con colocación
-              incluida, gomería propia (alineación, balanceo y rotación) y envío a todo el país.
+              incluida, y gomería propia (alineación, balanceo y rotación).
             </p>
           </div>
 

@@ -8,7 +8,7 @@ import { canonical } from "@/lib/seo";
 export const metadata: Metadata = {
   title: "Tuercas antirrobo para llantas — auto y camioneta",
   description:
-    "Tuercas antirrobo para auto y camioneta, con juego de llave codificada. Colocación sin cargo en el local de Córdoba y envío a todo el país.",
+    "Tuercas antirrobo para auto y camioneta, con juego de llave codificada. Colocación sin cargo en el local de Córdoba.",
   alternates: canonical("/tuercas-antirrobo"),
 };
 

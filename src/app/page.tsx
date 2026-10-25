@@ -7,7 +7,6 @@ import { PopularSizesSection } from "@/components/home/PopularSizesSection";
 import { AboutSection } from "@/components/home/AboutSection";
 import { LocalSection } from "@/components/home/LocalSection";
 import { FaqSection } from "@/components/seo/FaqSection";
-import { FREE_SHIPPING_THRESHOLD, SHIPPING_FLAT_RATE } from "@/lib/config";
 import { getProductosDesdePOS } from "@/lib/pos-api";
 import { getSelectedBranchSlug } from "@/lib/branch-server";
 import { canonical } from "@/lib/seo";
@@ -32,7 +31,7 @@ export const metadata: Metadata = {
     absolute: "Neumáticos baratos en Córdoba — Cubiertas al mejor precio",
   },
   description:
-    "Neumáticos y cubiertas de importación directa al mejor precio, con stock real publicado. Local con gomería propia en Córdoba: alineación, balanceo y colocación sin cargo. Auto, camioneta, A/T y carga, con envío a todo el país.",
+    "Neumáticos y cubiertas de importación directa al mejor precio, con stock real publicado. Local con gomería propia en Córdoba: alineación, balanceo y colocación sin cargo. Auto, camioneta, A/T y carga.",
   alternates: canonical("/"),
 };
 
@@ -51,11 +50,6 @@ const FAQS = [
     question: "¿Los neumáticos tienen garantía?",
     answer:
       "Sí, un año por defecto de fabricación en todas las marcas que vendemos, gestionada directamente con nosotros en el local. Cubre fallas de fábrica como deformaciones, separación de capas o pérdida de aire por vicio del material. No cubre pinchaduras, golpes contra baches o cordones, ni desgaste irregular por falta de alineación.",
-  },
-  {
-    question: "¿Hacen envíos a todo el país?",
-    answer:
-      `Sí, a cualquier punto de Argentina. Es gratis en compras desde $${FREE_SHIPPING_THRESHOLD.toLocaleString("es-AR")}; por debajo de eso, $${SHIPPING_FLAT_RATE.toLocaleString("es-AR")} fijos, sin importar la provincia de destino. La alternativa es retirar sin cargo en el local de Córdoba, donde además la colocación va incluida.`,
   },
   {
     question: "¿Puedo pagar online?",

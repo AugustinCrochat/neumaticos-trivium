@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { DEFAULT_BRANCH_ID, FREE_SHIPPING_THRESHOLD, SHIPPING_FLAT_RATE } from "@/lib/config";
+import { DEFAULT_BRANCH_ID } from "@/lib/config";
 import { getProductosDesdePOS } from "@/lib/pos-api";
 import { BRANDS } from "@/lib/data";
 import { canonical, SITE_NAME } from "@/lib/seo";
@@ -19,7 +19,7 @@ import { poolShare } from "@/lib/share-image";
 export const metadata: Metadata = {
   title: "Neumáticos por medida en Córdoba: precios y stock",
   description:
-    "Buscá tu medida de neumático y mirá precio y stock al instante. Cubiertas baratas para auto y camioneta, rodado 13 al 20, de importación directa: retiro en Córdoba con colocación sin cargo o envío a todo el país.",
+    "Buscá tu medida de neumático y mirá precio y stock al instante. Cubiertas baratas para auto y camioneta, rodado 13 al 20, de importación directa: retiro en Córdoba con colocación sin cargo.",
   alternates: canonical("/neumaticos"),
   openGraph: {
     title: `Neumáticos económicos por medida — ${SITE_NAME}`,
@@ -49,11 +49,6 @@ const FAQS = [
     question: "¿Los neumáticos importados tienen garantía en Argentina?",
     answer:
       "Sí. Todos los que vendemos tienen un año de garantía por defecto de fabricación, y se gestiona directamente con nosotros, en el local. La garantía cubre fallas de fábrica, no daños por golpes, baches, pinchaduras ni desgaste por falta de alineación.",
-  },
-  {
-    question: "¿Hacen envíos a todo el país?",
-    answer:
-      `Sí, a cualquier punto de Argentina. Gratis en compras desde $${FREE_SHIPPING_THRESHOLD.toLocaleString("es-AR")}; por debajo, $${SHIPPING_FLAT_RATE.toLocaleString("es-AR")} fijos, sin importar la provincia. También podés retirar sin cargo en el local de Córdoba, donde la colocación va incluida.`,
   },
 ];
 
@@ -112,9 +107,7 @@ export default async function NeumaticosPage() {
           Elegí tu medida y vas a ver, en la misma página, qué modelos hay, a qué precio y si están
           en stock ahora. Trabajamos con importación directa: compramos en fábrica y vendemos al
           público sin distribuidor en el medio, que es de dónde sale la diferencia de precio.
-          Enviamos a todo el país gratis desde ${FREE_SHIPPING_THRESHOLD.toLocaleString("es-AR")} de
-          compra (o ${SHIPPING_FLAT_RATE.toLocaleString("es-AR")} fijos por debajo), o podés
-          retirar sin cargo en Córdoba.
+          El retiro en el local de Córdoba no tiene costo y la colocación va incluida.
         </p>
         <p className="mt-3 max-w-3xl leading-relaxed text-slate-500">
           ¿No sabés cuál es tu medida? Está escrita en el flanco del neumático que tenés puesto, con

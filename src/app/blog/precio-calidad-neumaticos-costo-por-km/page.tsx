@@ -343,7 +343,7 @@ export default function PrecioCalidadNeumaticosPage() {
           Explorá todos los neumáticos Grenlander
         </h2>
         <p className="text-zinc-400 mb-8 max-w-md mx-auto">
-          Encontrá el modelo y la medida que necesitás, con stock disponible y envío a todo el país.
+          Encontrá el modelo y la medida que necesitás, con stock disponible y retiro en nuestro local de Córdoba.
         </p>
         <Link
           href="/marcas/grenlander"

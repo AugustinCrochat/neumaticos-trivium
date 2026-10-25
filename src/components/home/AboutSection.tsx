@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { FREE_SHIPPING_THRESHOLD, SHIPPING_FLAT_RATE } from "@/lib/config";
 
 /**
  * Bloque de texto largo de la home.
@@ -86,14 +85,10 @@ export function AboutSection() {
           </p>
 
           <h3 className="font-display pt-4 text-3xl font-bold uppercase tracking-wide text-navy-900">
-            Envío a todo el país o retiro sin cargo
+            Retiro sin cargo y colocación incluida
           </h3>
           <p>
-            Si estás lejos de Córdoba, enviamos a cualquier punto de Argentina: gratis en compras
-            desde ${FREE_SHIPPING_THRESHOLD.toLocaleString("es-AR")}, o $
-            {SHIPPING_FLAT_RATE.toLocaleString("es-AR")} fijos por debajo de eso, sin importar a qué
-            provincia van. Si estás cerca, el retiro en el local no tiene costo y
-            además te llevás la colocación incluida.{" "}
+            El retiro en el local no tiene costo y además te llevás la colocación incluida.{" "}
             <Link
               href="/neumaticos-en"
               className="font-bold text-navy-800 underline underline-offset-2"

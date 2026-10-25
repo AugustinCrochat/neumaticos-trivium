@@ -8,7 +8,7 @@ import { canonical } from "@/lib/seo";
 export const metadata: Metadata = {
   title: "Catálogo de neumáticos y cubiertas en Córdoba",
   description:
-    "Todo el catálogo de neumáticos importados a precio outlet: filtrá por marca, medida, tipo de vehículo y precio. Cubiertas para auto, camioneta, A/T y carga con stock real, retiro en Córdoba y envío a todo el país.",
+    "Todo el catálogo de neumáticos importados a precio outlet: filtrá por marca, medida, tipo de vehículo y precio. Cubiertas para auto, camioneta, A/T y carga con stock real, retiro en Córdoba.",
   alternates: canonical("/catalogo"),
 };
 

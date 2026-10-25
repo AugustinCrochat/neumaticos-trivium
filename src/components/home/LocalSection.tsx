@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { BRANCHES } from "@/lib/config";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
-import { ZonasAgrupadas } from "@/components/seo/ZonasAgrupadas";
+import { ZonasPorProvincia } from "@/components/seo/ZonasPorProvincia";
 
 /**
  * Bloque local de la home.
@@ -85,14 +85,7 @@ export function LocalSection() {
               Aires. Si estás en cualquiera de esas zonas, el retiro en el local no tiene costo y la
               colocación va incluida.
             </p>
-            <ZonasAgrupadas variant="dark" />
-            <p className="mt-4 text-sm leading-relaxed text-slate-400">
-              ¿Estás en otra provincia? Enviamos a todo el país con costo fijo.{" "}
-              <Link href="/neumaticos" className="font-bold text-white underline underline-offset-2">
-                Buscá tu medida
-              </Link>{" "}
-              y comprá online.
-            </p>
+            <ZonasPorProvincia />
           </div>
         </div>
       </div>

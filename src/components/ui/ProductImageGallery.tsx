@@ -209,7 +209,7 @@ export function ProductImageGallery({
   const warrantyBadge = (
     <a
       href="#garantia"
-      className="absolute top-4 right-4 z-10 flex items-center gap-2 rounded-full bg-amber-500 py-1.5 pl-1.5 pr-4 text-sm font-black uppercase tracking-tight text-white shadow-lg ring-2 ring-white/80 transition-colors hover:bg-amber-600"
+      className={`absolute right-4 z-10 flex items-center gap-2 rounded-full bg-amber-500 py-1.5 pl-1.5 pr-4 text-sm font-black uppercase tracking-tight text-white shadow-lg ring-2 ring-white/80 transition-colors hover:bg-amber-600 ${isPromoDay ? "bottom-16 sm:bottom-4" : "bottom-4"}`}
     >
       <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-amber-600">
         <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
@@ -224,9 +224,9 @@ export function ProductImageGallery({
     </a>
   );
 
-  // Sólo miércoles y sábado (ver isVisaMasterPromoDay). Va abajo, la única
-  // esquina libre: arriba ya están los badges de OFF/Carga/A-T (izquierda) y
-  // garantía (derecha).
+  // Sólo miércoles y sábado (ver isVisaMasterPromoDay). Va abajo a la
+  // izquierda; la garantía va abajo a la derecha y, en pantallas chicas donde
+  // no entran las dos en línea, se apila encima de este.
   const promoBadge = isPromoDay && (
     <a
       href="#metodos-pago"
@@ -296,7 +296,7 @@ export function ProductImageGallery({
               />
             )}
             {current.kind !== "sucursal" && (
-              <span className={`absolute right-3 bottom-3 w-8 h-8 rounded-full bg-white/90 shadow-md flex items-center justify-center text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity`}>
+              <span className={`absolute right-3 top-3 w-8 h-8 rounded-full bg-white/90 shadow-md flex items-center justify-center text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity`}>
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16zM11 8v6M8 11h6" />
                 </svg>
