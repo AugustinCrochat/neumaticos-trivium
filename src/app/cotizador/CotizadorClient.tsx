@@ -373,7 +373,10 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
             {buscandoTuerca && (
               <TuercaPicker
                 agregadas={tuercas.map((t) => t.id)}
-                onAdd={(a) => setTuercas((prev) => (prev.some((x) => x.id === a.id) ? prev : [...prev, a]))}
+                onAdd={(a) => {
+                  setTuercas((prev) => (prev.some((x) => x.id === a.id) ? prev : [...prev, a]));
+                  setBuscandoTuerca(false);
+                }}
               />
             )}
           </div>
