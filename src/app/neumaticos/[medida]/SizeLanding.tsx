@@ -128,8 +128,9 @@ export function SizeLanding({
   // Alternativas con stock para que nadie se quede sólo con "sin stock":
   // primero las del mismo rodado (sirven con las mismas llantas), con el
   // diámetro más cercano, después el resto, y a igual cercanía el más barato. Los de carga sólo si esta medida lo es.
+  const esMedidaCarga = productos.some((x) => x.isCarga);
   const alternativas = todos
-    .filter((p) => p.enStock && !sizesEqual(p.size, size) && !!p.isCarga === productos.some((x) => x.isCarga))
+    .filter((p) => p.enStock && !sizesEqual(p.size, size) && !!p.isCarga === esMedidaCarga)
     .map((p) => ({ p, diff: Math.abs(diameterDiffPercent(p.size, size)) }))
     .sort(
       (a, b) =>
@@ -215,7 +216,7 @@ export function SizeLanding({
       <LocalProductCarousel
         productos={alternativas}
         mejores={mejoresAlternativas}
-        titulo={enStock.length > 0 ? "Otros neumáticos con stock hoy" : `Sin ${label}: estos sí tenemos en stock hoy`}
+        titulo={enStock.length > 0 ? "Otros neumáticos disponibles en el local" : `Sin ${label}: estos otros están disponibles en el local`}
       />
 
       {productos.some((p) => p.isCarga) && (

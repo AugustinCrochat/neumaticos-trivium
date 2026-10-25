@@ -21,7 +21,7 @@ export function productAlt(p: Described): string {
 export function productExtraAlt(p: Pick<TireProduct, "brand" | "modeloBase" | "size">, src: string, n: number): string {
   const medida = `${p.size.width}/${p.size.profile} R${p.size.rim}`;
   const base = `${p.brand} ${p.modeloBase} ${medida}`;
-  if (src.includes("-etiqueta")) return `Neumático ${base} con la etiqueta del flanco: medida, índice de carga y etiqueta de eficiencia`;
+  if (src.endsWith("-etiqueta.webp")) return `Neumático ${base} con la etiqueta del flanco: medida, índice de carga y etiqueta de eficiencia`;
   return src.includes("/products-tread/")
     ? `Banda de rodamiento del neumático ${base}, primer plano del dibujo`
     : `Neumático ${base}, vista ${n + 1}`;

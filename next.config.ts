@@ -14,6 +14,12 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      // La nota de cubiertas de carga se renombró al corregir que ninguna es de nieve.
+      {
+        source: "/blog/cubierta-de-carga-comun-o-all-season-utilitario",
+        destination: "/blog/dos-cubiertas-de-carga-175-65-r14c-modelos-distintos",
+        permanent: true,
+      },
       // El índice de /indice-carga-velocidad/[codigo] nunca existió: la herramienta vive en /herramientas.
       { source: "/indice-carga-velocidad", destination: "/herramientas/indice-carga-velocidad", permanent: true },
       {

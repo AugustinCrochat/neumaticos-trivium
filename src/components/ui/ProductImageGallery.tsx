@@ -173,6 +173,10 @@ export function ProductImageGallery({
   }
 
   function goToSlide(nextIndex: number) {
+    // Un cambio manual (miniatura) cancela el swipe que estaba asentándose.
+    if (settleTimerRef.current) clearTimeout(settleTimerRef.current);
+    setSettling(false);
+    setDragX(0);
     setIndex(((nextIndex % slides.length) + slides.length) % slides.length);
     setImgAspect(1);
   }

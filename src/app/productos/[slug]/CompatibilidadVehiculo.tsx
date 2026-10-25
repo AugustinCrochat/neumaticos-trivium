@@ -2,24 +2,7 @@
 
 import { useVehicle } from "@/contexts/vehicle-context";
 import type { TireProduct } from "@/lib/types";
-
-// Diámetro en mm: rodado en pulgadas * 25.4 + 2 * (ancho * perfil / 100)
-function outerDiameterMm(size: { width: number; profile: number; rim: number }): number {
-  return size.rim * 25.4 + 2 * (size.width * (size.profile / 100));
-}
-
-function diameterDiffPercent(
-  a: { width: number; profile: number; rim: number },
-  b: { width: number; profile: number; rim: number }
-): number {
-  const da = outerDiameterMm(a);
-  const db = outerDiameterMm(b);
-  return ((da - db) / db) * 100;
-}
-
-function formatSize(size: { width: number; profile: number; rim: number }): string {
-  return `${size.width}/${size.profile} R${size.rim}`;
-}
+import { diameterDiffPercent, formatSize } from "@/lib/tire-sizes";
 
 /**
  * Aviso de compatibilidad con el vehículo elegido (persistido de una visita
@@ -139,6 +122,17 @@ export function CompatibilidadVehiculo({ product }: { product: TireProduct }) {
                 </ul>
               </details>
             )}
+          </div>
+        ) : vehicleSize ? (
+          <div className="bg-red-50 border border-red-200 rounded-2xl p-4 flex items-start gap-3">
+            <div className="w-5 h-5 rounded-full bg-red-100 flex items-center justify-center text-red-600 shrink-0 mt-0.5 text-xs font-black">!</div>
+            <div>
+              <p className="text-sm font-black text-red-950 leading-none">Esta medida no es la de tu auto</p>
+              <p className="text-xs text-red-800 mt-1.5 leading-relaxed">
+                Tu <span className="font-bold">{selectedVehicle.marca} {selectedVehicle.modelo}</span> usa {formatSize(vehicleSize!)}
+                {" "}y esta medida difiere {Math.abs(diffPercent).toFixed(1)}% en diámetro (el límite tolerado es ±3%). Consultanos antes de comprarla.
+              </p>
+            </div>
           </div>
         ) : null}
       </div>
