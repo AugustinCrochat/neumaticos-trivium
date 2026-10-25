@@ -69,7 +69,7 @@ const IMG = {
 };
 
 const L = {
-  todos: { label: "Ver todos los neumáticos", href: "/neumaticos" },
+  todos: { label: "Catálogo", href: "/catalogo" },
   ofertas: { label: "Ofertas", href: "/ofertas" },
   at: { label: "Neumáticos A/T", href: "/neumaticos/at" },
   ht: { label: "Neumáticos H/T", href: "/neumaticos/ht" },
@@ -218,8 +218,8 @@ export const BLOG_META: Record<string, BlogMeta> = {
   "opiniones-linglong-mileking-sumaxx": {
     cover: { src: IMG.montaje, alt: "Cubierta de carga Zmax montada en la desmontadora", position: "center 55%" },
     figure: { src: IMG.grenlanderPerfilBajo, alt: "Cubierta Grenlander de perfil bajo recién colocada en un auto rojo", portrait: true, caption: "Una cubierta de importación recién colocada en el taller." },
-    shopIntro: "Mirá los modelos y precios de estas marcas:",
-    shopLinks: [L.marcas, L.ofertas, L.todos],
+    shopIntro: "Las que sí tenemos en stock, con precio publicado:",
+    shopLinks: [L.grenlander, L.todos, L.ofertas],
   },
   "ruido-neumaticos": {
     cover: { src: IMG.rotacion, alt: "Auto con una rueda desmontada y la cubierta Pirelli al lado, durante una rotación", portrait: true, position: "center 55%" },
@@ -314,8 +314,8 @@ export const BLOG_META: Record<string, BlogMeta> = {
   "marcas-chinas-neumaticos-comparativa": {
     cover: { src: IMG.grenlanderPerfilBajo, alt: "Cubierta Grenlander de perfil bajo recién colocada en un auto rojo", portrait: true, position: "center 60%" },
     figure: { src: IMG.atClasica, alt: "Técnico colocando un Grenlander Maga A/T Two en una pickup Ford clásica", portrait: true, caption: "La diferencia entre marcas se ve en el uso y se mide en kilómetros." },
-    shopIntro: "Mirá las marcas que vendemos:",
-    shopLinks: [L.marcas, L.grenlander, L.ofertas],
+    shopIntro: "Probá Grenlander, nuestra marca de mayor confianza:",
+    shopLinks: [L.grenlander, L.todos, L.ofertas],
   },
   "etiqueta-europea-neumaticos": {
     cover: { src: IMG.montaje, alt: "Cubierta de carga Zmax montada en la desmontadora", position: "center 70%" },

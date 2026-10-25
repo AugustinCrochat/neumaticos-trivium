@@ -52,6 +52,26 @@ export function OtraMarcaExtra({ marca, productos }: { marca: OtraMarca; product
         </section>
       )}
 
+      {marca.produccion && (
+        <section className="mb-14 rounded-3xl border border-slate-200 bg-slate-50 p-6 md:p-8">
+          <h2 className={h2}>Fábricas distintas, resultados distintos</h2>
+          <div className="max-w-3xl space-y-3 leading-relaxed text-slate-700">
+            <p>{marca.produccion}</p>
+            <p>
+              Es lo contrario de un fabricante integrado. Grenlander y Zmax son del grupo Zodo, que figura como
+              fabricante en la homologación europea de ambas marcas y produce en sus propias plantas. Eso se nota en la
+              consistencia: el mismo modelo sale siempre de la misma línea y con el mismo control de calidad.
+            </p>
+            <p>
+              <Link href="/marcas/grenlander" className={link}>
+                Ver los neumáticos Grenlander
+              </Link>
+              .
+            </p>
+          </div>
+        </section>
+      )}
+
       <section className="mb-14 max-w-3xl space-y-3 leading-relaxed text-slate-700">
         <h2 className={h2}>Qué se sabe de {marca.name}</h2>
         <ul className="list-disc space-y-2 pl-5">

@@ -209,12 +209,14 @@ export function ProductImageGallery({
   const warrantyBadge = (
     <a
       href="#garantia"
-      className="absolute top-4 right-4 z-10 flex items-center gap-2 rounded-lg bg-amber-500 px-3.5 py-2 text-sm font-black uppercase tracking-tight text-white shadow-lg ring-2 ring-white/80 transition-colors hover:bg-amber-600"
+      className="absolute top-4 right-4 z-10 flex items-center gap-2 rounded-full bg-amber-500 py-1.5 pl-1.5 pr-4 text-sm font-black uppercase tracking-tight text-white shadow-lg ring-2 ring-white/80 transition-colors hover:bg-amber-600"
     >
-      <svg className="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z" />
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.5 12l1.75 1.75L14.5 10" />
-      </svg>
+      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-amber-600">
+        <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z" />
+          <path strokeLinecap="round" strokeLinejoin="round" d="M9.5 12l1.75 1.75L14.5 10" />
+        </svg>
+      </span>
       <span className="flex flex-col items-start leading-none">
         <span>Garantía 1 año</span>
         <span className="mt-0.5 text-[10px] font-bold normal-case tracking-normal text-amber-100">Trivium</span>
@@ -366,7 +368,7 @@ export function ProductImageGallery({
       )}
 
       {slides.length > 1 && (
-        <div className="mt-3 flex gap-3">
+        <div className="mt-3 flex gap-3 overflow-x-auto overscroll-x-contain pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" style={{ touchAction: "pan-x" }}>
           {slides.map((slide, i) => (
             <button
               key={i}

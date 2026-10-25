@@ -21,6 +21,8 @@ export type OtraMarca = {
   dato?: string;
   /** brandId de una marca nuestra que es del mismo fabricante. */
   mismoFabricante?: string;
+  /** Cómo se produce, solo cuando una fuente pública lo documenta: la marca encarga a terceros. */
+  produccion?: string;
 };
 
 export const OTRAS_MARCAS: OtraMarca[] = [
@@ -79,6 +81,50 @@ export const OTRAS_MARCAS: OtraMarca[] = [
     name: "Windforce",
     empresa: "No hay un grupo propietario único confirmado en las fuentes públicas",
     sede: "provincia de Shandong",
+  },
+  {
+    slug: "xbri",
+    name: "Xbri",
+    empresa: "Sunset Tires Corporation (grupo con matriz registrada en Hong Kong)",
+    sede: "Qingdao, según la prensa del sector",
+    dato: "Es una marca de origen brasileño que hasta ahora no tiene fábrica propia: anunció una planta en Ponta Grossa (Paraná) con producción prevista para 2027.",
+    produccion:
+      "Según la prensa del sector, sus neumáticos se fabrican en plantas de terceros en China, Vietnam, Tailandia y Camboya. Cuando una marca encarga a distintas fábricas, el mismo modelo puede salir de una planta u otra según el lote, y la calidad depende de a quién le tocó producir.",
+  },
+  {
+    slug: "doubleking",
+    name: "Double King",
+    empresa: "Shandong Double King Rubber Co., Ltd.",
+    sede: "provincia de Shandong",
+    dato: "Figura como titular de la marca registrada Double King. Algunos distribuidores la vinculan con el grupo Shuangwang, de Dongying, pero esa relación no está confirmada en fuentes oficiales.",
+  },
+  {
+    slug: "mileking",
+    name: "Mileking",
+    empresa: "ACMEX Group",
+    sede: "provincia de Shandong",
+    dato: "Según distribuidores, es del mismo grupo que Haida. Otra fuente pública registra la marca a nombre de Sichuan Tyre & Rubber, así que la titularidad no es unívoca.",
+  },
+  {
+    slug: "sumaxx",
+    name: "Sumaxx",
+    empresa: "Qingdao Sunforce Tyre Co., Ltd.",
+    sede: "Qingdao, provincia de Shandong",
+    dato: "Según un distribuidor europeo, se especializa en neumáticos de alto desempeño y fuera de ruta.",
+  },
+  {
+    slug: "aoteli",
+    name: "Aoteli",
+    empresa: "Shengtai Group",
+    sede: "Dongying, provincia de Shandong",
+    dato: "El grupo se fundó en 2002 y fabrica neumáticos de auto, SUV y camión.",
+  },
+  {
+    slug: "hifly",
+    name: "Hifly",
+    empresa: "Shandong Hengfeng Rubber and Plastic",
+    sede: "provincia de Shandong",
+    dato: "Según distribuidores, la marca Hifly se creó en 2007 para vender los neumáticos de la empresa en el exterior; en el registro europeo EPREL un modelo figura con otro proveedor de Dongying.",
   },
 ];
 

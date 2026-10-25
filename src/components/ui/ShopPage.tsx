@@ -778,6 +778,21 @@ export function ShopPage({
                         </Link>
                       </p>
                     </div>
+                    {vehiculoMarca && vehiculoModelo && (
+                      <div className="flex w-full shrink-0 items-center justify-between gap-3 rounded-2xl border border-emerald-200 bg-white px-4 py-3 md:w-auto md:flex-col md:items-start">
+                        <p className="text-sm font-bold text-emerald-950">
+                          <span className="block text-xs font-black uppercase tracking-wide text-emerald-700">Tu vehículo</span>
+                          {vehiculoMarca} {vehiculoModelo}
+                        </p>
+                        <button
+                          type="button"
+                          onClick={openVehicleModal}
+                          className="rounded-lg border border-emerald-300 bg-emerald-50 px-3 py-1.5 text-sm font-bold text-emerald-900 transition-colors hover:border-emerald-500 hover:bg-emerald-100"
+                        >
+                          Cambiar vehículo
+                        </button>
+                      </div>
+                    )}
                   </div>
                   
                   <div className="mt-8 p-5 bg-white/80 rounded-2xl border border-yellow-200/50 shadow-sm flex items-start gap-4">

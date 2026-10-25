@@ -117,6 +117,16 @@ export default function MarcasChinasComparativaPage() {
             </div>
           </div>
 
+          <p>
+            Hay un dato más que casi nadie mira: <strong className="text-zinc-900">quién fabrica de verdad</strong>.
+            Algunas marcas, como la brasileña Xbri, no tienen fábrica propia y encargan su producción a plantas de
+            terceros en distintos países (China, Vietnam, Tailandia y Camboya, según la prensa del sector). Cuando eso
+            pasa, dos neumáticos del mismo modelo pueden salir de plantas diferentes y no rendir igual. Zodo, el grupo de
+            Grenlander y Zmax, figura como fabricante en la homologación europea de sus marcas y produce en sus propias
+            plantas: mismo proceso y mismo control en cada lote.{" "}
+            <Link href="/marcas-de-neumaticos-chinos/xbri" className="font-bold text-red-700 underline">Más sobre Xbri</Link>.
+          </p>
+
           {/* Section 2: Grenlander */}
           <h2 className="text-2xl font-black text-zinc-900 pt-4 flex items-center gap-3">
             <span className="w-8 h-1 bg-red-600 rounded-full flex-shrink-0" />

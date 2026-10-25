@@ -13,6 +13,7 @@ import { sizeSlug, sizesFromCatalog } from "@/lib/tire-sizes";
 import { LOCALIDADES } from "@/lib/localidades";
 import { TOOLS, toolPath } from "@/lib/tools";
 import { poolShare } from "@/lib/share-image";
+import { SiteSearch, type SearchEntry } from "./SiteSearch";
 
 /** Notas que se ven de cada categoría antes del desplegable, para que las tarjetas queden parejas. */
 const NOTAS_VISIBLES = 4;
@@ -140,6 +141,19 @@ export default async function MapaDelSitioPage() {
   const posts = [...BLOG_POSTS].sort((a, b) => b.date.localeCompare(a.date));
   const categorias = [...new Set(posts.map((p) => p.category))];
 
+  const toolSlugs = new Set(TOOLS.map((t) => toolPath(t.slug)));
+  const buscables: SearchEntry[] = [
+    ...posts.map((p) => ({ title: p.title, href: `/blog/${p.slug}`, kind: `Nota · ${p.category}`, text: p.excerpt })),
+    ...TOOLS.map((t) => ({ title: t.name, href: toolPath(t.slug), kind: "Herramienta", text: `${t.short} ${t.metaDescription}` })),
+    ...SECTIONS.flatMap((s) => s.items)
+      .filter((i) => !toolSlugs.has(i.href))
+      .map((i) => ({ title: i.label, href: i.href, kind: "Página", text: i.hint })),
+    ...marcas.map(({ brand }) => ({ title: brand.name, href: `/marcas/${brand.id}`, kind: "Marca", text: brand.description ?? "" })),
+    { title: "UTQG: qué significa y cómo leerlo", href: "/utqg", kind: "Página", text: "Treadwear, tracción y temperatura de un neumático, como 400 A A." },
+    { title: "Opiniones y comparativas", href: "/opiniones-y-comparativas", kind: "Página", text: "Comparativas por medida y marcas chinas: quién las fabrica." },
+    { title: "Marcas de neumáticos chinos", href: "/marcas-de-neumaticos-chinos", kind: "Página", text: "Kpatos, Xbri, Double King, Linglong, Sailun y más." },
+  ];
+
   const stats = [
     { n: enStock.length, label: "modelos con stock" },
     { n: medidas.length, label: "medidas disponibles" },
@@ -226,6 +240,8 @@ export default async function MapaDelSitioPage() {
       </header>
 
       <main className="mx-auto max-w-6xl space-y-14 px-4 py-10 md:py-14">
+        <SiteSearch entries={buscables} />
+
         <div className="grid gap-5 md:grid-cols-2">
           {SECTIONS.map((section) => {
             const Icon = section.icon;

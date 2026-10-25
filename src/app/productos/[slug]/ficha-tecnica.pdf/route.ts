@@ -1,5 +1,5 @@
 import { PDFDocument, PDFName, PDFString, StandardFonts, rgb, type PDFFont, type PDFImage, type PDFPage } from "pdf-lib";
-import { BRANCHES, DEFAULT_BRANCH_ID, SITE_URL } from "@/lib/config";
+import { DEFAULT_BRANCH_ID, SITE_URL } from "@/lib/config";
 import { BRANDS } from "@/lib/data";
 import { getProductosDesdePOS } from "@/lib/pos-api";
 import { getTireLabel } from "@/lib/tire-labels";
@@ -86,7 +86,6 @@ export async function GET(_req: Request, { params }: Props) {
   const brand = BRANDS.find((b) => b.id === p.brandId);
   const label = getTireLabel(p.slug);
   const utqg = getUtqg(p.brandId, p.modeloBase, p.slug);
-  const branch = BRANCHES.find((b) => b.id === DEFAULT_BRANCH_ID) ?? BRANCHES[0];
   const url = `${SITE_URL}/productos/${p.slug}`;
   const sizeText = formatSize(p.size);
   const tipo = p.isCarga ? "Carga (serie C)" : p.isAT ? "A/T (All Terrain)" : "H/T (Highway Terrain), de calle";
@@ -125,7 +124,7 @@ export async function GET(_req: Request, { params }: Props) {
   const gy = 150;
   page.drawRectangle({ x: M, y: gy - 6, width: W - 2 * M, height: 52, color: rgb(1, 0.95, 0.9), borderColor: rgb(0.96, 0.62, 0.04), borderWidth: 1 });
   text("Garantía de 1 año por defecto de fabricación", M + 12, gy + 28, 10.5, { font: bold });
-  const g = wrap("No cubre desgaste por uso, pinchaduras, cortes ni daños por golpes, baches o falta de alineación. Se gestiona en el local con la factura de compra.", regular, 8.5, W - 2 * M - 24);
+  const g = wrap("No cubre desgaste por uso, pinchaduras, cortes ni daños por golpes, baches o falta de alineación. Se gestiona en la sucursal donde compraste, con la factura.", regular, 8.5, W - 2 * M - 24);
   g.forEach((l, i) => text(l, M + 12, gy + 14 - i * 10.5, 8.5, { color: MUTED }));
 
   // Botón a la ficha principal (con precio y stock al día).
@@ -137,11 +136,17 @@ export async function GET(_req: Request, { params }: Props) {
   text(u, M + (bw - regular.widthOfTextAtSize(u, 8.5)) / 2, 93, 8.5, { color: rgb(1, 0.9, 0.88) });
   link(page, pdf, M, 84, bw, 44, url);
 
-  page.drawLine({ start: { x: M, y: 70 }, end: { x: W - M, y: 70 }, thickness: 0.8, color: LINE });
-  text(`${branch.name} - ${branch.address}, ${branch.city}`, M, 56, 8.5, { color: MUTED });
-  text(`WhatsApp ${branch.phone ?? ""} - ${SITE_URL.replace("https://", "")}`, M, 44, 8.5, { color: MUTED });
-  text("Datos del fabricante. Los precios y el stock vigentes figuran en la ficha web.", M, 32, 8, { color: MUTED });
-
+  // Sin dirección ni teléfono: habrá muchas sucursales, así que los botones
+  // llevan a las páginas que muestran cada una.
+  const half = (bw - 12) / 2;
+  const outline = (label: string, x: number, href: string) => {
+    page.drawRectangle({ x, y: 44, width: half, height: 30, color: rgb(1, 1, 1), borderColor: NAVY, borderWidth: 1.5 });
+    text(label, x + (half - bold.widthOfTextAtSize(label, 10.5)) / 2, 55, 10.5, { font: bold, color: NAVY });
+    link(page, pdf, x, 44, half, 30, href);
+  };
+  outline("Elegir sucursal", M, `${SITE_URL}/sucursales`);
+  outline("Contacto", M + half + 12, `${SITE_URL}/contacto`);
+  text("Datos del fabricante. Los precios y el stock vigentes figuran en la ficha web.", M, 28, 8, { color: MUTED });
   };
 
   // Título.

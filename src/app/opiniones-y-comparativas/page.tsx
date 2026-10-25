@@ -5,6 +5,7 @@ import { breadcrumbJsonLd, canonical, itemListJsonLd } from "@/lib/seo";
 import { BLOG_POSTS } from "@/lib/data";
 import { medidasConComparativa } from "@/lib/comparativas";
 import { formatSize } from "@/lib/tire-sizes";
+import { OTRAS_MARCAS } from "@/lib/marcas-chinas";
 
 export const metadata: Metadata = {
   title: "Opiniones y comparativas de neumáticos: marcas, medidas y precios",
@@ -75,7 +76,7 @@ export default async function OpinionesYComparativasPage() {
           <h2 className="mb-4 text-2xl font-black text-navy-900">Marcas</h2>
           <ul className="grid gap-3 sm:grid-cols-3">
             {[
-              { href: "/marcas-de-neumaticos-chinos", t: "Marcas chinas", d: "Kpatos, Sailun, Goodride y más: cuáles se venden acá y cuáles tenemos." },
+              { href: "/marcas-de-neumaticos-chinos", t: "Marcas chinas", d: "Kpatos, Xbri, Double King, Linglong, Sailun y más: cuáles se venden acá y cuáles tenemos." },
               { href: "/alternativas", t: "Alternativas a marcas premium", d: "Qué comprar en lugar de Michelin, Bridgestone, Goodyear, Fate y otras." },
               { href: "/marcas", t: "Marcas que vendemos", d: "Todas las marcas de nuestro catálogo, con sus modelos." },
             ].map((c) => (
@@ -86,6 +87,28 @@ export default async function OpinionesYComparativasPage() {
                 </Link>
               </li>
             ))}
+          </ul>
+        </section>
+
+        <section className="mt-12">
+          <h2 className="mb-2 text-2xl font-black text-navy-900">Marcas chinas: quién las fabrica</h2>
+          <p className="mb-4 text-slate-600">
+            Una página por marca con su empresa titular y cómo compararla. Si una marca no está en nuestro catálogo, te mostramos
+            las que sí tenemos.
+          </p>
+          <ul className="flex flex-wrap gap-2">
+            {OTRAS_MARCAS.map((m) => (
+              <li key={m.slug}>
+                <Link href={`/marcas-de-neumaticos-chinos/${m.slug}`} className="inline-block rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-sm font-bold text-navy-900 hover:border-navy-300">
+                  {m.name}
+                </Link>
+              </li>
+            ))}
+            <li>
+              <Link href="/marcas/grenlander" className="inline-block rounded-xl bg-orange-500 px-3.5 py-2 text-sm font-black text-white hover:bg-orange-600">
+                Grenlander (la tenemos)
+              </Link>
+            </li>
           </ul>
         </section>
 
