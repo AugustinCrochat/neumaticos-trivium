@@ -1,4 +1,5 @@
 import type { TireBrand, Service, BlogPost } from "./types";
+import { blogMeta } from "./blog-meta";
 
 export const BRANDS: TireBrand[] = [
   {
@@ -155,7 +156,7 @@ export const SERVICES: Service[] = [
 // El orden importa: el listado del blog los muestra en este orden y las notas
 // relacionadas al pie de cada artículo toman las tres primeras que no sean la
 // actual. Las más útiles para alguien que está por comprar van arriba.
-export const BLOG_POSTS: BlogPost[] = [
+const BLOG_POSTS_BASE: BlogPost[] = [
   {
     id: "45",
     title: "Cómo leer la etiqueta de presión de la puerta de tu auto",
@@ -711,3 +712,7 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "Marcas",
   },
 ];
+
+// La miniatura del listado es siempre la portada de la nota (blog-meta.ts):
+// una sola fuente para que no se repitan fotos entre la grilla y el artículo.
+export const BLOG_POSTS: BlogPost[] = BLOG_POSTS_BASE.map((p) => ({ ...p, imageUrl: blogMeta(p.slug).cover.src }));
