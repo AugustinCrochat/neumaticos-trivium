@@ -41,6 +41,17 @@ function normalizeModelKey(brandId: string, modeloBase: string): string {
   return `${brandId}-${MODEL_ALIASES[slug] || slug}`;
 }
 
-export function getExtraPhotos(brandId: string, modeloBase: string): string[] {
-  return MAP[normalizeModelKey(brandId, modeloBase)] ?? [];
+/**
+ * `size` es opcional: una clave "<modelo>@175-65-r14" suma fotos que sólo valen
+ * para esa medida (por ejemplo una foto con la etiqueta del flanco, que dice la
+ * medida), después de las del modelo.
+ */
+export function getExtraPhotos(
+  brandId: string,
+  modeloBase: string,
+  size?: { width: number; profile: number; rim: number }
+): string[] {
+  const key = normalizeModelKey(brandId, modeloBase);
+  const porMedida = size ? MAP[`${key}@${size.width}-${size.profile}-r${size.rim}`] ?? [] : [];
+  return [...(MAP[key] ?? []), ...porMedida];
 }

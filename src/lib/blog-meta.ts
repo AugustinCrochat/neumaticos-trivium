@@ -65,6 +65,9 @@ const IMG = {
   colocandoTarget: `${LOCAL}/tecnico-colocando-target-de-alineacion-3d-en-auto-trivium-cordoba.webp`,
   tallerCuatroAutos: `${LOCAL}/taller-de-gomeria-con-cuatro-autos-neumaticos-trivium-arguello-cordoba.webp`,
   remis: `${LOCAL}/remis-cambio-de-cuatro-neumaticos-con-alineacion-y-balanceo-trivium-cordoba.webp`,
+  taxiLocal: `${LOCAL}/taxi-entrando-al-local-neumaticos-trivium-cordoba.webp`,
+  remisTaller: `${LOCAL}/remis-en-el-taller-con-balanceadora-y-neumaticos-trivium-cordoba.webp`,
+  taxiRueda: `${LOCAL}/taxi-rueda-delantera-en-el-taller-neumaticos-trivium-cordoba.webp`,
   autoRojoTarget: `${LOCAL}/alineacion-3d-de-auto-rojo-target-en-la-rueda-trivium-cordoba.webp`,
 };
 
@@ -156,7 +159,7 @@ export const BLOG_META: Record<string, BlogMeta> = {
     shopLinks: [L.todos, L.servicios, L.ofertas],
   },
   "neumaticos-para-uber-didi-cabify": {
-    cover: { src: IMG.remis, alt: "Remis sobre el elevador del taller de Neumáticos Trivium durante el cambio de las cuatro cubiertas", tall: true, position: "center 55%" },
+    cover: { src: IMG.taxiLocal, alt: "Taxi entrando al local de Neumáticos Trivium en Argüello, con el cartel de la fachada y las cubiertas nuevas en el exhibidor", tall: true, position: "center 45%" },
     figure: { src: IMG.tallerCuatroAutos, alt: "Interior del taller de Neumáticos Trivium en Argüello con cuatro autos en servicio", caption: "Colocación, balanceo y alineación en el mismo taller de Argüello." },
     shopIntro: "Para quien trabaja con el auto:",
     shopLinks: [L.remises, L.r14, L.r15],

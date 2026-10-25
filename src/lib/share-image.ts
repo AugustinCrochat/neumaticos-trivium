@@ -22,6 +22,8 @@ const POOL = [
   "local/taller-de-gomeria-con-cuatro-autos-neumaticos-trivium-arguello-cordoba",
   "local/cambio-de-cubiertas-en-camioneta-pickup-con-balanceadora-hofmann-trivium-cordoba",
   "local/remis-cambio-de-cuatro-neumaticos-con-alineacion-y-balanceo-trivium-cordoba",
+  "local/taxi-entrando-al-local-neumaticos-trivium-cordoba",
+  "local/remis-en-el-taller-con-balanceadora-y-neumaticos-trivium-cordoba",
 ];
 
 function withImage(url: string, size?: { width: number; height: number }) {

@@ -213,7 +213,7 @@ export default async function ProductPage({ params }: Props) {
   const tireLabel = getTireLabel(product.slug);
   const utqg = getUtqg(product.brandId, product.modeloBase, product.slug);
   const treadCloseup = getTreadCloseup(product.imageUrl);
-  const extraPhotos = [...(treadCloseup ? [treadCloseup] : []), ...getExtraPhotos(product.brandId, product.modeloBase)];
+  const extraPhotos = [...(treadCloseup ? [treadCloseup] : []), ...getExtraPhotos(product.brandId, product.modeloBase, product.size)];
   const brandLogo = getBrandLogo(product.brandId);
   const brand = BRANDS.find((b) => b.id === product.brandId);
   const speedKmh = product.speedRating ? SPEED_RATING_KMH[product.speedRating] : undefined;

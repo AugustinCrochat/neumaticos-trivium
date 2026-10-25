@@ -94,6 +94,33 @@ export function RemisesExtra({ productos }: { productos: TireProduct[] }) {
         </div>
       </section>
 
+      <section className="mb-14 grid grid-cols-3 gap-2 sm:gap-4">
+        {[
+          {
+            src: "/images/local/taxi-entrando-al-local-neumaticos-trivium-cordoba.webp",
+            alt: "Taxi entrando al local de Neumáticos Trivium en Argüello, con el cartel de la fachada y las cubiertas nuevas en el exhibidor",
+            caption: "Entrando al local de Argüello",
+          },
+          {
+            src: "/images/local/remis-en-el-taller-con-balanceadora-y-neumaticos-trivium-cordoba.webp",
+            alt: "Remis dentro del taller de Neumáticos Trivium, con la balanceadora y las estanterías de cubiertas al fondo",
+            caption: "En el taller, con el stock a la vista",
+          },
+          {
+            src: "/images/local/taxi-rueda-delantera-en-el-taller-neumaticos-trivium-cordoba.webp",
+            alt: "Rueda delantera de un taxi en el taller de Neumáticos Trivium, con la balanceadora y las plataformas de la alineadora al fondo",
+            caption: "Con la alineadora y la balanceadora a mano",
+          },
+        ].map((f) => (
+          <figure key={f.src}>
+            <div className="relative aspect-[3/4] overflow-hidden rounded-xl bg-slate-100 sm:rounded-2xl">
+              <Image src={f.src} alt={f.alt} fill sizes="(min-width: 768px) 280px, 33vw" className="object-cover" />
+            </div>
+            <figcaption className="mt-2 text-xs text-slate-500 sm:text-sm">{f.caption}</figcaption>
+          </figure>
+        ))}
+      </section>
+
       <section className="mb-14">
         <h2 className="font-display mb-2 text-3xl font-bold uppercase tracking-wide text-slate-900">
           La medida de los autos más usados en remises y apps

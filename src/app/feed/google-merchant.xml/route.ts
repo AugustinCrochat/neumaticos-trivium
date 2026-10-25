@@ -115,7 +115,7 @@ function tireItem(p: TireProduct): string {
   const imageUrl = p.imageUrl.startsWith("/") ? `${SITE_URL}${p.imageUrl}` : p.imageUrl;
   const label = getTireLabel(p.slug);
   const tread = getTreadCloseup(p.imageUrl);
-  const extraImages = [...(tread ? [tread] : []), ...getExtraPhotos(p.brandId, p.modeloBase), ...(label ? [label.imagePath] : [])];
+  const extraImages = [...(tread ? [tread] : []), ...getExtraPhotos(p.brandId, p.modeloBase, p.size), ...(label ? [label.imagePath] : [])];
   return `
     <item>
       <g:id>${escapeXml(p.id)}</g:id>
