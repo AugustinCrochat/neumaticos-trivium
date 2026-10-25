@@ -47,6 +47,8 @@ export function VehicleSizeSearch({ initialMedida, economicos = false }: { initi
   });
   // Cambia al elegir otro auto para que el selector se vuelva a montar y se abra solo.
   const [versionKey, setVersionKey] = useState(0);
+  // Sólo se abre sola al elegir el auto en este buscador, no al cargar la página con un auto recordado.
+  const [freshPick, setFreshPick] = useState(false);
   const selectedSize = versionIndex !== null ? sizes?.[versionIndex] : undefined;
 
   function selectVehicle(vehicle: VehiculoOption) {
@@ -55,6 +57,7 @@ export function VehicleSizeSearch({ initialMedida, economicos = false }: { initi
     setSelectedVehicle(vehicle, single);
     setVersionIndexState(single ? 0 : null);
     setVersionKey((k) => k + 1);
+    setFreshPick(true);
   }
 
   function changeVersion(index: number) {
@@ -109,7 +112,7 @@ export function VehicleSizeSearch({ initialMedida, economicos = false }: { initi
                 options={sizes.map(versionLabel)}
                 value={versionIndex}
                 onChange={changeVersion}
-                autoOpen={versionIndex === null}
+                autoOpen={freshPick && versionIndex === null}
               />
             </div>
           )}
