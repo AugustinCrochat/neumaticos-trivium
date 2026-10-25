@@ -71,6 +71,27 @@ type SpeechRecognitionWindow = Window &
 
 type MeasureSegment = 'width' | 'aspect' | 'rim';
 
+/**
+ * Rodado más probable cuando se escribió uno fuera de 13-24 (ej. "74" por "14").
+ * Primero el que cambia menos dígitos de lo escrito; si hay empate, el que
+ * existe en el catálogo para ese ancho y perfil; y después el de diámetro
+ * total más razonable (175/65 R14 mide ~58 cm, R24 ~89 cm).
+ */
+function rodadoProbable(rim: string, width: string, profile: string, opciones: { w: string; p: string; r: string }[]): number {
+  const diff = (n: number) => String(n).split("").reduce((acc, ch, i) => acc + (ch === rim[i] ? 0 : 1), 0);
+  const existe = (n: number) => opciones.some((o) => o.w === width && o.p === profile && o.r === String(n));
+  const w = Number(width);
+  const p = Number(profile);
+  const diametro = (n: number) => n * 25.4 + 2 * w * (p / 100);
+  const candidatos = Array.from({ length: 12 }, (_, i) => 13 + i);
+  return candidatos.sort(
+    (a, b) =>
+      diff(a) - diff(b) ||
+      Number(existe(b)) - Number(existe(a)) ||
+      (Number.isFinite(diametro(a)) ? Math.abs(diametro(a) - 640) - Math.abs(diametro(b) - 640) : 0)
+  )[0];
+}
+
 export function TireSizeSearch({
   initialMedida,
   compact = false,
@@ -277,10 +298,10 @@ export function TireSizeSearch({
     }
     if (rim.length >= 2) {
       const r = Number(rim);
-      if (r < 13 || r > 24) return { seg: "rim" as const, value: String(cerca(r, 1, 13, 24)) };
+      if (r < 13 || r > 24) return { seg: "rim" as const, value: String(rodadoProbable(rim, width, profile, opciones)) };
     }
     return null;
-  }, [isFlotation, width, profile, rim]);
+  }, [isFlotation, width, profile, rim, opciones]);
 
   const widthRef = useRef<HTMLInputElement | null>(null);
   const profileRef = useRef<HTMLInputElement | null>(null);
