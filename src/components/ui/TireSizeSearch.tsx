@@ -71,6 +71,11 @@ type SpeechRecognitionWindow = Window &
 
 type MeasureSegment = 'width' | 'aspect' | 'rim';
 
+/** En celular, al completar la medida se guarda el teclado numérico; tocar el campo lo vuelve a abrir. */
+function cerrarTeclado(input: HTMLInputElement) {
+  if (typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches) input.blur();
+}
+
 /**
  * Rodado más probable cuando se escribió uno fuera de 13-24 (ej. "74" por "14").
  * Primero el que cambia menos dígitos de lo escrito; si hay empate, el que
@@ -834,7 +839,7 @@ export function TireSizeSearch({
                 onFocus={(e) => handleMeasureInputFocus(e, 'rim')}
                 onBlur={() => setFocused(null)}
                 onClick={(e) => { selectInputText(e); setShowPopular(true); }}
-                onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, '').slice(0,2); setRim(v); }}
+                onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, '').slice(0,2); setRim(v); if (v.length === 2) cerrarTeclado(e.target); }}
                 onKeyDown={handleKeyDown}
                 placeholder="rodado"
                 aria-label="Rodado del neumático"
@@ -921,7 +926,7 @@ export function TireSizeSearch({
                   onFocus={(e) => handleMeasureInputFocus(e, 'rim')}
                   onBlur={() => setFocused(null)}
                   onClick={(e) => { selectInputText(e); setShowPopular(true); }}
-                  onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, '').slice(0,2); setRim(v); }}
+                  onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, '').slice(0,2); setRim(v); if (v.length === 2) cerrarTeclado(e.target); }}
                   onKeyDown={handleKeyDown}
                   placeholder="rodado"
                   aria-label="Rodado del neumático"
