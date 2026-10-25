@@ -397,8 +397,11 @@ export function ShopPage({
   }
   const [onlyCarga, setOnlyCarga] = useState(false);
   const [onlyAT, setOnlyAT] = useState(false);
+  const [onlyCalle, setOnlyCalle] = useState(false);
   const [sizeFilter, setSizeFilter] = useState<SizeFilter>({ w: "", p: "", r: "" });
   const [showFilters, setShowFilters] = useState(false);
+  // En celular el buscador de medida va plegado arriba (ya está el botón flotante de búsqueda).
+  const [buscadorAbierto, setBuscadorAbierto] = useState(false);
   const [visibleCount, setVisibleCount] = useState(24);
 
   // Lo que se escribe en el buscador de la barra lateral filtra en vivo: con la
@@ -411,6 +414,7 @@ export function ShopPage({
   if (prevMedida !== medida) {
     setPrevMedida(medida);
     setLive(null);
+    setBuscadorAbierto(false);
   }
   const liveComplete = !!live && live.w.length === 3 && live.p.length === 2 && live.r.length === 2;
   const onLiveSize = (v: SizeFilter) => {
@@ -435,6 +439,7 @@ export function ShopPage({
       if (onlyEconomic && !p.isEconomic) return false;
       if (onlyCarga && !p.isCarga) return false;
       if (onlyAT && !p.isAT) return false;
+      if (onlyCalle && (p.isCarga || p.isAT)) return false;
       // Con una medida en la URL manda esa; los campos sueltos filtran el catálogo.
       if (!parsed) {
         if (sizeFilter.w && !String(p.size.width).startsWith(sizeFilter.w)) return false;
@@ -470,7 +475,7 @@ export function ShopPage({
     const compatible = products.filter(p => isCompatibleSize(p, parsed) && ok(p)).sort(stockPrimero);
 
     return { exactResults: exact, compatibleResults: compatible, allProducts: [] };
-  }, [parsed, brandFilter, maxPrice, onlyEconomic, onlyCarga, onlyAT, sizeFilter, products, liveStock]);
+  }, [parsed, brandFilter, maxPrice, onlyEconomic, onlyCarga, onlyAT, onlyCalle, sizeFilter, products, liveStock]);
 
   // Catálogo sin medida en la URL: si ya sabemos la medida del auto elegido,
   // recomendamos esos neumáticos arriba de todo, sin esperar a que busquen.
@@ -492,7 +497,7 @@ export function ShopPage({
   const mejoresCatalogo = useMemo(() => bestPriceByGroup(allProducts), [allProducts]);
   const peersCatalogo = useMemo(() => peersByGroup(allProducts), [allProducts]);
   const hasActiveFilters =
-    brandFilter !== "todos" || maxPrice < MAX_POSSIBLE_PRICE || onlyEconomic || onlyCarga || onlyAT || !!(sizeFilter.w || sizeFilter.p || sizeFilter.r);
+    brandFilter !== "todos" || maxPrice < MAX_POSSIBLE_PRICE || onlyEconomic || onlyCarga || onlyAT || onlyCalle || !!(sizeFilter.w || sizeFilter.p || sizeFilter.r);
 
   const handleWhatsApp = (waLabel: string | null) => {
     const waUrl = (branch: typeof selectedBranch) =>
@@ -517,6 +522,24 @@ export function ShopPage({
     return new Set(visibles.map((p) => p.brandId));
   }, [parsed, products]);
 
+  // Tipos en los que existe la medida buscada (calle, A/T, carga): si hay más
+  // de uno se ofrecen botones para filtrar, sin tocar el resto de los filtros.
+  const tiposDeLaMedida = useMemo(() => {
+    if (!parsed) return [];
+    const delaMedida = products.filter((p) => isExactMatch(p, parsed) || isCompatibleSize(p, parsed));
+    const tipos: { id: "calle" | "at" | "carga"; label: string }[] = [];
+    if (delaMedida.some((p) => !p.isCarga && !p.isAT)) tipos.push({ id: "calle", label: "Calle" });
+    if (delaMedida.some((p) => p.isAT)) tipos.push({ id: "at", label: "A/T" });
+    if (delaMedida.some((p) => p.isCarga)) tipos.push({ id: "carga", label: "Carga" });
+    return tipos;
+  }, [parsed, products]);
+  const tipoActivo = onlyCarga ? "carga" : onlyAT ? "at" : onlyCalle ? "calle" : "todos";
+  const elegirTipo = (t: "todos" | "calle" | "at" | "carga") => {
+    setOnlyCarga(t === "carga");
+    setOnlyAT(t === "at");
+    setOnlyCalle(t === "calle");
+  };
+
   const filterProps = {
     brandFilter, setBrandFilter,
     availableBrandIds,
@@ -535,6 +558,7 @@ export function ShopPage({
       setOnlyEconomic(false);
       setOnlyCarga(false);
       setOnlyAT(false);
+      setOnlyCalle(false);
     },
   };
 
@@ -545,7 +569,20 @@ export function ShopPage({
 
           {/* Sidebar — search widget only */}
           <aside className="w-full lg:w-72 shrink-0 lg:sticky lg:top-32 lg:self-start lg:max-h-[calc(100dvh-9rem)] lg:overflow-y-auto lg:overscroll-contain">
-            <SizeOrVehicleSearch key={`${medida ?? "empty"}-${economicosParam}-${searchResetKey}`} compact initialMedida={medida} forceVoiceButton initialEconomicos={economicosParam} onLiveChange={onLiveSize} />
+            <button
+              type="button"
+              onClick={() => setBuscadorAbierto((v) => !v)}
+              aria-expanded={buscadorAbierto}
+              className="flex w-full items-center justify-between gap-3 rounded-xl border border-slate-200 bg-slate-100 px-4 py-3 text-left font-bold text-navy-900 lg:hidden"
+            >
+              <span className="min-w-0 truncate">{label ? `Medida ${label} · cambiar` : "Buscar por medida o por mi auto"}</span>
+              <svg className={`h-5 w-5 shrink-0 text-slate-500 transition-transform ${buscadorAbierto ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div className={buscadorAbierto ? "mt-3 lg:mt-0" : "hidden lg:block"}>
+              <SizeOrVehicleSearch key={`${medida ?? "empty"}-${economicosParam}-${searchResetKey}`} compact initialMedida={medida} forceVoiceButton initialEconomicos={economicosParam} onLiveChange={onLiveSize} />
+            </div>
           </aside>
 
           {/* Main content */}
@@ -687,6 +724,24 @@ export function ShopPage({
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </Link>
+            )}
+
+            {/* ── Tipo de neumático (cuando la medida existe en más de uno) ── */}
+            {parsed && tiposDeLaMedida.length > 1 && (
+              <div className="mb-6 flex flex-wrap items-center gap-2" role="group" aria-label="Filtrar por tipo de neumático">
+                <span className="mr-1 text-xs font-black uppercase tracking-widest text-slate-500">Tipo</span>
+                {[{ id: "todos" as const, label: "Todos" }, ...tiposDeLaMedida].map((t) => (
+                  <button
+                    key={t.id}
+                    type="button"
+                    onClick={() => elegirTipo(t.id)}
+                    aria-pressed={tipoActivo === t.id}
+                    className={`rounded-full border-2 px-4 py-1.5 text-sm font-black transition-colors ${tipoActivo === t.id ? "border-orange-500 bg-orange-50 text-orange-600" : "border-slate-200 bg-white text-slate-600 hover:border-slate-300"}`}
+                  >
+                    {t.label}
+                  </button>
+                ))}
+              </div>
             )}
 
             {/* ── Search results ── */}

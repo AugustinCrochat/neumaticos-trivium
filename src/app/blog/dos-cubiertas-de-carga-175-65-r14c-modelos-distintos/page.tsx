@@ -78,9 +78,9 @@ export default function Page() {
         <strong>90/88R</strong>, es decir, índice de velocidad R (hasta 170 km/h).
       </p>
       <p>
-        La de la derecha es otro modelo de la marca, con un dibujo más cerrado y muchas laminillas finas.
-        Termina en <strong>90/88T</strong>: índice de velocidad T, hasta 190 km/h. Las dos son cubiertas C de
-        verano, no de nieve.
+        La de la derecha es la <strong>Greentour A/S</strong>, con un dibujo más cerrado y muchas laminillas finas.
+        Termina en <strong>90/88T</strong>: índice de velocidad T, hasta 190 km/h. La sigla A/S es &quot;all season&quot;:
+        está pensada para andar todo el año en uso mixto, y el dibujo de la L-MAX9 es el clásico de trabajo.
       </p>
 
       <h2>Cuál conviene</h2>

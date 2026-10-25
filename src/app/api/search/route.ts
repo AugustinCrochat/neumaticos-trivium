@@ -1,6 +1,7 @@
 import { getProductosDesdePOS, getAccesoriosDesdePOS } from "@/lib/pos-api";
 import { getSelectedBranchSlug } from "@/lib/branch-server";
 import { searchCatalog, type ScoredMatch } from "@/lib/search-catalog";
+import { searchContent } from "@/lib/search-content";
 
 export type SearchResult = {
   type: "tire" | "accessory";
@@ -40,7 +41,7 @@ const HEADERS = {
 
 export async function GET(request: Request) {
   const query = new URL(request.url).searchParams.get("q")?.trim() ?? "";
-  if (!query || query.length > 80) return Response.json({ results: [], matches: [], total: 0 });
+  if (!query || query.length > 80) return Response.json({ results: [], matches: [], content: [], total: 0 });
 
   // `full=1` es para /busqueda: devuelve los productos completos (sin recorte)
   // para que la página los dibuje en el cliente en vez de renderizarlos en el Worker.
@@ -68,8 +69,8 @@ export async function GET(request: Request) {
   const [productos, accesorios] = await Promise.all([getProductosDesdePOS(sucursal), getAccesoriosDesdePOS(sucursal)]);
   const matches = searchCatalog(query, productos, accesorios);
   const body = full
-    ? JSON.stringify({ matches: matches.map(({ type, item }) => ({ type, item })), total: matches.length })
-    : JSON.stringify({ results: matches.slice(0, PREVIEW_LIMIT).map(toSearchResult), total: matches.length });
+    ? JSON.stringify({ matches: matches.map(({ type, item }) => ({ type, item })), content: searchContent(query, 24), total: matches.length })
+    : JSON.stringify({ results: matches.slice(0, PREVIEW_LIMIT).map(toSearchResult), content: searchContent(query, 5), total: matches.length });
 
   // Catálogo vacío = falla del POS, no "sin resultados": no se cachea.
   if (productos.length > 0) {

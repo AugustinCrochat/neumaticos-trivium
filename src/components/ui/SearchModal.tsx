@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import type { SearchResult } from "@/app/api/search/route";
+import type { ContentResult } from "@/lib/search-content";
+import { medidaQueryHref } from "@/lib/medida-query";
 
 function formatPrice(price: number) {
   return new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 }).format(price);
@@ -18,6 +20,7 @@ export function SearchModal({ onClose }: { onClose: () => void }) {
   const router = useRouter();
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
+  const [content, setContent] = useState<ContentResult[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -31,6 +34,7 @@ export function SearchModal({ onClose }: { onClose: () => void }) {
     setQuery(value);
     if (!value.trim()) {
       setResults([]);
+      setContent([]);
       setTotal(0);
       setLoading(false);
     }
@@ -51,10 +55,11 @@ export function SearchModal({ onClose }: { onClose: () => void }) {
           if (!res.ok) throw new Error(String(res.status));
           return res.json();
         })
-        .then((data: { results: SearchResult[]; total: number }) => {
+        .then((data: { results: SearchResult[]; content?: ContentResult[]; total: number }) => {
           if (cancelled) return;
           setFailed(false);
           setResults(data.results);
+          setContent(data.content ?? []);
           setTotal(data.total);
           setLoading(false);
         })
@@ -64,6 +69,7 @@ export function SearchModal({ onClose }: { onClose: () => void }) {
           // aparte y se ofrece la página completa de búsqueda.
           setFailed(true);
           setResults([]);
+          setContent([]);
           setTotal(0);
           setLoading(false);
         });
@@ -76,6 +82,13 @@ export function SearchModal({ onClose }: { onClose: () => void }) {
 
   function goToResultsPage() {
     if (!query.trim()) return;
+    // Una medida completa ("1756514", "175 65 14") va directo al catálogo por medida.
+    const medida = medidaQueryHref(query);
+    if (medida) {
+      router.push(medida);
+      onClose();
+      return;
+    }
     router.push(`/busqueda?q=${encodeURIComponent(query.trim())}`);
     onClose();
   }
@@ -111,6 +124,12 @@ export function SearchModal({ onClose }: { onClose: () => void }) {
         </form>
 
         <div className="overflow-y-auto">
+          {medidaQueryHref(query) && (
+            <button onClick={goToResultsPage} className="w-full border-b border-slate-100 p-3 text-left text-sm font-black text-orange-600 hover:bg-slate-50">
+              Ver neumáticos en esa medida &rarr;
+            </button>
+          )}
+
           {loading && <p className="p-6 text-center text-sm text-slate-400">Buscando…</p>}
 
           {!loading && failed && (
@@ -119,7 +138,7 @@ export function SearchModal({ onClose }: { onClose: () => void }) {
             </button>
           )}
 
-          {!loading && !failed && query.trim().length > 0 && results.length === 0 && (
+          {!loading && !failed && query.trim().length > 0 && results.length === 0 && content.length === 0 && (
             <p className="p-6 text-center text-sm text-slate-400">No encontramos nada para &quot;{query}&quot;.</p>
           )}
 
@@ -143,6 +162,26 @@ export function SearchModal({ onClose }: { onClose: () => void }) {
               </div>
             </Link>
           ))}
+
+          {!loading && content.length > 0 && (
+            <div className="border-t border-slate-100">
+              <p className="px-3 pt-3 text-[11px] font-black uppercase tracking-wide text-slate-400">Notas y páginas</p>
+              {content.map((c) => (
+                <Link
+                  key={c.href + c.title}
+                  href={c.href}
+                  onClick={onClose}
+                  className="flex items-center gap-3 p-3 hover:bg-slate-50 border-b border-slate-50 last:border-b-0 transition-colors"
+                >
+                  <span className="shrink-0 rounded-md bg-slate-100 px-2 py-1 text-[10px] font-black uppercase tracking-wide text-slate-500">{c.kind}</span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate text-sm font-bold text-navy-900">{c.title}</span>
+                    <span className="block truncate text-xs text-slate-500">{c.description}</span>
+                  </span>
+                </Link>
+              ))}
+            </div>
+          )}
 
           {!loading && total > results.length && (
             <button
