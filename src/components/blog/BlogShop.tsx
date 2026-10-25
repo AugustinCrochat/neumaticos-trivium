@@ -9,36 +9,45 @@ import { BlogCover } from "@/components/blog/BlogCover";
  * el pulgar en móvil); el primero va relleno de rojo Trivium y es el camino
  * principal, los demás son secundarios.
  */
+function ArrowIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4" aria-hidden="true">
+      <path d="M5 12h14M13 6l6 6-6 6" />
+    </svg>
+  );
+}
+
 export function BlogShopLinks({ slug }: { slug: string }) {
   const { shopIntro, shopLinks } = blogMeta(slug);
   return (
     <nav
       aria-label="Productos relacionados con esta nota"
-      className="overflow-hidden rounded-2xl bg-gradient-to-br from-navy-950 to-black p-4 shadow-lg sm:p-5"
+      className="relative overflow-hidden rounded-3xl border-t-4 border-orange-500 bg-gradient-to-br from-navy-950 via-navy-950 to-black p-5 shadow-2xl shadow-black/30 sm:p-7"
     >
-      <p className="mb-1 text-xs font-black uppercase tracking-widest text-orange-400">
+      <div aria-hidden="true" className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-orange-500/20 blur-3xl" />
+      <p className="relative mb-2 inline-block rounded-full bg-orange-500 px-3 py-1 text-xs font-black uppercase tracking-widest text-white">
         Mirá en el catálogo
       </p>
-      <p className="mb-4 text-lg font-black leading-snug text-white">{shopIntro}</p>
-      <ul className="grid grid-cols-2 gap-2.5 sm:grid-cols-3">
+      <p className="relative mb-5 text-xl font-black leading-snug text-white sm:text-2xl">{shopIntro}</p>
+      <ul className="relative grid grid-cols-2 gap-3 sm:grid-cols-3">
         {shopLinks.map((l, i) => (
           <li key={l.href} className={i === 0 && shopLinks.length % 2 === 1 ? "col-span-2 sm:col-span-1" : ""}>
             <Link
               href={l.href}
-              className={`flex min-h-14 items-center justify-between gap-2 rounded-xl px-4 py-3 text-left text-sm font-black leading-tight !no-underline transition-all active:scale-[0.97] ${
+              className={`flex min-h-16 items-center justify-between gap-3 rounded-2xl px-4 py-3 text-left text-base font-black leading-tight !no-underline transition-all active:scale-[0.97] ${
                 i === 0
-                  ? "bg-orange-500 !text-white shadow-md shadow-orange-900/30 hover:bg-orange-600"
-                  : "border border-white/15 bg-white/10 !text-white hover:border-orange-400 hover:bg-white/20"
+                  ? "bg-orange-500 !text-white shadow-lg shadow-orange-950/50 ring-2 ring-white/70 hover:bg-orange-600"
+                  : "border-2 border-white/30 bg-white/10 !text-white hover:border-orange-400 hover:bg-white/20"
               }`}
             >
               <span>{l.label}</span>
               <span
                 aria-hidden="true"
-                className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-base ${
-                  i === 0 ? "bg-white/25" : "bg-orange-500"
+                className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${
+                  i === 0 ? "bg-white text-orange-600" : "bg-orange-500 text-white"
                 }`}
               >
-                &rarr;
+                <ArrowIcon />
               </span>
             </Link>
           </li>
