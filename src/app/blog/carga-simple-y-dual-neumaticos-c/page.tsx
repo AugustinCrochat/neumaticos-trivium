@@ -97,6 +97,11 @@ export default function Page() {
         situaciones de uso distintas del mismo neumático.
       </p>
 
+      <p>
+        Para ver dos cubiertas C de la misma medida con dibujos muy distintos, mirá{" "}
+        <Link href="/blog/cubierta-de-carga-comun-o-all-season-utilitario">la comparación de dos 175/65 R14C</Link>.
+      </p>
+
       <h2>Por qué hay dos números y no uno</h2>
       <p>
         La carga que un neumático puede sostener no es una propiedad fija: depende de cómo esté

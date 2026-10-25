@@ -87,6 +87,10 @@ export default function Page() {
         Esa etiqueta suele traer dos valores: uno para uso normal y otro para el auto cargado o con
         muchos ocupantes. Si salís de viaje con la familia y el baúl lleno, usá el segundo.
       </p>
+      <p>
+        Si la tabla te resulta confusa, armamos una guía con un ejemplo real:{" "}
+        <Link href="/blog/etiqueta-de-presion-puerta-del-auto">cómo leer la etiqueta de presión de la puerta</Link>.
+      </p>
 
       <h2>Cómo medirla bien</h2>
       <p>

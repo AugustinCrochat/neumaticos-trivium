@@ -157,6 +157,24 @@ export const SERVICES: Service[] = [
 // actual. Las más útiles para alguien que está por comprar van arriba.
 export const BLOG_POSTS: BlogPost[] = [
   {
+    id: "45",
+    title: "Cómo leer la etiqueta de presión de la puerta de tu auto",
+    excerpt: "Bar, PSI, filas por ocupantes y una presión para cada medida de llanta: qué significa cada línea, con un ejemplo real.",
+    imageUrl: "/images/local/etiqueta-de-presion-recomendada-en-la-puerta-del-auto-trivium-cordoba.webp",
+    date: "2026-10-25",
+    slug: "etiqueta-de-presion-puerta-del-auto",
+    category: "Guías",
+  },
+  {
+    id: "44",
+    title: "Dos cubiertas de carga 175/65 R14C: dibujo clásico o con símbolo de nieve",
+    excerpt: "Misma medida y mismo índice 90/88, dibujos muy distintos: en qué se diferencian dos cubiertas C y cuál conviene según el uso.",
+    imageUrl: "/images/local/dos-cubiertas-de-carga-grenlander-175-65-r14c-lug-y-all-season-trivium-cordoba.webp",
+    date: "2026-10-25",
+    slug: "cubierta-de-carga-comun-o-all-season-utilitario",
+    category: "Guías",
+  },
+  {
     id: "40",
     title: "Cómo comparar neumáticos antes de comprar: 7 puntos para no equivocarte",
     excerpt: "Medida e índices, etiqueta europea, fecha de fabricación, garantía y qué incluye el precio: una lista para comparar dos cubiertas con los mismos criterios.",

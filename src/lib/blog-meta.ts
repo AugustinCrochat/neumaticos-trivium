@@ -68,6 +68,10 @@ const IMG = {
   taxiLocal: `${LOCAL}/taxi-entrando-al-local-neumaticos-trivium-cordoba.webp`,
   remisTaller: `${LOCAL}/remis-en-el-taller-con-balanceadora-y-neumaticos-trivium-cordoba.webp`,
   taxiRueda: `${LOCAL}/taxi-rueda-delantera-en-el-taller-neumaticos-trivium-cordoba.webp`,
+  cargaDos: `${LOCAL}/dos-cubiertas-de-carga-grenlander-175-65-r14c-lug-y-all-season-trivium-cordoba.webp`,
+  valvula: `${LOCAL}/tecnico-colocando-valvula-en-llanta-de-camioneta-con-neumatico-at-trivium-cordoba.webp`,
+  placaPresion: `${LOCAL}/etiqueta-de-presion-recomendada-en-la-puerta-del-auto-trivium-cordoba.webp`,
+  descarga: `${LOCAL}/descarga-de-neumaticos-importados-grenlander-del-camion-trivium-cordoba.webp`,
   autoRojoTarget: `${LOCAL}/alineacion-3d-de-auto-rojo-target-en-la-rueda-trivium-cordoba.webp`,
 };
 
@@ -106,7 +110,7 @@ export const BLOG_META: Record<string, BlogMeta> = {
   },
   "arme-y-desarme-de-neumaticos": {
     cover: { src: IMG.montaje, alt: "Cubierta montada en la desmontadora del taller", position: "center 55%" },
-    figure: { src: IMG.cambioCamioneta, alt: "Cambio de cubiertas de una camioneta en el taller de Neumáticos Trivium, con la balanceadora Hofmann al lado", caption: "Cambio de cubiertas de una camioneta: se desarma, se arma y se balancea en el mismo taller." },
+    figure: { src: IMG.valvula, alt: "Técnico colocando la válvula de una llanta de camioneta durante el arme de la cubierta", portrait: true, caption: "En el arme se coloca válvula nueva en cada llanta, antes de balancear." },
     shopIntro: "Comprá las cubiertas y colocalas en el local:",
     shopLinks: [L.todos, L.servicios, L.ofertas],
   },
@@ -153,10 +157,22 @@ export const BLOG_META: Record<string, BlogMeta> = {
     shopLinks: [L.todos, L.equivalencias, L.ofertas],
   },
   "cambio-de-valvulas-de-neumaticos": {
-    cover: { src: IMG.montaje, alt: "Cubierta montada en la desmontadora del taller", position: "center 55%" },
+    cover: { src: IMG.valvula, alt: "Técnico del taller colocando la válvula en una llanta de camioneta con un neumático A/T en la desmontadora", portrait: true },
     figure: { src: IMG.balanceandoCamioneta, alt: "Técnico balanceando una rueda de camioneta en la balanceadora Hofmann del taller", portrait: true, caption: "Con la cubierta nueva y la válvula nueva, la rueda se balancea antes de volver al auto." },
     shopIntro: "Comprá las cubiertas y colocalas en el local:",
     shopLinks: [L.todos, L.servicios, L.ofertas],
+  },
+  "etiqueta-de-presion-puerta-del-auto": {
+    cover: { src: IMG.placaPresion, alt: "Etiqueta de presión de neumáticos en el parante de la puerta de un Audi", portrait: true, tall: true, position: "center 35%" },
+    figure: { src: IMG.balanceo, alt: "Técnico de Trivium junto a la balanceadora con una rueda montada", caption: "Con la rueda montada y balanceada, la presión es lo último que se ajusta." },
+    shopIntro: "Si la presión mal usada ya gastó las cubiertas:",
+    shopLinks: [L.todos, L.servicios, L.ofertas],
+  },
+  "cubierta-de-carga-comun-o-all-season-utilitario": {
+    cover: { src: IMG.cargaDos, alt: "Dos cubiertas de carga Grenlander 175/65 R14C 90/88 sostenidas en el taller de Neumáticos Trivium", portrait: true, tall: true, position: "center 40%" },
+    figure: { src: IMG.descarga, alt: "Descarga de neumáticos Grenlander del camión en el local de Trivium", caption: "Las cubiertas de carga llegan al local en cantidad: se consulta stock por medida." },
+    shopIntro: "Mirá las cubiertas C disponibles:",
+    shopLinks: [L.carga, L.r14, L.grenlander],
   },
   "neumaticos-para-uber-didi-cabify": {
     cover: { src: IMG.taxiLocal, alt: "Taxi entrando al local de Neumáticos Trivium en Argüello, con el cartel de la fachada y las cubiertas nuevas en el exhibidor", tall: true, position: "center 45%" },
@@ -189,14 +205,14 @@ export const BLOG_META: Record<string, BlogMeta> = {
     shopLinks: [L.carga, L.ofertas, L.todos],
   },
   "neumatico-c-o-de-auto-utilitario": {
-    cover: { src: IMG.montaje, alt: "Cubierta de carga Zmax montada en la desmontadora", position: "center 55%" },
+    cover: { src: IMG.cargaDos, alt: "Dos cubiertas de carga Grenlander 175/65 R14C 90/88, una de dibujo clásico y otra con símbolo de nieve, sostenidas en el taller", portrait: true },
     figure: { src: IMG.alineacion, alt: "Utilitario blanco elevado en el taller de Neumáticos Trivium", caption: "Un utilitario en el taller de Trivium: la medida es la misma, la cubierta no." },
     shopIntro: "Mirá las cubiertas C disponibles:",
     shopLinks: [L.carga, L.todos, L.indice],
   },
   "presion-neumaticos-utilitarios-con-carga": {
     cover: { src: IMG.alineacion, alt: "Utilitario blanco elevado en el taller de Neumáticos Trivium", position: "center 30%" },
-    figure: { src: IMG.camionetas, alt: "Dos camionetas en el taller de Neumáticos Trivium, una sobre el elevador", caption: "Con carga o sin ella, la presión se revisa antes de salir." },
+    figure: { src: IMG.placaPresion, alt: "Etiqueta de presión en el parante de la puerta, con filas distintas según ocupantes y carga", portrait: true, caption: "La etiqueta de la puerta trae una fila para el auto liviano y otra para el auto cargado." },
     shopIntro: "Si ya toca cambiarlas, estas son las cubiertas para trabajo:",
     shopLinks: [L.carga, L.servicios, L.todos],
   },
@@ -261,7 +277,7 @@ export const BLOG_META: Record<string, BlogMeta> = {
     shopLinks: [L.servicios, L.todos, L.ofertas],
   },
   "carga-simple-y-dual-neumaticos-c": {
-    cover: { src: IMG.montaje, alt: "Cubierta de carga Zmax montada en la desmontadora", position: "center 55%" },
+    cover: { src: IMG.cargaDos, alt: "Dos cubiertas de carga Grenlander 175/65 R14C 90/88 sobre la rampa del taller", portrait: true },
     figure: { src: IMG.camionetas, alt: "Dos camionetas en el taller de Neumáticos Trivium, una sobre el elevador", caption: "El índice de carga se lee en el flanco, junto a la medida." },
     shopIntro: "Cubiertas C por medida:",
     shopLinks: [L.carga, L.indice, L.todos],
@@ -286,7 +302,7 @@ export const BLOG_META: Record<string, BlogMeta> = {
   },
   "presion-de-neumaticos": {
     cover: { src: IMG.balanceo, alt: "Técnico de Trivium junto a la balanceadora con una rueda montada", position: "center 45%" },
-    figure: { src: IMG.rotacion, alt: "Auto con una rueda desmontada y la cubierta Pirelli al lado, durante una rotación", portrait: true, caption: "Con la rueda afuera es el mejor momento para revisar presión y estado." },
+    figure: { src: IMG.placaPresion, alt: "Etiqueta de presión de neumáticos en el parante de la puerta de un Audi, con valores en bar y PSI", portrait: true, caption: "La presión correcta está en la puerta del auto, no en el flanco de la cubierta." },
     shopIntro: "Si el desgaste ya está al límite:",
     shopLinks: [L.todos, L.ofertas, L.servicios],
   },
@@ -339,13 +355,13 @@ export const BLOG_META: Record<string, BlogMeta> = {
     shopLinks: [L.todos, L.servicios, L.ofertas],
   },
   "neumaticos-de-marca-vs-importados-cual-conviene": {
-    cover: { src: IMG.rotacion, alt: "Auto con una rueda desmontada y la cubierta Pirelli al lado", portrait: true },
+    cover: { src: IMG.descarga, alt: "Trabajador de Trivium bajando neumáticos Grenlander importados de un camión" },
     figure: { src: IMG.kingpro, alt: "Cubierta Grenlander Kingpro One apoyada junto a una pickup", portrait: true, caption: "Una cubierta importada lista para colocar en el taller." },
     shopIntro: "Mirá marcas y alternativas en tu medida:",
     shopLinks: [L.todos, L.marcas, L.ofertas],
   },
   "son-malos-los-neumaticos-chinos": {
-    cover: { src: IMG.fachada, alt: "Frente del local de Neumáticos Trivium" },
+    cover: { src: IMG.descarga, alt: "Descarga de un camión con neumáticos Grenlander para el local de Neumáticos Trivium" },
     figure: { src: IMG.grenlanderPerfilBajo, alt: "Cubierta Grenlander de perfil bajo ya colocada", caption: "Una Grenlander colocada: la homologación ECE R30 va grabada en el flanco." },
     shopIntro: "Cubiertas importadas con homologación:",
     shopLinks: [L.grenlander, L.todos, L.ofertas],
@@ -375,7 +391,7 @@ export const BLOG_META: Record<string, BlogMeta> = {
     shopLinks: [L.todos, L.ofertas, L.servicios],
   },
   "como-elegir-neumatico-importado-seguro": {
-    cover: { src: IMG.kingpro, alt: "Cubierta Grenlander Kingpro One junto a una pickup", portrait: true },
+    cover: { src: IMG.descarga, alt: "Descarga de neumáticos importados Grenlander de un camión en el local de Neumáticos Trivium" },
     figure: { src: IMG.rotacion, alt: "Rueda desmontada con la cubierta al lado", portrait: true, caption: "Antes de comprar, mirá el flanco: homologación y fecha DOT." },
     shopIntro: "Cubiertas con homologación verificable:",
     shopLinks: [L.grenlander, L.indice, L.todos],
@@ -387,14 +403,14 @@ export const BLOG_META: Record<string, BlogMeta> = {
     shopLinks: [L.at, L.carga, L.ht],
   },
   "alternativas-a-michelin-y-pirelli": {
-    cover: { src: IMG.rotacion, alt: "Auto con una rueda desmontada y la cubierta Pirelli al lado", portrait: true },
+    cover: { src: IMG.descarga, alt: "Camión descargando neumáticos importados Grenlander en el local" },
     figure: { src: IMG.kingpro, alt: "Cubierta Grenlander Kingpro One junto a una pickup", portrait: true, caption: "Una alternativa importada junto a una pickup." },
     shopIntro: "Mirá las marcas disponibles:",
     shopLinks: [L.pirelli, L.michelin, L.marcas],
   },
   "at-o-ht-cual-conviene-para-tu-camioneta": {
     cover: { src: IMG.atClasica, alt: "Camioneta clásica con neumáticos A/T Grenlander Maga A/T Two" },
-    figure: { src: IMG.pickup4x4, alt: "Pickup 4x4 sobre el elevador del taller de Neumáticos Trivium", caption: "Con la camioneta sobre el elevador se elige y se verifica la medida." },
+    figure: { src: IMG.valvula, alt: "Técnico armando un neumático A/T en una llanta de camioneta en la desmontadora", portrait: true, caption: "Un neumático A/T siendo armado en la llanta de una camioneta." },
     shopIntro: "Mirá las dos opciones:",
     shopLinks: [L.at, L.ht, L.carga],
   },

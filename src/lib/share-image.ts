@@ -24,6 +24,10 @@ const POOL = [
   "local/remis-cambio-de-cuatro-neumaticos-con-alineacion-y-balanceo-trivium-cordoba",
   "local/taxi-entrando-al-local-neumaticos-trivium-cordoba",
   "local/remis-en-el-taller-con-balanceadora-y-neumaticos-trivium-cordoba",
+  "local/dos-cubiertas-de-carga-grenlander-175-65-r14c-lug-y-all-season-trivium-cordoba",
+  "local/tecnico-colocando-valvula-en-llanta-de-camioneta-con-neumatico-at-trivium-cordoba",
+  "local/etiqueta-de-presion-recomendada-en-la-puerta-del-auto-trivium-cordoba",
+  "local/descarga-de-neumaticos-importados-grenlander-del-camion-trivium-cordoba",
 ];
 
 function withImage(url: string, size?: { width: number; height: number }) {
