@@ -567,7 +567,7 @@ export const VEHICLE_DB: VehicleDBEntry[] = [
   { brand: "Renault", model: "Fluence", sizes: [{ w: "205", p: "60", r: "16", version: "Confort / Dynamique" }, { w: "205", p: "55", r: "17", version: "Privilege / GT / Luxe" }] },
   { brand: "Renault", model: "Kangoo", sizes: [{ w: "175", p: "70", r: "14", version: "Kangoo 1", generation: "Kangoo I", years: "1998-2010" }, { w: "175", p: "70", r: "14", version: "Confort / Authentique", generation: "Kangoo II", years: "2010-2021" }, { w: "195", p: "55", r: "16", version: "Stepway", generation: "Kangoo II", years: "2010-2021" }] },
   { brand: "Renault", model: "Kardian", sizes: [{ w: "205", p: "65", r: "16", version: "Evolution" }, { w: "205", p: "60", r: "16", version: "Techno / Premiere Edition" }, { w: "205", p: "55", r: "17", version: "Iconic" }] },
-  { brand: "Renault", model: "Kwid", sizes: [{ w: "165", p: "70", r: "14", version: "Zen / Intense / Iconic", years: "2019-2022" }, { w: "175", p: "70", r: "14", version: "Outsider (facelift)", years: "2022-presente" }] },
+  { brand: "Renault", model: "Kwid", sizes: [{ w: "165", p: "70", r: "14", version: "Zen / Intens / Iconic / Outsider", years: "2019-presente" }] },
   { brand: "Renault", model: "Logan", sizes: [{ w: "175", p: "70", r: "14", version: "Authentique / Expression", generation: "Logan I", years: "2007-2014" }, { w: "185", p: "65", r: "15", version: "Privilege", generation: "Logan I", years: "2007-2014" }, { w: "185", p: "65", r: "15", version: "Life / Zen / Intens", generation: "Logan II / Nuevo Logan", years: "2014-presente" }] },
   { brand: "Renault", model: "Master", sizes: [{ w: "225", p: "65", r: "16" }] },
   { brand: "Renault", model: "Megane", sizes: [{ w: "175", p: "65", r: "14", version: "RN / RL", generation: "Megane I / Classic", years: "1996-2010" }, { w: "185", p: "65", r: "15", version: "RT / RXE", generation: "Megane I / Classic", years: "1996-2010" }, { w: "195", p: "65", r: "15", version: "Authentique", generation: "Megane II", years: "2003-2010" }, { w: "205", p: "55", r: "16", version: "Dynamique / Privilege", generation: "Megane II", years: "2003-2010" }, { w: "205", p: "50", r: "17", version: "Sport / Coupe", generation: "Megane II", years: "2003-2010" }, { w: "205", p: "55", r: "16", version: "Luxe", generation: "Megane III", years: "2011-2016" }, { w: "225", p: "45", r: "17", version: "Privilege / GT", generation: "Megane III", years: "2011-2016" }] },
@@ -652,6 +652,23 @@ export const VEHICLE_DB: VehicleDBEntry[] = [
   { brand: "Volvo", model: "XC40", sizes: [{ w: "235", p: "55", r: "18", version: "T4 Kinetic" }, { w: "245", p: "45", r: "20", version: "T5 AWD R-Design" }] },
   { brand: "Volvo", model: "XC60", sizes: [{ w: "235", p: "60", r: "18", version: "T5 Momentum" }, { w: "255", p: "45", r: "20", version: "T6 Inscription" }] },
   { brand: "Volvo", model: "XC90", sizes: [{ w: "275", p: "45", r: "20", version: "T6 Momentum" }] },
+
+  // Lanzamientos recientes (2024+), medidas de ficha de Autocosmos; las que
+  // tenían una sola fuente dudosa quedaron afuera a propósito.
+  { brand: "Toyota", model: "Yaris Cross", sizes: [{ w: "215", p: "60", r: "17", version: "XLi", generation: "Yaris Cross", years: "2026-presente" }, { w: "215", p: "55", r: "18", version: "XEi / SEG / Híbrido", generation: "Yaris Cross", years: "2026-presente" }] },
+  { brand: "Citroen", model: "Basalt", sizes: [{ w: "205", p: "60", r: "16", version: "Live / Feel", generation: "Basalt", years: "2025-presente" }, { w: "215", p: "60", r: "17", version: "Shine / First Edition", generation: "Basalt", years: "2025-presente" }] },
+  { brand: "Nissan", model: "Kait", sizes: [{ w: "205", p: "60", r: "16", version: "Sense", generation: "Kait", years: "2026-presente" }, { w: "205", p: "55", r: "17", version: "Advance", generation: "Kait", years: "2026-presente" }] },
+  { brand: "Hyundai", model: "HB20", sizes: [{ w: "185", p: "60", r: "15", version: "Comfort Plus", generation: "HB20", years: "2024-presente" }, { w: "195", p: "55", r: "16", version: "Comfort Plus Aut / Platinum Safety", generation: "HB20", years: "2024-presente" }] },
+  { brand: "Hyundai", model: "HB20 Sedán", sizes: [{ w: "185", p: "60", r: "15", version: "Comfort Plus", generation: "HB20 Sedán", years: "2025-presente" }] },
+  { brand: "Kia", model: "Seltos", sizes: [{ w: "215", p: "60", r: "17", version: "LX 1.6 Aut" }] },
+  { brand: "Kia", model: "K3", sizes: [{ w: "205", p: "55", r: "17", version: "EX / GT-Line" }] },
+  { brand: "Kia", model: "K3 Cross", sizes: [{ w: "205", p: "55", r: "17", version: "EX / GT-Line" }] },
+  { brand: "Kia", model: "K4", sizes: [{ w: "225", p: "45", r: "17", version: "EX" }, { w: "235", p: "40", r: "18", version: "GT-Line" }] },
+  { brand: "Kia", model: "Tasman", sizes: [{ w: "265", p: "65", r: "17", version: "EX 2.5 TGDi / EX 2.2 CRDi" }, { w: "265", p: "70", r: "17", version: "X-Pro 2.5 TGDi (All Terrain)" }] },
+  { brand: "BYD", model: "Dolphin Mini", sizes: [{ w: "185", p: "55", r: "16", version: "GL / GS" }] },
+  { brand: "BYD", model: "Song Pro", sizes: [{ w: "225", p: "60", r: "18", version: "GL / GS" }] },
+  { brand: "Renault", model: "Arkana", sizes: [{ w: "215", p: "55", r: "18", version: "E-Tech Hybrid Esprit Alpine" }] },
+  { brand: "Chevrolet", model: "Spark EUV", sizes: [{ w: "215", p: "55", r: "17", version: "102 cv" }] },
 
   // Zotye
   { brand: "Zotye", model: "Z100", sizes: [{ w: "165", p: "60", r: "14" }] }
