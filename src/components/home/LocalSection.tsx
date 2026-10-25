@@ -1,14 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { BRANCHES } from "@/lib/config";
-import { LOCALIDADES } from "@/lib/localidades";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
-
-/** "Córdoba, Argüello, Villa Allende y Saldán" — lista en prosa, con "y" final. */
-const ZONAS_EN_PROSA = LOCALIDADES.map((l) => l.name).reduce((acc, name, i, arr) => {
-  if (i === 0) return name;
-  return i === arr.length - 1 ? `${acc} y ${name}` : `${acc}, ${name}`;
-}, "");
+import { ZonasAgrupadas } from "@/components/seo/ZonasAgrupadas";
 
 /**
  * Bloque local de la home.
@@ -70,11 +64,9 @@ export function LocalSection() {
             </div>
           </div>
 
-          {/* Las localidades se nombran en prosa, no como grilla de accesos
-              directos: la señal geográfica para el pack local la da el texto,
-              y una botonera de ocho zonas en la home competía con el CTA real
-              sin que nadie la usara para navegar. Las landings de
-              /neumaticos-en siguen enlazadas desde el footer y el sitemap. */}
+          {/* Las zonas van agrupadas por ciudad, con los barrios en un desplegable
+              (<details>): para una persona es un bloque corto y escaneable, y los
+              nombres siguen en el HTML —cerrados— para la señal geográfica. */}
           <div>
             {branch.facadePhoto && (
               <div className="relative mb-6 aspect-[4/3] w-full overflow-hidden rounded-xl">
@@ -88,11 +80,12 @@ export function LocalSection() {
               </div>
             )}
             <h3 className="font-display text-2xl font-bold uppercase tracking-wide">Zonas donde vendemos</h3>
-            <p className="mt-2 leading-relaxed text-slate-300">
-              Atendemos Córdoba Capital y todo el corredor de Sierras Chicas:{" "}
-              {ZONAS_EN_PROSA}. Si estás en cualquiera de esas zonas, el retiro en el local no tiene
-              costo y la colocación va incluida.
+            <p className="mt-2 mb-5 leading-relaxed text-slate-300">
+              Atendemos Córdoba Capital, el corredor de Sierras Chicas y el oeste del Gran Buenos
+              Aires. Si estás en cualquiera de esas zonas, el retiro en el local no tiene costo y la
+              colocación va incluida.
             </p>
+            <ZonasAgrupadas variant="dark" />
             <p className="mt-4 text-sm leading-relaxed text-slate-400">
               ¿Estás en otra provincia? Enviamos a todo el país con costo fijo.{" "}
               <Link href="/neumaticos" className="font-bold text-white underline underline-offset-2">
