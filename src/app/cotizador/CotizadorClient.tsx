@@ -92,7 +92,12 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
     agregarCombo() {
       setIncludeCombo(true);
       setExpanded(true);
-      containerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      // La tarjeta de alineado de arriba se oculta al agregarlo y el presupuesto
+      // se expande: se espera al nuevo layout para frenar en el inicio de la
+      // sección, sin bajar hasta el servicio agregado.
+      requestAnimationFrame(() =>
+        requestAnimationFrame(() => containerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }))
+      );
     },
   }));
 

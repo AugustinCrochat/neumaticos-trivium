@@ -99,7 +99,7 @@ export default function Page() {
 
       <p>
         Para ver dos cubiertas C de la misma medida con dibujos muy distintos, mirá{" "}
-        <Link href="/blog/cubierta-de-carga-comun-o-all-season-utilitario">la comparación de dos 175/65 R14C</Link>.
+        <Link href="/blog/dos-cubiertas-de-carga-175-65-r14c-modelos-distintos">la comparación de dos 175/65 R14C</Link>.
       </p>
 
       <h2>Por qué hay dos números y no uno</h2>

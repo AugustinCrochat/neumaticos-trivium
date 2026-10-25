@@ -4,16 +4,16 @@ import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { canonical } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
-const SLUG = "cubierta-de-carga-comun-o-all-season-utilitario";
-const TITLE = "Dos cubiertas de carga 175/65 R14C: dibujo clásico o con símbolo de nieve";
+const SLUG = "dos-cubiertas-de-carga-175-65-r14c-modelos-distintos";
+const TITLE = "Dos cubiertas de carga Grenlander 175/65 R14C: misma medida, modelos distintos";
 const SUBTITLE =
-  "Mismas medidas, mismo índice de carga y dibujos muy distintos. Cómo se diferencian dos cubiertas C para utilitarios livianos y qué mirar para elegir la que te conviene.";
+  "Misma medida, mismo índice de carga y dos modelos con dibujos muy distintos. Qué cambia entre dos cubiertas C para utilitarios livianos y qué mirar para elegir.";
 
 export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Comparación de dos cubiertas de carga 175/65 R14C 90/88: una de dibujo clásico y otra con símbolo 3PMSF. Diferencias en el flanco, el índice de velocidad, la etiqueta europea y cuándo conviene cada una.",
+    "Dos cubiertas de carga Grenlander 175/65 R14C 90/88 de modelos distintos: qué tienen en común, qué cambia en el dibujo y el índice de velocidad, y cómo elegir para tu utilitario.",
   alternates: canonical(`/blog/${SLUG}`),
 };
 
@@ -29,9 +29,9 @@ const FAQS = [
       "La letra final es el índice de velocidad: R soporta hasta 170 km/h y T hasta 190 km/h. Con la misma carga, la T es de una categoría de velocidad más alta.",
   },
   {
-    question: "¿Qué es el símbolo de la montaña con el copo de nieve?",
+    question: "¿Dos cubiertas de la misma medida rinden igual?",
     answer:
-      "Es el pictograma 3PMSF: indica que la cubierta pasó una prueba de tracción sobre nieve definida en la norma europea. Aparece en la etiqueta y suele ir en cubiertas de uso mixto o all-season.",
+      "No necesariamente. La medida y el índice de carga pueden ser iguales, pero cada modelo tiene su propio dibujo, compuesto y construcción, y eso cambia el agarre, el ruido, el desgaste y el consumo.",
   },
   {
     question: "¿Puedo poner una de cada tipo en el mismo auto?",
@@ -71,16 +71,16 @@ export default function Page() {
         </li>
       </ul>
 
-      <h2>Qué cambia: el dibujo y las letras del flanco</h2>
+      <h2>Qué cambia: el modelo, el dibujo y la letra del flanco</h2>
       <p>
-        La de la izquierda, el modelo <strong>L-MAX9</strong>, tiene un dibujo clásico de utilitario: grandes
-        bloques en zigzag y canales anchos, pensado para andar cargado y resistir el desgaste. Termina en{" "}
+        La de la izquierda es la <strong>L-MAX9</strong>, con un dibujo clásico de utilitario: grandes bloques en
+        zigzag y canales anchos, pensado para andar cargado y resistir el desgaste. Termina en{" "}
         <strong>90/88R</strong>, es decir, índice de velocidad R (hasta 170 km/h).
       </p>
       <p>
-        La de la derecha tiene un dibujo más cerrado, con muchas laminillas finas, y su etiqueta lleva el
-        pictograma de la <strong>montaña con copo de nieve (3PMSF)</strong>. Termina en <strong>90/88T</strong>:
-        índice de velocidad T, hasta 190 km/h. Es una cubierta de uso mixto todo el año.
+        La de la derecha es otro modelo de la marca, con un dibujo más cerrado y muchas laminillas finas.
+        Termina en <strong>90/88T</strong>: índice de velocidad T, hasta 190 km/h. Las dos son cubiertas C de
+        verano, no de nieve.
       </p>
 
       <h2>Cuál conviene</h2>
@@ -90,8 +90,8 @@ export default function Page() {
           precio.
         </li>
         <li>
-          <strong>Ruta, lluvia y viajes más largos:</strong> las laminillas del dibujo cerrado y el índice T dan
-          más margen en velocidad y en piso mojado.
+          <strong>Ruta y viajes más largos:</strong> el dibujo más cerrado y el índice T dan más margen en
+          velocidad y un andar más silencioso.
         </li>
         <li>
           <strong>Auto de pasajeros con llanta 14:</strong> verificá que el índice de carga no sea menor al original

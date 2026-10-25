@@ -167,11 +167,11 @@ export const BLOG_POSTS: BlogPost[] = [
   },
   {
     id: "44",
-    title: "Dos cubiertas de carga 175/65 R14C: dibujo clásico o con símbolo de nieve",
-    excerpt: "Misma medida y mismo índice 90/88, dibujos muy distintos: en qué se diferencian dos cubiertas C y cuál conviene según el uso.",
-    imageUrl: "/images/local/dos-cubiertas-de-carga-grenlander-175-65-r14c-lug-y-all-season-trivium-cordoba.webp",
+    title: "Dos cubiertas de carga Grenlander 175/65 R14C: misma medida, modelos distintos",
+    excerpt: "Mismo tamaño e índice 90/88, dos modelos con dibujos muy distintos: en qué se diferencian y cuál conviene según el uso.",
+    imageUrl: "/images/local/dos-cubiertas-de-carga-grenlander-175-65-r14c-modelos-distintos-trivium-cordoba.webp",
     date: "2026-10-25",
-    slug: "cubierta-de-carga-comun-o-all-season-utilitario",
+    slug: "dos-cubiertas-de-carga-175-65-r14c-modelos-distintos",
     category: "Guías",
   },
   {

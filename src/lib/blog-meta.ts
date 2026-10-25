@@ -68,7 +68,7 @@ const IMG = {
   taxiLocal: `${LOCAL}/taxi-entrando-al-local-neumaticos-trivium-cordoba.webp`,
   remisTaller: `${LOCAL}/remis-en-el-taller-con-balanceadora-y-neumaticos-trivium-cordoba.webp`,
   taxiRueda: `${LOCAL}/taxi-rueda-delantera-en-el-taller-neumaticos-trivium-cordoba.webp`,
-  cargaDos: `${LOCAL}/dos-cubiertas-de-carga-grenlander-175-65-r14c-lug-y-all-season-trivium-cordoba.webp`,
+  cargaDos: `${LOCAL}/dos-cubiertas-de-carga-grenlander-175-65-r14c-modelos-distintos-trivium-cordoba.webp`,
   valvula: `${LOCAL}/tecnico-colocando-valvula-en-llanta-de-camioneta-con-neumatico-at-trivium-cordoba.webp`,
   placaPresion: `${LOCAL}/etiqueta-de-presion-recomendada-en-la-puerta-del-auto-trivium-cordoba.webp`,
   descarga: `${LOCAL}/descarga-de-neumaticos-importados-grenlander-del-camion-trivium-cordoba.webp`,
@@ -168,7 +168,7 @@ export const BLOG_META: Record<string, BlogMeta> = {
     shopIntro: "Si la presión mal usada ya gastó las cubiertas:",
     shopLinks: [L.todos, L.servicios, L.ofertas],
   },
-  "cubierta-de-carga-comun-o-all-season-utilitario": {
+  "dos-cubiertas-de-carga-175-65-r14c-modelos-distintos": {
     cover: { src: IMG.cargaDos, alt: "Dos cubiertas de carga Grenlander 175/65 R14C 90/88 sostenidas en el taller de Neumáticos Trivium", portrait: true, tall: true, position: "center 40%" },
     figure: { src: IMG.descarga, alt: "Descarga de neumáticos Grenlander del camión en el local de Trivium", caption: "Las cubiertas de carga llegan al local en cantidad: se consulta stock por medida." },
     shopIntro: "Mirá las cubiertas C disponibles:",
@@ -205,7 +205,7 @@ export const BLOG_META: Record<string, BlogMeta> = {
     shopLinks: [L.carga, L.ofertas, L.todos],
   },
   "neumatico-c-o-de-auto-utilitario": {
-    cover: { src: IMG.cargaDos, alt: "Dos cubiertas de carga Grenlander 175/65 R14C 90/88, una de dibujo clásico y otra con símbolo de nieve, sostenidas en el taller", portrait: true },
+    cover: { src: IMG.cargaDos, alt: "Dos cubiertas de carga Grenlander 175/65 R14C 90/88, dos modelos distintos, sostenidas en el taller", portrait: true },
     figure: { src: IMG.alineacion, alt: "Utilitario blanco elevado en el taller de Neumáticos Trivium", caption: "Un utilitario en el taller de Trivium: la medida es la misma, la cubierta no." },
     shopIntro: "Mirá las cubiertas C disponibles:",
     shopLinks: [L.carga, L.todos, L.indice],
