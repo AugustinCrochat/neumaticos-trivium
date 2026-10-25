@@ -135,7 +135,7 @@ export function PaymentMethodsSection({
   }
 
   return (
-    <section id="metodos-pago" className="scroll-mt-24 rounded-xl border border-slate-200 bg-white p-4">
+    <section id="metodos-pago" className="scroll-mt-36 rounded-xl border border-slate-200 bg-white p-4">
       <div className="mb-3 flex items-center justify-between gap-2">
         <h2 className="text-xs font-black uppercase tracking-wide text-navy-900">Medios de pago</h2>
         {onCalcularCuotas && (

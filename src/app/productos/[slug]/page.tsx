@@ -432,7 +432,7 @@ export default async function ProductPage({ params }: Props) {
             </p>
           )}
 
-          <div id="garantia" className="mt-6 scroll-mt-24 overflow-hidden rounded-2xl border-2 border-amber-400 bg-gradient-to-br from-amber-50 to-orange-50 shadow-md">
+          <div id="garantia" className="mt-6 scroll-mt-36 overflow-hidden rounded-2xl border-2 border-amber-400 bg-gradient-to-br from-amber-50 to-orange-50 shadow-md">
             <div className="flex items-center gap-3 bg-amber-500 px-4 py-3 text-white">
               <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-amber-600">
                 <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
@@ -442,7 +442,7 @@ export default async function ProductPage({ params }: Props) {
               </span>
               <div className="leading-tight">
                 <p className="text-lg font-black uppercase tracking-tight">Garantía de 1 año</p>
-                <p className="text-xs font-bold text-amber-50">Por defecto de fabricación, gestionada directo con nosotros</p>
+                <Link href="/garantia-neumaticos" className="text-xs font-bold text-amber-50 underline underline-offset-2 hover:text-white">Por defecto de fabricación, gestionada directo con nosotros &rarr;</Link>
               </div>
             </div>
             <div className="grid gap-3 p-4 text-sm leading-snug sm:grid-cols-2">

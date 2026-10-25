@@ -28,6 +28,7 @@ const PAGES: { title: string; description: string; href: string; keywords: strin
   { title: "Calculadora de equivalencias", description: "Medidas equivalentes dentro del ±3% de diámetro.", href: "/calculadora-equivalencia-neumaticos", keywords: "equivalencias equivalente medida alternativa calculadora" },
   { title: "UTQG: qué significa", description: "Desgaste, tracción y temperatura del neumático.", href: "/utqg", keywords: "utqg treadwear desgaste traccion temperatura" },
   { title: "Índice de carga y velocidad", description: "Tabla de índices de carga y velocidad.", href: "/indice-carga-velocidad", keywords: "indice carga velocidad tabla" },
+  { title: "Garantía de 1 año en neumáticos", description: "Qué cubre la garantía por defecto de fabricación y cómo se reclama.", href: "/garantia-neumaticos", keywords: "garantia garantias un año fabricacion defecto reclamo cubre" },
   { title: "Política de devoluciones", description: "Cambios y devoluciones.", href: "/politica-de-devoluciones", keywords: "devolucion devoluciones cambio garantia arrepentimiento" },
   { title: "Blog", description: "Guías y notas sobre neumáticos.", href: "/blog", keywords: "blog notas guias articulos" },
   { title: "Herramientas gratuitas", description: "Calculadoras y lectores para el neumático.", href: "/herramientas", keywords: "herramientas calculadoras gratis" },

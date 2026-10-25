@@ -106,7 +106,8 @@ const SECTIONS: Section[] = [
       { href: "/sucursales", label: "Sucursales", hint: "Direcciones, horarios y cómo llegar." },
       { href: "/neumaticos-en", label: "Zonas donde atendemos", hint: "Localidades y barrios de Córdoba." },
       { href: "/contacto", label: "Contacto", hint: "WhatsApp, teléfono y mail." },
-      { href: "/politica-de-devoluciones", label: "Garantía y devoluciones", hint: "Un año por defecto de fabricación." },
+      { href: "/garantia-neumaticos", label: "Garantía de 1 año", hint: "Qué cubre y cómo se reclama." },
+      { href: "/politica-de-devoluciones", label: "Cambios y devoluciones", hint: "Arrepentimiento y cambios a 30 días." },
     ],
   },
 ];
