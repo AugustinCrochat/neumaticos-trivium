@@ -590,7 +590,7 @@ export function ShopPage({
                         <button
                           type="button"
                           onClick={openVehicleModal}
-                          className="text-sm font-bold text-slate-600 hover:text-slate-900 underline underline-offset-4"
+                          className="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-sm font-bold text-slate-700 transition-colors hover:border-slate-400 hover:text-slate-900"
                         >
                           Cambiar vehículo
                         </button>

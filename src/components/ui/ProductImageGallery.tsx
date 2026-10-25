@@ -302,6 +302,12 @@ export function ProductImageGallery({
                 style={{ left: lensStyle.left, top: lensStyle.top, width: lensStyle.width, height: lensStyle.height }}
               />
             )}
+            {label && current.kind === "foto" && (
+              <span className="absolute bottom-3 left-3 flex items-center gap-1.5 rounded-full bg-white/95 py-1 pl-1.5 pr-3 text-[11px] font-black uppercase tracking-wide text-navy-900 shadow-md ring-1 ring-slate-200">
+                <EuStars className="h-5 w-5 shrink-0" />
+                Homologadas en Europa
+              </span>
+            )}
             {current.kind !== "sucursal" && (
               <span className="absolute bottom-3 right-3 w-8 h-8 rounded-full bg-white/90 shadow-md flex items-center justify-center text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
