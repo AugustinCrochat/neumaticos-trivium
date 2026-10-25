@@ -125,6 +125,9 @@ export default async function AccessoryPage({ params }: Props) {
             <span className="text-4xl font-black text-red-600">{formatPrice(accessory.price)}</span>
             <p className="text-xs text-slate-400 mt-1 mb-4">Precio por juego, con 2 llaves · IVA incluido</p>
             <AccessoryConsult accessory={accessory} />
+            <Link href="/tuercas-antirrobo#buscar" className="mt-3 inline-block text-sm font-bold text-navy-700 underline decoration-navy-300 underline-offset-4 hover:decoration-navy-900">
+              ¿No sabés si va en tu auto? Buscá por modelo
+            </Link>
           </div>
         </div>
       </div>

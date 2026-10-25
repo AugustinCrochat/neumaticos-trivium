@@ -2,6 +2,7 @@
 
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useCart } from "@/contexts/cart-context";
 import { useBranch } from "@/contexts/branch-context";
 import { useUpsellCombo } from "@/hooks/use-upsell-combo";
@@ -209,7 +210,8 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
 
       {expanded && (
       <>
-      {/* Buscador */}
+      {/* Buscador: desde la ficha, con el neumático ya elegido, se oculta hasta que lo quiten. */}
+      {!(initialProduct && items.some((it) => it.product.id === initialProduct.id)) && (
       <div className="relative">
         <input
           type="text"
@@ -252,6 +254,7 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
           </div>
         )}
       </div>
+      )}
 
       {/* Ítems agregados */}
       <div className="rounded-2xl border border-slate-200 bg-white">
@@ -339,6 +342,16 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
                 </button>
               </div>
             )}
+            <Link
+              href="/tuercas-antirrobo#buscar"
+              className="flex items-center gap-3 p-4 text-sm transition-colors hover:bg-slate-50"
+            >
+              <span className="flex-1">
+                <span className="block font-black text-navy-900">¿Sumás tuercas antirrobo?</span>
+                <span className="text-slate-500">Buscá la que lleva tu auto por modelo.</span>
+              </span>
+              <span className="shrink-0 text-xs font-black text-orange-600">Buscar &rarr;</span>
+            </Link>
           </div>
         )}
       </div>

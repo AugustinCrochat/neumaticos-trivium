@@ -188,6 +188,14 @@ export const TUERCAS_VEHICULOS: Record<string, TuercaVehiculo[]> = {
   ],
 };
 
+/** Todas las tuercas que declaran compatibilidad con el auto (puede haber más de una). */
+export function getCompatibleAccessories(marca: string, modelo: string, accesorios: Accessory[]): Accessory[] {
+  return accesorios.filter((accessory) => {
+    const compatibles = accessory.codigoTango ? TUERCAS_VEHICULOS[accessory.codigoTango] : undefined;
+    return !!compatibles?.some((c) => c.marca === marca && (!c.modelo || c.modelo === modelo));
+  });
+}
+
 export function getCompatibleAccessory(marca: string, modelo: string, accesorios: Accessory[]): Accessory | null {
   for (const accessory of accesorios) {
     const compatibles = accessory.codigoTango ? TUERCAS_VEHICULOS[accessory.codigoTango] : undefined;

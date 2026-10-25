@@ -36,7 +36,7 @@ export async function SizesCatalog({ sizes, limit = 8, branch = "arguello" }: { 
   return (
     <div className="not-prose [&_a]:!no-underline">
       <SortedProductGrid
-        className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4"
+        className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4"
         items={rows.slice(0, limit).map(({ items }) => ({ product: items[0], peers: peers.get(items[0].id) }))}
       />
       <ul className="mt-6 flex flex-wrap gap-2">
