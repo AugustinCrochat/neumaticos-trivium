@@ -4,7 +4,7 @@
  *
  * Uso:
  *   GA4_PROPERTY_ID=123456789 GA4_KEY_FILE=/ruta/clave.json \
- *     node scripts/ga4-report.mjs [paginas|eventos|fuentes|contactos|diario] [--dias=28] [--limite=30]
+ *     node scripts/ga4-report.mjs [paginas|eventos|fuentes|contactos|entradas|campanias|diario] [--dias=28] [--limite=30]
  *
  * Autenticación: GA4_KEY_FILE (cuenta de servicio) o GA4_OAUTH_FILE (token de
  * usuario generado con scripts/ga4-auth.mjs, para cuando la organización bloquea
@@ -29,6 +29,7 @@ const args = process.argv.slice(2);
 const reporte = args.find((a) => !a.startsWith("--")) ?? "paginas";
 const opt = (name, def) => Number(args.find((a) => a.startsWith(`--${name}=`))?.split("=")[1] ?? def);
 const dias = opt("dias", 28);
+const fuente = args.find((a) => a.startsWith("--fuente="))?.slice("--fuente=".length);
 const limite = opt("limite", 30);
 
 const b64 = (x) => Buffer.from(x).toString("base64url");
@@ -86,6 +87,18 @@ const REPORTES = {
     orderBy: "eventCount",
     eventos: ["click_whatsapp", "como_llegar", "ads_conversion_Contactar_1"],
   },
+  // Páginas de entrada; con --fuente="google / organic" filtra por fuente/medio.
+  entradas: {
+    dimensions: ["landingPagePlusQueryString"],
+    metrics: ["sessions", "activeUsers", "engagementRate", "averageSessionDuration", "keyEvents"],
+    orderBy: "sessions",
+  },
+  // Campañas de pago: sesiones y eventos por campaña (usar con --fuente="google / cpc").
+  campanias: {
+    dimensions: ["sessionCampaignName"],
+    metrics: ["sessions", "activeUsers", "engagementRate", "keyEvents"],
+    orderBy: "sessions",
+  },
   diario: { dimensions: ["date"], metrics: ["sessions", "activeUsers", "screenPageViews", "keyEvents"], orderBy: null },
 };
 
@@ -100,7 +113,10 @@ const body = {
   dimensions: def.dimensions.map((name) => ({ name })),
   metrics: def.metrics.map((name) => ({ name })),
   limit: limite,
-  ...(def.eventos
+  ...(fuente
+    ? { dimensionFilter: { filter: { fieldName: "sessionSourceMedium", stringFilter: { matchType: "EXACT", value: fuente } } } }
+    : {}),
+  ...(def.eventos && !fuente
     ? { dimensionFilter: { filter: { fieldName: "eventName", inListFilter: { values: def.eventos } } } }
     : {}),
   ...(def.orderBy
