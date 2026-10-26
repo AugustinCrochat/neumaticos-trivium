@@ -16,6 +16,7 @@ import { useVehicle } from "@/contexts/vehicle-context";
 import { useLiveStockMap } from "@/contexts/live-stock-context";
 import { getCompatibleAccessory } from "@/lib/tuercas-vehiculos";
 import { goToWhatsApp } from "@/lib/gtag";
+import { PaymentMethodsSection } from "@/components/ui/PaymentMethodsSection";
 import { SPEED_RATING_KMH } from "@/lib/tire-sizes";
 import type { Accessory, TireProduct, TireSize, VehicleType } from "@/lib/types";
 
@@ -731,8 +732,11 @@ export function ShopPage({
                     <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m-6 4h6m-6 4h4M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z" />
                     </svg>
-                    Armar presupuesto para varios neumáticos
+                    Armar presupuesto
                   </Link>
+                </div>
+                <div className="mb-6">
+                  <PaymentMethodsSection />
                 </div>
                 {allProducts.length === 0 ? (
                   <div className="flex flex-col items-center justify-center py-20 text-center">
