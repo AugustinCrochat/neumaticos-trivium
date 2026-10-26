@@ -433,6 +433,9 @@ export function ShopPage({
     // horneado en el build. Lo que se agotó desde el build va al fondo.
     const enStock = (p: TireProduct) => liveStock[p.id]?.enStock ?? !!p.enStock;
     const stockPrimero = (a: TireProduct, b: TireProduct) => Number(enStock(b)) - Number(enStock(a));
+    // Al buscar una medida, el neumático de ruta (ni carga ni A/T) va primero.
+    const rango = (p: TireProduct) => (p.isCarga ? 2 : p.isAT ? 1 : 0);
+    const tipoPrimero = (a: TireProduct, b: TireProduct) => rango(a) - rango(b);
     const ok = (p: TireProduct) => {
       if (brandFilter !== "todos" && p.brandId !== brandFilter) return false;
       if (p.price > maxPrice) return false;
@@ -471,8 +474,8 @@ export function ShopPage({
     // manda antes que el precio — si no, un modelo sin stock más barato le
     // saca el lugar a uno disponible más caro y el cliente no lo ve.
     const exact = products.filter(p => isExactMatch(p, parsed) && ok(p))
-      .sort((a, b) => stockPrimero(a, b) || getUnitPrice(a) - getUnitPrice(b));
-    const compatible = products.filter(p => isCompatibleSize(p, parsed) && ok(p)).sort(stockPrimero);
+      .sort((a, b) => stockPrimero(a, b) || tipoPrimero(a, b) || getUnitPrice(a) - getUnitPrice(b));
+    const compatible = products.filter(p => isCompatibleSize(p, parsed) && ok(p)).sort((a, b) => stockPrimero(a, b) || tipoPrimero(a, b));
 
     return { exactResults: exact, compatibleResults: compatible, allProducts: [] };
   }, [parsed, brandFilter, maxPrice, onlyEconomic, onlyCarga, onlyAT, onlyCalle, sizeFilter, products, liveStock]);
@@ -528,7 +531,7 @@ export function ShopPage({
     if (!parsed) return [];
     const delaMedida = products.filter((p) => isExactMatch(p, parsed) || isCompatibleSize(p, parsed));
     const tipos: { id: "calle" | "at" | "carga"; label: string }[] = [];
-    if (delaMedida.some((p) => !p.isCarga && !p.isAT)) tipos.push({ id: "calle", label: "Calle" });
+    if (delaMedida.some((p) => !p.isCarga && !p.isAT)) tipos.push({ id: "calle", label: "Ruta" });
     if (delaMedida.some((p) => p.isAT)) tipos.push({ id: "at", label: "A/T" });
     if (delaMedida.some((p) => p.isCarga)) tipos.push({ id: "carga", label: "Carga" });
     return tipos;
