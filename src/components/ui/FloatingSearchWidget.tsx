@@ -75,7 +75,7 @@ export function FloatingSearchWidget() {
       >
         <div className="relative flex h-7 w-7 items-center justify-center">
           <svg
-            className={`absolute h-5 w-5 text-white transition-[opacity,transform] duration-500 will-change-[opacity,transform] group-hover:rotate-12 ${!verTexto && capa !== 0 ? "scale-50 opacity-0" : "opacity-100"}`}
+            className={`absolute h-5 w-5 text-white transition-[opacity,scale,rotate] duration-700 ease-in-out will-change-[opacity,scale] group-hover:rotate-12 ${!verTexto && capa !== 0 ? "scale-50 opacity-0" : "opacity-100"}`}
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -94,7 +94,7 @@ export function FloatingSearchWidget() {
               src={`/images/buscador/neumatico-${i + 1}.webp`}
               alt=""
               aria-hidden
-              className={`pointer-events-none absolute h-10 w-10 max-w-none object-contain transition-[opacity,transform] duration-500 will-change-[opacity,transform] ${!verTexto && capa === i + 1 ? "scale-100 opacity-100" : "scale-50 opacity-0"}`}
+              className={`pointer-events-none absolute h-10 w-10 max-w-none object-contain transition-[opacity,scale,rotate] duration-700 ease-in-out will-change-[opacity,scale] ${!verTexto && capa === i + 1 ? "scale-100 opacity-100" : "scale-50 opacity-0"}`}
             />
           ))}
           <span className="absolute -top-1 -right-1 h-2 w-2 animate-ping rounded-full bg-black" />
