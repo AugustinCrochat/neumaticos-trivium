@@ -94,7 +94,7 @@ export function FloatingSearchWidget() {
               src={`/images/buscador/neumatico-${i + 1}.webp`}
               alt=""
               aria-hidden
-              className={`pointer-events-none absolute h-7 w-7 object-contain transition-all duration-500 motion-reduce:transition-none ${!verTexto && capa === i + 1 ? "scale-100 opacity-100" : "scale-50 opacity-0"}`}
+              className={`pointer-events-none absolute h-10 w-10 max-w-none object-contain transition-all duration-500 motion-reduce:transition-none ${!verTexto && capa === i + 1 ? "scale-100 opacity-100" : "scale-50 opacity-0"}`}
             />
           ))}
           <span className="absolute -top-1 -right-1 h-2 w-2 animate-ping rounded-full bg-black" />
