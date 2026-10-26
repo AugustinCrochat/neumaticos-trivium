@@ -8,6 +8,8 @@ export function FloatingSearchWidget() {
   const [isOpen, setIsOpen] = useState(false);
   // Arranca con el texto a la vista y a los pocos segundos queda sólo la lupa.
   const [expandido, setExpandido] = useState(true);
+  const [hover, setHover] = useState(false);
+  const verTexto = expandido || hover;
   const pathname = usePathname();
 
   useEffect(() => {
@@ -54,6 +56,10 @@ export function FloatingSearchWidget() {
       <button
         type="button"
         onClick={() => setIsOpen(true)}
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
+        onFocus={() => setHover(true)}
+        onBlur={() => setHover(false)}
         aria-label="Abrir buscador de neumáticos"
         className="fixed bottom-5 right-5 z-40 sm:bottom-6 sm:right-6 group flex items-center bg-orange-500 hover:bg-orange-600 text-white font-black p-3.5 sm:p-4 rounded-full shadow-xl shadow-navy-900/30 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
       >
@@ -75,7 +81,7 @@ export function FloatingSearchWidget() {
         </div>
         <span
           className={`overflow-hidden whitespace-nowrap text-xs sm:text-sm uppercase tracking-wider font-extrabold transition-all duration-500 ease-in-out ${
-            expandido ? "ml-2.5 max-w-[12rem] opacity-100" : "ml-0 max-w-0 opacity-0"
+            verTexto ? "ml-2.5 max-w-[12rem] opacity-100" : "ml-0 max-w-0 opacity-0"
           }`}
         >
           Buscar neumáticos

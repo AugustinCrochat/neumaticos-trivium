@@ -21,14 +21,19 @@ export function SizeOrVehicleSearch({
   initialEconomicos?: boolean;
   onLiveChange?: (v: { w: string; p: string; r: string }) => void;
 }) {
-  const { selectedVehicle, loadVehiculos } = useVehicle();
+  const { selectedVehicle, restaurado, loadVehiculos } = useVehicle();
   // null = sin elección manual: sigue el default (pestaña "Por mi auto" si ya
   // tenemos un vehículo recordado de localStorage, "Por medida" si no).
   const [manualMode, setManualMode] = useState<"medida" | "vehiculo" | null>(null);
   // Apagado por defecto: sólo se enciende si el visitante lo pide (o si la
   // búsqueda que está viendo ya venía filtrada, ver ShopPage).
   const [economicos, setEconomicos] = useState(initialEconomicos);
-  const mode = manualMode ?? (selectedVehicle ? "vehiculo" : "medida");
+  // El default se fija una sola vez, al leer el auto recordado. Si después se
+  // elige un auto desde otro lado (menú, modal) la pestaña no cambia sola: eso
+  // desmontaba el buscador de medida en pleno uso y parecía una recarga.
+  const [pestañaInicial, setPestañaInicial] = useState<"medida" | "vehiculo" | null>(null);
+  if (restaurado && pestañaInicial === null) setPestañaInicial(selectedVehicle ? "vehiculo" : "medida");
+  const mode = manualMode ?? pestañaInicial ?? "medida";
 
   // El listado completo del POS solo hace falta acá. Se pide al entrar a la
   // pestaña, no en cada carga de página del sitio.
