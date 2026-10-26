@@ -4,12 +4,23 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { SizeOrVehicleSearch } from "@/components/ui/SizeOrVehicleSearch";
 
+const MINIATURAS = 4;
+
 export function FloatingSearchWidget() {
   const [isOpen, setIsOpen] = useState(false);
   // Arranca con el texto a la vista y a los pocos segundos queda sólo la lupa.
   const [expandido, setExpandido] = useState(true);
   const [hover, setHover] = useState(false);
   const verTexto = expandido || hover;
+  // Colapsado, la lupa alterna con miniaturas de neumáticos (recortes sin fondo).
+  // Capa 0 = lupa; 1..N = neumáticos.
+  const [capa, setCapa] = useState(0);
+  useEffect(() => {
+    if (verTexto || isOpen) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const t = setInterval(() => setCapa((c) => (c + 1) % (MINIATURAS + 1)), 1800);
+    return () => clearInterval(t);
+  }, [verTexto, isOpen]);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -61,11 +72,11 @@ export function FloatingSearchWidget() {
         onFocus={() => setHover(true)}
         onBlur={() => setHover(false)}
         aria-label="Abrir buscador de neumáticos"
-        className="fixed bottom-5 right-5 z-40 sm:bottom-6 sm:right-6 group flex h-14 items-center justify-center border-2 border-white bg-orange-500 hover:bg-orange-600 text-white font-black px-4 rounded-full shadow-xl shadow-navy-900/30 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
+        className="fixed bottom-5 right-5 z-40 sm:bottom-6 sm:right-6 group flex h-14 items-center justify-center border-2 border-white bg-orange-500 hover:bg-orange-600 text-white font-black px-3 rounded-full shadow-xl shadow-navy-900/30 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
       >
-        <div className="relative flex items-center justify-center">
+        <div className="relative flex h-7 w-7 items-center justify-center">
           <svg
-            className="w-5 h-5 text-white transition-transform group-hover:rotate-12"
+            className={`absolute h-5 w-5 text-white transition-all duration-500 group-hover:rotate-12 ${!verTexto && capa !== 0 ? "scale-50 opacity-0" : "opacity-100"}`}
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -77,11 +88,22 @@ export function FloatingSearchWidget() {
               d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"
             />
           </svg>
-          <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-black animate-ping" />
+          {Array.from({ length: MINIATURAS }, (_, i) => (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              key={i}
+              src={`/images/buscador/neumatico-${i + 1}.webp`}
+              alt=""
+              aria-hidden
+              loading="lazy"
+              className={`pointer-events-none absolute h-7 w-7 object-contain transition-all duration-500 ${!verTexto && capa === i + 1 ? "scale-100 opacity-100" : "scale-50 opacity-0"}`}
+            />
+          ))}
+          <span className="absolute -top-1 -right-1 h-2 w-2 animate-ping rounded-full bg-black" />
         </div>
         <span
           className={`overflow-hidden whitespace-nowrap text-xs sm:text-sm uppercase tracking-wider font-extrabold transition-all duration-500 ease-in-out ${
-            verTexto ? "ml-2.5 mr-1 max-w-[12rem] opacity-100" : "ml-0 max-w-0 opacity-0"
+            verTexto ? "ml-2.5 mr-2 max-w-[12rem] opacity-100" : "ml-0 max-w-0 opacity-0"
           }`}
         >
           Buscar neumáticos
