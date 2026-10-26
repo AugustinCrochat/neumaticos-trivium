@@ -16,6 +16,7 @@ import { useVehicle } from "@/contexts/vehicle-context";
 import { useLiveStockMap } from "@/contexts/live-stock-context";
 import { getCompatibleAccessory } from "@/lib/tuercas-vehiculos";
 import { goToWhatsApp } from "@/lib/gtag";
+import { SPEED_RATING_KMH } from "@/lib/tire-sizes";
 import type { Accessory, TireProduct, TireSize, VehicleType } from "@/lib/types";
 
 // Removed PRICE_RANGES in favor of a slider
@@ -238,6 +239,38 @@ function getUnitPrice(product: TireProduct) {
   return product.price;
 }
 
+function CargaVelocidadSelects({
+  loadOptions, speedOptions, minLoad, setMinLoad, minSpeed, setMinSpeed, className,
+}: {
+  loadOptions: string[];
+  speedOptions: string[];
+  minLoad: string;
+  setMinLoad: (v: string) => void;
+  minSpeed: string;
+  setMinSpeed: (v: string) => void;
+  className?: string;
+}) {
+  const sel = "w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-bold text-slate-700";
+  return (
+    <div className={`grid grid-cols-2 gap-3 ${className ?? ""}`}>
+      <label className="block">
+        <span className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Índice de carga</span>
+        <select value={minLoad} onChange={(e) => setMinLoad(e.target.value)} className={sel}>
+          <option value="">Todos</option>
+          {loadOptions.map((v) => <option key={v} value={v}>{v} o más</option>)}
+        </select>
+      </label>
+      <label className="block">
+        <span className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Velocidad</span>
+        <select value={minSpeed} onChange={(e) => setMinSpeed(e.target.value)} className={sel}>
+          <option value="">Todas</option>
+          {speedOptions.map((v) => <option key={v} value={v}>{v} ({SPEED_RATING_KMH[v]} km/h) o más</option>)}
+        </select>
+      </label>
+    </div>
+  );
+}
+
 type SizeFilter = { w: string; p: string; r: string };
 
 /** Ancho / perfil / rodado sueltos: filtran el catálogo por cualquiera de los tres. */
@@ -249,6 +282,7 @@ function FilterBar({
   onlyCarga, setOnlyCarga,
   onlyAT, setOnlyAT,
   hasActiveFilters, clearFilters,
+  maxPriceLimit, cv,
   layout,
 }: {
   availableBrandIds: Set<string>;
@@ -264,6 +298,8 @@ function FilterBar({
   setOnlyAT: (v: boolean) => void;
   hasActiveFilters: boolean;
   clearFilters: () => void;
+  maxPriceLimit: number;
+  cv: Omit<React.ComponentProps<typeof CargaVelocidadSelects>, "className">;
   layout: "horizontal" | "vertical";
 }) {
   if (layout === "horizontal") {
@@ -279,8 +315,12 @@ function FilterBar({
         <div className="w-px h-8 bg-slate-100 mx-1 shrink-0" />
         
         <div className="w-64">
-          <PriceSlider value={maxPrice} onChange={setMaxPrice} />
+          <PriceSlider value={maxPrice} onChange={setMaxPrice} max={maxPriceLimit} />
         </div>
+
+        <div className="w-px h-8 bg-slate-100 mx-1 shrink-0" />
+
+        <CargaVelocidadSelects {...cv} className="w-80" />
 
         <div className="w-px h-8 bg-slate-100 mx-1 shrink-0" />
 
@@ -324,7 +364,12 @@ function FilterBar({
 
       <div>
         <p className="text-xs font-black text-slate-400 uppercase tracking-[0.15em] mb-6">Precio</p>
-        <PriceSlider value={maxPrice} onChange={setMaxPrice} />
+        <PriceSlider value={maxPrice} onChange={setMaxPrice} max={maxPriceLimit} />
+      </div>
+
+      <div>
+        <p className="text-xs font-black text-slate-400 uppercase tracking-[0.15em] mb-4">Carga y velocidad</p>
+        <CargaVelocidadSelects {...cv} />
       </div>
 
       <div className="pt-6 border-t border-slate-100">
@@ -385,7 +430,23 @@ export function ShopPage({
     vehiculoMarca && vehiculoModelo ? getCompatibleAccessory(vehiculoMarca, vehiculoModelo, accesorios) : null;
 
   const [brandFilter, setBrandFilter] = useState("todos");
-  const [maxPrice, setMaxPrice] = useState(MAX_POSSIBLE_PRICE);
+  // Tope del slider = el neumático más caro del catálogo, redondeado a 10 mil.
+  const maxPriceLimit = useMemo(() => {
+    const top = Math.max(0, ...products.map((p) => p.price));
+    return top > MIN_POSSIBLE_PRICE ? Math.ceil(top / 10000) * 10000 : MAX_POSSIBLE_PRICE;
+  }, [products]);
+  const [maxPrice, setMaxPrice] = useState(maxPriceLimit);
+  const [minLoad, setMinLoad] = useState("");
+  const [minSpeed, setMinSpeed] = useState("");
+  const loadOptions = useMemo(
+    () => [...new Set(products.map((p) => p.loadIndex).filter((v): v is string => !!v))].sort((a, b) => Number(a) - Number(b)),
+    [products],
+  );
+  const speedOptions = useMemo(
+    () => [...new Set(products.map((p) => p.speedRating).filter((v): v is string => !!v && v in SPEED_RATING_KMH))]
+      .sort((a, b) => SPEED_RATING_KMH[a] - SPEED_RATING_KMH[b]),
+    [products],
+  );
   const economicosParam = searchParams.get("economicos") === "1";
   const [onlyEconomic, setOnlyEconomic] = useState(economicosParam);
   // El buscador puede volver a mandar a /buscar con otro valor del toggle sin
@@ -440,6 +501,8 @@ export function ShopPage({
       if (brandFilter !== "todos" && p.brandId !== brandFilter) return false;
       if (p.price > maxPrice) return false;
       if (onlyEconomic && !p.isEconomic) return false;
+      if (minLoad && !(Number(p.loadIndex) >= Number(minLoad))) return false;
+      if (minSpeed && !((p.speedRating ? SPEED_RATING_KMH[p.speedRating] ?? 0 : 0) >= SPEED_RATING_KMH[minSpeed])) return false;
       if (onlyCarga && !p.isCarga) return false;
       if (onlyAT && !p.isAT) return false;
       if (onlyCalle && (p.isCarga || p.isAT)) return false;
@@ -478,7 +541,7 @@ export function ShopPage({
     const compatible = products.filter(p => isCompatibleSize(p, parsed) && ok(p)).sort((a, b) => stockPrimero(a, b) || tipoPrimero(a, b));
 
     return { exactResults: exact, compatibleResults: compatible, allProducts: [] };
-  }, [parsed, brandFilter, maxPrice, onlyEconomic, onlyCarga, onlyAT, onlyCalle, sizeFilter, products, liveStock]);
+  }, [parsed, brandFilter, maxPrice, minLoad, minSpeed, onlyEconomic, onlyCarga, onlyAT, onlyCalle, sizeFilter, products, liveStock]);
 
   // Catálogo sin medida en la URL: si ya sabemos la medida del auto elegido,
   // recomendamos esos neumáticos arriba de todo, sin esperar a que busquen.
@@ -500,7 +563,7 @@ export function ShopPage({
   const mejoresCatalogo = useMemo(() => bestPriceByGroup(allProducts), [allProducts]);
   const peersCatalogo = useMemo(() => peersByGroup(allProducts), [allProducts]);
   const hasActiveFilters =
-    brandFilter !== "todos" || maxPrice < MAX_POSSIBLE_PRICE || onlyEconomic || onlyCarga || onlyAT || onlyCalle || !!(sizeFilter.w || sizeFilter.p || sizeFilter.r);
+    brandFilter !== "todos" || maxPrice < maxPriceLimit || !!minLoad || !!minSpeed || onlyEconomic || onlyCarga || onlyAT || onlyCalle || !!(sizeFilter.w || sizeFilter.p || sizeFilter.r);
 
   const handleWhatsApp = (waLabel: string | null) => {
     const waUrl = (branch: typeof selectedBranch) =>
@@ -551,13 +614,17 @@ export function ShopPage({
     onlyCarga, setOnlyCarga,
     onlyAT, setOnlyAT,
     hasActiveFilters,
+    maxPriceLimit,
+    cv: { loadOptions, speedOptions, minLoad, setMinLoad, minSpeed, setMinSpeed },
     clearFilters() {
       setSizeFilter({ w: "", p: "", r: "" });
       // Vacía también lo escrito en el buscador de la barra lateral.
       setLive(null);
       setSearchResetKey((k) => k + 1);
       setBrandFilter("todos");
-      setMaxPrice(MAX_POSSIBLE_PRICE);
+      setMaxPrice(maxPriceLimit);
+      setMinLoad("");
+      setMinSpeed("");
       setOnlyEconomic(false);
       setOnlyCarga(false);
       setOnlyAT(false);
