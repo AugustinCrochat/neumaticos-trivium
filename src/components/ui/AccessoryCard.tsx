@@ -80,9 +80,11 @@ export function AccessoryCard({ accessory, priceOld = accessory.priceOld }: { ac
           </span>
           <Link
             href={`/tuercas-antirrobo/${accessory.slug}`}
-            className="block w-full text-center bg-black hover:bg-neutral-800 text-white font-semibold py-2.5 rounded-xl text-sm transition-colors"
+            className={`block w-full text-center font-semibold py-2.5 rounded-xl text-sm transition-colors ${
+              accessory.enStock ? "bg-black hover:bg-neutral-800 text-white" : "bg-slate-300 text-white pointer-events-none"
+            }`}
           >
-            Ver detalle
+            {accessory.enStock ? "Ver detalle" : "Sin stock"}
           </Link>
         </div>
       </div>

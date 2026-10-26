@@ -9,7 +9,7 @@ import { SearchModal } from "@/components/ui/SearchModal";
 
 const NAV_LINKS = [
   { href: "/ofertas", label: "% Ofertas", match: ["/ofertas"] },
-  { href: "/catalogo", label: "Neumáticos", match: ["/catalogo", "/neumaticos", "/buscar", "/productos", "/marcas", "/tuercas-antirrobo"] },
+  { href: "/catalogo", label: "Neumáticos", match: ["/catalogo", "/neumaticos", "/buscar", "/productos", "/marcas"] },
   { href: "/servicios", label: "Servicios", match: ["/servicios"] },
   { href: "/sucursales", label: "Sucursales", match: ["/sucursales"] },
   { href: "/contacto", label: "Contacto", match: ["/contacto"] },
