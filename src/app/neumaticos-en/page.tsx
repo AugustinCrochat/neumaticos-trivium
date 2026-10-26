@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import Link from "@/components/ui/Link";
 import { BRANCHES } from "@/lib/config";
 import { ZonasAgrupadas } from "@/components/seo/ZonasAgrupadas";
 import { LOCALIDADES, getBranchForLocalidad } from "@/lib/localidades";

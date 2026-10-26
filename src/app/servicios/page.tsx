@@ -3,7 +3,7 @@ import { FaqSection } from "@/components/seo/FaqSection";
 import { JsonLd } from "@/components/seo/JsonLd";
 import type { Metadata } from "next";
 import { SERVICES } from "@/lib/data";
-import Link from "next/link";
+import Link from "@/components/ui/Link";
 import { EXTRA_SERVICES, SERVICIOS_SEO } from "@/lib/servicios-seo";
 import { breadcrumbJsonLd, canonical, serviceJsonLd } from "@/lib/seo";
 

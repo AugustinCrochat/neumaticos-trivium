@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/ui/Link";
 import { TIRE_RIMS } from "@/lib/config";
 import { MEDIDAS_PRIORITARIAS, formatSize, rimSlug, sizeSlug } from "@/lib/tire-sizes";
 

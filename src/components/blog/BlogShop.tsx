@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/ui/Link";
 import { SizeOrVehicleSearch } from "@/components/ui/SizeOrVehicleSearch";
 import { blogMeta } from "@/lib/blog-meta";
 import { BlogCover } from "@/components/blog/BlogCover";

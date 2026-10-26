@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/ui/Link";
 import Image from "next/image";
 import type { Metadata } from "next";
 import { BRANCHES, LEGAL_NAME, CUIT, CONTACT_EMAIL } from "@/lib/config";

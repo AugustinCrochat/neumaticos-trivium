@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/ui/Link";
 import { SortedProductGrid } from "@/components/ui/SortedProductGrid";
 import { FEATURED_TIRE_IDS } from "@/lib/featured";
 import { peersByGroup } from "@/lib/best-price";

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import Link from "@/components/ui/Link";
 import { EquivalenceCalculator } from "@/components/ui/EquivalenceCalculator";
 import { SITE_URL } from "@/lib/config";
 import { getProductosDesdePOS } from "@/lib/pos-api";

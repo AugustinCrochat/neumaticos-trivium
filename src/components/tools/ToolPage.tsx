@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/components/ui/Link";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";

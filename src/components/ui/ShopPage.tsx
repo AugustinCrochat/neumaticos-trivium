@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
-import Link from "next/link";
+import Link from "@/components/ui/Link";
 import { BRANDS } from "@/lib/data";
 import { getBrandLogo } from "@/lib/brand-utils";
 import { EconomicChip } from "@/components/ui/EconomicChip";

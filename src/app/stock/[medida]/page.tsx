@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import Link from "@/components/ui/Link";
 import { notFound } from "next/navigation";
 import { BRANCHES, DEFAULT_BRANCH_ID, type Branch } from "@/lib/config";
 import { getProductosDesdePOS } from "@/lib/pos-api";

@@ -3,7 +3,7 @@ import { getProductosDesdePOS } from '@/lib/pos-api';
 import { SortedProductGrid } from '@/components/ui/SortedProductGrid';
 import type { TireSize } from '@/lib/types';
 import type { VehicleTireProfile } from '@/lib/vehicles';
-import Link from 'next/link';
+import Link from "@/components/ui/Link";
 import { peersByGroup } from '@/lib/best-price';
 
 interface CatalogWidgetProps {

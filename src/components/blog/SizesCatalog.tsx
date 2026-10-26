@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/ui/Link";
 import { getProductosDesdePOS } from "@/lib/pos-api";
 import { SortedProductGrid } from "@/components/ui/SortedProductGrid";
 import { sizeSearchHref } from "@/lib/size-href";

@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
-import Link from "next/link";
+import Link from "@/components/ui/Link";
 import { ProductCard } from "@/components/ui/ProductCard";
 import { useLiveStockMap } from "@/contexts/live-stock-context";
 import { sortInStockFirst } from "@/components/ui/SortedProductGrid";

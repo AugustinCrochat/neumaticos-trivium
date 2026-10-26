@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import Link from "next/link";
+import Link from "@/components/ui/Link";
 import type { Metadata } from "next";
 import { productShare } from "@/lib/share-image";
 import { productImagePaths } from "@/lib/image-seo";

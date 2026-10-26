@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/components/ui/Link";
 import type { SearchResult } from "@/app/api/search/route";
 import type { ContentResult } from "@/lib/search-content";
 import { medidaQueryHref } from "@/lib/medida-query";

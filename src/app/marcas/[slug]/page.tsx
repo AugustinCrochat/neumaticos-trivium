@@ -4,7 +4,7 @@ import { getSelectedBranchSlug } from "@/lib/branch-server";
 import { SortedProductGrid } from "@/components/ui/SortedProductGrid";
 import { peersByGroup } from "@/lib/best-price";
 import { notFound } from "next/navigation";
-import Link from "next/link";
+import Link from "@/components/ui/Link";
 import { Metadata } from "next";
 import { getBrandLogo } from "@/lib/brand-utils";
 import { DEFAULT_BRANCH_ID } from "@/lib/config";

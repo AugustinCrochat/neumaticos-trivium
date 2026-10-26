@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/ui/Link";
 import { MARCAS_PREMIUM, type MarcaPremium } from "@/lib/marcas-premium";
 
 const link = "font-bold text-[#cc1800] underline underline-offset-4";

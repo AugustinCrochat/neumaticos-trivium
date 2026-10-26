@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/components/ui/Link";
 import { BRANCHES } from "@/lib/config";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 import { ZonasPorProvincia } from "@/components/seo/ZonasPorProvincia";

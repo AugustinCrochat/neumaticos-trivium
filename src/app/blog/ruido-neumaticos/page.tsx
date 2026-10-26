@@ -1,6 +1,6 @@
 import { ProductBlock } from '@/components/blog/ProductBlock';
 import { CatalogWidget } from '@/components/blog/CatalogWidget';
-import Link from 'next/link';
+import Link from "@/components/ui/Link";
 import { blogMeta } from '@/lib/blog-meta';
 import { BlogCover } from '@/components/blog/BlogCover';
 import { BlogSearchStrip, BlogShopLinks } from '@/components/blog/BlogShop';

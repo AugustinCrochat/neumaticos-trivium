@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import Link from "next/link";
+import Link from "@/components/ui/Link";
 import { ProductCard } from "@/components/ui/ProductCard";
 import type { TireProduct, TireSize } from "@/lib/types";
 

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/components/ui/Link";
 import { useVehicle } from "@/contexts/vehicle-context";
 import { getCompatibleAccessory } from "@/lib/tuercas-vehiculos";
 import type { Accessory } from "@/lib/types";

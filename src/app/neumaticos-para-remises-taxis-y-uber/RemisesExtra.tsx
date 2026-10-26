@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/components/ui/Link";
 import type { TireProduct, TireSize } from "@/lib/types";
 import { POPULAR_VEHICLES, getSizesForVehicle, vehicleSlug } from "@/lib/vehicles";
 import { sizeSlug } from "@/lib/tire-sizes";

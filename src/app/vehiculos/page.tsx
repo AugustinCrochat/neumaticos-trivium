@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import Link from "@/components/ui/Link";
 import { POPULAR_VEHICLES, vehicleSlug } from "@/lib/vehicles";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { canonical, breadcrumbJsonLd, itemListJsonLd } from "@/lib/seo";

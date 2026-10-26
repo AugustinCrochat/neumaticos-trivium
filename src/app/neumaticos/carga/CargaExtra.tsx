@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/ui/Link";
 import type { TireProduct } from "@/lib/types";
 import { cargaCapacityLabel, cargaSlug, formatCargaSize } from "@/lib/carga";
 

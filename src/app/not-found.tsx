@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/ui/Link";
 
 // Next.js sirve esta página (dentro del layout raíz, con header y footer)
 // para cualquier notFound() o ruta inexistente. Sin este archivo, mostraba el

@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/ui/Link";
 import { CLUSTER } from "@/lib/blog-cluster";
 
 /** Enlaces cruzados del clúster "marca vs. alternativas", sin la nota actual. */

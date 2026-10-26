@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/components/ui/Link";
 import { BlogShopLinks } from "@/components/blog/BlogShop";
 import { SizesCatalog } from "@/components/blog/SizesCatalog";
 import { JsonLd } from "@/components/seo/JsonLd";

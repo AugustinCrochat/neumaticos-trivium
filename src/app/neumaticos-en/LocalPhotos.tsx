@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/components/ui/Link";
 
 const FOTOS = [
   { src: "/images/local/fachada-local-neumaticos-trivium-cordoba.webp", alt: "Fachada del local de Neumáticos Trivium en Argüello, Córdoba" },

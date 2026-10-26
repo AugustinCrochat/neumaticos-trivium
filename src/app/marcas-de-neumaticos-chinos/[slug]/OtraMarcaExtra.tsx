@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/ui/Link";
 import type { TireProduct } from "@/lib/types";
 import { BRANDS } from "@/lib/data";
 import { OTRAS_MARCAS, type OtraMarca } from "@/lib/marcas-chinas";

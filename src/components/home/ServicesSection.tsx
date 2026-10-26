@@ -1,5 +1,5 @@
 import { SERVICES } from "@/lib/data";
-import Link from "next/link";
+import Link from "@/components/ui/Link";
 import Image from "next/image";
 import { getServiciosPrecios } from "@/lib/pos-api";
 import { getSelectedBranchSlug } from "@/lib/branch-server";

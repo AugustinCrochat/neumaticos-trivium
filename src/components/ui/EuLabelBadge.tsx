@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/ui/Link";
 import type { TireLabel } from "@/lib/tire-labels";
 
 export function EuStars({ className }: { className?: string }) {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+import Link from "@/components/ui/Link";
 import { flotationToMetric, metricToFlotation, formatFlotationEquivalent } from "@/lib/flotation";
 import { sizeSlug } from "@/lib/tire-sizes";
 import { Result, MedidaFields, inputCls, labelCls, medidaCompleta, type Medida } from "./ui";

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import Link from "@/components/ui/Link";
 import { canonical, SITE_NAME } from "@/lib/seo";
 import { MARCAS_PREMIUM } from "@/lib/marcas-premium";
 import { poolShare } from "@/lib/share-image";

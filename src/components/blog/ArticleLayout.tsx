@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/ui/Link";
 import { Children, isValidElement } from "react";
 import type { ReactNode } from "react";
 import Image from "next/image";

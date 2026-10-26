@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+import Link from "@/components/ui/Link";
 import { inputCls, labelCls, Result } from "./ui";
 
 type Nivel = 0 | 1 | 2 | 3; // 0 ok, 1 vigilar, 2 planificar, 3 cambiar ya

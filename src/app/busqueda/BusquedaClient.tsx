@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
+import Link from "@/components/ui/Link";
 import { medidaQueryHref } from "@/lib/medida-query";
 import type { ContentResult } from "@/lib/search-content";
 import { ProductCard } from "@/components/ui/ProductCard";

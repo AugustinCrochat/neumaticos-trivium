@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+import Link from "@/components/ui/Link";
 import { LOAD_INDEX_KG, SPEED_RATING_KMH } from "@/lib/tire-sizes";
 import { LOAD_SPEED_CODES } from "@/lib/load-speed";
 import { inputCls, labelCls, Result } from "./ui";

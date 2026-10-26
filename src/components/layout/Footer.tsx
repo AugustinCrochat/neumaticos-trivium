@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/ui/Link";
 import Image from "next/image";
 import { BRANCHES, LEGAL_NAME, CUIT, CONTACT_EMAIL, INSTAGRAM_URL, FACEBOOK_URL, YOUTUBE_URL, AFIP_DATA_FISCAL_QR } from "@/lib/config";
 import { GoogleRatingBadge } from "@/components/ui/GoogleRatingBadge";

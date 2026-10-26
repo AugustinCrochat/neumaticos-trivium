@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import Link from "@/components/ui/Link";
 import { notFound } from "next/navigation";
 import { POPULAR_VEHICLES, vehicleSlug } from "@/lib/vehicles";
 import { marcaSlug } from "@/lib/marcas-autos";
