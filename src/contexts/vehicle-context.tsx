@@ -18,8 +18,6 @@ export type SelectedVehicle = VehiculoOption & { size?: VehicleSize };
 
 type VehicleContextType = {
   vehiculos: VehiculoOption[];
-  /** true una vez leído el auto recordado en localStorage (haya o no uno). */
-  restaurado: boolean;
   /** Trae el listado completo del POS. Llamalo al mostrar UI de búsqueda por auto. */
   loadVehiculos: () => void;
   selectedVehicle: SelectedVehicle | null;
@@ -48,7 +46,6 @@ export function VehicleProvider({
   const [vehiculos, setVehiculos] = useState(initialVehiculos);
   const [selectedVehicle, setSelectedVehicleState] = useState<SelectedVehicle | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [restaurado, setRestaurado] = useState(false);
 
   // El layout raíz pasa la lista estática (sin red); el listado completo del
   // POS se pide bajo demanda.
@@ -77,7 +74,6 @@ export function VehicleProvider({
 
   useIsomorphicLayoutEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
-    setRestaurado(true);
     if (!stored) return;
     try {
       const { marca, modelo, size } = JSON.parse(stored);
@@ -109,7 +105,6 @@ export function VehicleProvider({
     <VehicleContext.Provider
       value={{
         vehiculos,
-        restaurado,
         loadVehiculos,
         selectedVehicle,
         setSelectedVehicle,

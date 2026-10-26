@@ -21,20 +21,12 @@ export function SizeOrVehicleSearch({
   initialEconomicos?: boolean;
   onLiveChange?: (v: { w: string; p: string; r: string }) => void;
 }) {
-  const { selectedVehicle, restaurado, loadVehiculos } = useVehicle();
-  // null = sin elección manual: sigue el default (pestaña "Por mi auto" si ya
-  // tenemos un vehículo recordado de localStorage, "Por medida" si no).
-  const [manualMode, setManualMode] = useState<"medida" | "vehiculo" | null>(null);
+  const { loadVehiculos } = useVehicle();
+  // Siempre abre en "Por medida", aunque haya un auto recordado.
+  const [mode, setMode] = useState<"medida" | "vehiculo">("medida");
   // Apagado por defecto: sólo se enciende si el visitante lo pide (o si la
   // búsqueda que está viendo ya venía filtrada, ver ShopPage).
   const [economicos, setEconomicos] = useState(initialEconomicos);
-  // El default se fija una sola vez, al leer el auto recordado. Si después se
-  // elige un auto desde otro lado (menú, modal) la pestaña no cambia sola: eso
-  // desmontaba el buscador de medida en pleno uso y parecía una recarga.
-  const [pestañaInicial, setPestañaInicial] = useState<"medida" | "vehiculo" | null>(null);
-  if (restaurado && pestañaInicial === null) setPestañaInicial(selectedVehicle ? "vehiculo" : "medida");
-  const mode = manualMode ?? pestañaInicial ?? "medida";
-
   // El listado completo del POS solo hace falta acá. Se pide al entrar a la
   // pestaña, no en cada carga de página del sitio.
   useEffect(() => {
@@ -46,13 +38,13 @@ export function SizeOrVehicleSearch({
       <div className="mb-3 flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
       <div className="inline-flex items-center rounded-xl border border-slate-200 bg-white p-1">
         <button
-          onClick={() => setManualMode("medida")}
+          onClick={() => setMode("medida")}
           className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors ${mode === "medida" ? "bg-black text-white" : "text-slate-500 hover:text-slate-800"}`}
         >
           Por medida
         </button>
         <button
-          onClick={() => setManualMode("vehiculo")}
+          onClick={() => setMode("vehiculo")}
           // Adelantar el fetch al primer indicio de intención, así la lista ya
           // está cuando el usuario efectivamente cambia de pestaña.
           onMouseEnter={loadVehiculos}
@@ -83,7 +75,7 @@ export function SizeOrVehicleSearch({
       ) : (
         // Al quitar el auto se queda en esta pestaña (sin esto el modo por defecto
         // vuelve a "Por medida" porque ya no hay vehículo).
-        <VehicleSizeSearch initialMedida={initialMedida} economicos={economicos} onClear={() => setManualMode("vehiculo")} />
+        <VehicleSizeSearch initialMedida={initialMedida} economicos={economicos} onClear={() => setMode("vehiculo")} />
       )}
     </div>
   );
