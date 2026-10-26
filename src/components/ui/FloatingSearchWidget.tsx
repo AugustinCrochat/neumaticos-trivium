@@ -6,7 +6,14 @@ import { SizeOrVehicleSearch } from "@/components/ui/SizeOrVehicleSearch";
 
 export function FloatingSearchWidget() {
   const [isOpen, setIsOpen] = useState(false);
+  // Arranca con el texto a la vista y a los pocos segundos queda sólo la lupa.
+  const [expandido, setExpandido] = useState(true);
   const pathname = usePathname();
+
+  useEffect(() => {
+    const t = setTimeout(() => setExpandido(false), 5000);
+    return () => clearTimeout(t);
+  }, []);
 
   // Cualquier navegación interna (buscar por medida, por auto, o un link como
   // "¿Qué es esto?" dentro del modal) debe cerrarlo — si no, la navegación
@@ -48,7 +55,7 @@ export function FloatingSearchWidget() {
         type="button"
         onClick={() => setIsOpen(true)}
         aria-label="Abrir buscador de neumáticos"
-        className="fixed bottom-5 right-5 z-40 sm:bottom-6 sm:right-6 group flex items-center gap-2.5 bg-orange-500 hover:bg-orange-600 text-white font-black px-4 py-3 sm:px-5 sm:py-3.5 rounded-full shadow-xl shadow-navy-900/30 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
+        className="fixed bottom-5 right-5 z-40 sm:bottom-6 sm:right-6 group flex items-center bg-orange-500 hover:bg-orange-600 text-white font-black p-3.5 sm:p-4 rounded-full shadow-xl shadow-navy-900/30 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
       >
         <div className="relative flex items-center justify-center">
           <svg
@@ -66,7 +73,11 @@ export function FloatingSearchWidget() {
           </svg>
           <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-black animate-ping" />
         </div>
-        <span className="text-xs sm:text-sm uppercase tracking-wider font-extrabold">
+        <span
+          className={`overflow-hidden whitespace-nowrap text-xs sm:text-sm uppercase tracking-wider font-extrabold transition-all duration-500 ease-in-out ${
+            expandido ? "ml-2.5 max-w-[12rem] opacity-100" : "ml-0 max-w-0 opacity-0"
+          }`}
+        >
           Buscar neumáticos
         </span>
       </button>
