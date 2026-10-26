@@ -30,13 +30,8 @@ function ordenarPlanes(planes: Plan[]): Plan[] {
     que abrir el cotizador de más abajo. Antes iba todo junto separado por
     "·" y con varias opciones (típico en Mercado Pago, que tiene hasta 4) se
     hacía ilegible en una sola línea. */
-function lineasCuotas(planes: Plan[], basePrice: number | null): string[] {
+function lineasCuotas(planes: Plan[], basePrice: number): string[] {
   return ordenarPlanes(planes).map((p) => {
-    // Sin precio de referencia (catálogo) sólo se dice el plan, sin montos.
-    if (basePrice == null) {
-      const recargo = Math.round(((p.coeficiente ?? 1) - 1) * 1000) / 10;
-      return recargo > 0 ? `${p.cuotas} cuotas con recargo` : `${p.cuotas} cuotas sin interés`;
-    }
     const total = Math.round(basePrice * (p.coeficiente ?? 1));
     const monto = Math.round(total / cantidadCuotas(p));
     return `${p.cuotas} de ${formatPrice(monto)} (total ${formatPrice(total)})`;
@@ -76,15 +71,12 @@ const METODOS: Metodo[] = [
  * generaría un mismatch de hidratación.
  */
 export function PaymentMethodsSection({
-  basePrice: precioReferencia,
+  basePrice,
   onCalcularCuotas,
 }: {
-  /** Sin precio (catálogo) el detalle de cada medio muestra sólo las cuotas, sin montos. */
-  basePrice?: number;
+  basePrice: number;
   onCalcularCuotas?: () => void;
 }) {
-  const basePrice = precioReferencia ?? 1;
-  const montos = precioReferencia != null ? precioReferencia : null;
   const [isPromoDay, setIsPromoDay] = useState(false);
   useEffect(() => {
     const update = () => setIsPromoDay(isVisaMasterPromoDay());
@@ -105,7 +97,7 @@ export function PaymentMethodsSection({
   const naranjaPlanes = grupoNaranja ? planesParaGrupo(grupoNaranja, basePrice, recargos, isPromoDay) : [];
   const gocPlanes = planesParaGrupo(GOCUOTAS_GRUPO, basePrice, recargos, isPromoDay);
 
-  const lineasBanco = lineasCuotas(bancoPlanes, montos);
+  const lineasBanco = lineasCuotas(bancoPlanes, basePrice);
   const detalleBanco =
     lineasBanco.length > 0
       ? VISA_MASTER_PROMO_ACTIVA
@@ -113,9 +105,9 @@ export function PaymentMethodsSection({
         : lineasBanco
       : ["Consultá cuotas disponibles."];
 
-  const lineasMp = lineasCuotas(mpPlanes, montos);
-  const lineasNaranja = lineasCuotas(naranjaPlanes, montos);
-  const lineasGocuotas = lineasCuotas(gocPlanes, montos);
+  const lineasMp = lineasCuotas(mpPlanes, basePrice);
+  const lineasNaranja = lineasCuotas(naranjaPlanes, basePrice);
+  const lineasGocuotas = lineasCuotas(gocPlanes, basePrice);
 
   const detalles: Record<string, string[]> = {
     visa: detalleBanco,

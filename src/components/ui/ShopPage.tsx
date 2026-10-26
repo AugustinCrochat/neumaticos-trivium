@@ -16,7 +16,6 @@ import { useVehicle } from "@/contexts/vehicle-context";
 import { useLiveStockMap } from "@/contexts/live-stock-context";
 import { getCompatibleAccessory } from "@/lib/tuercas-vehiculos";
 import { goToWhatsApp } from "@/lib/gtag";
-import { PaymentMethodsSection } from "@/components/ui/PaymentMethodsSection";
 import { SPEED_RATING_KMH } from "@/lib/tire-sizes";
 import type { Accessory, TireProduct, TireSize, VehicleType } from "@/lib/types";
 
@@ -170,6 +169,26 @@ function PriceSlider({
           style={{ left: `clamp(0px, calc(${percent}% - 10px), calc(100% - 20px))` }}
         />
       </div>
+    </div>
+  );
+}
+
+// Logos de los medios de pago, a modo indicativo (el detalle de cuotas está en la ficha).
+const MEDIOS_PAGO_CHICOS = [
+  { logo: "visa", alt: "Visa", cls: "h-2.5" },
+  { logo: "mastercard", alt: "Mastercard", cls: "h-5" },
+  { logo: "mercadopago", alt: "Mercado Pago", cls: "h-6" },
+  { logo: "naranja-x", alt: "Tarjeta Naranja", cls: "h-4" },
+  { logo: "gocuotas", alt: "GOcuotas", cls: "h-4" },
+];
+
+function MediosDePagoChicos() {
+  return (
+    <div className="flex items-center justify-center gap-3 sm:justify-end" aria-label="Medios de pago">
+      {MEDIOS_PAGO_CHICOS.map((m) => (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img key={m.logo} src={`/images/payments/${m.logo}.svg`} alt={m.alt} className={`${m.cls} w-auto`} loading="lazy" />
+      ))}
     </div>
   );
 }
@@ -725,18 +744,18 @@ export function ShopPage({
                       {allProducts.length} producto{allProducts.length !== 1 ? "s" : ""} encontrados
                     </p>
                   </div>
+                  <div className="flex w-full flex-col items-stretch gap-2 sm:w-auto sm:items-end">
                   <Link
                     href="/cotizador"
-                    className="inline-flex min-h-11 items-center gap-2 rounded-xl border-2 border-orange-500 bg-orange-50 px-4 text-sm font-black text-orange-700 transition-colors hover:bg-orange-100"
+                    className="inline-flex min-h-11 w-full items-center justify-center gap-2 sm:w-auto rounded-xl border-2 border-orange-500 bg-orange-50 px-4 text-sm font-black text-orange-700 transition-colors hover:bg-orange-100"
                   >
                     <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m-6 4h6m-6 4h4M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z" />
                     </svg>
                     Armar presupuesto
                   </Link>
-                </div>
-                <div className="mb-6">
-                  <PaymentMethodsSection />
+                  <MediosDePagoChicos />
+                  </div>
                 </div>
                 {allProducts.length === 0 ? (
                   <div className="flex flex-col items-center justify-center py-20 text-center">
