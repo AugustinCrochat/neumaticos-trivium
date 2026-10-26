@@ -61,7 +61,7 @@ export function FloatingSearchWidget() {
         onFocus={() => setHover(true)}
         onBlur={() => setHover(false)}
         aria-label="Abrir buscador de neumáticos"
-        className="fixed bottom-5 right-5 z-40 sm:bottom-6 sm:right-6 group flex items-center bg-orange-500 hover:bg-orange-600 text-white font-black p-3.5 sm:p-4 rounded-full shadow-xl shadow-navy-900/30 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
+        className="fixed bottom-5 right-5 z-40 sm:bottom-6 sm:right-6 group flex h-14 items-center justify-center border-2 border-white bg-orange-500 hover:bg-orange-600 text-white font-black px-4 rounded-full shadow-xl shadow-navy-900/30 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
       >
         <div className="relative flex items-center justify-center">
           <svg
@@ -81,7 +81,7 @@ export function FloatingSearchWidget() {
         </div>
         <span
           className={`overflow-hidden whitespace-nowrap text-xs sm:text-sm uppercase tracking-wider font-extrabold transition-all duration-500 ease-in-out ${
-            verTexto ? "ml-2.5 max-w-[12rem] opacity-100" : "ml-0 max-w-0 opacity-0"
+            verTexto ? "ml-2.5 mr-1 max-w-[12rem] opacity-100" : "ml-0 max-w-0 opacity-0"
           }`}
         >
           Buscar neumáticos
