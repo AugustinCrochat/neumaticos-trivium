@@ -8,6 +8,7 @@ import { getProductosDesdePOS } from "@/lib/pos-api";
 import { getSelectedBranchSlug } from "@/lib/branch-server";
 import { sizeCatalogHref } from "@/lib/size-href";
 import { poolShare } from "@/lib/share-image";
+import { CiudadSucursal } from "./CiudadSucursal";
 import { CotizadorClient, type QuoteProduct } from "./CotizadorClient";
 import type { MedidaDisponible } from "./CotizadorSelector";
 
@@ -136,7 +137,7 @@ export default async function CotizadorPage() {
         <div className="pointer-events-none absolute -bottom-32 left-1/4 h-72 w-72 rounded-full bg-orange-600/15 blur-3xl" aria-hidden />
         <div className="relative mx-auto max-w-4xl px-4 py-7 md:py-12">
           <h1 className="text-3xl font-black leading-tight md:text-5xl">
-            Cotizador de neumáticos <span className="text-orange-500">en Córdoba</span>
+            Cotizador de neumáticos <span className="text-orange-500">en <CiudadSucursal /></span>
           </h1>
           <p className="mt-4 max-w-2xl text-base leading-relaxed text-slate-300 md:text-lg">
             Elegí tu medida o tu auto, mirá los neumáticos que hay en stock con su precio real y armá tu presupuesto en
