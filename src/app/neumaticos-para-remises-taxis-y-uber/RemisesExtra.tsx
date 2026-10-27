@@ -94,7 +94,7 @@ export function RemisesExtra({ productos }: { productos: TireProduct[] }) {
         </div>
       </section>
 
-      <section className="mb-14 grid grid-cols-3 gap-2 sm:gap-4">
+      <section className="mb-14 grid grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-4">
         {[
           {
             src: "/images/local/taxi-entrando-al-local-neumaticos-trivium-cordoba.webp",
@@ -111,10 +111,15 @@ export function RemisesExtra({ productos }: { productos: TireProduct[] }) {
             alt: "Rueda delantera de un taxi en el taller de Neumáticos Trivium, con la balanceadora y las plataformas de la alineadora al fondo",
             caption: "Con la alineadora y la balanceadora a mano",
           },
+          {
+            src: "/images/local/remis-chevrolet-classic-cambio-de-neumaticos-y-balanceo-trivium-cordoba.webp",
+            alt: "Remis Chevrolet Classic verde sobre el elevador del taller de Neumáticos Trivium con las cubiertas nuevas puestas, la balanceadora y las estanterías de neumáticos al fondo",
+            caption: "Cubiertas nuevas y balanceo antes de volver a la calle",
+          },
         ].map((f) => (
           <figure key={f.src}>
             <div className="relative aspect-[3/4] overflow-hidden rounded-xl bg-slate-100 sm:rounded-2xl">
-              <Image src={f.src} alt={f.alt} fill sizes="(min-width: 768px) 280px, 33vw" className="object-cover" />
+              <Image src={f.src} alt={f.alt} fill sizes="(min-width: 768px) 280px, 50vw" className="object-cover" />
             </div>
             <figcaption className="mt-2 text-xs text-slate-500 sm:text-sm">{f.caption}</figcaption>
           </figure>
