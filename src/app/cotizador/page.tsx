@@ -144,7 +144,7 @@ export default async function CotizadorPage() {
             un minuto. Después lo compartís por WhatsApp, sin compromiso.
           </p>
           <ul className="mt-5 flex flex-wrap gap-2 text-xs font-bold md:mt-6 md:gap-2.5 md:text-sm">
-            {["Precio con IVA incluido", "Stock real del local", "1 año de garantía", "Alineado y balanceado en el mismo lugar"].map((t) => (
+            {["Colocación y cambio de válvulas sin cargo", "Stock real del local", "1 año de garantía", "Alineado y balanceado en el mismo lugar"].map((t) => (
               <li key={t} className="flex items-center gap-1.5 rounded-full border border-white/15 bg-white/10 px-3 py-1.5">
                 <span className="text-orange-400">&#10003;</span>
                 {t}
