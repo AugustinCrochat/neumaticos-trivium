@@ -10,6 +10,7 @@ import { TuercaPicker } from "@/components/ui/TuercaPicker";
 import type { Accessory } from "@/lib/types";
 import { InstallmentCalculator, type PagoElegido } from "@/components/ui/InstallmentCalculator";
 import { goToWhatsApp, trackEvent } from "@/lib/gtag";
+import { CotizadorSelector, type MedidaDisponible } from "./CotizadorSelector";
 
 function formatPrice(price: number) {
   return new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 }).format(price);
@@ -58,8 +59,8 @@ export type CotizadorHandle = {
   agregarCombo: () => void;
 };
 
-export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: QuoteProduct; /** Unidades del ítem precargado (4 = juego de neumáticos). */ initialQuantity?: number; compact?: boolean; /** Avisa si el presupuesto incluye alineación + balanceo. */ onComboChange?: (incluido: boolean) => void }>(
-  function CotizadorClient({ initialProduct, initialQuantity = 4, compact = false, onComboChange }, ref) {
+export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: QuoteProduct; /** Unidades del ítem precargado (4 = juego de neumáticos). */ initialQuantity?: number; compact?: boolean; /** Medidas y neumáticos destacados: con ellos (y sin `compact`) el cotizador es la versión guiada de /cotizador. */ medidas?: MedidaDisponible[]; destacados?: (QuoteProduct & { medida: string })[]; /** Avisa si el presupuesto incluye alineación + balanceo. */ onComboChange?: (incluido: boolean) => void }>(
+  function CotizadorClient({ initialProduct, initialQuantity = 4, compact = false, medidas, destacados = [], onComboChange }, ref) {
   const { selectedBranch } = useBranch();
   const { addTireLine, addService, addAccessory, openCart } = useCart();
   // En Córdoba (Argüello) se dice "alineado y balanceado"; "alineación y
@@ -82,6 +83,9 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
   const [includeCombo, setIncludeCombo] = useState(false);
   const [tuercas, setTuercas] = useState<Accessory[]>([]);
   const [buscandoTuerca, setBuscandoTuerca] = useState(false);
+  const guiado = !compact && !!medidas;
+  const [hayMedida, setHayMedida] = useState(false);
+  const presupuestoRef = useRef<HTMLDivElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
     onComboChange?.(includeCombo);
@@ -135,6 +139,7 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
       if (prev.some((it) => it.product.id === product.id)) return prev;
       return [...prev, { product, quantity }];
     });
+    if (guiado) setTimeout(() => presupuestoRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 120);
     setQuery("");
     setIsOpen(false);
   }
@@ -216,7 +221,20 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
       {expanded && (
       <>
       {/* Buscador: desde la ficha, con el neumático ya elegido, se oculta hasta que lo quiten. */}
-      {!(initialProduct && items.some((it) => it.product.id === initialProduct.id)) && (
+      {guiado && (
+        <>
+          <Pasos paso={hasItems ? 3 : hayMedida ? 2 : 1} />
+          <CotizadorSelector
+            medidas={medidas!}
+            destacados={destacados}
+            agregados={items.map((it) => it.product.id)}
+            onAdd={(p) => addProduct(p)}
+            onMedida={setHayMedida}
+          />
+        </>
+      )}
+
+      {!guiado && !(initialProduct && items.some((it) => it.product.id === initialProduct.id)) && (
       <div className="relative">
         <input
           type="text"
@@ -262,10 +280,20 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
       )}
 
       {/* Ítems agregados */}
+      <div ref={presupuestoRef} id="presupuesto" className="scroll-mt-28">
+      {guiado && hasItems && (
+        <div className="mb-3 flex items-center gap-3">
+          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-orange-500 text-sm font-black text-white">3</span>
+          <div>
+            <h2 className="text-lg font-black leading-tight text-navy-900">Tu presupuesto</h2>
+            <p className="text-xs font-medium text-slate-500">Ajustá cantidades, sumá servicios y compartilo o comprá.</p>
+          </div>
+        </div>
+      )}
       <div className="rounded-2xl border border-slate-200 bg-white">
         {!hasItems ? (
           <p className="p-6 text-center text-sm text-slate-500">
-            Todavía no agregaste ningún neumático. Buscalo arriba para empezar.
+            {guiado ? "Tu presupuesto va a aparecer acá apenas agregues un neumático." : "Todavía no agregaste ningún neumático. Buscalo arriba para empezar."}
           </p>
         ) : (
           <div className="divide-y divide-slate-100">
@@ -382,6 +410,7 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
           </div>
         )}
       </div>
+      </div>
 
       {hasItems && (
         <InstallmentCalculator
@@ -391,8 +420,48 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
           onBuy={items.every((it) => it.product.slug) ? buyOnline : undefined}
         />
       )}
+      {guiado && hasItems && (
+        <div className="sticky bottom-3 z-30 md:hidden">
+          <button
+            type="button"
+            onClick={() => presupuestoRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })}
+            className="flex w-full items-center justify-between rounded-2xl bg-black px-5 py-3.5 text-white shadow-2xl"
+          >
+            <span className="text-sm font-bold">{items.reduce((n, it) => n + it.quantity, 0)} neumático(s) · Total</span>
+            <span className="text-lg font-black">{formatPrice(total)}</span>
+          </button>
+        </div>
+      )}
       </>
       )}
     </div>
   );
 });
+
+const PASOS = ["Medida", "Neumático", "Presupuesto", "Pagar o enviar"];
+
+/** Indicador de pasos arriba del cotizador guiado. */
+function Pasos({ paso }: { paso: number }) {
+  return (
+    <ol className="flex items-center gap-1.5 sm:gap-2" aria-label="Pasos del cotizador">
+      {PASOS.map((nombre, i) => {
+        const n = i + 1;
+        const hecho = n < paso;
+        const actual = n === paso;
+        return (
+          <li key={nombre} className="flex min-w-0 flex-1 items-center gap-2">
+            <span
+              className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-black ${
+                hecho ? "bg-emerald-500 text-white" : actual ? "bg-orange-500 text-white" : "bg-slate-200 text-slate-500"
+              }`}
+            >
+              {hecho ? "✓" : n}
+            </span>
+            <span className={`hidden truncate text-xs font-black sm:block ${actual ? "text-navy-900" : "text-slate-400"}`}>{nombre}</span>
+            {n < PASOS.length && <span className={`h-0.5 flex-1 rounded ${hecho ? "bg-emerald-400" : "bg-slate-200"}`} />}
+          </li>
+        );
+      })}
+    </ol>
+  );
+}
