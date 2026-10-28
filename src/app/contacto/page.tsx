@@ -7,7 +7,7 @@ import { BranchStatusBadge } from "@/app/sucursales/[id]/BranchStatusBadge";
 import { BranchMiniMap } from "@/app/sucursales/[id]/BranchMiniMap";
 import { DirectionsButton } from "@/app/sucursales/[id]/DirectionsButton";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
-import { PinIcon } from "@/components/ui/PinIcon";
+import { DirectionsIcon } from "@/components/ui/DirectionsIcon";
 
 export const metadata: Metadata = {
   title: "Contacto — WhatsApp, teléfono y ubicación",
@@ -108,7 +108,7 @@ export default function ContactoPage() {
                       label={`Neumáticos Trivium ${branch.shortName}`}
                       className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-sm font-black text-navy-900 shadow-sm transition-colors hover:border-orange-400 hover:text-orange-600"
                     >
-                      <PinIcon className="h-4 w-4 text-orange-500" />
+                      <DirectionsIcon className="h-6 w-6 text-orange-500" />
                       Cómo llegar
                     </DirectionsButton>
                   </div>

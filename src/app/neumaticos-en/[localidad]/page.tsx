@@ -22,7 +22,7 @@ import { LocalProductCarousel } from "../LocalProductCarousel";
 import { LocalPhotos } from "../LocalPhotos";
 import { ZonasAgrupadas } from "@/components/seo/ZonasAgrupadas";
 import { poolShare } from "@/lib/share-image";
-import { PinIcon } from "@/components/ui/PinIcon";
+import { DirectionsIcon } from "@/components/ui/DirectionsIcon";
 
 /**
  * Landings de SEO local: "neumáticos en Villa Allende", "gomería en Saldán".
@@ -208,7 +208,7 @@ export default async function LocalidadPage({ params }: Props) {
             href={`/sucursales/${branch.id}`}
             className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-black px-6 text-sm font-black text-white transition-transform active:scale-[0.98]"
           >
-            <PinIcon className="h-5 w-5" />
+            <DirectionsIcon className="h-6 w-6" />
             Cómo llegar al local
           </Link>
         </div>

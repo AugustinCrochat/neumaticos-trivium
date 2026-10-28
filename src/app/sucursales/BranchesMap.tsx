@@ -7,7 +7,7 @@ import maplibregl, { type ExpressionSpecification, type Map, type Marker } from 
 import type { Branch } from "@/lib/config";
 import { useBranch } from "@/contexts/branch-context";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
-import { PinIcon } from "@/components/ui/PinIcon";
+import { DirectionsIcon } from "@/components/ui/DirectionsIcon";
 import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
 
 type ComingSoonBranch = {
@@ -219,7 +219,7 @@ function BranchSummary({
           rel="noopener noreferrer"
           className="inline-flex min-h-11 items-center justify-center rounded-xl border border-navy-200 bg-white px-4 py-2.5 text-sm font-black text-navy-900 shadow-sm transition-colors hover:border-orange-500 hover:bg-orange-50 hover:text-orange-700"
         >
-          <PinIcon className="mr-2 h-5 w-5" />
+          <DirectionsIcon className="mr-2 h-6 w-6" />
           Cómo llegar
         </a>
       </div>
@@ -586,7 +586,7 @@ export function BranchesMap({ branches, comingSoon = NO_COMING_SOON }: BranchesM
                   aria-label="Cómo llegar"
                   className="inline-flex min-h-11 shrink-0 items-center justify-center gap-1.5 rounded-xl bg-orange-500 px-3.5 text-xs font-black text-white transition-colors hover:bg-orange-600"
                 >
-                  <PinIcon className="h-4 w-4" />
+                  <DirectionsIcon className="h-5 w-5" />
                   Cómo llegar
                 </a>
               </div>

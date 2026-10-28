@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useBranch } from "@/contexts/branch-context";
 import { BRANCHES } from "@/lib/config";
 import { getBranchDistances, formatDistance } from "@/lib/branch-geo";
-import { PinIcon } from "./PinIcon";
+import { DirectionsIcon } from "./DirectionsIcon";
 import { WhatsAppLink } from "./WhatsAppLink";
 
 type GeoState = "idle" | "loading" | "done" | "error";
@@ -234,19 +234,19 @@ export function BranchModal() {
                       </svg>
                       {branch.hours}
                     </div>
-                    <p className="text-xs text-slate-400 mt-1">
-                      Atención por orden de llegada
-                    </p>
-                    <a
-                      href={branch.mapUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={(e) => e.stopPropagation()}
-                      className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-navy-200 bg-white px-3 py-1.5 text-xs font-bold text-navy-700 hover:border-navy-400 hover:bg-navy-50 transition-colors"
-                    >
-                      <PinIcon className="w-4 h-4 text-orange-500" />
-                      Cómo llegar
-                    </a>
+                    <div className="mt-1 flex items-center justify-between gap-2">
+                      <p className="text-xs text-slate-400">Atención por orden de llegada</p>
+                      <a
+                        href={branch.mapUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-navy-200 bg-white py-1 pl-2 pr-3 text-xs font-bold text-navy-700 transition-colors hover:border-navy-400 hover:bg-navy-50"
+                      >
+                        <DirectionsIcon className="h-5 w-5 shrink-0 text-orange-500" />
+                        Cómo llegar
+                      </a>
+                    </div>
                   </div>
                   <div
                     className={`mt-1 w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors ${

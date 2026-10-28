@@ -11,7 +11,7 @@ import { isVisaMasterPromoDay } from "@/lib/promo-day";
 import { ImageLightbox } from "./ImageLightbox";
 import { ZoomPanel } from "./ZoomPanel";
 import { productAlt, productExtraAlt } from "@/lib/image-seo";
-import { PinIcon } from "@/components/ui/PinIcon";
+import { DirectionsIcon } from "@/components/ui/DirectionsIcon";
 
 const ZOOM_FACTOR = 2.5;
 
@@ -414,7 +414,7 @@ export function ProductImageGallery({
                 rel="noopener noreferrer"
                 className="flex items-center gap-1.5 rounded-lg bg-orange-500 px-3 py-2 text-xs font-black transition-colors hover:bg-orange-600"
               >
-                <PinIcon className="h-3.5 w-3.5" />
+                <DirectionsIcon className="h-5 w-5" />
                 Cómo llegar
               </a>
             </div>

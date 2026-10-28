@@ -13,7 +13,7 @@ import { BranchMiniMap } from "./BranchMiniMap";
 import { SetActiveBranch } from "./SetActiveBranch";
 import { DirectionsButton } from "./DirectionsButton";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
-import { PinIcon } from "@/components/ui/PinIcon";
+import { DirectionsIcon } from "@/components/ui/DirectionsIcon";
 import { poolShare } from "@/lib/share-image";
 
 type Props = { params: Promise<{ id: string }> };
@@ -201,7 +201,7 @@ export default async function BranchPage({ params }: Props) {
             label={`Neumáticos Trivium ${branch.shortName}`}
             className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-black text-navy-900 shadow-sm transition-colors hover:border-orange-400 hover:text-orange-600"
           >
-            <PinIcon className="h-5 w-5 text-orange-500" />
+            <DirectionsIcon className="h-6 w-6 text-orange-500" />
             Cómo llegar
           </DirectionsButton>
         </section>
@@ -243,7 +243,7 @@ export default async function BranchPage({ params }: Props) {
             label={`Neumáticos Trivium ${branch.shortName}`}
             className="mt-4 inline-flex w-full min-h-12 items-center justify-center gap-2 rounded-xl bg-black px-4 text-sm font-black text-white transition-transform active:scale-[0.98]"
           >
-            <PinIcon className="h-5 w-5" />
+            <DirectionsIcon className="h-6 w-6" />
             Cómo llegar
           </DirectionsButton>
         </section>
