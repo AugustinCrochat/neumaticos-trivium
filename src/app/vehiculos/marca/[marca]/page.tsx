@@ -125,7 +125,7 @@ export default async function MarcaPage({ params }: Props) {
                         src={vehiclePhoto(vehicleSlug(v.brand, v.model))!}
                         alt={`${v.brand} ${v.model}`}
                         width={1000}
-                        height={650}
+                        height={560}
                         loading="lazy"
                         decoding="async"
                         className="h-16 w-24 shrink-0 object-contain"

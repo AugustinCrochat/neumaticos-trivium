@@ -219,8 +219,8 @@ export default async function VehiclePage({ params }: Props) {
                   src={vehiclePhoto(slug)!}
                   alt={name}
                   width={1000}
-                  height={650}
-                  className="relative z-20 order-first mx-auto -mt-16 mb-4 h-auto w-64 drop-shadow-[0_18px_24px_rgba(0,0,0,0.45)] md:order-last md:mx-0 md:-mt-32 md:w-80"
+                  height={560}
+                  className="relative z-20 order-first mx-auto -mt-24 mb-2 h-auto w-72 drop-shadow-[0_18px_24px_rgba(0,0,0,0.45)] md:order-last md:mx-0 md:-mt-44 md:w-[28rem]"
                 />
               )}
             </div>

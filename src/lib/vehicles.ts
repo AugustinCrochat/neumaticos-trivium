@@ -578,7 +578,6 @@ export const VEHICLE_DB: VehicleDBEntry[] = [
   { brand: "Renault", model: "Oroch", sizes: [{ w: "215", p: "65", r: "16" }] },
   { brand: "Renault", model: "Sandero", sizes: [{ w: "175", p: "70", r: "14", version: "Authentique / Expression", generation: "Sandero I", years: "2008-2014" }, { w: "185", p: "65", r: "15", version: "Privilege", generation: "Sandero I", years: "2008-2014" }, { w: "185", p: "65", r: "15", version: "Life / Zen / Intens", generation: "Sandero II / Nuevo Sandero", years: "2014-presente" }, { w: "195", p: "55", r: "16", version: "RS / Intens Plus", generation: "Sandero II / Nuevo Sandero", years: "2014-presente" }] },
   { brand: "Renault", model: "Sandero Stepway", sizes: [{ w: "205", p: "55", r: "16", generation: "Stepway I / II", years: "2009-2020" }, { w: "205", p: "60", r: "16", generation: "New Stepway", years: "2021-presente" }] },
-  { brand: "Renault", model: "Stepway", sizes: [{ w: "205", p: "55", r: "16", generation: "Stepway I / II", years: "2009-2020" }, { w: "205", p: "60", r: "16", generation: "New Stepway", years: "2021-presente" }] },
   { brand: "Renault", model: "Symbol", sizes: [{ w: "175", p: "70", r: "14", version: "Authentique" }, { w: "185", p: "65", r: "15", version: "Privilege / Luxe" }] },
   { brand: "Renault", model: "Trafic", sizes: [{ w: "185", p: "80", r: "14" }, { w: "195", p: "70", r: "15" }] },
   { brand: "Renault", model: "Twingo", sizes: [{ w: "155", p: "70", r: "13" }] },
