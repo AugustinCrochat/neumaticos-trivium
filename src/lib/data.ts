@@ -158,6 +158,42 @@ export const SERVICES: Service[] = [
 // actual. Las más útiles para alguien que está por comprar van arriba.
 const BLOG_POSTS_BASE: BlogPost[] = [
   {
+    id: "49",
+    title: "Neumáticos nuevos: ¿adelante o atrás? Dónde conviene colocarlos",
+    excerpt: "Si cambiás solo dos, los nuevos van al eje trasero aunque el auto sea de tracción delantera: por qué, qué pasa si van adelante y cuándo no alcanza con dos.",
+    imageUrl: "/images/local/remis-chevrolet-classic-cambio-de-neumaticos-y-balanceo-trivium-cordoba.webp",
+    date: "2026-10-27",
+    slug: "neumaticos-nuevos-adelante-o-atras",
+    category: "Guías",
+  },
+  {
+    id: "48",
+    title: "¿Se puede cambiar un solo neumático o hay que cambiar de a pares?",
+    excerpt: "Cuándo alcanza con una cubierta, qué diferencia de desgaste se tolera y por qué conviene el par en el mismo eje.",
+    imageUrl: "/images/servicios/arme-desarme.webp",
+    date: "2026-10-27",
+    slug: "cambiar-un-solo-neumatico-o-de-a-pares",
+    category: "Guías",
+  },
+  {
+    id: "47",
+    title: "Neumáticos en un 4x4 o AWD: por qué conviene cambiar las cuatro",
+    excerpt: "En tracción integral, una diferencia de diámetro entre ruedas fuerza la transmisión: qué se tolera y qué hacer si cambiás solo dos.",
+    imageUrl: "/images/local/pickup-4x4-en-elevador-alineacion-neumaticos-trivium-cordoba.webp",
+    date: "2026-10-27",
+    slug: "cambiar-los-cuatro-neumaticos-en-4x4-o-awd",
+    category: "Guías",
+  },
+  {
+    id: "46",
+    title: "Neumáticos direccionales y asimétricos: cómo se montan y cómo reconocerlos",
+    excerpt: "La flecha del flanco, INSIDE y OUTSIDE y qué pasa si una cubierta se monta al revés o se rota mal.",
+    imageUrl: "/images/local/cubierta-perfil-bajo-grenlander-colocada-neumaticos-trivium.webp",
+    date: "2026-10-27",
+    slug: "neumaticos-direccionales-y-asimetricos-como-se-montan",
+    category: "Guías",
+  },
+  {
     id: "45",
     title: "Cómo leer la etiqueta de presión de la puerta de tu auto",
     excerpt: "Bar, PSI, filas por ocupantes y una presión para cada medida de llanta: qué significa cada línea, con un ejemplo real.",

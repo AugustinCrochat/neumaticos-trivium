@@ -155,6 +155,30 @@ const L = {
 } satisfies Record<string, ShopLink>;
 
 export const BLOG_META: Record<string, BlogMeta> = {
+  "neumaticos-nuevos-adelante-o-atras": {
+    cover: cover("remisClassic"),
+    figure: figure("cambioCamioneta", "Con las cubiertas nuevas colocadas, el eje trasero lleva el par con más dibujo."),
+    shopIntro: "Buscá tu medida y colocala en el local:",
+    shopLinks: [L.todos, L.servicios, L.ofertas],
+  },
+  "cambiar-un-solo-neumatico-o-de-a-pares": {
+    cover: cover("montaje"),
+    figure: figure("tallerCuatroAutos", "Con el auto en el taller se compara el dibujo de las otras tres antes de decidir."),
+    shopIntro: "Mirá las medidas disponibles:",
+    shopLinks: [L.todos, L.ofertas, L.servicios],
+  },
+  "cambiar-los-cuatro-neumaticos-en-4x4-o-awd": {
+    cover: cover("pickup4x4"),
+    figure: figure("kingpro"),
+    shopIntro: "Neumáticos para camionetas y SUV:",
+    shopLinks: [L.at, L.ht, L.todos],
+  },
+  "neumaticos-direccionales-y-asimetricos-como-se-montan": {
+    cover: cover("grenlanderPerfilBajo"),
+    figure: figure("montaje", "En la desmontadora se respeta el sentido de giro o el lado exterior de cada cubierta."),
+    shopIntro: "Buscá tu medida:",
+    shopLinks: [L.todos, L.ofertas, L.servicios],
+  },
   "reparacion-de-pinchaduras-parche-mecha": {
     cover: cover("taxi"),
     figure: { src: IMG.rotacion, alt: "Rueda Pirelli desmontada de un auto en el taller", caption: "Con la rueda afuera se revisa la cubierta por dentro antes de reparar." },
