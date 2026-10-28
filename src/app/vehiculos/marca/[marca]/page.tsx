@@ -8,6 +8,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { canonical, breadcrumbJsonLd, faqJsonLd, itemListJsonLd, type Faq } from "@/lib/seo";
 import { formatSize, sizeSlug } from "@/lib/tire-sizes";
 import { poolShare } from "@/lib/share-image";
+import { vehiclePhoto } from "@/lib/vehicle-photos";
 
 /**
  * Neumáticos para una marca de auto (/vehiculos/marca/chevrolet): lista los
@@ -97,7 +98,7 @@ export default async function MarcaPage({ params }: Props) {
       <div className="bg-black px-4 py-14">
         <div className="mx-auto max-w-4xl text-center">
           <span className="mx-auto mb-5 flex h-24 w-24 items-center justify-center">
-            <MarcaLogo brand={brand} className="h-24 w-24 drop-shadow-[0_0_2px_rgba(255,255,255,0.9)] drop-shadow-[0_0_10px_rgba(255,255,255,0.35)]" />
+            <MarcaLogo brand={brand} sobreNegro className="h-24 w-24" />
           </span>
           <h1 className="mb-4 text-4xl font-black text-white md:text-5xl">Neumáticos para {brand}</h1>
           <p className="mx-auto max-w-2xl text-lg text-slate-300">
@@ -116,9 +117,22 @@ export default async function MarcaPage({ params }: Props) {
                 <li key={v.model}>
                   <Link
                     href={`/vehiculos/${vehicleSlug(v.brand, v.model)}`}
-                    className="flex h-full items-start gap-3 rounded-xl border border-slate-200 bg-white p-4 hover:border-navy-300"
+                    className="flex h-full items-center gap-3 rounded-xl border border-slate-200 bg-white p-4 hover:border-navy-300"
                   >
-                    <MarcaLogo brand={brand} className="mt-0.5 h-6 w-6" />
+                    {vehiclePhoto(vehicleSlug(v.brand, v.model)) ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={vehiclePhoto(vehicleSlug(v.brand, v.model))!}
+                        alt={`${v.brand} ${v.model}`}
+                        width={1000}
+                        height={650}
+                        loading="lazy"
+                        decoding="async"
+                        className="h-16 w-24 shrink-0 object-contain"
+                      />
+                    ) : (
+                      <MarcaLogo brand={brand} className="mt-0.5 h-6 w-6" />
+                    )}
                     <span>
                       <span className="block font-black text-navy-900">
                         {v.brand} {v.model}

@@ -85,17 +85,23 @@ const LOGO_FILE: Record<string, string> = {
   "Great Wall Motors": "great-wall",
 };
 
+/** Logos oscuros que sobre fondo negro se pierden: tienen una versión en blanco (<archivo>-claro.webp). */
+const CLARO = new Set(["arcfox", "audi", "citroen", "cupra", "dongfeng", "great-wall", "jaguar", "jeep", "jmev", "lynk-co", "maserati", "nissan", "omoda", "renault", "toyota", "volkswagen"]);
+/** Logos oscuros con detalle interno (escudos): sobre negro van en un recuadro blanco. */
+const EN_RECUADRO = new Set(["gac", "lamborghini", "peugeot", "porsche"]);
+
+/** Cómo mostrar el logo sobre fondo negro: versión en blanco, recuadro blanco, o tal cual. */
+export function marcaLogoSobreNegro(brand: string): { src: string; recuadro: boolean } | null {
+  const f = LOGO_FILE[brand];
+  if (!f) return null;
+  if (CLARO.has(f)) return { src: `/images/marcas-autos/${f}-claro.webp`, recuadro: false };
+  return { src: `/images/marcas-autos/${f}.webp`, recuadro: EN_RECUADRO.has(f) };
+}
+
 /** Ruta del logo de la marca, o null si no tenemos. */
 export function marcaLogo(brand: string): string | null {
   const f = LOGO_FILE[brand];
   return f ? `/images/marcas-autos/${f}.webp` : null;
-}
-
-/** Marcas cuyo logo es oscuro: sobre fondo negro se ven con una silueta blanca detrás. */
-const LOGO_OSCURO = new Set(["arcfox","audi","changan","citroen","cupra","dongfeng","fiat","gac","great-wall","isuzu","jaguar","jeep","jmc","jmev","kia","lamborghini","leapmotor","lifan","lynk-co","maserati","mitsubishi","nissan","omoda","peugeot","porsche","renault","ssangyong","suzuki","toyota","volkswagen"]);
-export function marcaLogoOscuro(brand: string): boolean {
-  const f = LOGO_FILE[brand];
-  return !!f && LOGO_OSCURO.has(f);
 }
 
 /** Slug de URL de la página de una marca: "Citroen" -> "citroen". */
