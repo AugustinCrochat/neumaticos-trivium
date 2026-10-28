@@ -261,7 +261,7 @@ export function ProductImageGallery({
     <a
       href="#garantia"
       onClick={(e) => scrollSuave(e, "garantia")}
-      className={`absolute right-4 z-10 flex items-center gap-2 rounded-full bg-amber-500 py-1.5 pl-1.5 pr-4 text-sm font-black uppercase tracking-tight text-white shadow-lg ring-2 ring-white/80 transition-colors hover:bg-amber-600 ${isPromoDay ? "bottom-16 sm:bottom-4" : "bottom-4"}`}
+      className={`absolute right-4 z-10 flex items-center gap-2 rounded-full bg-amber-500 py-1.5 pl-1.5 pr-4 text-sm font-black uppercase tracking-tight text-white shadow-lg ring-2 ring-white/80 transition-colors hover:bg-amber-600 ${isPromoDay ? "bottom-24 sm:bottom-4" : "bottom-4"}`}
     >
       <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-amber-600">
         <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
@@ -283,7 +283,7 @@ export function ProductImageGallery({
     <a
       href="#metodos-pago"
       onClick={(e) => scrollSuave(e, "metodos-pago")}
-      className={`absolute left-4 z-10 flex items-center gap-2 rounded-lg bg-navy-900 px-3 py-2 text-xs font-black text-white shadow-lg ring-2 ring-white/80 transition-colors hover:bg-navy-800 ${label ? "bottom-12" : "bottom-4"}`}
+      className={`absolute left-4 z-10 flex flex-col items-start gap-1.5 rounded-lg bg-navy-900 px-3 py-2 text-xs font-black text-white shadow-lg ring-2 ring-white/80 transition-colors hover:bg-navy-800 ${label ? "bottom-12" : "bottom-4"}`}
     >
       <span className="flex shrink-0 items-center gap-1.5 rounded bg-white px-1.5 py-1">
         <Image src="/images/payments/visa.svg" alt="" width={32} height={20} className="h-4 w-auto" />
