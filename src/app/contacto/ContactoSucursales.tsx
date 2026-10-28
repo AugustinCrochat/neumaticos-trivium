@@ -78,14 +78,14 @@ function BranchCard({ branch }: { branch: Branch }) {
             </Link>
 
             {branch.facadePhoto && (
-              <Link href={`/sucursales/${branch.id}`} className="mt-4 block w-44 overflow-hidden rounded-xl ring-1 ring-slate-200">
+              <Link href={`/sucursales/${branch.id}`} className="mt-4 block w-full overflow-hidden rounded-xl ring-1 ring-slate-200">
                 <div className="relative aspect-[4/3] w-full">
                   <Image
                     src={branch.facadePhoto}
                     alt={`Fachada del local de Neumáticos Trivium ${branch.shortName}`}
                     fill
                     className="object-cover"
-                    sizes="176px"
+                    sizes="(max-width: 768px) 100vw, 480px"
                   />
                 </div>
               </Link>

@@ -93,6 +93,20 @@ export default async function ServicioPage({ params }: Props) {
 
       <div className="max-w-3xl mx-auto px-4 pb-12 md:pb-16">
         {ofreceCombo && <UpsellNeumaticos />}
+        {service.id === "tuercas-de-seguridad" && (
+          <Link
+            href="/tuercas-antirrobo"
+            className="mt-10 flex flex-col gap-3 rounded-2xl border border-orange-200 bg-orange-50 p-5 transition-colors hover:border-orange-300 sm:flex-row sm:items-center sm:justify-between"
+          >
+            <span>
+              <span className="block text-lg font-black text-navy-900">¿Buscás un juego de tuercas antirrobo?</span>
+              <span className="block text-sm text-slate-600">
+                Mirá la categoría con los modelos disponibles, sus fotos y precios, y los que son compatibles con tu auto.
+              </span>
+            </span>
+            <span className="shrink-0 rounded-xl bg-orange-500 px-5 py-2.5 text-sm font-black text-white">Ver tuercas antirrobo →</span>
+          </Link>
+        )}
         {seo && (
           <div className="mt-12 space-y-8">
             <div className="space-y-4 text-slate-700 leading-relaxed">
@@ -137,6 +151,13 @@ export default async function ServicioPage({ params }: Props) {
                       </Link>
                     </li>
                   ))}
+                {service.id === "tuercas-de-seguridad" && (
+                  <li>
+                    <Link href="/tuercas-antirrobo" className="font-bold text-orange-700 underline underline-offset-4">
+                      Tuercas antirrobo: categoría y precios
+                    </Link>
+                  </li>
+                )}
                 <li>
                   <Link href="/servicios" className="font-bold text-orange-700 underline underline-offset-4">
                     Todos los servicios de la gomería

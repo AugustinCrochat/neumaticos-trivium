@@ -92,29 +92,30 @@ export function Header() {
           a comprar en otro lado sin taller propio. */}
       <div
         aria-hidden={compact}
-        className={`relative overflow-hidden bg-[#ff1e00] text-white transition-all duration-200 ${
-          compact ? "max-h-0 py-0" : "max-h-8 py-1"
+        className={`relative overflow-hidden transition-all duration-200 ${compact ? "h-0" : "h-7"} ${
+          haySlides && slide === 1 ? "bg-white text-navy-900" : "bg-[#ff1e00] text-white"
         }`}
       >
         {haySlides && slide === 1 ? (
           <Link
             href="/ofertas"
             tabIndex={compact ? -1 : 0}
-            className="flex items-center justify-center gap-2 px-9 text-center text-[11px] font-bold hover:bg-[#cc1800] md:text-xs"
+            className="flex h-7 items-center justify-center gap-2 px-9 text-center text-[11px] font-bold hover:bg-slate-100 md:text-xs"
           >
             <span>
               Hoy 3 cuotas sin interés<span className="hidden md:inline"> con Visa o Mastercard</span>
             </span>
-            <span className="flex shrink-0 items-center gap-1 rounded bg-white px-1.5 py-px">
-              <Image src="/images/payments/visa.svg" alt="Visa" width={32} height={20} className="h-3 w-auto" />
-              <Image src="/images/payments/mastercard.svg" alt="Mastercard" width={32} height={20} className="h-4 w-auto" />
+            {/* Mismas proporciones que en Medios de pago de la ficha: Visa a la mitad de alto que Mastercard. */}
+            <span className="flex shrink-0 items-center gap-1.5">
+              <Image src="/images/payments/visa.svg" alt="Visa" width={32} height={20} className="h-2.5 w-auto" />
+              <Image src="/images/payments/mastercard.svg" alt="Mastercard" width={32} height={20} className="h-5 w-auto" />
             </span>
           </Link>
         ) : (
           <Link
             href="/servicios"
             tabIndex={compact ? -1 : 0}
-            className="block px-9 text-center text-[11px] font-bold hover:bg-[#cc1800] md:text-xs"
+            className="flex h-7 items-center justify-center px-9 text-center text-[11px] font-bold hover:bg-[#cc1800] md:text-xs"
           >
             {selectedBranch.apertura
               ? `Neumáticos Trivium ${selectedBranch.shortName} abre ${selectedBranch.apertura}`
@@ -127,7 +128,7 @@ export function Header() {
               type="button"
               onClick={cambiarSlide}
               aria-label="Mensaje anterior"
-              className="absolute inset-y-0 left-0 flex w-8 items-center justify-center text-sm font-black text-white/80 hover:text-white"
+              className="absolute inset-y-0 left-0 flex w-8 items-center justify-center text-sm font-black opacity-70 hover:opacity-100"
             >
               ‹
             </button>
@@ -135,7 +136,7 @@ export function Header() {
               type="button"
               onClick={cambiarSlide}
               aria-label="Mensaje siguiente"
-              className="absolute inset-y-0 right-0 flex w-8 items-center justify-center text-sm font-black text-white/80 hover:text-white"
+              className="absolute inset-y-0 right-0 flex w-8 items-center justify-center text-sm font-black opacity-70 hover:opacity-100"
             >
               ›
             </button>
