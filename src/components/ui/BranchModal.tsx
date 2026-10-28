@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useBranch } from "@/contexts/branch-context";
 import { BRANCHES } from "@/lib/config";
 import { getBranchDistances, formatDistance } from "@/lib/branch-geo";
+import { DirectionsIcon } from "./DirectionsIcon";
 import { WhatsAppLink } from "./WhatsAppLink";
 
 type GeoState = "idle" | "loading" | "done" | "error";
@@ -246,11 +247,9 @@ export function BranchModal() {
                 href={branch.mapUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-1.5 ml-1 inline-flex items-center gap-1.5 text-xs font-bold text-navy-700 hover:text-orange-600 transition-colors"
+                className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-navy-200 bg-white px-3 py-1.5 text-xs font-bold text-navy-700 hover:border-navy-400 hover:bg-navy-50 transition-colors"
               >
-                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
-                </svg>
+                <DirectionsIcon className="w-5 h-5 text-navy-600" />
                 Cómo llegar
               </a>
               </div>
