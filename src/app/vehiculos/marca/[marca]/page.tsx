@@ -94,10 +94,10 @@ export default async function MarcaPage({ params }: Props) {
         data={itemListJsonLd(vehiculos.map((v) => ({ name: `Neumáticos para ${v.brand} ${v.model}`, path: `/vehiculos/${vehicleSlug(v.brand, v.model)}` })))}
       />
 
-      <div className="bg-navy-950 px-4 py-14">
+      <div className="bg-black px-4 py-14">
         <div className="mx-auto max-w-4xl text-center">
-          <span className="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-2xl bg-white">
-            <MarcaLogo brand={brand} className="h-12 w-12" />
+          <span className="mx-auto mb-5 flex h-24 w-24 items-center justify-center">
+            <MarcaLogo brand={brand} className="h-24 w-24 drop-shadow-[0_0_2px_rgba(255,255,255,0.9)] drop-shadow-[0_0_10px_rgba(255,255,255,0.35)]" />
           </span>
           <h1 className="mb-4 text-4xl font-black text-white md:text-5xl">Neumáticos para {brand}</h1>
           <p className="mx-auto max-w-2xl text-lg text-slate-300">

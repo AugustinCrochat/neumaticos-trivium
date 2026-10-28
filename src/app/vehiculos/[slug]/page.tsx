@@ -208,7 +208,7 @@ export default async function VehiclePage({ params }: Props) {
       </div>
 
       <div className="relative z-10 mx-auto -mt-8 max-w-4xl px-4">
-        <div className="rounded-3xl bg-white p-6 shadow-xl md:p-10">
+        <div className="rounded-3xl bg-white p-4 shadow-xl sm:p-6 md:p-10">
           <section className="mb-10 border-b border-slate-100 pb-10">
             <div className="md:flex md:items-start md:justify-between md:gap-6">
               <h2 className="mb-3 text-2xl font-bold text-navy-900 md:pt-4">Qué medida lleva el {name}</h2>

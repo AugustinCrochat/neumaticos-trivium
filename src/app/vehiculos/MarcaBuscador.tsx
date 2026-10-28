@@ -37,7 +37,7 @@ export function MarcaBuscador({ items }: { items: MarcaItem[] }) {
         <ul className="mb-6 flex flex-wrap gap-2">
           {modelos.slice(0, 24).map((m) => (
             <li key={m.href}>
-              <Link href={m.href} className="inline-block rounded-xl bg-navy-900 px-3.5 py-2 text-sm font-bold text-white hover:bg-navy-800">
+              <Link href={m.href} className="inline-block rounded-xl bg-black px-3.5 py-2 text-sm font-bold text-white hover:bg-orange-600">
                 {m.label}
               </Link>
             </li>

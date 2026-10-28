@@ -27,7 +27,7 @@ export default function VehiculosIndexPage() {
           POPULAR_VEHICLES.map((v) => ({ name: `Neumáticos para ${v.brand} ${v.model}`, path: `/vehiculos/${vehicleSlug(v.brand, v.model)}` }))
         )}
       />
-      <div className="bg-navy-950 px-4 py-16">
+      <div className="bg-black px-4 py-16">
         <div className="mx-auto max-w-4xl text-center">
           <h1 className="mb-4 text-4xl font-black text-white md:text-5xl">Neumáticos por vehículo</h1>
           <p className="mx-auto max-w-2xl text-lg text-slate-300">

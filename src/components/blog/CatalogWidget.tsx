@@ -63,10 +63,10 @@ export async function CatalogWidget({ size, loadIndex, speedRating, vehicleProfi
   }
 
   return (
-    <div className="my-10 bg-slate-50 p-6 rounded-2xl border border-slate-100 not-prose [&_a]:!no-underline">
+    <div className="my-10 bg-slate-50 p-3 sm:p-6 rounded-2xl border border-slate-100 not-prose [&_a]:!no-underline">
       {title && <h3 className="text-2xl font-black text-navy-900 mb-6">{title}</h3>}
       <SortedProductGrid
-        className="grid grid-cols-2 gap-3 sm:gap-4"
+        className="grid grid-cols-1 gap-3 min-[480px]:grid-cols-2 sm:gap-4"
         items={displayProducts.map((p) => ({ product: p, peers: peers.get(p.id) }))}
       />
       {size && (
