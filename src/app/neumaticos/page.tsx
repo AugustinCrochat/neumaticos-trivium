@@ -12,15 +12,25 @@ import {
   rimSlug,
   sizeSlug,
   sizesFromCatalog,
+  sizesEqual,
 } from "@/lib/tire-sizes";
 import type { TireSize } from "@/lib/types";
 import { poolShare } from "@/lib/share-image";
 import { SizeOrVehicleSearch } from "@/components/ui/SizeOrVehicleSearch";
+import { SortedProductGrid } from "@/components/ui/SortedProductGrid";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { MarcaLogo } from "@/components/ui/MarcaLogo";
+import { peersByGroup } from "@/lib/best-price";
+import { MEDIDAS } from "@/lib/blog-cluster";
+import { POPULAR_VEHICLES, vehicleSlug } from "@/lib/vehicles";
+import { vehiclePhoto } from "@/lib/vehicle-photos";
+import { vehiclesUsingSize } from "@/lib/tire-sizes";
+import { itemListJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Neumáticos por medida en Córdoba: precios y stock",
+  title: "Neumáticos por medida en Córdoba: precios, stock y autos",
   description:
-    "Buscá tu medida de neumático y mirá precio y stock al instante. Cubiertas baratas para auto y camioneta, rodado 13 al 20, de importación directa: retiro en Córdoba con colocación sin cargo.",
+    "Buscá tu medida de neumático (185/65 R15, 205/55 R16, 175/70 R14 y más) y mirá precio y stock al instante, con los autos que la usan y sus equivalencias. Importación directa: retiro en Córdoba con colocación sin cargo.",
   alternates: canonical("/neumaticos"),
   openGraph: {
     title: `Neumáticos económicos por medida — ${SITE_NAME}`,
@@ -53,6 +63,28 @@ const FAQS = [
   },
 ];
 
+const money = (n: number) =>
+  new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 }).format(n);
+
+const parseMedida = (k: string): TireSize => {
+  const [, w, p, r] = k.match(/(\d+)\/(\d+) R(\d+)/)!;
+  return { width: +w, profile: +p, rim: +r };
+};
+
+const USOS = [
+  { href: "/neumaticos/ht", titulo: "H/T · Highway Terrain", texto: "Para camionetas y SUV que andan sobre todo en asfalto: silenciosas y cómodas." },
+  { href: "/neumaticos/at", titulo: "A/T · All Terrain", texto: "Para pickups que también salen a tierra y ripio: dibujo más agresivo." },
+  { href: "/neumaticos/carga", titulo: "De carga (C)", texto: "Para utilitarios y furgones: construcción reforzada y más índice de carga." },
+  { href: "/neumaticos-baratos", titulo: "Los más económicos", texto: "Juegos de cuatro a buen precio, de marcas importadas homologadas." },
+];
+
+const CONFIANZA = [
+  "Colocación sin cargo",
+  "Retiro en el local de Argüello",
+  "1 año de garantía de fábrica",
+  "Importación directa",
+];
+
 /** Agrupa por rodado para que la grilla se lea como el catálogo mental del
     comprador: primero "qué rodado tengo", después "qué ancho y perfil". */
 function agruparPorRodado(sizes: { size: TireSize; count: number }[]) {
@@ -74,6 +106,8 @@ function agruparPorRodado(sizes: { size: TireSize; count: number }[]) {
 
 export default async function NeumaticosPage() {
   const productos = await getProductosDesdePOS(DEFAULT_BRANCH_ID);
+  const peers = peersByGroup(productos);
+  const enStock = productos.filter((p) => p.enStock && !p.isCarga);
 
   // Catálogo real + medidas prioritarias sin stock: unificarlas evita que el
   // hub tenga menos enlaces que el sitemap y deje páginas huérfanas.
@@ -91,117 +125,280 @@ export default async function NeumaticosPage() {
     productos.some((p) => p.brandId === b.id)
   );
 
+  // Precio más bajo con stock de cada medida, para mostrar "desde $" en toda la grilla.
+  // Con colchón de stock (3 o más): el sitio se congela en cada build y una
+  // unidad suelta puede agotarse antes del próximo, dejando una tarjeta "Sin stock".
+  const firmes = enStock.filter((p) => (p.stock ?? 0) >= 3);
+  const desde = new Map<string, number>();
+  for (const p of firmes.length ? firmes : enStock) {
+    const k = sizeSlug(p.size);
+    desde.set(k, Math.min(desde.get(k) ?? Infinity, p.price));
+  }
+
+  // Las medidas más buscadas (las de las notas por medida), con los autos que
+  // la llevan y la foto del primero que la tiene.
+  const populares = MEDIDAS.map(({ slug, size }) => {
+    const t = parseMedida(size);
+    const modelos = new Map<string, { nombre: string; slug: string }>();
+    for (const v of vehiclesUsingSize(t)) {
+      const key = `${v.brand} ${v.model}`;
+      if (!modelos.has(key)) modelos.set(key, { nombre: key, slug: vehicleSlug(v.brand, v.model) });
+    }
+    const orden = POPULAR_VEHICLES.map((v) => `${v.brand} ${v.model}`);
+    const lista = [...modelos.values()].sort((a, b) => orden.indexOf(a.nombre) - orden.indexOf(b.nombre));
+    const foto = lista.map((m) => vehiclePhoto(m.slug)).find(Boolean) ?? null;
+    return { slug, size, t, total: lista.length, nombres: lista.slice(0, 3).map((m) => m.nombre), foto, desde: desde.get(sizeSlug(t)) };
+  });
+
+  // Los más económicos con stock de las medidas populares: una tarjeta por medida.
+  const destacados = populares
+    .map(({ t }) => firmes.filter((p) => sizesEqual(p.size, t)).sort((a, b) => a.price - b.price)[0])
+    .filter(Boolean)
+    .slice(0, 8);
+
+  // Autos más buscados, con foto, para entrar por el modelo.
+  const autos = POPULAR_VEHICLES.filter((v) => vehiclePhoto(vehicleSlug(v.brand, v.model))).slice(0, 12);
+
   return (
-    <div className="mx-auto max-w-7xl 2xl:max-w-[96rem] px-4 py-8">
-      <Breadcrumbs
-        crumbs={[
-          { name: "Inicio", path: "/" },
-          { name: "Neumáticos", path: "/neumaticos" },
-        ]}
+    <div className="bg-white pb-16">
+      <JsonLd
+        data={itemListJsonLd(
+          todas.map(({ size }) => ({ name: `Neumáticos ${formatSize(size)}`, path: `/neumaticos/${sizeSlug(size)}` }))
+        )}
       />
 
-      <header className="mb-10">
-        <h1 className="text-3xl font-black leading-tight text-navy-900 md:text-5xl">
-          Neumáticos por medida
-        </h1>
-        <p className="mt-4 max-w-3xl text-lg leading-relaxed text-slate-600">
-          Elegí tu medida y vas a ver, en la misma página, qué modelos hay, a qué precio y si están
-          en stock ahora. Trabajamos con importación directa: compramos en fábrica y vendemos al
-          público sin distribuidor en el medio, que es de dónde sale la diferencia de precio.
-          El retiro en el local de Córdoba no tiene costo y la colocación va incluida.
-        </p>
-        <p className="mt-3 max-w-3xl leading-relaxed text-slate-500">
-          ¿No sabés cuál es tu medida? Está escrita en el flanco del neumático que tenés puesto, con
-          el formato <span className="font-mono font-bold text-navy-800">205/55 R16</span>.{" "}
-          <Link
-            href="/blog/como-leer-medida-neumatico"
-            className="font-bold text-navy-700 underline underline-offset-2"
-          >
-            Te explicamos cómo leerla acá
-          </Link>
-          , o buscá directamente por marca y modelo de auto.
-        </p>
-      </header>
-
-      <div className="mb-12 max-w-2xl">
-        <SizeOrVehicleSearch />
-      </div>
-
-      {grupos.map(({ rim, medidas }) => (
-        <section key={rim} className="mb-10">
-          <div className="mb-4 flex items-baseline justify-between gap-4">
-            <h2 className="text-2xl font-black text-navy-900">Rodado {rim}</h2>
-            <Link
-              href={`/neumaticos/${rimSlug(rim)}`}
-              className="text-sm font-bold text-navy-600 underline underline-offset-2 hover:text-navy-900"
-            >
-              Ver todo R{rim}
-            </Link>
+      {/* Héroe: lo primero es encontrar la medida. */}
+      <section className="bg-black px-4 pb-14 pt-8 text-white">
+        <div className="mx-auto max-w-6xl">
+          <Breadcrumbs
+            dark
+            crumbs={[
+              { name: "Inicio", path: "/" },
+              { name: "Neumáticos", path: "/neumaticos" },
+            ]}
+          />
+          <h1 className="mt-4 max-w-3xl text-4xl font-black leading-tight md:text-6xl">
+            Neumáticos por medida <span className="text-orange-500">en Córdoba</span>
+          </h1>
+          <p className="mt-4 max-w-2xl text-lg leading-relaxed text-slate-300">
+            Elegí tu medida o tu auto y mirá en la misma página qué modelos hay, a qué precio y si están en stock ahora.
+            Importamos directo de fábrica: sin distribuidor en el medio.
+          </p>
+          <div className="mt-8 max-w-2xl rounded-2xl bg-white p-4 text-navy-900 shadow-2xl md:p-6">
+            <SizeOrVehicleSearch />
           </div>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-            {medidas.map(({ size, count }) => (
-              <Link
-                key={sizeSlug(size)}
-                href={`/neumaticos/${sizeSlug(size)}`}
-                className={`rounded-xl border p-4 text-center transition-colors ${
-                  count > 0
-                    ? "border-slate-200 bg-white hover:border-orange-400"
-                    : "border-dashed border-slate-200 bg-slate-50 hover:border-navy-300"
-                }`}
-              >
-                <span className="block font-black text-navy-900">{formatSize(size)}</span>
-                <span className="mt-1 block text-xs font-bold text-slate-500">
-                  {count > 0 ? `${count} ${count === 1 ? "modelo" : "modelos"}` : "a pedido"}
-                </span>
-              </Link>
+          <ul className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm font-bold text-slate-200">
+            {CONFIANZA.map((c) => (
+              <li key={c} className="flex items-center gap-2">
+                <span aria-hidden="true" className="text-orange-500">✓</span>
+                {c}
+              </li>
             ))}
-          </div>
-        </section>
-      ))}
-
-      <section className="mb-12">
-        <h2 className="mb-4 text-2xl font-black text-navy-900">Por tipo de uso</h2>
-        <div className="flex flex-wrap gap-3">
-          <Link
-            href="/neumaticos/ht"
-            className="rounded-xl border border-slate-200 bg-white px-5 py-3 font-bold text-navy-900 transition-colors hover:border-navy-400"
-          >
-            Neumáticos H/T (Highway Terrain)
-          </Link>
-          <Link
-            href="/neumaticos/at"
-            className="rounded-xl border border-slate-200 bg-white px-5 py-3 font-bold text-navy-900 transition-colors hover:border-navy-400"
-          >
-            Neumáticos A/T (All Terrain)
-          </Link>
-          <Link
-            href="/neumaticos/carga"
-            className="rounded-xl border border-slate-200 bg-white px-5 py-3 font-bold text-navy-900 transition-colors hover:border-navy-400"
-          >
-            Neumáticos de carga
-          </Link>
+          </ul>
         </div>
       </section>
 
-      {marcasConProductos.length > 0 && (
-        <section className="mt-12">
-          <h2 className="mb-4 text-2xl font-black text-navy-900">Marcas que trabajamos</h2>
-          <div className="flex flex-wrap gap-3">
-            {marcasConProductos.map((brand) => (
-              <Link
-                key={brand.id}
-                href={`/marcas/${brand.id}`}
-                className="rounded-xl border border-slate-200 bg-white px-5 py-3 font-bold text-navy-900 transition-colors hover:border-navy-400"
-              >
-                {brand.name}
-                <span className="ml-2 text-xs font-medium text-slate-400">{brand.origin}</span>
+      <div className="mx-auto max-w-6xl px-4">
+        {/* Medidas más buscadas */}
+        <section className="pt-12">
+          <h2 className="text-2xl font-black text-navy-900 md:text-3xl">Las medidas más buscadas</h2>
+          <p className="mt-2 max-w-2xl text-slate-600">
+            Las que llevan los autos más comunes. Cada una tiene su guía con los modelos que la usan y las equivalencias.
+          </p>
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {populares.map((m) => (
+              <div key={m.slug} className="flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-shadow hover:shadow-md">
+                <Link href={`/neumaticos/${sizeSlug(m.t)}`} className="block bg-black px-3 pt-4">
+                  <span className="block text-center text-2xl font-black italic text-white">{m.size}</span>
+                  <span className="mt-1 flex h-28 items-end justify-center">
+                    {m.foto && (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={m.foto} alt="" loading="lazy" decoding="async" className="max-h-28 w-auto max-w-full object-contain" />
+                    )}
+                  </span>
+                </Link>
+                <div className="flex flex-1 flex-col p-4">
+                  <p className="text-sm text-slate-600">
+                    {m.nombres.join(", ")}
+                    {m.total > 3 ? ` y ${m.total - 3} modelos más` : ""}
+                  </p>
+                  <p className="mt-2 text-sm font-black text-navy-900">
+                    {m.desde ? `Desde ${money(m.desde)}` : "Consultá stock"}
+                  </p>
+                  <div className="mt-auto flex flex-wrap gap-x-4 gap-y-1 pt-3 text-sm font-bold">
+                    <Link href={`/neumaticos/${sizeSlug(m.t)}`} className="text-orange-600 underline underline-offset-2">
+                      Ver neumáticos
+                    </Link>
+                    <Link href={`/blog/${m.slug}`} className="text-navy-700 underline underline-offset-2">
+                      Guía
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Los más económicos hoy */}
+        {destacados.length > 0 && (
+          <section className="pt-14">
+            <h2 className="text-2xl font-black text-navy-900 md:text-3xl">Lo más económico en stock hoy</h2>
+            <p className="mt-2 max-w-2xl text-slate-600">El neumático más barato con stock de cada medida popular.</p>
+            <div className="mt-6 [&_a]:!no-underline">
+              <SortedProductGrid
+                className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4"
+                items={destacados.map((p) => ({ product: p, peers: peers.get(p.id) }))}
+              />
+            </div>
+          </section>
+        )}
+
+        {/* Por auto */}
+        <section className="pt-14">
+          <div className="flex flex-wrap items-baseline justify-between gap-2">
+            <h2 className="text-2xl font-black text-navy-900 md:text-3xl">¿No sabés tu medida? Buscá por tu auto</h2>
+            <Link href="/vehiculos" className="text-sm font-bold text-navy-700 underline underline-offset-2">
+              Ver todas las marcas →
+            </Link>
+          </div>
+          <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+            {autos.map((v) => {
+              const slug = vehicleSlug(v.brand, v.model);
+              return (
+                <Link key={slug} href={`/vehiculos/${slug}`} className="group rounded-xl border border-slate-200 bg-white p-3 text-center transition-colors hover:border-orange-400">
+                  <span className="flex h-20 items-center justify-center">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={vehiclePhoto(slug)!} alt="" loading="lazy" decoding="async" className="max-h-20 w-auto max-w-full object-contain" />
+                  </span>
+                  <span className="mt-2 flex items-center justify-center gap-1.5 text-sm font-black text-navy-900">
+                    <MarcaLogo brand={v.brand} className="h-4 w-4" />
+                    {v.model}
+                  </span>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* Por uso */}
+        <section className="pt-14">
+          <h2 className="text-2xl font-black text-navy-900 md:text-3xl">Por tipo de uso</h2>
+          <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {USOS.map((u) => (
+              <Link key={u.href} href={u.href} className="rounded-2xl border border-slate-200 bg-slate-50 p-5 transition-colors hover:border-navy-400 hover:bg-white">
+                <span className="block font-black text-navy-900">{u.titulo}</span>
+                <span className="mt-2 block text-sm leading-relaxed text-slate-600">{u.texto}</span>
               </Link>
             ))}
           </div>
         </section>
-      )}
 
-      <FaqSection faqs={FAQS} title="Preguntas frecuentes sobre medidas de neumáticos" />
+        {/* Todas las medidas por rodado */}
+        <section className="pt-14">
+          <h2 className="text-2xl font-black text-navy-900 md:text-3xl">Todas las medidas por rodado</h2>
+          <nav aria-label="Ir a un rodado" className="mt-4 flex flex-wrap gap-2">
+            {grupos.map(({ rim }) => (
+              <a key={rim} href={`#rodado-${rim}`} className="rounded-full border border-slate-200 bg-white px-4 py-1.5 text-sm font-black text-navy-900 hover:border-orange-400">
+                R{rim}
+              </a>
+            ))}
+          </nav>
+          {grupos.map(({ rim, medidas }) => (
+            <div key={rim} id={`rodado-${rim}`} className="mt-8 scroll-mt-28">
+              <div className="mb-3 flex items-baseline justify-between gap-4">
+                <h3 className="text-xl font-black text-navy-900">Rodado {rim}</h3>
+                <Link href={`/neumaticos/${rimSlug(rim)}`} className="text-sm font-bold text-navy-600 underline underline-offset-2 hover:text-navy-900">
+                  Ver todo R{rim}
+                </Link>
+              </div>
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+                {medidas.map(({ size, count }) => (
+                  <Link
+                    key={sizeSlug(size)}
+                    href={`/neumaticos/${sizeSlug(size)}`}
+                    className={`rounded-xl border p-4 text-center transition-colors ${
+                      count > 0 ? "border-slate-200 bg-white hover:border-orange-400" : "border-dashed border-slate-200 bg-slate-50 hover:border-navy-300"
+                    }`}
+                  >
+                    <span className="block font-black text-navy-900">{formatSize(size)}</span>
+                    <span className="mt-1 block text-xs font-bold text-slate-500">
+                      {desde.get(sizeSlug(size))
+                        ? `desde ${money(desde.get(sizeSlug(size))!)}`
+                        : count > 0
+                          ? `${count} ${count === 1 ? "modelo" : "modelos"}`
+                          : "a pedido"}
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          ))}
+        </section>
+
+        {/* Marcas */}
+        {marcasConProductos.length > 0 && (
+          <section className="pt-14">
+            <h2 className="text-2xl font-black text-navy-900 md:text-3xl">Marcas que trabajamos</h2>
+            <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+              {marcasConProductos.map((brand) => (
+                <Link key={brand.id} href={`/marcas/${brand.id}`} className="flex flex-col items-center gap-2 rounded-xl border border-slate-200 bg-white p-4 text-center transition-colors hover:border-navy-400">
+                  {brand.logoUrl && (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={brand.logoUrl} alt={`Logo ${brand.name}`} loading="lazy" decoding="async" className="h-10 w-auto max-w-full object-contain" />
+                  )}
+                  <span className="font-black text-navy-900">{brand.name}</span>
+                  <span className="text-xs font-medium text-slate-400">{brand.origin}</span>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Guías */}
+        <section className="pt-14">
+          <h2 className="text-2xl font-black text-navy-900 md:text-3xl">Guías para elegir bien</h2>
+          <ul className="mt-6 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+            <li>
+              <Link href="/blog/como-leer-medida-neumatico" className="block rounded-xl border border-slate-200 bg-slate-50 p-4 font-bold text-navy-900 hover:border-orange-400">
+                Cómo leer la medida de un neumático
+              </Link>
+            </li>
+            <li>
+              <Link href="/calculadora-equivalencia-neumaticos" className="block rounded-xl border border-slate-200 bg-slate-50 p-4 font-bold text-navy-900 hover:border-orange-400">
+                Calculadora de equivalencias
+              </Link>
+            </li>
+            <li>
+              <Link href="/blog/como-ahorrar-en-neumaticos-guia-completa" className="block rounded-xl border border-slate-200 bg-slate-50 p-4 font-bold text-navy-900 hover:border-orange-400">
+                Cómo ahorrar en neumáticos
+              </Link>
+            </li>
+            <li>
+              <Link href="/herramientas" className="block rounded-xl border border-slate-200 bg-slate-50 p-4 font-bold text-navy-900 hover:border-orange-400">
+                Herramientas y calculadoras
+              </Link>
+            </li>
+          </ul>
+        </section>
+
+        {/* Servicio */}
+        <section className="mt-14 rounded-3xl bg-black p-8 text-white md:p-10">
+          <h2 className="text-2xl font-black md:text-3xl">Los colocamos en el momento</h2>
+          <p className="mt-3 max-w-2xl text-slate-300">
+            Comprás, retirás y los montamos en el taller de Argüello, con alineado y balanceado si los necesitás.
+          </p>
+          <div className="mt-5 flex flex-wrap gap-3">
+            <Link href="/servicios" className="inline-flex min-h-12 items-center rounded-xl bg-orange-500 px-6 text-sm font-black !text-white hover:bg-orange-600">
+              Ver servicios
+            </Link>
+            <Link href="/sucursales" className="inline-flex min-h-12 items-center rounded-xl border border-white/30 px-6 text-sm font-black !text-white hover:bg-white/10">
+              Cómo llegar
+            </Link>
+          </div>
+        </section>
+
+        <FaqSection faqs={FAQS} title="Preguntas frecuentes sobre medidas de neumáticos" />
+      </div>
     </div>
   );
 }
