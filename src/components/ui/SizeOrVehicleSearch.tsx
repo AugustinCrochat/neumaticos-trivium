@@ -12,6 +12,7 @@ export function SizeOrVehicleSearch({
   forceVoiceButton = false,
   hideLearnLink = false,
   initialEconomicos = false,
+  autoFocus = false,
   onLiveChange,
 }: {
   compact?: boolean;
@@ -19,6 +20,8 @@ export function SizeOrVehicleSearch({
   forceVoiceButton?: boolean;
   hideLearnLink?: boolean;
   initialEconomicos?: boolean;
+  /** Cursor en "ancho" al abrir (modal del buscador flotante). */
+  autoFocus?: boolean;
   onLiveChange?: (v: { w: string; p: string; r: string }) => void;
 }) {
   const { loadVehiculos } = useVehicle();
@@ -70,6 +73,7 @@ export function SizeOrVehicleSearch({
           forceVoiceButton={forceVoiceButton}
           hideLearnLink={hideLearnLink}
           economicos={economicos}
+          autoFocus={autoFocus}
           onLiveChange={onLiveChange}
         />
       ) : (

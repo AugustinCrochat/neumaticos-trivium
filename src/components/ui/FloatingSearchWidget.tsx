@@ -147,7 +147,7 @@ export function FloatingSearchWidget() {
             </div>
 
             <div className="p-4 sm:p-6 overflow-y-auto">
-              <SizeOrVehicleSearch compact />
+              <SizeOrVehicleSearch compact autoFocus />
             </div>
           </div>
         </div>

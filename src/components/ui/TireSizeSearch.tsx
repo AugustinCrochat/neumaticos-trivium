@@ -99,6 +99,7 @@ export function TireSizeSearch({
   hideLearnLink = false,
   embedded = false,
   economicos = false,
+  autoFocus = false,
   onLiveChange,
 }: {
   initialMedida?: string;
@@ -109,6 +110,8 @@ export function TireSizeSearch({
   embedded?: boolean;
   /** Si está activo, la búsqueda va a /buscar con el filtro de económicos. */
   economicos?: boolean;
+  /** Al montarse deja el cursor en "ancho" (buscador que se abre en un modal). */
+  autoFocus?: boolean;
   /** Se llama a cada tecla con lo escrito, para listados que filtran en vivo (catálogo). */
   onLiveChange?: (v: { w: string; p: string; r: string }) => void;
 }) {
@@ -155,6 +158,11 @@ export function TireSizeSearch({
   // Atado a lo escrito: al cambiar la medida la lista se filtra y el índice viejo deja de valer.
   const [activeState, setActiveState] = useState({ key: "", index: -1 });
   const containerRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (autoFocus) widthRef.current?.focus();
+    // Solo al montar: no debe robar el foco en cada render.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   // Autos que vienen con la medida completa (para confirmar que es la correcta).
   const [vehiculos, setVehiculos] = useState<{ brand: string; model: string }[]>([]);
   const [voiceError, setVoiceError] = useState<string | null>(null);
