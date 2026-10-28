@@ -97,16 +97,24 @@ html {
   100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 @keyframes branch-ring {
-  0% { box-shadow: 0 0 0 0 rgb(255 30 0 / 0.45); }
-  100% { box-shadow: 0 0 0 14px rgb(255 30 0 / 0); }
+  0% { box-shadow: 0 0 0 0 rgb(255 30 0 / 0.5); }
+  100% { box-shadow: 0 0 0 12px rgb(255 30 0 / 0); }
 }
 @keyframes branch-ping {
-  0% { transform: scale(1); opacity: 0.7; }
-  100% { transform: scale(2.6); opacity: 0; }
+  0% { transform: scale(1); opacity: 0.75; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+/* Una sola declaración: dos clases con `animation` se pisaban entre sí. */
+.branch-nearest {
+  animation:
+    branch-pop 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) both,
+    branch-ring 1.5s ease-out 0.6s 4;
 }
 .branch-pop { animation: branch-pop 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
-.branch-ring { animation: branch-ring 1.4s ease-out 0.5s 3; }
-.branch-ping { animation: branch-ping 1.4s ease-out infinite; }
+.branch-ping { transform-origin: center; animation: branch-ping 1.5s ease-out infinite; }
+/* Con "reducir movimiento" se saca solo el desplazamiento de la entrada; los
+   pulsos son pequeños y son lo que marca cuál es la sucursal elegida. */
 @media (prefers-reduced-motion: reduce) {
-  .branch-pop, .branch-ring, .branch-ping { animation: none; }
+  .branch-pop { animation: none; }
+  .branch-nearest { animation: branch-ring 1.5s ease-out 0.2s 4; }
 }

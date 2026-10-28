@@ -81,6 +81,10 @@ export function BranchModal() {
 
   if (!isModalOpen) return null;
 
+  // Primero la activa, después la más cercana detectada, después el resto.
+  const rank = (id: string) =>
+    hasConfirmedBranch && selectedBranch.id === id ? 0 : id === nearestId ? 1 : 2;
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
@@ -164,7 +168,7 @@ export function BranchModal() {
         {/* Branches */}
         <div className="p-4 space-y-3 mt-1">
           {[...BRANCHES]
-            .sort((a, b) => (a.id === nearestId ? -1 : b.id === nearestId ? 1 : 0))
+            .sort((a, b) => rank(a.id) - rank(b.id))
             .map((branch) => {
             const isActive = hasConfirmedBranch && selectedBranch.id === branch.id;
             const isNearest = nearestId === branch.id;
@@ -174,7 +178,7 @@ export function BranchModal() {
               <button
                 onClick={() => setSelectedBranch(branch)}
                 className={`w-full text-left rounded-xl border-2 p-4 transition-all ${
-                  isNearest ? "branch-pop branch-ring " : ""
+                  isNearest ? "branch-nearest " : ""
                 }${
                   isActive
                     ? "border-orange-500 bg-orange-50"
@@ -200,9 +204,9 @@ export function BranchModal() {
                       )}
                       {isNearest && (
                         <span className="inline-flex items-center gap-1.5 bg-neutral-900 text-white text-xs font-bold px-2.5 py-0.5 rounded-full">
-                          <span className="relative flex w-2 h-2">
-                            <span className="branch-ping absolute inset-0 rounded-full bg-orange-500" />
-                            <span className="relative w-2 h-2 rounded-full bg-orange-500" />
+                          <span className="relative inline-block w-2 h-2 shrink-0">
+                            <span className="branch-ping absolute left-0 top-0 w-2 h-2 rounded-full bg-orange-500" />
+                            <span className="absolute left-0 top-0 w-2 h-2 rounded-full bg-orange-500" />
                           </span>
                           La más cercana
                         </span>
