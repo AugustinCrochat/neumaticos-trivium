@@ -48,6 +48,11 @@ export default async function NeumaticosHTPage() {
       productos={ht}
       faqs={FAQS}
       hero={{
+        image: {
+          src: "/images/local/camionetas-en-elevador-taller-neumaticos-trivium-cordoba.webp",
+          alt: "Dos camionetas en el taller de Neumáticos Trivium, una sobre el elevador",
+          position: "center",
+        },
         headline: "Confort y silencio",
         accent: "en cada kilómetro.",
         bajada:

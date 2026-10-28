@@ -80,6 +80,11 @@ export default async function NeumaticosParaRemisesPage() {
       faqs={FAQS}
       extra={<RemisesExtra productos={lista} />}
       hero={{
+        image: {
+          src: "/images/local/remis-chevrolet-classic-cambio-de-neumaticos-y-balanceo-trivium-cordoba.webp",
+          alt: "Remis Chevrolet Classic sobre el elevador del taller con cubiertas nuevas",
+          position: "center 60%",
+        },
         headline: "Neumáticos económicos",
         accent: "para remises, taxis y Uber.",
         bajada:

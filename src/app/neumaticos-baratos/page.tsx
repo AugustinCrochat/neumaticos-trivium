@@ -68,6 +68,11 @@ export default async function NeumaticosBaratosPage() {
       faqs={FAQS}
       extra={<BaratosExtra productos={lista} />}
       hero={{
+        image: {
+          src: "/images/local/descarga-de-neumaticos-importados-grenlander-del-camion-trivium-cordoba.webp",
+          alt: "Descarga de neumáticos importados Grenlander de un camión en el local de Trivium",
+          position: "center",
+        },
         headline: "Cubiertas nuevas",
         accent: "al mejor precio.",
         bajada:

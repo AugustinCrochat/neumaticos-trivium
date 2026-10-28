@@ -48,6 +48,11 @@ export default async function NeumaticosATPage() {
       productos={at}
       faqs={FAQS}
       hero={{
+        image: {
+          src: "/images/local/neumatico-at-grenlander-maga-at-two-camioneta-clasica-trivium.webp",
+          alt: "Técnico colocando un neumático Grenlander A/T en una pickup clásica",
+          position: "center 70%",
+        },
         headline: "Ripio, barro y asfalto.",
         accent: "Un solo neumático.",
         bajada:

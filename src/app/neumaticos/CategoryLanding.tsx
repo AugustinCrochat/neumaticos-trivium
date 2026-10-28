@@ -16,6 +16,8 @@ export type CategoryHero = {
   highlights: { titulo: string; detalle: string }[];
   idealPara: string[];
   noIdealPara: string[];
+  /** Foto del taller para el encabezado; sin ella se usa el isotipo de Trivium. */
+  image?: { src: string; alt: string; position?: string };
 };
 
 /**
@@ -73,14 +75,29 @@ export function CategoryLanding({
       />
 
       <header className="relative mb-6 overflow-hidden rounded-3xl bg-black">
-        {/* Mismo recurso que la miniatura de links compartidos (og-layout): el
-            isotipo grande, cortado contra la esquina y casi transparente. */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/images/trivium-icon.svg"
-          alt=""
-          className="pointer-events-none absolute -right-6 top-0 h-64 w-64 opacity-25 md:right-10 md:top-1/2 md:h-[24rem] md:w-[24rem] md:-translate-y-1/2 md:opacity-40"
-        />
+        {hero.image ? (
+          <>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={hero.image.src}
+              alt={hero.image.alt}
+              className="absolute inset-0 h-full w-full object-cover"
+              style={{ objectPosition: hero.image.position ?? "center" }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-black/20 max-md:from-black/90 max-md:via-black/75 max-md:to-black/60" />
+          </>
+        ) : (
+          <>
+            {/* Mismo recurso que la miniatura de links compartidos (og-layout): el
+                isotipo grande, cortado contra la esquina y casi transparente. */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/trivium-icon.svg"
+              alt=""
+              className="pointer-events-none absolute -right-6 top-0 h-64 w-64 opacity-25 md:right-10 md:top-1/2 md:h-[24rem] md:w-[24rem] md:-translate-y-1/2 md:opacity-40"
+            />
+          </>
+        )}
         <div className="relative max-w-2xl px-6 py-10 md:px-10 md:py-16">
           <h1 className="inline-block rounded-md bg-[#ff1e00] px-3 py-1 text-xs font-bold uppercase tracking-widest text-white">
             {title}

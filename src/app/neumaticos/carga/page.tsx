@@ -79,6 +79,11 @@ export default async function NeumaticosCargaPage() {
       sizeLabel={formatCargaSize}
       extra={<CargaExtra productos={carga} />}
       hero={{
+        image: {
+          src: "/images/local/dos-cubiertas-de-carga-grenlander-175-65-r14c-modelos-distintos-trivium-cordoba.webp",
+          alt: "Dos cubiertas de carga Grenlander 175/65 R14C sostenidas en el taller",
+          position: "center 40%",
+        },
         headline: "Reforzados",
         accent: "para trabajar.",
         bajada:
