@@ -13,6 +13,7 @@ import { poolShare } from "@/lib/share-image";
 import { MarcaLogo } from "@/components/ui/MarcaLogo";
 import { marcaLogo, marcaSlug } from "@/lib/marcas-autos";
 import { vehiclePhoto, vehicleCardUrl } from "@/lib/vehicle-photos";
+import { VENTAS_MODELO, VENTAS_DATOS_AL } from "@/lib/ventas-modelo";
 
 /**
  * Ficha por vehículo (/vehiculos/toyota-hilux): captura "neumáticos para
@@ -117,6 +118,16 @@ export default async function VehiclePage({ params }: Props) {
     .sort((a, b) => Number(b.brand === vehicle.brand) - Number(a.brand === vehicle.brand))
     .slice(0, 8);
 
+  // Lo que se llevaron los clientes de este modelo en el taller (datos propios del POS).
+  const ventas = VENTAS_MODELO[name];
+  const ventasTop = ventas
+    ? ventas.top.map(([medida, u]) => ({ medida, u, pct: Math.round((u / ventas.n) * 100) })).filter((t) => t.pct >= 3)
+    : [];
+  const medidaSlug = (m: string) => {
+    const x = m.match(/^(\d+)\/(\d+) R(\d+)$/);
+    return x ? sizeSlug({ width: Number(x[1]), profile: Number(x[2]), rim: Number(x[3]) }) : null;
+  };
+
   const faqs: Faq[] = [
     {
       question: `¿Qué medida de neumáticos lleva el ${name}?`,
@@ -126,6 +137,17 @@ export default async function VehiclePage({ params }: Props) {
           .join("; ")}. ` +
         "Confirmá la tuya en el flanco del neumático que tenés puesto o en la calcomanía del parante de la puerta del conductor, porque una misma versión puede haber salido con más de una medida.",
     },
+    ...(ventasTop.length
+      ? [
+          {
+            question: `¿Qué medida eligen más los clientes del ${name}?`,
+            answer: `En nuestro taller de Córdoba, de los ${ventas!.n} neumáticos que colocamos en ${name} hasta ${VENTAS_DATOS_AL}, ${ventasTop
+              .slice(0, 3)
+              .map((t) => `${t.pct}% fueron ${t.medida}`)
+              .join(", ")}. No siempre coincide con la medida de fábrica: depende de la versión y de la llanta que tenga tu auto.`,
+          },
+        ]
+      : []),
     {
       question: `¿Tienen neumáticos para ${name} en stock?`,
       answer: conStock.length
@@ -239,6 +261,38 @@ export default async function VehiclePage({ params }: Props) {
               .
             </p>
           </section>
+
+          {ventasTop.length > 0 && (
+            <section className="mb-10 border-b border-slate-100 pb-10">
+              <h2 className="mb-1 text-2xl font-bold text-navy-900">Qué medida se llevan los {name} en nuestro taller</h2>
+              <p className="mb-5 text-sm text-slate-500">
+                Sobre {ventas!.n} neumáticos que colocamos en {name} en el local de Argüello (datos al {VENTAS_DATOS_AL}). Es lo que
+                eligieron los clientes, que no siempre es la medida de fábrica.
+              </p>
+              <ul className="space-y-3">
+                {ventasTop.map((t) => {
+                  const slugM = medidaSlug(t.medida);
+                  return (
+                    <li key={t.medida}>
+                      <div className="mb-1 flex items-baseline justify-between gap-3 text-sm">
+                        {slugM ? (
+                          <Link href={`/neumaticos/${slugM}`} className="font-black text-navy-900 underline underline-offset-4 hover:text-orange-600">
+                            {t.medida}
+                          </Link>
+                        ) : (
+                          <span className="font-black text-navy-900">{t.medida}</span>
+                        )}
+                        <span className="font-bold text-slate-600">{t.pct}%</span>
+                      </div>
+                      <div className="h-2 overflow-hidden rounded-full bg-slate-100">
+                        <div className="h-full rounded-full bg-orange-500" style={{ width: `${t.pct}%` }} />
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            </section>
+          )}
 
           <div className="space-y-12">
             {medidas.map((m) => (
