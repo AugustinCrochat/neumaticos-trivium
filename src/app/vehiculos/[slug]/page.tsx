@@ -7,8 +7,12 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { canonical, breadcrumbJsonLd, faqJsonLd, type Faq } from "@/lib/seo";
 import { getProductosDesdePOS } from "@/lib/pos-api";
 import { DEFAULT_BRANCH_ID } from "@/lib/config";
-import { formatSize, sizeSlug, sizesEqual } from "@/lib/tire-sizes";
-import type { TireProduct } from "@/lib/types";
+import { formatSize, sizeSlug, sizesEqual, diameterDiffPercent } from "@/lib/tire-sizes";
+import { SortedProductGrid } from "@/components/ui/SortedProductGrid";
+import { peersByGroup } from "@/lib/best-price";
+import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
+import { BRANCHES } from "@/lib/config";
+import type { TireProduct, TireSize } from "@/lib/types";
 import { poolShare } from "@/lib/share-image";
 import { MarcaLogo } from "@/components/ui/MarcaLogo";
 import { marcaLogo, marcaSlug } from "@/lib/marcas-autos";
@@ -304,7 +308,11 @@ export default async function VehiclePage({ params }: Props) {
                   </p>
                   <p className="mt-2 text-sm font-medium text-slate-600">{selectionCopy(m.profile)}</p>
                 </div>
-                <CatalogWidget size={m.size} vehicleProfile={m.profile} title="En stock hoy" />
+                {m.disponibles.length > 0 ? (
+                  <CatalogWidget size={m.size} vehicleProfile={m.profile} title="En stock hoy" />
+                ) : (
+                  <SinStockMedida name={name} size={m.size} profile={m.profile} />
+                )}
               </div>
             ))}
           </div>
@@ -360,4 +368,52 @@ function selectionCopy(profile: VehicleTireProfile) {
     return "Mostramos neumáticos para pickup; puede incluir opciones A/T, pero no cubiertas comerciales C de utilitario.";
   }
   return "Mostramos neumáticos de auto: excluimos cubiertas comerciales C y A/T aunque compartan esta medida.";
+}
+
+/**
+ * Medida sin stock: en vez de dejar la sección vacía, ofrece los neumáticos con
+ * stock del mismo rodado y diámetro dentro del ±3% (equivalentes) y la consulta
+ * por WhatsApp. Si no hay equivalentes, queda sólo la consulta.
+ */
+async function SinStockMedida({ name, size, profile }: { name: string; size: TireSize; profile: VehicleTireProfile }) {
+  const catalogo = await getProductosDesdePOS(DEFAULT_BRANCH_ID);
+  const peers = peersByGroup(catalogo);
+  const equivalentes = catalogo
+    .filter((p) => p.enStock && p.size.rim === size.rim && !sizesEqual(p.size, size) && fitsProfile(p, profile))
+    .map((p) => ({ p, diff: Math.abs(diameterDiffPercent(p.size, size)) }))
+    .filter((x) => x.diff <= 3)
+    .sort((a, b) => a.diff - b.diff || a.p.price - b.p.price)
+    .slice(0, 4);
+  const branch = BRANCHES[0];
+  const texto = encodeURIComponent(`Hola! Busco neumáticos ${formatSize(size)} para mi ${name}. ¿Los tienen o me pueden conseguir?`);
+
+  return (
+    <div className="space-y-6">
+      <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+        <p className="font-black text-navy-900">Hoy no tenemos stock en {formatSize(size)}</p>
+        <p className="mt-1 text-sm text-slate-600">
+          Escribinos y te avisamos cuándo entra, o te proponemos una medida equivalente.
+        </p>
+        <WhatsAppLink
+          href={`https://wa.me/${branch.whatsapp}?text=${texto}`}
+          className="mt-4 inline-flex min-h-12 items-center justify-center rounded-xl bg-orange-500 px-6 text-sm font-black !text-white !no-underline hover:bg-orange-600"
+        >
+          Consultar {formatSize(size)} por WhatsApp
+        </WhatsAppLink>
+      </div>
+      {equivalentes.length > 0 && (
+        <div className="rounded-2xl border border-slate-100 bg-slate-50 p-3 sm:p-6 not-prose [&_a]:!no-underline">
+          <h3 className="mb-1 text-xl font-black text-navy-900">Medidas equivalentes en stock</h3>
+          <p className="mb-5 text-sm text-slate-500">
+            Mismo rodado R{size.rim} y diámetro dentro del ±3% de {formatSize(size)}: el velocímetro y el ABS siguen
+            funcionando bien. Confirmá con nosotros que entre en tu llanta.
+          </p>
+          <SortedProductGrid
+            className="grid grid-cols-1 gap-3 min-[480px]:grid-cols-2 sm:gap-4"
+            items={equivalentes.map(({ p }) => ({ product: p, peers: peers.get(p.id) }))}
+          />
+        </div>
+      )}
+    </div>
+  );
 }
