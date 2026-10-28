@@ -12,6 +12,8 @@ import { BRANCHES, DEFAULT_BRANCH_ID, BRANCH_COOKIE, type Branch } from "@/lib/c
 type BranchContextType = {
   selectedBranch: Branch;
   setSelectedBranch: (branch: Branch) => void;
+  /** Deja elegida la sucursal sin cerrar el modal ni disparar la acción pendiente (elección automática por ubicación). */
+  autoSelectBranch: (branch: Branch) => void;
   hasConfirmedBranch: boolean;
   isModalOpen: boolean;
   openModal: () => void;
@@ -100,6 +102,12 @@ export function BranchProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const autoSelectBranch = (branch: Branch) => {
+    setSelectedBranchState(branch);
+    writeBranchCookie(branch.id);
+    setHasConfirmedBranch(true);
+  };
+
   const openModalForAction = (cb: (branch: Branch) => void) => {
     setPendingAction(() => cb);
     setIsModalOpen(true);
@@ -110,6 +118,7 @@ export function BranchProvider({ children }: { children: ReactNode }) {
       value={{
         selectedBranch,
         setSelectedBranch,
+        autoSelectBranch,
         hasConfirmedBranch,
         isModalOpen,
         openModal: () => setIsModalOpen(true),

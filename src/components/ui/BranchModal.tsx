@@ -9,7 +9,7 @@ import { WhatsAppLink } from "./WhatsAppLink";
 type GeoState = "idle" | "loading" | "done" | "error";
 
 export function BranchModal() {
-  const { isModalOpen, closeModal, setSelectedBranch, selectedBranch, hasConfirmedBranch } = useBranch();
+  const { isModalOpen, closeModal, setSelectedBranch, selectedBranch, hasConfirmedBranch, autoSelectBranch } = useBranch();
   const [nearestId, setNearestId] = useState<string | null>(null);
   const [distances, setDistances] = useState<Record<string, number>>({});
   const [geoState, setGeoState] = useState<GeoState>("idle");
@@ -57,6 +57,8 @@ export function BranchModal() {
           const [nearest] = Object.entries(dist).sort((a, b) => a[1] - b[1]);
           setDistances(dist);
           setNearestId(nearest[0]);
+          const branch = BRANCHES.find((b) => b.id === nearest[0]);
+          if (branch) autoSelectBranch(branch);
           finish("done");
         } catch {
           setGeoMsg("No pudimos calcular la sucursal más cercana. Elegí manualmente.");
@@ -145,6 +147,7 @@ export function BranchModal() {
               <span>
                 Estás a <strong>{formatDistance(distances[nearestId])}</strong> de{" "}
                 <strong>{BRANCHES.find((b) => b.id === nearestId)?.shortName}</strong>
+                {" "}— la elegimos por vos. Si preferís otra, tocala.
               </span>
             </div>
           )}
@@ -167,8 +170,8 @@ export function BranchModal() {
             const isNearest = nearestId === branch.id;
             const distance = distances[branch.id];
             return (
+              <div key={branch.id}>
               <button
-                key={branch.id}
                 onClick={() => setSelectedBranch(branch)}
                 className={`w-full text-left rounded-xl border-2 p-4 transition-all ${
                   isNearest ? "branch-pop branch-ring " : ""
@@ -235,6 +238,18 @@ export function BranchModal() {
                   </div>
                 </div>
               </button>
+              <a
+                href={branch.mapUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-1.5 ml-1 inline-flex items-center gap-1.5 text-xs font-bold text-navy-700 hover:text-orange-600 transition-colors"
+              >
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                </svg>
+                Cómo llegar
+              </a>
+              </div>
             );
           })}
         </div>
