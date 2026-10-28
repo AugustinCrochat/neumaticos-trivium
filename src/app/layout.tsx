@@ -6,14 +6,12 @@ import { SITE_NAME, siteGraphJsonLd } from "@/lib/seo";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { BranchProvider } from "@/contexts/branch-context";
 import { LiveStockProvider } from "@/contexts/live-stock-context";
-import { BranchModal } from "@/components/ui/BranchModal";
 import { VehicleProvider } from "@/contexts/vehicle-context";
-import { VehicleModal } from "@/components/ui/VehicleModal";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { ScrollToTop } from "@/components/layout/ScrollToTop";
+import { LazyOverlays } from "@/components/layout/LazyOverlays";
 import { CartProvider } from "@/contexts/cart-context";
-import { CartDrawer } from "@/components/ui/CartDrawer";
 import { FloatingSearchWidget } from "@/components/ui/FloatingSearchWidget";
 import { FloatingWhatsAppButton } from "@/components/ui/FloatingWhatsAppButton";
 import { GoogleReviewsBadge } from "@/components/ui/GoogleReviewsBadge";
@@ -142,9 +140,7 @@ export default function RootLayout({
               <CartProvider>
                 <ScrollToTop />
                 <Header />
-                <BranchModal />
-                <VehicleModal />
-                <CartDrawer />
+                <LazyOverlays />
                 <FloatingSearchWidget />
                 <FloatingWhatsAppButton />
                 <GoogleReviewsBadge />

@@ -2,7 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import { SizeOrVehicleSearch } from "@/components/ui/SizeOrVehicleSearch";
+import dynamic from "next/dynamic";
+
+// El buscador (medidas, autos, voz) pesa bastante y solo se usa al abrir el
+// panel: no tiene por qué viajar con cada página.
+const SizeOrVehicleSearch = dynamic(
+  () => import("@/components/ui/SizeOrVehicleSearch").then((m) => m.SizeOrVehicleSearch),
+  { ssr: false }
+);
 
 const MINIATURAS = 4;
 

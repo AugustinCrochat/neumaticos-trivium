@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import { BRANCHES, LEGAL_NAME, CUIT, CONTACT_EMAIL } from "@/lib/config";
 import { canonical } from "@/lib/seo";
 import { BranchStatusBadge } from "@/app/sucursales/[id]/BranchStatusBadge";
-import { BranchMiniMap } from "@/app/sucursales/[id]/BranchMiniMap";
+import { LazyBranchMiniMap } from "@/app/sucursales/[id]/LazyBranchMiniMap";
 import { DirectionsButton } from "@/app/sucursales/[id]/DirectionsButton";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 import { DirectionsIcon } from "@/components/ui/DirectionsIcon";
@@ -123,7 +123,7 @@ export default function ContactoPage() {
 
                 {/* Mapa */}
                 <div className="p-6 pt-0 md:p-8 md:pl-0">
-                  <BranchMiniMap branch={branch} />
+                  <LazyBranchMiniMap branch={branch} />
                 </div>
               </div>
             </section>

@@ -9,7 +9,7 @@ import { BRANCHES, DEFAULT_BRANCH_ID } from "@/lib/config";
 // dispararía un fetch "fresh" al POS por cada producto listado en una grilla.
 export const dynamic = "force-dynamic";
 
-type Entry = { enStock: boolean; stock: number; price: number };
+type Entry = { enStock: boolean; stock: number; price: number; vendidos: number };
 
 // Cada visita a CUALQUIER página del sitio termina acá (LiveStockProvider vive
 // en el layout raíz). Con `fresh: true` directo, cada visita era un fetch al
@@ -34,7 +34,7 @@ async function cargar(branchId: string): Promise<string> {
   const productos = await getProductosDesdePOS(branchId, { fresh: true });
   const data: Record<string, Entry> = {};
   for (const p of productos) {
-    data[p.id] = { enStock: p.enStock ?? false, stock: p.stock ?? 0, price: p.price };
+    data[p.id] = { enStock: p.enStock ?? false, stock: p.stock ?? 0, price: p.price, vendidos: p.vendidos ?? 0 };
   }
   const body = JSON.stringify(data);
   // Un catálogo vacío es una falla del POS, no "se vendió todo": no cachearlo.

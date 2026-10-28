@@ -3,7 +3,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { useBranch } from "@/contexts/branch-context";
 
-type LiveEntry = { enStock: boolean; stock: number; price: number };
+type LiveEntry = { enStock: boolean; stock: number; price: number; vendidos?: number };
 
 const LiveStockContext = createContext<Record<string, LiveEntry>>({});
 

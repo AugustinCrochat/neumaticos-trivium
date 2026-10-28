@@ -25,7 +25,6 @@ function formatPrice(price: number) {
 export function ProductPageClient({ product }: { product: TireProduct }) {
   const { selectedBranch, openModal } = useBranch();
   const cotizadorRef = useRef<CotizadorHandle | null>(null);
-  const price = useLiveStock(product.id)?.price ?? product.price;
   const combo = useUpsellCombo();
   // Si el presupuesto ya incluye el servicio, se oculta la sección que lo ofrece.
   const [comboEnPresupuesto, setComboEnPresupuesto] = useState(false);
@@ -33,30 +32,17 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
   // "alineación y balanceo" (mismo criterio que el cotizador).
   const servicioLabel = selectedBranch.id === "arguello" ? "Alineado y balanceado" : "Alineación y balanceo";
 
-  // El stock de `product` viene horneado en el HTML del último build (el
-  // sitio es 100% estático, sin ISR — ver memoria del proyecto), así que
-  // puede tener hasta 2h de atraso. Al montar, se corrige con el valor real
-  // del POS sin tener que volver dinámica toda la ficha. Si el fetch falla
-  // (offline, edge caído) se queda con el valor estático en vez de romper.
-  const [enStock, setEnStock] = useState(product.enStock ?? false);
-  const [stock, setStock] = useState(product.stock ?? 0);
+  // El stock de `product` viene horneado en el HTML del último build (hasta 2 h
+  // de atraso). Se corrige con el catálogo vivo (/api/catalogo-vivo, caché de
+  // 60 s) que LiveStockProvider ya pidió para toda la página: antes la ficha
+  // hacía además su propio /api/stock/[id] con lectura fresca al POS, la ruta
+  // más pesada del sitio y una vía directa a los 1102.
+  const live = useLiveStock(product.id);
+  const enStock = live?.enStock ?? product.enStock ?? false;
+  const stock = live?.stock ?? product.stock ?? 0;
   // Unidades vendidas en esta sucursal en los últimos 180 días (dato del POS).
-  const [vendidos, setVendidos] = useState(product.vendidos ?? 0);
-  useEffect(() => {
-    let cancelado = false;
-    fetch(`/api/stock/${product.id}?sucursal=${selectedBranch.id}`, { cache: "no-store" })
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data: { enStock?: boolean; stock?: number; vendidos?: number } | null) => {
-        if (cancelado || !data) return;
-        if (typeof data.enStock === "boolean") setEnStock(data.enStock);
-        if (typeof data.stock === "number") setStock(data.stock);
-        if (typeof data.vendidos === "number") setVendidos(data.vendidos);
-      })
-      .catch(() => {});
-    return () => {
-      cancelado = true;
-    };
-  }, [product.id, selectedBranch.id]);
+  const vendidos = live?.vendidos ?? product.vendidos ?? 0;
+  const price = live?.price ?? product.price;
 
   // Se calcula en el cliente (como BranchStatusBadge) para usar la hora real
   // y evitar mismatch de hidratación entre servidor y navegador.

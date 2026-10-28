@@ -9,7 +9,7 @@ import { localidadesDeSucursal } from "@/lib/localidades";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { FaqSection } from "@/components/seo/FaqSection";
 import { BranchStatusBadge } from "./BranchStatusBadge";
-import { BranchMiniMap } from "./BranchMiniMap";
+import { LazyBranchMiniMap } from "./LazyBranchMiniMap";
 import { SetActiveBranch } from "./SetActiveBranch";
 import { DirectionsButton } from "./DirectionsButton";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
@@ -236,7 +236,7 @@ export default async function BranchPage({ params }: Props) {
           <p className="mb-4 text-sm text-slate-600">
             {branch.address}, {branch.city}
           </p>
-          <BranchMiniMap branch={branch} />
+          <LazyBranchMiniMap branch={branch} />
           <DirectionsButton
             lat={branch.coordinates.lat}
             lng={branch.coordinates.lng}
