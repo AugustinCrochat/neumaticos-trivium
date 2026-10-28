@@ -11,7 +11,6 @@ import { isVisaMasterPromoDay } from "@/lib/promo-day";
 import { ImageLightbox } from "./ImageLightbox";
 import { ZoomPanel } from "./ZoomPanel";
 import { productAlt, productExtraAlt } from "@/lib/image-seo";
-import { DirectionsIcon } from "@/components/ui/DirectionsIcon";
 
 const ZOOM_FACTOR = 2.5;
 
@@ -414,7 +413,10 @@ export function ProductImageGallery({
                 rel="noopener noreferrer"
                 className="flex items-center gap-1.5 rounded-lg bg-orange-500 px-3 py-2 text-xs font-black transition-colors hover:bg-orange-600"
               >
-                <DirectionsIcon className="h-3.5 w-3.5" />
+                <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
                 Cómo llegar
               </a>
             </div>

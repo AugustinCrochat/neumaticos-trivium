@@ -6,7 +6,6 @@ import { useBranch } from "@/contexts/branch-context";
 import { SITE_URL } from "@/lib/config";
 import { formatPrecio } from "@/lib/servicios";
 import { BranchStatusBadge } from "@/app/sucursales/[id]/BranchStatusBadge";
-import { DirectionsIcon } from "@/components/ui/DirectionsIcon";
 import { PaymentMethodsSection } from "@/components/ui/PaymentMethodsSection";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 
@@ -148,7 +147,10 @@ export function ServicioFicha({
                 rel="noopener noreferrer"
                 className="flex flex-1 items-center justify-center gap-2 rounded-xl border-2 border-navy-900 bg-white py-3 text-base font-semibold text-navy-900 transition-colors hover:bg-slate-50"
               >
-                <DirectionsIcon className="h-5 w-5 shrink-0" />
+                <svg className="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
                 Cómo llegar
               </a>
             </div>

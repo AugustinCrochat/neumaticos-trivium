@@ -175,10 +175,18 @@ export function BranchModal() {
             const isNearest = nearestId === branch.id;
             const distance = distances[branch.id];
             return (
-              <div key={branch.id}>
-              <button
+              <div
+                key={branch.id}
+                role="button"
+                tabIndex={0}
                 onClick={() => setSelectedBranch(branch)}
-                className={`w-full text-left rounded-xl border-2 p-4 transition-all ${
+                onKeyDown={(e) => {
+                  if (e.target === e.currentTarget && (e.key === "Enter" || e.key === " ")) {
+                    e.preventDefault();
+                    setSelectedBranch(branch);
+                  }
+                }}
+                className={`w-full cursor-pointer text-left rounded-xl border-2 p-4 transition-all ${
                   isNearest ? "branch-nearest " : ""
                 }${
                   isActive
@@ -229,6 +237,16 @@ export function BranchModal() {
                     <p className="text-xs text-slate-400 mt-1">
                       Atención por orden de llegada
                     </p>
+                    <a
+                      href={branch.mapUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-navy-200 bg-white px-3 py-1.5 text-xs font-bold text-navy-700 hover:border-navy-400 hover:bg-navy-50 transition-colors"
+                    >
+                      <DirectionsIcon className="w-5 h-5 text-navy-600" />
+                      Cómo llegar
+                    </a>
                   </div>
                   <div
                     className={`mt-1 w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors ${
@@ -242,16 +260,6 @@ export function BranchModal() {
                     )}
                   </div>
                 </div>
-              </button>
-              <a
-                href={branch.mapUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-navy-200 bg-white px-3 py-1.5 text-xs font-bold text-navy-700 hover:border-navy-400 hover:bg-navy-50 transition-colors"
-              >
-                <DirectionsIcon className="w-5 h-5 text-navy-600" />
-                Cómo llegar
-              </a>
               </div>
             );
           })}
