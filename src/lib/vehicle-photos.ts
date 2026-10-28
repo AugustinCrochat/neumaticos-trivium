@@ -20,6 +20,7 @@ export const VEHICLE_PHOTOS = new Set([
   "audi-q7",
   "audi-q8",
   "baic-bj40",
+  "baic-x35",
   "bmw-serie-1",
   "bmw-serie-2",
   "bmw-serie-3",

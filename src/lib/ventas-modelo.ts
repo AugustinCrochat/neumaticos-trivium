@@ -45,7 +45,7 @@ export const VENTAS_MODELO: Record<string, VentasModelo> = {
   "Peugeot Partner": { n: 103, top: [["175/65 R14",71],["175/70 R14",14],["185/65 R14",10],["185/65 R15",8]] },
   "Renault Clio": { n: 136, top: [["175/65 R14",79],["175/70 R13",38],["175/70 R14",7],["185/60 R14",6]] },
   "Renault Duster": { n: 85, top: [["215/65 R16",85]] },
-  "Renault Duster Oroch": { n: 21, top: [["215/65 R16",21]] },
+  "Renault Oroch": { n: 21, top: [["215/65 R16",21]] },
   "Renault Kangoo": { n: 191, top: [["175/65 R14",116],["175/70 R14",38],["185/65 R15",27],["205/55 R16",8]] },
   "Renault Logan": { n: 68, top: [["185/65 R15",35],["185/70 R14",15],["195/60 R15",8],["205/45 R17",4]] },
   "Renault Megane": { n: 48, top: [["185/65 R14",8],["185/65 R15",8],["175/65 R14",6],["205/55 R17",6]] },
