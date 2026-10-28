@@ -60,6 +60,8 @@ export type Accessory = {
   imageUrl: string | null;
   enStock: boolean;
   stock: number;
+  /** Unidades vendidas en los últimos 180 días en la sucursal. */
+  vendidos?: number;
   slug: string;
 };
 

@@ -127,7 +127,15 @@ export default async function AccessoryPage({ params }: Props) {
               </div>
             )}
             <span className="text-4xl font-black text-red-600">{formatPrice(accessory.price)}</span>
-            <p className="text-xs text-slate-400 mt-1 mb-4">Precio por juego, con 2 llaves · IVA incluido</p>
+            <p className="text-xs text-slate-400 mt-1">
+              Precio por juego, con 2 llaves · Precio sin impuestos nacionales: {formatPrice(accessory.price / 1.21)}
+            </p>
+            {(accessory.vendidos ?? 0) >= 5 && (
+              <p className="mt-1 text-xs font-bold text-slate-600">
+                {accessory.vendidos} juegos vendidos en los últimos 6 meses
+              </p>
+            )}
+            <div className="mb-4" />
             <AccessoryConsult accessory={accessory} />
             <Link href="/tuercas-antirrobo#buscar" className="mt-3 inline-block text-sm font-bold text-navy-700 underline decoration-navy-300 underline-offset-4 hover:decoration-navy-900">
               ¿No sabés si va en tu auto? Buscá por modelo

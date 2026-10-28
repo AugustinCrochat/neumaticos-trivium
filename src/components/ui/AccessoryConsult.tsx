@@ -9,6 +9,7 @@ import { getPickupLabel, type PickupTiming } from "@/lib/branch-status";
 import type { Accessory } from "@/lib/types";
 import { isLowStock, stockLabel } from "@/lib/stock";
 import { WhatsAppLink } from "./WhatsAppLink";
+import { DirectionsIcon } from "./DirectionsIcon";
 
 export function AccessoryConsult({ accessory }: { accessory: Accessory }) {
   const { selectedBranch } = useBranch();
@@ -31,18 +32,29 @@ export function AccessoryConsult({ accessory }: { accessory: Accessory }) {
           {stockLabel(accessory.stock)}
         </p>
       )}
-      {accessory.enStock ? (
-        <WhatsAppLink
-          href={`https://wa.me/${selectedBranch.whatsapp}?text=${waText}`}
-          className="flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1ebe57] text-white font-semibold py-2.5 rounded-xl text-sm transition-colors"
+      <div className="flex gap-2">
+        {accessory.enStock ? (
+          <WhatsAppLink
+            href={`https://wa.me/${selectedBranch.whatsapp}?text=${waText}`}
+            className="flex-1 flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1ebe57] text-white font-semibold py-3 rounded-xl text-base transition-colors"
+          >
+            Consultar en {selectedBranch.shortName}
+          </WhatsAppLink>
+        ) : (
+          <button disabled className="flex-1 bg-slate-300 text-white font-semibold py-3 rounded-xl text-base">
+            Sin stock
+          </button>
+        )}
+        <a
+          href={selectedBranch.mapUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex-1 flex items-center justify-center gap-2 bg-white border-2 border-navy-900 hover:bg-slate-50 text-navy-900 font-semibold py-3 rounded-xl text-base transition-colors"
         >
-          Consultar en {selectedBranch.shortName}
-        </WhatsAppLink>
-      ) : (
-        <button disabled className="w-full bg-slate-300 text-white font-semibold py-2.5 rounded-xl text-sm">
-          Sin stock
-        </button>
-      )}
+          <DirectionsIcon className="w-5 h-5 shrink-0" />
+          Cómo llegar
+        </a>
+      </div>
       </div>
 
       {/* Mismo bloque que la ficha de neumáticos, sin la parte de válvulas

@@ -358,6 +358,7 @@ type PosAccesorio = {
   imagen_url: string | null;
   en_stock: boolean;
   stock: number;
+  vendidos?: number;
 };
 
 export async function getAccesoriosDesdePOS(sucursalSlug: string = DEFAULT_BRANCH_ID): Promise<Accessory[]> {
@@ -389,6 +390,7 @@ export async function getAccesoriosDesdePOS(sucursalSlug: string = DEFAULT_BRANC
       imageUrl: a.imagen_url,
       enStock: a.en_stock,
       stock: a.stock,
+      vendidos: a.vendidos ?? 0,
       slug: slugify(a.nombre),
     }));
 

@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import Image from "next/image";
 import { useBranch } from "@/contexts/branch-context";
 import { ImageLightbox } from "./ImageLightbox";
+import { useSwipeGallery } from "@/hooks/use-swipe-gallery";
 import { ZoomPanel } from "./ZoomPanel";
 
 // Mismo zoom que la galería de neumáticos (ProductImageGallery).
@@ -65,7 +66,6 @@ export function AccessoryGallery({
       : []),
   ];
 
-  const [index, setIndex] = useState(0);
   const [lightbox, setLightbox] = useState(false);
   const [zoomed, setZoomed] = useState(false);
   const [lensStyle, setLensStyle] = useState({ left: 0, top: 0, width: 0, height: 0 });
@@ -74,11 +74,14 @@ export function AccessoryGallery({
   // Aspect real de la imagen: la lente respeta lo que object-contain dibuja.
   const [imgAspect, setImgAspect] = useState(1);
   const boxRef = useRef<HTMLButtonElement>(null);
-  const current = slides[Math.min(index, slides.length - 1)];
-  const go = (i: number) => {
-    setIndex((i + slides.length) % slides.length);
-    setImgAspect(1);
-  };
+  const frameRef = useRef<HTMLDivElement>(null);
+  const thumbsRef = useRef<HTMLDivElement>(null);
+  const swipe = useSwipeGallery(slides.length, frameRef, thumbsRef, () => setImgAspect(1));
+  const index = swipe.index;
+  const current = slides[index];
+  const go = swipe.goTo;
+  const peek = swipe.peekIndex !== null ? slides[swipe.peekIndex] : null;
+  const slideTransition = swipe.settling ? "transform 220ms ease-out" : "none";
   const isTouch = () => typeof window !== "undefined" && window.matchMedia("(hover: none)").matches;
 
   function handleMouseMove(e: React.MouseEvent<HTMLButtonElement>) {
@@ -100,10 +103,25 @@ export function AccessoryGallery({
   return (
     <div>
       <div
-        className={`group relative aspect-square overflow-hidden rounded-2xl bg-slate-50 ${
-          current.kind === "foto" && current.src === imageUrl ? "p-8" : ""
-        }`}
+        ref={frameRef}
+        {...swipe.touchHandlers}
+        className="group relative aspect-square touch-pan-y overflow-hidden rounded-2xl bg-slate-50"
       >
+        {peek && (
+          <div
+            aria-hidden
+            className={`pointer-events-none absolute inset-0 bg-slate-50 ${peek.kind === "foto" && peek.src === imageUrl ? "p-8" : ""}`}
+            style={{ transform: `translateX(calc(${swipe.dragX < 0 ? "100%" : "-100%"} + ${swipe.dragX}px))`, transition: slideTransition }}
+          >
+            <div className="relative h-full w-full">
+              <Image src={peek.src} alt="" fill sizes="(max-width: 768px) 100vw, 50vw" className={peek.kind === "sucursal" ? "object-cover" : "object-contain"} />
+            </div>
+          </div>
+        )}
+        <div
+          className={`absolute inset-0 ${current.kind === "foto" && current.src === imageUrl ? "p-8" : ""}`}
+          style={{ transform: swipe.dragX ? `translateX(${swipe.dragX}px)` : undefined, transition: slideTransition }}
+        >
         {current.kind === "sucursal" ? (
           <div className="relative h-full w-full">
             <Image src={current.src} alt={current.alt} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" />
@@ -132,7 +150,7 @@ export function AccessoryGallery({
           <button
             ref={boxRef}
             type="button"
-            onClick={() => setLightbox(true)}
+            onClick={() => { if (!swipe.consumeSwipe()) setLightbox(true); }}
             onMouseEnter={() => !isTouch() && setZoomed(true)}
             onMouseLeave={() => {
               setZoomed(false);
@@ -164,6 +182,7 @@ export function AccessoryGallery({
             </span>
           </button>
         )}
+        </div>
 
         {slides.length > 1 && (
           <>
@@ -210,12 +229,12 @@ export function AccessoryGallery({
       )}
 
       {slides.length > 1 && (
-        <div className="mt-3 flex gap-3">
+        <div ref={thumbsRef} className="mt-3 flex gap-3 overflow-x-auto overscroll-x-contain pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" style={{ touchAction: "pan-x" }}>
           {slides.map((slide, i) => (
             <button
               key={slide.src}
               type="button"
-              onClick={() => setIndex(i)}
+              onClick={() => go(i)}
               className={`relative h-16 w-16 shrink-0 overflow-hidden rounded-xl border-2 bg-slate-50 transition-colors ${
                 index === i ? "border-navy-700" : "border-transparent hover:border-slate-200"
               }`}
