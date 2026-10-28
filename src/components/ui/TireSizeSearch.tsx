@@ -448,6 +448,8 @@ export function TireSizeSearch({
     }
     const href = sizeCatalogHref(w, p, rVal, economicosRef.current);
     router.push(href);
+    // Buscar de nuevo estando en /buscar cambia solo el ?query: Next conserva el scroll.
+    window.scrollTo(0, 0);
   };
 
   // Al completar una medida estándar se busca sola (y se guarda el teclado en

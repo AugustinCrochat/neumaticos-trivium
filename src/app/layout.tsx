@@ -11,6 +11,7 @@ import { VehicleProvider } from "@/contexts/vehicle-context";
 import { VehicleModal } from "@/components/ui/VehicleModal";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { ScrollToTop } from "@/components/layout/ScrollToTop";
 import { CartProvider } from "@/contexts/cart-context";
 import { CartDrawer } from "@/components/ui/CartDrawer";
 import { FloatingSearchWidget } from "@/components/ui/FloatingSearchWidget";
@@ -139,6 +140,7 @@ export default function RootLayout({
           <LiveStockProvider>
             <VehicleProvider vehiculos={vehiculos}>
               <CartProvider>
+                <ScrollToTop />
                 <Header />
                 <BranchModal />
                 <VehicleModal />
