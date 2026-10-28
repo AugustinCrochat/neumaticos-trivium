@@ -11,7 +11,7 @@ import { formatSize, sizeSlug, sizesEqual } from "@/lib/tire-sizes";
 import type { TireProduct } from "@/lib/types";
 import { poolShare } from "@/lib/share-image";
 import { MarcaLogo } from "@/components/ui/MarcaLogo";
-import { marcaLogo, marcaSlug } from "@/lib/marcas-autos";
+import { marcaLogo, marcaLogoOscuro, marcaSlug } from "@/lib/marcas-autos";
 import { vehiclePhoto, vehicleCardUrl } from "@/lib/vehicle-photos";
 import { VENTAS_MODELO, VENTAS_DATOS_AL } from "@/lib/ventas-modelo";
 
@@ -193,7 +193,7 @@ export default async function VehiclePage({ params }: Props) {
               className="mx-auto mb-4 flex h-24 w-24 items-center justify-center"
               aria-label={`Neumáticos para ${vehicle.brand}`}
             >
-              <MarcaLogo brand={vehicle.brand} className="h-24 w-24 drop-shadow-[0_0_2px_rgba(255,255,255,0.9)] drop-shadow-[0_0_10px_rgba(255,255,255,0.35)]" />
+              <MarcaLogo brand={vehicle.brand} className={`h-24 w-24 ${marcaLogoOscuro(vehicle.brand) ? "[filter:drop-shadow(2px_0_0_#fff)_drop-shadow(-2px_0_0_#fff)_drop-shadow(0_2px_0_#fff)_drop-shadow(0_-2px_0_#fff)_drop-shadow(1.5px_1.5px_0_#fff)_drop-shadow(-1.5px_-1.5px_0_#fff)_drop-shadow(1.5px_-1.5px_0_#fff)_drop-shadow(-1.5px_1.5px_0_#fff)]" : ""}`} />
             </Link>
           )}
           <span className="mb-4 block text-sm font-bold uppercase tracking-widest text-orange-500">

@@ -91,6 +91,13 @@ export function marcaLogo(brand: string): string | null {
   return f ? `/images/marcas-autos/${f}.webp` : null;
 }
 
+/** Marcas cuyo logo es oscuro: sobre fondo negro se ven con una silueta blanca detrás. */
+const LOGO_OSCURO = new Set(["arcfox","audi","changan","citroen","cupra","dongfeng","fiat","gac","great-wall","isuzu","jaguar","jeep","jmc","jmev","kia","lamborghini","leapmotor","lifan","lynk-co","maserati","mitsubishi","nissan","omoda","peugeot","porsche","renault","ssangyong","suzuki","toyota","volkswagen"]);
+export function marcaLogoOscuro(brand: string): boolean {
+  const f = LOGO_FILE[brand];
+  return !!f && LOGO_OSCURO.has(f);
+}
+
 /** Slug de URL de la página de una marca: "Citroen" -> "citroen". */
 export function marcaSlug(brand: string): string {
   return brand.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
