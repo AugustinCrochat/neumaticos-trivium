@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
+import { CatalogWidget } from "@/components/blog/CatalogWidget";
 import { MedidasLinks } from "@/components/blog/MedidasLinks";
 import { canonical } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
@@ -76,6 +77,7 @@ export default function Page() {
       </table>
       <p>También la usan, según versión: <Link key="fiat-grand-siena" href="/vehiculos/fiat-grand-siena">Fiat Grand Siena</Link>, <Link key="fiat-uno-way" href="/vehiculos/fiat-uno-way">Fiat Uno Way</Link>, <Link key="geely-lc-cross" href="/vehiculos/geely-lc-cross">Geely LC Cross</Link>, <Link key="peugeot-partner" href="/vehiculos/peugeot-partner">Peugeot Partner</Link>, <Link key="renault-clio-mio" href="/vehiculos/renault-clio-mio">Renault Clio Mio</Link>, <Link key="suzuki-fun" href="/vehiculos/suzuki-fun">Suzuki Fun</Link>, <Link key="suzuki-swift" href="/vehiculos/suzuki-swift">Suzuki Swift</Link>.</p>
       <p>Una misma versión puede haber cambiado de llanta con los años, así que tomá esta lista como punto de partida y confirmá en el flanco o en la etiqueta de la puerta (<Link href="/blog/etiqueta-de-presion-puerta-del-auto">dónde está y cómo leerla</Link>).</p>
+      <CatalogWidget size={{ width: 175, profile: 65, rim: 14 }} title="175/65 R14 en stock hoy" />
 
       <h2>Medidas parecidas: cuáles se pueden usar</h2>
       <p>Lo que se compara no es el ancho sino el <strong>diámetro total</strong>. Una diferencia de hasta un 3 % se considera tolerable; más que eso empieza a cambiar el velocímetro y el cuentakilómetros, que marcan de más o de menos.</p>

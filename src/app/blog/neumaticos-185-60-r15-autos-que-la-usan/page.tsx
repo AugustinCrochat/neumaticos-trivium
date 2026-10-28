@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
+import { CatalogWidget } from "@/components/blog/CatalogWidget";
 import { MedidasLinks } from "@/components/blog/MedidasLinks";
 import { canonical } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
@@ -76,6 +77,7 @@ export default function Page() {
       </table>
       <p>También la usan, según versión: <Link key="chevrolet-agile" href="/vehiculos/chevrolet-agile">Chevrolet Agile</Link>, <Link key="fiat-grand-siena" href="/vehiculos/fiat-grand-siena">Fiat Grand Siena</Link>, <Link key="ford-fiesta-kinetic" href="/vehiculos/ford-fiesta-kinetic">Ford Fiesta Kinetic</Link>, <Link key="geely-515" href="/vehiculos/geely-515">Geely 515</Link>, <Link key="hyundai-hb20" href="/vehiculos/hyundai-hb20">Hyundai HB20</Link>, <Link key="hyundai-hb20-sed-n" href="/vehiculos/hyundai-hb20-sed-n">Hyundai HB20 Sedán</Link>, <Link key="nissan-march" href="/vehiculos/nissan-march">Nissan March</Link>, <Link key="peugeot-207-compact" href="/vehiculos/peugeot-207-compact">Peugeot 207 Compact</Link>, <Link key="toyota-yaris" href="/vehiculos/toyota-yaris">Toyota Yaris</Link>, <Link key="volkswagen-up" href="/vehiculos/volkswagen-up">Volkswagen Up!</Link>.</p>
       <p>Una misma versión puede haber cambiado de llanta con los años, así que tomá esta lista como punto de partida y confirmá en el flanco o en la etiqueta de la puerta (<Link href="/blog/etiqueta-de-presion-puerta-del-auto">dónde está y cómo leerla</Link>).</p>
+      <CatalogWidget size={{ width: 185, profile: 60, rim: 15 }} title="185/60 R15 en stock hoy" />
 
       <h2>Medidas parecidas: cuáles se pueden usar</h2>
       <p>Lo que se compara no es el ancho sino el <strong>diámetro total</strong>. Una diferencia de hasta un 3 % se considera tolerable; más que eso empieza a cambiar el velocímetro y el cuentakilómetros, que marcan de más o de menos.</p>

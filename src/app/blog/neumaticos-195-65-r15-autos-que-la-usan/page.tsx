@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
+import { CatalogWidget } from "@/components/blog/CatalogWidget";
 import { MedidasLinks } from "@/components/blog/MedidasLinks";
 import { canonical } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
@@ -76,6 +77,7 @@ export default function Page() {
       </table>
       <p>También la usan, según versión: <Link key="nissan-tiida" href="/vehiculos/nissan-tiida">Nissan Tiida</Link>, <Link key="nissan-versa" href="/vehiculos/nissan-versa">Nissan Versa</Link>, <Link key="seat-toledo" href="/vehiculos/seat-toledo">Seat Toledo</Link>, <Link key="subaru-impreza" href="/vehiculos/subaru-impreza">Subaru Impreza</Link>, <Link key="toyota-prius" href="/vehiculos/toyota-prius">Toyota Prius</Link>, <Link key="volkswagen-golf" href="/vehiculos/volkswagen-golf">Volkswagen Golf</Link>.</p>
       <p>Una misma versión puede haber cambiado de llanta con los años, así que tomá esta lista como punto de partida y confirmá en el flanco o en la etiqueta de la puerta (<Link href="/blog/etiqueta-de-presion-puerta-del-auto">dónde está y cómo leerla</Link>).</p>
+      <CatalogWidget size={{ width: 195, profile: 65, rim: 15 }} title="195/65 R15 en stock hoy" />
 
       <h2>Medidas parecidas: cuáles se pueden usar</h2>
       <p>Lo que se compara no es el ancho sino el <strong>diámetro total</strong>. Una diferencia de hasta un 3 % se considera tolerable; más que eso empieza a cambiar el velocímetro y el cuentakilómetros, que marcan de más o de menos.</p>

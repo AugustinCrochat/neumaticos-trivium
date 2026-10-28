@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
+import { CatalogWidget } from "@/components/blog/CatalogWidget";
 import { MedidasLinks } from "@/components/blog/MedidasLinks";
 import { canonical } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
@@ -76,6 +77,7 @@ export default function Page() {
       </table>
       <p>También la usan, según versión: <Link key="fiat-fiorino" href="/vehiculos/fiat-fiorino">Fiat Fiorino</Link>, <Link key="fiat-strada" href="/vehiculos/fiat-strada">Fiat Strada</Link>, <Link key="foton-gratour" href="/vehiculos/foton-gratour">Foton Gratour</Link>, <Link key="lifan-foison" href="/vehiculos/lifan-foison">Lifan Foison</Link>, <Link key="peugeot-405" href="/vehiculos/peugeot-405">Peugeot 405</Link>, <Link key="shineray-t30" href="/vehiculos/shineray-t30">Shineray T30</Link>, <Link key="shineray-t32" href="/vehiculos/shineray-t32">Shineray T32</Link>, <Link key="shineray-x30" href="/vehiculos/shineray-x30">Shineray X30</Link>, <Link key="volkswagen-caddy" href="/vehiculos/volkswagen-caddy">Volkswagen Caddy</Link>, <Link key="volkswagen-saveiro" href="/vehiculos/volkswagen-saveiro">Volkswagen Saveiro</Link>, <Link key="volkswagen-up" href="/vehiculos/volkswagen-up">Volkswagen Up!</Link>.</p>
       <p>Una misma versión puede haber cambiado de llanta con los años, así que tomá esta lista como punto de partida y confirmá en el flanco o en la etiqueta de la puerta (<Link href="/blog/etiqueta-de-presion-puerta-del-auto">dónde está y cómo leerla</Link>).</p>
+      <CatalogWidget size={{ width: 175, profile: 70, rim: 14 }} title="175/70 R14 en stock hoy" />
 
       <h2>Medidas parecidas: cuáles se pueden usar</h2>
       <p>Lo que se compara no es el ancho sino el <strong>diámetro total</strong>. Una diferencia de hasta un 3 % se considera tolerable; más que eso empieza a cambiar el velocímetro y el cuentakilómetros, que marcan de más o de menos.</p>

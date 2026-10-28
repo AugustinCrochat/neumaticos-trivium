@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
+import { CatalogWidget } from "@/components/blog/CatalogWidget";
 import { MedidasLinks } from "@/components/blog/MedidasLinks";
 import { canonical } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
@@ -76,6 +77,7 @@ export default function Page() {
       </table>
       <p>También la usan, según versión: <Link key="citroen-basalt" href="/vehiculos/citroen-basalt">Citroen Basalt</Link>, <Link key="citroen-c4-picasso" href="/vehiculos/citroen-c4-picasso">Citroen C4 Picasso</Link>, <Link key="geely-gx3-pro" href="/vehiculos/geely-gx3-pro">Geely GX3 Pro</Link>, <Link key="haval-h1" href="/vehiculos/haval-h1">Haval H1</Link>, <Link key="mercedes-benz-clase-a" href="/vehiculos/mercedes-benz-clase-a">Mercedes-Benz Clase A</Link>, <Link key="mercedes-benz-clase-b" href="/vehiculos/mercedes-benz-clase-b">Mercedes-Benz Clase B</Link>, <Link key="mitsubishi-lancer" href="/vehiculos/mitsubishi-lancer">Mitsubishi Lancer</Link>, <Link key="nissan-kait" href="/vehiculos/nissan-kait">Nissan Kait</Link>, <Link key="nissan-sentra" href="/vehiculos/nissan-sentra">Nissan Sentra</Link>, <Link key="renault-captur" href="/vehiculos/renault-captur">Renault Captur</Link>, <Link key="renault-kardian" href="/vehiculos/renault-kardian">Renault Kardian</Link>, <Link key="subaru-legacy" href="/vehiculos/subaru-legacy">Subaru Legacy</Link>, <Link key="volkswagen-tera" href="/vehiculos/volkswagen-tera">Volkswagen Tera</Link>.</p>
       <p>Una misma versión puede haber cambiado de llanta con los años, así que tomá esta lista como punto de partida y confirmá en el flanco o en la etiqueta de la puerta (<Link href="/blog/etiqueta-de-presion-puerta-del-auto">dónde está y cómo leerla</Link>).</p>
+      <CatalogWidget size={{ width: 205, profile: 60, rim: 16 }} title="205/60 R16 en stock hoy" />
 
       <h2>Medidas parecidas: cuáles se pueden usar</h2>
       <p>Lo que se compara no es el ancho sino el <strong>diámetro total</strong>. Una diferencia de hasta un 3 % se considera tolerable; más que eso empieza a cambiar el velocímetro y el cuentakilómetros, que marcan de más o de menos.</p>

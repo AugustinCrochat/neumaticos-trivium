@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
+import { CatalogWidget } from "@/components/blog/CatalogWidget";
 import { MedidasLinks } from "@/components/blog/MedidasLinks";
 import { canonical } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
@@ -76,6 +77,7 @@ export default function Page() {
       </table>
       <p>También la usan, según versión: <Link key="volkswagen-suran" href="/vehiculos/volkswagen-suran">Volkswagen Suran</Link>, <Link key="alfa-romeo-mito" href="/vehiculos/alfa-romeo-mito">Alfa Romeo Mito</Link>, <Link key="chevrolet-agile" href="/vehiculos/chevrolet-agile">Chevrolet Agile</Link>, <Link key="fiat-punto" href="/vehiculos/fiat-punto">Fiat Punto</Link>, <Link key="hyundai-hb20" href="/vehiculos/hyundai-hb20">Hyundai HB20</Link>, <Link key="mini-cooper" href="/vehiculos/mini-cooper">Mini Cooper</Link>, <Link key="nissan-note" href="/vehiculos/nissan-note">Nissan Note</Link>, <Link key="peugeot-301" href="/vehiculos/peugeot-301">Peugeot 301</Link>, <Link key="volkswagen-virtus" href="/vehiculos/volkswagen-virtus">Volkswagen Virtus</Link>.</p>
       <p>Una misma versión puede haber cambiado de llanta con los años, así que tomá esta lista como punto de partida y confirmá en el flanco o en la etiqueta de la puerta (<Link href="/blog/etiqueta-de-presion-puerta-del-auto">dónde está y cómo leerla</Link>).</p>
+      <CatalogWidget size={{ width: 195, profile: 55, rim: 16 }} title="195/55 R16 en stock hoy" />
 
       <h2>Medidas parecidas: cuáles se pueden usar</h2>
       <p>Lo que se compara no es el ancho sino el <strong>diámetro total</strong>. Una diferencia de hasta un 3 % se considera tolerable; más que eso empieza a cambiar el velocímetro y el cuentakilómetros, que marcan de más o de menos.</p>
