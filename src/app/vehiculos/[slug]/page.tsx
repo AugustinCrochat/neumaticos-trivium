@@ -190,10 +190,10 @@ export default async function VehiclePage({ params }: Props) {
           {marcaLogo(vehicle.brand) && (
             <Link
               href={`/vehiculos/marca/${marcaSlug(vehicle.brand)}`}
-              className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-white"
+              className="mx-auto mb-4 flex h-24 w-24 items-center justify-center"
               aria-label={`Neumáticos para ${vehicle.brand}`}
             >
-              <MarcaLogo brand={vehicle.brand} className="h-10 w-10" />
+              <MarcaLogo brand={vehicle.brand} className="h-24 w-24 drop-shadow-[0_0_2px_rgba(255,255,255,0.9)] drop-shadow-[0_0_10px_rgba(255,255,255,0.35)]" />
             </Link>
           )}
           <span className="mb-4 block text-sm font-bold uppercase tracking-widest text-orange-500">
