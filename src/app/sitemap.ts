@@ -9,6 +9,7 @@ import { MARCAS_PREMIUM } from "@/lib/marcas-premium";
 import { cargaSlug } from "@/lib/carga";
 import { LOAD_SPEED_CODES } from "@/lib/load-speed";
 import { POPULAR_VEHICLES, vehicleSlug } from "@/lib/vehicles";
+import { vehicleCardUrl } from "@/lib/vehicle-photos";
 import { medidasConComparativa } from "@/lib/comparativas";
 import { marcaSlug } from "@/lib/marcas-autos";
 import { productImagePaths } from "@/lib/image-seo";
@@ -84,7 +85,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...OTRAS_MARCAS.map((m) => url(`/marcas-de-neumaticos-chinos/${m.slug}`, 0.7, "weekly")),
     url("/vehiculos", 0.8, "weekly"),
     ...[...new Set(POPULAR_VEHICLES.map((v) => v.brand))].map((b) => url(`/vehiculos/marca/${marcaSlug(b)}`, 0.7, "weekly")),
-    ...POPULAR_VEHICLES.map((v) => url(`/vehiculos/${vehicleSlug(v.brand, v.model)}`, 0.8, "weekly")),
+    ...POPULAR_VEHICLES.map((v) => {
+      const slug = vehicleSlug(v.brand, v.model);
+      const card = vehicleCardUrl(slug);
+      return url(`/vehiculos/${slug}`, 0.8, "weekly", undefined, card ? [card, abs(`/images/vehiculos/${slug}.webp`)] : undefined);
+    }),
     url("/calculadora-equivalencia-neumaticos", 0.8, "monthly"),
     url("/cotizador", 0.7, "monthly"),
     url("/herramientas", 0.7, "monthly"),

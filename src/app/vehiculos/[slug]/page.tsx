@@ -12,7 +12,7 @@ import type { TireProduct } from "@/lib/types";
 import { poolShare } from "@/lib/share-image";
 import { MarcaLogo } from "@/components/ui/MarcaLogo";
 import { marcaLogo, marcaSlug } from "@/lib/marcas-autos";
-import { vehiclePhoto } from "@/lib/vehicle-photos";
+import { vehiclePhoto, vehicleCardUrl } from "@/lib/vehicle-photos";
 
 /**
  * Ficha por vehículo (/vehiculos/toyota-hilux): captura "neumáticos para
@@ -82,12 +82,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     "Garantía de 1 año y colocación sin cargo en Córdoba.",
   ].join(" ");
 
+  // Con foto del modelo se comparte la tarjeta del auto; sin ella, una foto del local.
+  const card = vehicleCardUrl(slug);
+  const share = card
+    ? {
+        openGraph: { images: [{ url: card, width: 1200, height: 630, alt: `Neumáticos para ${name}` }] },
+        twitter: { card: "summary_large_image" as const, images: [card] },
+      }
+    : poolShare(slug);
+
   return {
     title,
     description,
     alternates: canonical(`/vehiculos/${slug}`),
-    openGraph: { title, description, url: `/vehiculos/${slug}`, ...poolShare(slug).openGraph },
-    twitter: poolShare(slug).twitter,
+    openGraph: { title, description, url: `/vehiculos/${slug}`, ...share.openGraph },
+    twitter: share.twitter,
   };
 }
 
@@ -141,8 +150,20 @@ export default async function VehiclePage({ params }: Props) {
         ])}
       />
       <JsonLd data={faqJsonLd(faqs)} />
+      {vehicleCardUrl(slug) && (
+        <JsonLd
+          data={{
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            name: `Neumáticos para ${name}: medidas y precios`,
+            url: canonical(`/vehiculos/${slug}`).canonical,
+            primaryImageOfPage: { "@type": "ImageObject", url: vehicleCardUrl(slug), width: 1200, height: 630 },
+            image: vehicleCardUrl(slug),
+          }}
+        />
+      )}
 
-      <div className="bg-navy-950 px-4 py-16">
+      <div className={`bg-black px-4 pt-16 ${vehiclePhoto(slug) ? "pb-32" : "pb-16"}`}>
         <div className="mx-auto max-w-4xl text-center">
           {marcaLogo(vehicle.brand) && (
             <Link
@@ -153,7 +174,7 @@ export default async function VehiclePage({ params }: Props) {
               <MarcaLogo brand={vehicle.brand} className="h-10 w-10" />
             </Link>
           )}
-          <span className="mb-4 block text-sm font-bold uppercase tracking-widest text-orange-400">
+          <span className="mb-4 block text-sm font-bold uppercase tracking-widest text-orange-500">
             Guía de medidas por vehículo
           </span>
           <h1 className="mb-6 text-4xl font-black text-white md:text-5xl">Neumáticos para {name}</h1>
@@ -161,23 +182,26 @@ export default async function VehiclePage({ params }: Props) {
             Medidas originales de fábrica del {name} según versión
             {desde ? `, con neumáticos en stock desde ${formatPrice(desde)}` : ""}. Elegí la tuya para ver qué tenemos.
           </p>
-          {vehiclePhoto(slug) && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={vehiclePhoto(slug)!}
-              alt={`${name}`}
-              width={1000}
-              height={650}
-              className="mx-auto mt-8 h-auto w-full max-w-md drop-shadow-2xl"
-            />
-          )}
         </div>
       </div>
 
       <div className="relative z-10 mx-auto -mt-8 max-w-4xl px-4">
         <div className="rounded-3xl bg-white p-6 shadow-xl md:p-10">
           <section className="mb-10 border-b border-slate-100 pb-10">
-            <h2 className="mb-3 text-2xl font-bold text-navy-900">Qué medida lleva el {name}</h2>
+            <div className="md:flex md:items-start md:justify-between md:gap-6">
+              <h2 className="mb-3 text-2xl font-bold text-navy-900 md:pt-4">Qué medida lleva el {name}</h2>
+              {vehiclePhoto(slug) && (
+                // Sobresale del recuadro blanco hacia el héroe de arriba.
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={vehiclePhoto(slug)!}
+                  alt={name}
+                  width={1000}
+                  height={650}
+                  className="relative z-20 mx-auto -mt-16 mb-4 h-auto w-64 drop-shadow-[0_18px_24px_rgba(0,0,0,0.45)] md:order-last md:mx-0 md:-mt-32 md:w-80"
+                />
+              )}
+            </div>
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm">
                 <thead>
