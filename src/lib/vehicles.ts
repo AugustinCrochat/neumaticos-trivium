@@ -734,10 +734,9 @@ export function vehicleSlug(brand: string, model: string): string {
 }
 
 /**
- * Vehículos que tienen landing propia (/vehiculos/[slug]): los de
- * ORDEN_POPULARIDAD que existen en VEHICLE_DB, en ese orden. El resto de la
- * base se queda sin página a propósito — una ficha por cada modelo del
- * catálogo sería contenido delgado; se suman a mano a ORDEN_POPULARIDAD.
+ * Vehículos que tienen ficha propia (/vehiculos/[slug]): todos los de
+ * VEHICLE_DB, con los de ORDEN_POPULARIDAD primero y en ese orden. Cada ficha
+ * sale de las medidas, versiones y años del modelo más el stock real, así que
+ * no es un texto con el nombre cambiado.
  */
-export const POPULAR_VEHICLES: VehicleDBEntry[] = sortVehiclesByPopularity(VEHICLE_DB)
-  .filter((v) => ORDEN_POPULARIDAD.includes(`${v.brand} ${v.model}`));
+export const POPULAR_VEHICLES: VehicleDBEntry[] = sortVehiclesByPopularity(VEHICLE_DB);

@@ -1,10 +1,10 @@
 /**
  * Logos de marcas de autos (public/images/marcas-autos/*.svg, de simple-icons,
  * licencia CC0; las marcas son de sus dueños y se usan sólo para identificar
- * el vehículo). Faltan las que simple-icons no tiene (Mercedes-Benz, Alfa
- * Romeo, Lexus...): esas se muestran sólo con el nombre.
+ * el vehículo). Faltan las que simple-icons no tiene (Lexus, BYD, Chery...): esas se muestran sólo con el nombre.
  */
 const LOGO_SLUG: Record<string, string> = {
+  "Alfa Romeo": "alfaromeo",
   Audi: "audi",
   BMW: "bmw",
   Chevrolet: "chevrolet",
@@ -17,7 +17,10 @@ const LOGO_SLUG: Record<string, string> = {
   Honda: "honda",
   Hyundai: "hyundai",
   Jeep: "jeep",
+  Jaguar: "jaguar",
   Kia: "kia",
+  "Land Rover": "landrover",
+  "Mercedes-Benz": "mercedes-benz",
   MG: "mg",
   Mini: "mini",
   Mitsubishi: "mitsubishi",
@@ -28,6 +31,7 @@ const LOGO_SLUG: Record<string, string> = {
   Renault: "renault",
   Seat: "seat",
   SEAT: "seat",
+  Smart: "smart",
   Subaru: "subaru",
   Suzuki: "suzuki",
   Toyota: "toyota",

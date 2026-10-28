@@ -12,6 +12,7 @@ import type { TireProduct } from "@/lib/types";
 import { poolShare } from "@/lib/share-image";
 import { MarcaLogo } from "@/components/ui/MarcaLogo";
 import { marcaLogo, marcaSlug } from "@/lib/marcas-autos";
+import { vehiclePhoto } from "@/lib/vehicle-photos";
 
 /**
  * Ficha por vehículo (/vehiculos/toyota-hilux): captura "neumáticos para
@@ -160,6 +161,16 @@ export default async function VehiclePage({ params }: Props) {
             Medidas originales de fábrica del {name} según versión
             {desde ? `, con neumáticos en stock desde ${formatPrice(desde)}` : ""}. Elegí la tuya para ver qué tenemos.
           </p>
+          {vehiclePhoto(slug) && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={vehiclePhoto(slug)!}
+              alt={`${name}`}
+              width={1000}
+              height={650}
+              className="mx-auto mt-8 h-auto w-full max-w-md drop-shadow-2xl"
+            />
+          )}
         </div>
       </div>
 
