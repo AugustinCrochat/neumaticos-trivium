@@ -40,33 +40,24 @@ export function Header() {
   const [moreOpen, setMoreOpen] = useState(false);
   const moreRef = useRef<HTMLDivElement | null>(null);
   const [mobileMoreOpen, setMobileMoreOpen] = useState(false);
-  // Franja roja: los miércoles y sábados alterna sola (solo en pantallas
-  // grandes) entre "colocación sin cargo" y "hoy 3 cuotas sin interés". En
-  // celular queda fija en el mensaje de cuotas, sin alternar ni flechas.
-  // Arranca en false y se corrige al montar (el sitio es estático: calcularlo
-  // en el build lo congelaría).
+  // Franja roja: los miércoles y sábados alterna sola, en celular y en
+  // escritorio, entre "colocación sin cargo" y "hoy 3 cuotas sin interés". El
+  // cambio es instantáneo (sin animación), por eso no se frena con la
+  // preferencia de reducir movimiento. Arranca en false y se corrige al montar
+  // (el sitio es estático: calcularlo en el build lo congelaría).
   const [promoHoy, setPromoHoy] = useState(false);
-  const [esDesktop, setEsDesktop] = useState(false);
   const [slide, setSlide] = useState(0);
   useEffect(() => {
     const update = () => setPromoHoy(isVisaMasterPromoDay());
     update();
   }, []);
-  useEffect(() => {
-    const mq = window.matchMedia("(min-width: 768px)");
-    const update = () => setEsDesktop(mq.matches);
-    update();
-    mq.addEventListener("change", update);
-    return () => mq.removeEventListener("change", update);
-  }, []);
   const haySlides = promoHoy && !selectedBranch.apertura;
   useEffect(() => {
-    if (!haySlides || !esDesktop || compact) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (!haySlides || compact) return;
     const t = setInterval(() => setSlide((n) => (n + 1) % 2), 5000);
     return () => clearInterval(t);
-  }, [haySlides, esDesktop, compact]);
-  const slideActivo = haySlides ? (esDesktop ? slide : 1) : 0;
+  }, [haySlides, compact]);
+  const slideActivo = haySlides ? slide : 0;
   useEffect(() => {
     if (!moreOpen) return;
     const close = (e: MouseEvent | KeyboardEvent) => {
