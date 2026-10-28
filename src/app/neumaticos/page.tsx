@@ -22,6 +22,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { MarcaLogo } from "@/components/ui/MarcaLogo";
 import { peersByGroup } from "@/lib/best-price";
 import { MEDIDAS } from "@/lib/blog-cluster";
+import { BLOG_POSTS } from "@/lib/data";
 import { POPULAR_VEHICLES, vehicleSlug } from "@/lib/vehicles";
 import { vehiclePhoto } from "@/lib/vehicle-photos";
 import { vehiclesUsingSize } from "@/lib/tire-sizes";
@@ -137,7 +138,7 @@ export default async function NeumaticosPage() {
 
   // Las medidas más buscadas (las de las notas por medida), con los autos que
   // la llevan y la foto del primero que la tiene.
-  const populares = MEDIDAS.map(({ slug, size }) => {
+  const populares = MEDIDAS.filter(({ slug }) => BLOG_POSTS.some((p) => p.slug === slug)).map(({ slug, size }) => {
     const t = parseMedida(size);
     const modelos = new Map<string, { nombre: string; slug: string }>();
     for (const v of vehiclesUsingSize(t)) {

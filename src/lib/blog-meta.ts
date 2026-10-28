@@ -251,6 +251,18 @@ export const BLOG_META: Record<string, BlogMeta> = {
     shopIntro: "Mirá la medida 185/60 R15 en stock:",
     shopLinks: [{ label: "Medida 185/60 R15", href: "/neumaticos/185-60-r15" }, L.todos, L.ofertas],
   },
+  "neumaticos-265-65-r17-autos-que-la-usan": {
+    cover: { src: "/images/blog/medida-265-65-r17-portada.webp", alt: "Neumáticos 265/65 R17 con las pickups que la usan: Toyota Hilux, Ford Ranger" },
+    figure: { src: "/images/blog/medida-265-65-r17-autos.webp", alt: "Pickups y SUV que usan la medida 265/65 R17", caption: "Algunas de las camionetas que llevan la medida 265/65 R17 de fábrica." },
+    shopIntro: "Mirá la medida 265/65 R17 en stock:",
+    shopLinks: [{ label: "Medida 265/65 R17", href: "/neumaticos/265-65-r17" }, L.at, L.ht],
+  },
+  "como-elegir-neumaticos-guia-completa": {
+    cover: cover("alineacion"),
+    figure: figure("tallerCuatroAutos", "Con la medida, los índices y el uso claros, elegir es mucho más simple."),
+    shopIntro: "Cuando tengas tu medida:",
+    shopLinks: [L.todos, L.ofertas, { label: "Neumáticos baratos", href: "/neumaticos-baratos" }],
+  },
   "como-guardar-neumaticos": {
     cover: cover("fachada"),
     figure: figure("descarga", "Las cubiertas nuevas se guardan lejos del sol y de fuentes de calor."),

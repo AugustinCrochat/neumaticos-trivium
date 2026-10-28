@@ -159,6 +159,24 @@ export const SERVICES: Service[] = [
 // actual. Las más útiles para alguien que está por comprar van arriba.
 const BLOG_POSTS_BASE: BlogPost[] = [
   {
+    id: "70",
+    title: "Cómo elegir neumáticos: la guía completa para comprar bien",
+    excerpt: "Los 7 pasos para elegir las cubiertas de tu auto o camioneta: medida, carga y velocidad, tipo de uso, marca, fecha de fabricación y cuántos cambiar.",
+    imageUrl: "",
+    date: "2026-11-04",
+    slug: "como-elegir-neumaticos-guia-completa",
+    category: "Guías",
+  },
+  {
+    id: "69",
+    title: "Neumáticos 265/65 R17: qué autos la usan, equivalencias y cómo elegir",
+    excerpt: "Medida, diámetro total, los 11 modelos de nuestra base que la llevan y qué otras medidas se pueden usar sin tocar el velocímetro.",
+    imageUrl: "",
+    date: "2026-11-02",
+    slug: "neumaticos-265-65-r17-autos-que-la-usan",
+    category: "Medidas",
+  },
+  {
     id: "61",
     title: "Neumáticos 205/55 R16: qué autos la usan, equivalencias y cómo elegir",
     excerpt: "Medida, diámetro total, los 42 modelos de nuestra base que la llevan y qué otras medidas se pueden usar sin tocar el velocímetro.",
