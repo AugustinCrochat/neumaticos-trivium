@@ -64,3 +64,18 @@ export const AHORRO: { grupo: string; notas: { slug: string; title: string }[] }
     ],
   },
 ];
+
+/**
+ * Clúster "medidas de neumáticos": una nota por medida popular con los autos
+ * que la usan, equivalencias y cómo elegir. Ver MedidasLinks.
+ */
+export const MEDIDAS: { slug: string; size: string }[] = [
+  { slug: "neumaticos-205-55-r16-autos-que-la-usan", size: "205/55 R16" },
+  { slug: "neumaticos-185-65-r15-autos-que-la-usan", size: "185/65 R15" },
+  { slug: "neumaticos-175-70-r14-autos-que-la-usan", size: "175/70 R14" },
+  { slug: "neumaticos-195-55-r16-autos-que-la-usan", size: "195/55 R16" },
+  { slug: "neumaticos-205-60-r16-autos-que-la-usan", size: "205/60 R16" },
+  { slug: "neumaticos-175-65-r14-autos-que-la-usan", size: "175/65 R14" },
+  { slug: "neumaticos-195-65-r15-autos-que-la-usan", size: "195/65 R15" },
+  { slug: "neumaticos-185-60-r15-autos-que-la-usan", size: "185/60 R15" },
+];
