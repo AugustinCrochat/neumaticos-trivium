@@ -33,6 +33,9 @@ import { ProductNameWithHighlightedSize } from "@/components/ui/ProductNameWithH
 import { ProductImageGallery } from "@/components/ui/ProductImageGallery";
 import { ProductPageClient } from "./ProductPageClient";
 import { CompatibilidadVehiculo } from "./CompatibilidadVehiculo";
+import { ModelosCompatibles, type ModeloCompatible } from "./ModelosCompatibles";
+import { vehicleSlug } from "@/lib/vehicles";
+import { marcaSlug } from "@/lib/marcas-autos";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -220,6 +223,19 @@ export default async function ProductPage({ params }: Props) {
   const loadKg = product.loadIndex ? LOAD_INDEX_KG[product.loadIndex] : undefined;
   const loadDualKg = product.loadIndexDual ? LOAD_INDEX_KG[product.loadIndexDual] : undefined;
   const vehiculos = vehiclesUsingSize(product.size);
+  // Un modelo con varias versiones/generaciones en esta medida es un solo ítem.
+  const modelosCompatibles: ModeloCompatible[] = [];
+  for (const v of vehiculos) {
+    const href = `/vehiculos/${vehicleSlug(v.brand, v.model)}`;
+    const existente = modelosCompatibles.find((m) => m.href === href);
+    const full = [v.generation, v.years, v.version].filter(Boolean).join(" · ");
+    if (existente) {
+      if (v.years && !existente.detail.split(", ").includes(v.years)) existente.detail = [existente.detail, v.years].filter(Boolean).join(", ");
+      if (full) existente.full = [existente.full, full].filter(Boolean).join(" | ");
+    } else {
+      modelosCompatibles.push({ brand: v.brand, model: v.model, detail: v.years ?? "", full, href, brandHref: `/vehiculos/marca/${marcaSlug(v.brand)}` });
+    }
+  }
   // Mismo criterio que los listados: el más barato con stock de su medida y tipo.
   const peers = peersByGroup(productos).get(product.id) ?? [];
 
@@ -527,23 +543,7 @@ export default async function ProductPage({ params }: Props) {
             </Link>
           </div>
 
-          <ul className="flex flex-wrap gap-2">
-            {vehiculos.map((v) => (
-              <li
-                key={`${v.brand}-${v.model}-${v.generation ?? ""}-${v.version ?? ""}`}
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-200 bg-slate-50 text-sm"
-              >
-                <span className="font-bold text-navy-900">
-                  {v.brand} {v.model}
-                </span>
-                {(v.generation || v.version) && (
-                  <span className="text-slate-500 font-normal text-xs">
-                    ({[v.generation, v.years && `${v.years}`, v.version].filter(Boolean).join(" · ")})
-                  </span>
-                )}
-              </li>
-            ))}
-          </ul>
+          <ModelosCompatibles items={modelosCompatibles} />
           <p className="text-xs text-slate-400 mt-4 leading-relaxed">
             * Te recomendamos verificar la medida grabada en el lateral de tus neumáticos actuales o en el parante de la puerta antes de realizar la compra.
           </p>
