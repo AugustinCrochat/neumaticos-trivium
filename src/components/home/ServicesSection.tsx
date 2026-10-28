@@ -283,15 +283,15 @@ export async function ServicesSection() {
                 className="group relative bg-gradient-to-br from-navy-950 to-black rounded-2xl text-white overflow-hidden"
               >
                 {PHOTOS[service.id] && (
-                  <div className="relative aspect-[4/3] w-full">
+                  <Link href={`/servicios/${service.id}`} className="relative block aspect-[4/3] w-full" tabIndex={-1}>
                     <Image
                       src={PHOTOS[service.id]}
                       alt={`${service.title} en el taller de Neumáticos Trivium`}
                       fill
-                      className="object-cover"
+                      className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
                       sizes="(max-width: 768px) 100vw, 33vw"
                     />
-                  </div>
+                  </Link>
                 )}
 
                 <div className="relative p-7">
@@ -316,6 +316,13 @@ export async function ServicesSection() {
                       </li>
                     ))}
                   </ul>
+                  <Link
+                    href={`/servicios/${service.id}`}
+                    className="mt-6 inline-flex items-center gap-2 rounded-xl bg-orange-500 px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-orange-600"
+                  >
+                    Ver precio y detalle
+                    <span aria-hidden="true">→</span>
+                  </Link>
                   </div>
                 </div>
               </div>
@@ -346,7 +353,7 @@ export async function ServicesSection() {
                   más barato que los servicios sueltos.
                 </p>
               </div>
-              <div className="flex gap-6 md:pl-6 md:border-l md:border-orange-200 shrink-0">
+              <div className="flex flex-wrap items-center gap-6 md:pl-6 md:border-l md:border-orange-200 shrink-0">
                 {combo.auto && (
                   <div>
                     <span className="block text-[10px] font-bold uppercase tracking-widest text-orange-500">Auto</span>
@@ -359,6 +366,12 @@ export async function ServicesSection() {
                     <span className="text-2xl font-black text-navy-900">{formatPrecio(combo.camioneta.precio)}</span>
                   </div>
                 )}
+                <Link
+                  href="/servicios/alineacion"
+                  className="rounded-xl bg-navy-900 px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-black"
+                >
+                  Ver el combo →
+                </Link>
               </div>
             </div>
           </div>
