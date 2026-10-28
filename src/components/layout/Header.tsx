@@ -40,27 +40,33 @@ export function Header() {
   const [moreOpen, setMoreOpen] = useState(false);
   const moreRef = useRef<HTMLDivElement | null>(null);
   const [mobileMoreOpen, setMobileMoreOpen] = useState(false);
-  // Franja roja: los miércoles y sábados alterna entre "colocación sin cargo"
-  // y "hoy 3 cuotas sin interés". Arranca en false y se corrige al montar
-  // (el sitio es estático: calcularlo en el build lo congelaría).
+  // Franja roja: los miércoles y sábados alterna sola (solo en pantallas
+  // grandes) entre "colocación sin cargo" y "hoy 3 cuotas sin interés". En
+  // celular queda fija en el mensaje de cuotas, sin alternar ni flechas.
+  // Arranca en false y se corrige al montar (el sitio es estático: calcularlo
+  // en el build lo congelaría).
   const [promoHoy, setPromoHoy] = useState(false);
+  const [esDesktop, setEsDesktop] = useState(false);
   const [slide, setSlide] = useState(0);
-  const [rotacionAuto, setRotacionAuto] = useState(true);
   useEffect(() => {
     const update = () => setPromoHoy(isVisaMasterPromoDay());
     update();
   }, []);
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    const update = () => setEsDesktop(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
   const haySlides = promoHoy && !selectedBranch.apertura;
   useEffect(() => {
-    if (!haySlides || !rotacionAuto || compact) return;
+    if (!haySlides || !esDesktop || compact) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const t = setInterval(() => setSlide((n) => (n + 1) % 2), 5000);
     return () => clearInterval(t);
-  }, [haySlides, rotacionAuto, compact]);
-  const cambiarSlide = () => {
-    setRotacionAuto(false);
-    setSlide((n) => (n + 1) % 2);
-  };
+  }, [haySlides, esDesktop, compact]);
+  const slideActivo = haySlides ? (esDesktop ? slide : 1) : 0;
   useEffect(() => {
     if (!moreOpen) return;
     const close = (e: MouseEvent | KeyboardEvent) => {
@@ -93,14 +99,14 @@ export function Header() {
       <div
         aria-hidden={compact}
         className={`relative overflow-hidden transition-all duration-200 ${compact ? "h-0" : "h-7"} ${
-          haySlides && slide === 1 ? "bg-white text-navy-900" : "bg-[#ff1e00] text-white"
+          slideActivo === 1 ? "bg-white text-navy-900" : "bg-[#ff1e00] text-white"
         }`}
       >
-        {haySlides && slide === 1 ? (
+        {slideActivo === 1 ? (
           <Link
             href="/ofertas"
             tabIndex={compact ? -1 : 0}
-            className="flex h-7 items-center justify-center gap-2 px-9 text-center text-[11px] font-bold hover:bg-slate-100 md:text-xs"
+            className="flex h-7 items-center justify-center gap-2 px-4 text-center text-[11px] font-bold hover:bg-slate-100 md:text-xs"
           >
             <span>
               Hoy 3 cuotas sin interés<span className="hidden md:inline"> con Visa o Mastercard</span>
@@ -115,32 +121,12 @@ export function Header() {
           <Link
             href="/servicios"
             tabIndex={compact ? -1 : 0}
-            className="flex h-7 items-center justify-center px-9 text-center text-[11px] font-bold hover:bg-[#cc1800] md:text-xs"
+            className="flex h-7 items-center justify-center px-4 text-center text-[11px] font-bold hover:bg-[#cc1800] md:text-xs"
           >
             {selectedBranch.apertura
               ? `Neumáticos Trivium ${selectedBranch.shortName} abre ${selectedBranch.apertura}`
               : "Colocación y válvulas sin cargo en nuestros locales"}
           </Link>
-        )}
-        {haySlides && !compact && (
-          <>
-            <button
-              type="button"
-              onClick={cambiarSlide}
-              aria-label="Mensaje anterior"
-              className="absolute inset-y-0 left-0 flex w-8 items-center justify-center text-sm font-black opacity-70 hover:opacity-100"
-            >
-              ‹
-            </button>
-            <button
-              type="button"
-              onClick={cambiarSlide}
-              aria-label="Mensaje siguiente"
-              className="absolute inset-y-0 right-0 flex w-8 items-center justify-center text-sm font-black opacity-70 hover:opacity-100"
-            >
-              ›
-            </button>
-          </>
         )}
       </div>
 
