@@ -84,6 +84,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...MARCAS_PREMIUM.map((m) => url(`/alternativas/${m.slug}`, 0.7, "weekly")),
     ...OTRAS_MARCAS.map((m) => url(`/marcas-de-neumaticos-chinos/${m.slug}`, 0.7, "weekly")),
     url("/vehiculos", 0.8, "weekly"),
+    url("/vehiculos/todos", 0.7, "weekly"),
     ...[...new Set(POPULAR_VEHICLES.map((v) => v.brand))].map((b) => url(`/vehiculos/marca/${marcaSlug(b)}`, 0.7, "weekly")),
     ...POPULAR_VEHICLES.map((v) => {
       const slug = vehicleSlug(v.brand, v.model);

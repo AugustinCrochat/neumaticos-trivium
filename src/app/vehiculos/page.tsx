@@ -43,7 +43,12 @@ export default function VehiculosIndexPage() {
             models: porMarca.get(marca)!.map((v) => ({ label: `${v.brand} ${v.model}`, href: `/vehiculos/${vehicleSlug(v.brand, v.model)}` })),
           }))}
         />
-        <h2 className="mb-6 mt-12 text-2xl font-black text-navy-900">Todos los modelos por marca</h2>
+        <h2 className="mb-2 mt-12 text-2xl font-black text-navy-900">Todos los modelos por marca</h2>
+        <p className="mb-6 text-slate-600">
+          <Link href="/vehiculos/todos" className="font-bold text-orange-600 hover:underline">
+            Ver el catálogo completo con fotos y medidas →
+          </Link>
+        </p>
         <div className="space-y-8">
           {marcas.map((marca) => (
             <section key={marca}>
