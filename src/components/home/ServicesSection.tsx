@@ -367,7 +367,7 @@ export async function ServicesSection() {
                   </div>
                 )}
                 <Link
-                  href="/servicios/alineacion"
+                  href="/servicios/combo-alineado-y-balanceado"
                   className="rounded-xl bg-navy-900 px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-black"
                 >
                   Ver el combo →

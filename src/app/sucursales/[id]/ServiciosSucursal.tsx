@@ -81,7 +81,7 @@ export async function ServiciosSucursal({ branch }: { branch: Branch }) {
 
       {(combo.auto || combo.camioneta) && (
         <Link
-          href="/servicios/alineacion"
+          href="/servicios/combo-alineado-y-balanceado"
           className="mt-4 flex flex-col gap-2 rounded-xl border border-orange-200 bg-orange-50 p-4 transition-colors hover:border-orange-300 sm:flex-row sm:items-center sm:justify-between"
         >
           <span>

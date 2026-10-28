@@ -2,6 +2,7 @@
 
 import { useState, type ReactNode } from "react";
 import Image from "next/image";
+import Link from "@/components/ui/Link";
 import { useBranch } from "@/contexts/branch-context";
 import { SITE_URL } from "@/lib/config";
 import { formatPrecio, nombreServicio } from "@/lib/servicios";
@@ -52,7 +53,7 @@ export function ServicioFicha({
   const foto = fotos[fotoActiva];
   const comboVariante = combo.find((c) => c.label === variante?.label) ?? combo[0];
   const comboWaText = encodeURIComponent(
-    `Hola, quiero el combo completo de ${arguello ? "alineado y balanceado" : "alineación y balanceo"}${comboVariante ? ` (${comboVariante.label.toLowerCase()})` : ""}\n${SITE_URL}/servicios/alineacion`
+    `Hola, quiero el combo completo de ${arguello ? "alineado y balanceado" : "alineación y balanceo"}${comboVariante ? ` (${comboVariante.label.toLowerCase()})` : ""}\n${SITE_URL}/servicios/combo-alineado-y-balanceado`
   );
   const waText = encodeURIComponent(
     `Hola, quiero consultar por el servicio de ${nombre.toLowerCase()}${variante ? ` (${variante.label.toLowerCase()})` : ""}\n${SITE_URL}/servicios/${id}`
@@ -169,7 +170,10 @@ export function ServicioFicha({
                   Combo completo: {arguello ? "alineado + 4 balanceados" : "alineación + 4 balanceos"} con rotación
                 </p>
                 <p className="mt-1 text-sm leading-snug text-slate-600">
-                  Las cuatro ruedas listas en la misma visita y más barato que los servicios sueltos.
+                  Las cuatro ruedas listas en la misma visita y más barato que los servicios sueltos.{" "}
+                  <Link href="/servicios/combo-alineado-y-balanceado" className="font-bold text-orange-700 underline underline-offset-2">
+                    Ver el combo
+                  </Link>
                 </p>
                 <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
                   <span className="text-2xl font-black text-navy-900">

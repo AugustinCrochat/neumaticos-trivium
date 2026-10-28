@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL, BRANCHES, DEFAULT_BRANCH_ID, TIRE_RIMS } from "@/lib/config";
 import { BRANDS, SERVICES, BLOG_POSTS } from "@/lib/data";
-import { EXTRA_SERVICES } from "@/lib/servicios-seo";
+import { COMBO_SERVICE, EXTRA_SERVICES } from "@/lib/servicios-seo";
 import { LOCALIDADES } from "@/lib/localidades";
 import { OTRAS_MARCAS } from "@/lib/marcas-chinas";
 import { TUERCA_FOTO_LLAVES, TUERCA_FOTO_TALLER, tuercaCardPath } from "@/lib/tuercas-fotos";
@@ -151,12 +151,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const SERVICE_IMAGES: Record<string, string[]> = {
     alineacion: ["/images/servicios/alineacion.webp", "/images/local/tecnicos-alineando-auto-elevador-gomeria-trivium-cordoba.webp", "/images/local/alineadora-geoliner-630-taller-neumaticos-trivium-cordoba.webp", "/images/local/alineadora-3d-hofmann-geoliner-630-con-target-en-la-rueda-trivium-cordoba.webp", "/images/local/tecnico-colocando-target-de-alineacion-3d-en-auto-trivium-cordoba.webp", "/images/local/alineacion-3d-de-auto-rojo-target-en-la-rueda-trivium-cordoba.webp"],
     balanceo: ["/images/servicios/balanceo.webp", "/images/local/tecnico-balanceando-rueda-balanceadora-trivium-cordoba.webp", "/images/local/balanceadora-hofmann-geodyna-7800p-balanceando-rueda-de-camioneta-trivium-cordoba.webp"],
+    "combo-alineado-y-balanceado": ["/images/servicios/alineacion.webp", "/images/local/alineadora-3d-hofmann-geoliner-630-con-target-en-la-rueda-trivium-cordoba.webp", "/images/local/balanceadora-hofmann-geodyna-7800p-balanceando-rueda-de-camioneta-trivium-cordoba.webp"],
     montaje: ["/images/servicios/arme-desarme.webp", "/images/local/cambio-de-cubiertas-en-camioneta-pickup-con-balanceadora-hofmann-trivium-cordoba.webp"],
     "reparacion-de-pinchaduras": ["/images/local/taxi-en-el-taller-neumaticos-trivium-cordoba.webp"],
     "tuercas-de-seguridad": ["/images/local/tuerca-antirrobo-de-seguridad-en-llanta-de-aleacion-trivium-cordoba.webp", "/images/local/cubierta-perfil-bajo-grenlander-colocada-neumaticos-trivium.webp"],
     "rotacion-de-ruedas": ["/images/local/rotacion-de-neumaticos-pirelli-rueda-desmontada-trivium.webp"],
   };
-  const servicios: Entry[] = [...SERVICES, ...EXTRA_SERVICES].map((s) => url(`/servicios/${s.id}`, 0.7, "monthly", undefined, SERVICE_IMAGES[s.id]?.map(abs)));
+  const servicios: Entry[] = [...SERVICES, COMBO_SERVICE, ...EXTRA_SERVICES].map((s) => url(`/servicios/${s.id}`, 0.7, "monthly", undefined, SERVICE_IMAGES[s.id]?.map(abs)));
 
   // Imágenes propias que queremos que se descubran en la búsqueda de imágenes.
   const POST_IMAGES: Record<string, string[]> = {

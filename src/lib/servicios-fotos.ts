@@ -30,6 +30,10 @@ const F = {
 } satisfies Record<string, FotoServicio>;
 
 export const SERVICIOS_FOTOS: Record<string, { principal: FotoServicio; galeria: FotoServicio[] }> = {
+  "combo-alineado-y-balanceado": {
+    principal: { src: "/images/servicios/alineacion.webp", alt: "Alineado de un auto en el taller de Neumáticos Trivium, Córdoba" },
+    galeria: [F.alineadora3d, F.balanceandoCamioneta, F.tallerCuatroAutos],
+  },
   alineacion: {
     principal: { src: "/images/servicios/alineacion.webp", alt: "Alineación de un auto en el taller de Neumáticos Trivium, Córdoba" },
     galeria: [F.alineadora3d, F.colocandoTarget, F.autoRojoTarget],

@@ -63,10 +63,86 @@ export const TUERCAS_SERVICE: Service = {
   ],
 };
 
+/**
+ * Combo de alineado + balanceado de las cuatro ruedas con rotación. En el POS
+ * es su propio grupo de precios ("combo", auto y camioneta), así que tiene
+ * ficha propia con precio, fuera del listado de tres tarjetas.
+ */
+export const COMBO_ID = "combo-alineado-y-balanceado";
+export const COMBO_SERVICE: Service = {
+  id: COMBO_ID,
+  title: "Combo alineado y balanceado",
+  description:
+    "Alineado computarizado 3D más balanceado de las cuatro ruedas con rotación incluida, en la misma visita y a menor precio que por separado.",
+  icon: "alignment",
+  features: [
+    "Alineado computarizado 3D",
+    "Balanceado dinámico de las cuatro ruedas",
+    "Rotación de las ruedas incluida",
+    "Control de presión sin cargo",
+  ],
+};
+
 /** Páginas de servicio fuera del listado y sin precio propio en el POS. */
 export const EXTRA_SERVICES: Service[] = [ROTACION_SERVICE, PINCHADURAS_SERVICE, TUERCAS_SERVICE];
 
 export const SERVICIOS_SEO: Record<string, ServicioSeo> = {
+  [COMBO_ID]: {
+    title: "Combo de alineado y balanceado en Córdoba",
+    metaDescription:
+      "Combo de alineado 3D y balanceado de las cuatro ruedas con rotación incluida en Córdoba (Argüello): todo en una visita y a menor precio que por separado. Sin turno, por orden de llegada.",
+    h1: "Combo de alineado y balanceado en Córdoba",
+    intro: [
+      "El combo junta lo que casi siempre hace falta al mismo tiempo: alinear el auto y balancear las cuatro ruedas, con la rotación incluida. Es lo que más conviene hacer cuando se cambian las cubiertas o después de un golpe fuerte, y sale menos que contratar cada servicio por separado.",
+      "Lo hacemos en nuestra gomería de Argüello, Córdoba, con alineadora 3D y balanceadora computarizada. Atendemos por orden de llegada, sin turno.",
+    ],
+    secciones: [
+      {
+        titulo: "Qué incluye",
+        items: [
+          "Alineado computarizado 3D: corrección de camber, caster y convergencia.",
+          "Balanceado dinámico de las cuatro ruedas.",
+          "Rotación de las ruedas.",
+          "Control de presión sin cargo.",
+        ],
+      },
+      {
+        titulo: "Cuándo conviene el combo",
+        items: [
+          "Al cambiar el juego de neumáticos, para que los nuevos arranquen alineados y balanceados.",
+          "Si el auto tira hacia un lado y además el volante vibra.",
+          "Después de un golpe fuerte contra un pozo o un cordón.",
+          "Antes de un viaje largo o cuando hace mucho que no hacés ninguno de los dos.",
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: "¿Qué incluye el combo de alineado y balanceado?",
+        answer:
+          "Alineado computarizado 3D, balanceado de las cuatro ruedas y la rotación, en la misma visita. El precio publicado en esta página es el del combo completo, según sea auto o camioneta.",
+      },
+      {
+        question: "¿Es más barato que hacerlos por separado?",
+        answer:
+          "Sí: el combo cuesta menos que sumar el alineado y los cuatro balanceados por separado. Podés comparar el precio del combo con los de la ficha de alineado y de balanceado.",
+      },
+      {
+        question: "¿Cuánto tarda?",
+        answer:
+          "Depende de la cola del día. Atendemos por orden de llegada, y podés consultar por WhatsApp el tiempo de espera estimado antes de venir.",
+      },
+      {
+        question: "¿Si compro los neumáticos conviene hacer el combo?",
+        answer:
+          "Sí. La colocación y el cambio de válvulas no tienen cargo si comprás las cubiertas en el local, y el combo deja el juego nuevo alineado y balanceado en la misma visita.",
+      },
+    ],
+    relacionados: [
+      ["alineacion-y-balanceo", "Alineado y balanceado: qué es cada cosa y cada cuánto se hacen"],
+      ["sintomas-alineacion-balanceo-o-rotacion", "Tu auto vibra o tira: ¿alineado, balanceado o rotación?"],
+    ],
+  },
   alineacion: {
     title: "Alineación computarizada 3D en Córdoba",
     metaDescription:

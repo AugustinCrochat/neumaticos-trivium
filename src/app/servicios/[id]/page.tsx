@@ -8,7 +8,7 @@ import { getServiciosPrecios } from "@/lib/pos-api";
 import { getSelectedBranchSlug } from "@/lib/branch-server";
 import { splitAutoCamioneta } from "@/lib/servicios";
 import { FaqSection } from "@/components/seo/FaqSection";
-import { EXTRA_SERVICES, SERVICIOS_SEO } from "@/lib/servicios-seo";
+import { COMBO_ID, COMBO_SERVICE, EXTRA_SERVICES, SERVICIOS_SEO } from "@/lib/servicios-seo";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { ServicioFicha } from "./ServicioFicha";
 import { EquipoHofmann } from "@/components/blog/EquipoHofmann";
@@ -20,10 +20,10 @@ type Props = { params: Promise<{ id: string }> };
 
 // La rotación de ruedas tiene página propia (se busca aparte) pero no figura en
 // el listado de servicios: comparte grupo de precios con "Balanceo y Rotación".
-const findService = (id: string) => [...SERVICES, ...EXTRA_SERVICES].find((s) => s.id === id);
+const findService = (id: string) => [...SERVICES, COMBO_SERVICE, ...EXTRA_SERVICES].find((s) => s.id === id);
 
 export async function generateStaticParams() {
-  return [...SERVICES, ...EXTRA_SERVICES].map((s) => ({ id: s.id }));
+  return [...SERVICES, COMBO_SERVICE, ...EXTRA_SERVICES].map((s) => ({ id: s.id }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -45,11 +45,12 @@ export default async function ServicioPage({ params }: Props) {
   const seo = SERVICIOS_SEO[service.id];
 
   const precios =
-    EXTRA_SERVICES.some((e) => e.id === service.id) ? [] : await getServiciosPrecios(id, await getSelectedBranchSlug());
+    EXTRA_SERVICES.some((e) => e.id === service.id) ? [] : await getServiciosPrecios(id === COMBO_ID ? "combo" : id, await getSelectedBranchSlug());
   const { auto, camioneta } = splitAutoCamioneta(precios);
   const fotos = SERVICIOS_FOTOS[service.id];
   // Alineado y balanceado ofrecen el combo completo y las cubiertas.
   const ofreceCombo = service.id === "alineacion" || service.id === "balanceo";
+  const ofreceNeumaticos = ofreceCombo || service.id === COMBO_ID;
   const comboPrecios = splitAutoCamioneta(ofreceCombo ? await getServiciosPrecios("combo", await getSelectedBranchSlug()) : []);
 
   return (
@@ -92,7 +93,7 @@ export default async function ServicioPage({ params }: Props) {
       />
 
       <div className="max-w-3xl mx-auto px-4 pb-12 md:pb-16">
-        {ofreceCombo && <UpsellNeumaticos />}
+        {ofreceNeumaticos && <UpsellNeumaticos />}
         {service.id === "tuercas-de-seguridad" && (
           <Link
             href="/tuercas-antirrobo"
@@ -128,7 +129,7 @@ export default async function ServicioPage({ params }: Props) {
               </section>
             ))}
             <FaqSection faqs={seo.faqs} />
-            {ofreceCombo && <EquipoHofmann />}
+            {ofreceNeumaticos && <EquipoHofmann />}
             <section>
               <h2 className="text-xl font-black text-navy-900 mb-3">Más información</h2>
               <ul className="space-y-2">
@@ -139,7 +140,7 @@ export default async function ServicioPage({ params }: Props) {
                     </Link>
                   </li>
                 ))}
-                {[...SERVICES, ...EXTRA_SERVICES]
+                {[...SERVICES, COMBO_SERVICE, ...EXTRA_SERVICES]
                   .filter((other) => other.id !== service.id)
                   .map((other) => (
                     <li key={other.id}>
