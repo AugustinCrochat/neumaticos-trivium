@@ -71,7 +71,7 @@ export function AccessoryConsult({ accessory }: { accessory: Accessory }) {
             <p className="font-black text-navy-900 text-base leading-snug">Colocación en {selectedBranch.shortName} sin cargo</p>
             {accessory.enStock ? (
               <p className={`text-sm font-bold mt-0.5 ${pickup && !pickup.sameDay ? "text-amber-600" : "text-emerald-700"}`}>
-                {pickup?.label ?? "Retiro el mismo día"}
+                {pickup?.label ?? "Retiro el mismo día"} · <span className="font-semibold">atendemos por orden de llegada</span>
               </p>
             ) : (
               <p className="text-sm font-bold text-red-600 mt-0.5">Sin stock para retiro</p>

@@ -113,7 +113,7 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
                   pickup && !pickup.sameDay ? "text-amber-600" : "text-emerald-700"
                 }`}
               >
-                {pickup?.label ?? "Retiro el mismo día"}
+                {pickup?.label ?? "Retiro el mismo día"} · <span className="font-semibold">atendemos por orden de llegada</span>
               </p>
             ) : (
               <p className="text-sm font-bold text-red-600 mt-0.5">Sin stock para retiro</p>
