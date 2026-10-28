@@ -4,7 +4,7 @@ import { useState, type ReactNode } from "react";
 import Image from "next/image";
 import { useBranch } from "@/contexts/branch-context";
 import { SITE_URL } from "@/lib/config";
-import { formatPrecio } from "@/lib/servicios";
+import { formatPrecio, nombreServicio } from "@/lib/servicios";
 import { BranchStatusBadge } from "@/app/sucursales/[id]/BranchStatusBadge";
 import { PaymentMethodsSection } from "@/components/ui/PaymentMethodsSection";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
@@ -29,6 +29,7 @@ export function ServicioFicha({
   priceNote,
   features,
   volver,
+  combo = [],
 }: {
   id: string;
   title: string;
@@ -39,14 +40,22 @@ export function ServicioFicha({
   priceNote?: string;
   features: string[];
   volver: ReactNode;
+  /** Precios del combo completo (alineado + balanceado), si hay que ofrecerlo como upsell. */
+  combo?: Variante[];
 }) {
   const { selectedBranch } = useBranch();
+  const arguello = selectedBranch.id === "arguello";
+  const nombre = nombreServicio(id, title, selectedBranch.id, true);
   const [fotoActiva, setFotoActiva] = useState(0);
   const [varianteActiva, setVarianteActiva] = useState(0);
   const variante = variantes[varianteActiva];
   const foto = fotos[fotoActiva];
+  const comboVariante = combo.find((c) => c.label === variante?.label) ?? combo[0];
+  const comboWaText = encodeURIComponent(
+    `Hola, quiero el combo completo de ${arguello ? "alineado y balanceado" : "alineación y balanceo"}${comboVariante ? ` (${comboVariante.label.toLowerCase()})` : ""}\n${SITE_URL}/servicios/alineacion`
+  );
   const waText = encodeURIComponent(
-    `Hola, quiero consultar por el servicio de ${title.toLowerCase()}${variante ? ` (${variante.label.toLowerCase()})` : ""}\n${SITE_URL}/servicios/${id}`
+    `Hola, quiero consultar por el servicio de ${nombre.toLowerCase()}${variante ? ` (${variante.label.toLowerCase()})` : ""}\n${SITE_URL}/servicios/${id}`
   );
 
   return (
@@ -85,7 +94,7 @@ export function ServicioFicha({
           <div className="flex flex-col gap-4">
             <div>
               <p className="text-xs font-black uppercase tracking-widest text-orange-500">Servicio de gomería</p>
-              <h1 className="mt-1 text-3xl font-black leading-tight text-navy-900 md:text-4xl">{title}</h1>
+              <h1 className="mt-1 text-3xl font-black leading-tight text-navy-900 md:text-4xl">{nombre}</h1>
               <p className="mt-3 leading-relaxed text-slate-600">{description}</p>
             </div>
 
@@ -152,6 +161,30 @@ export function ServicioFicha({
                 Cómo llegar
               </a>
             </div>
+
+            {comboVariante && (
+              <div className="rounded-2xl border border-orange-200 bg-orange-50 p-4">
+                <p className="text-xs font-black uppercase tracking-widest text-orange-600">Mejor opción</p>
+                <p className="mt-1 text-lg font-black leading-tight text-navy-900">
+                  Combo completo: {arguello ? "alineado + 4 balanceados" : "alineación + 4 balanceos"} con rotación
+                </p>
+                <p className="mt-1 text-sm leading-snug text-slate-600">
+                  Las cuatro ruedas listas en la misma visita y más barato que los servicios sueltos.
+                </p>
+                <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
+                  <span className="text-2xl font-black text-navy-900">
+                    {formatPrecio(comboVariante.precio)}
+                    <span className="ml-2 text-xs font-bold text-slate-500">{comboVariante.label.toLowerCase()}</span>
+                  </span>
+                  <WhatsAppLink
+                    href={`https://wa.me/${selectedBranch.whatsapp}?text=${comboWaText}`}
+                    className="rounded-xl bg-navy-900 px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-black"
+                  >
+                    Quiero el combo
+                  </WhatsAppLink>
+                </div>
+              </div>
+            )}
 
             <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm">
               <p className="font-black text-navy-900">Te atendemos en {selectedBranch.shortName}</p>

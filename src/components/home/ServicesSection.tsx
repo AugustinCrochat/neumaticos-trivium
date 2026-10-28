@@ -4,6 +4,7 @@ import Image from "next/image";
 import { getServiciosPrecios } from "@/lib/pos-api";
 import { getSelectedBranchSlug } from "@/lib/branch-server";
 import { formatPrecio, splitAutoCamioneta } from "@/lib/servicios";
+import { PorSucursal, ServicioNombre } from "@/components/ui/ServicioNombre";
 
 // Fotos del taller real, todas recortadas a la misma proporción (4:3) para
 // que las tarjetas queden parejas.
@@ -298,7 +299,7 @@ export async function ServicesSection() {
                   <div className="text-orange-500 mb-4">{ICONS[service.icon]}</div>
                   <h3 className="text-xl font-bold mb-3">
                     <Link href={`/servicios/${service.id}`} className="hover:text-orange-400 transition-colors">
-                      {service.title}
+                      <ServicioNombre id={service.id} fallback={service.title} />
                     </Link>
                   </h3>
                   <p className="text-slate-300 text-sm leading-relaxed mb-5">
@@ -335,7 +336,9 @@ export async function ServicesSection() {
               </div>
               <div className="flex-1">
                 <h3 className="text-xl font-black text-navy-900 mb-1.5">
-                  Combo: alineación + 4 balanceos con rotación incluida
+                  Combo:{" "}
+                  <PorSucursal arguello="alineado + 4 balanceados" otras="alineación + 4 balanceos" /> con
+                  rotación incluida
                 </h3>
                 <p className="text-slate-600 text-sm leading-relaxed">
                   Las cuatro ruedas alineadas y balanceadas en la misma visita, con rotación

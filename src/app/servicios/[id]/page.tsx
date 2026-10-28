@@ -11,6 +11,7 @@ import { FaqSection } from "@/components/seo/FaqSection";
 import { EXTRA_SERVICES, SERVICIOS_SEO } from "@/lib/servicios-seo";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { ServicioFicha } from "./ServicioFicha";
+import { UpsellNeumaticos } from "@/components/servicios/UpsellNeumaticos";
 import { SERVICIOS_FOTOS } from "@/lib/servicios-fotos";
 import { breadcrumbJsonLd, canonical, serviceJsonLd } from "@/lib/seo";
 
@@ -46,6 +47,9 @@ export default async function ServicioPage({ params }: Props) {
     EXTRA_SERVICES.some((e) => e.id === service.id) ? [] : await getServiciosPrecios(id, await getSelectedBranchSlug());
   const { auto, camioneta } = splitAutoCamioneta(precios);
   const fotos = SERVICIOS_FOTOS[service.id];
+  // Alineado y balanceado ofrecen el combo completo y las cubiertas.
+  const ofreceCombo = service.id === "alineacion" || service.id === "balanceo";
+  const comboPrecios = splitAutoCamioneta(ofreceCombo ? await getServiciosPrecios("combo", await getSelectedBranchSlug()) : []);
 
   return (
     <div className="min-h-screen bg-white">
@@ -68,6 +72,10 @@ export default async function ServicioPage({ params }: Props) {
           ...(camioneta ? [{ label: "Camioneta", precio: camioneta.precio }] : []),
         ]}
         priceNote={service.priceNote}
+        combo={[
+          ...(comboPrecios.auto ? [{ label: "Auto", precio: comboPrecios.auto.precio }] : []),
+          ...(comboPrecios.camioneta ? [{ label: "Camioneta", precio: comboPrecios.camioneta.precio }] : []),
+        ]}
         features={service.features}
         volver={
           <Link
@@ -83,6 +91,7 @@ export default async function ServicioPage({ params }: Props) {
       />
 
       <div className="max-w-3xl mx-auto px-4 pb-12 md:pb-16">
+        {ofreceCombo && <UpsellNeumaticos />}
         {seo && (
           <div className="mt-12 space-y-8">
             <div className="space-y-4 text-slate-700 leading-relaxed">

@@ -20,3 +20,22 @@ export function splitAutoCamioneta(precios: ServicioPrecio[]) {
   const auto = precios.find((p) => p !== camioneta && /\bauto\b/i.test(p.nombre));
   return { auto, camioneta };
 }
+
+/**
+ * En Córdoba (sucursal Argüello) el taller y la gente dicen "alineado" y
+ * "balanceado" en vez de "alineación" y "balanceo". Es solo el nombre que se
+ * muestra: los títulos SEO y las descripciones siguen con el término general.
+ */
+const NOMBRES_ARGUELLO: Record<string, string> = {
+  alineacion: "Alineado",
+  balanceo: "Balanceado y Rotación",
+};
+const H1_ARGUELLO: Record<string, string> = {
+  alineacion: "Alineado computarizado 3D en Córdoba",
+  balanceo: "Balanceado y rotación de ruedas en Córdoba",
+};
+
+export function nombreServicio(id: string, fallback: string, branchId: string, h1 = false): string {
+  if (branchId !== "arguello") return fallback;
+  return (h1 ? H1_ARGUELLO[id] : NOMBRES_ARGUELLO[id]) ?? fallback;
+}
