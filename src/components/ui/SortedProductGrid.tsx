@@ -31,8 +31,8 @@ export function SortedProductGrid({ items, className }: { items: GridItem[]; cla
   const sorted = useMemo(() => sortInStockFirst(items, (i) => i.product.id, (i) => i.product.enStock, live), [items, live]);
   return (
     <div className={className}>
-      {sorted.map((it) => (
-        <ProductCard key={it.product.id} product={it.product} peers={it.peers} isCheapest={it.isCheapest} cheapestLabel={it.cheapestLabel} />
+      {sorted.map((it, i) => (
+        <ProductCard key={it.product.id} priority={i < 2} product={it.product} peers={it.peers} isCheapest={it.isCheapest} cheapestLabel={it.cheapestLabel} />
       ))}
     </div>
   );

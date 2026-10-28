@@ -928,8 +928,8 @@ export function ShopPage({
                   </span>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  {exactResults.map(product => (
-                    <ProductCard key={product.id} product={product} isCheapest={mejoresExactos.has(product.id)} cheapestLabel={mejoresExactos.get(product.id)} peers={peersCatalogo.get(product.id)} />
+                  {exactResults.map((product, i) => (
+                    <ProductCard key={product.id} product={product} priority={i < 2} isCheapest={mejoresExactos.has(product.id)} cheapestLabel={mejoresExactos.get(product.id)} peers={peersCatalogo.get(product.id)} />
                   ))}
                 </div>
               </section>

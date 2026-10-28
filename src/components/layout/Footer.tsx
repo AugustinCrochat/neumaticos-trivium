@@ -224,7 +224,7 @@ export function Footer() {
             </p>
           </div>
           <a href={AFIP_DATA_FISCAL_QR} target="_F960AFIPInfo" rel="noopener noreferrer" className="shrink-0">
-            <img src="https://www.afip.gob.ar/images/f960/DATAWEB.jpg" alt="Data Fiscal AFIP" width={110} height={70} className="opacity-90 hover:opacity-100 transition-opacity" />
+            <img src="https://www.afip.gob.ar/images/f960/DATAWEB.jpg" alt="Data Fiscal AFIP" width={110} height={70} loading="lazy" className="opacity-90 hover:opacity-100 transition-opacity" />
           </a>
         </div>
       </div>

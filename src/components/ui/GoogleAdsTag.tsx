@@ -14,9 +14,18 @@ import { GA4_MEASUREMENT_ID, GOOGLE_ADS_ID, GOOGLE_ADS_WHATSAPP_CONVERSION_LABEL
 export function GoogleAdsTag() {
   return (
     <>
+      {/* La biblioteca de gtag (y la de GA4 que arrastra) suman ~600 KB y ~1 s de
+          hilo principal justo mientras la página se pinta. `lazyOnload` la baja
+          cuando el navegador termina de cargar. Mientras tanto gtag() encola en
+          dataLayer, y gtag_report_conversion recién se publica al cargar: un clic
+          en WhatsApp antes de eso abre el chat igual (sin contar la conversión). */}
       <Script
         src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ADS_ID}`}
-        strategy="afterInteractive"
+        strategy="lazyOnload"
+        onLoad={() => {
+          const w = window as unknown as { __reportConversion?: (url?: string) => boolean; gtag_report_conversion?: (url?: string) => boolean };
+          w.gtag_report_conversion = w.__reportConversion;
+        }}
       />
       <Script id="google-ads-gtag" strategy="afterInteractive">
         {`
@@ -58,7 +67,7 @@ export function GoogleAdsTag() {
             });
             return false;
           }
-          window.gtag_report_conversion = gtag_report_conversion;
+          window.__reportConversion = gtag_report_conversion;
         `}
       </Script>
     </>

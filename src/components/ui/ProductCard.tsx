@@ -43,6 +43,7 @@ export function ProductCard({
   cheapestLabel,
   peers,
   note,
+  priority = false,
 }: {
   product: TireProduct;
   imageFooter?: ReactNode;
@@ -52,6 +53,8 @@ export function ProductCard({
   /** Productos de su mismo grupo: con esto el tag se recalcula con stock y precio vivos. */
   peers?: PricePeer[];
   note?: ReactNode;
+  /** Imagen con carga prioritaria: para las primeras tarjetas de un listado (son el LCP). */
+  priority?: boolean;
 }) {
   const hasImage =
     !!product.imageUrl && product.imageUrl !== "/images/tire-placeholder.webp";
@@ -103,6 +106,7 @@ export function ProductCard({
                 fill
                 className="object-contain group-hover:scale-105 transition-transform duration-300"
                 sizes="(max-width: 768px) 100vw, 33vw"
+                priority={priority}
               />
             </div>
           ) : (
