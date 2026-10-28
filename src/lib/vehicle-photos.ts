@@ -9,6 +9,7 @@ import { SITE_URL } from "./config";
  * filesystem; al sumar una foto nueva, agregar su slug acá.
  */
 export const VEHICLE_PHOTOS = new Set([
+  "chevrolet-corsa",
   "chevrolet-montana",
   "chevrolet-onix",
   "chevrolet-onix-plus",
@@ -42,9 +43,11 @@ export const VEHICLE_PHOTOS = new Set([
   "volkswagen-gol",
   "volkswagen-nivus",
   "volkswagen-polo",
+  "volkswagen-suran",
   "volkswagen-t-cross",
   "volkswagen-taos",
   "volkswagen-vento",
+  "volkswagen-voyage",
 ] as const);
 
 export const vehiclePhoto = (slug: string): string | null =>
