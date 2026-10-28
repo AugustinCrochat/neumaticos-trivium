@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import Link from "@/components/ui/Link";
@@ -509,6 +509,29 @@ export function ShopPage({
     return medida ? parseMedida(medida) : null;
   }, [medida, live, liveComplete]);
 
+  // Autos que traen esta medida de fábrica, en una línea discreta arriba de los
+  // resultados. Por API (cacheada un día) y no importado: VEHICLE_DB no debe
+  // entrar al bundle del cliente.
+  const pw = parsed?.width;
+  const pp = parsed?.profile;
+  const pr = parsed?.rim;
+  const [autosDeLaMedida, setAutosDeLaMedida] = useState<{ key: string; autos: string[] }>({ key: "", autos: [] });
+  const medidaKey = pw && pp && pr ? `${pw}-${pp}-${pr}` : "";
+  useEffect(() => {
+    if (!medidaKey) return;
+    let vivo = true;
+    fetch(`/api/medida-vehiculos?w=${pw}&p=${pp}&r=${pr}`)
+      .then((res) => (res.ok ? res.json() : { vehiculos: [] }))
+      .then((d: { vehiculos?: { brand: string; model: string }[] }) => {
+        if (vivo) setAutosDeLaMedida({ key: medidaKey, autos: (d.vehiculos ?? []).map((v) => `${v.brand} ${v.model}`) });
+      })
+      .catch(() => {});
+    return () => {
+      vivo = false;
+    };
+  }, [medidaKey, pw, pp, pr]);
+  const autosVisibles = autosDeLaMedida.key === medidaKey ? autosDeLaMedida.autos : [];
+
   const { exactResults, compatibleResults, allProducts } = useMemo(() => {
     // Stock real: el vivo del POS (LiveStockProvider) si ya llegó, si no el
     // horneado en el build. Lo que se agotó desde el build va al fondo.
@@ -817,6 +840,12 @@ export function ShopPage({
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </Link>
+            )}
+
+            {parsed && autosVisibles.length > 0 && (
+              <p className="mb-3 text-xs text-slate-500">
+                Medida de fábrica de: <span className="font-semibold text-slate-600">{autosVisibles.join(", ")}</span> y otros
+              </p>
             )}
 
             {/* ── Tipo de neumático (cuando la medida existe en más de uno) ── */}

@@ -28,12 +28,6 @@ function cargarMedidas(): Promise<MedidaCatalogo[] | null> {
 
 type Opcion = { w: string; p: string; r: string; c: boolean; t: MedidaCatalogo["t"]; info?: MedidaCatalogo };
 
-const TIPO_NOMBRE = { n: "Auto / calle", a: "A/T (todo terreno)", c: "Carga (serie C)" } as const;
-const TIPO_AYUDA = {
-  n: "Para autos y SUV en asfalto",
-  a: "Para camionetas con ripio, barro o campo",
-  c: "Para furgones y utilitarios, con más capacidad de carga",
-} as const;
 const TIPO_ORDEN = { n: 0, a: 1, c: 2 } as const;
 
 const diametroMm = (w: number, p: number, r: number) => r * 25.4 + (2 * w * p) / 100;
@@ -164,7 +158,6 @@ export function TireSizeSearch({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   // Autos que vienen con la medida completa (para confirmar que es la correcta).
-  const [vehiculos, setVehiculos] = useState<{ brand: string; model: string }[]>([]);
   const [voiceError, setVoiceError] = useState<string | null>(null);
   // Última medida buscada en este navegador ("195-65-15"), para repetirla con un
   // toque. En el servidor es null, así no hay diferencia de hidratación.
@@ -390,31 +383,9 @@ export function TireSizeSearch({
       })()
     : [];
 
-  // La medida completa ya no navega sola a los 300 ms (se perdía lo escrito si
-  // alguien corregía un dígito): se muestra una vista previa y se va con el
-  // botón o Enter. Ver la tarjeta "previewOk" más abajo.
   const mw = medidaObjetivo?.w;
   const mp = medidaObjetivo?.p;
   const mr = medidaObjetivo?.r;
-
-  // Autos que traen esta medida: confirma que la leyó bien.
-  useEffect(() => {
-    if (!mw || !mp || !mr || shouldClearInitialOnEdit) return;
-    let vivo = true;
-    const t = setTimeout(() => {
-      fetch(`/api/medida-vehiculos?w=${mw}&p=${mp}&r=${mr}`)
-        .then((res) => (res.ok ? res.json() : { vehiculos: [] }))
-        .then((d: { vehiculos?: { brand: string; model: string }[] }) => {
-          if (vivo) setVehiculos(d.vehiculos ?? []);
-        })
-        .catch(() => {});
-    }, 250);
-    return () => {
-      vivo = false;
-      clearTimeout(t);
-      setVehiculos([]);
-    };
-  }, [mw, mp, mr, shouldClearInitialOnEdit]);
 
   // Registro de búsquedas sin resultado (no está en catálogo o no tiene stock):
   // dice qué medidas piden y no tenemos. Una vez por medida y por sesión, y con
@@ -479,28 +450,17 @@ export function TireSizeSearch({
     router.push(href);
   };
 
-  // Elegir una versión concreta de la medida (calle, A/T o carga).
-  function irATipo(m: MedidaCatalogo, variasVersiones: boolean) {
-    if (flotationEquivalent) rememberFlotationOrigin();
-    if (m.t === "c") {
-      if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
-      setShowPopular(false);
-      router.push(`/neumaticos/carga/${m.w}-${m.p}-r${m.r}c`);
-      return;
-    }
-    performSearch(String(m.w), String(m.p), String(m.r));
-  }
-
   // Al completar una medida estándar se busca sola (y se guarda el teclado en
-  // el celular, porque performSearch saca el foco). Con una medida rara no:
-  // queda la corrección sugerida.
+  // el celular, porque performSearch saca el foco). Con una medida rara que no
+  // tenemos no: queda la corrección sugerida.
   function autoBuscarAlCompletar(rimValue: string) {
     if (isFlotation || rimValue.length !== 2 || width.length !== 3 || profile.length !== 2) return;
     const w = Number(width);
     const p = Number(profile);
     const r = Number(rimValue);
     const estandar = w >= 135 && w <= 355 && w % 5 === 0 && p >= 25 && p <= 85 && p % 5 === 0 && r >= 13 && r <= 24;
-    if (estandar) performSearch(width, profile, rimValue);
+    const enCatalogo = !!catalogo?.some((m) => m.w === w && m.p === p && m.r === r);
+    if (estandar || enCatalogo) performSearch(width, profile, rimValue);
   }
 
   function executeSearch() {
@@ -1026,61 +986,6 @@ export function TireSizeSearch({
             </div>
           )}
 
-          {previewOk && stockTotal > 0 && medidaObjetivo && (
-            <div role="status" className="mt-2 rounded-xl border border-emerald-200 bg-emerald-50 p-4 shadow-lg">
-              <p className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                <span className="text-xl font-black text-navy-900">
-                  {medidaObjetivo.w}/{medidaObjetivo.p} R{medidaObjetivo.r}
-                  {entradas.length === 1 && entradas[0].t === "c" ? "C" : ""}
-                </span>
-                {entradas.length === 1 && (
-                  <span className="text-sm font-bold text-emerald-700">
-                    {entradas[0].s} {entradas[0].s === 1 ? "modelo" : "modelos"} con stock · desde {formatPrecio(entradas[0].d ?? 0)}
-                    {entradas[0].t === "a" ? " · A/T" : entradas[0].t === "c" ? " · carga" : ""}
-                  </span>
-                )}
-              </p>
-              {vehiculos.length > 0 && (
-                <p className="mt-1 text-sm text-slate-600">
-                  Es la medida de: <strong className="text-navy-900">{vehiculos.map((v) => `${v.brand} ${v.model}`).join(", ")}</strong>
-                </p>
-              )}
-              {entradas.length > 1 ? (
-                // Sólo se pregunta cuando la medida existe en más de una versión.
-                <div className="mt-3">
-                  <p className="text-sm font-black text-navy-900">Esta medida viene en más de un tipo. ¿Cuál buscás?</p>
-                  <div className="mt-2 grid gap-2">
-                    {entradas.map((m) => (
-                      <button
-                        key={m.t}
-                        type="button"
-                        onClick={() => irATipo(m, true)}
-                        className="flex items-center justify-between gap-3 rounded-xl border border-slate-300 bg-white px-4 py-3 text-left transition-colors hover:border-orange-400 hover:bg-orange-50"
-                      >
-                        <span>
-                          <span className="block font-black text-navy-900">{TIPO_NOMBRE[m.t]}</span>
-                          <span className="block text-xs text-slate-500">{TIPO_AYUDA[m.t]}</span>
-                        </span>
-                        <span className={`shrink-0 text-right text-xs font-bold ${m.s > 0 ? "text-emerald-700" : "text-slate-500"}`}>
-                          {m.s > 0 ? `${m.s} ${m.s === 1 ? "modelo" : "modelos"} · desde ${formatPrecio(m.d ?? 0)}` : "Sin stock hoy"}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => irATipo(entradas[0], false)}
-                  className="mt-3 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-orange-500 px-4 text-sm font-black text-white shadow-md shadow-orange-500/20 transition-colors hover:bg-orange-600"
-                >
-                  Ver neumáticos {medidaObjetivo.w}/{medidaObjetivo.p} R{medidaObjetivo.r}
-                  {entradas[0].t === "c" ? "C" : ""} →
-                </button>
-              )}
-            </div>
-          )}
-
           {(sinCatalogo || (sinStock && previewOk)) && medidaObjetivo && (
             <div role="status" className="mt-2 rounded-xl border border-slate-200 bg-white p-4 text-sm shadow-lg">
               <p className="font-black text-navy-900">
@@ -1192,7 +1097,8 @@ export function TireSizeSearch({
 
         {compact && (
           <div className="hidden lg:block">
-            {!forceVoiceButton && hasInput ? (
+            {/* La medida estándar se busca sola; el botón queda solo para flotation, que no. */}
+            {!forceVoiceButton && hasInput && isFlotation ? (
               <button type="button" onClick={executeSearch} aria-label="Buscar medida"
                 className="w-full h-[52px] bg-orange-500 hover:bg-orange-400 text-white font-black rounded-xl border border-orange-400 shadow-lg shadow-orange-500/20 transition-all flex items-center justify-center gap-2">
                 Buscar medida

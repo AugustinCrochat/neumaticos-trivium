@@ -23,7 +23,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
   }
 
   return Response.json(
-    { enStock: product.enStock ?? false, stock: product.stock ?? 0 },
+    { enStock: product.enStock ?? false, stock: product.stock ?? 0, vendidos: product.vendidos ?? 0 },
     { headers: { "Cache-Control": "no-store" } }
   );
 }

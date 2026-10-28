@@ -14,6 +14,9 @@ import { PaymentMethodsSection } from "@/components/ui/PaymentMethodsSection";
 import { CotizadorClient, type CotizadorHandle } from "@/app/cotizador/CotizadorClient";
 import { getPickupLabel, type PickupTiming } from "@/lib/branch-status";
 
+// Debajo de este número el dato no suma confianza (y un "1 vendido" juega en contra).
+const VENDIDOS_MINIMO = 5;
+
 function formatPrice(price: number) {
   return new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 }).format(price);
 }
@@ -36,14 +39,17 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
   // (offline, edge caído) se queda con el valor estático en vez de romper.
   const [enStock, setEnStock] = useState(product.enStock ?? false);
   const [stock, setStock] = useState(product.stock ?? 0);
+  // Unidades vendidas en esta sucursal en los últimos 180 días (dato del POS).
+  const [vendidos, setVendidos] = useState(product.vendidos ?? 0);
   useEffect(() => {
     let cancelado = false;
     fetch(`/api/stock/${product.id}?sucursal=${selectedBranch.id}`, { cache: "no-store" })
       .then((res) => (res.ok ? res.json() : null))
-      .then((data: { enStock?: boolean; stock?: number } | null) => {
+      .then((data: { enStock?: boolean; stock?: number; vendidos?: number } | null) => {
         if (cancelado || !data) return;
         if (typeof data.enStock === "boolean") setEnStock(data.enStock);
         if (typeof data.stock === "number") setStock(data.stock);
+        if (typeof data.vendidos === "number") setVendidos(data.vendidos);
       })
       .catch(() => {});
     return () => {
@@ -71,6 +77,15 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
         <p className={`text-xs font-bold flex items-center gap-1.5 ${isLowStock(stock) ? "text-amber-600" : "text-emerald-600"}`}>
           <span className={`w-1.5 h-1.5 rounded-full ${isLowStock(stock) ? "bg-amber-500" : "bg-emerald-500"}`} />
           {stockLabel(stock)}
+        </p>
+      )}
+
+      {vendidos >= VENDIDOS_MINIMO && (
+        <p className="text-xs font-bold text-slate-600 flex items-center gap-1.5">
+          <svg className="w-3.5 h-3.5 text-navy-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+          </svg>
+          {vendidos} {vendidos === 1 ? "unidad vendida" : "unidades vendidas"} en {selectedBranch.shortName} en los últimos 6 meses
         </p>
       )}
 
