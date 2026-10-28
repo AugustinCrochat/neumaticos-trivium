@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { useBranch } from "@/contexts/branch-context";
 import { SearchModal } from "@/components/ui/SearchModal";
+import { isVisaMasterPromoDay } from "@/lib/promo-day";
 
 const NAV_LINKS = [
   { href: "/ofertas", label: "% Ofertas", match: ["/ofertas"] },
@@ -39,6 +40,27 @@ export function Header() {
   const [moreOpen, setMoreOpen] = useState(false);
   const moreRef = useRef<HTMLDivElement | null>(null);
   const [mobileMoreOpen, setMobileMoreOpen] = useState(false);
+  // Franja roja: los miércoles y sábados alterna entre "colocación sin cargo"
+  // y "hoy 3 cuotas sin interés". Arranca en false y se corrige al montar
+  // (el sitio es estático: calcularlo en el build lo congelaría).
+  const [promoHoy, setPromoHoy] = useState(false);
+  const [slide, setSlide] = useState(0);
+  const [rotacionAuto, setRotacionAuto] = useState(true);
+  useEffect(() => {
+    const update = () => setPromoHoy(isVisaMasterPromoDay());
+    update();
+  }, []);
+  const haySlides = promoHoy && !selectedBranch.apertura;
+  useEffect(() => {
+    if (!haySlides || !rotacionAuto || compact) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const t = setInterval(() => setSlide((n) => (n + 1) % 2), 5000);
+    return () => clearInterval(t);
+  }, [haySlides, rotacionAuto, compact]);
+  const cambiarSlide = () => {
+    setRotacionAuto(false);
+    setSlide((n) => (n + 1) % 2);
+  };
   useEffect(() => {
     if (!moreOpen) return;
     const close = (e: MouseEvent | KeyboardEvent) => {
@@ -68,18 +90,58 @@ export function Header() {
       {/* Franja de colocación sin cargo: lo primero que se ve al entrar,
           antes que el selector de sucursal, porque es un diferencial frente
           a comprar en otro lado sin taller propio. */}
-      <Link
-        href="/servicios"
+      <div
         aria-hidden={compact}
-        tabIndex={compact ? -1 : 0}
-        className={`block overflow-hidden bg-[#ff1e00] px-4 text-center text-[11px] font-bold text-white transition-all duration-200 hover:bg-[#cc1800] md:text-xs ${
+        className={`relative overflow-hidden bg-[#ff1e00] text-white transition-all duration-200 ${
           compact ? "max-h-0 py-0" : "max-h-8 py-1"
         }`}
       >
-        {selectedBranch.apertura
-          ? `Neumáticos Trivium ${selectedBranch.shortName} abre ${selectedBranch.apertura}`
-          : "Colocación y válvulas sin cargo en nuestros locales"}
-      </Link>
+        {haySlides && slide === 1 ? (
+          <Link
+            href="/ofertas"
+            tabIndex={compact ? -1 : 0}
+            className="flex items-center justify-center gap-2 px-9 text-center text-[11px] font-bold hover:bg-[#cc1800] md:text-xs"
+          >
+            <span>
+              Hoy 3 cuotas sin interés<span className="hidden md:inline"> con Visa o Mastercard</span>
+            </span>
+            <span className="flex shrink-0 items-center gap-1 rounded bg-white px-1.5 py-px">
+              <Image src="/images/payments/visa.svg" alt="Visa" width={32} height={20} className="h-3 w-auto" />
+              <Image src="/images/payments/mastercard.svg" alt="Mastercard" width={32} height={20} className="h-4 w-auto" />
+            </span>
+          </Link>
+        ) : (
+          <Link
+            href="/servicios"
+            tabIndex={compact ? -1 : 0}
+            className="block px-9 text-center text-[11px] font-bold hover:bg-[#cc1800] md:text-xs"
+          >
+            {selectedBranch.apertura
+              ? `Neumáticos Trivium ${selectedBranch.shortName} abre ${selectedBranch.apertura}`
+              : "Colocación y válvulas sin cargo en nuestros locales"}
+          </Link>
+        )}
+        {haySlides && !compact && (
+          <>
+            <button
+              type="button"
+              onClick={cambiarSlide}
+              aria-label="Mensaje anterior"
+              className="absolute inset-y-0 left-0 flex w-8 items-center justify-center text-sm font-black text-white/80 hover:text-white"
+            >
+              ‹
+            </button>
+            <button
+              type="button"
+              onClick={cambiarSlide}
+              aria-label="Mensaje siguiente"
+              className="absolute inset-y-0 right-0 flex w-8 items-center justify-center text-sm font-black text-white/80 hover:text-white"
+            >
+              ›
+            </button>
+          </>
+        )}
+      </div>
 
       {/* Main nav */}
       <nav className="bg-black shadow-lg">

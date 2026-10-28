@@ -137,7 +137,17 @@ export function PaymentMethodsSection({
   return (
     <section id="metodos-pago" className="scroll-mt-36 rounded-xl border border-slate-200 bg-white p-4">
       <div className="mb-3 flex items-center justify-between gap-2">
-        <h2 className="text-xs font-black uppercase tracking-wide text-navy-900">Medios de pago</h2>
+        <div className="min-w-0">
+          <h2 className="text-xs font-black uppercase tracking-wide text-navy-900">Medios de pago</h2>
+          {/* Sólo miércoles y sábados. Discreto a propósito: el detalle completo
+              está al tocar Visa o Mastercard. */}
+          {isPromoDay && VISA_MASTER_PROMO_ACTIVA && (
+            <p className="mt-0.5 flex items-center gap-1.5 text-[11px] font-bold text-emerald-700">
+              <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500" aria-hidden="true" />
+              Hoy 3 cuotas sin interés con Visa o Mastercard
+            </p>
+          )}
+        </div>
         {onCalcularCuotas && (
           <button
             type="button"

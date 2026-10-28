@@ -7,7 +7,6 @@ import type { TireProduct } from "@/lib/types";
 import type { TireLabel } from "@/lib/tire-labels";
 import type { Utqg } from "@/lib/utqg";
 import { useBranch } from "@/contexts/branch-context";
-import { isVisaMasterPromoDay } from "@/lib/promo-day";
 import { ImageLightbox } from "./ImageLightbox";
 import { ZoomPanel } from "./ZoomPanel";
 import { productAlt, productExtraAlt } from "@/lib/image-seo";
@@ -51,14 +50,6 @@ export function ProductImageGallery({
 }) {
   const hasImage = !!product.imageUrl && product.imageUrl !== "/images/tire-placeholder.webp";
   const { selectedBranch } = useBranch();
-
-  // Igual que PaymentMethodsSection: arranca en false y se corrige al montar
-  // para no depender del día en que se generó esta página estática.
-  const [isPromoDay, setIsPromoDay] = useState(false);
-  useEffect(() => {
-    const update = () => setIsPromoDay(isVisaMasterPromoDay());
-    update();
-  }, []);
 
   const [direccionCopiada, setDireccionCopiada] = useState(false);
   function copiarDireccion(direccion: string) {
@@ -261,7 +252,7 @@ export function ProductImageGallery({
     <a
       href="#garantia"
       onClick={(e) => scrollSuave(e, "garantia")}
-      className={`absolute right-4 z-10 flex items-center gap-2 rounded-full bg-amber-500 py-1.5 pl-1.5 pr-4 text-sm font-black uppercase tracking-tight text-white shadow-lg ring-2 ring-white/80 transition-colors hover:bg-amber-600 ${isPromoDay ? "bottom-20 sm:bottom-4" : "bottom-4"}`}
+      className={`absolute right-4 z-10 flex items-center gap-2 rounded-full bg-amber-500 py-1.5 pl-1.5 pr-4 text-sm font-black uppercase tracking-tight text-white shadow-lg ring-2 ring-white/80 transition-colors hover:bg-amber-600 bottom-4`}
     >
       <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-amber-600">
         <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
@@ -273,25 +264,6 @@ export function ProductImageGallery({
         <span>Garantía 1 año</span>
         <span className="mt-0.5 text-[10px] font-bold normal-case tracking-normal text-amber-100">Trivium</span>
       </span>
-    </a>
-  );
-
-  // Sólo miércoles y sábado (ver isVisaMasterPromoDay). Va abajo a la
-  // izquierda; la garantía va abajo a la derecha y, en pantallas chicas donde
-  // no entran las dos en línea, se apila encima de este.
-  const promoBadge = isPromoDay && (
-    <a
-      href="#metodos-pago"
-      onClick={(e) => scrollSuave(e, "metodos-pago")}
-      aria-label="Hoy 3 cuotas sin interés con Visa y Mastercard. Ver medios de pago"
-      title="Hoy 3 cuotas sin interés con Visa y Mastercard"
-      className={`absolute left-4 z-10 flex flex-col items-stretch gap-1.5 rounded-lg bg-navy-900 px-3 py-2 text-center text-xs font-black leading-tight text-white shadow-lg ring-2 ring-white/80 transition-colors hover:bg-navy-800 ${label ? "bottom-12" : "bottom-4"}`}
-    >
-      <span className="flex shrink-0 items-center justify-center gap-2 rounded bg-white px-2.5 py-1">
-        <Image src="/images/payments/visa.svg" alt="" width={32} height={20} className="h-5 w-auto" />
-        <Image src="/images/payments/mastercard.svg" alt="" width={32} height={20} className="h-8 w-auto" />
-      </span>
-      <span>3 cuotas</span>
     </a>
   );
 
@@ -326,7 +298,6 @@ export function ProductImageGallery({
           <>
             {badges}
             {warrantyBadge}
-            {promoBadge}
           </>
         )}
         <div className={`flex h-full w-full items-center justify-center ${current?.kind === "sucursal" || current?.kind === "etiqueta" ? "" : "p-1 md:p-2"}`}>
