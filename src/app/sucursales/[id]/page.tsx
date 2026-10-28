@@ -3,7 +3,6 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { BRANCHES, FREE_SHIPPING_THRESHOLD, SHIPPING_FLAT_RATE, SITE_URL, type Branch } from "@/lib/config";
-import { SERVICES } from "@/lib/data";
 import { canonical, SITE_NAME, type Faq } from "@/lib/seo";
 import { localidadesDeSucursal } from "@/lib/localidades";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
@@ -12,6 +11,7 @@ import { BranchStatusBadge } from "./BranchStatusBadge";
 import { LazyBranchMiniMap } from "./LazyBranchMiniMap";
 import { SetActiveBranch } from "./SetActiveBranch";
 import { DirectionsButton } from "./DirectionsButton";
+import { ServiciosSucursal } from "./ServiciosSucursal";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 import { DirectionsIcon } from "@/components/ui/DirectionsIcon";
 import { poolShare } from "@/lib/share-image";
@@ -249,18 +249,7 @@ export default async function BranchPage({ params }: Props) {
         </section>
 
         {/* Servicios */}
-        <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-          <h2 className="mb-1 text-lg font-black text-navy-900">Servicios en esta sucursal</h2>
-          <p className="mb-4 text-sm text-slate-500">Taller propio con equipos de última generación.</p>
-          <div className="grid gap-3 md:grid-cols-2">
-            {SERVICES.map((service) => (
-              <div key={service.id} className="rounded-xl bg-slate-50 p-4">
-                <h3 className="font-bold text-navy-900">{service.title}</h3>
-                <p className="mt-1 text-sm text-slate-600">{service.description}</p>
-              </div>
-            ))}
-          </div>
-        </section>
+        <ServiciosSucursal branch={branch} />
 
         {/* Resena en Google */}
         {branch.reviewUrl && (
