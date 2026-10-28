@@ -20,7 +20,10 @@ import openNext from "./.open-next/worker.js";
 // @ts-ignore: idem.
 export { DOQueueHandler, DOShardedTagCache, BucketCachePurge } from "./.open-next/worker.js";
 
-const TTL_SEGUNDOS = 600;
+// La clave ya lleva la versión desplegada y el sitio se redespliega al menos cada
+// 2 h (o al cambiar un producto), así que un TTL largo no deja datos viejos: las
+// entradas de un build anterior simplemente dejan de usarse. Más TTL = menos MISS.
+const TTL_SEGUNDOS = 6 * 60 * 60;
 const NO_CACHEAR = ["/api/", "/admin", "/carrito", "/pago", "/stock/", "/feed/", "/_next/", "/cdn-cgi/"];
 const HEADERS_DE_NEXT = ["rsc", "next-router-prefetch", "next-router-state-tree", "next-router-segment-prefetch", "next-url"];
 
