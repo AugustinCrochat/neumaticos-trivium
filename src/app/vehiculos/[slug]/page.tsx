@@ -210,7 +210,7 @@ export default async function VehiclePage({ params }: Props) {
       <div className="relative z-10 mx-auto -mt-8 max-w-4xl px-4">
         <div className="rounded-3xl bg-white p-4 shadow-xl sm:p-6 md:p-10">
           <section className="mb-10 border-b border-slate-100 pb-10">
-            <div className="md:flex md:items-start md:justify-between md:gap-6">
+            <div className="flex flex-col md:flex-row md:items-start md:justify-between md:gap-6">
               <h2 className="mb-3 text-2xl font-bold text-navy-900 md:pt-4">Qué medida lleva el {name}</h2>
               {vehiclePhoto(slug) && (
                 // Sobresale del recuadro blanco hacia el héroe de arriba.
@@ -220,7 +220,7 @@ export default async function VehiclePage({ params }: Props) {
                   alt={name}
                   width={1000}
                   height={650}
-                  className="relative z-20 mx-auto -mt-16 mb-4 h-auto w-64 drop-shadow-[0_18px_24px_rgba(0,0,0,0.45)] md:order-last md:mx-0 md:-mt-32 md:w-80"
+                  className="relative z-20 order-first mx-auto -mt-16 mb-4 h-auto w-64 drop-shadow-[0_18px_24px_rgba(0,0,0,0.45)] md:order-last md:mx-0 md:-mt-32 md:w-80"
                 />
               )}
             </div>
