@@ -13,6 +13,7 @@ export function SizeOrVehicleSearch({
   hideLearnLink = false,
   initialEconomicos = false,
   autoFocus = false,
+  onNavigate,
   onLiveChange,
 }: {
   compact?: boolean;
@@ -22,6 +23,8 @@ export function SizeOrVehicleSearch({
   initialEconomicos?: boolean;
   /** Cursor en "ancho" al abrir (modal del buscador flotante). */
   autoFocus?: boolean;
+  /** Se llama justo antes de navegar a los resultados. */
+  onNavigate?: () => void;
   onLiveChange?: (v: { w: string; p: string; r: string }) => void;
 }) {
   const { loadVehiculos } = useVehicle();
@@ -74,12 +77,13 @@ export function SizeOrVehicleSearch({
           hideLearnLink={hideLearnLink}
           economicos={economicos}
           autoFocus={autoFocus}
+          onNavigate={onNavigate}
           onLiveChange={onLiveChange}
         />
       ) : (
         // Al quitar el auto se queda en esta pestaña (sin esto el modo por defecto
         // vuelve a "Por medida" porque ya no hay vehículo).
-        <VehicleSizeSearch initialMedida={initialMedida} economicos={economicos} onClear={() => setMode("vehiculo")} />
+        <VehicleSizeSearch initialMedida={initialMedida} economicos={economicos} onClear={() => setMode("vehiculo")} onNavigate={onNavigate} />
       )}
     </div>
   );

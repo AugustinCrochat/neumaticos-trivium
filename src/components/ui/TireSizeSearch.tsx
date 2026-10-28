@@ -94,6 +94,7 @@ export function TireSizeSearch({
   embedded = false,
   economicos = false,
   autoFocus = false,
+  onNavigate,
   onLiveChange,
 }: {
   initialMedida?: string;
@@ -106,6 +107,8 @@ export function TireSizeSearch({
   economicos?: boolean;
   /** Al montarse deja el cursor en "ancho" (buscador que se abre en un modal). */
   autoFocus?: boolean;
+  /** Se llama justo antes de navegar a los resultados (el modal del buscador flotante se cierra con esto). */
+  onNavigate?: () => void;
   /** Se llama a cada tecla con lo escrito, para listados que filtran en vivo (catálogo). */
   onLiveChange?: (v: { w: string; p: string; r: string }) => void;
 }) {
@@ -447,6 +450,7 @@ export function TireSizeSearch({
       }
     }
     const href = sizeCatalogHref(w, p, rVal, economicosRef.current);
+    onNavigate?.();
     router.push(href);
     // Buscar de nuevo estando en /buscar cambia solo el ?query: Next conserva el scroll.
     window.scrollTo(0, 0);
@@ -501,6 +505,7 @@ export function TireSizeSearch({
     if (s.c) {
       // La medida C tiene su propia landing (otra carcasa, otro índice de carga).
       if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+      onNavigate?.();
       router.push(`/neumaticos/carga/${s.w}-${s.p}-r${s.r}c`);
       return;
     }
@@ -672,6 +677,7 @@ export function TireSizeSearch({
       if (!w || !p || !rVal) return;
       hasNavigated = true;
       if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+      onNavigate?.();
       router.push(sizeCatalogHref(w, p, rVal, economicosRef.current));
     };
 
