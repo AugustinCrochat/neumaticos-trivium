@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
+import { AhorroLinks } from "@/components/blog/AhorroLinks";
 import { canonical } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
@@ -131,6 +132,7 @@ export default function Page() {
         mirá <Link href="/neumaticos-baratos">neumáticos baratos</Link>, y si querés un presupuesto, escribinos
         por WhatsApp con la medida de tu auto.
       </p>
+      <AhorroLinks current={SLUG} />
     </ArticleLayout>
   );
 }

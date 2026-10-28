@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
+import { AhorroLinks } from "@/components/blog/AhorroLinks";
+import { EquipoHofmann } from "@/components/blog/EquipoHofmann";
 import { Callout } from "@/components/blog/Callout";
 import { canonical } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
@@ -129,6 +131,8 @@ export default function Page() {
         <Link href="/blog/cada-cuantos-km-cambiar-neumaticos">cada cuántos kilómetros conviene</Link>. Y al
         colocar los nuevos, corregí primero la causa: <Link href="/servicios">alineación y balanceo en el local</Link>.
       </p>
+      <EquipoHofmann />
+      <AhorroLinks current={SLUG} />
     </ArticleLayout>
   );
 }

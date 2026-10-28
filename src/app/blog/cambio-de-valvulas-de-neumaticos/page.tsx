@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
+import { AhorroLinks } from "@/components/blog/AhorroLinks";
 import { canonical } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
@@ -126,6 +127,7 @@ export default function Page() {
         <Link href="/servicios/montaje">arme y desarme</Link> y buscá tu medida en el{" "}
         <Link href="/catalogo">catálogo</Link>.
       </p>
+      <AhorroLinks current={SLUG} />
     </ArticleLayout>
   );
 }

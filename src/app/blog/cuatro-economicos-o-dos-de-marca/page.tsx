@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
+import { AhorroLinks } from "@/components/blog/AhorroLinks";
 import { Callout } from "@/components/blog/Callout";
 import { ClusterLinks } from "@/components/blog/ClusterLinks";
 import { canonical } from "@/lib/seo";
@@ -100,6 +101,7 @@ export default function Page() {
       </p>
 
       <ClusterLinks current={SLUG} />
+      <AhorroLinks current={SLUG} />
     </ArticleLayout>
   );
 }

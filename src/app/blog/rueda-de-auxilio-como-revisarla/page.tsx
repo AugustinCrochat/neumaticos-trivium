@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
+import { AhorroLinks } from "@/components/blog/AhorroLinks";
 import { Callout } from "@/components/blog/Callout";
 import { canonical } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
@@ -105,6 +106,7 @@ export default function Page() {
         En el local te controlamos la presión del auxilio junto con las otras cuatro, sin cargo. Si querés
         revisar el resto, mirá <Link href="/blog/presion-de-neumaticos">cuánto inflar y cada cuánto</Link>.
       </p>
+      <AhorroLinks current={SLUG} />
     </ArticleLayout>
   );
 }

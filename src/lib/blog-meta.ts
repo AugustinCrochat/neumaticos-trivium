@@ -155,6 +155,72 @@ const L = {
 } satisfies Record<string, ShopLink>;
 
 export const BLOG_META: Record<string, BlogMeta> = {
+  "como-ahorrar-en-neumaticos-guia-completa": {
+    cover: cover("tallerCuatroAutos"),
+    figure: figure("cambioCamioneta", "Un juego bien colocado, alineado y balanceado es la base para que rinda todos sus kilómetros."),
+    shopIntro: "Cuando llegue el momento de cambiar:",
+    shopLinks: [L.todos, L.ofertas, L.servicios],
+  },
+  "revision-mensual-de-neumaticos-en-5-minutos": {
+    cover: cover("placaPresion"),
+    figure: figure("balanceando", "Una rueda que vibra a ciertas velocidades suele necesitar balanceado."),
+    shopIntro: "Si la revisión encontró algo:",
+    shopLinks: [L.todos, L.servicios, L.ofertas],
+  },
+  "habitos-de-manejo-que-gastan-los-neumaticos": {
+    cover: cover("taxiRueda"),
+    figure: figure("remisClassic", "En autos de trabajo, el manejo cambia mucho cuántos kilómetros rinde un juego."),
+    shopIntro: "Cuando toque cambiarlos:",
+    shopLinks: [L.todos, L.remises, L.ofertas],
+  },
+  "pozo-o-golpe-que-revisar-en-el-neumatico": {
+    cover: cover("autoRojoTarget"),
+    figure: figure("tecnicosAlineando", "Después de un golpe fuerte, el alineado mide si los ángulos siguen dentro de lo normal."),
+    shopIntro: "Si la cubierta quedó dañada:",
+    shopLinks: [L.todos, L.servicios, L.ofertas],
+  },
+  "burbuja-en-el-flanco-del-neumatico": {
+    cover: cover("grenlanderPerfilBajo"),
+    figure: figure("montaje", "La cubierta con burbuja se desmonta y se cambia: no hay reparación posible."),
+    shopIntro: "Para reemplazarla:",
+    shopLinks: [L.todos, L.ofertas, L.servicios],
+  },
+  "neumatico-que-pierde-aire-solo-causas": {
+    cover: cover("valvula"),
+    figure: figure("balanceo", "Con la rueda en el taller se sumerge o se rocía para ubicar la pérdida."),
+    shopIntro: "Si hay que reemplazarla:",
+    shopLinks: [L.todos, L.servicios, L.ofertas],
+  },
+  "aquaplaning-que-es-y-como-evitarlo": {
+    cover: cover("kingpro"),
+    figure: figure("atClasica", "Un dibujo profundo evacúa más agua y reduce el riesgo de aquaplaning."),
+    shopIntro: "Para tener dibujo nuevo:",
+    shopLinks: [L.todos, L.ofertas, L.at],
+  },
+  "neumaticos-usados-conviene-comprarlos": {
+    cover: cover("descarga"),
+    figure: figure("tallerCuatroAutos", "Un juego nuevo se coloca, se alinea y se balancea en la misma visita."),
+    shopIntro: "Alternativas nuevas y económicas:",
+    shopLinks: [{ label: "Neumáticos baratos", href: "/neumaticos-baratos" }, L.todos, L.ofertas],
+  },
+  "como-guardar-neumaticos": {
+    cover: cover("fachada"),
+    figure: figure("descarga", "Las cubiertas nuevas se guardan lejos del sol y de fuentes de calor."),
+    shopIntro: "Para renovar el juego:",
+    shopLinks: [L.todos, L.ofertas, L.servicios],
+  },
+  "limpiar-neumaticos-brillo-y-productos": {
+    cover: cover("grenlanderPerfilBajo"),
+    figure: figure("rotacion", "Con la rueda afuera es el mejor momento para limpiar y revisar la cubierta."),
+    shopIntro: "Para renovar las cubiertas:",
+    shopLinks: [L.todos, L.ofertas, L.servicios],
+  },
+  "como-cambiar-una-rueda-paso-a-paso": {
+    cover: cover("rotacion"),
+    figure: figure("antirrobo", "Si tu auto tiene tuercas antirrobo, la llave tiene que estar a mano."),
+    shopIntro: "Si tenés que reponer la cubierta:",
+    shopLinks: [L.todos, L.tuercas, L.ofertas],
+  },
   "neumaticos-nuevos-adelante-o-atras": {
     cover: cover("remisClassic"),
     figure: figure("cambioCamioneta", "Con las cubiertas nuevas colocadas, el eje trasero lleva el par con más dibujo."),

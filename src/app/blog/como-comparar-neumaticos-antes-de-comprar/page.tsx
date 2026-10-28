@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
+import { AhorroLinks } from "@/components/blog/AhorroLinks";
 import { canonical } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
@@ -93,6 +94,7 @@ export default function Page() {
         estás entre una marca conocida y una alternativa, mirá{" "}
         <Link href="/alternativas">las alternativas a las marcas premium</Link>.
       </p>
+      <AhorroLinks current={SLUG} />
     </ArticleLayout>
   );
 }

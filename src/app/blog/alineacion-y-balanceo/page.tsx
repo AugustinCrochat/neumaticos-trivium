@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { DesgasteFoto } from "@/components/tools/DesgasteFoto";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
+import { AhorroLinks } from "@/components/blog/AhorroLinks";
+import { EquipoHofmann } from "@/components/blog/EquipoHofmann";
 import { canonical } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
@@ -227,6 +229,8 @@ export default function Page() {
         <Link href="/neumaticos">Buscá tu medida</Link> y te pasamos el total con todo incluido
         antes de que vengas.
       </p>
+      <EquipoHofmann />
+      <AhorroLinks current={SLUG} />
     </ArticleLayout>
   );
 }

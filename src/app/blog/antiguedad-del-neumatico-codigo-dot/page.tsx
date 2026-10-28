@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
+import { AhorroLinks } from "@/components/blog/AhorroLinks";
 import { Callout } from "@/components/blog/Callout";
 import { canonical } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
@@ -130,6 +131,7 @@ export default function Page() {
         <Link href="/blog/como-comparar-neumaticos-antes-de-comprar">7 puntos</Link> te ordena la
         revisión.
       </p>
+      <AhorroLinks current={SLUG} />
     </ArticleLayout>
   );
 }

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
+import { AhorroLinks } from "@/components/blog/AhorroLinks";
 import { canonical } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
@@ -109,6 +110,7 @@ export default function Page() {
         estuvieron mal infladas, pasá por el taller: revisamos la presión en el momento y te decimos el estado de
         las cubiertas.
       </p>
+      <AhorroLinks current={SLUG} />
     </ArticleLayout>
   );
 }

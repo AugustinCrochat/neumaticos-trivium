@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
+import { AhorroLinks } from "@/components/blog/AhorroLinks";
 import { canonical } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
@@ -217,6 +218,7 @@ export default function Page() {
         de que se coma un juego entero. Y si te ofrecen inflar con nitrógeno, mirá{" "}
         <Link href="/blog/nitrogeno-en-neumaticos-vale-la-pena">qué mejora de verdad y cuánto conviene pagar</Link>.
       </p>
+      <AhorroLinks current={SLUG} />
     </ArticleLayout>
   );
 }

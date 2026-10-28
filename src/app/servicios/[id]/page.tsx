@@ -11,6 +11,7 @@ import { FaqSection } from "@/components/seo/FaqSection";
 import { EXTRA_SERVICES, SERVICIOS_SEO } from "@/lib/servicios-seo";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { ServicioFicha } from "./ServicioFicha";
+import { EquipoHofmann } from "@/components/blog/EquipoHofmann";
 import { UpsellNeumaticos } from "@/components/servicios/UpsellNeumaticos";
 import { SERVICIOS_FOTOS } from "@/lib/servicios-fotos";
 import { breadcrumbJsonLd, canonical, serviceJsonLd } from "@/lib/seo";
@@ -113,6 +114,7 @@ export default async function ServicioPage({ params }: Props) {
               </section>
             ))}
             <FaqSection faqs={seo.faqs} />
+            {ofreceCombo && <EquipoHofmann />}
             <section>
               <h2 className="text-xl font-black text-navy-900 mb-3">Más información</h2>
               <ul className="space-y-2">
