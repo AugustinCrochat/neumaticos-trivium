@@ -18,3 +18,17 @@ export function getNearestBranch(lat: number, lng: number): Branch {
     return distThis < distNearest ? branch : nearest;
   });
 }
+
+/** Distancia en línea recta (km) desde unas coordenadas a cada sucursal. */
+export function getBranchDistances(lat: number, lng: number): Record<string, number> {
+  return Object.fromEntries(
+    BRANCHES.map((b) => [b.id, haversineKm(lat, lng, b.coordinates.lat, b.coordinates.lng)])
+  );
+}
+
+/** "850 m", "3,4 km", "27 km": la distancia en línea recta, redondeada para leerse de un vistazo. */
+export function formatDistance(km: number): string {
+  if (km < 1) return `${Math.max(50, Math.round((km * 1000) / 50) * 50)} m`;
+  if (km < 10) return `${km.toFixed(1).replace(".", ",")} km`;
+  return `${Math.round(km)} km`;
+}

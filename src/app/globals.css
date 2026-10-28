@@ -89,3 +89,24 @@ html {
     0 0 0 12px rgb(42 101 168 / 0.2),
     0 8px 20px rgb(15 23 42 / 0.28);
 }
+
+/* Modal de sucursal: la más cercana entra con resalte y un aro que pulsa. */
+@keyframes branch-pop {
+  0% { opacity: 0; transform: translateY(-10px) scale(0.96); }
+  60% { transform: translateY(0) scale(1.025); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes branch-ring {
+  0% { box-shadow: 0 0 0 0 rgb(255 30 0 / 0.45); }
+  100% { box-shadow: 0 0 0 14px rgb(255 30 0 / 0); }
+}
+@keyframes branch-ping {
+  0% { transform: scale(1); opacity: 0.7; }
+  100% { transform: scale(2.6); opacity: 0; }
+}
+.branch-pop { animation: branch-pop 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+.branch-ring { animation: branch-ring 1.4s ease-out 0.5s 3; }
+.branch-ping { animation: branch-ping 1.4s ease-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .branch-pop, .branch-ring, .branch-ping { animation: none; }
+}

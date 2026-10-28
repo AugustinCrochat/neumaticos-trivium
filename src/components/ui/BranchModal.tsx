@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useBranch } from "@/contexts/branch-context";
 import { BRANCHES } from "@/lib/config";
-import { getNearestBranch } from "@/lib/branch-geo";
+import { getBranchDistances, formatDistance } from "@/lib/branch-geo";
 import { WhatsAppLink } from "./WhatsAppLink";
 
 type GeoState = "idle" | "loading" | "done" | "error";
@@ -11,6 +11,7 @@ type GeoState = "idle" | "loading" | "done" | "error";
 export function BranchModal() {
   const { isModalOpen, closeModal, setSelectedBranch, selectedBranch, hasConfirmedBranch } = useBranch();
   const [nearestId, setNearestId] = useState<string | null>(null);
+  const [distances, setDistances] = useState<Record<string, number>>({});
   const [geoState, setGeoState] = useState<GeoState>("idle");
   const [geoMsg, setGeoMsg] = useState("No pudimos acceder a tu ubicación. Elegí manualmente.");
 
@@ -21,6 +22,7 @@ export function BranchModal() {
       document.body.style.overflow = "";
       setGeoState("idle");
       setNearestId(null);
+      setDistances({});
     }
     return () => { document.body.style.overflow = ""; };
   }, [isModalOpen]);
@@ -51,7 +53,10 @@ export function BranchModal() {
       (pos) => {
         if (settled) return;
         try {
-          setNearestId(getNearestBranch(pos.coords.latitude, pos.coords.longitude).id);
+          const dist = getBranchDistances(pos.coords.latitude, pos.coords.longitude);
+          const [nearest] = Object.entries(dist).sort((a, b) => a[1] - b[1]);
+          setDistances(dist);
+          setNearestId(nearest[0]);
           finish("done");
         } catch {
           setGeoMsg("No pudimos calcular la sucursal más cercana. Elegí manualmente.");
@@ -133,11 +138,14 @@ export function BranchModal() {
             </div>
           )}
           {geoState === "done" && nearestId && (
-            <div className="flex items-center gap-2 text-sm text-green-700 bg-green-50 border border-green-200 px-4 py-2.5 rounded-xl">
-              <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+            <div className="branch-pop flex items-center gap-2.5 text-sm text-green-800 bg-green-50 border border-green-200 px-4 py-2.5 rounded-xl">
+              <svg className="w-5 h-5 flex-shrink-0 text-green-600" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
               </svg>
-              Encontramos la sucursal más cercana a vos
+              <span>
+                Estás a <strong>{formatDistance(distances[nearestId])}</strong> de{" "}
+                <strong>{BRANCHES.find((b) => b.id === nearestId)?.shortName}</strong>
+              </span>
             </div>
           )}
           {geoState === "error" && (
@@ -152,18 +160,23 @@ export function BranchModal() {
 
         {/* Branches */}
         <div className="p-4 space-y-3 mt-1">
-          {BRANCHES.map((branch) => {
+          {[...BRANCHES]
+            .sort((a, b) => (a.id === nearestId ? -1 : b.id === nearestId ? 1 : 0))
+            .map((branch) => {
             const isActive = hasConfirmedBranch && selectedBranch.id === branch.id;
             const isNearest = nearestId === branch.id;
+            const distance = distances[branch.id];
             return (
               <button
                 key={branch.id}
                 onClick={() => setSelectedBranch(branch)}
                 className={`w-full text-left rounded-xl border-2 p-4 transition-all ${
+                  isNearest ? "branch-pop branch-ring " : ""
+                }${
                   isActive
                     ? "border-orange-500 bg-orange-50"
                     : isNearest
-                    ? "border-navy-400 bg-navy-50"
+                    ? "border-orange-500 bg-orange-50/60 shadow-lg"
                     : "border-slate-200 hover:border-navy-300 hover:bg-slate-50"
                 }`}
               >
@@ -182,12 +195,21 @@ export function BranchModal() {
                           Activa
                         </span>
                       )}
-                      {isNearest && !isActive && (
-                        <span className="bg-neutral-800 text-white text-xs font-bold px-2 py-0.5 rounded-full">
-                          Más cercana
+                      {isNearest && (
+                        <span className="inline-flex items-center gap-1.5 bg-neutral-900 text-white text-xs font-bold px-2.5 py-0.5 rounded-full">
+                          <span className="relative flex w-2 h-2">
+                            <span className="branch-ping absolute inset-0 rounded-full bg-orange-500" />
+                            <span className="relative w-2 h-2 rounded-full bg-orange-500" />
+                          </span>
+                          La más cercana
                         </span>
                       )}
                     </div>
+                    {distance !== undefined && (
+                      <p className={`text-sm font-semibold mb-1 ${isNearest ? "text-orange-600" : "text-slate-500"}`}>
+                        A {formatDistance(distance)} de tu ubicación
+                      </p>
+                    )}
                     <p className="text-slate-600 text-sm">{branch.address}</p>
                     <p className="text-slate-500 text-sm">{branch.city}</p>
                     <div className="flex items-center gap-1.5 mt-2 text-xs text-slate-400">
