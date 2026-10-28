@@ -13,6 +13,7 @@ import { BranchMiniMap } from "./BranchMiniMap";
 import { SetActiveBranch } from "./SetActiveBranch";
 import { DirectionsButton } from "./DirectionsButton";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
+import { PinIcon } from "@/components/ui/PinIcon";
 import { poolShare } from "@/lib/share-image";
 
 type Props = { params: Promise<{ id: string }> };
@@ -200,9 +201,7 @@ export default async function BranchPage({ params }: Props) {
             label={`Neumáticos Trivium ${branch.shortName}`}
             className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-black text-navy-900 shadow-sm transition-colors hover:border-orange-400 hover:text-orange-600"
           >
-            <svg className="h-5 w-5 text-orange-500" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M21.71 11.29l-9-9a1 1 0 00-1.42 0l-9 9a1 1 0 000 1.42l9 9a1 1 0 001.42 0l9-9a1 1 0 000-1.42zM14 14.5V12h-4v3H8v-4a1 1 0 011-1h5V7.5l3.5 3.5z" />
-            </svg>
+            <PinIcon className="h-5 w-5 text-orange-500" />
             Cómo llegar
           </DirectionsButton>
         </section>
@@ -244,9 +243,7 @@ export default async function BranchPage({ params }: Props) {
             label={`Neumáticos Trivium ${branch.shortName}`}
             className="mt-4 inline-flex w-full min-h-12 items-center justify-center gap-2 rounded-xl bg-black px-4 text-sm font-black text-white transition-transform active:scale-[0.98]"
           >
-            <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M21.71 11.29l-9-9a1 1 0 00-1.42 0l-9 9a1 1 0 000 1.42l9 9a1 1 0 001.42 0l9-9a1 1 0 000-1.42zM14 14.5V12h-4v3H8v-4a1 1 0 011-1h5V7.5l3.5 3.5z" />
-            </svg>
+            <PinIcon className="h-5 w-5" />
             Cómo llegar
           </DirectionsButton>
         </section>
