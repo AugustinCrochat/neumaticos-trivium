@@ -6,10 +6,11 @@ import { SERVICES } from "@/lib/data";
 import { ICONS } from "@/components/home/ServicesSection";
 import { getServiciosPrecios } from "@/lib/pos-api";
 import { getSelectedBranchSlug } from "@/lib/branch-server";
-import { formatPrecio, splitAutoCamioneta } from "@/lib/servicios";
+import { splitAutoCamioneta } from "@/lib/servicios";
 import { FaqSection } from "@/components/seo/FaqSection";
 import { EXTRA_SERVICES, SERVICIOS_SEO } from "@/lib/servicios-seo";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { ServicioFicha } from "./ServicioFicha";
 import { SERVICIOS_FOTOS } from "@/lib/servicios-fotos";
 import { breadcrumbJsonLd, canonical, serviceJsonLd } from "@/lib/seo";
 
@@ -56,90 +57,32 @@ export default async function ServicioPage({ params }: Props) {
         ])}
       />
       <JsonLd data={serviceJsonLd(service)} />
-      <div className="bg-black py-12 md:py-16">
-        <div className="max-w-5xl mx-auto px-4 grid items-center gap-8 md:grid-cols-[1fr_380px]">
-          <div>
-            <Link
-              href="/servicios"
-              className="inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-white mb-8 transition-colors"
-            >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-              Volver a servicios
-            </Link>
-            <div className="text-orange-500 mb-4">{ICONS[service.icon]}</div>
-            <h1 className="text-3xl md:text-4xl font-black text-white mb-4">{seo?.h1 ?? service.title}</h1>
-            <p className="text-slate-300 text-lg max-w-xl leading-relaxed">{service.description}</p>
-          </div>
-          {fotos && (
-            <div className="relative aspect-[4/3] overflow-hidden rounded-2xl ring-1 ring-white/10">
-              <Image
-                src={fotos.principal.src}
-                alt={fotos.principal.alt}
-                fill
-                priority
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, 380px"
-              />
-            </div>
-          )}
-        </div>
-      </div>
+      <ServicioFicha
+        id={service.id}
+        title={seo?.h1 ?? service.title}
+        description={service.description}
+        icon={ICONS[service.icon]}
+        fotos={fotos ? [fotos.principal, ...fotos.galeria] : []}
+        variantes={[
+          ...(auto ? [{ label: "Auto", precio: auto.precio }] : []),
+          ...(camioneta ? [{ label: "Camioneta", precio: camioneta.precio }] : []),
+        ]}
+        priceNote={service.priceNote}
+        features={service.features}
+        volver={
+          <Link
+            href="/servicios"
+            className="mb-6 inline-flex items-center gap-1.5 text-sm text-slate-500 transition-colors hover:text-navy-900"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            Volver a servicios
+          </Link>
+        }
+      />
 
-      <div className="max-w-3xl mx-auto px-4 py-12 md:py-16">
-        <div className="grid md:grid-cols-2 gap-10">
-          {/* Features */}
-          <div>
-            <h2 className="text-lg font-black text-navy-900 mb-4 uppercase tracking-wide">Qué incluye</h2>
-            <ul className="space-y-3">
-              {service.features.map((feat) => (
-                <li key={feat} className="flex items-center gap-2 text-slate-700">
-                  <svg className="w-4 h-4 text-orange-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  {feat}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Price list — separado por auto/camioneta en vez de la lista cruda
-              del POS, que trae los dos ítems con nombres tipo "ALINEACION AUTO". */}
-          <div>
-            <h2 className="text-lg font-black text-navy-900 mb-4 uppercase tracking-wide">Precios</h2>
-            {!auto && !camioneta ? (
-              <p className="text-slate-500 bg-slate-50 border border-slate-100 rounded-xl p-4 text-sm">
-                Consultanos el precio actualizado por WhatsApp.
-              </p>
-            ) : (
-              <>
-                <ul className="divide-y divide-slate-100 border border-slate-100 rounded-xl overflow-hidden">
-                  {auto && (
-                    <li className="flex items-center justify-between px-4 py-3 bg-white">
-                      <span className="text-sm font-semibold text-slate-700">Auto</span>
-                      <span className="text-sm font-black text-navy-900 whitespace-nowrap ml-4">
-                        {formatPrecio(auto.precio)}
-                      </span>
-                    </li>
-                  )}
-                  {camioneta && (
-                    <li className="flex items-center justify-between px-4 py-3 bg-white">
-                      <span className="text-sm font-semibold text-slate-700">Camioneta</span>
-                      <span className="text-sm font-black text-navy-900 whitespace-nowrap ml-4">
-                        {formatPrecio(camioneta.precio)}
-                      </span>
-                    </li>
-                  )}
-                </ul>
-                {service.priceNote && (
-                  <p className="text-xs text-slate-400 mt-2">{service.priceNote}</p>
-                )}
-              </>
-            )}
-          </div>
-        </div>
-
+      <div className="max-w-3xl mx-auto px-4 pb-12 md:pb-16">
         {seo && (
           <div className="mt-12 space-y-8">
             <div className="space-y-4 text-slate-700 leading-relaxed">
