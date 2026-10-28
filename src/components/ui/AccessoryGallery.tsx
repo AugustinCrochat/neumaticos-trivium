@@ -33,12 +33,14 @@ export function AccessoryGallery({
   imageUrl,
   cardSrc,
   tallerFoto,
+  tallerFoto2,
   llavesFoto,
 }: {
   nombre: string;
   imageUrl: string | null;
   cardSrc: string | null;
   tallerFoto: { src: string; alt: string };
+  tallerFoto2: { src: string; alt: string };
   llavesFoto: { src: string; alt: string };
 }) {
   const { selectedBranch } = useBranch();
@@ -50,6 +52,7 @@ export function AccessoryGallery({
       : []),
     { kind: "foto" as const, src: llavesFoto.src, alt: llavesFoto.alt, label: "Ver las dos llaves" },
     { kind: "foto" as const, src: tallerFoto.src, alt: tallerFoto.alt, label: "Ver foto del taller" },
+    { kind: "foto" as const, src: tallerFoto2.src, alt: tallerFoto2.alt, label: "Ver otra foto del taller" },
     ...(selectedBranch.facadePhoto
       ? [
           {

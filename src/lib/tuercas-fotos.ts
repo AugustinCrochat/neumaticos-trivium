@@ -16,6 +16,12 @@ export const TUERCA_FOTO_TALLER = {
   alt: "Tuerca antirrobo colocada entre las tuercas comunes de una llanta de aleación, en el taller de Neumáticos Trivium",
 };
 
+/** Segunda foto del taller: la tuerca antirrobo en la llanta de un Ford con cubierta nueva. */
+export const TUERCA_FOTO_TALLER_2 = {
+  src: "/images/local/tuerca-antirrobo-en-llanta-de-ford-con-cubierta-grenlander-kingpro-trivium-cordoba.webp",
+  alt: "Tuerca antirrobo colocada en la llanta de un Ford, con una cubierta nueva Grenlander Kingpro One 175/65 R14",
+};
+
 /** Las dos llaves que trae cada juego, con el cartel "x2" (scripts/build-tuercas-dos-llaves.mjs). */
 export const TUERCA_FOTO_LLAVES = {
   src: "/images/tuercas-antirrobo/dos-llaves-incluidas-tuercas-antirrobo-trivium-cordoba.webp",

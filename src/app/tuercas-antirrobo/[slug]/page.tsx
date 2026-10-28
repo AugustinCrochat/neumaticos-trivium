@@ -10,7 +10,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { ORGANIZATION_ID } from "@/lib/seo";
 import Image from "next/image";
 import { modelosCompatibles } from "@/lib/tuercas-vehiculos";
-import { TUERCA_FOTO_LLAVES, TUERCA_FOTO_TALLER, tuercaCardPath } from "@/lib/tuercas-fotos";
+import { TUERCA_FOTO_LLAVES, TUERCA_FOTO_TALLER, TUERCA_FOTO_TALLER_2, tuercaCardPath } from "@/lib/tuercas-fotos";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -66,7 +66,7 @@ export default async function AccessoryPage({ params }: Props) {
     "@type": "Product",
     name: accessory.nombre,
     description: `${accessory.nombre}.${accessory.descripcion ? ` Compatible con: ${accessory.descripcion}.` : ""} Incluye 2 llaves.`,
-    image: [accessory.imageUrl, card, TUERCA_FOTO_LLAVES.src, TUERCA_FOTO_TALLER.src].filter((x): x is string => !!x).map(abs),
+    image: [accessory.imageUrl, card, TUERCA_FOTO_LLAVES.src, TUERCA_FOTO_TALLER.src, TUERCA_FOTO_TALLER_2.src].filter((x): x is string => !!x).map(abs),
     sku: accessory.codigoTango ?? accessory.id,
     mpn: accessory.codigoTango ?? accessory.id,
     url: `${SITE_URL}/tuercas-antirrobo/${accessory.slug}`,
@@ -101,6 +101,7 @@ export default async function AccessoryPage({ params }: Props) {
           imageUrl={accessory.imageUrl}
           cardSrc={card}
           tallerFoto={TUERCA_FOTO_TALLER}
+          tallerFoto2={TUERCA_FOTO_TALLER_2}
           llavesFoto={TUERCA_FOTO_LLAVES}
         />
 

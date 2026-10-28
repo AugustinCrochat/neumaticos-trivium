@@ -4,7 +4,7 @@ import { BRANDS, SERVICES, BLOG_POSTS } from "@/lib/data";
 import { COMBO_SERVICE, EXTRA_SERVICES } from "@/lib/servicios-seo";
 import { LOCALIDADES } from "@/lib/localidades";
 import { OTRAS_MARCAS } from "@/lib/marcas-chinas";
-import { TUERCA_FOTO_LLAVES, TUERCA_FOTO_TALLER, tuercaCardPath } from "@/lib/tuercas-fotos";
+import { TUERCA_FOTO_LLAVES, TUERCA_FOTO_TALLER, TUERCA_FOTO_TALLER_2, tuercaCardPath } from "@/lib/tuercas-fotos";
 import { MARCAS_PREMIUM } from "@/lib/marcas-premium";
 import { cargaSlug } from "@/lib/carga";
 import { LOAD_SPEED_CODES } from "@/lib/load-speed";
@@ -159,7 +159,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "combo-alineado-y-balanceado": ["/images/servicios/alineacion.webp", "/images/local/alineadora-3d-hofmann-geoliner-630-con-target-en-la-rueda-trivium-cordoba.webp", "/images/local/balanceadora-hofmann-geodyna-7800p-balanceando-rueda-de-camioneta-trivium-cordoba.webp"],
     montaje: ["/images/servicios/arme-desarme.webp", "/images/local/cambio-de-cubiertas-en-camioneta-pickup-con-balanceadora-hofmann-trivium-cordoba.webp"],
     "reparacion-de-pinchaduras": ["/images/local/taxi-en-el-taller-neumaticos-trivium-cordoba.webp"],
-    "tuercas-de-seguridad": ["/images/local/tuerca-antirrobo-de-seguridad-en-llanta-de-aleacion-trivium-cordoba.webp", "/images/local/cubierta-perfil-bajo-grenlander-colocada-neumaticos-trivium.webp"],
+    "tuercas-de-seguridad": ["/images/local/tuerca-antirrobo-de-seguridad-en-llanta-de-aleacion-trivium-cordoba.webp", "/images/local/tuerca-antirrobo-en-llanta-de-ford-con-cubierta-grenlander-kingpro-trivium-cordoba.webp", "/images/local/cubierta-perfil-bajo-grenlander-colocada-neumaticos-trivium.webp"],
     "rotacion-de-ruedas": ["/images/local/rotacion-de-neumaticos-pirelli-rueda-desmontada-trivium.webp"],
   };
   const servicios: Entry[] = [...SERVICES, COMBO_SERVICE, ...EXTRA_SERVICES].map((s) => url(`/servicios/${s.id}`, 0.7, "monthly", undefined, SERVICE_IMAGES[s.id]?.map(abs)));
@@ -188,6 +188,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       ...(tuercaCardPath(a.codigoTango, a.slug) ? [abs(tuercaCardPath(a.codigoTango, a.slug)!)] : []),
       abs(TUERCA_FOTO_LLAVES.src),
       abs(TUERCA_FOTO_TALLER.src),
+      abs(TUERCA_FOTO_TALLER_2.src),
     ])
   );
 
