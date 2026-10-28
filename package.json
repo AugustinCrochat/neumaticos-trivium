@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "prebuild": "node scripts/generate-og-share-images.mjs && node scripts/generate-og-branch-photos.mjs",
+    "prebuild": "node scripts/sync-llms-blog.mjs && node scripts/check-blog-links.mjs && node scripts/generate-og-share-images.mjs && node scripts/generate-og-branch-photos.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",

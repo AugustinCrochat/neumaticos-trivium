@@ -1,5 +1,6 @@
 import type { TireBrand, Service, BlogPost } from "./types";
 import { blogMeta } from "./blog-meta";
+import { estaPublicada } from "./publicacion";
 
 export const BRANDS: TireBrand[] = [
   {
@@ -922,4 +923,8 @@ const BLOG_POSTS_BASE: BlogPost[] = [
 
 // La miniatura del listado es siempre la portada de la nota (blog-meta.ts):
 // una sola fuente para que no se repitan fotos entre la grilla y el artículo.
-export const BLOG_POSTS: BlogPost[] = BLOG_POSTS_BASE.map((p) => ({ ...p, imageUrl: blogMeta(p.slug).cover.src }));
+/** Fecha de publicación de una nota según este registro (la fuente única; null si no está registrada). */
+export const fechaDeNota = (slug: string): string | null => BLOG_POSTS_BASE.find((p) => p.slug === slug)?.date ?? null;
+
+/** Solo las notas ya publicadas (ver publicacion.ts); las programadas no existen para el sitio. */
+export const BLOG_POSTS: BlogPost[] = BLOG_POSTS_BASE.filter((p) => estaPublicada(p.date)).map((p) => ({ ...p, imageUrl: blogMeta(p.slug).cover.src }));

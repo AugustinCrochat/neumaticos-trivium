@@ -1,8 +1,10 @@
 import Link from "@/components/ui/Link";
+import { notFound } from "next/navigation";
+import { estaPublicada } from "@/lib/publicacion";
 import { Children, isValidElement } from "react";
 import type { ReactNode } from "react";
 import Image from "next/image";
-import { BLOG_POSTS } from "@/lib/data";
+import { BLOG_POSTS, fechaDeNota } from "@/lib/data";
 import { blogMeta } from "@/lib/blog-meta";
 import { BlogCover } from "@/components/blog/BlogCover";
 import { BlogSearchCard, BlogShopLinks } from "@/components/blog/BlogShop";
@@ -45,7 +47,7 @@ export function ArticleLayout({
   title,
   subtitle,
   category,
-  date,
+  date: fechaPagina,
   updated,
   readingMinutes,
   faqs,
@@ -63,6 +65,9 @@ export function ArticleLayout({
   faqs?: Faq[];
   children: ReactNode;
 }) {
+  // Nota programada: hasta su fecha la URL no existe (ver publicacion.ts).
+  const date = fechaDeNota(slug) ?? fechaPagina;
+  if (!estaPublicada(date)) notFound();
   const branch = BRANCHES[0];
   const relacionadas = BLOG_POSTS.filter((p) => p.slug !== slug).slice(0, 3);
   const meta = blogMeta(slug);

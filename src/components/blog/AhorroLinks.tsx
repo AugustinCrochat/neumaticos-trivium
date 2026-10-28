@@ -1,5 +1,6 @@
 import Link from "@/components/ui/Link";
 import { AHORRO, AHORRO_PILAR } from "@/lib/blog-cluster";
+import { BLOG_POSTS } from "@/lib/data";
 
 /** Enlaces cruzados del clúster "ahorrar en neumáticos", sin la nota actual. */
 export function AhorroLinks({ current }: { current: string }) {
@@ -21,7 +22,7 @@ export function AhorroLinks({ current }: { current: string }) {
             <p className="!mb-1 !text-sm font-black !text-navy-900">{g.grupo}</p>
             <ul className="!mb-0 !space-y-0.5 !pl-5">
               {g.notas
-                .filter((n) => n.slug !== current)
+                .filter((n) => n.slug !== current && BLOG_POSTS.some((p) => p.slug === n.slug))
                 .map((n) => (
                   <li key={n.slug} className="!leading-snug">
                     <Link href={`/blog/${n.slug}`} className="!text-sm !no-underline hover:!underline">

@@ -1,9 +1,10 @@
 import Link from "@/components/ui/Link";
 import { CLUSTER } from "@/lib/blog-cluster";
+import { BLOG_POSTS } from "@/lib/data";
 
 /** Enlaces cruzados del clúster "marca vs. alternativas", sin la nota actual. */
 export function ClusterLinks({ current }: { current: string }) {
-  const otras = CLUSTER.filter((c) => c.slug !== current);
+  const otras = CLUSTER.filter((c) => c.slug !== current && BLOG_POSTS.some((p) => p.slug === c.slug));
   return (
     <section className="mt-12 rounded-2xl border border-slate-200 bg-slate-50 p-5">
       <p className="!mb-1 !text-xs font-black uppercase tracking-widest !text-orange-600">¿Marca o alternativa?</p>
