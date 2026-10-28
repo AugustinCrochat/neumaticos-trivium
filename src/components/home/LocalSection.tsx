@@ -3,6 +3,7 @@ import Link from "@/components/ui/Link";
 import { BRANCHES } from "@/lib/config";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 import { ZonasPorProvincia } from "@/components/seo/ZonasPorProvincia";
+import { PinIcon } from "@/components/ui/PinIcon";
 
 /**
  * Bloque local de la home.
@@ -51,8 +52,9 @@ export function LocalSection() {
             <div className="mt-7 flex flex-wrap gap-3">
               <Link
                 href={`/sucursales/${branch.id}`}
-                className="inline-flex min-h-12 items-center justify-center rounded-xl bg-orange-500 px-6 text-sm font-black text-white transition-transform active:scale-[0.98] hover:bg-orange-600"
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-orange-500 px-6 text-sm font-black text-white transition-transform active:scale-[0.98] hover:bg-orange-600"
               >
+                <PinIcon className="h-5 w-5" />
                 Cómo llegar
               </Link>
               <WhatsAppLink

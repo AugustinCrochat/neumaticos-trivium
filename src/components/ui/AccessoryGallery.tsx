@@ -6,6 +6,7 @@ import { useBranch } from "@/contexts/branch-context";
 import { ImageLightbox } from "./ImageLightbox";
 import { useSwipeGallery } from "@/hooks/use-swipe-gallery";
 import { ZoomPanel } from "./ZoomPanel";
+import { PinIcon } from "@/components/ui/PinIcon";
 
 // Mismo zoom que la galería de neumáticos (ProductImageGallery).
 const ZOOM_FACTOR = 2.5;
@@ -141,6 +142,7 @@ export function AccessoryGallery({
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 rounded-lg bg-orange-500 px-3 py-2 text-xs font-black transition-colors hover:bg-orange-600"
                 >
+                  <PinIcon className="h-3.5 w-3.5" />
                   Cómo llegar
                 </a>
               </div>

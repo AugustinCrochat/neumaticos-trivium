@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useBranch } from "@/contexts/branch-context";
 import { BRANCHES } from "@/lib/config";
 import { getBranchDistances, formatDistance } from "@/lib/branch-geo";
-import { DirectionsIcon } from "./DirectionsIcon";
+import { PinIcon } from "./PinIcon";
 import { WhatsAppLink } from "./WhatsAppLink";
 
 type GeoState = "idle" | "loading" | "done" | "error";
@@ -244,7 +244,7 @@ export function BranchModal() {
                       onClick={(e) => e.stopPropagation()}
                       className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-navy-200 bg-white px-3 py-1.5 text-xs font-bold text-navy-700 hover:border-navy-400 hover:bg-navy-50 transition-colors"
                     >
-                      <DirectionsIcon className="w-5 h-5 text-navy-600" />
+                      <PinIcon className="w-4 h-4 text-orange-500" />
                       Cómo llegar
                     </a>
                   </div>

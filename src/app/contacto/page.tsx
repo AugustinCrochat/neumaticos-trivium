@@ -7,6 +7,7 @@ import { BranchStatusBadge } from "@/app/sucursales/[id]/BranchStatusBadge";
 import { BranchMiniMap } from "@/app/sucursales/[id]/BranchMiniMap";
 import { DirectionsButton } from "@/app/sucursales/[id]/DirectionsButton";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
+import { PinIcon } from "@/components/ui/PinIcon";
 
 export const metadata: Metadata = {
   title: "Contacto — WhatsApp, teléfono y ubicación",
@@ -107,9 +108,7 @@ export default function ContactoPage() {
                       label={`Neumáticos Trivium ${branch.shortName}`}
                       className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-sm font-black text-navy-900 shadow-sm transition-colors hover:border-orange-400 hover:text-orange-600"
                     >
-                      <svg className="h-4 w-4 text-orange-500" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M21.71 11.29l-9-9a1 1 0 00-1.42 0l-9 9a1 1 0 000 1.42l9 9a1 1 0 001.42 0l9-9a1 1 0 000-1.42zM14 14.5V12h-4v3H8v-4a1 1 0 011-1h5V7.5l3.5 3.5z" />
-                      </svg>
+                      <PinIcon className="h-4 w-4 text-orange-500" />
                       Cómo llegar
                     </DirectionsButton>
                   </div>
