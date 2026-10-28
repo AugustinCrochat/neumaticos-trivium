@@ -4,8 +4,9 @@ import { POPULAR_VEHICLES, vehicleSlug } from "@/lib/vehicles";
 import { vehiclePhoto } from "@/lib/vehicle-photos";
 import { marcaSlug } from "@/lib/marcas-autos";
 import { MarcaLogo } from "@/components/ui/MarcaLogo";
+import { CatalogoBuscador } from "./CatalogoBuscador";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { canonical, breadcrumbJsonLd, itemListJsonLd } from "@/lib/seo";
+import { canonical, breadcrumbJsonLd, itemListJsonLd, faqJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: `Neumáticos para todos los autos y camionetas: ${POPULAR_VEHICLES.length} modelos con su medida`,
@@ -13,6 +14,29 @@ export const metadata: Metadata = {
     "Catálogo de todos los autos, pickups y utilitarios que se venden y circulan en Argentina, por marca, con la medida de neumático original de cada modelo y stock real en Córdoba.",
   alternates: canonical("/vehiculos/todos"),
 };
+
+const FAQS = [
+  {
+    question: "¿Cómo sé qué medida de neumático lleva mi auto?",
+    answer:
+      "Mirá el flanco del neumático: tiene un código como 185/65 R15 (ancho en mm, perfil en % y rodado en pulgadas). También está en la etiqueta del marco de la puerta del conductor y en el manual. O buscá tu modelo en este catálogo.",
+  },
+  {
+    question: "¿La medida es la misma para todas las versiones de un modelo?",
+    answer:
+      "No siempre. Las versiones de entrada suelen usar rodado 14, 15 o 16 y las más equipadas 17 o más. Cada ficha de modelo lista la medida por versión y año.",
+  },
+  {
+    question: "¿Puedo poner una medida distinta a la original?",
+    answer:
+      "Se puede usar una medida equivalente si mantiene el diámetro total de la rueda y la capacidad de carga. Usá la calculadora de equivalencias o consultanos en el taller.",
+  },
+  {
+    question: "¿Tienen stock y precio de la medida de mi auto?",
+    answer:
+      "Sí: cada ficha muestra los neumáticos disponibles en nuestras sucursales de Córdoba con precio actualizado.",
+  },
+];
 
 const medidas = (v: (typeof POPULAR_VEHICLES)[number]) => [...new Set(v.sizes.map((s) => `${s.w}/${s.p} R${s.r}`))];
 
@@ -30,6 +54,7 @@ export default function TodosLosVehiculosPage() {
           { name: "Todos los modelos", path: "/vehiculos/todos" },
         ])}
       />
+      <JsonLd data={faqJsonLd(FAQS)} />
       <JsonLd
         data={itemListJsonLd(
           POPULAR_VEHICLES.map((v) => ({ name: `Neumáticos para ${v.brand} ${v.model}`, path: `/vehiculos/${vehicleSlug(v.brand, v.model)}` }))
@@ -44,47 +69,49 @@ export default function TodosLosVehiculosPage() {
         </div>
       </div>
       <div className="mx-auto max-w-7xl px-4 pt-8">
-        <nav aria-label="Marcas" className="mb-10 flex flex-wrap gap-2">
-          {marcas.map((m) => (
-            <a key={m} href={`#${marcaSlug(m)}`} className="rounded-full bg-black px-3 py-1 text-sm font-semibold text-white hover:bg-orange-600">
-              {m}
-            </a>
-          ))}
-        </nav>
-        {marcas.map((marca) => (
-          <section key={marca} id={marcaSlug(marca)} className="mb-12 scroll-mt-24">
-            <div className="mb-4 flex items-center justify-between gap-3 border-b border-slate-300 pb-2">
-              <h2 className="flex items-center gap-3 text-2xl font-black text-black">
-                <MarcaLogo brand={marca} className="h-9 w-9" />
-                Neumáticos para {marca}
-              </h2>
-              <Link href={`/vehiculos/marca/${marcaSlug(marca)}`} className="shrink-0 text-sm font-semibold text-orange-600 hover:underline">
-                Página de {marca} →
-              </Link>
-            </div>
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-              {porMarca.get(marca)!.map((v) => {
-                const slug = vehicleSlug(v.brand, v.model);
-                const foto = vehiclePhoto(slug);
-                const ms = medidas(v);
-                return (
-                  <Link key={slug} href={`/vehiculos/${slug}`} className="rounded-lg border border-slate-200 bg-white p-3 hover:border-orange-500">
-                    <div className="flex h-24 items-center justify-center">
-                      {foto ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img src={foto} alt={`${v.brand} ${v.model}`} width={1000} height={560} loading="lazy" className="max-h-full w-auto object-contain" />
-                      ) : (
-                        <MarcaLogo brand={v.brand} className="h-14 w-14 opacity-60" />
-                      )}
-                    </div>
-                    <p className="mt-2 truncate text-sm font-bold text-black">{v.brand} {v.model}</p>
-                    <p className="truncate text-xs text-slate-600">{ms.slice(0, 3).join(" · ")}{ms.length > 3 ? ` · +${ms.length - 3}` : ""}</p>
-                  </Link>
-                );
-              })}
-            </div>
-          </section>
-        ))}
+        <CatalogoBuscador
+          marcas={marcas.map((marca) => ({
+            brand: marca,
+            anchor: marcaSlug(marca),
+            href: `/vehiculos/marca/${marcaSlug(marca)}`,
+            models: porMarca.get(marca)!.map((v) => {
+              const slug = vehicleSlug(v.brand, v.model);
+              return { name: v.model, href: `/vehiculos/${slug}`, foto: vehiclePhoto(slug), medidas: medidas(v) };
+            }),
+          }))}
+        />
+        <section className="mx-auto mt-4 max-w-3xl">
+          <h2 className="mb-3 text-2xl font-black text-black">¿Qué medida de neumático lleva mi auto?</h2>
+          <p className="mb-3 text-slate-700">
+            La medida original de tu auto figura en el flanco del neumático que tiene puesto (por ejemplo <strong>185/65 R15</strong>), en la
+            etiqueta del marco de la puerta del conductor y en el manual. Si todavía no sabés cuál es, buscá tu modelo arriba: cada ficha trae
+            la medida de cada versión y año, el stock y el precio en nuestras sucursales de Córdoba.
+          </p>
+          <p className="mb-6 text-slate-700">
+            Muchas versiones de un mismo modelo usan rodados distintos (por ejemplo 15, 16 o 17 pulgadas). Fijate en la ficha cuál corresponde a
+            tu versión, o consultanos y lo confirmamos.
+          </p>
+          <h2 className="mb-3 text-2xl font-black text-black">Preguntas frecuentes</h2>
+          <div className="space-y-4">
+            {FAQS.map((f) => (
+              <div key={f.question}>
+                <h3 className="font-bold text-black">{f.question}</h3>
+                <p className="text-slate-700">{f.answer}</p>
+              </div>
+            ))}
+          </div>
+          <p className="mt-8 text-slate-700">
+            ¿Querés ver qué se lleva la gente? Mirá{" "}
+            <Link href="/vehiculos/mas-atendidos" className="font-bold text-orange-600 hover:underline">
+              los autos y medidas que más cambiamos
+            </Link>{" "}
+            o la{" "}
+            <Link href="/herramientas" className="font-bold text-orange-600 hover:underline">
+              calculadora de medidas equivalentes
+            </Link>
+            .
+          </p>
+        </section>
       </div>
     </main>
   );

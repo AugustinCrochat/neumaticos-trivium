@@ -48,6 +48,10 @@ export default function VehiculosIndexPage() {
           <Link href="/vehiculos/todos" className="font-bold text-orange-600 hover:underline">
             Ver el catálogo completo con fotos y medidas →
           </Link>
+          {" · "}
+          <Link href="/vehiculos/mas-atendidos" className="font-bold text-orange-600 hover:underline">
+            Los autos y medidas que más cambiamos →
+          </Link>
         </p>
         <div className="space-y-8">
           {marcas.map((marca) => (
