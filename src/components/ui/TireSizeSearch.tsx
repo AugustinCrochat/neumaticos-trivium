@@ -2,7 +2,6 @@
 
 import { useState, useRef, useEffect, useMemo, useSyncExternalStore } from "react";
 import Link from "@/components/ui/Link";
-import { useRouter } from "next/navigation";
 import { sizeCatalogHref } from "@/lib/size-href";
 import { flotationToMetric, formatFlotationLabel } from "@/lib/flotation";
 import { TireDiagram } from "./TireDiagram";
@@ -10,6 +9,7 @@ import { MedidaHelpDialog } from "./MedidaHelpDialog";
 import { WhatsAppLink } from "./WhatsAppLink";
 import { BRANCHES } from "@/lib/config";
 import type { MedidaCatalogo } from "@/app/api/medidas/route";
+import { irA } from "@/lib/navigate";
 
 // Medidas del catálogo (ver /api/medidas): se piden una sola vez por pestaña, la
 // primera vez que alguien enfoca el buscador. Si falla, el buscador sigue con la
@@ -112,7 +112,6 @@ export function TireSizeSearch({
   /** Se llama a cada tecla con lo escrito, para listados que filtran en vivo (catálogo). */
   onLiveChange?: (v: { w: string; p: string; r: string }) => void;
 }) {
-  const router = useRouter();
   // Ref y no closure: el reconocimiento de voz y el auto-search capturan la
   // función al arrancar, y el toggle puede cambiar después.
   const economicosRef = useRef(economicos);
@@ -451,7 +450,7 @@ export function TireSizeSearch({
     }
     const href = sizeCatalogHref(w, p, rVal, economicosRef.current);
     onNavigate?.();
-    router.push(href);
+    irA(href);
     // Buscar de nuevo estando en /buscar cambia solo el ?query: Next conserva el scroll.
     window.scrollTo(0, 0);
   };
@@ -506,7 +505,7 @@ export function TireSizeSearch({
       // La medida C tiene su propia landing (otra carcasa, otro índice de carga).
       if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
       onNavigate?.();
-      router.push(`/neumaticos/carga/${s.w}-${s.p}-r${s.r}c`);
+      irA(`/neumaticos/carga/${s.w}-${s.p}-r${s.r}c`);
       return;
     }
     performSearch(s.w, s.p, s.r);
@@ -678,7 +677,7 @@ export function TireSizeSearch({
       hasNavigated = true;
       if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
       onNavigate?.();
-      router.push(sizeCatalogHref(w, p, rVal, economicosRef.current));
+      irA(sizeCatalogHref(w, p, rVal, economicosRef.current));
     };
 
     r.onresult = (ev) => {

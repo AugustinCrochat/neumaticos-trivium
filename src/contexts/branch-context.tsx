@@ -21,6 +21,8 @@ type BranchContextType = {
   closeModal: () => void;
 };
 
+const SIN_SUGERENCIA_KEY = "trivium:sucursal-ip-sin-dato";
+
 const BranchContext = createContext<BranchContextType | null>(null);
 
 // Cookie (no localStorage): las páginas piden el catálogo de la sucursal
@@ -75,11 +77,25 @@ export function BranchProvider({ children }: { children: ReactNode }) {
 
     // Primera visita sin elección previa: se preselecciona la sucursal más
     // cercana por IP. Si el usuario elige otra, setSelectedBranch pisa esto.
+    // Con navegación de carga completa cada página vuelve a montar este efecto:
+    // si ya se preguntó en esta sesión y no hubo sugerencia (sin geo por IP), no se repite.
+    try {
+      if (sessionStorage.getItem(SIN_SUGERENCIA_KEY)) return;
+    } catch {
+      // sessionStorage bloqueado: se pregunta igual.
+    }
     let cancelado = false;
     fetch("/api/sucursal-cercana", { cache: "no-store" })
       .then((res) => (res.ok ? res.json() : null))
       .then((json: { branchId: string | null } | null) => {
         const branch = json?.branchId ? BRANCHES.find((b) => b.id === json.branchId) : undefined;
+        if (!branch) {
+          try {
+            sessionStorage.setItem(SIN_SUGERENCIA_KEY, "1");
+          } catch {
+            // sin sessionStorage: no se recuerda, no es crítico.
+          }
+        }
         if (!branch || cancelado || readBranchCookie()) return;
         setSelectedBranchState(branch);
         writeSessionBranchCookie(branch.id);

@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "@/components/ui/Link";
 import type { SearchResult } from "@/app/api/search/route";
 import type { ContentResult } from "@/lib/search-content";
 import { medidaQueryHref } from "@/lib/medida-query";
+import { irA } from "@/lib/navigate";
 
 function formatPrice(price: number) {
   return new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 }).format(price);
@@ -17,7 +17,6 @@ function hrefFor(r: SearchResult) {
 }
 
 export function SearchModal({ onClose }: { onClose: () => void }) {
-  const router = useRouter();
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
   const [content, setContent] = useState<ContentResult[]>([]);
@@ -85,11 +84,11 @@ export function SearchModal({ onClose }: { onClose: () => void }) {
     // Una medida completa ("1756514", "175 65 14") va directo al catálogo por medida.
     const medida = medidaQueryHref(query);
     if (medida) {
-      router.push(medida);
+      irA(medida);
       onClose();
       return;
     }
-    router.push(`/busqueda?q=${encodeURIComponent(query.trim())}`);
+    irA(`/busqueda?q=${encodeURIComponent(query.trim())}`);
     onClose();
   }
 

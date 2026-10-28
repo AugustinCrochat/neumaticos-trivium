@@ -74,6 +74,11 @@ jobs:
 
       - run: npx opennextjs-cloudflare build
 
+      # Publica el HTML de las páginas prearmadas como archivos estáticos: los
+      # sirve el borde de Cloudflare sin ejecutar el Worker, o sea rápido desde
+      # la primera visita (ver el script). Tiene que ir antes del deploy.
+      - run: node scripts/copy-prerendered-html.mjs
+
       - run: npx opennextjs-cloudflare deploy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}

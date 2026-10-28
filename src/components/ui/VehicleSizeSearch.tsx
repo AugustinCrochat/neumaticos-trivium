@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { useBranch } from "@/contexts/branch-context";
 import { useVehicle } from "@/contexts/vehicle-context";
 import { getSizesForVehicle, type VehicleDBEntry } from "@/lib/vehicles";
@@ -9,6 +8,7 @@ import { VehicleCombobox } from "@/components/ui/VehicleCombobox";
 import { VersionSelect } from "@/components/ui/VersionSelect";
 import type { VehiculoOption } from "@/lib/pos-api";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
+import { irA } from "@/lib/navigate";
 
 type Sizes = VehicleDBEntry["sizes"];
 
@@ -27,7 +27,6 @@ function findVersionIndexBySize(sizes: Sizes | null, size?: Sizes[number]): numb
 }
 
 export function VehicleSizeSearch({ initialMedida, economicos = false, onClear, onNavigate }: { initialMedida?: string; economicos?: boolean; onClear?: () => void; onNavigate?: () => void }) {
-  const router = useRouter();
   const { selectedBranch } = useBranch();
   const { vehiculos, selectedVehicle, setSelectedVehicle, clearSelectedVehicle } = useVehicle();
 
@@ -74,7 +73,7 @@ export function VehicleSizeSearch({ initialMedida, economicos = false, onClear, 
     if (!selectedVehicle || !selectedSize) return;
     const medida = `${selectedSize.w}-${selectedSize.p}-r${selectedSize.r}`;
     onNavigate?.();
-    router.push(`/buscar?medida=${medida}&marca=${encodeURIComponent(selectedVehicle.marca)}&modelo=${encodeURIComponent(selectedVehicle.modelo)}${economicos ? "&economicos=1" : ""}`);
+    irA(`/buscar?medida=${medida}&marca=${encodeURIComponent(selectedVehicle.marca)}&modelo=${encodeURIComponent(selectedVehicle.modelo)}${economicos ? "&economicos=1" : ""}`);
   }
 
   const waText = selectedVehicle

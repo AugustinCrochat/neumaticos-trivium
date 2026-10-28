@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import Link from "@/components/ui/Link";
 import { medidaQueryHref } from "@/lib/medida-query";
 import type { ContentResult } from "@/lib/search-content";
@@ -12,7 +12,6 @@ import type { TireProduct, Accessory } from "@/lib/types";
 type Match = { type: "tire"; item: TireProduct } | { type: "accessory"; item: Accessory };
 
 export function BusquedaClient() {
-  const router = useRouter();
   const query = useSearchParams().get("q")?.trim() ?? "";
   const medidaHref = medidaQueryHref(query);
   // `done` guarda la consulta ya resuelta: mientras no coincida con `query`
@@ -27,7 +26,7 @@ export function BusquedaClient() {
   useEffect(() => {
     // Una medida pegada (/busqueda?q=1756514) se resuelve como búsqueda por medida.
     if (medidaHref) {
-      router.replace(medidaHref);
+      window.location.replace(medidaHref);
       return;
     }
     if (!query) return;
@@ -46,7 +45,7 @@ export function BusquedaClient() {
     return () => {
       cancelled = true;
     };
-  }, [query, medidaHref, router]);
+  }, [query, medidaHref]);
 
   if (!query) {
     return (

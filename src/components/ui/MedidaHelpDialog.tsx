@@ -4,8 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import Link from "@/components/ui/Link";
-import { useRouter } from "next/navigation";
 import { sizeCatalogHref } from "@/lib/size-href";
+import { irA } from "@/lib/navigate";
 
 /**
  * "¿Dónde veo mi medida?": muestra la foto real del flanco con cada código
@@ -16,7 +16,6 @@ import { sizeCatalogHref } from "@/lib/size-href";
  * ocupa la pantalla. Se cierra con la ×, con Esc o haciendo clic afuera.
  */
 export function MedidaHelpDialog({ compact = false }: { compact?: boolean }) {
-  const router = useRouter();
   const [open, setOpen] = useState(false);
   // null = pantalla completa (celular); con valores = anclado al botón (mouse).
   const [pos, setPos] = useState<{ top: number; left: number } | null>(null);
@@ -79,7 +78,7 @@ export function MedidaHelpDialog({ compact = false }: { compact?: boolean }) {
     if (p.length < 2) return pRef.current?.focus();
     if (r.length < 2) return rRef.current?.focus();
     setOpen(false);
-    router.push(sizeCatalogHref(w, p, r));
+    irA(sizeCatalogHref(w, p, r));
   }
 
   const tarjeta = (
