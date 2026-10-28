@@ -15,6 +15,7 @@ import {
 } from "@/lib/tire-sizes";
 import type { TireSize } from "@/lib/types";
 import { poolShare } from "@/lib/share-image";
+import { SizeOrVehicleSearch } from "@/components/ui/SizeOrVehicleSearch";
 
 export const metadata: Metadata = {
   title: "Neumáticos por medida en Córdoba: precios y stock",
@@ -121,6 +122,10 @@ export default async function NeumaticosPage() {
           , o buscá directamente por marca y modelo de auto.
         </p>
       </header>
+
+      <div className="mb-12 max-w-2xl">
+        <SizeOrVehicleSearch />
+      </div>
 
       {grupos.map(({ rim, medidas }) => (
         <section key={rim} className="mb-10">
