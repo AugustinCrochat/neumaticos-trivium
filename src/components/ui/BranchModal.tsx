@@ -100,14 +100,13 @@ export function BranchModal() {
       />
 
       {/* Panel */}
-      <div className="relative z-10 w-full max-w-lg rounded-2xl bg-white shadow-2xl overflow-hidden">
+      <div className="relative z-10 flex max-h-[calc(100dvh-2rem)] w-full max-w-lg flex-col overflow-hidden rounded-2xl bg-white shadow-2xl">
         {/* Header */}
-        <div className="bg-black px-6 py-5 flex items-start justify-between">
+        <div className="flex flex-shrink-0 items-start justify-between bg-black px-5 py-4">
           <div>
             <h2 className="text-white text-xl font-bold">Elegí tu sucursal</h2>
-            <p className="text-slate-300 text-sm mt-1 leading-snug max-w-xs">
-              Seleccioná la sucursal más cercana para ver el stock y el
-              número de WhatsApp correspondiente.
+            <p className="mt-0.5 max-w-xs text-sm leading-snug text-slate-300">
+              Cada sucursal tiene su stock y su WhatsApp.
             </p>
           </div>
           <button
@@ -122,7 +121,7 @@ export function BranchModal() {
         </div>
 
         {/* Geo button */}
-        <div className="px-5 pt-4">
+        <div className="flex-shrink-0 px-4 pt-3">
           {geoState === "idle" && (
             <button
               onClick={detectLocation}
@@ -167,7 +166,7 @@ export function BranchModal() {
         </div>
 
         {/* Branches */}
-        <div className="p-4 space-y-3 mt-1">
+        <div className="min-h-0 flex-1 space-y-2 overflow-y-auto p-4 pt-3">
           {[...BRANCHES]
             .sort((a, b) => rank(a.id) - rank(b.id))
             .map((branch) => {
@@ -186,7 +185,7 @@ export function BranchModal() {
                     setSelectedBranch(branch);
                   }
                 }}
-                className={`w-full cursor-pointer text-left rounded-xl border-2 p-4 transition-all ${
+                className={`flex w-full cursor-pointer items-center gap-3 rounded-xl border-2 px-3.5 py-3 text-left transition-all ${
                   isNearest ? "branch-nearest " : ""
                 }${
                   isActive
@@ -196,77 +195,71 @@ export function BranchModal() {
                     : "border-slate-200 hover:border-navy-300 hover:bg-slate-50"
                 }`}
               >
-                <div className="flex items-start justify-between gap-3">
-                  <div className="flex-1">
-                    <div className="flex items-center flex-wrap gap-2 mb-1">
-                      <span
-                        className={`text-base font-semibold ${
-                          isActive ? "text-navy-800" : "text-slate-800"
-                        }`}
-                      >
-                        {branch.name}
-                      </span>
-                      {isActive && (
-                        <span className="bg-orange-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
-                          Activa
-                        </span>
-                      )}
-                      {isNearest && (
-                        <span className="inline-flex items-center gap-1.5 bg-neutral-900 text-white text-xs font-bold px-2.5 py-0.5 rounded-full">
-                          <span className="relative inline-block w-2 h-2 shrink-0">
-                            <span className="branch-ping absolute left-0 top-0 w-2 h-2 rounded-full bg-orange-500" />
-                            <span className="absolute left-0 top-0 w-2 h-2 rounded-full bg-orange-500" />
-                          </span>
-                          La más cercana
-                        </span>
-                      )}
-                    </div>
-                    {distance !== undefined && (
-                      <p className={`text-sm font-semibold mb-1 ${isNearest ? "text-orange-600" : "text-slate-500"}`}>
-                        A {formatDistance(distance)} de tu ubicación
-                      </p>
-                    )}
-                    <p className="text-slate-600 text-sm">{branch.address}</p>
-                    <p className="text-slate-500 text-sm">{branch.city}</p>
-                    <div className="flex items-center gap-1.5 mt-2 text-xs text-slate-400">
-                      <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                      {branch.hours}
-                    </div>
-                    <div className="mt-1 flex items-center justify-between gap-2">
-                      <p className="text-xs text-slate-400">Atención por orden de llegada</p>
-                      <a
-                        href={branch.mapUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(e) => e.stopPropagation()}
-                        className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-navy-200 bg-white py-1 pl-2 pr-3 text-xs font-bold text-navy-700 transition-colors hover:border-navy-400 hover:bg-navy-50"
-                      >
-                        <DirectionsIcon className="h-5 w-5 shrink-0 text-orange-500" />
-                        Cómo llegar
-                      </a>
-                    </div>
-                  </div>
-                  <div
-                    className={`mt-1 w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors ${
-                      isActive ? "border-orange-500 bg-orange-500" : "border-slate-300"
-                    }`}
-                  >
-                    {isActive && (
-                      <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                      </svg>
-                    )}
-                  </div>
+                <div
+                  className={`flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full border-2 transition-colors ${
+                    isActive ? "border-orange-500 bg-orange-500" : "border-slate-300"
+                  }`}
+                >
+                  {isActive && (
+                    <svg className="h-3 w-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  )}
                 </div>
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                    <span className="text-base font-bold leading-tight text-navy-900">{branch.shortName}</span>
+                    {branch.apertura ? (
+                      <span className="rounded-full bg-navy-50 px-2 py-0.5 text-[11px] font-bold text-navy-700">
+                        Abre {branch.apertura}
+                      </span>
+                    ) : (
+                      <span className="rounded-full bg-green-50 px-2 py-0.5 text-[11px] font-bold text-green-700">
+                        Abierta
+                      </span>
+                    )}
+                    {isNearest && (
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-neutral-900 px-2 py-0.5 text-[11px] font-bold text-white">
+                        <span className="relative inline-block h-1.5 w-1.5 shrink-0">
+                          <span className="branch-ping absolute left-0 top-0 h-1.5 w-1.5 rounded-full bg-orange-500" />
+                          <span className="absolute left-0 top-0 h-1.5 w-1.5 rounded-full bg-orange-500" />
+                        </span>
+                        La más cercana
+                      </span>
+                    )}
+                  </div>
+                  <p className="mt-0.5 truncate text-sm text-slate-600">
+                    {branch.address}, {branch.city}
+                  </p>
+                  <p className="text-xs text-slate-500">
+                    {distance !== undefined && (
+                      <span className={`font-bold ${isNearest ? "text-orange-600" : "text-slate-600"}`}>
+                        A {formatDistance(distance)} de tu ubicación ·{" "}
+                      </span>
+                    )}
+                    {branch.hours}
+                    {!branch.apertura && !branch.provisorio && " · por orden de llegada"}
+                  </p>
+                </div>
+                <a
+                  href={branch.mapUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  aria-label={`Cómo llegar a ${branch.shortName}`}
+                  className="inline-flex flex-shrink-0 items-center gap-1 rounded-full border border-navy-200 bg-white py-1 pl-1.5 pr-2.5 text-xs font-bold text-navy-700 transition-colors hover:border-navy-400 hover:bg-navy-50"
+                >
+                  <DirectionsIcon className="h-5 w-5 shrink-0 text-orange-500" />
+                  <span className="hidden min-[420px]:inline">Cómo llegar</span>
+                  <span className="min-[420px]:hidden">Mapa</span>
+                </a>
               </div>
             );
           })}
         </div>
 
         {hasConfirmedBranch && (
-          <div className="px-4 pb-4">
+          <div className="flex-shrink-0 px-4 pb-4">
             <WhatsAppLink
               href={`https://wa.me/${selectedBranch.whatsapp}`}
               className="flex items-center justify-center gap-2 w-full bg-[#25d366] hover:bg-[#1ebe5d] text-white font-semibold py-3 rounded-xl transition-colors text-sm"

@@ -178,7 +178,7 @@ function BranchSummary({
         </span>
         <span className="min-w-0">
           <span className="flex flex-wrap items-center gap-2">
-            <span className="block text-lg font-black text-navy-900">{branch.name}</span>
+            <span className="block text-lg font-black text-navy-900">{branch.shortName}</span>
             {isSelected && (
               <span className="rounded-full bg-orange-100 px-2 py-0.5 text-xs font-bold text-orange-700">
                 Tu sucursal

@@ -111,7 +111,7 @@ export function Footer() {
                   className="bg-black rounded-xl p-4 border border-zinc-900"
                 >
                   <p className="text-white font-semibold text-sm mb-1">
-                    {branch.name}
+                    {branch.shortName}
                   </p>
                   <p className="text-zinc-400 text-xs mb-0.5">{branch.address}</p>
                   <p className="text-zinc-400 text-xs mb-2">{branch.city}</p>
