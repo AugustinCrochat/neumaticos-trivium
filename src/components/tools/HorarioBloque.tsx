@@ -2,7 +2,8 @@
 
 import { MapPin } from "lucide-react";
 import Link from "@/components/ui/Link";
-import { BRANCHES } from "@/lib/config";
+import { useBranch } from "@/contexts/branch-context";
+import type { Branch } from "@/lib/config";
 import { getBranchStatus } from "@/lib/branch-status";
 import { useRelojCordoba } from "@/lib/reloj-cordoba";
 import { toolPath } from "@/lib/tools";
@@ -14,9 +15,9 @@ import {
   mejoresTramos,
   nivelEnHora,
   nivelesDelDia,
+  tieneAfluencia,
 } from "@/lib/afluencia";
 
-const branch = BRANCHES.find((b) => b.id === "arguello")!;
 const COLOR_BARRA = ["bg-green-500", "bg-yellow-400", "bg-orange-500"];
 const COLOR_TEXTO = ["!text-green-700", "!text-yellow-700", "!text-orange-600"];
 const ALTURA = ["h-3", "h-6", "h-10"];
@@ -27,14 +28,34 @@ const mayus = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
  * en las páginas de servicios, contacto y sucursal sin mandar a la herramienta
  * completa. Hoy si abre; si no (domingo, o antes de hidratar), el día más tranquilo.
  */
-export function HorarioBloque({ className = "", titulo = "¿A qué hora conviene venir?" }: { className?: string; titulo?: string }) {
+export function HorarioBloque({ className = "", titulo = "¿A qué hora conviene venir?", sucursal }: { className?: string; titulo?: string; sucursal?: Branch }) {
+  const { selectedBranch } = useBranch();
+  const branch = sucursal ?? selectedBranch;
   const reloj = useRelojCordoba();
+  const hayDatos = tieneAfluencia(branch.id);
   const hoyAbre = reloj !== null && reloj.dia >= 1 && reloj.dia <= 6;
   const dia = hoyAbre ? reloj.dia : diasPorTranquilidad()[0];
   const niveles = nivelesDelDia(dia);
   const tramos = mejoresTramos(dia);
   const abierto = reloj !== null && getBranchStatus(branch).isOpen;
   const ahora = hoyAbre && abierto ? nivelEnHora(reloj.dia, reloj.hora) : null;
+
+  if (!hayDatos) {
+    return (
+      <section className={`rounded-2xl border border-emerald-200 bg-emerald-50 p-5 sm:p-6 ${className}`}>
+        <h2 className="!mb-0 !mt-0 !text-xl font-black !text-navy-900">{titulo}</h2>
+        <p className="!mb-0 mt-1 !text-sm !text-slate-700">
+          {branch.apertura ? `${branch.shortName} abre ${branch.apertura}. ` : ""}
+          Todavía no tenemos datos de movimiento de {branch.shortName}; consultá la espera por WhatsApp antes de ir.
+        </p>
+        <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm font-bold">
+          <a href={branch.mapUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 !text-emerald-800 underline underline-offset-4">
+            <MapPin className="h-4 w-4" aria-hidden /> {branch.shortName} en Google Maps
+          </a>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className={`rounded-2xl border border-emerald-200 bg-emerald-50 p-5 sm:p-6 ${className}`}>
@@ -43,7 +64,7 @@ export function HorarioBloque({ className = "", titulo = "¿A qué hora conviene
         Atendemos por orden de llegada, sin turnos.{" "}
         {ahora !== null ? (
           <>
-            Ahora el movimiento suele ser <strong className={COLOR_TEXTO[ahora]}>{NIVELES[ahora].toLowerCase()}</strong>.
+            Ahora suele estar <strong className={COLOR_TEXTO[ahora]}>{NIVELES[ahora].toLowerCase()}</strong> comparado con el resto del día.
           </>
         ) : (
           <>

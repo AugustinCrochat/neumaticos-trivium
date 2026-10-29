@@ -228,7 +228,7 @@ export default async function BranchPage({ params }: Props) {
           </p>
         </section>
 
-        {branch.id === "arguello" && !branch.provisorio && !branch.apertura && <HorarioBloque titulo="¿A qué hora conviene venir a Argüello?" />}
+        <HorarioBloque sucursal={branch} titulo={`¿A qué hora conviene venir a ${branch.shortName}?`} />
 
         </div>
         </div>

@@ -1,5 +1,5 @@
 // Resume cuántas órdenes de trabajo entran por día y hora en una sucursal del POS
-// y escribe src/lib/afluencia.ts (solo conteos: sin clientes, patentes ni montos).
+// y escribe src/lib/afluencia-datos.ts (solo conteos: sin clientes, patentes ni montos).
 // Uso: node scripts/afluencia-pos.mjs <ruta al .env.local del POS> [id-sucursal-pos] [desde]
 // Necesita NEXT_PUBLIC_SUPABASE_URL y SUPABASE_SERVICE_ROLE_KEY en ese archivo.
 import { readFileSync, writeFileSync } from "node:fs";
@@ -42,25 +42,29 @@ const suave = (d, h) => {
   const w = [[h - 1, 1], [h, 2], [h + 1, 1]].filter(([x]) => HORAS.includes(x));
   return w.reduce((s, [x, k]) => s + promedio(d, x) * k, 0) / w.reduce((s, [, k]) => s + k, 0);
 };
-const valores = [];
-for (const d of [1, 2, 3, 4, 5, 6]) for (const h of HORAS) valores.push(suave(d, h));
-const orden = [...valores].sort((a, b) => a - b);
-const t1 = orden[Math.floor(orden.length / 3)];
-const t2 = orden[Math.floor((orden.length * 2) / 3)];
-const nivel = (v) => (v <= t1 ? 0 : v <= t2 ? 1 : 2);
-
-const dias = [1, 2, 3, 4, 5, 6].map((d) => HORAS.map((h) => nivel(suave(d, h))).join(""));
+// Los niveles comparan las horas de un mismo día entre sí (tercios de ese día), así
+// el sábado, que es el más cargado, también muestra sus horas más tranquilas.
+// El promedio de cada día se guarda aparte, solo para ordenar los días entre sí.
+const nivelesDia = (d) => {
+  const v = HORAS.map((h) => suave(d, h));
+  const orden = [...v].sort((a, b) => a - b);
+  const t1 = orden[Math.floor(orden.length / 3)];
+  const t2 = orden[Math.floor((orden.length * 2) / 3)];
+  return v.map((x) => (x <= t1 ? 0 : x <= t2 ? 1 : 2)).join("");
+};
+const dias = [1, 2, 3, 4, 5, 6].map(nivelesDia);
+const promedios = [1, 2, 3, 4, 5, 6].map((d) => HORAS.reduce((s, h) => s + promedio(d, h), 0) / HORAS.length);
 const hasta = new Date().toISOString().slice(0, 10);
 const semanas = Math.round(ocurrencias[1]);
 
 writeFileSync(
-  new URL("../src/lib/afluencia.ts", import.meta.url),
+  new URL("../src/lib/afluencia-datos.ts", import.meta.url),
   `/**
  * Qué tan movido está el taller de Argüello por día y hora, según cuándo se
  * abren las órdenes de trabajo en el POS (generado con scripts/afluencia-pos.mjs:
- * solo conteos por día y hora, sin datos de clientes). Es un nivel relativo al
- * propio taller, no una cantidad: 0 tranquilo, 1 normal, 2 movido, calculado
- * con el promedio suavizado de ~${semanas} semanas (${desde} al ${hasta}).
+ * solo conteos por día y hora, sin datos de clientes). Es un nivel relativo a las
+ * demás horas del mismo día, no una cantidad: 0 tranquilo, 1 normal, 2 movido,
+ * calculado con el promedio suavizado de ~${semanas} semanas (${desde} al ${hasta}).
  * Para refrescarlo, volver a correr el script.
  */
 export const AFLUENCIA_DESDE = "${desde}";
@@ -71,6 +75,10 @@ export const AFLUENCIA_HORA_INICIO = ${HORAS[0]};
 /** Un string por día (lunes a sábado), un dígito por hora desde AFLUENCIA_HORA_INICIO. */
 export const AFLUENCIA: Record<number, string> = {
 ${dias.map((s, i) => `  ${i + 1}: "${s}",`).join("\n")}
+};
+/** Órdenes promedio por hora de cada día (lunes a sábado): solo para ordenar los días del más tranquilo al más movido. */
+export const AFLUENCIA_PROMEDIO: Record<number, number> = {
+${promedios.map((x, i) => `  ${i + 1}: ${x.toFixed(2)},`).join("\n")}
 };
 `,
 );

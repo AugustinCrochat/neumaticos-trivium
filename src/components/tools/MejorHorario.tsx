@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { MapPin, MessageCircle } from "lucide-react";
 import Link from "@/components/ui/Link";
-import { BRANCHES } from "@/lib/config";
+import { useBranch } from "@/contexts/branch-context";
+import type { Branch } from "@/lib/config";
 import { getBranchStatus } from "@/lib/branch-status";
 import { useRelojCordoba } from "@/lib/reloj-cordoba";
 import {
@@ -15,10 +16,10 @@ import {
   mejoresTramos,
   nivelEnHora,
   nivelesDelDia,
+  tieneAfluencia,
   type Nivel,
 } from "@/lib/afluencia";
 
-const branch = BRANCHES.find((b) => b.id === "arguello")!;
 const DIAS = [1, 2, 3, 4, 5, 6];
 
 const COLOR_BARRA = ["bg-green-500", "bg-yellow-400", "bg-orange-500"];
@@ -26,6 +27,14 @@ const COLOR_TEXTO = ["text-green-700", "text-yellow-700", "text-orange-600"];
 const ALTURA = ["h-10", "h-20", "h-32"];
 
 const SERVICIOS = [
+  {
+    id: "neumaticos",
+    label: "Cambiar neumáticos",
+    texto:
+      "Confirmá la medida y el stock antes de venir para no perder el viaje. Si querés alineación y balanceo en el mismo turno, contá con más tiempo.",
+    link: { href: "/buscador", label: "Buscar mi medida" },
+    wa: "cambiar neumáticos",
+  },
   {
     id: "alineado",
     label: "Alineado y balanceado",
@@ -38,17 +47,9 @@ const SERVICIOS = [
     id: "tuercas",
     label: "Tuercas antirrobo",
     texto:
-      "Si ya sabés qué juego necesitás, es un trabajo corto. Traé la llave de la tuerca de seguridad si ya tenés una puesta, y si la perdiste avisanos antes de venir.",
+      "Podés llevarte las tuercas antirrobo y que te las coloquemos en el momento. Si ya tenés unas puestas y no tenés la llave, te las sacamos como servicio del taller.",
     link: { href: "/tuercas-antirrobo", label: "Ver tuercas antirrobo" },
-    wa: "colocar tuercas antirrobo",
-  },
-  {
-    id: "neumaticos",
-    label: "Cambiar neumáticos",
-    texto:
-      "Confirmá la medida y el stock antes de venir para no perder el viaje. Si querés alineación y balanceo en el mismo turno, contá con más tiempo.",
-    link: { href: "/buscador", label: "Buscar mi medida" },
-    wa: "cambiar neumáticos",
+    wa: "colocar o sacar tuercas antirrobo",
   },
   {
     id: "pinchadura",
@@ -61,7 +62,9 @@ const SERVICIOS = [
 
 const rango = (d: number, h: number) => `${d} a ${h} h`;
 
-export function MejorHorario() {
+export function MejorHorario({ sucursal }: { sucursal?: Branch }) {
+  const { selectedBranch } = useBranch();
+  const branch = sucursal ?? selectedBranch;
   const reloj = useRelojCordoba();
   const dia = reloj?.dia ?? null;
   const hora = reloj?.hora ?? null;
@@ -77,20 +80,45 @@ export function MejorHorario() {
   const svc = SERVICIOS.find((s) => s.id === servicio) ?? SERVICIOS[0];
   const waTexto = `Hola, quiero ir a ${svc.wa} el ${DIAS_NOMBRES[diaVisible]}. ¿Cómo está la espera?`;
 
+  if (!tieneAfluencia(branch.id)) {
+    return (
+      <div>
+        <p className="text-xl font-black text-tire-950">Todavía no tenemos datos de movimiento de {branch.shortName}</p>
+        <p className="mt-2 text-slate-600">
+          {branch.apertura ? `Esta sucursal abre ${branch.apertura}. ` : ""}
+          Cuando junte atención vas a ver acá los días y horarios más tranquilos. Mientras tanto, podés consultar la espera por WhatsApp.
+        </p>
+        <div className="mt-5 flex flex-wrap gap-3">
+          <a href={branch.mapUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full bg-tire-950 px-5 py-3 text-sm font-bold text-white hover:bg-black">
+            <MapPin className="h-4 w-4" aria-hidden /> Ver {branch.shortName} en Google Maps
+          </a>
+          <a
+            href={`https://wa.me/${branch.whatsapp}?text=${encodeURIComponent(`Hola, quiero ir a ${branch.shortName}. ¿Cómo está la espera?`)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-full bg-green-600 px-5 py-3 text-sm font-bold text-white hover:bg-green-700"
+          >
+            <MessageCircle className="h-4 w-4" aria-hidden /> Consultar por WhatsApp
+          </a>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div>
       {reloj && (
         <div className="mb-6 rounded-2xl border border-slate-200 bg-slate-50 p-4">
-          <p className="text-sm font-bold uppercase tracking-wide text-slate-500">Ahora en Argüello</p>
+          <p className="text-sm font-bold uppercase tracking-wide text-slate-500">Ahora en {branch.shortName}</p>
           {abierto && ahora !== null ? (
             <p className="mt-1 text-xl font-black text-tire-950">
-              Movimiento <span className={COLOR_TEXTO[ahora]}>{NIVELES[ahora].toLowerCase()}</span> para esta hora
+              Ahora suele estar <span className={COLOR_TEXTO[ahora]}>{NIVELES[ahora].toLowerCase()}</span>, comparado con el resto del día
             </p>
           ) : (
             <p className="mt-1 text-xl font-black text-tire-950">Cerrado ahora · {branch.hours}</p>
           )}
           <p className="mt-1 text-sm text-slate-600">
-            Es lo habitual para {abierto ? "este día y esta hora" : "los días de atención"}, no un conteo en vivo. Para ver cómo está en este momento, mirá «En vivo» en la ficha de Google Maps.
+            Es lo habitual a esta hora, no un conteo en vivo. Para ver cómo está en este momento, mirá «En vivo» en la ficha de Google Maps.
           </p>
         </div>
       )}
@@ -134,15 +162,11 @@ export function MejorHorario() {
         ))}
       </ul>
 
-      <p className="mt-4 text-base text-slate-700">
-        {tramos.length > 0 ? (
-          <>
-            El {DIAS_NOMBRES[diaVisible]} es más {tramos[0].nivel === 0 ? "tranquilo" : tramos[0].nivel === 1 ? "parejo" : "movido a toda hora"}{" "}
-            {tramos[0].nivel === 2 ? "" : <strong>{tramos.map((t) => rango(t.desde, t.hasta)).join(" y de ")}</strong>}
-            {tramos[0].nivel === 2 ? ". Si podés, probá otro día." : "."}
-          </>
-        ) : null}
-      </p>
+      {tramos.length > 0 && (
+        <p className="mt-4 text-base text-slate-700">
+          El {DIAS_NOMBRES[diaVisible]}, lo más tranquilo es <strong>{tramos.map((t) => rango(t.desde, t.hasta)).join(" y de ")}</strong>.
+        </p>
+      )}
 
       <h2 className="mt-8 text-lg font-black text-tire-950">¿Qué vas a hacer?</h2>
       <div className="mt-2 flex flex-wrap gap-2" role="group" aria-label="Servicio">
@@ -186,7 +210,7 @@ export function MejorHorario() {
         </a>
       </div>
       <p className="mt-4 text-xs text-slate-500">
-        Basado en cuándo ingresaron los trabajos al taller en las últimas {AFLUENCIA_SEMANAS} semanas. Atendemos por orden de llegada, sin turnos.
+        Los colores comparan las horas de un mismo día entre sí, según cuándo ingresaron los trabajos al taller en las últimas {AFLUENCIA_SEMANAS} semanas. Atendemos por orden de llegada, sin turnos.
       </p>
     </div>
   );

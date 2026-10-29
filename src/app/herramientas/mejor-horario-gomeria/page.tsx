@@ -54,8 +54,8 @@ export default function Page() {
           </p>
           <ul>
             <li><strong>Más tranquilo:</strong> {tranquilos.join(" y ")}, con el mejor tramo el {DIAS_NOMBRES[orden[0]]} {tramos(orden[0])}.</li>
-            <li><strong>Más movido:</strong> el {movido}, sobre todo a la mañana. Si tu trabajo es largo, como un alineado y balanceado, probá otro día.</li>
-            <li><strong>Antes del cierre:</strong> las últimas horas de la tarde suelen juntar gente que sale del trabajo. Para los trabajos de más de una hora, no llegues justo.</li>
+            <li><strong>Más movido:</strong> el {movido}, aunque también tiene sus ratos más livianos: {tramos(orden[orden.length - 1])}.</li>
+            <li><strong>Antes del cierre:</strong> los trabajos de más de una hora, como el alineado y balanceado, necesitan tiempo: no llegues justo sobre las 19 h.</li>
           </ul>
           <h2>Cómo usar el movimiento en vivo de Google Maps</h2>
           <p>

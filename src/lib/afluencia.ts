@@ -1,25 +1,6 @@
-/**
- * Qué tan movido está el taller de Argüello por día y hora, según cuándo se
- * abren las órdenes de trabajo en el POS (generado con scripts/afluencia-pos.mjs:
- * solo conteos por día y hora, sin datos de clientes). Es un nivel relativo al
- * propio taller, no una cantidad: 0 tranquilo, 1 normal, 2 movido, calculado
- * con el promedio suavizado de ~29 semanas (2026-04-13 al 2026-10-29).
- * Para refrescarlo, volver a correr el script.
- */
-export const AFLUENCIA_DESDE = "2026-04-13";
-export const AFLUENCIA_HASTA = "2026-10-29";
-export const AFLUENCIA_SEMANAS = 29;
-/** Primera hora de la grilla y cantidad de horas (9 a 19 h). */
-export const AFLUENCIA_HORA_INICIO = 9;
-/** Un string por día (lunes a sábado), un dígito por hora desde AFLUENCIA_HORA_INICIO. */
-export const AFLUENCIA: Record<number, string> = {
-  1: "1000011222",
-  2: "1000012221",
-  3: "1000011111",
-  4: "0110000011",
-  5: "2200001211",
-  6: "2222222222",
-};
+import { AFLUENCIA, AFLUENCIA_HORA_INICIO, AFLUENCIA_PROMEDIO } from "./afluencia-datos";
+
+export { AFLUENCIA_DESDE, AFLUENCIA_HASTA, AFLUENCIA_HORA_INICIO, AFLUENCIA_SEMANAS } from "./afluencia-datos";
 
 export type Nivel = 0 | 1 | 2;
 export const NIVELES = ["Tranquilo", "Normal", "Movido"] as const;
@@ -36,7 +17,7 @@ export function nivelEnHora(dia: number, hora: number): Nivel | null {
   return nivelesDelDia(dia)[hora - AFLUENCIA_HORA_INICIO] ?? null;
 }
 
-/** Tramos horarios seguidos con el nivel más bajo que tenga ese día, ej. "de 10 a 14 h" (cierra a la hora siguiente de la última celda). */
+/** Tramos horarios seguidos con el nivel más bajo de ese día (comparado con sus otras horas), ej. "de 10 a 14 h" (cierra a la hora siguiente de la última celda). */
 export function mejoresTramos(dia: number): { desde: number; hasta: number; nivel: Nivel }[] {
   const n = nivelesDelDia(dia);
   if (!n.length) return [];
@@ -54,6 +35,9 @@ export function mejoresTramos(dia: number): { desde: number; hasta: number; nive
 
 /** Días de lunes a sábado de más tranquilo a más movido. */
 export function diasPorTranquilidad(): number[] {
-  const puntaje = (d: number) => nivelesDelDia(d).reduce<number>((s, v) => s + v, 0);
-  return [1, 2, 3, 4, 5, 6].sort((a, b) => puntaje(a) - puntaje(b) || a - b);
+  return [1, 2, 3, 4, 5, 6].sort((a, b) => AFLUENCIA_PROMEDIO[a] - AFLUENCIA_PROMEDIO[b] || a - b);
 }
+
+/** Sucursales con datos de movimiento (órdenes del POS). El resto muestra un aviso en vez de la grilla. */
+const SUCURSALES_CON_AFLUENCIA = ["arguello"];
+export const tieneAfluencia = (branchId: string) => SUCURSALES_CON_AFLUENCIA.includes(branchId);
