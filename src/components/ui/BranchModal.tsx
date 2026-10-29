@@ -9,24 +9,24 @@ import { WhatsAppLink } from "./WhatsAppLink";
 
 type GeoState = "idle" | "loading" | "done" | "error";
 
+/** Monta el contenido solo con el modal abierto: al cerrarse se desmonta y el
+    estado de la detección de ubicación se reinicia sin necesidad de un efecto. */
 export function BranchModal() {
-  const { isModalOpen, closeModal, setSelectedBranch, selectedBranch, hasConfirmedBranch, autoSelectBranch } = useBranch();
+  const { isModalOpen } = useBranch();
+  return isModalOpen ? <BranchModalContent /> : null;
+}
+
+function BranchModalContent() {
+  const { closeModal, setSelectedBranch, selectedBranch, hasConfirmedBranch, autoSelectBranch } = useBranch();
   const [nearestId, setNearestId] = useState<string | null>(null);
   const [distances, setDistances] = useState<Record<string, number>>({});
   const [geoState, setGeoState] = useState<GeoState>("idle");
   const [geoMsg, setGeoMsg] = useState("No pudimos acceder a tu ubicación. Elegí manualmente.");
 
   useEffect(() => {
-    if (isModalOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-      setGeoState("idle");
-      setNearestId(null);
-      setDistances({});
-    }
+    document.body.style.overflow = "hidden";
     return () => { document.body.style.overflow = ""; };
-  }, [isModalOpen]);
+  }, []);
 
   function detectLocation() {
     if (!navigator.geolocation) {
@@ -79,8 +79,6 @@ export function BranchModal() {
       { timeout: 10000, maximumAge: 10 * 60 * 1000 }
     );
   }
-
-  if (!isModalOpen) return null;
 
   // Primero la activa, después la más cercana detectada, después el resto.
   const rank = (id: string) =>
