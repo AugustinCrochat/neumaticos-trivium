@@ -222,7 +222,7 @@ export default async function BranchPage({ params }: Props) {
               </div>
             ))}
           </dl>
-          <p className="mt-3 rounded-xl bg-orange-50 px-3 py-2 text-xs font-medium text-orange-700">
+          <p className="mt-3 rounded-xl bg-emerald-50 px-3 py-2 text-xs font-medium text-emerald-700">
             Atención por orden de llegada, sin turnos. Consultá tiempos de espera por WhatsApp.
           </p>
         </section>

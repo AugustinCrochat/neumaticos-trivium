@@ -3,7 +3,9 @@
 import Link from "@/components/ui/Link";
 import Image from "next/image";
 import { BRANCHES, type Branch } from "@/lib/config";
+import { useState } from "react";
 import { useBranch } from "@/contexts/branch-context";
+import { getBranchDistances, formatDistance } from "@/lib/branch-geo";
 import { BranchStatusBadge } from "@/app/sucursales/[id]/BranchStatusBadge";
 import { LazyBranchMiniMap } from "@/app/sucursales/[id]/LazyBranchMiniMap";
 import { DirectionsButton } from "@/app/sucursales/[id]/DirectionsButton";
@@ -18,7 +20,7 @@ function BranchCard({ branch }: { branch: Branch }) {
       <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
         <div className="grid gap-0 md:grid-cols-2">
           {/* Info + acciones */}
-          <div className="p-6 md:p-8">
+          <div className="flex flex-col p-6 md:p-8">
             <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
               <h2 className="text-xl font-black text-navy-900">
                 Neumáticos Trivium {branch.shortName}
@@ -78,8 +80,8 @@ function BranchCard({ branch }: { branch: Branch }) {
             </Link>
 
             {branch.facadePhoto && (
-              <Link href={`/sucursales/${branch.id}`} className="mt-4 block w-full overflow-hidden rounded-xl ring-1 ring-slate-200">
-                <div className="relative aspect-[4/3] w-full">
+              <Link href={`/sucursales/${branch.id}`} className="mt-4 block w-full overflow-hidden rounded-xl ring-1 ring-slate-200 md:min-h-40 md:flex-1">
+                <div className="relative aspect-[4/3] w-full md:aspect-auto md:h-full">
                   <Image
                     src={branch.facadePhoto}
                     alt={`Fachada del local de Neumáticos Trivium ${branch.shortName}`}
@@ -109,35 +111,73 @@ function BranchCard({ branch }: { branch: Branch }) {
  * contacto de cada una sigue estando para buscadores.
  */
 export function ContactoSucursales() {
-  const { selectedBranch, hasConfirmedBranch, openModal } = useBranch();
+  const { selectedBranch, hasConfirmedBranch, setSelectedBranch } = useBranch();
   const ordenadas = [selectedBranch, ...BRANCHES.filter((b) => b.id !== selectedBranch.id)];
+  const [geo, setGeo] = useState<"idle" | "loading" | "error">("idle");
+  const [distancias, setDistancias] = useState<Record<string, number>>({});
+
+  function usarMiUbicacion() {
+    if (!navigator.geolocation) {
+      setGeo("error");
+      return;
+    }
+    setGeo("loading");
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const dist = getBranchDistances(pos.coords.latitude, pos.coords.longitude);
+        const [cercana] = Object.entries(dist).sort((a, b) => a[1] - b[1]);
+        const branch = BRANCHES.find((b) => b.id === cercana[0]);
+        setDistancias(dist);
+        if (branch) setSelectedBranch(branch);
+        setGeo("idle");
+      },
+      () => setGeo("error"),
+      { timeout: 10000, maximumAge: 10 * 60 * 1000 }
+    );
+  }
 
   return (
     <div className="space-y-8">
-      {hasConfirmedBranch ? (
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <p className="text-sm font-bold text-slate-600">
-            Tu sucursal: <span className="text-navy-900">{selectedBranch.shortName}</span>
+      {BRANCHES.length > 1 && (
+        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm md:p-5">
+          <p className="font-black text-navy-900">
+            {hasConfirmedBranch ? "Sucursal" : "¿Con qué sucursal querés hablar?"}
           </p>
-          {BRANCHES.length > 1 && (
-            <button type="button" onClick={openModal} className="text-sm font-bold text-navy-700 underline underline-offset-4 hover:text-navy-900">
-              Cambiar sucursal
+          <div className="mt-3 flex flex-wrap gap-2">
+            {BRANCHES.map((b) => {
+              const activa = hasConfirmedBranch && b.id === selectedBranch.id;
+              return (
+                <button
+                  key={b.id}
+                  type="button"
+                  aria-pressed={activa}
+                  onClick={() => setSelectedBranch(b)}
+                  className={`rounded-xl border px-4 py-2.5 text-sm font-black transition-colors ${
+                    activa
+                      ? "border-navy-900 bg-navy-900 text-white"
+                      : "border-slate-200 bg-white text-navy-900 hover:border-slate-400"
+                  }`}
+                >
+                  {b.shortName}
+                  {distancias[b.id] !== undefined && (
+                    <span className="ml-1.5 font-semibold opacity-70">· {formatDistance(distancias[b.id])}</span>
+                  )}
+                </button>
+              );
+            })}
+            <button
+              type="button"
+              onClick={usarMiUbicacion}
+              disabled={geo === "loading"}
+              className="inline-flex items-center gap-2 rounded-xl border border-orange-200 bg-orange-50 px-4 py-2.5 text-sm font-black text-orange-700 transition-colors hover:bg-orange-100 disabled:opacity-60"
+            >
+              <DirectionsIcon className="h-5 w-5" />
+              {geo === "loading" ? "Buscando…" : "Usar mi ubicación"}
             </button>
-          )}
-        </div>
-      ) : (
-        <div className="flex flex-col gap-3 rounded-2xl border border-orange-200 bg-orange-50 p-5 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <p className="font-black text-navy-900">¿Con qué sucursal querés hablar?</p>
-            <p className="mt-0.5 text-sm text-slate-600">Elegila de la lista o dejá que detectemos la más cercana a tu ubicación.</p>
           </div>
-          <button
-            type="button"
-            onClick={openModal}
-            className="shrink-0 rounded-xl bg-orange-500 px-5 py-3 text-sm font-black text-white transition-colors hover:bg-orange-600"
-          >
-            Elegir mi sucursal
-          </button>
+          {geo === "error" && (
+            <p className="mt-2 text-sm text-slate-600">No pudimos acceder a tu ubicación. Elegí la sucursal de la lista.</p>
+          )}
         </div>
       )}
       {ordenadas.map((branch) => (

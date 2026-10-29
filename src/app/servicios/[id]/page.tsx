@@ -187,7 +187,7 @@ export default async function ServicioPage({ params }: Props) {
           </section>
         )}
 
-        <div className="mt-12 bg-orange-50 border border-orange-100 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="mt-12 bg-emerald-50 border border-emerald-100 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <div>
             <h3 className="text-lg font-bold text-navy-900 mb-1">Atención por orden de llegada</h3>
             <p className="text-slate-600 text-sm">Vení directamente a la sucursal, sin turnos.</p>
