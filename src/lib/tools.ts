@@ -77,6 +77,15 @@ export const TOOLS: Tool[] = [
     image: { src: "/images/local/neumatico-at-grenlander-maga-at-two-camioneta-clasica-trivium.webp", alt: "Neumático A/T de medida flotation en una camioneta" },
   },
   {
+    slug: "foto-del-neumatico",
+    name: "Foto del neumático: te decimos la medida",
+    short: "Sacá una foto al flanco desde el celular y mandala por WhatsApp: te decimos qué medida lleva.",
+    metaTitle: "¿Qué medida lleva mi neumático? Mandanos una foto por WhatsApp",
+    metaDescription:
+      "Si no sabés qué medida lleva tu neumático, sacale una foto al flanco con la cámara guiada (con flash) y mandala por WhatsApp: te decimos la medida y qué tenemos en stock.",
+    image: { src: "/images/herramientas/codigo-dot-flanco-neumatico.webp", alt: "Flanco de un neumático con la medida y el código DOT grabados" },
+  },
+  {
     slug: "arma-tu-juego",
     name: "Armá tu juego completo",
     short: "Elegí tu auto, un modelo y mirá el total de los 4 neumáticos con alineación y balanceo.",

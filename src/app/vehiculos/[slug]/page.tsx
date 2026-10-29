@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { FotoNeumaticoBloque } from "@/components/tools/FotoNeumaticoBloque";
 import Link from "@/components/ui/Link";
 import { notFound } from "next/navigation";
 import { POPULAR_VEHICLES, vehicleSlug, vehicleTireProfile, type VehicleTireProfile } from "@/lib/vehicles";
@@ -236,7 +237,7 @@ export default async function VehiclePage({ params }: Props) {
         />
       )}
 
-      <div className={`bg-black px-4 pt-8 ${vehiclePhoto(slug) ? "pb-20 md:pb-24" : "pb-10"}`}>
+      <div className={`bg-black px-4 pt-8 ${vehiclePhoto(slug) ? "pb-24 md:pb-28" : "pb-10"}`}>
         <div className="mx-auto max-w-4xl text-center">
           {marcaLogo(vehicle.brand) && (
             <Link
@@ -267,7 +268,7 @@ export default async function VehiclePage({ params }: Props) {
                   alt={name}
                   width={1000}
                   height={560}
-                  className="relative z-20 order-first mx-auto -mt-16 mb-2 h-auto w-64 drop-shadow-[0_18px_24px_rgba(0,0,0,0.45)] md:order-last md:mx-0 md:-mt-32 md:w-96"
+                  className="relative z-20 order-first mx-auto -mt-24 mb-2 h-auto w-72 drop-shadow-[0_18px_24px_rgba(0,0,0,0.45)] md:order-last md:mx-0 md:-mt-44 md:w-[28rem]"
                 />
               )}
             </div>
@@ -282,6 +283,8 @@ export default async function VehiclePage({ params }: Props) {
               .
             </p>
           </section>
+
+          <FotoNeumaticoBloque className="mb-10" titulo={`¿No sabés qué medida lleva tu ${name}?`} />
 
           {masBaratos.length > 0 && (
             <section className="mb-10 border-b border-slate-100 pb-10">

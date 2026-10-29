@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { FotoNeumaticoBloque } from "@/components/tools/FotoNeumaticoBloque";
 import Link from "@/components/ui/Link";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { FaqSection } from "@/components/seo/FaqSection";
@@ -111,6 +112,8 @@ export default function BuscadorPage() {
         <div className="mt-8 max-w-3xl rounded-2xl bg-white p-4 shadow-lg md:p-6">
           <SizeOrVehicleSearch />
         </div>
+
+        <FotoNeumaticoBloque className="mt-8 max-w-3xl" />
 
         <section className="mt-12 max-w-3xl">
           <h2 className="mb-3 text-2xl font-black text-tire-950">Qué hace este buscador</h2>

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { FotoNeumaticoBloque } from "@/components/tools/FotoNeumaticoBloque";
 import Link from "@/components/ui/Link";
 import { POPULAR_VEHICLES, vehicleSlug } from "@/lib/vehicles";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -39,6 +40,7 @@ export default function VehiculosIndexPage() {
         </div>
       </div>
       <div className="mx-auto max-w-4xl px-4 pt-10">
+        <FotoNeumaticoBloque className="mb-8" />
         <MarcaBuscador
           items={marcas.map((marca) => ({
             brand: marca,

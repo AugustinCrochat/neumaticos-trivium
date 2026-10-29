@@ -1,4 +1,5 @@
 import Link from "@/components/ui/Link";
+import { FotoNeumaticoBloque } from "@/components/tools/FotoNeumaticoBloque";
 import type { TireProduct, TireSize } from "@/lib/types";
 import { BRANCHES } from "@/lib/config";
 import { esRangoFlotation, formatFlotationEquivalent, metricToFlotation } from "@/lib/flotation";
@@ -400,6 +401,7 @@ export function SizeLanding({
         </p>
       </section>
 
+      <FotoNeumaticoBloque className="mt-12" />
       <FaqSection faqs={buildFaqs(size, enStock, desde)} title={`Preguntas frecuentes sobre ${label}`} />
 
       {/* Cierre: dónde comprar */}

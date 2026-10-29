@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { FotoNeumaticoBloque } from "@/components/tools/FotoNeumaticoBloque";
 import Link from "@/components/ui/Link";
 import { notFound } from "next/navigation";
 import { POPULAR_VEHICLES, vehicleSlug } from "@/lib/vehicles";
@@ -108,6 +109,7 @@ export default async function MarcaPage({ params }: Props) {
       </div>
 
       <div className="mx-auto max-w-4xl px-4 pt-10">
+        <FotoNeumaticoBloque className="mb-8" />
         <section>
           <h2 className="mb-4 text-2xl font-black text-navy-900">Modelos {brand}</h2>
           <ul className="grid gap-3 sm:grid-cols-2">
