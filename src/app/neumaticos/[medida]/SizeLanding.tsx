@@ -26,6 +26,7 @@ import {
 } from "@/lib/tire-sizes";
 import { cargaSlug, formatCargaSize } from "@/lib/carga";
 import { sortVehiclesByPopularity, POPULAR_VEHICLES, vehicleSlug } from "@/lib/vehicles";
+import { vehiclePhoto } from "@/lib/vehicle-photos";
 
 function formatPrice(price: number) {
   return new Intl.NumberFormat("es-AR", {
@@ -126,6 +127,16 @@ export function SizeLanding({
   );
   const desde = enStock.length ? Math.min(...enStock.map((p) => p.price)) : null;
   const vehiculos = sortVehiclesByPopularity(vehiclesUsingSize(size));
+  // Una tarjeta por modelo (las versiones se juntan), con foto los que la tienen primero.
+  const autos = vehiculos
+    .reduce<{ slug: string; brand: string; model: string; versiones: string[] }[]>((acc, v) => {
+      const slug = vehicleSlug(v.brand, v.model);
+      const previo = acc.find((x) => x.slug === slug);
+      if (!previo) acc.push({ slug, brand: v.brand, model: v.model, versiones: v.version ? [v.version] : [] });
+      else if (v.version && !previo.versiones.includes(v.version)) previo.versiones.push(v.version);
+      return acc;
+    }, [])
+    .sort((a, b) => Number(!!vehiclePhoto(b.slug)) - Number(!!vehiclePhoto(a.slug)));
   const branch = BRANCHES[0];
 
   // Alternativas con stock para que nadie se quede sólo con "sin stock":
@@ -304,27 +315,43 @@ export function SizeLanding({
             neumático que tenés puesto o la calcomanía del parante de la puerta del conductor, porque
             una misma versión puede haber salido con más de una medida.
           </p>
-          <ul className="flex flex-wrap gap-2">
-            {vehiculos.map((v) => (
-              <li
-                key={`${v.brand}-${v.model}-${v.version ?? ""}`}
-                className="rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-sm"
-              >
-                {POPULAR_VEHICLES.some((p) => p.brand === v.brand && p.model === v.model) ? (
-                  <Link
-                    href={`/vehiculos/${vehicleSlug(v.brand, v.model)}`}
-                    className="font-bold text-navy-900 underline underline-offset-4 hover:text-orange-600"
-                  >
-                    {v.brand} {v.model}
-                  </Link>
-                ) : (
-                  <span className="font-bold text-navy-900">
-                    {v.brand} {v.model}
-                  </span>
-                )}
-                {v.version && <span className="ml-1.5 text-slate-500">{v.version}</span>}
-              </li>
-            ))}
+          <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+            {autos.map((a) => {
+              const foto = vehiclePhoto(a.slug);
+              const enFicha = POPULAR_VEHICLES.some((p) => p.brand === a.brand && p.model === a.model);
+              const contenido = (
+                <>
+                  <div className="flex h-24 items-center justify-center bg-slate-50 px-3">
+                    {foto ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={foto} alt={`${a.brand} ${a.model}`} loading="lazy" decoding="async" className="max-h-20 w-auto max-w-full object-contain" />
+                    ) : (
+                      <span className="text-xs font-bold uppercase tracking-widest text-slate-300">{a.brand}</span>
+                    )}
+                  </div>
+                  <div className="p-3">
+                    <p className="font-black leading-tight text-navy-900 group-hover:text-orange-600">
+                      {a.brand} {a.model}
+                    </p>
+                    {a.versiones.length > 0 && (
+                      <p className="mt-1 text-xs leading-snug text-slate-500">{a.versiones.join(" · ")}</p>
+                    )}
+                  </div>
+                </>
+              );
+              const clase = "group block h-full overflow-hidden rounded-xl border border-slate-200 bg-white";
+              return (
+                <li key={a.slug}>
+                  {enFicha ? (
+                    <Link href={`/vehiculos/${a.slug}`} className={`${clase} transition-colors hover:border-orange-300`}>
+                      {contenido}
+                    </Link>
+                  ) : (
+                    <div className={clase}>{contenido}</div>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         </section>
       )}
