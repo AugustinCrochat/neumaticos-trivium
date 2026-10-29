@@ -61,6 +61,7 @@ export default function Page() {
 
       <h2>Qué ancho admite tu llanta</h2>
       <p>Cada ancho de llanta acepta un rango de anchos de neumático. Salirse de ese rango deja el neumático estirado o abombado, y además hay que revisar que no roce en el paso de rueda ni en la suspensión. Ante la duda, lo más seguro es respetar la medida original y consultarnos si querés cambiarla.</p>
+      <p>Si ya sabés tu ancho, mirá las medidas con stock en las páginas de <Link href="/neumaticos/ancho-175">175</Link>, <Link href="/neumaticos/ancho-185">185</Link>, <Link href="/neumaticos/ancho-195">195</Link>, <Link href="/neumaticos/ancho-205">205</Link>, <Link href="/neumaticos/ancho-215">215</Link> o <Link href="/neumaticos/ancho-225">225</Link> milímetros.</p>
       <p>Para leer el resto del código, mirá <Link href="/blog/como-leer-medida-neumatico">cómo leer la medida completa</Link>; lo que sigue al ancho es el <Link href="/blog/perfil-del-neumatico-que-significa">perfil</Link>.</p>
     </ArticleLayout>
   );

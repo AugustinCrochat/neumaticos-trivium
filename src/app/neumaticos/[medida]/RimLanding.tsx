@@ -1,6 +1,6 @@
 import Link from "@/components/ui/Link";
 import type { TireProduct } from "@/lib/types";
-import { BRANCHES } from "@/lib/config";
+import { BRANCHES, TIRE_RIMS } from "@/lib/config";
 import { SortedProductGrid } from "@/components/ui/SortedProductGrid";
 import { bestPriceByGroup, peersByGroup } from "@/lib/best-price";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
@@ -8,7 +8,10 @@ import { FaqSection } from "@/components/seo/FaqSection";
 import type { Faq } from "@/lib/seo";
 import {
   MEDIDAS_PRIORITARIAS,
+  anchosYPerfiles,
   formatSize,
+  profileSlug,
+  widthSlug,
   rimSlug,
   sizeSlug,
   sizesFromCatalog,
@@ -57,6 +60,7 @@ export function RimLanding({ rim, productos }: { rim: number; productos: TirePro
   const enStock = delRodado.filter((p) => p.enStock);
   const desde = enStock.length ? Math.min(...enStock.map((p) => p.price)) : null;
   const branch = BRANCHES[0];
+  const { anchos, perfiles } = anchosYPerfiles(productos);
 
   // Medidas de este rodado: las que hay en catálogo primero, después las
   // prioritarias que todavía no tienen stock pero sí página propia.
@@ -146,6 +150,45 @@ export function RimLanding({ rim, productos }: { rim: number; productos: TirePro
           </div>
         </section>
       )}
+
+      <section className="mb-14">
+        <h2 className="mb-3 text-2xl font-black text-navy-900">Otros diámetros, anchos y perfiles</h2>
+        <p className="mb-3 text-sm font-bold text-slate-500">Rodado (diámetro de la llanta)</p>
+        <ul className="mb-5 flex flex-wrap gap-2">
+          {TIRE_RIMS.map((r) => (
+            <li key={r}>
+              <Link
+                href={`/neumaticos/${rimSlug(r)}`}
+                className={`inline-block rounded-xl border px-3.5 py-2 text-sm font-bold ${
+                  r === rim ? "border-navy-900 bg-navy-900 text-white" : "border-slate-200 bg-white text-navy-900 hover:border-navy-300"
+                }`}
+              >
+                R{r}
+              </Link>
+            </li>
+          ))}
+        </ul>
+        <p className="mb-3 text-sm font-bold text-slate-500">Ancho (mm)</p>
+        <ul className="mb-5 flex flex-wrap gap-2">
+          {anchos.map((a) => (
+            <li key={a}>
+              <Link href={`/neumaticos/${widthSlug(a)}`} className="inline-block rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-sm font-bold text-navy-900 hover:border-navy-300">
+                {a}
+              </Link>
+            </li>
+          ))}
+        </ul>
+        <p className="mb-3 text-sm font-bold text-slate-500">Perfil (%)</p>
+        <ul className="flex flex-wrap gap-2">
+          {perfiles.map((pf) => (
+            <li key={pf}>
+              <Link href={`/neumaticos/${profileSlug(pf)}`} className="inline-block rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-sm font-bold text-navy-900 hover:border-navy-300">
+                {pf}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </section>
 
       <FaqSection faqs={buildFaqs(rim, desde)} title={`Preguntas sobre el rodado ${rim}`} />
 

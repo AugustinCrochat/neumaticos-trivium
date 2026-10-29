@@ -58,6 +58,7 @@ export default function Page() {
 
       <h2>Si querés subir de rodado</h2>
       <p>Al pasar a una llanta más grande, el neumático necesita menos perfil para conservar el diámetro total. Un ejemplo: <strong>195/65 R15</strong> (634,5 mm) y <strong>205/55 R16</strong> (631,9 mm) son equivalentes con apenas 0,4 % de diferencia. Hay que revisar también el índice de carga y que la llanta nueva sea compatible con el auto. Si querés ver qué conviene, usá la <Link href="/calculadora-equivalencia-neumaticos">calculadora de equivalencias</Link> o leé <Link href="/blog/perfil-bajo-o-perfil-alto">perfil bajo o perfil alto</Link>.</p>
+      <p>Todas las medidas por diámetro de llanta: <Link href="/neumaticos/rodado-13">R13</Link>, <Link href="/neumaticos/rodado-14">R14</Link>, <Link href="/neumaticos/rodado-15">R15</Link>, <Link href="/neumaticos/rodado-16">R16</Link>, <Link href="/neumaticos/rodado-17">R17</Link> y <Link href="/neumaticos/rodado-18">R18</Link>.</p>
       <p>Para el resto del código, mirá <Link href="/blog/como-leer-medida-neumatico">cómo leer la medida de un neumático</Link>.</p>
     </ArticleLayout>
   );

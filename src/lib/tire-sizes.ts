@@ -96,6 +96,45 @@ export function rimSlug(rim: number): string {
   return `rodado-${rim}`;
 }
 
+const WIDTH_SLUG_RE = /^ancho-(\d{3})$/;
+const PROFILE_SLUG_RE = /^perfil-(\d{2})$/;
+
+/** "ancho-195" -> 195. Hub del primer número de la medida, en el mismo
+    segmento que las medidas y los rodados (misma jerarquía, un nivel arriba). */
+export function parseWidthSlug(slug: string): number | null {
+  const match = WIDTH_SLUG_RE.exec(slug.toLowerCase());
+  if (!match) return null;
+  const width = Number(match[1]);
+  return width >= 125 && width <= 355 ? width : null;
+}
+
+export function widthSlug(width: number): string {
+  return `ancho-${width}`;
+}
+
+/** "perfil-65" -> 65. */
+export function parseProfileSlug(slug: string): number | null {
+  const match = PROFILE_SLUG_RE.exec(slug.toLowerCase());
+  if (!match) return null;
+  const profile = Number(match[1]);
+  return profile >= 25 && profile <= 85 ? profile : null;
+}
+
+export function profileSlug(profile: number): string {
+  return `perfil-${profile}`;
+}
+
+/** Anchos y perfiles distintos que tienen producto en el catálogo o una medida
+    prioritaria: son los únicos que merecen página propia (sin páginas vacías). */
+export function anchosYPerfiles(products: TireProduct[]): { anchos: number[]; perfiles: number[] } {
+  const sizes = [...products.map((p) => p.size), ...MEDIDAS_PRIORITARIAS];
+  const orden = (a: number, b: number) => a - b;
+  return {
+    anchos: [...new Set(sizes.map((s) => s.width))].sort(orden),
+    perfiles: [...new Set(sizes.map((s) => s.profile))].sort(orden),
+  };
+}
+
 export function sizesEqual(a: TireSize, b: TireSize): boolean {
   return a.width === b.width && a.profile === b.profile && a.rim === b.rim;
 }

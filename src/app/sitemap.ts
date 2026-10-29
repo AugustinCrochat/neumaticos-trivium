@@ -19,6 +19,9 @@ import { getProductosDesdePOS, getAccesoriosDesdePOS } from "@/lib/pos-api";
 import {
   MEDIDAS_PRIORITARIAS,
   rimSlug,
+  anchosYPerfiles,
+  widthSlug,
+  profileSlug,
   sizeSlug,
   sizesFromCatalog,
 } from "@/lib/tire-sizes";
@@ -140,6 +143,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url(`/neumaticos/${rimSlug(rim)}`, 0.7, "weekly")
   );
 
+  const { anchos, perfiles } = anchosYPerfiles(productos);
+  const ejes: Entry[] = [
+    ...anchos.map((a) => url(`/neumaticos/${widthSlug(a)}`, 0.6, "weekly")),
+    ...perfiles.map((pf) => url(`/neumaticos/${profileSlug(pf)}`, 0.6, "weekly")),
+  ];
+
   const localidades: Entry[] = LOCALIDADES.map((l) =>
     url(`/neumaticos-en/${l.slug}`, l.esCabecera ? 0.9 : 0.7, "monthly")
   );
@@ -201,6 +210,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...medidas.values(),
     ...medidasCarga,
     ...rodados,
+    ...ejes,
     ...localidades,
     ...sucursales,
     ...marcas,

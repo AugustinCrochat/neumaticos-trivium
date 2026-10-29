@@ -18,6 +18,8 @@ import {
   formatSize,
   outerDiameterMm,
   rimSlug,
+  widthSlug,
+  profileSlug,
   sizeSlug,
   sizesEqual,
   vehiclesUsingSize,
@@ -424,6 +426,18 @@ export function SizeLanding({
             className="inline-flex min-h-12 items-center justify-center rounded-xl border border-white/20 bg-white/5 px-6 text-sm font-black text-white transition-colors hover:bg-white/10"
           >
             Ver todas las medidas rodado {size.rim}
+          </Link>
+          <Link
+            href={`/neumaticos/${widthSlug(size.width)}`}
+            className="inline-flex min-h-12 items-center justify-center rounded-xl border border-white/20 bg-white/5 px-6 text-sm font-black text-white transition-colors hover:bg-white/10"
+          >
+            Todo en ancho {size.width}
+          </Link>
+          <Link
+            href={`/neumaticos/${profileSlug(size.profile)}`}
+            className="inline-flex min-h-12 items-center justify-center rounded-xl border border-white/20 bg-white/5 px-6 text-sm font-black text-white transition-colors hover:bg-white/10"
+          >
+            Todo en perfil {size.profile}
           </Link>
         </div>
       </section>

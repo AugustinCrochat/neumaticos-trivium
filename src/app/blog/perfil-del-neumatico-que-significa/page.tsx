@@ -67,6 +67,7 @@ export default function Page() {
         <li><strong>Perfil alto (65, 70 o más):</strong> flanco más alto, que absorbe mejor pozos y calles rotas. Es más cómodo y cuida la llanta.</li>
         <li><strong>Perfil bajo (50 o menos):</strong> flanco más corto, con respuesta más directa en curva, pero más duro y con más riesgo de dañar la llanta si pegás un pozo.</li>
       </ul>
+      <p>Medidas con stock según el perfil: <Link href="/neumaticos/perfil-55">55</Link>, <Link href="/neumaticos/perfil-60">60</Link>, <Link href="/neumaticos/perfil-65">65</Link> o <Link href="/neumaticos/perfil-70">70</Link> por ciento.</p>
       <p>Si estás pensando en cambiar, mirá <Link href="/blog/perfil-bajo-o-perfil-alto">perfil bajo o perfil alto</Link>. Y para entender cómo se lee la medida completa: <Link href="/blog/como-leer-medida-neumatico">cómo leer la medida de un neumático</Link>.</p>
     </ArticleLayout>
   );
