@@ -133,7 +133,7 @@ export default async function VehiclePage({ params }: Props) {
   // Lo que se llevaron los clientes de este modelo en el taller (datos propios del POS).
   const ventas = VENTAS_MODELO[name];
   const ventasTop = ventas
-    ? ventas.top.map(([medida, u]) => ({ medida, u, pct: Math.round((u / ventas.n) * 100) })).filter((t) => t.pct >= 3)
+    ? ventas.top.map(([medida, u]) => ({ medida, u, pct: Math.round((u / ventas.n) * 20) * 5 })).filter((t) => t.pct >= 5)
     : [];
   const medidaSlug = (m: string) => {
     const x = m.match(/^(\d+)\/(\d+) R(\d+)$/);
@@ -153,9 +153,9 @@ export default async function VehiclePage({ params }: Props) {
       ? [
           {
             question: `¿Qué medida eligen más los clientes del ${name}?`,
-            answer: `En nuestro taller de Córdoba, de los ${ventas!.n} neumáticos que colocamos en ${name} hasta ${VENTAS_DATOS_AL}, ${ventasTop
+            answer: `En nuestro taller de Córdoba, de los neumáticos que colocamos en ${name} hasta ${VENTAS_DATOS_AL}, en aproximadamente ${ventasTop
               .slice(0, 3)
-              .map((t) => `${t.pct}% fueron ${t.medida}`)
+              .map((t) => `${t.pct}% fue ${t.medida}`)
               .join(", ")}. No siempre coincide con la medida de fábrica: depende de la versión y de la llanta que tenga tu auto.`,
           },
         ]
@@ -278,7 +278,7 @@ export default async function VehiclePage({ params }: Props) {
             <section className="mb-10 border-b border-slate-100 pb-10">
               <h2 className="mb-1 text-2xl font-bold text-navy-900">Qué medida se llevan los {name} en nuestro taller</h2>
               <p className="mb-5 text-sm text-slate-500">
-                Sobre {ventas!.n} neumáticos que colocamos en {name} en el local de Argüello (datos al {VENTAS_DATOS_AL}). Es lo que
+                Sobre los neumáticos que colocamos en {name} en el local de Argüello (porcentajes aproximados, datos al {VENTAS_DATOS_AL}). Es lo que
                 eligieron los clientes, que no siempre es la medida de fábrica.
               </p>
               <ul className="space-y-3">

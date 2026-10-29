@@ -21,7 +21,6 @@ export default function MasAtendidosPage() {
     .map(([name, d]) => ({ name, ...d, v: POPULAR_VEHICLES.find((x) => `${x.brand} ${x.model}` === name) }))
     .filter((m) => m.v)
     .sort((a, b) => b.n - a.n);
-  const total = modelos.reduce((a, m) => a + m.n, 0);
 
   const porMedida = new Map<string, number>();
   for (const m of modelos) for (const [med, u] of m.top) porMedida.set(med, (porMedida.get(med) ?? 0) + u);
@@ -43,14 +42,14 @@ export default function MasAtendidosPage() {
         <div className="mx-auto max-w-4xl text-center">
           <h1 className="mb-4 text-4xl font-black text-white md:text-5xl">Qué autos y qué medidas cambiamos más</h1>
           <p className="mx-auto max-w-2xl text-lg text-slate-300">
-            Ranking real de nuestro taller de Argüello (Córdoba): {total} neumáticos colocados en {modelos.length} modelos, con datos al {VENTAS_DATOS_AL}.
+            Ranking real de nuestro taller de Argüello (Córdoba): {modelos.length} modelos con más movimiento, con datos al {VENTAS_DATOS_AL}.
           </p>
         </div>
       </div>
       <div className="mx-auto max-w-4xl px-4 pt-10">
         <h2 className="mb-2 text-2xl font-black text-black">Las medidas que más se llevan</h2>
         <p className="mb-4 text-slate-600">
-          Suma de lo que colocamos en estos {modelos.length} modelos. Es lo que eligió el cliente, que no siempre coincide con la medida de fábrica.
+          Según lo que colocamos en estos {modelos.length} modelos. Es lo que eligió el cliente, que no siempre coincide con la medida de fábrica.
         </p>
         <ol className="mb-12 grid gap-2 sm:grid-cols-2">
           {medidas.map(([med, u], i) => {
@@ -63,13 +62,12 @@ export default function MasAtendidosPage() {
                 ) : (
                   <span className="font-bold text-black">{med}</span>
                 )}
-                <span className="ml-auto text-sm text-slate-500">{u} u.</span>
               </li>
             );
           })}
         </ol>
         <h2 className="mb-2 text-2xl font-black text-black">Los autos que más atendemos</h2>
-        <p className="mb-4 text-slate-600">Solo modelos con 20 o más neumáticos colocados. Tocá uno para ver su medida original y qué medidas se llevan.</p>
+        <p className="mb-4 text-slate-600">Solo modelos con movimiento sostenido en el taller. Tocá uno para ver su medida original y qué medidas se llevan.</p>
         <ol className="space-y-2">
           {modelos.map((m, i) => {
             const slug = vehicleSlug(m.v!.brand, m.v!.model);
@@ -90,7 +88,7 @@ export default function MasAtendidosPage() {
                   <div className="min-w-0">
                     <p className="truncate font-bold text-black">{m.name}</p>
                     <p className="text-sm text-slate-600">
-                      {m.n} neumáticos · la más elegida: {med} ({Math.round((u / m.n) * 100)}%)
+                      la más elegida: {med} (cerca del {Math.round((u / m.n) * 20) * 5}%)
                     </p>
                   </div>
                 </Link>
