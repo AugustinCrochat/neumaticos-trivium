@@ -1,10 +1,13 @@
 import Link from "@/components/ui/Link";
+import { HorarioBloque } from "@/components/tools/HorarioBloque";
 import { TALLER, TALLER_PILAR } from "@/lib/blog-cluster";
 import { BLOG_POSTS } from "@/lib/data";
 
 /** Enlaces cruzados del clúster "alineado y balanceado", sin la nota actual. */
 export function TallerLinks({ current }: { current: string }) {
   return (
+    <>
+    <HorarioBloque className="mt-12 [&_h2]:!mt-0 [&_h2]:!mb-0 [&_p]:!mb-0" titulo="¿A qué hora conviene ir?" />
     <section className="mt-12 rounded-2xl border border-slate-200 bg-slate-50 p-5">
       <p className="!mb-1 !text-xs font-black uppercase tracking-widest !text-orange-600">Alineado y balanceado</p>
       <h2 className="!mt-0 !mb-3 !text-xl">
@@ -35,5 +38,6 @@ export function TallerLinks({ current }: { current: string }) {
         ))}
       </div>
     </section>
+    </>
   );
 }

@@ -7,6 +7,8 @@ import { useBranch } from "@/contexts/branch-context";
 import { toolPath } from "@/lib/tools";
 import { descargarContacto } from "@/lib/vcard";
 
+const MENSAJE_WA = "¡Hola! Te mando una foto del flanco de mi neumático para saber qué medida lleva.";
+
 const CamaraNeumaticoModal = dynamic(() => import("./CamaraNeumaticoModal"), { ssr: false });
 
 /**
@@ -40,6 +42,13 @@ export function FotoNeumaticoBloque({ className = "", titulo = "¿No sabés qué
     });
   }
 
+  // Camino más simple: abrir el chat de la sucursal y que la persona adjunte o saque la foto desde WhatsApp.
+  function porWhatsApp() {
+    conSucursal((b) => {
+      window.open(`https://wa.me/${b.whatsapp}?text=${encodeURIComponent(MENSAJE_WA)}`, "_blank", "noopener");
+    });
+  }
+
   function elegirArchivo(f: File) {
     conSucursal((b) => {
       setDestino(b);
@@ -55,20 +64,22 @@ export function FotoNeumaticoBloque({ className = "", titulo = "¿No sabés qué
         <div>
           <h2 className="text-xl font-black text-navy-900">{titulo}</h2>
           <p className="mt-1 text-sm leading-relaxed text-slate-700">
-            Sacale una foto al flanco y mandanosla por WhatsApp: te decimos qué medida lleva y qué tenemos en stock. La foto sale de tu dispositivo y no se guarda en el sitio.
+            Escribinos por WhatsApp y mandanos una foto del flanco (el costado del neumático): te decimos qué medida lleva y qué tenemos en stock. Desde el chat tocá el clip o la cámara para adjuntarla. Si preferís, usá nuestra cámara guiada, con círculo y flash.
           </p>
         </div>
         <div className="flex shrink-0 flex-col items-stretch gap-2 sm:items-end">
           <button
             type="button"
-            onClick={sacarFoto}
+            onClick={porWhatsApp}
             className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 text-sm font-black text-white hover:bg-emerald-700"
           >
-            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h1.5l1-2h9l1 2H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-              <circle cx="12" cy="13" r="3.5" strokeWidth={2} />
+            <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12.04 2a9.9 9.9 0 00-8.47 15.04L2 22l5.1-1.5A9.9 9.9 0 1012.04 2zm5.8 14.1c-.25.7-1.45 1.33-2 1.4-.52.07-1.17.1-1.88-.12-.43-.14-.98-.32-1.68-.63-2.96-1.28-4.9-4.26-5.05-4.46-.14-.2-1.2-1.6-1.2-3.05 0-1.45.76-2.16 1.03-2.46.27-.3.6-.37.8-.37h.57c.18 0 .43-.07.67.52.25.6.85 2.07.93 2.22.07.15.12.32.02.52-.1.2-.15.32-.3.5-.15.17-.3.38-.45.52-.15.15-.3.3-.13.6.17.3.77 1.27 1.65 2.05 1.13 1 2.1 1.32 2.4 1.47.3.15.47.12.65-.07.17-.2.75-.87.95-1.17.2-.3.4-.25.67-.15.27.1 1.73.82 2.03.97.3.15.5.22.57.35.07.12.07.72-.18 1.42z" />
             </svg>
-            Sacar foto del neumático
+            Mandar la foto por WhatsApp
+          </button>
+          <button type="button" onClick={sacarFoto} className="text-xs font-bold text-emerald-800 underline underline-offset-4">
+            Usar la cámara guiada (círculo y flash)
           </button>
           <button type="button" onClick={() => inputRef.current?.click()} className="text-xs font-bold text-emerald-800 underline underline-offset-4">
             Elegir una foto de la galería

@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useSyncExternalStore } from "react";
+import { useState } from "react";
 import { MapPin, MessageCircle } from "lucide-react";
 import Link from "@/components/ui/Link";
 import { BRANCHES } from "@/lib/config";
 import { getBranchStatus } from "@/lib/branch-status";
+import { useRelojCordoba } from "@/lib/reloj-cordoba";
 import {
   AFLUENCIA_HORA_INICIO,
   AFLUENCIA_SEMANAS,
@@ -58,26 +59,12 @@ const SERVICIOS = [
   },
 ];
 
-/** Reloj en hora de Córdoba, actualizado una vez por minuto. Vacío en el servidor. */
-function subscribe(cb: () => void) {
-  const t = setInterval(cb, 60_000);
-  return () => clearInterval(t);
-}
-function snapshot() {
-  const p = Object.fromEntries(
-    new Intl.DateTimeFormat("en-US", { timeZone: "America/Argentina/Cordoba", weekday: "short", hour: "2-digit", hour12: false })
-      .formatToParts(new Date())
-      .map((x) => [x.type, x.value]),
-  );
-  const dia = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 }[p.weekday as string] ?? 0;
-  return `${dia}-${Number(p.hour) % 24}`;
-}
-
 const rango = (d: number, h: number) => `${d} a ${h} h`;
 
 export function MejorHorario() {
-  const reloj = useSyncExternalStore(subscribe, snapshot, () => "");
-  const [dia, hora] = reloj ? reloj.split("-").map(Number) : [null, null];
+  const reloj = useRelojCordoba();
+  const dia = reloj?.dia ?? null;
+  const hora = reloj?.hora ?? null;
   const [elegido, setElegido] = useState<number | null>(null);
   const [servicio, setServicio] = useState(SERVICIOS[0].id);
 

@@ -1,3 +1,4 @@
+import { HorarioBloque } from "@/components/tools/HorarioBloque";
 import Link from "@/components/ui/Link";
 import Image from "next/image";
 import type { Metadata } from "next";
@@ -226,6 +227,8 @@ export default async function BranchPage({ params }: Props) {
             Atención por orden de llegada, sin turnos. Consultá tiempos de espera por WhatsApp.
           </p>
         </section>
+
+        {branch.id === "arguello" && !branch.provisorio && !branch.apertura && <HorarioBloque titulo="¿A qué hora conviene venir a Argüello?" />}
 
         </div>
         </div>

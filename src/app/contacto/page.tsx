@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { LEGAL_NAME, CUIT, CONTACT_EMAIL } from "@/lib/config";
 import { canonical } from "@/lib/seo";
+import { HorarioBloque } from "@/components/tools/HorarioBloque";
 import { ContactoSucursales } from "./ContactoSucursales";
 
 export const metadata: Metadata = {
@@ -16,6 +17,8 @@ export default function ContactoPage() {
       <h1 className="sr-only">Contacto</h1>
       <div className="max-w-5xl mx-auto px-4 py-10 space-y-8">
         <ContactoSucursales />
+
+        <HorarioBloque />
 
         {/* Datos legales */}
         <div className="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:flex-row sm:items-center sm:justify-between">

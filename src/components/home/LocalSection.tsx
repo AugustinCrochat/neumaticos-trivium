@@ -46,7 +46,12 @@ export function LocalSection() {
               </div>
               <div className="flex gap-2">
                 <dt className="font-bold text-white">Atención:</dt>
-                <dd>Por orden de llegada, sin turno</dd>
+                <dd>
+                  Por orden de llegada, sin turno.{" "}
+                  <Link href="/herramientas/mejor-horario-gomeria" className="font-bold text-white underline underline-offset-4">
+                    Ver cuándo está más tranquilo
+                  </Link>
+                </dd>
               </div>
             </dl>
             <div className="mt-7 flex flex-wrap gap-3">

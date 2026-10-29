@@ -1,3 +1,4 @@
+import { HorarioBloque } from "@/components/tools/HorarioBloque";
 import type { Metadata } from "next";
 import { AccessoryCard } from "@/components/ui/AccessoryCard";
 import { TuercaVehicleSearch } from "@/components/ui/TuercaVehicleSearch";
@@ -34,6 +35,8 @@ export default async function TuercasAntirroboPage() {
           ))}
         </div>
       )}
+
+      <HorarioBloque className="mt-10" titulo="¿A qué hora conviene venir a colocarlas?" />
     </div>
   );
 }

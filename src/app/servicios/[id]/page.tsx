@@ -10,6 +10,7 @@ import { splitAutoCamioneta } from "@/lib/servicios";
 import { FaqSection } from "@/components/seo/FaqSection";
 import { COMBO_ID, COMBO_SERVICE, EXTRA_SERVICES, SERVICIOS_SEO } from "@/lib/servicios-seo";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { HorarioBloque } from "@/components/tools/HorarioBloque";
 import { ServicioFicha } from "./ServicioFicha";
 import { EquipoHofmann } from "@/components/blog/EquipoHofmann";
 import { UpsellNeumaticos } from "@/components/servicios/UpsellNeumaticos";
@@ -187,16 +188,12 @@ export default async function ServicioPage({ params }: Props) {
           </section>
         )}
 
-        <div className="mt-12 bg-emerald-50 border border-emerald-100 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-4">
+        <HorarioBloque className="mt-12" />
+
+        <div className="mt-6 bg-emerald-50 border border-emerald-100 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <div>
             <h3 className="text-lg font-bold text-navy-900 mb-1">Atención por orden de llegada</h3>
-            <p className="text-slate-600 text-sm">
-              Vení directamente a la sucursal, sin turnos.{" "}
-              <Link href="/herramientas/mejor-horario-gomeria" className="font-bold text-emerald-800 underline underline-offset-4">
-                Mirá a qué hora está más tranquilo
-              </Link>
-              .
-            </p>
+            <p className="text-slate-600 text-sm">Vení directamente a la sucursal, sin turnos.</p>
           </div>
           <Link
             href="/contacto"

@@ -1,4 +1,5 @@
 import { ServicesSection } from "@/components/home/ServicesSection";
+import { HorarioBloque } from "@/components/tools/HorarioBloque";
 import { FaqSection } from "@/components/seo/FaqSection";
 import { JsonLd } from "@/components/seo/JsonLd";
 import type { Metadata } from "next";
@@ -32,7 +33,7 @@ const FAQS = [
   {
     question: "¿Necesito turno para ir a la gomería?",
     answer:
-      "No. Atendemos por orden de llegada, sin turnos. Si querés estimar el tiempo de espera antes de salir, podés consultarlo por WhatsApp o mirar a qué hora suele estar más tranquilo el taller en la herramienta «¿A qué hora conviene ir a la gomería?» (/herramientas/mejor-horario-gomeria).",
+      "No. Atendemos por orden de llegada, sin turnos. Si querés estimar el tiempo de espera antes de salir, podés consultarlo por WhatsApp.",
   },
 ];
 
@@ -72,6 +73,8 @@ export default function ServiciosPage() {
         </ul>
       </section>
       <div className="mx-auto max-w-4xl px-4 pb-16">
+        <HorarioBloque className="mt-10" />
+
         <FaqSection faqs={FAQS} />
       </div>
     </div>
