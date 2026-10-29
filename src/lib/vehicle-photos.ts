@@ -55,6 +55,7 @@ export const VEHICLE_PHOTOS = new Set([
   "citroen-berlingo",
   "citroen-c3",
   "citroen-c3-aircross",
+  "citroen-c4-cactus",
   "citroen-jumper",
   "citroen-jumpy",
   "citroen-xsara-picasso",
