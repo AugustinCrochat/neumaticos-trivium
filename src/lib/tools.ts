@@ -94,6 +94,15 @@ export const TOOLS: Tool[] = [
       "Elegí tu auto o tu medida, un neumático en stock y mirá el total del juego de 4 con colocación, alineación y balanceo. Enviá el presupuesto por WhatsApp.",
     image: { src: "/images/local/tecnicos-alineando-auto-elevador-gomeria-trivium-cordoba.webp", alt: "Técnicos alineando un auto en el elevador del taller de Trivium" },
   },
+  {
+    slug: "mejor-horario-gomeria",
+    name: "¿A qué hora conviene ir a la gomería?",
+    short: "Mirá qué días y horas está más tranquilo el taller de Argüello y elegí cuándo ir.",
+    metaTitle: "¿A qué hora conviene ir a la gomería en Córdoba? Horarios más tranquilos",
+    metaDescription:
+      "Mirá qué días y horas está más tranquila nuestra gomería de Argüello para alinear y balancear, colocar tuercas antirrobo o cambiar neumáticos sin esperar de más.",
+    image: { src: "/images/local/taller-de-gomeria-con-cuatro-autos-neumaticos-trivium-arguello-cordoba.webp", alt: "Taller de gomería de Neumáticos Trivium en Argüello con cuatro autos" },
+  },
 ];
 
 export const toolPath = (slug: string) => `/herramientas/${slug}`;

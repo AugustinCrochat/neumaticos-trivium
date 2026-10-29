@@ -190,7 +190,13 @@ export default async function ServicioPage({ params }: Props) {
         <div className="mt-12 bg-emerald-50 border border-emerald-100 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <div>
             <h3 className="text-lg font-bold text-navy-900 mb-1">Atención por orden de llegada</h3>
-            <p className="text-slate-600 text-sm">Vení directamente a la sucursal, sin turnos.</p>
+            <p className="text-slate-600 text-sm">
+              Vení directamente a la sucursal, sin turnos.{" "}
+              <Link href="/herramientas/mejor-horario-gomeria" className="font-bold text-emerald-800 underline underline-offset-4">
+                Mirá a qué hora está más tranquilo
+              </Link>
+              .
+            </p>
           </div>
           <Link
             href="/contacto"

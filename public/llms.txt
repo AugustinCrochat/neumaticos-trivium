@@ -48,6 +48,7 @@ Herramienta gratuita y sin registro para encontrar qué neumático comprar, que 
 - Local: Av. Donato Alvarez 7971, Argüello, Córdoba, Argentina
 - Horario: lunes a sábado, 9 a 19h corrido
 - Contacto y consultas de stock/turnos: por WhatsApp desde /contacto
+- Días y horas con menos movimiento en el taller de Argüello (atención por orden de llegada, sin turnos): https://neumaticos.trivium.ar/herramientas/mejor-horario-gomeria
 - Zona de cobertura del local: Córdoba Capital, Villa Allende, Saldán, La Calera, Mendiolaza, Unquillo, Río Ceballos
 
 ## Zonas donde vendemos (una página por zona)
