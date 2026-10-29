@@ -211,6 +211,12 @@ export const BLOG_META: Record<string, BlogMeta> = {
     shopIntro: "Para alinear tu auto:",
     shopLinks: [L.servicios, L.todos, L.ofertas],
   },
+  "cuanto-tarda-alineado-y-balanceado": {
+    cover: cover("tallerCuatroAutos"),
+    figure: figure("tecnicosAlineando"),
+    shopIntro: "Para alinear y balancear tu auto:",
+    shopLinks: [L.servicios, L.todos, L.ofertas],
+  },
   "revision-mensual-de-neumaticos-en-5-minutos": {
     cover: cover("placaPresion"),
     figure: figure("balanceando", "Una rueda que vibra a ciertas velocidades suele necesitar balanceado."),

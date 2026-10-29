@@ -104,6 +104,7 @@ export const TALLER: { grupo: string; notas: { slug: string; title: string }[] }
     notas: [
       { slug: "cada-cuantos-km-alinear-y-balancear", title: "Cada cuántos km alinear y balancear" },
       { slug: "alineado-y-balanceado-en-camionetas-y-4x4", title: "En camionetas y 4x4" },
+      { slug: "cuanto-tarda-alineado-y-balanceado", title: "Cuánto tarda el servicio" },
       { slug: "revision-antes-de-viajar-neumaticos", title: "Revisión antes de viajar" },
       { slug: "rotacion-de-neumaticos", title: "Rotación de neumáticos" },
     ],

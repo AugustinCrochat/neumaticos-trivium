@@ -87,6 +87,9 @@ export default function Page() {
         </tbody>
       </table>
 
+      <h2>Cuánto tarda</h2>
+      <p>El servicio completo de una camioneta lleva alrededor de una hora y veinte, contra unos 50 minutos de un auto: hay más peso por mover, ruedas más grandes y más para ajustar.</p>
+
       <h2>Balanceo en ruedas grandes</h2>
       <p>Las ruedas de camioneta se balancean en dos planos, igual que las de un auto, pero con una balanceadora que acepte el diámetro y el peso. Las llantas de aleación grandes y las llantas con neumáticos A/T suelen necesitar contrapesos mayores. Y cualquier cosa que cambie la masa de la rueda, como barro pegado en el interior de la llanta, puede arruinar un balanceo prolijo: por eso conviene limpiar bien antes.</p>
 

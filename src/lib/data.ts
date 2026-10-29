@@ -249,6 +249,15 @@ const BLOG_POSTS_BASE: BlogPost[] = [
     category: "Servicios",
   },
   {
+    id: "79",
+    title: "¿Cuánto tarda el alineado y balanceado? Tiempos para auto y camioneta",
+    excerpt: "Unos 50 minutos para un auto y alrededor de una hora y veinte para una camioneta; qué incluye y qué lo alarga.",
+    imageUrl: "/images/local/taller-de-gomeria-con-cuatro-autos-neumaticos-trivium-arguello-cordoba.webp",
+    date: "2026-11-27",
+    slug: "cuanto-tarda-alineado-y-balanceado",
+    category: "Servicios",
+  },
+  {
     id: "61",
     title: "Neumáticos 205/55 R16: qué autos la usan, equivalencias y cómo elegir",
     excerpt: "Medida, diámetro total, los 42 modelos de nuestra base que la llevan y qué otras medidas se pueden usar sin tocar el velocímetro.",

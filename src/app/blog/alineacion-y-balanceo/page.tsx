@@ -215,7 +215,7 @@ export default function Page() {
         kilómetro. Es la forma más rápida de arruinar una compra que acabás de hacer.
       </p>
       <p>
-        Por eso lo tratamos como un combo en el taller. La alineación es{" "}
+        Por eso lo tratamos como un combo en el taller: el servicio completo de un auto lleva en general unos 50 minutos. La alineación es{" "}
         <strong>computarizada 3D</strong>, que mide los tres ángulos en las cuatro ruedas contra la
         ficha del fabricante de tu modelo, y el balanceo es dinámico, que corrige el desbalance en
         los dos planos y no sólo en uno.{" "}
