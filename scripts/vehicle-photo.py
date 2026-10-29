@@ -24,9 +24,9 @@ Requiere: pip install "rembg[cpu]" pillow numpy scipy
 Después de cambiar una foto hay que regenerar lo que la usa fuera de la ficha
 (portadas de blog con autos): ver scripts/vehicle-photo.md.
 """
-import io, os, re, sys, urllib.request
+import functools, io, os, re, sys, urllib.request
 import numpy as np
-from PIL import Image, ImageDraw, ImageOps
+from PIL import Image, ImageDraw, ImageFilter, ImageFont, ImageOps
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 DIR = os.path.join(ROOT, "public/images/vehiculos")
@@ -135,16 +135,98 @@ def normalize(cut, flip):
     return c
 
 
+VEHICLES_TS = os.path.join(ROOT, "src/lib/vehicles.ts")
+PRODUCTS = os.path.join(ROOT, "public/images/products")
+FONTS = "/usr/share/fonts/truetype/noto/NotoSans-Condensed{}.ttf"
+RED = (255, 30, 0)
+
+
+@functools.lru_cache(maxsize=None)
+def vehicle_sizes():
+    """slug -> medidas únicas ("175/70 R14") en el orden de VEHICLE_DB; la primera es la principal."""
+    out = {}
+    src = open(VEHICLES_TS).read()
+    for brand, model, body in re.findall(r'\{ brand: "([^"]+)", model: "([^"]+)", sizes: \[(.*?)\] \}', src):
+        slug = re.sub(r"(^-|-$)+", "", re.sub(r"[^a-z0-9]+", "-", f"{brand} {model}".lower()))
+        sizes = []
+        for w, pr, r in re.findall(r'w: "(\d+)", p: "(\d+)", r: "(\d+)"', body):
+            if (w, pr, r) not in sizes:
+                sizes.append((w, pr, r))
+        out[slug] = (f"{brand} {model}", sizes)
+    return out
+
+
+def pirelli_photo(size):
+    """Foto de un Pirelli de la medida o, si no hay, el de rodado y ancho más cercanos (Trivium no trabaja otras marcas en estas fotos)."""
+    found = []
+    for f in sorted(os.listdir(PRODUCTS)):
+        m = re.search(r"(\d{3})-?(\d{2})-?z?r(\d{2})", f) if "pirelli" in f else None
+        if m:
+            found.append((tuple(m.groups()), f))
+    if not found:
+        return None
+    w, pr, r = (int(v) for v in size) if size else (185, 65, 15)
+    best = min(found, key=lambda x: (x[0] != tuple(str(v) for v in (w, pr, r)), abs(int(x[0][2]) - r), abs(int(x[0][0]) - w), x[1]))
+    return os.path.join(PRODUCTS, best[1])
+
+
+def cutout_white(path):
+    """Neumático sin su fondo blanco (relleno desde la esquina, así no se pierde el blanco de la llanta)."""
+    t = Image.open(path).convert("RGB")
+    m = Image.fromarray(((np.asarray(t).min(axis=2) > 236) * 255).astype("uint8")).copy()
+    ImageDraw.floodfill(m, (0, 0), 100, thresh=0)
+    a = Image.fromarray(((np.asarray(m) != 100) * 255).astype("uint8")).filter(ImageFilter.MinFilter(3)).filter(ImageFilter.GaussianBlur(1))
+    t = t.convert("RGBA")
+    t.putalpha(a)
+    return t.crop(t.getchannel("A").getbbox())
+
+
+def fit_font(kind, text, size, max_w, min_size=34):
+    while True:
+        f = ImageFont.truetype(FONTS.format(kind), size)
+        if f.getlength(text) <= max_w or size <= min_size:
+            return f
+        size -= 2
+
+
 def card(slug):
+    """Tarjeta 1200x630 de la ficha (miniatura en Google y al compartir): fondo blanco, el nombre, la medida
+    principal en grande, las otras medidas en una lista chica, el auto y un neumático pegado a su parte trasera."""
+    name, sizes = vehicle_sizes().get(slug, (slug.replace("-", " ").title(), []))
+    fmt = lambda s: f"{s[0]}/{s[1]} R{s[2]}"
+    out = Image.new("RGB", (1200, 630), (255, 255, 255))
+    d = ImageDraw.Draw(out)
+
     car = Image.open(os.path.join(DIR, slug + ".webp")).convert("RGBA")
+    car = car.crop(car.getchannel("A").getbbox())
+    k = min(760 / car.width, 420 / car.height)
+    car = car.resize((round(car.width * k), round(car.height * k)), Image.LANCZOS)
+    cx, cy = 1200 - car.width - 20, 600 - car.height
+    out.paste(car, (cx, cy), car)
+    photo = pirelli_photo(sizes[0] if sizes else None)
+    if photo:
+        t = cutout_white(photo)
+        t = t.resize((round(t.width * 300 / t.height), 300), Image.LANCZOS)
+        out.paste(t, (cx + car.width - t.width + 10, 612 - t.height), t)
+
+    d.text((40, 24), "NEUMÁTICOS PARA", font=fit_font("ExtraBold", "NEUMÁTICOS PARA", 54, 620), fill=(90, 90, 90))
+    d.text((40, 76), name.upper(), font=fit_font("Black", name.upper(), 66, 620), fill=(0, 0, 0))
+    if sizes:
+        d.text((40, 150), fmt(sizes[0]), font=fit_font("Black", fmt(sizes[0]), 112, 560), fill=RED)
+    if len(sizes) > 1:
+        d.text((40, 282), "TAMBIÉN LLEVA", font=ImageFont.truetype(FONTS.format("Bold"), 24), fill=(110, 110, 110))
+        for i, s in enumerate(sizes[1:4]):
+            d.text((40, 312 + i * 38), "• " + fmt(s), font=ImageFont.truetype(FONTS.format("Bold"), 30), fill=(40, 40, 40))
+
     logo = Image.open(LOGO).convert("RGBA")
-    logo.thumbnail((230, 80))
-    bg = Image.new("RGB", (1200, 630), (0, 0, 0))
-    bg.paste(car, (60, 20), car)
-    bg.paste(logo, (1200 - logo.width - 36, 630 - logo.height - 24), logo)
-    ImageDraw.Draw(bg).rectangle((0, 620, 1200, 630), fill=(255, 30, 0))
+    logo = logo.crop(logo.getbbox())
+    logo.thumbnail((190, 56))
+    plate = Image.new("RGB", (210, 70), (0, 0, 0))
+    plate.paste(logo, ((210 - logo.width) // 2, (70 - logo.height) // 2), logo)
+    out.paste(plate, (30, 536))
+    d.rectangle((0, 620, 1200, 630), fill=RED)
     os.makedirs(CARDS, exist_ok=True)
-    bg.save(os.path.join(CARDS, slug + ".jpg"), quality=84, optimize=True)
+    out.save(os.path.join(CARDS, slug + ".jpg"), quality=84, optimize=True)
 
 
 def update_list():
