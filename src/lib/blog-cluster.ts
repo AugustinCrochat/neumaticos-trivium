@@ -80,3 +80,42 @@ export const MEDIDAS: { slug: string; size: string }[] = [
   { slug: "neumaticos-185-60-r15-autos-que-la-usan", size: "185/60 R15" },
   { slug: "neumaticos-265-65-r17-autos-que-la-usan", size: "265/65 R17" },
 ];
+
+/**
+ * Clúster "alineado y balanceado": el pilar explica qué es cada cosa y las demás
+ * responden una búsqueda puntual (síntomas, cada cuánto, equipos, camionetas).
+ * Ver TallerLinks.
+ */
+export const TALLER_PILAR = "alineacion-y-balanceo";
+
+export const TALLER: { grupo: string; notas: { slug: string; title: string }[] }[] = [
+  {
+    grupo: "Síntomas: qué le pasa a mi auto",
+    notas: [
+      { slug: "auto-tira-para-un-lado-causas", title: "El auto tira para un lado" },
+      { slug: "volante-vibra-causas-y-solucion", title: "El volante vibra" },
+      { slug: "sintomas-alineacion-balanceo-o-rotacion", title: "¿Alineación, balanceo o rotación?" },
+      { slug: "desgaste-irregular-de-neumaticos", title: "Desgaste irregular" },
+      { slug: "pozo-o-golpe-que-revisar-en-el-neumatico", title: "Después de un pozo o un golpe" },
+    ],
+  },
+  {
+    grupo: "Cada cuánto y para qué",
+    notas: [
+      { slug: "cada-cuantos-km-alinear-y-balancear", title: "Cada cuántos km alinear y balancear" },
+      { slug: "alineado-y-balanceado-en-camionetas-y-4x4", title: "En camionetas y 4x4" },
+      { slug: "revision-antes-de-viajar-neumaticos", title: "Revisión antes de viajar" },
+      { slug: "rotacion-de-neumaticos", title: "Rotación de neumáticos" },
+    ],
+  },
+  {
+    grupo: "Cómo se hace",
+    notas: [
+      { slug: "que-mide-una-alineadora-convergencia-caida-avance", title: "Qué mide una alineadora" },
+      { slug: "alineacion-3d-vs-alineacion-tradicional", title: "Alineación 3D vs. tradicional" },
+      { slug: "pesas-de-balanceo-por-que-se-caen", title: "Pesas de balanceo" },
+      { slug: "geoliner-630-geodyna-7800p-alineacion-balanceo", title: "Los equipos del taller" },
+      { slug: "gomeria-en-cordoba", title: "Qué hace una gomería" },
+    ],
+  },
+];

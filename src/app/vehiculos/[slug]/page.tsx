@@ -82,17 +82,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const lista = medidas.slice(0, 3).map((m) => formatSize(m.size)).join(", ");
 
   // La medida va en el título: es lo que la persona busca, más que el auto.
-  const principal = medidas[0] ? formatSize(medidas[0].size) : null;
+  // Medida del título: la primera con stock, así el precio del título es el de esa medida.
+  const medidaTitulo = medidas.find((m) => m.desde) ?? medidas[0];
+  const principal = medidaTitulo ? formatSize(medidaTitulo.size) : null;
   const title = !principal
     ? `Neumáticos para ${name}: medidas y precios`
-    : medidas.length === 1
-      ? `Neumáticos para ${name}: medida ${principal}`
-      : `Neumáticos para ${name}: ${principal} y otras medidas`;
+    : medidaTitulo.desde
+      ? `Neumáticos para ${name}: ${principal}, desde ${formatPrice(medidaTitulo.desde)}`
+      : `Neumáticos para ${name}: medida ${principal}`;
   const description = [
     medidas.length === 1
       ? `¿Qué medida de neumático lleva el ${name}? La original es ${lista}.`
       : `¿Qué medida de neumático lleva el ${name}? Según la versión: ${lista}${medidas.length > 3 ? " y más" : ""}.`,
-    desde ? `Neumáticos desde ${formatPrice(desde)} con stock real.` : "Consultá stock y precio de tu medida.",
+    desde ? `Neumáticos económicos desde ${formatPrice(desde)}, con stock real y precio de outlet.` : "Consultá stock y precio de tu medida.",
     "Garantía de 1 año y colocación sin cargo en Córdoba.",
   ].join(" ");
 
@@ -141,6 +143,11 @@ export default async function VehiclePage({ params }: Props) {
     return x ? sizeSlug({ width: Number(x[1]), profile: Number(x[2]), rim: Number(x[3]) }) : null;
   };
 
+  // El más barato en stock de cada medida: sustenta la sección y la FAQ de precio.
+  const masBaratos = medidas
+    .map((m) => ({ m, p: [...m.disponibles].sort((x, y) => x.price - y.price)[0] }))
+    .filter((x): x is { m: (typeof medidas)[number]; p: TireProduct } => Boolean(x.p));
+
   // Medida que más se lleva en el taller primero; el resto en su orden.
   const masElegida = ventasTop[0]?.medida ?? null;
   const ordenadas = [...medidas].sort((a, b) => Number(formatSize(b.size) === masElegida) - Number(formatSize(a.size) === masElegida));
@@ -184,6 +191,15 @@ export default async function VehiclePage({ params }: Props) {
         ]
       : []),
     {
+      question: `¿Cuáles son los neumáticos más baratos para el ${name}?`,
+      answer: masBaratos.length
+        ? `Hoy, los más económicos en stock son ${masBaratos
+            .slice(0, 3)
+            .map(({ m, p }) => `${p.brand} ${p.modeloBase} en ${formatSize(m.size)} a ${formatPrice(p.price)}`)
+            .join("; ")}. Son precios por unidad, de outlet por importación directa, con garantía de 1 año y colocación sin cargo en el local.`
+        : `Por ahora no tenemos stock en las medidas originales del ${name}. Escribinos por WhatsApp y te pasamos precio de la medida o de una equivalente.`,
+    },
+    {
       question: `¿Tienen neumáticos para ${name} en stock?`,
       answer: conStock.length
         ? `Sí. Hoy hay stock en ${conStock.map((m) => formatSize(m.size)).join(", ")}, desde ${formatPrice(desde as number)} por neumático. Garantía de 1 año y colocación sin cargo en el local.`
@@ -220,24 +236,20 @@ export default async function VehiclePage({ params }: Props) {
         />
       )}
 
-      <div className={`bg-black px-4 pt-16 ${vehiclePhoto(slug) ? "pb-32" : "pb-16"}`}>
+      <div className={`bg-black px-4 pt-8 ${vehiclePhoto(slug) ? "pb-20 md:pb-24" : "pb-10"}`}>
         <div className="mx-auto max-w-4xl text-center">
           {marcaLogo(vehicle.brand) && (
             <Link
               href={`/vehiculos/marca/${marcaSlug(vehicle.brand)}`}
-              className="mx-auto mb-4 flex h-24 w-24 items-center justify-center"
+              className="mx-auto mb-2 flex h-14 w-14 items-center justify-center"
               aria-label={`Neumáticos para ${vehicle.brand}`}
             >
-              <MarcaLogo brand={vehicle.brand} sobreNegro className="h-24 w-24" />
+              <MarcaLogo brand={vehicle.brand} sobreNegro className="h-14 w-14" />
             </Link>
           )}
-          <span className="mb-4 block text-sm font-bold uppercase tracking-widest text-orange-500">
-            Guía de medidas por vehículo
-          </span>
-          <h1 className="mb-6 text-4xl font-black text-white md:text-5xl">Medida de neumáticos del {name}</h1>
-          <p className="mx-auto max-w-2xl text-lg text-slate-300 md:text-xl">
-            Medidas de neumáticos originales de fábrica del {name} según versión
-            {desde ? `, con neumáticos en stock desde ${formatPrice(desde)}` : ""}. Elegí la tuya para ver qué tenemos.
+          <h1 className="mb-2 text-3xl font-black text-white md:text-4xl">Medida de neumáticos del {name}</h1>
+          <p className="mx-auto max-w-2xl text-base text-slate-300">
+            Medida original por versión{desde ? ` y neumáticos económicos desde ${formatPrice(desde)}` : ""}, con stock real.
           </p>
         </div>
       </div>
@@ -255,7 +267,7 @@ export default async function VehiclePage({ params }: Props) {
                   alt={name}
                   width={1000}
                   height={560}
-                  className="relative z-20 order-first mx-auto -mt-24 mb-2 h-auto w-72 drop-shadow-[0_18px_24px_rgba(0,0,0,0.45)] md:order-last md:mx-0 md:-mt-44 md:w-[28rem]"
+                  className="relative z-20 order-first mx-auto -mt-16 mb-2 h-auto w-64 drop-shadow-[0_18px_24px_rgba(0,0,0,0.45)] md:order-last md:mx-0 md:-mt-32 md:w-96"
                 />
               )}
             </div>
@@ -270,6 +282,28 @@ export default async function VehiclePage({ params }: Props) {
               .
             </p>
           </section>
+
+          {masBaratos.length > 0 && (
+            <section className="mb-10 border-b border-slate-100 pb-10">
+              <h2 className="mb-1 text-2xl font-bold text-navy-900">Neumáticos económicos para el {name}</h2>
+              <p className="mb-4 text-sm text-slate-500">
+                El más barato que tenemos en stock hoy en cada medida. Precio por unidad, outlet por importación directa.
+              </p>
+              <ul className="divide-y divide-slate-100 overflow-hidden rounded-2xl border border-slate-200">
+                {masBaratos.map(({ m, p }) => (
+                  <li key={sizeSlug(m.size)}>
+                    <Link href={`/productos/${p.slug}`} className="flex items-center justify-between gap-3 px-4 py-3 hover:bg-slate-50">
+                      <span className="min-w-0">
+                        <span className="block text-sm font-black text-navy-900">{formatSize(m.size)}</span>
+                        <span className="block truncate text-sm text-slate-600">{p.brand} {p.modeloBase}</span>
+                      </span>
+                      <span className="shrink-0 text-lg font-black text-emerald-700">{formatPrice(p.price)}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
 
           {ventasTop.length > 0 && (
             <section className="mb-10 border-b border-slate-100 pb-10">
