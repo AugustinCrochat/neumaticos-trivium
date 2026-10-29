@@ -176,6 +176,7 @@ export const VEHICLE_PHOTOS = new Set([
   "renault-sandero",
   "renault-sandero-stepway",
   "renault-symbol",
+  "renault-trafic",
   "shineray-t30",
   "shineray-t32",
   "subaru-crosstrek",
