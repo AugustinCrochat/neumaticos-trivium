@@ -17,6 +17,7 @@ import { poolShare } from "@/lib/share-image";
 import { MarcaLogo } from "@/components/ui/MarcaLogo";
 import { marcaLogo, marcaSlug } from "@/lib/marcas-autos";
 import { vehiclePhoto, vehicleCardUrl } from "@/lib/vehicle-photos";
+import { MedidasVehiculo, type MedidaItem } from "./MedidasVehiculo";
 import { VENTAS_MODELO, VENTAS_DATOS_AL } from "@/lib/ventas-modelo";
 
 /**
@@ -140,6 +141,28 @@ export default async function VehiclePage({ params }: Props) {
     return x ? sizeSlug({ width: Number(x[1]), profile: Number(x[2]), rim: Number(x[3]) }) : null;
   };
 
+  // Medida que más se lleva en el taller primero; el resto en su orden.
+  const masElegida = ventasTop[0]?.medida ?? null;
+  const ordenadas = [...medidas].sort((a, b) => Number(formatSize(b.size) === masElegida) - Number(formatSize(a.size) === masElegida));
+  const itemsMedida: MedidaItem[] = ordenadas.map((m) => ({
+    slug: sizeSlug(m.size),
+    label: formatSize(m.size),
+    versions: m.versions,
+    years: m.years,
+    desde: m.desde ? formatPrice(m.desde) : null,
+    masElegida: medidas.length > 1 && formatSize(m.size) === masElegida,
+  }));
+  // Respuesta directa, antes de las tarjetas: es lo que busca quien llega con la pregunta.
+  const respuestaCorta =
+    medidas.length === 1
+      ? `El ${name} lleva de fábrica la medida ${formatSize(medidas[0].size)}.`
+      : `Según la versión, el ${name} usa ${ordenadas
+          .slice(0, 3)
+          .map((m) => `${formatSize(m.size)}${m.versions.length ? ` (${m.versions.slice(0, 2).join(" / ")})` : ""}`)
+          .join(", ")}${ordenadas.length > 3 ? " y otras" : ""}.${
+          masElegida ? ` La que más cambiamos en nuestro taller de Córdoba es ${masElegida}.` : ""
+        }`;
+
   const faqs: Faq[] = [
     {
       question: `¿Qué medida de neumáticos lleva el ${name}?`,
@@ -236,32 +259,8 @@ export default async function VehiclePage({ params }: Props) {
                 />
               )}
             </div>
-            <ul className="space-y-3">
-              {medidas.map((m) => (
-                <li key={sizeSlug(m.size)}>
-                  <Link
-                    href={`/neumaticos/${sizeSlug(m.size)}`}
-                    className="group flex items-center gap-4 rounded-2xl border-2 border-slate-200 bg-white p-4 transition-colors hover:border-orange-500 hover:bg-orange-50/40 sm:p-5"
-                  >
-                    <span className="min-w-0 flex-1">
-                      <span className="block text-2xl font-black text-navy-900 group-hover:text-orange-600">{formatSize(m.size)}</span>
-                      <span className="mt-0.5 block text-sm text-slate-600">
-                        {m.versions.join(", ") || "Varias versiones"}
-                        {m.years.length > 0 ? ` · ${m.years.join(", ")}` : ""}
-                      </span>
-                    </span>
-                    <span className="shrink-0 text-right">
-                      <span className={`block text-sm font-black ${m.desde ? "text-emerald-700" : "text-slate-500"}`}>
-                        {m.desde ? `Desde ${formatPrice(m.desde)}` : "Consultar stock"}
-                      </span>
-                      <span className="mt-1 inline-flex items-center gap-1 rounded-lg bg-orange-500 px-3 py-1.5 text-xs font-black text-white group-hover:bg-orange-600">
-                        Ver neumáticos <span aria-hidden="true">→</span>
-                      </span>
-                    </span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <p className="mb-5 rounded-2xl bg-slate-50 p-4 leading-relaxed text-slate-700">{respuestaCorta}</p>
+            <MedidasVehiculo items={itemsMedida} />
             <p className="mt-4 text-sm leading-relaxed text-slate-500">
               Confirmá tu medida en el flanco del neumático o en la calcomanía del parante de la puerta del
               conductor: una misma versión puede haber salido con más de una. Si necesitás otra,{" "}
