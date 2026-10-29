@@ -148,6 +148,7 @@ export const VEHICLE_PHOTOS = new Set([
   "peugeot-408",
   "peugeot-boxer",
   "peugeot-expert",
+  "peugeot-partner",
   "porsche-cayenne",
   "porsche-macan",
   "porsche-panamera",
