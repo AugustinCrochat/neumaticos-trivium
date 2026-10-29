@@ -79,6 +79,7 @@ export const VEHICLE_PHOTOS = new Set([
   "fiat-titano",
   "fiat-toro",
   "fiat-uno",
+  "fiat-uno-way",
   "ford-ecosport",
   "ford-fiesta",
   "ford-focus",
