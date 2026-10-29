@@ -15,6 +15,9 @@ Uso (desde la raíz del repo):
                 con texto, agregar --plate=x0,y0,x1,y1 (caja aproximada en el lienzo
                 1000x560) para que el texto quede legible y no espejado
                 (--dark si es texto claro sobre chapa oscura).
+  --trivium-plate <slug> x0,y0,x1,y1,x2,y2,x3,y3   # pone una patente Trivium (negra, con el logo) sobre la de la foto; esquinas
+                en el lienzo 1000x560, en orden sup-izq, sup-der, inf-der, inf-izq (sigue la perspectiva del auto)
+
   --keep-alpha  la imagen ya trae fondo transparente (PNG): no pasa por rembg.
 
 Requiere: pip install "rembg[cpu]" pillow numpy scipy
@@ -88,6 +91,37 @@ def blank_text(im, rough, inverse=False):
     return Image.fromarray(arr, "RGBA"), (int(xs.min()), int(ys.min()), int(xs.max()), int(ys.max()))
 
 
+def trivium_plate(slug, corners):
+    """Tapa la patente de la foto con una patente Trivium: chapa negra con borde
+    blanco y el logo. `corners` son las 4 esquinas de la patente en el lienzo
+    1000x560 (sup-izq, sup-der, inf-der, inf-izq); la chapa se deforma con
+    perspectiva para acompañar el ángulo del auto."""
+    PW, PH, K = 400, 130, 4
+    plate = Image.new("RGBA", (PW, PH), (0, 0, 0, 0))
+    d = ImageDraw.Draw(plate)
+    d.rounded_rectangle((0, 0, PW - 1, PH - 1), 12, fill=(235, 235, 235, 255))
+    d.rounded_rectangle((5, 5, PW - 6, PH - 6), 9, fill=(10, 10, 12, 255))
+    logo = Image.open(LOGO).convert("RGBA")
+    logo = logo.crop(logo.getbbox())
+    logo.thumbnail((PW - 56, PH - 34), Image.LANCZOS)
+    plate.paste(logo, ((PW - logo.width) // 2, (PH - logo.height) // 2), logo)
+    # coeficientes de la perspectiva destino -> origen (ampliado K veces para suavizar bordes)
+    dst = [(x * K, y * K) for x, y in zip(corners[0::2], corners[1::2])]
+    src = [(0, 0), (PW, 0), (PW, PH), (0, PH)]
+    A, b = [], []
+    for (x, y), (u, v) in zip(dst, src):
+        A += [[x, y, 1, 0, 0, 0, -u * x, -u * y], [0, 0, 0, x, y, 1, -v * x, -v * y]]
+        b += [u, v]
+    coef = np.linalg.solve(np.array(A, float), np.array(b, float))
+    layer = plate.transform((CW * K, CH * K), Image.PERSPECTIVE, tuple(coef), Image.BICUBIC)
+    layer = layer.resize((CW, CH), Image.LANCZOS)
+    p = os.path.join(DIR, slug + ".webp")
+    car = Image.open(p).convert("RGBA")
+    car.alpha_composite(layer)
+    car.save(p, "WEBP", quality=86, method=6)
+    card(slug)
+
+
 def normalize(cut, flip):
     cut = cut.convert("RGBA")
     cut = cut.crop(cut.getchannel("A").point(lambda v: 255 if v > 8 else 0).getbbox())
@@ -128,6 +162,10 @@ def main(argv):
             if f.endswith(".webp"):
                 card(f[:-5])
         print("tarjetas regeneradas")
+        return
+    if argv[:1] == ["--trivium-plate"]:
+        trivium_plate(argv[1], [int(v) for v in argv[2].split(",")])
+        print(argv[1], "patente Trivium lista")
         return
     if argv[:1] == ["--fix-plate"]:
         slug, rough = argv[1], tuple(int(v) for v in argv[2].split(","))
