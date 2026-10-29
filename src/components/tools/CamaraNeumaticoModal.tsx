@@ -1,8 +1,12 @@
 "use client";
 
+import type { Branch } from "@/lib/config";
+import { descargarContacto } from "@/lib/vcard";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 type Props = {
+  /** Para el botón "Agendar": la sucursal completa. */
+  branch: Branch;
   whatsapp: string;
   /** Nombre de la sucursal elegida, para avisar a qué chat se abre. */
   sucursal: string;
@@ -25,7 +29,7 @@ const MENSAJE = "¡Hola! Te mando la foto del flanco de mi neumático desde la w
  * y abre el chat de la sucursal elegida para que la persona la pegue o la
  * adjunte. Donde hay menú de compartir se ofrece también como alternativa.
  */
-export default function CamaraNeumaticoModal({ whatsapp, sucursal, fotoInicial = null, onClose }: Props) {
+export default function CamaraNeumaticoModal({ branch, whatsapp, sucursal, fotoInicial = null, onClose }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const circuloRef = useRef<HTMLDivElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -298,6 +302,9 @@ export default function CamaraNeumaticoModal({ whatsapp, sucursal, fotoInicial =
               Compartir con otra app
             </button>
           )}
+          <button type="button" onClick={() => descargarContacto(branch)} className="text-sm font-bold underline underline-offset-4">
+            Agendar a {sucursal} en mis contactos
+          </button>
           <button type="button" onClick={repetir} className="text-sm font-bold underline underline-offset-4">
             Sacar otra
           </button>

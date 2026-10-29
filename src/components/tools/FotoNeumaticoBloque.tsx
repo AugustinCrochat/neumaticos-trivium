@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { SITE_URL, type Branch } from "@/lib/config";
 import { useBranch } from "@/contexts/branch-context";
 import { toolPath } from "@/lib/tools";
+import { descargarContacto } from "@/lib/vcard";
 
 const CamaraNeumaticoModal = dynamic(() => import("./CamaraNeumaticoModal"), { ssr: false });
 
@@ -72,6 +73,9 @@ export function FotoNeumaticoBloque({ className = "", titulo = "¿No sabés qué
           <button type="button" onClick={() => inputRef.current?.click()} className="text-xs font-bold text-emerald-800 underline underline-offset-4">
             Elegir una foto de la galería
           </button>
+          <button type="button" onClick={() => conSucursal(descargarContacto)} className="text-xs font-bold text-emerald-800 underline underline-offset-4">
+            Agendar nuestro WhatsApp
+          </button>
           <input
             ref={inputRef}
             type="file"
@@ -97,7 +101,7 @@ export function FotoNeumaticoBloque({ className = "", titulo = "¿No sabés qué
         />
       )}
       {camara && destino && (
-        <CamaraNeumaticoModal whatsapp={destino.whatsapp} sucursal={destino.shortName} fotoInicial={foto} onClose={() => setCamara(false)} />
+        <CamaraNeumaticoModal branch={destino} whatsapp={destino.whatsapp} sucursal={destino.shortName} fotoInicial={foto} onClose={() => setCamara(false)} />
       )}
     </section>
   );

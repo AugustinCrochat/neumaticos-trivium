@@ -10,6 +10,7 @@ import { BranchStatusBadge } from "@/app/sucursales/[id]/BranchStatusBadge";
 import { LazyBranchMiniMap } from "@/app/sucursales/[id]/LazyBranchMiniMap";
 import { DirectionsButton } from "@/app/sucursales/[id]/DirectionsButton";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
+import { descargarContacto } from "@/lib/vcard";
 import { DirectionsIcon } from "@/components/ui/DirectionsIcon";
 
 function BranchCard({ branch }: { branch: Branch }) {
@@ -72,6 +73,13 @@ function BranchCard({ branch }: { branch: Branch }) {
               </DirectionsButton>
             </div>
 
+            <button
+              type="button"
+              onClick={() => descargarContacto(branch)}
+              className="mt-4 mr-4 inline-block text-sm font-bold text-navy-700 underline decoration-navy-300 hover:decoration-navy-900"
+            >
+              Agendar nuestro WhatsApp
+            </button>
             <Link
               href={`/sucursales/${branch.id}`}
               className="mt-4 inline-block text-sm font-bold text-navy-700 underline decoration-navy-300 hover:decoration-navy-900"
