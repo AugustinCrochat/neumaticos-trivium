@@ -115,6 +115,7 @@ const SECTIONS: Section[] = [
 
 const ZONAS = [
   { branchId: "arguello", titulo: "Sucursal Argüello · Córdoba" },
+  { branchId: "lomas-del-mirador", titulo: "Sucursal Lomas del Mirador · Buenos Aires" },
   { branchId: "san-justo", titulo: "Sucursal San Justo · Buenos Aires" },
 ];
 

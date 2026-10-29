@@ -67,7 +67,7 @@ export default function ServiciosPage() {
           </li>
           <li>
             <Link href="/blog/gomeria-en-san-justo-buenos-aires" className="font-bold text-orange-700 underline underline-offset-4">
-              Gomería en San Justo y La Matanza (abre en diciembre)
+              Gomería en San Justo y La Matanza (abre en enero)
             </Link>
           </li>
         </ul>

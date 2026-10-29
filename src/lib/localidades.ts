@@ -372,13 +372,13 @@ export const LOCALIDADES: Localidad[] = [
     slug: "lomas-del-mirador",
     name: "Lomas del Mirador",
     province: "Buenos Aires",
-    branchId: "san-justo",
-    parent: "la-matanza",
-    minutosHastaSucursal: 10,
+    branchId: "lomas-del-mirador",
+    esCabecera: true,
+    minutosHastaSucursal: 5,
     comoLlegar:
-      "Lomas del Mirador está en el mismo partido, al noreste de San Justo: son unos diez minutos en auto, con el tránsito normal de la zona. Google Maps calcula el recorrido exacto desde tu domicilio y te avisa si hay demoras.",
+      "El local está en Av. General Enrique Mosconi 248, en Lomas del Mirador, pegado a la General Paz. Sumá la dirección en Google Maps y te marca el recorrido exacto desde tu domicilio.",
     intro:
-      "Lomas del Mirador es un barrio grande y muy poblado de La Matanza, con muchísimos autos de uso diario. Para quien vive acá, San Justo es el centro más cercano para comprar neumáticos sin ir hasta Capital.",
+      "Lomas del Mirador es un barrio grande y muy poblado de La Matanza, con muchísimos autos de uso diario y pegado a la Ciudad. Trivium abre acá una sucursal sobre Av. Mosconi, para quien vive en el barrio y en el oeste de Capital.",
     porQue:
       "Una zona con tanto parque automotor tiene precios muy parejos entre gomerías, y casi nadie se anima a comparar contra una importación directa. Si estás por cambiar las cubiertas, mirá el precio de tu medida en nuestra web y compará con lo que te dieron: al ser neumáticos nuevos con garantía de un año, la comparación es de igual a igual.",
     incluye: ["Lomas del Mirador centro"],
@@ -604,27 +604,27 @@ export const LOCALIDADES: Localidad[] = [
     slug: "capital-federal",
     name: "Capital Federal",
     province: "Ciudad Autónoma de Buenos Aires",
-    branchId: "san-justo",
-    minutosHastaSucursal: 30,
+    branchId: "lomas-del-mirador",
+    minutosHastaSucursal: 20,
     comoLlegar:
-      "Desde los barrios del oeste y sur de la Ciudad (Liniers, Mataderos, Villa Luro, Parque Avellaneda) se llega a La Matanza por la General Paz o por la Ruta 3 en unos treinta minutos aproximadamente, según el tránsito. Google Maps te marca el recorrido desde tu barrio.",
+      "Desde los barrios del oeste y sur de la Ciudad (Liniers, Villa Luro, Versalles, Mataderos, Parque Avellaneda, Villa Lugano) el local de Av. General Enrique Mosconi 248 queda del otro lado de la General Paz: se llega en unos quince a veinte minutos aproximadamente, según el tránsito. Google Maps te marca el recorrido desde tu barrio.",
     intro:
-      "Muchos vecinos de la Ciudad cruzan la General Paz para comprar neumáticos: los precios de los comercios de Capital incluyen alquileres caros, y el neumático termina costando más. San Justo queda del otro lado de la avenida.",
+      "Muchos vecinos de la Ciudad cruzan la General Paz para comprar neumáticos: los precios de los comercios de Capital incluyen alquileres caros, y el neumático termina costando más. Nuestro local de Lomas del Mirador está sobre Av. Mosconi, pegado a la avenida.",
     porQue:
-      "Si vivís en el oeste o sur de la Ciudad, salir por la General Paz hacia La Matanza es un trayecto corto. Para un cambio de cuatro neumáticos, la diferencia entre el precio de Capital y el de un outlet de importación directa justifica el viaje. Mirá tu medida en la web, compará, y decidí.",
+      "Si vivís en el oeste o sur de la Ciudad, cruzar la General Paz hacia Lomas del Mirador es un trayecto corto. Para un cambio de cuatro neumáticos, la diferencia entre el precio de Capital y el de un outlet de importación directa justifica el viaje. Mirá tu medida en la web, compará, y decidí.",
     incluye: ["Liniers", "Mataderos", "Villa Luro", "Parque Avellaneda", "Villa Lugano", "Floresta"],
   },
   {
     slug: "liniers",
     name: "Liniers",
     province: "Ciudad Autónoma de Buenos Aires",
-    branchId: "san-justo",
+    branchId: "lomas-del-mirador",
     parent: "capital-federal",
-    minutosHastaSucursal: 20,
+    minutosHastaSucursal: 10,
     comoLlegar:
-      "Liniers queda pegado al límite con La Matanza: se llega a San Justo en unos veinte minutos en auto, cruzando la General Paz hacia el oeste. Google Maps te marca el recorrido más rápido a esa hora.",
+      "Liniers queda pegado a la General Paz: el local de Av. Mosconi, en Lomas del Mirador, está a unos diez minutos en auto, cruzando la avenida. Google Maps te marca el recorrido más rápido a esa hora.",
     intro:
-      "Liniers es la puerta de entrada de la Ciudad al oeste, con mucho tránsito y mucho comercio. Para quien vive o trabaja ahí, el local de San Justo queda del otro lado de la avenida.",
+      "Liniers es la puerta de entrada de la Ciudad al oeste, con mucho tránsito y mucho comercio. Para quien vive o trabaja ahí, nuestro local de Lomas del Mirador queda del otro lado de la General Paz.",
     porQue:
       "En Liniers hay muchísima oferta de gomerías y casas de neumáticos, y cada una cotiza distinto. Antes de cambiar las cuatro cubiertas, mirá cuánto sale tu medida en un outlet de importación directa: el precio está en la web antes de ir.",
   },
@@ -632,13 +632,13 @@ export const LOCALIDADES: Localidad[] = [
     slug: "mataderos",
     name: "Mataderos",
     province: "Ciudad Autónoma de Buenos Aires",
-    branchId: "san-justo",
+    branchId: "lomas-del-mirador",
     parent: "capital-federal",
-    minutosHastaSucursal: 20,
+    minutosHastaSucursal: 15,
     comoLlegar:
-      "Desde Mataderos se llega a La Matanza por la General Paz o por la Ruta 3: son unos veinte minutos aproximados hasta San Justo, según el tránsito. Google Maps calcula el recorrido exacto.",
+      "Desde Mataderos se cruza la General Paz y se llega a Lomas del Mirador en unos quince minutos aproximados, según el tránsito. Google Maps calcula el recorrido exacto.",
     intro:
-      "Mataderos es un barrio de la Ciudad muy ligado al mundo del transporte y del trabajo con vehículos, a pocos minutos del límite con La Matanza. Para quien vive ahí, San Justo es el outlet de neumáticos más cercano fuera de la Ciudad.",
+      "Mataderos es un barrio de la Ciudad muy ligado al mundo del transporte y del trabajo con vehículos, a pocos minutos del límite con La Matanza. Para quien vive ahí, Lomas del Mirador es el outlet de neumáticos más cercano fuera de la Ciudad.",
     porQue:
       "Quien trabaja con el auto o con un utilitario cambia cubiertas seguido, y ahí cada diferencia de precio pesa. Mirá tu medida en la web, compará con tu cotización y decidí si te conviene cruzar la avenida.",
   },
@@ -646,13 +646,13 @@ export const LOCALIDADES: Localidad[] = [
     slug: "parque-avellaneda",
     name: "Parque Avellaneda",
     province: "Ciudad Autónoma de Buenos Aires",
-    branchId: "san-justo",
+    branchId: "lomas-del-mirador",
     parent: "capital-federal",
-    minutosHastaSucursal: 25,
+    minutosHastaSucursal: 15,
     comoLlegar:
-      "Desde Parque Avellaneda se llega a La Matanza por la General Paz en unos veinticinco minutos aproximadamente, según el tránsito. Dejale a Google Maps la elección del camino desde tu casa.",
+      "Desde Parque Avellaneda se llega a Lomas del Mirador por la General Paz en unos quince minutos aproximadamente, según el tránsito. Dejale a Google Maps la elección del camino desde tu casa.",
     intro:
-      "Parque Avellaneda es un barrio residencial del sudoeste de la Ciudad, con mucho auto familiar y salida directa a la General Paz. Desde ahí, San Justo queda a un viaje corto hacia el oeste.",
+      "Parque Avellaneda es un barrio residencial del sudoeste de la Ciudad, con mucho auto familiar y salida directa a la General Paz. Desde ahí, nuestro local de Lomas del Mirador queda a un viaje corto.",
     porQue:
       "Con los costos de una zona comercial de Capital, las cubiertas suelen salir más caras. Ver el precio de tu medida en la web antes de moverte es lo que te dice si el viaje vale la pena.",
   },
@@ -660,13 +660,13 @@ export const LOCALIDADES: Localidad[] = [
     slug: "villa-lugano",
     name: "Villa Lugano",
     province: "Ciudad Autónoma de Buenos Aires",
-    branchId: "san-justo",
+    branchId: "lomas-del-mirador",
     parent: "capital-federal",
-    minutosHastaSucursal: 25,
+    minutosHastaSucursal: 20,
     comoLlegar:
-      "Desde Villa Lugano se llega a San Justo en unos veinticinco minutos aproximados, por la General Paz y luego hacia La Matanza. Según la hora puede haber más tránsito: Google Maps calcula el camino.",
+      "Desde Villa Lugano se llega a Lomas del Mirador en unos veinte minutos aproximados, por la General Paz. Según la hora puede haber más tránsito: Google Maps calcula el camino.",
     intro:
-      "Villa Lugano está en el extremo sur de la Ciudad, cerca del límite con La Matanza, y desde ahí San Justo es una opción de neumáticos a precio de outlet a un viaje razonable.",
+      "Villa Lugano está en el extremo sur de la Ciudad, cerca del límite con La Matanza, y desde ahí nuestro local de Lomas del Mirador es una opción de neumáticos a precio de outlet a un viaje razonable.",
     porQue:
       "Para quien vive en el sur de la Ciudad y usa el auto a diario, reponer cubiertas es un gasto fuerte. Mirá tu medida en la web, comparala con la cotización que tengas y decidí con el número en la mano.",
   },
@@ -674,13 +674,13 @@ export const LOCALIDADES: Localidad[] = [
     slug: "versalles",
     name: "Versalles",
     province: "Ciudad Autónoma de Buenos Aires",
-    branchId: "san-justo",
+    branchId: "lomas-del-mirador",
     parent: "capital-federal",
-    minutosHastaSucursal: 25,
+    minutosHastaSucursal: 10,
     comoLlegar:
-      "Versalles queda al oeste de la Ciudad, cerca de la General Paz: son unos veinticinco minutos en auto hasta San Justo, según el tránsito. Google Maps te marca el recorrido exacto desde tu casa.",
+      "Versalles queda al oeste de la Ciudad, pegado a la General Paz: son unos diez minutos en auto hasta Lomas del Mirador, según el tránsito. Google Maps te marca el recorrido exacto desde tu casa.",
     intro:
-      "Versalles es un barrio residencial tranquilo del oeste de la Ciudad, con casas bajas y mucho auto familiar. Desde ahí, el local de San Justo queda a un cruce de la General Paz.",
+      "Versalles es un barrio residencial tranquilo del oeste de la Ciudad, con casas bajas y mucho auto familiar. Desde ahí, el local de Lomas del Mirador queda a un cruce de la General Paz.",
     porQue:
       "En una zona de uso familiar, el neumático se cambia por desgaste o por seguridad, y siempre conviene comparar. Mirá el precio de tu medida en la web y llevá tu cotización para ver si te conviene.",
   },
@@ -688,27 +688,27 @@ export const LOCALIDADES: Localidad[] = [
     slug: "villa-luro",
     name: "Villa Luro",
     province: "Ciudad Autónoma de Buenos Aires",
-    branchId: "san-justo",
+    branchId: "lomas-del-mirador",
     parent: "capital-federal",
-    minutosHastaSucursal: 25,
+    minutosHastaSucursal: 10,
     comoLlegar:
-      "Desde Villa Luro se llega a La Matanza en unos veinticinco minutos aproximadamente, por la General Paz o por la Ruta 3. Dejale a Google Maps la elección del camino según el tránsito.",
+      "Desde Villa Luro se llega a Lomas del Mirador en unos diez minutos aproximadamente, cruzando la General Paz. Dejale a Google Maps la elección del camino según el tránsito.",
     intro:
-      "Villa Luro es un barrio del oeste de la Ciudad con mucho comercio y tránsito, cerca del límite con La Matanza. San Justo queda del otro lado de la avenida.",
+      "Villa Luro es un barrio del oeste de la Ciudad con mucho comercio y tránsito, cerca del límite con La Matanza. Lomas del Mirador queda del otro lado de la avenida.",
     porQue:
-      "Con tanta oferta de gomerías en la zona, comparar precios no es difícil: lo ves en la web, sin moverte, y recién después decidís si te conviene el viaje a San Justo.",
+      "Con tanta oferta de gomerías en la zona, comparar precios no es difícil: lo ves en la web, sin moverte, y recién después decidís si te conviene el viaje a Lomas del Mirador.",
   },
   {
     slug: "villa-devoto",
     name: "Villa Devoto",
     province: "Ciudad Autónoma de Buenos Aires",
-    branchId: "san-justo",
+    branchId: "lomas-del-mirador",
     parent: "capital-federal",
-    minutosHastaSucursal: 30,
+    minutosHastaSucursal: 20,
     comoLlegar:
-      "Desde Villa Devoto se llega a La Matanza en unos treinta minutos aproximadamente, por la General Paz hacia el sur. Según la hora hay más tránsito: Google Maps calcula el recorrido exacto.",
+      "Desde Villa Devoto se llega a Lomas del Mirador en unos veinte minutos aproximadamente, por la General Paz hacia el sur. Según la hora hay más tránsito: Google Maps calcula el recorrido exacto.",
     intro:
-      "Villa Devoto es un barrio residencial del noroeste de la Ciudad, muy ligado al auto. Para un cambio completo de cubiertas, vale la pena evaluar cruzar la General Paz hasta San Justo.",
+      "Villa Devoto es un barrio residencial del noroeste de la Ciudad, muy ligado al auto. Para un cambio completo de cubiertas, vale la pena evaluar cruzar la General Paz hasta Lomas del Mirador.",
     porQue:
       "En un barrio donde el auto es parte de la vida diaria, reponer cubiertas es un gasto que se repite. Mirá tu medida en la web, comparala con tu cotización y decidí si el viaje se justifica.",
   },
@@ -716,13 +716,13 @@ export const LOCALIDADES: Localidad[] = [
     slug: "floresta",
     name: "Floresta",
     province: "Ciudad Autónoma de Buenos Aires",
-    branchId: "san-justo",
+    branchId: "lomas-del-mirador",
     parent: "capital-federal",
-    minutosHastaSucursal: 25,
+    minutosHastaSucursal: 15,
     comoLlegar:
-      "Desde Floresta se llega a San Justo en unos veinticinco minutos aproximados, por la General Paz hacia La Matanza. Google Maps te marca el camino más rápido a esa hora.",
+      "Desde Floresta se llega a Lomas del Mirador en unos quince minutos aproximados, por la General Paz. Google Maps te marca el camino más rápido a esa hora.",
     intro:
-      "Floresta es un barrio del oeste de la Ciudad, con mucho auto de uso diario y a pocos minutos del límite con La Matanza. San Justo queda del otro lado de la avenida.",
+      "Floresta es un barrio del oeste de la Ciudad, con mucho auto de uso diario y a pocos minutos del límite con La Matanza. Lomas del Mirador queda del otro lado de la avenida.",
     porQue:
       "Con alquileres de Capital, las cubiertas en la zona suelen salir más caras. Mirá tu medida en la web antes de moverte: es la manera más simple de saber si te conviene cruzar.",
   },

@@ -7,13 +7,13 @@ import { blogShare } from "@/lib/blog-meta";
 const SLUG = "gomeria-en-san-justo-buenos-aires";
 const TITLE = "Gomería en San Justo y La Matanza: servicios y qué mirar antes de elegir";
 const SUBTITLE =
-  "Qué servicios necesita tu auto en el oeste del Gran Buenos Aires (alineación, balanceo, rotación, arme y desarme) y cómo elegir un taller. Neumáticos Trivium San Justo abre en diciembre.";
+  "Qué servicios necesita tu auto en el oeste del Gran Buenos Aires (alineación, balanceo, rotación, arme y desarme) y cómo elegir un taller. Neumáticos Trivium San Justo abre en enero.";
 
 export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Guía de gomería en San Justo, La Matanza y el oeste de Buenos Aires: arme y desarme, balanceo, alineación, rotación, pinchaduras y tuercas de seguridad. Neumáticos Trivium San Justo abre en diciembre.",
+    "Guía de gomería en San Justo, La Matanza y el oeste de Buenos Aires: arme y desarme, balanceo, alineación, rotación, pinchaduras y tuercas de seguridad. Neumáticos Trivium San Justo abre en enero.",
   alternates: canonical(`/blog/${SLUG}`),
 };
 
@@ -21,7 +21,7 @@ const FAQS = [
   {
     question: "¿Dónde queda Neumáticos Trivium San Justo?",
     answer:
-      "En Pres. Juan Domingo Perón 2847, San Justo, partido de La Matanza, Buenos Aires. La sucursal abre en diciembre; mientras tanto podés consultar stock y precios en la web y por WhatsApp.",
+      "En Pres. Juan Domingo Perón 2847, San Justo, partido de La Matanza, Buenos Aires. La sucursal abre en enero; mientras tanto podés consultar stock y precios en la web y por WhatsApp.",
   },
   {
     question: "¿Qué servicios va a haber en San Justo?",
@@ -52,7 +52,7 @@ export default function Page() {
       <h2>Neumáticos Trivium San Justo</h2>
       <p>
         Nuestra sucursal de Buenos Aires está en Pres. Juan Domingo Perón 2847, San Justo, y{" "}
-        <strong>abre en diciembre</strong>. Vamos a atender de lunes a sábados de 9 a 19 horas corrido,
+        <strong>abre en enero</strong>. Vamos a atender de lunes a sábados de 9 a 19 horas corrido,
         igual que en Argüello. Hasta entonces podés ver el stock y los precios en el{" "}
         <Link href="/catalogo">catálogo</Link> y escribirnos por WhatsApp.
       </p>

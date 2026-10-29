@@ -167,6 +167,44 @@ export const BRANCHES: Branch[] = [
     googleStoreCode: "14523860207436626950",
   },
   {
+    id: "lomas-del-mirador",
+    name: "Neumáticos Trivium Lomas del Mirador",
+    shortName: "Lomas del Mirador",
+    address: "Av. General Enrique Mosconi 248",
+    // Google Maps lo muestra como CABA, pero el CPA B1752 es de Lomas del
+    // Mirador (La Matanza, provincia de Buenos Aires), pegado a la General Paz.
+    city: "Lomas del Mirador",
+    province: "Buenos Aires",
+    postalCode: "B1752CXP",
+    neighborhood: "Lomas del Mirador",
+    provisorio: true,
+    apertura: "en diciembre",
+    // Apunta a la zona de Capital Federal pegada a la General Paz.
+    areaServed: [
+      "Lomas del Mirador",
+      "Capital Federal",
+      "Liniers",
+      "Mataderos",
+      "Parque Avellaneda",
+      "Villa Lugano",
+      "Versalles",
+      "Villa Luro",
+      "Villa Devoto",
+      "Floresta",
+    ],
+    // WhatsApp/teléfono: mismo número provisorio que San Justo hasta tener el
+    // de la sucursal. Pendiente: googleStoreCode, reviewUrl y googleMapsEmbedUrl
+    // (salen del perfil de Google Business) y las coordenadas exactas.
+    phone: "+54 9 11 4037-0322",
+    whatsapp: "5491140370322",
+    hours: "Lun–Sáb 9–19h (de corrido)",
+    schedule: [{ days: [1, 2, 3, 4, 5, 6], open: "09:00", close: "19:00" }],
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Av.+General+Enrique+Mosconi+248,+Lomas+del+Mirador",
+    // Aproximadas (Av. Mosconi y General Paz): ajustar con el pin real.
+    coordinates: { lat: -34.6571, lng: -58.5264 },
+    mapPosition: { x: 50, y: 58 },
+  },
+  {
     id: "san-justo",
     name: "Neumáticos Trivium San Justo",
     shortName: "San Justo",
@@ -179,12 +217,11 @@ export const BRANCHES: Branch[] = [
     postalCode: "B1754AZW",
     neighborhood: "San Justo",
     provisorio: true,
-    apertura: "en diciembre",
+    apertura: "en enero",
     areaServed: [
       "San Justo",
       "Ramos Mejía",
       "Villa Luzuriaga",
-      "Lomas del Mirador",
       "Ciudad Evita",
       "Aldo Bonzi",
       "Villa Madero",
@@ -200,15 +237,6 @@ export const BRANCHES: Branch[] = [
       "Merlo",
       "Ituzaingó",
       "Ezeiza",
-      "Capital Federal",
-      "Liniers",
-      "Mataderos",
-      "Parque Avellaneda",
-      "Villa Lugano",
-      "Versalles",
-      "Villa Luro",
-      "Villa Devoto",
-      "Floresta",
       "La Matanza",
     ],
     // WhatsApp/teléfono: número personal de Augustin, provisorio hasta tener el

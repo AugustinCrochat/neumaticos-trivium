@@ -453,7 +453,7 @@ export const BLOG_META: Record<string, BlogMeta> = {
   },
   "gomeria-en-san-justo-buenos-aires": {
     cover: cover("fachada"),
-    figure: { src: IMG.tallerCuatroAutos, alt: "Interior del taller de Neumáticos Trivium en Argüello con cuatro autos en servicio", caption: "Así trabaja la gomería de Argüello; San Justo abre en diciembre." },
+    figure: { src: IMG.tallerCuatroAutos, alt: "Interior del taller de Neumáticos Trivium en Argüello con cuatro autos en servicio", caption: "Así trabaja la gomería de Argüello; San Justo abre en enero." },
     shopIntro: "Mirá el stock mientras abrimos:",
     shopLinks: [L.todos, L.ofertas, L.servicios],
   },

@@ -73,27 +73,27 @@ Cada página explica cómo llegar al local desde esa zona y muestra neumáticos 
 - Mendiolaza: https://neumaticos.trivium.ar/neumaticos-en/mendiolaza — local Argüello (Córdoba)
 - Unquillo: https://neumaticos.trivium.ar/neumaticos-en/unquillo — local Argüello (Córdoba)
 - Río Ceballos: https://neumaticos.trivium.ar/neumaticos-en/rio-ceballos — local Argüello (Córdoba)
-- La Matanza: https://neumaticos.trivium.ar/neumaticos-en/la-matanza — local San Justo (abre en diciembre)
+- La Matanza: https://neumaticos.trivium.ar/neumaticos-en/la-matanza — local San Justo (abre en enero)
   - San Justo: https://neumaticos.trivium.ar/neumaticos-en/san-justo
   - Villa Luzuriaga: https://neumaticos.trivium.ar/neumaticos-en/villa-luzuriaga
   - Ramos Mejía: https://neumaticos.trivium.ar/neumaticos-en/ramos-mejia
-  - Lomas del Mirador: https://neumaticos.trivium.ar/neumaticos-en/lomas-del-mirador
   - Ciudad Evita: https://neumaticos.trivium.ar/neumaticos-en/ciudad-evita
   - Isidro Casanova: https://neumaticos.trivium.ar/neumaticos-en/isidro-casanova
   - Laferrere: https://neumaticos.trivium.ar/neumaticos-en/laferrere
   - González Catán: https://neumaticos.trivium.ar/neumaticos-en/gonzalez-catan
   - Aldo Bonzi: https://neumaticos.trivium.ar/neumaticos-en/aldo-bonzi
   - Villa Madero: https://neumaticos.trivium.ar/neumaticos-en/villa-madero
-- Morón: https://neumaticos.trivium.ar/neumaticos-en/moron — local San Justo (abre en diciembre)
-- Tres de Febrero: https://neumaticos.trivium.ar/neumaticos-en/tres-de-febrero — local San Justo (abre en diciembre)
+- Lomas del Mirador: https://neumaticos.trivium.ar/neumaticos-en/lomas-del-mirador — local Lomas del Mirador, Av. General Enrique Mosconi 248 (abre en diciembre)
+- Morón: https://neumaticos.trivium.ar/neumaticos-en/moron — local San Justo (abre en enero)
+- Tres de Febrero: https://neumaticos.trivium.ar/neumaticos-en/tres-de-febrero — local San Justo (abre en enero)
   - Ciudadela: https://neumaticos.trivium.ar/neumaticos-en/ciudadela
-- Hurlingham: https://neumaticos.trivium.ar/neumaticos-en/hurlingham — local San Justo (abre en diciembre)
-- Ituzaingó: https://neumaticos.trivium.ar/neumaticos-en/ituzaingo — local San Justo (abre en diciembre)
-- Merlo: https://neumaticos.trivium.ar/neumaticos-en/merlo — local San Justo (abre en diciembre)
-- San Martín: https://neumaticos.trivium.ar/neumaticos-en/san-martin — local San Justo (abre en diciembre)
-- Esteban Echeverría: https://neumaticos.trivium.ar/neumaticos-en/esteban-echeverria — local San Justo (abre en diciembre)
-- Ezeiza: https://neumaticos.trivium.ar/neumaticos-en/ezeiza — local San Justo (abre en diciembre)
-- Capital Federal: https://neumaticos.trivium.ar/neumaticos-en/capital-federal — local San Justo (abre en diciembre)
+- Hurlingham: https://neumaticos.trivium.ar/neumaticos-en/hurlingham — local San Justo (abre en enero)
+- Ituzaingó: https://neumaticos.trivium.ar/neumaticos-en/ituzaingo — local San Justo (abre en enero)
+- Merlo: https://neumaticos.trivium.ar/neumaticos-en/merlo — local San Justo (abre en enero)
+- San Martín: https://neumaticos.trivium.ar/neumaticos-en/san-martin — local San Justo (abre en enero)
+- Esteban Echeverría: https://neumaticos.trivium.ar/neumaticos-en/esteban-echeverria — local San Justo (abre en enero)
+- Ezeiza: https://neumaticos.trivium.ar/neumaticos-en/ezeiza — local San Justo (abre en enero)
+- Capital Federal: https://neumaticos.trivium.ar/neumaticos-en/capital-federal — local Lomas del Mirador (abre en diciembre)
   - Liniers: https://neumaticos.trivium.ar/neumaticos-en/liniers
   - Mataderos: https://neumaticos.trivium.ar/neumaticos-en/mataderos
   - Parque Avellaneda: https://neumaticos.trivium.ar/neumaticos-en/parque-avellaneda
@@ -131,7 +131,7 @@ Cada página explica cómo llegar al local desde esa zona y muestra neumáticos 
 - Colocación y montaje de neumáticos en Córdoba: https://neumaticos.trivium.ar/servicios/montaje
 - Reparación de pinchaduras en Córdoba: https://neumaticos.trivium.ar/servicios/reparacion-de-pinchaduras
 - Tuercas de seguridad, extracción y espárragos rotos en Córdoba: https://neumaticos.trivium.ar/servicios/tuercas-de-seguridad
-- Gomería en San Justo y La Matanza (abre en diciembre): https://neumaticos.trivium.ar/blog/gomeria-en-san-justo-buenos-aires
+- Gomería en San Justo y La Matanza (abre en enero): https://neumaticos.trivium.ar/blog/gomeria-en-san-justo-buenos-aires
 - Máquinas Hofmann y elevadores Rotary Lift (equipamiento en pro.trivium.ar): https://neumaticos.trivium.ar/blog/maquinas-hofmann-y-elevadores-rotary-lift-gomeria
 - Nitrógeno en los neumáticos, ¿vale la pena?: https://neumaticos.trivium.ar/blog/nitrogeno-en-neumaticos-vale-la-pena
 - Cambio de válvulas de neumáticos: https://neumaticos.trivium.ar/blog/cambio-de-valvulas-de-neumaticos

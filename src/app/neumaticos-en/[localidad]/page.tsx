@@ -54,10 +54,11 @@ export function generateStaticParams() {
 function tituloLocal(localidad: Localidad): string {
   // "Baratos" es el modificador de precio con más volumen de búsqueda junto a
   // "neumáticos", y no aparecía en ningún título de esta serie de landings.
-  if (getBranchForLocalidad(localidad).provisorio) {
+  const sucursal = getBranchForLocalidad(localidad);
+  if (sucursal.provisorio) {
     return localidad.esCabecera
       ? `Neumáticos baratos en ${localidad.name} — outlet de importación directa`
-      : `Neumáticos baratos en ${localidad.name} — precios de outlet, local en San Justo`;
+      : `Neumáticos baratos en ${localidad.name} — precios de outlet, local en ${sucursal.shortName}`;
   }
   return localidad.esCabecera
     ? `Neumáticos baratos en ${localidad.name} — outlet con stock y local propio`
