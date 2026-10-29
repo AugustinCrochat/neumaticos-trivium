@@ -31,7 +31,7 @@ const FAQS = [
   {
     question: "¿Qué zonas cubre la sucursal San Justo?",
     answer:
-      "La Matanza (San Justo, Ramos Mejía, Villa Luzuriaga, Ciudad Evita, Isidro Casanova, Laferrere, González Catán), Morón, Hurlingham, Tres de Febrero, Merlo, Ituzaingó, Ezeiza y Capital Federal oeste.",
+      "La Matanza (San Justo, Ramos Mejía, Villa Luzuriaga, Ciudad Evita, Isidro Casanova, Laferrere, González Catán), Morón, Hurlingham, Tres de Febrero, Merlo, Ituzaingó, Ezeiza. Para el oeste de Capital Federal está la sucursal de Lomas del Mirador.",
   },
   {
     question: "¿Cuánto cuesta la alineación y el balanceo en Buenos Aires?",

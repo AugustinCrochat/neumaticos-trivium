@@ -1078,6 +1078,15 @@ const BLOG_POSTS_BASE: BlogPost[] = [
     slug: "xl-extra-load-que-significa-en-el-neumatico",
     category: "Guías",
   },
+  {
+    id: "86",
+    title: "Gomería en Lomas del Mirador y oeste de Capital: neumáticos, alineación y balanceo",
+    excerpt: "Qué servicios necesita tu auto en Liniers, Villa Luro, Mataderos y alrededores, y cómo llegar al local de Av. Mosconi, pegado a la General Paz.",
+    imageUrl: "/images/local/fachada-local-neumaticos-trivium-cordoba.webp",
+    date: "2026-11-05",
+    slug: "gomeria-en-lomas-del-mirador-y-oeste-de-capital",
+    category: "Guías",
+  },
 ];
 
 // La miniatura del listado es siempre la portada de la nota (blog-meta.ts):

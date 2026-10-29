@@ -457,6 +457,12 @@ export const BLOG_META: Record<string, BlogMeta> = {
     shopIntro: "Mirá el stock mientras abrimos:",
     shopLinks: [L.todos, L.ofertas, L.servicios],
   },
+  "gomeria-en-lomas-del-mirador-y-oeste-de-capital": {
+    cover: cover("fachada"),
+    figure: { src: IMG.tallerCuatroAutos, alt: "Interior del taller de Neumáticos Trivium en Argüello con cuatro autos en servicio", caption: "Así trabaja la gomería de Argüello; Lomas del Mirador abre en diciembre." },
+    shopIntro: "Mirá el stock mientras abrimos:",
+    shopLinks: [L.todos, L.ofertas, L.servicios],
+  },
   "neumaticos-para-utilitarios-furgones-reparto": {
     cover: cover("utilitario"),
     figure: figure("camionetas"),
