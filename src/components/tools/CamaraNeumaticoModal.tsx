@@ -4,6 +4,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 type Props = {
   whatsapp: string;
+  /** Nombre de la sucursal elegida, para avisar a qué chat se abre. */
+  sucursal: string;
   /** Una foto elegida de la galería o hecha con la cámara nativa: salta directo a la vista previa. */
   fotoInicial?: Blob | null;
   onClose: () => void;
@@ -17,13 +19,13 @@ const MENSAJE = "¡Hola! Te mando la foto del flanco de mi neumático desde la w
  * Cámara a pantalla completa con un círculo guía para encuadrar el flanco del
  * neumático, flash (donde el navegador lo permite) y envío por WhatsApp.
  *
- * La foto no se sube a ningún servidor nuestro: se recorta en el teléfono y se
- * comparte desde ahí con el menú de compartir del sistema (donde se elige
- * WhatsApp y el chat). Los navegadores no pueden adjuntar un archivo a un chat
- * de WhatsApp por enlace, así que sin menú de compartir se descarga la foto y se
- * abre el chat para adjuntarla.
+ * La foto no se sube a ningún servidor nuestro: se recorta en el dispositivo.
+ * Los navegadores no pueden adjuntar un archivo a un chat de WhatsApp por
+ * enlace, así que "Enviar" la copia al portapapeles, la guarda en el dispositivo
+ * y abre el chat de la sucursal elegida para que la persona la pegue o la
+ * adjunte. Donde hay menú de compartir se ofrece también como alternativa.
  */
-export default function CamaraNeumaticoModal({ whatsapp, fotoInicial = null, onClose }: Props) {
+export default function CamaraNeumaticoModal({ whatsapp, sucursal, fotoInicial = null, onClose }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const circuloRef = useRef<HTMLDivElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -148,26 +150,62 @@ export default function CamaraNeumaticoModal({ whatsapp, fotoInicial = null, onC
     );
   }
 
+  const archivo = () => (foto ? new File([foto], "flanco-neumatico.jpg", { type: "image/jpeg" }) : null);
+
+  // Portapapeles: los navegadores solo aceptan PNG para imágenes.
+  async function copiarAlPortapapeles(): Promise<boolean> {
+    if (!foto || !navigator.clipboard?.write || typeof ClipboardItem === "undefined") return false;
+    try {
+      const bitmap = await createImageBitmap(foto);
+      const canvas = document.createElement("canvas");
+      canvas.width = bitmap.width;
+      canvas.height = bitmap.height;
+      canvas.getContext("2d")?.drawImage(bitmap, 0, 0);
+      const png = await new Promise<Blob | null>((ok) => canvas.toBlob(ok, "image/png"));
+      if (!png) return false;
+      await navigator.clipboard.write([new ClipboardItem({ "image/png": png })]);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  function descargar() {
+    const f = archivo();
+    if (!f) return;
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(f);
+    a.download = f.name;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 10000);
+  }
+
   async function enviar() {
     if (!foto) return;
-    const archivo = new File([foto], "flanco-neumatico.jpg", { type: "image/jpeg" });
-    const puedeCompartir = typeof navigator.canShare === "function" && navigator.canShare({ files: [archivo] });
-    if (puedeCompartir) {
-      try {
-        await navigator.share({ files: [archivo], text: MENSAJE });
-        return;
-      } catch (e) {
-        if ((e as Error).name === "AbortError") return;
-      }
-    }
-    // Sin menú de compartir (escritorio): se baja la foto y se abre el chat.
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(archivo);
-    a.download = archivo.name;
-    a.click();
+    // Primero el portapapeles (necesita la página en foco) y la descarga; recién
+    // después se abre el chat.
+    descargar();
+    const copiada = await copiarAlPortapapeles();
+    setAviso(
+      copiada
+        ? `Copiamos la foto y la guardamos en tu dispositivo. En el chat de ${sucursal} que se abrió, pegala o adjuntala.`
+        : `Guardamos la foto en tu dispositivo. En el chat de ${sucursal} que se abrió, adjuntala.`
+    );
     window.open(`https://wa.me/${whatsapp}?text=${encodeURIComponent(MENSAJE)}`, "_blank", "noopener");
-    setAviso("Se descargó la foto: adjuntala en el chat de WhatsApp que se abrió.");
   }
+
+  async function compartir() {
+    const f = archivo();
+    if (!f) return;
+    try {
+      await navigator.share({ files: [f], text: MENSAJE });
+    } catch {
+      /* cerró el menú de compartir */
+    }
+  }
+
+  const puedeCompartir =
+    typeof navigator !== "undefined" && typeof navigator.canShare === "function" && foto !== null && navigator.canShare({ files: [new File([foto], "f.jpg", { type: "image/jpeg" })] });
 
   function repetir() {
     guardarFoto(null);
@@ -246,15 +284,20 @@ export default function CamaraNeumaticoModal({ whatsapp, fotoInicial = null, onC
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={fotoUrl} alt="Foto del neumático" className="max-h-[55dvh] w-auto max-w-full rounded-2xl" />
           <p className="max-w-sm text-center text-sm text-slate-300">
-            Si se leen las letras y los números, mandala. Te respondemos con la medida en horario de atención.
+            Si se leen las letras y los números, mandala. Copiamos la foto y abrimos el chat para que la pegues o la adjuntes. Te respondemos con la medida en horario de atención.
           </p>
           <button
             type="button"
             onClick={enviar}
             className="flex min-h-14 w-full max-w-sm items-center justify-center gap-2 rounded-2xl bg-[#25d366] px-4 text-base font-black text-white"
           >
-            Enviar por WhatsApp
+            Enviar por WhatsApp a {sucursal}
           </button>
+          {puedeCompartir && (
+            <button type="button" onClick={compartir} className="text-sm font-bold underline underline-offset-4">
+              Compartir con otra app
+            </button>
+          )}
           <button type="button" onClick={repetir} className="text-sm font-bold underline underline-offset-4">
             Sacar otra
           </button>
