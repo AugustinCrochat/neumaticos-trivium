@@ -673,6 +673,42 @@ export const BLOG_META: Record<string, BlogMeta> = {
     shopIntro: "Mirá las dos opciones:",
     shopLinks: [L.at, L.ht, L.carga],
   },
+  "ancho-del-neumatico-que-significa": {
+    cover: cover("taxiRueda"),
+    figure: figure("montaje"),
+    shopIntro: "Buscá por ancho y medida:",
+    shopLinks: [L.m185, L.m175, L.equivalencias, L.todos],
+  },
+  "perfil-del-neumatico-que-significa": {
+    cover: cover("grenlanderPerfilBajo"),
+    figure: figure("balanceando"),
+    shopIntro: "Verificá la equivalencia y mirá las medidas:",
+    shopLinks: [L.equivalencias, L.todos, L.indice],
+  },
+  "neumatico-radial-que-significa-la-r": {
+    cover: cover("kingpro"),
+    figure: figure("rotacion"),
+    shopIntro: "Con tu medida a mano:",
+    shopLinks: [L.todos, L.ofertas, L.indice],
+  },
+  "rodado-del-neumatico-que-significa": {
+    cover: cover("montaje"),
+    figure: figure("cambioCamioneta"),
+    shopIntro: "Mirá las medidas por rodado:",
+    shopLinks: [L.r14, L.r15, L.r16, L.equivalencias],
+  },
+  "m-s-barro-y-nieve-que-significa-en-el-neumatico": {
+    cover: cover("atClasica"),
+    figure: figure("pickup4x4"),
+    shopIntro: "Neumáticos para camino de tierra y uso mixto:",
+    shopLinks: [L.at, L.ht, L.todos],
+  },
+  "xl-extra-load-que-significa-en-el-neumatico": {
+    cover: cover("camionetas"),
+    figure: figure("cargaDos"),
+    shopIntro: "Buscá por medida e índice de carga:",
+    shopLinks: [L.indice, L.carga, L.todos],
+  },
   "perfil-bajo-o-perfil-alto": {
     cover: cover("grenlanderPerfilBajo"),
     figure: { src: IMG.balanceando, alt: "Técnico balanceando una rueda en la balanceadora del taller", caption: "Al cambiar de rodado la rueda nueva se balancea antes de volver al auto." },

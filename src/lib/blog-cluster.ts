@@ -120,3 +120,19 @@ export const TALLER: { grupo: string; notas: { slug: string; title: string }[] }
     ],
   },
 ];
+
+/**
+ * Clúster "código del flanco": la guía madre muestra la foto de un 195/65 R15 95T XL con
+ * cada dato numerado y cada nota explica uno. Ver FlancoLinks.
+ */
+export const FLANCO_PILAR = "como-leer-medida-neumatico";
+
+export const FLANCO: { slug: string; title: string; numero: number }[] = [
+  { slug: "ancho-del-neumatico-que-significa", title: "El ancho: qué significa el 195", numero: 1 },
+  { slug: "perfil-del-neumatico-que-significa", title: "El perfil: qué significa el 65", numero: 2 },
+  { slug: "neumatico-radial-que-significa-la-r", title: "La R: neumático radial", numero: 3 },
+  { slug: "rodado-del-neumatico-que-significa", title: "El rodado: qué significa el 15", numero: 4 },
+  { slug: "indice-de-carga-y-velocidad", title: "Índice de carga y velocidad: el 95 y la T", numero: 5 },
+  { slug: "xl-extra-load-que-significa-en-el-neumatico", title: "XL (Extra Load): neumático reforzado", numero: 7 },
+  { slug: "m-s-barro-y-nieve-que-significa-en-el-neumatico", title: "M+S: barro y nieve", numero: 8 },
+];

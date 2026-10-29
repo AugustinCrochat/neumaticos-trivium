@@ -8,6 +8,8 @@ import { TireSizeSearch } from "@/components/ui/TireSizeSearch";
 import { absoluteUrl, canonical, ORGANIZATION_ID } from "@/lib/seo";
 import { sizeSearchHref } from "@/lib/size-href";
 import { blogShare } from "@/lib/blog-meta";
+import { FotoNeumaticoBloque } from "@/components/tools/FotoNeumaticoBloque";
+import { FlancoLinks } from "@/components/blog/FlancoLinks";
 
 const SLUG = "como-leer-medida-neumatico";
 const TITLE = "Cómo leer la medida de un neumático: 205/55 R16 explicado";
@@ -261,6 +263,13 @@ export default function ComoLeerMedidaPage() {
       </section>
 
       {/* Código completo */}
+      <section className="py-10">
+        <div className="mx-auto max-w-5xl space-y-6 px-4">
+          <FotoNeumaticoBloque titulo="¿No sabés qué medida lleva tu neumático? Mandanos una foto" />
+          <FlancoLinks current={SLUG} />
+        </div>
+      </section>
+
       <section id="codigo" className="scroll-mt-16 py-14 md:py-20">
         <div className="mx-auto max-w-6xl px-4">
           <SectionHead kicker="Más allá de la medida" title="205/55 R16 91V: el código completo del flanco">

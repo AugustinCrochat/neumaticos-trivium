@@ -5,6 +5,8 @@ import { LOAD_SPEED_CODES } from "@/lib/load-speed";
 import { canonical } from "@/lib/seo";
 import { LOAD_INDEX_KG, SPEED_RATING_KMH } from "@/lib/tire-sizes";
 import { blogShare } from "@/lib/blog-meta";
+import { FotoNeumaticoBloque } from "@/components/tools/FotoNeumaticoBloque";
+import { FlancoLinks } from "@/components/blog/FlancoLinks";
 
 const SLUG = "indice-de-carga-y-velocidad";
 const TITLE = "Índice de carga y velocidad: qué significan el 91 y la V del flanco";
@@ -60,6 +62,12 @@ export default function Page() {
       date="2026-07-31"
       readingMinutes={7}
       faqs={FAQS}
+      extras={
+        <>
+          <FotoNeumaticoBloque titulo="¿No sabés qué lleva tu neumático? Mandanos una foto" />
+          <FlancoLinks current={SLUG} />
+        </>
+      }
     >
       <p>
         Cuando alguien elige neumáticos, mira la medida y mira el precio. Los dos caracteres que van

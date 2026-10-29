@@ -1018,6 +1018,66 @@ const BLOG_POSTS_BASE: BlogPost[] = [
     slug: "neumaticos-double-king-quien-los-fabrica",
     category: "Marcas",
   },
+  {
+    id: "80",
+    title: "Ancho del neumático: qué significa el 195 en 195/65 R15",
+    excerpt:
+      "Qué significa el primer número de la medida, cómo cambia el comportamiento con más o menos ancho y cuándo conviene otra medida.",
+    imageUrl: "/images/local/fachada-local-neumaticos-trivium-cordoba.webp",
+    date: "2026-11-09",
+    slug: "ancho-del-neumatico-que-significa",
+    category: "Guías",
+  },
+  {
+    id: "81",
+    title: "Perfil del neumático: qué significa el 65 en 195/65 R15",
+    excerpt:
+      "El número que va después de la barra: cómo se calcula la altura del flanco y qué cambia entre perfil alto y perfil bajo.",
+    imageUrl: "/images/local/fachada-local-neumaticos-trivium-cordoba.webp",
+    date: "2026-11-11",
+    slug: "perfil-del-neumatico-que-significa",
+    category: "Guías",
+  },
+  {
+    id: "82",
+    title: "La R en la medida del neumático: qué es un neumático radial",
+    excerpt:
+      "La R de 195/65 R15 no es el rodado: es el tipo de construcción. Qué es un neumático radial y en qué se diferencia del diagonal.",
+    imageUrl: "/images/local/fachada-local-neumaticos-trivium-cordoba.webp",
+    date: "2026-11-16",
+    slug: "neumatico-radial-que-significa-la-r",
+    category: "Guías",
+  },
+  {
+    id: "83",
+    title: "Rodado del neumático: qué significa el 15 en 195/65 R15",
+    excerpt:
+      "El número final de la medida es el rodado: el diámetro de la llanta en pulgadas. Cómo pasarlo a milímetros y qué cambiar si querés una llanta más grande.",
+    imageUrl: "/images/local/fachada-local-neumaticos-trivium-cordoba.webp",
+    date: "2026-11-18",
+    slug: "rodado-del-neumatico-que-significa",
+    category: "Guías",
+  },
+  {
+    id: "84",
+    title: "M+S en el neumático: qué significa «barro y nieve»",
+    excerpt:
+      "Qué indican las letras M+S del flanco, para qué sirven, en qué neumáticos se ven y en qué se diferencian del copo de nieve.",
+    imageUrl: "/images/local/fachada-local-neumaticos-trivium-cordoba.webp",
+    date: "2026-11-23",
+    slug: "m-s-barro-y-nieve-que-significa-en-el-neumatico",
+    category: "Guías",
+  },
+  {
+    id: "85",
+    title: "XL en el neumático: qué significa «Extra Load» o reforzado",
+    excerpt:
+      "Qué indica la sigla XL, cómo se relaciona con el índice de carga y por qué hay que respetarla al cambiar los neumáticos.",
+    imageUrl: "/images/local/fachada-local-neumaticos-trivium-cordoba.webp",
+    date: "2026-11-25",
+    slug: "xl-extra-load-que-significa-en-el-neumatico",
+    category: "Guías",
+  },
 ];
 
 // La miniatura del listado es siempre la portada de la nota (blog-meta.ts):

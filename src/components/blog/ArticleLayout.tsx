@@ -51,6 +51,7 @@ export function ArticleLayout({
   updated,
   readingMinutes,
   faqs,
+  extras,
   children,
 }: {
   slug: string;
@@ -63,6 +64,8 @@ export function ArticleLayout({
   updated?: string;
   readingMinutes: number;
   faqs?: Faq[];
+  /** Bloques con su propio estilo (no heredan la tipografía de la nota), después del texto y las preguntas. */
+  extras?: ReactNode;
   children: ReactNode;
 }) {
   // Nota programada: hasta su fecha la URL no existe (ver publicacion.ts).
@@ -179,11 +182,15 @@ export function ArticleLayout({
         <BlogSearchCard slug={slug} />
       </div>
 
-      <article className={`mx-auto max-w-3xl px-4 pb-12 ${TYPO}`}>
+      <article className={`mx-auto max-w-3xl px-4 ${TYPO}`}>
         {despues}
 
         {faqs && faqs.length > 0 && <FaqSection faqs={faqs} />}
+      </article>
 
+      {extras && <div className="mx-auto max-w-3xl space-y-8 px-4 pb-4">{extras}</div>}
+
+      <div className={`mx-auto max-w-3xl px-4 pb-12 ${TYPO}`}>
         {/* Cierre comercial: la nota atrae la visita informativa, este bloque
             la conecta con la página que vende. */}
         <aside className="mt-14 rounded-2xl bg-gradient-to-br from-navy-950 to-black p-7 text-white">
@@ -227,7 +234,7 @@ export function ArticleLayout({
             </ul>
           </section>
         )}
-      </article>
+      </div>
     </div>
   );
 }

@@ -18,7 +18,7 @@ import {
 
 const branch = BRANCHES.find((b) => b.id === "arguello")!;
 const COLOR_BARRA = ["bg-green-500", "bg-yellow-400", "bg-orange-500"];
-const COLOR_TEXTO = ["text-green-700", "text-yellow-700", "text-orange-600"];
+const COLOR_TEXTO = ["!text-green-700", "!text-yellow-700", "!text-orange-600"];
 const ALTURA = ["h-3", "h-6", "h-10"];
 const mayus = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
@@ -38,8 +38,8 @@ export function HorarioBloque({ className = "", titulo = "¿A qué hora conviene
 
   return (
     <section className={`rounded-2xl border border-emerald-200 bg-emerald-50 p-5 sm:p-6 ${className}`}>
-      <h2 className="text-xl font-black text-navy-900">{titulo}</h2>
-      <p className="mt-1 text-sm text-slate-700">
+      <h2 className="!mb-0 !mt-0 !text-xl font-black !text-navy-900">{titulo}</h2>
+      <p className="!mb-0 mt-1 !text-sm !text-slate-700">
         Atendemos por orden de llegada, sin turnos.{" "}
         {ahora !== null ? (
           <>
@@ -64,16 +64,16 @@ export function HorarioBloque({ className = "", titulo = "¿A qué hora conviene
           );
         })}
       </div>
-      <p className="mt-3 text-sm text-slate-700">
+      <p className="!mb-0 mt-3 !text-sm !text-slate-700">
         {mayus(hoyAbre ? "hoy" : `el ${DIAS_NOMBRES[dia]}`)}, lo más tranquilo:{" "}
         <strong>{tramos.map((t) => `de ${t.desde} a ${t.hasta} h`).join(" y ")}</strong>.
       </p>
 
       <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm font-bold">
-        <Link href={toolPath("mejor-horario-gomeria")} className="text-emerald-800 underline underline-offset-4">
+        <Link href={toolPath("mejor-horario-gomeria")} className="!text-emerald-800 underline underline-offset-4">
           Ver los otros días y qué conviene según el trabajo
         </Link>
-        <a href={branch.mapUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-emerald-800 underline underline-offset-4">
+        <a href={branch.mapUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 !text-emerald-800 underline underline-offset-4">
           <MapPin className="h-4 w-4" aria-hidden /> En vivo en Google Maps
         </a>
       </div>
