@@ -236,34 +236,32 @@ export default async function VehiclePage({ params }: Props) {
                 />
               )}
             </div>
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-sm">
-                <thead>
-                  <tr className="border-b border-slate-200 text-slate-500">
-                    <th className="py-2 pr-4 font-bold">Medida</th>
-                    <th className="py-2 pr-4 font-bold">Versiones</th>
-                    <th className="py-2 pr-4 font-bold">Años</th>
-                    <th className="py-2 font-bold">Stock</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {medidas.map((m) => (
-                    <tr key={sizeSlug(m.size)} className="border-b border-slate-100 align-top">
-                      <td className="py-2 pr-4 font-black text-navy-900">
-                        <Link href={`/neumaticos/${sizeSlug(m.size)}`} className="underline underline-offset-4 hover:text-orange-600">
-                          {formatSize(m.size)}
-                        </Link>
-                      </td>
-                      <td className="py-2 pr-4 text-slate-600">{m.versions.join(", ") || "Varias versiones"}</td>
-                      <td className="py-2 pr-4 text-slate-600">{m.years.join(", ") || "—"}</td>
-                      <td className="py-2 font-bold text-slate-700">
-                        {m.desde ? `Desde ${formatPrice(m.desde)}` : "Consultar"}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <ul className="space-y-3">
+              {medidas.map((m) => (
+                <li key={sizeSlug(m.size)}>
+                  <Link
+                    href={`/neumaticos/${sizeSlug(m.size)}`}
+                    className="group flex items-center gap-4 rounded-2xl border-2 border-slate-200 bg-white p-4 transition-colors hover:border-orange-500 hover:bg-orange-50/40 sm:p-5"
+                  >
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-2xl font-black text-navy-900 group-hover:text-orange-600">{formatSize(m.size)}</span>
+                      <span className="mt-0.5 block text-sm text-slate-600">
+                        {m.versions.join(", ") || "Varias versiones"}
+                        {m.years.length > 0 ? ` · ${m.years.join(", ")}` : ""}
+                      </span>
+                    </span>
+                    <span className="shrink-0 text-right">
+                      <span className={`block text-sm font-black ${m.desde ? "text-emerald-700" : "text-slate-500"}`}>
+                        {m.desde ? `Desde ${formatPrice(m.desde)}` : "Consultar stock"}
+                      </span>
+                      <span className="mt-1 inline-flex items-center gap-1 rounded-lg bg-orange-500 px-3 py-1.5 text-xs font-black text-white group-hover:bg-orange-600">
+                        Ver neumáticos <span aria-hidden="true">→</span>
+                      </span>
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
             <p className="mt-4 text-sm leading-relaxed text-slate-500">
               Confirmá tu medida en el flanco del neumático o en la calcomanía del parante de la puerta del
               conductor: una misma versión puede haber salido con más de una. Si necesitás otra,{" "}
