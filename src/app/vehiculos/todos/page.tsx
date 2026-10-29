@@ -9,9 +9,9 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { canonical, breadcrumbJsonLd, itemListJsonLd, faqJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: `Neumáticos para todos los autos y camionetas: ${POPULAR_VEHICLES.length} modelos con su medida`,
+  title: `Medida de neumáticos de ${POPULAR_VEHICLES.length} autos y camionetas, por modelo`,
   description:
-    "Catálogo de todos los autos, pickups y utilitarios que se venden y circulan en Argentina, por marca, con la medida de neumático original de cada modelo y stock real en Córdoba.",
+    "¿Qué medida de neumático lleva tu auto? Listado por marca de autos, pickups y utilitarios que circulan en Argentina, con la medida original de cada modelo y stock real en Córdoba.",
   alternates: canonical("/vehiculos/todos"),
 };
 
@@ -62,7 +62,7 @@ export default function TodosLosVehiculosPage() {
       />
       <div className="bg-black px-4 py-16">
         <div className="mx-auto max-w-4xl text-center">
-          <h1 className="mb-4 text-4xl font-black text-white md:text-5xl">Todos los autos y camionetas</h1>
+          <h1 className="mb-4 text-4xl font-black text-white md:text-5xl">Medida de neumáticos de todos los autos</h1>
           <p className="mx-auto max-w-2xl text-lg text-slate-300">
             {POPULAR_VEHICLES.length} modelos de {marcas.length} marcas con la medida de neumático original. Tocá el tuyo para ver las versiones, el stock y el precio.
           </p>

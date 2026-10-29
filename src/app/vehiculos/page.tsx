@@ -8,9 +8,9 @@ import { MarcaLogo } from "@/components/ui/MarcaLogo";
 import { MarcaBuscador } from "./MarcaBuscador";
 
 export const metadata: Metadata = {
-  title: "Neumáticos por vehículo: medidas originales de cada auto",
+  title: "¿Qué medida de neumático lleva tu auto? Buscá por modelo",
   description:
-    "Buscá tu auto o camioneta y mirá las medidas de neumáticos originales de cada versión, con stock y precio reales. Hilux, Cronos, Onix, 208, Amarok y más.",
+    "Elegí tu auto o camioneta y mirá qué medida de neumático lleva cada versión, con stock y precio reales. Hilux, Cronos, Onix, 208, Amarok y más.",
   alternates: canonical("/vehiculos"),
 };
 
@@ -29,9 +29,9 @@ export default function VehiculosIndexPage() {
       />
       <div className="bg-black px-4 py-16">
         <div className="mx-auto max-w-4xl text-center">
-          <h1 className="mb-4 text-4xl font-black text-white md:text-5xl">Neumáticos por vehículo</h1>
+          <h1 className="mb-4 text-4xl font-black text-white md:text-5xl">¿Qué medida de neumático lleva tu auto?</h1>
           <p className="mx-auto max-w-2xl text-lg text-slate-300">
-            Elegí tu auto o camioneta para ver la medida original de cada versión y los neumáticos que tenemos en stock.
+            Elegí tu auto o camioneta para ver la medida de neumático de cada versión y lo que tenemos en stock.
           </p>
         </div>
       </div>

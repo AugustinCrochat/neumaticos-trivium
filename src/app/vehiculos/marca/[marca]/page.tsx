@@ -46,8 +46,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const brand = findBrand(marca);
   if (!brand) return {};
   const { vehiculos } = datos(brand);
-  const title = `Neumáticos para ${brand}: medida de cada modelo`;
-  const description = `Medidas de neumáticos de los ${brand} más comunes (${vehiculos
+  const title = `Medida de neumáticos de cada ${brand}: todos los modelos`;
+  const description = `¿Qué medida de neumático lleva tu ${brand}? Medida original de los modelos más comunes (${vehiculos
     .slice(0, 4)
     .map((v) => v.model)
     .join(", ")}${vehiculos.length > 4 ? " y más" : ""}), con stock y precio reales. Garantía de 1 año y colocación sin cargo en Córdoba.`;
@@ -100,7 +100,7 @@ export default async function MarcaPage({ params }: Props) {
           <span className="mx-auto mb-5 flex h-24 w-24 items-center justify-center">
             <MarcaLogo brand={brand} sobreNegro className="h-24 w-24" />
           </span>
-          <h1 className="mb-4 text-4xl font-black text-white md:text-5xl">Neumáticos para {brand}</h1>
+          <h1 className="mb-4 text-4xl font-black text-white md:text-5xl">Medida de neumáticos de {brand}</h1>
           <p className="mx-auto max-w-2xl text-lg text-slate-300">
             Elegí tu modelo para ver la medida original de cada versión y los neumáticos que tenemos en stock.
           </p>

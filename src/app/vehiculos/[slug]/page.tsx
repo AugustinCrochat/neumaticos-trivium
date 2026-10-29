@@ -80,9 +80,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const desde = precios.length ? Math.min(...precios) : null;
   const lista = medidas.slice(0, 3).map((m) => formatSize(m.size)).join(", ");
 
-  const title = `Neumáticos para ${name}: medidas y precios`;
+  // La medida va en el título: es lo que la persona busca, más que el auto.
+  const principal = medidas[0] ? formatSize(medidas[0].size) : null;
+  const title = !principal
+    ? `Neumáticos para ${name}: medidas y precios`
+    : medidas.length === 1
+      ? `Neumáticos para ${name}: medida ${principal}`
+      : `Neumáticos para ${name}: ${principal} y otras medidas`;
   const description = [
-    `Medidas originales del ${name}: ${lista}${medidas.length > 3 ? " y más" : ""}.`,
+    medidas.length === 1
+      ? `¿Qué medida de neumático lleva el ${name}? La original es ${lista}.`
+      : `¿Qué medida de neumático lleva el ${name}? Según la versión: ${lista}${medidas.length > 3 ? " y más" : ""}.`,
     desde ? `Neumáticos desde ${formatPrice(desde)} con stock real.` : "Consultá stock y precio de tu medida.",
     "Garantía de 1 año y colocación sin cargo en Córdoba.",
   ].join(" ");
@@ -203,9 +211,9 @@ export default async function VehiclePage({ params }: Props) {
           <span className="mb-4 block text-sm font-bold uppercase tracking-widest text-orange-500">
             Guía de medidas por vehículo
           </span>
-          <h1 className="mb-6 text-4xl font-black text-white md:text-5xl">Neumáticos para {name}</h1>
+          <h1 className="mb-6 text-4xl font-black text-white md:text-5xl">Medida de neumáticos del {name}</h1>
           <p className="mx-auto max-w-2xl text-lg text-slate-300 md:text-xl">
-            Medidas originales de fábrica del {name} según versión
+            Medidas de neumáticos originales de fábrica del {name} según versión
             {desde ? `, con neumáticos en stock desde ${formatPrice(desde)}` : ""}. Elegí la tuya para ver qué tenemos.
           </p>
         </div>
