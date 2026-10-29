@@ -32,6 +32,16 @@ const VehicleContext = createContext<VehicleContextType | null>(null);
 
 const STORAGE_KEY = "trivium-vehicle";
 
+// El auto elegido se recuerda solo mientras dura la pestaña (sessionStorage).
+// Antes quedaba en localStorage para siempre y volvía a aparecer en cada
+// visita, con avisos de "esta medida no es la de tu auto" aunque la persona
+// buscara para otro vehículo.
+const storage = {
+  get: () => { try { return sessionStorage.getItem(STORAGE_KEY); } catch { return null; } },
+  set: (v: string) => { try { sessionStorage.setItem(STORAGE_KEY, v); } catch {} },
+  remove: () => { try { sessionStorage.removeItem(STORAGE_KEY); } catch {} },
+};
+
 // En el cliente corre antes del primer paint (evita el flash "Por medida" ->
 // "Por mi auto"); en SSR cae a useEffect porque useLayoutEffect no existe ahí.
 const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
@@ -73,7 +83,8 @@ export function VehicleProvider({
   }, []);
 
   useIsomorphicLayoutEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
+    try { localStorage.removeItem(STORAGE_KEY); } catch {}
+    const stored = storage.get();
     if (!stored) return;
     try {
       const { marca, modelo, size } = JSON.parse(stored);
@@ -84,7 +95,7 @@ export function VehicleProvider({
         ?? { marca, modelo, label: `${marca} ${modelo}` };
       setSelectedVehicleState(size ? { ...vehicle, size } : vehicle);
     } catch {
-      localStorage.removeItem(STORAGE_KEY);
+      storage.remove();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -92,13 +103,13 @@ export function VehicleProvider({
   const setSelectedVehicle = (vehicle: VehiculoOption, size?: VehicleSize) => {
     const next: SelectedVehicle = size ? { ...vehicle, size } : { marca: vehicle.marca, modelo: vehicle.modelo, label: vehicle.label };
     setSelectedVehicleState(next);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ marca: vehicle.marca, modelo: vehicle.modelo, size }));
+    storage.set(JSON.stringify({ marca: vehicle.marca, modelo: vehicle.modelo, size }));
     setIsModalOpen(false);
   };
 
   const clearSelectedVehicle = () => {
     setSelectedVehicleState(null);
-    localStorage.removeItem(STORAGE_KEY);
+    storage.remove();
   };
 
   return (

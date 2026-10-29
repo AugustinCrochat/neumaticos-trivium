@@ -10,7 +10,7 @@ import { diameterDiffPercent, formatSize } from "@/lib/tire-sizes";
  * compatibles; si no hay vehículo elegido no muestra nada.
  */
 export function CompatibilidadVehiculo({ product }: { product: TireProduct }) {
-  const { selectedVehicle } = useVehicle();
+  const { selectedVehicle, clearSelectedVehicle } = useVehicle();
   // Convertimos la medida del vehículo a tipo TireSize
   const vehicleSize = selectedVehicle?.size ? {
     width: Number(selectedVehicle.size.w),
@@ -124,14 +124,21 @@ export function CompatibilidadVehiculo({ product }: { product: TireProduct }) {
             )}
           </div>
         ) : vehicleSize ? (
-          <div className="bg-red-50 border border-red-200 rounded-2xl p-4 flex items-start gap-3">
-            <div className="w-5 h-5 rounded-full bg-red-100 flex items-center justify-center text-red-600 shrink-0 mt-0.5 text-xs font-black">!</div>
-            <div>
-              <p className="text-sm font-black text-red-950 leading-none">Esta medida no es la de tu auto</p>
-              <p className="text-xs text-red-800 mt-1.5 leading-relaxed">
+          <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 flex items-start gap-3">
+            <div className="w-5 h-5 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 shrink-0 mt-0.5 text-xs font-black">i</div>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-black text-navy-900 leading-none">Esta medida es distinta a la de tu auto</p>
+              <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">
                 Tu <span className="font-bold">{selectedVehicle.marca} {selectedVehicle.modelo}</span> usa {formatSize(vehicleSize!)}
-                {" "}y esta medida difiere {Math.abs(diffPercent).toFixed(1)}% en diámetro (el límite tolerado es ±3%). Consultanos antes de comprarla.
+                {" "}y esta medida difiere {Math.abs(diffPercent).toFixed(1)}% en diámetro (el límite tolerado es ±3%). Si es para otro vehículo, ignorá este aviso.
               </p>
+              <button
+                type="button"
+                onClick={clearSelectedVehicle}
+                className="mt-2 text-xs font-bold text-slate-500 underline underline-offset-4 hover:text-slate-800"
+              >
+                No es mi auto, quitar
+              </button>
             </div>
           </div>
         ) : null}
