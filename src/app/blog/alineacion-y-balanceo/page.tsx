@@ -3,20 +3,21 @@ import Link from "@/components/ui/Link";
 import { DesgasteFoto } from "@/components/tools/DesgasteFoto";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { AhorroLinks } from "@/components/blog/AhorroLinks";
+import { TallerLinks } from "@/components/blog/TallerLinks";
 import { EquipoHofmann } from "@/components/blog/EquipoHofmann";
 import { canonical } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "alineacion-y-balanceo";
-const TITLE = "Alineación y balanceo: qué es cada cosa y cada cuánto se hacen";
+const TITLE = "Alineado y balanceado (alineación y balanceo): qué es cada cosa y cada cuánto se hacen";
 const SUBTITLE =
   "Se nombran juntos pero resuelven problemas distintos. Uno corrige hacia dónde apuntan las ruedas; el otro, cómo giran. Acá va la diferencia en criollo.";
 
 export const metadata: Metadata = {
-  ...blogShare("alineacion-y-balanceo"),
+  ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Diferencia entre alineación y balanceo, síntomas de cada problema, cada cuántos kilómetros conviene hacerlos y qué pasa si los postergás.",
+    "Alineado y balanceado (alineación y balanceo): la diferencia entre uno y otro, los síntomas de cada problema, cada cuántos kilómetros conviene hacerlos y qué pasa si los postergás.",
   alternates: canonical(`/blog/${SLUG}`),
 };
 
@@ -56,12 +57,14 @@ export default function Page() {
       subtitle={SUBTITLE}
       category="Servicios"
       date="2026-07-31"
+      updated="2026-10-30"
       readingMinutes={6}
       faqs={FAQS}
     >
       <p>
-        &quot;Alineación y balanceo&quot; se dice de corrido, como si fuera un solo servicio. No lo
-        es. Son dos trabajos distintos, con equipos distintos, que resuelven dos problemas que ni
+        &quot;Alineación y balanceo&quot; se dice de corrido, como si fuera un solo servicio. En Córdoba
+        se dice &quot;alineado y balanceado&quot;, y en otras ciudades &quot;alineación y balanceo&quot; o
+        &quot;alineación y balanceado&quot;: es lo mismo. No es un solo trabajo. Son dos trabajos distintos, con equipos distintos, que resuelven dos problemas que ni
         siquiera se parecen. Entender cuál es cuál te sirve para dos cosas: describir bien el
         síntoma cuando llegás al taller, y no pagar por algo que no necesitás.
       </p>
@@ -217,7 +220,7 @@ export default function Page() {
         ficha del fabricante de tu modelo, y el balanceo es dinámico, que corrige el desbalance en
         los dos planos y no sólo en uno.{" "}
         <Link href="/servicios">Podés ver el detalle de los dos servicios acá</Link>. Los equipos que
-        usamos son la alineadora 3D Hofmann Geoliner 630 y la balanceadora Hofmann Geodyna 7800P —{" "}
+        usamos son la alineadora 3D Hofmann Geoliner 630 y la balanceadora Hofmann Geodyna —{" "}
         <Link href="/blog/geoliner-630-geodyna-7800p-alineacion-balanceo">
           acá contamos qué diferencia hacen
         </Link>
@@ -230,6 +233,7 @@ export default function Page() {
         antes de que vengas.
       </p>
       <EquipoHofmann />
+      <TallerLinks current={SLUG} />
       <AhorroLinks current={SLUG} />
     </ArticleLayout>
   );

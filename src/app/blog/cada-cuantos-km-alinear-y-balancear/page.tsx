@@ -77,7 +77,7 @@ export default function Page() {
           </tr>
           <tr>
             <td>Calles con muchos pozos o uso en caminos de tierra</td>
-            <td>Cada 5.000 a 8.000 km</td>
+            <td>Más seguido que la referencia</td>
             <td>Si aparece vibración</td>
           </tr>
           <tr>

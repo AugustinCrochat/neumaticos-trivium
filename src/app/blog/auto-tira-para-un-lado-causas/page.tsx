@@ -98,7 +98,7 @@ export default function Page() {
       <p>Un auto que tira obliga a corregir con el volante todo el tiempo, cansa y, sobre todo, desgasta el neumático de un solo lado. Un juego bien cuidado puede quedar inutilizable mucho antes de tiempo por una desalineación que nadie corrigió. El alineado cuesta mucho menos que cambiar el juego, y es la forma de que lo que ya pagaste rinda todos sus kilómetros.</p>
 
       <h2>Cuándo conviene volver a alinear</h2>
-      <p>Después de cualquier golpe fuerte, cuando se cambia un neumático o se toca la suspensión, y como control periódico. Los criterios completos están en <Link href="/blog/cada-cuantos-km-alinear-y-balancear">cada cuántos kilómetros alinear y balancear</Link>. Si además vibra el volante, es otro problema: <Link href="/blog/volante-vibra-causas-y-solucion">por qué vibra el volante</Link>.</p>
+      <p>Después de cualquier golpe fuerte, cuando se cambia un neumático o se toca la suspensión, y como control periódico. Los criterios completos están en cada cuántos kilómetros alinear y balancear. Si además vibra el volante, es otro problema: por qué vibra el volante.</p>
       <p>Para distinguir de un vistazo qué servicio corresponde a cada síntoma, la nota <Link href="/blog/sintomas-alineacion-balanceo-o-rotacion">alineación, balanceo o rotación</Link> lo resume en una tabla.</p>
       <EquipoHofmann />
       <TallerLinks current={SLUG} />

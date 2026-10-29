@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
+import { TallerLinks } from "@/components/blog/TallerLinks";
 import { AhorroLinks } from "@/components/blog/AhorroLinks";
 import { EquipoHofmann } from "@/components/blog/EquipoHofmann";
 import { Callout } from "@/components/blog/Callout";
@@ -131,6 +132,7 @@ export default function Page() {
         Mirá los servicios que hacemos en el local en <Link href="/servicios">alineación, balanceo y más</Link>.
       </p>
       <EquipoHofmann />
+      <TallerLinks current={SLUG} />
       <AhorroLinks current={SLUG} />
     </ArticleLayout>
   );

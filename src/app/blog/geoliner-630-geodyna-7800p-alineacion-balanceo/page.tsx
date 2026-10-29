@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
+import { TallerLinks } from "@/components/blog/TallerLinks";
 import { canonical } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
@@ -224,6 +225,7 @@ export default function Page() {
         <Link href="/blog/alineacion-y-balanceo">alineación y balanceo: qué es cada cosa</Link> lo
         explica en detalle.
       </p>
+      <TallerLinks current={SLUG} />
     </ArticleLayout>
   );
 }

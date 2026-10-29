@@ -93,7 +93,7 @@ export default function Page() {
         <li>Que los valores &quot;después&quot; estén dentro del rango en las cuatro ruedas.</li>
         <li>Que la convergencia total esté simétrica entre izquierda y derecha: un lado muy distinto del otro hace tirar el auto.</li>
       </ol>
-      <p>Cómo se mide con la tecnología actual, con targets en cada rueda y sin mover el auto, lo explicamos en <Link href="/blog/alineacion-3d-vs-alineacion-tradicional">alineación 3D vs. alineación tradicional</Link>.</p>
+      <p>Cómo se mide con la tecnología actual, con targets en cada rueda y sin mover el auto, lo explicamos en alineación 3D vs. alineación tradicional.</p>
 
       <h2>Y entonces, ¿cuándo?</h2>
       <p>Con los síntomas del auto: <Link href="/blog/auto-tira-para-un-lado-causas">si tira para un lado</Link> o después de un golpe, y como chequeo periódico, <Link href="/blog/cada-cuantos-km-alinear-y-balancear">cada cuántos kilómetros</Link>. Para ver el servicio, <Link href="/servicios/alineacion">alineado</Link>.</p>

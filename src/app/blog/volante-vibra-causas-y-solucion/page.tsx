@@ -99,7 +99,7 @@ export default function Page() {
 
       <h2>El balanceo, que es la causa más común</h2>
       <p>Cada conjunto de llanta y neumático tiene zonas más pesadas que otras: la soldadura de la llanta, el empalme del neumático, la válvula. A baja velocidad no se nota, pero a 100 km/h la fuerza centrífuga de un desbalance de pocos gramos hace temblar la dirección. El balanceo mide el desbalance en una máquina que hace girar la rueda y lo compensa con un contrapeso en el punto exacto.</p>
-      <p>Cuándo corresponde balancear, y por qué hay que hacerlo cada vez que se cambia un neumático, está en <Link href="/blog/alineacion-y-balanceo">alineado y balanceado: qué es cada cosa</Link>. Y si se cae una pesa, el síntoma vuelve: <Link href="/blog/pesas-de-balanceo-por-que-se-caen">por qué se caen las pesas de balanceo</Link>.</p>
+      <p>Cuándo corresponde balancear, y por qué hay que hacerlo cada vez que se cambia un neumático, está en <Link href="/blog/alineacion-y-balanceo">alineado y balanceado: qué es cada cosa</Link>. Y si se cae una pesa, el síntoma vuelve: por qué se caen las pesas de balanceo.</p>
 
       <h2>Qué NO conviene hacer</h2>
       <ul>

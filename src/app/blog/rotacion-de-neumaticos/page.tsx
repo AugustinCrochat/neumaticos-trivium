@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { DesgasteFoto } from "@/components/tools/DesgasteFoto";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
+import { TallerLinks } from "@/components/blog/TallerLinks";
 import { AhorroLinks } from "@/components/blog/AhorroLinks";
 import { canonical } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
@@ -150,6 +151,7 @@ export default function Page() {
         <Link href="/blog/cada-cuantos-km-cambiar-neumaticos">cada cuántos kilómetros cambiar los
         neumáticos</Link> está cómo medirlo.
       </p>
+      <TallerLinks current={SLUG} />
       <AhorroLinks current={SLUG} />
     </ArticleLayout>
   );
