@@ -194,14 +194,14 @@ export const BRANCHES: Branch[] = [
     ],
     // WhatsApp/teléfono: mismo número provisorio que San Justo hasta tener el
     // de la sucursal. Pendiente: googleStoreCode, reviewUrl y googleMapsEmbedUrl
-    // (salen del perfil de Google Business) y las coordenadas exactas.
+    // (salen del perfil de Google Business).
     phone: "+54 9 11 4037-0322",
     whatsapp: "5491140370322",
     hours: "Lun–Sáb 9–19h (de corrido)",
     schedule: [{ days: [1, 2, 3, 4, 5, 6], open: "09:00", close: "19:00" }],
-    mapUrl: "https://www.google.com/maps/search/?api=1&query=Av.+General+Enrique+Mosconi+248,+Lomas+del+Mirador",
-    // Aproximadas (Av. Mosconi y General Paz): ajustar con el pin real.
-    coordinates: { lat: -34.6571, lng: -58.5264 },
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=-34.658494,-58.528653",
+    // Pin exacto de Google Maps.
+    coordinates: { lat: -34.658494, lng: -58.528653 },
     mapPosition: { x: 50, y: 58 },
   },
   {
