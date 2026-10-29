@@ -71,6 +71,7 @@ const SECTIONS: Section[] = [
     tone: "bg-black",
     foto: { src: "/images/local/target-alineadora-rueda-auto-elevador-trivium-cordoba.webp", alt: "Target de la alineadora 3D en la rueda de un auto sobre el elevador" },
     items: [
+      { href: "/buscador", label: "Buscador de neumáticos", hint: "Por medida o por auto, con stock y precio reales." },
       { href: "/herramientas", label: "Todas las herramientas", hint: "Calculadoras y conversores gratis." },
       { href: "/calculadora-equivalencia-neumaticos", label: "Calculadora de equivalencias", hint: "Verificá si otra medida es compatible con la tuya." },
       ...TOOLS.map((t) => ({ href: toolPath(t.slug), label: t.name, hint: t.short })),

@@ -33,6 +33,9 @@ export default function VehiculosIndexPage() {
           <p className="mx-auto max-w-2xl text-lg text-slate-300">
             Elegí tu auto o camioneta para ver la medida de neumático de cada versión y lo que tenemos en stock.
           </p>
+          <p className="mx-auto mt-3 max-w-2xl text-sm text-slate-400">
+            ¿Preferís buscar por medida? Usá el <Link href="/buscador" className="font-bold text-white underline underline-offset-4">buscador de neumáticos con stock real</Link>.
+          </p>
         </div>
       </div>
       <div className="mx-auto max-w-4xl px-4 pt-10">

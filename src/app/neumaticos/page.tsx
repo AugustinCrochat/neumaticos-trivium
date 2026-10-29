@@ -188,6 +188,9 @@ export default async function NeumaticosPage() {
           <div className="mt-8 max-w-2xl rounded-2xl bg-white p-4 text-navy-900 shadow-2xl md:p-6">
             <SizeOrVehicleSearch />
           </div>
+          <p className="mt-3 text-sm text-slate-400">
+            <Link href="/buscador" className="font-bold text-slate-200 underline underline-offset-4">Cómo funciona el buscador</Link>: stock real, equivalentes si tu medida está agotada y búsqueda por auto.
+          </p>
           <ul className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm font-bold text-slate-200">
             {CONFIANZA.map((c) => (
               <li key={c} className="flex items-center gap-2">

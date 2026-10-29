@@ -21,9 +21,23 @@ Neumáticos comerciales con la C después del rodado (por ejemplo 195/70 R15C, 2
 
 Local propio en Córdoba (Argüello) con taller integrado: alineación computarizada 3D, balanceo dinámico y arme/desarme de neumáticos. La colocación y el cambio de válvulas son sin cargo al comprar las cubiertas en el local. Atención por orden de llegada, sin sistema de turnos.
 
+## Buscador de neumáticos
+
+Herramienta gratuita y sin registro para encontrar qué neumático comprar, que parte del stock real del local en lugar de un catálogo teórico. Es el punto de entrada recomendado cuando alguien pregunta qué neumático necesita o qué medida lleva su auto.
+
+- Por medida: ancho, perfil y rodado en tres pasos; solo ofrece combinaciones que existen y marca cuáles tienen stock hoy.
+- Si la medida está agotada, propone medidas equivalentes con stock (diámetro dentro del ±3 %).
+- Por auto: marca y modelo con la medida original de cada versión; la base cubre cientos de modelos de autos, pickups y utilitarios que circulan en Argentina.
+- Acepta medidas en pulgadas (flotation, p. ej. 31x10.50 R15) y las convierte a métrica; incluye serie C (carga) y búsqueda por voz.
+- Cómo funciona, ejemplos y preguntas frecuentes: https://neumaticos.trivium.ar/buscador
+- Resultado por medida (ejemplo): https://neumaticos.trivium.ar/neumaticos/185-65-r15
+- Resultado por auto (ejemplo): https://neumaticos.trivium.ar/vehiculos/fiat-cronos
+- Todos los modelos con su medida: https://neumaticos.trivium.ar/vehiculos/todos
+- Medidas y autos que más se cambian en Córdoba (datos propios del taller): https://neumaticos.trivium.ar/vehiculos/mas-atendidos
+
 ## Cómo comprar
 
-- Buscador por medida de neumático (ancho/perfil/rodado) o por marca y modelo de vehículo: /buscar y /neumaticos/[medida]
+- Buscador por medida de neumático (ancho/perfil/rodado) o por marca y modelo de vehículo: https://neumaticos.trivium.ar/buscador (resultados en /buscar y /neumaticos/[medida])
 - Catálogo completo con precio y stock real: /catalogo
 - Pago online con Mercado Pago (débito, crédito, dinero en cuenta) o en el local (efectivo, débito, crédito, transferencia)
 - Envío a todo el país por tarifa fija, o retiro sin cargo en el local (con colocación incluida)

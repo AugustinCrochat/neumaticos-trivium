@@ -66,6 +66,9 @@ export default function TodosLosVehiculosPage() {
           <p className="mx-auto max-w-2xl text-lg text-slate-300">
             {POPULAR_VEHICLES.length} modelos de {marcas.length} marcas con la medida de neumático original. Tocá el tuyo para ver las versiones, el stock y el precio.
           </p>
+          <p className="mx-auto mt-3 max-w-2xl text-sm text-slate-400">
+            También podés <Link href="/buscador" className="font-bold text-white underline underline-offset-4">buscar por medida con stock real</Link>.
+          </p>
         </div>
       </div>
       <div className="mx-auto max-w-7xl px-4 pt-8">

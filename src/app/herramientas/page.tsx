@@ -20,6 +20,7 @@ export const metadata: Metadata = {
 };
 
 const EXTRA: { href: string; name: string; short: string; image?: { src: string; alt: string } }[] = [
+  { href: "/buscador", name: "Buscador de neumáticos", short: "Por medida o por auto, con stock y precio reales y equivalentes si la tuya está agotada.", image: { src: "/images/local/cubierta-perfil-bajo-grenlander-colocada-neumaticos-trivium.webp", alt: "Cubierta de perfil bajo colocada en una llanta" } },
   { href: "/calculadora-equivalencia-neumaticos", name: "Calculadora de equivalencias", short: "Verificá si otra medida es compatible (±3 %) y mirá las que hay en stock.", image: { src: "/images/local/cubierta-perfil-bajo-grenlander-colocada-neumaticos-trivium.webp", alt: "Cubierta de perfil bajo colocada en una llanta" } },
   { href: "/vehiculos", name: "Medida por vehículo", short: "La medida de neumático que lleva tu auto o camioneta.", image: { src: "/images/local/taxi-en-el-taller-neumaticos-trivium-cordoba.webp", alt: "Taxi en el taller de Neumáticos Trivium" } },
   { href: "/cotizador", name: "Cotizador", short: "Armá un presupuesto con varios productos y compartilo por WhatsApp.", image: { src: "/images/local/fachada-local-neumaticos-trivium-cordoba.webp", alt: "Fachada del local de Neumáticos Trivium" } },
