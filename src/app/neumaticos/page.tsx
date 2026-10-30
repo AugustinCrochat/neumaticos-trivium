@@ -73,17 +73,18 @@ const parseMedida = (k: string): TireSize => {
 };
 
 const USOS = [
-  { href: "/neumaticos/ht", titulo: "H/T · Highway Terrain", texto: "Para camionetas y SUV que andan sobre todo en asfalto: silenciosas y cómodas.", foto: "/images/usos/ht.webp" },
-  { href: "/neumaticos/at", titulo: "A/T · All Terrain", texto: "Para pickups que también salen a tierra y ripio: dibujo más agresivo.", foto: "/images/usos/at.webp" },
-  { href: "/neumaticos/carga", titulo: "De carga (C)", texto: "Para utilitarios y furgones: construcción reforzada y más índice de carga.", foto: "/images/usos/carga.webp" },
+  { href: "/neumaticos/ht", titulo: "Camionetas y SUV de ruta", etiqueta: "H/T", texto: "Para pickups y SUV que andan casi siempre en asfalto: silenciosas, cómodas y de buen consumo.", foto: "/images/usos/ht.webp" },
+  { href: "/neumaticos/at", titulo: "4x4 para ruta y campo", etiqueta: "A/T", texto: "Para pickups que también salen a tierra, barro y ripio: dibujo más agresivo y flancos más duros.", foto: "/images/usos/at.webp" },
+  { href: "/neumaticos/carga", titulo: "Utilitarios y furgones", etiqueta: "Carga", texto: "Para Kangoo, Partner, Berlingo y furgones: construcción reforzada y más capacidad de carga.", foto: "/images/usos/carga.webp" },
 ];
 
-// Los autos que más se patentan en Argentina en 2026 (Hilux, Cronos, 208 y
-// Ranger al frente según El Cero Km), para entrar por el modelo.
+// Los autos que más pasan por el taller de Argüello, en ese orden (órdenes de
+// trabajo del POS, abril a octubre 2026). No son los más patentados: un 0 km casi
+// no cambia neumáticos, y los que sí lo hacen son los autos de entre 5 y 20 años.
 const AUTOS_POPULARES: [string, string][] = [
-  ["Toyota", "Hilux"], ["Fiat", "Cronos"], ["Peugeot", "208"], ["Ford", "Ranger"],
-  ["Ford", "Territory"], ["Volkswagen", "Amarok"], ["Chevrolet", "Tracker"], ["Toyota", "Yaris"],
-  ["Fiat", "Argo"], ["Fiat", "Strada"], ["Renault", "Kwid"], ["Chevrolet", "Onix"],
+  ["Fiat", "Palio"], ["Volkswagen", "Gol"], ["Fiat", "Cronos"], ["Renault", "Kangoo"],
+  ["Renault", "Clio"], ["Chevrolet", "Corsa"], ["Fiat", "Siena"], ["Fiat", "Uno"],
+  ["Peugeot", "Partner"], ["Volkswagen", "Gol Trend"], ["Ford", "Ka"], ["Volkswagen", "Suran"],
 ];
 
 const CONFIANZA = [
@@ -143,17 +144,30 @@ export default async function NeumaticosPage() {
     desde.set(k, Math.min(desde.get(k) ?? Infinity, p.price));
   }
 
-  // Las medidas más buscadas (las de las notas por medida), con los autos que
-  // la llevan y la foto del primero que la tiene.
-  const populares = MEDIDAS.filter(({ slug }) => BLOG_POSTS.some((p) => p.slug === slug)).map(({ slug, size }) => {
-    const t = parseMedida(size);
+  // Las medidas que más se venden en el local (unidades de los últimos 180 días
+  // en el POS), no las de las notas del blog. Cada una enlaza a su guía si la tiene.
+  const vendidasPorMedida = new Map<string, number>();
+  for (const p of productos) {
+    if (p.isCarga) continue;
+    const k = sizeSlug(p.size);
+    vendidasPorMedida.set(k, (vendidasPorMedida.get(k) ?? 0) + (p.vendidos ?? 0));
+  }
+  const masVendidas = [...vendidasPorMedida.entries()].sort((a, b) => b[1] - a[1]).slice(0, 8);
+  const populares = masVendidas.map(([k]) => {
+    const t = delCatalogo.find((e) => sizeSlug(e.size) === k)!.size;
+    const size = formatSize(t);
+    const guia = MEDIDAS.find((m) => sizesEqual(parseMedida(m.size), t) && BLOG_POSTS.some((p) => p.slug === m.slug))?.slug;
+    return { slug: guia, size, t };
+  }).map(({ slug, size, t }) => {
     const modelos = new Map<string, { nombre: string; slug: string }>();
     for (const v of vehiclesUsingSize(t)) {
       const key = `${v.brand} ${v.model}`;
       if (!modelos.has(key)) modelos.set(key, { nombre: key, slug: vehicleSlug(v.brand, v.model) });
     }
-    const orden = POPULAR_VEHICLES.map((v) => `${v.brand} ${v.model}`);
-    const lista = [...modelos.values()].sort((a, b) => orden.indexOf(a.nombre) - orden.indexOf(b.nombre));
+    // Primero los autos del taller, después el resto por popularidad nacional.
+    const orden = [...AUTOS_POPULARES.map(([br, mo]) => `${br} ${mo}`), ...POPULAR_VEHICLES.map((v) => `${v.brand} ${v.model}`)];
+    const rango = (n: string) => (orden.includes(n) ? orden.indexOf(n) : orden.length);
+    const lista = [...modelos.values()].sort((a, b) => rango(a.nombre) - rango(b.nombre));
     // Foto del neumático: el más barato con stock de esa medida.
     const foto = enStock.filter((p) => sizesEqual(p.size, t)).sort((a, b) => a.price - b.price)[0]?.imageUrl ?? null;
     return { slug, size, t, total: lista.length, nombres: lista.slice(0, 3).map((m) => m.nombre), foto, desde: desde.get(sizeSlug(t)) };
@@ -171,7 +185,7 @@ export default async function NeumaticosPage() {
     if (destacados.length === 4) break;
   }
 
-  // Autos más vendidos del país, con foto, para entrar por el modelo.
+  // Autos que más pasan por el taller, con foto, para entrar por el modelo.
   const autos = AUTOS_POPULARES.map(([brand, model]) => ({ brand, model })).filter((v) => vehiclePhoto(vehicleSlug(v.brand, v.model)));
 
   return (
@@ -207,7 +221,7 @@ export default async function NeumaticosPage() {
           <div className="mx-auto mt-5 flex max-w-3xl flex-wrap items-center justify-center gap-2">
             <span className="text-sm font-bold text-slate-400">Las más pedidas:</span>
             {populares.slice(0, 5).map((m) => (
-              <Link key={m.slug} href={`/neumaticos/${sizeSlug(m.t)}`} className="rounded-full border border-white/20 px-3 py-1 text-sm font-black !text-white hover:border-orange-500 hover:bg-white/10">
+              <Link key={sizeSlug(m.t)} href={`/neumaticos/${sizeSlug(m.t)}`} className="rounded-full border border-white/20 px-3 py-1 text-sm font-black !text-white hover:border-orange-500 hover:bg-white/10">
                 {m.size}
               </Link>
             ))}
@@ -231,11 +245,11 @@ export default async function NeumaticosPage() {
         <section className="pt-12">
           <h2 className="text-2xl font-black text-navy-900 md:text-3xl">Las medidas más buscadas</h2>
           <p className="mt-2 max-w-2xl text-slate-600">
-            Las que llevan los autos más comunes. Cada una tiene su guía con los modelos que la usan y las equivalencias.
+            Las que más vendemos en el local. Cada una tiene su página con los modelos que la usan y las equivalencias.
           </p>
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {populares.map((m) => (
-              <div key={m.slug} className="flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-shadow hover:shadow-md">
+              <div key={sizeSlug(m.t)} className="flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-shadow hover:shadow-md">
                 <Link href={`/neumaticos/${sizeSlug(m.t)}`} className="relative block bg-slate-100">
                   <span className="flex aspect-[4/3] items-center justify-center p-3">
                     {m.foto && (
@@ -257,9 +271,11 @@ export default async function NeumaticosPage() {
                     <Link href={`/neumaticos/${sizeSlug(m.t)}`} className="text-orange-600 underline underline-offset-2">
                       Ver neumáticos
                     </Link>
-                    <Link href={`/blog/${m.slug}`} className="text-navy-700 underline underline-offset-2">
-                      Guía
-                    </Link>
+                    {m.slug && (
+                      <Link href={`/blog/${m.slug}`} className="text-navy-700 underline underline-offset-2">
+                        Guía
+                      </Link>
+                    )}
                   </div>
                 </div>
               </div>
@@ -325,7 +341,10 @@ export default async function NeumaticosPage() {
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={u.foto} alt={u.titulo} loading="lazy" decoding="async" className="aspect-[4/3] w-full object-cover transition-transform duration-300 group-hover:scale-105" />
                 <span className="block p-5">
-                  <span className="block font-black text-navy-900">{u.titulo}</span>
+                  <span className="flex items-center justify-between gap-2 font-black text-navy-900">
+                    {u.titulo}
+                    <span className="rounded-md bg-slate-100 px-2 py-0.5 text-xs font-bold text-slate-500">{u.etiqueta}</span>
+                  </span>
                   <span className="mt-2 block text-sm leading-relaxed text-slate-600">{u.texto}</span>
                 </span>
               </Link>
