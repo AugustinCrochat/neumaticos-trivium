@@ -96,7 +96,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       ? `¿Qué medida de neumático lleva el ${name}? La original es ${lista}.`
       : `¿Qué medida de neumático lleva el ${name}? Según la versión: ${lista}${medidas.length > 3 ? " y más" : ""}.`,
     desde ? `Neumáticos económicos desde ${formatPrice(desde)}, con stock real y precio de outlet.` : "Consultá stock y precio de tu medida.",
-    "Garantía de 1 año y colocación sin cargo en Córdoba.",
+    "Colocación sin cargo en el día y garantía de 1 año.",
   ].join(" ");
 
   // Con foto del modelo se comparte la tarjeta del auto; sin ella, una foto del local.

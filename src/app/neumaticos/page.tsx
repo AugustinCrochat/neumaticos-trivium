@@ -428,6 +428,11 @@ export default async function NeumaticosPage() {
               </Link>
             </li>
             <li>
+              <Link href="/comprar-neumaticos-online-o-en-el-local" className="block rounded-xl border border-slate-200 bg-slate-50 p-4 font-bold text-navy-900 hover:border-orange-400">
+                Online o en el local: qué incluye el precio
+              </Link>
+            </li>
+            <li>
               <Link href="/blog/como-ahorrar-en-neumaticos-guia-completa" className="block rounded-xl border border-slate-200 bg-slate-50 p-4 font-bold text-navy-900 hover:border-orange-400">
                 Cómo ahorrar en neumáticos
               </Link>

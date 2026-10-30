@@ -62,7 +62,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const title = `Neumáticos baratos rodado ${rim} — precios y medidas R${rim}`;
     return {
       title,
-      description: `Todas las medidas de neumáticos rodado ${rim} con stock y precio actualizado. Cubiertas R${rim} de importación directa para auto y camioneta, con retiro en Córdoba.`,
+      description: `Todas las medidas de neumáticos rodado ${rim} con stock y precio actualizado. Cubiertas R${rim} de importación directa para auto y camioneta, con colocación sin cargo en el día.`,
       alternates: canonical(`/neumaticos/${rimSlug(rim)}`),
       openGraph: { title: `${title} — ${SITE_NAME}`, url: `/neumaticos/${rimSlug(rim)}`, ...poolShare(medida).openGraph },
       twitter: poolShare(medida).twitter,
@@ -85,7 +85,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const ruta = `/neumaticos/${eje === "ancho" ? widthSlug(valor) : profileSlug(valor)}`;
     return {
       title,
-      description: `Todas las medidas de neumáticos de ${nombre} con stock y precio actualizado, y los autos que las usan. Cubiertas de importación directa con retiro en Córdoba.`,
+      description: `Todas las medidas de neumáticos de ${nombre} con stock y precio actualizado, y los autos que las usan. Cubiertas de importación directa con colocación sin cargo en el día.`,
       alternates: canonical(ruta),
       openGraph: { title: `${title} — ${SITE_NAME}`, url: ruta, ...poolShare(medida).openGraph },
       twitter: poolShare(medida).twitter,
@@ -108,11 +108,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     desde
       ? `Neumáticos ${label} desde $${desde.toLocaleString("es-AR")} con stock disponible.`
       : `Neumáticos ${label}: precios, equivalencias y disponibilidad.`,
-    "Cubiertas de importación directa con garantía de 1 año.",
+    "Colocación sin cargo en el día y garantía de 1 año.",
     vehiculos.length
       ? `Medida original de ${sortVehiclesByPopularity(vehiculos).slice(0, 3).map((v) => `${v.brand} ${v.model}`).join(", ")} y otros.`
       : "",
-    "Retiro sin cargo en Córdoba.",
+    "Importación directa, retiro en el local.",
   ].filter(Boolean);
 
   const title = desde

@@ -96,6 +96,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       return url(`/vehiculos/${slug}`, 0.8, "weekly", undefined, card ? [card, abs(`/images/vehiculos/${slug}.webp`)] : undefined);
     }),
     url("/calculadora-equivalencia-neumaticos", 0.8, "monthly"),
+    url("/comprar-neumaticos-online-o-en-el-local", 0.7, "monthly"),
     url("/cotizador", 0.7, "monthly"),
     url("/buscador", 0.8, "monthly"),
     url("/herramientas", 0.7, "monthly"),
