@@ -225,6 +225,7 @@ export const VEHICLE_DB: VehicleDBEntry[] = [
 
   // BYD
   { brand: "BYD", model: "Dolphin", sizes: [{ w: "185", p: "55", r: "16" }] },
+  { brand: "BYD", model: "Shark", sizes: [{ w: "265", p: "65", r: "18" }] },
   { brand: "BYD", model: "Song Plus", sizes: [{ w: "225", p: "60", r: "18" }] },
   { brand: "BYD", model: "Tang", sizes: [{ w: "265", p: "45", r: "21" }] },
   { brand: "BYD", model: "Yuan Plus", sizes: [{ w: "215", p: "60", r: "17" }] },

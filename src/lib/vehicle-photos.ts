@@ -32,6 +32,7 @@ export const VEHICLE_PHOTOS = new Set([
   "bmw-x6",
   "byd-dolphin",
   "byd-dolphin-mini",
+  "byd-shark",
   "byd-song-pro",
   "changan-cs55",
   "chery-tiggo-8",
