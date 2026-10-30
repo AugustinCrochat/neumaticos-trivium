@@ -343,6 +343,8 @@ export const VEHICLE_DB: VehicleDBEntry[] = [
   { brand: "Fiat", model: "Tipo", sizes: [{ w: "175", p: "70", r: "13", version: "1.6", generation: "Tipo", years: "1993-1998" }] },
   { brand: "Fiat", model: "Uno", sizes: [{ w: "155", p: "80", r: "13", version: "S / SL (Fase 1)", generation: "Uno (Fase 1)", years: "1984-1993" }, { w: "175", p: "70", r: "13", version: "Fire / SCR / Mille", generation: "Uno (Fase 2/3)", years: "1993-2000" }, { w: "185", p: "60", r: "14", version: "ELX", generation: "Uno (Fase 3, tardío)", years: "2000-2004" }, { w: "175", p: "65", r: "14", version: "Way / Attractive", generation: "Uno (Novo Uno)", years: "2010-2021" }] },
   { brand: "Fiat", model: "Uno Way", sizes: [{ w: "175", p: "70", r: "13", version: "Way (Fase 3)", generation: "Uno (Fase 3)", years: "2000-2010" }, { w: "175", p: "65", r: "14", version: "Way", generation: "Uno (Novo Uno)", years: "2010-2021" }] },
+  { brand: "Fiat", model: "147", sizes: [{ w: "165", p: "70", r: "13" }] },
+  { brand: "Fiat", model: "Qubo", sizes: [{ w: "185", p: "65", r: "15" }, { w: "195", p: "55", r: "16" }] },
 
   // Ford
   { brand: "Ford", model: "Bronco", sizes: [{ w: "315", p: "70", r: "17", version: "Wildtrak Sasquatch", generation: "6ta gen (U725)", years: "2024-presente" }] },
@@ -549,6 +551,9 @@ export const VEHICLE_DB: VehicleDBEntry[] = [
   { brand: "Peugeot", model: "Boxer", sizes: [{ w: "215", p: "75", r: "16" }] },
   { brand: "Peugeot", model: "Expert", sizes: [{ w: "215", p: "65", r: "16" }] },
   { brand: "Peugeot", model: "Partner", sizes: [{ w: "175", p: "65", r: "14", version: "Confort" }, { w: "185", p: "65", r: "15", version: "Patagónica" }] },
+  { brand: "Peugeot", model: "106", sizes: [{ w: "175", p: "70", r: "13" }] },
+  { brand: "Peugeot", model: "205", sizes: [{ w: "165", p: "70", r: "13" }] },
+  { brand: "Peugeot", model: "306", sizes: [{ w: "185", p: "65", r: "14" }] },
 
   // Porsche
   { brand: "Porsche", model: "911", sizes: [{ w: "235", p: "40", r: "19", version: "Carrera - Delantero" }, { w: "295", p: "35", r: "20", version: "Carrera - Trasero" }, { w: "245", p: "35", r: "20", version: "Carrera S - Delantero" }, { w: "305", p: "30", r: "20", version: "Carrera S - Trasero" }] },
@@ -674,7 +679,14 @@ export const VEHICLE_DB: VehicleDBEntry[] = [
   { brand: "BYD", model: "Dolphin Mini", sizes: [{ w: "185", p: "55", r: "16", version: "GL / GS" }] },
   { brand: "BYD", model: "Song Pro", sizes: [{ w: "225", p: "60", r: "18", version: "GL / GS" }] },
   { brand: "Renault", model: "Arkana", sizes: [{ w: "215", p: "55", r: "18", version: "E-Tech Hybrid Esprit Alpine" }] },
+  { brand: "Renault", model: "9", sizes: [{ w: "175", p: "70", r: "13" }] },
+  { brand: "Renault", model: "11", sizes: [{ w: "175", p: "70", r: "13" }] },
+  { brand: "Renault", model: "12", sizes: [{ w: "175", p: "70", r: "13" }, { w: "165", p: "70", r: "13" }] },
+  { brand: "Renault", model: "19", sizes: [{ w: "175", p: "70", r: "13" }] },
+  { brand: "Renault", model: "Express", sizes: [{ w: "175", p: "70", r: "13" }] },
+  { brand: "Renault", model: "Scenic", sizes: [{ w: "195", p: "65", r: "15" }] },
   { brand: "Chevrolet", model: "Spark EUV", sizes: [{ w: "215", p: "55", r: "17", version: "102 cv" }] },
+  { brand: "Chevrolet", model: "Cobalt", sizes: [{ w: "195", p: "65", r: "15" }] },
 
   // Zotye
   { brand: "Zotye", model: "Z100", sizes: [{ w: "165", p: "60", r: "14" }] }
