@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "@/components/ui/Link";
+import { useBranch } from "@/contexts/branch-context";
 
 export type MedidaItem = {
   slug: string;
@@ -21,6 +22,10 @@ export type MedidaItem = {
  */
 export function MedidasVehiculo({ items }: { items: MedidaItem[] }) {
   const [version, setVersion] = useState<string | null>(null);
+  // El dato sale del taller de Argüello: solo se nombra Córdoba si el visitante
+  // eligió esa sucursal; con otra (o sin elegir) dice "nuestros locales".
+  const { selectedBranch, hasConfirmedBranch } = useBranch();
+  const dondeElegida = hasConfirmedBranch && selectedBranch.city === "Córdoba" ? "en Córdoba" : "en nuestros locales";
   const versiones = [...new Set(items.flatMap((i) => i.versions))];
   const conSelector = items.length > 1 && versiones.length > 1 && versiones.length <= 12;
 
@@ -71,7 +76,7 @@ export function MedidasVehiculo({ items }: { items: MedidaItem[] }) {
                       )}
                       {m.masElegida && (
                         <span className="rounded-md bg-navy-900 px-2 py-0.5 text-[11px] font-black uppercase tracking-wide text-white">
-                          La más elegida en Córdoba
+                          La más elegida {dondeElegida}
                         </span>
                       )}
                     </span>

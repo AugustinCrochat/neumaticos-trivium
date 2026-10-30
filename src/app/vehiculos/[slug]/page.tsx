@@ -284,6 +284,23 @@ export default async function VehiclePage({ params }: Props) {
             </p>
           </section>
 
+          {vehicleCardUrl(slug) && (
+            // La portada de la ficha como imagen real de la página (no solo og:image): así Google Imágenes la puede indexar con su alt.
+            <figure className="mb-10">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={`/images/vehiculos/share/${slug}.jpg`}
+                alt={`Neumáticos para ${name}: medida original y precios`}
+                width={1200}
+                height={630}
+                loading="lazy"
+                decoding="async"
+                className="h-auto w-full rounded-2xl border border-slate-200"
+              />
+              <figcaption className="mt-2 text-center text-xs text-slate-500">Medida original del {name} y neumáticos disponibles.</figcaption>
+            </figure>
+          )}
+
           <FotoNeumaticoBloque className="mb-10" titulo={`¿No sabés qué medida lleva tu ${name}?`} />
 
           {masBaratos.length > 0 && (
