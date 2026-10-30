@@ -24,6 +24,7 @@ import {
   sizesEqual,
   vehiclesUsingSize,
 } from "@/lib/tire-sizes";
+import { filasTecnicas } from "@/lib/medida-tecnica";
 import { cargaSlug, formatCargaSize } from "@/lib/carga";
 import { sortVehiclesByPopularity, POPULAR_VEHICLES, vehicleSlug } from "@/lib/vehicles";
 import { vehiclePhoto } from "@/lib/vehicle-photos";
@@ -138,6 +139,16 @@ export function SizeLanding({
     }, [])
     .sort((a, b) => Number(!!vehiclePhoto(b.slug)) - Number(!!vehiclePhoto(a.slug)));
   const branch = BRANCHES[0];
+
+  // Una fila por marca: su neumático más barato (con stock si lo hay).
+  const porMarca = [...new Set(productos.map((p) => p.brand))]
+    .map((brand) => {
+      const delaMarca = productos.filter((p) => p.brand === brand);
+      const conStock = delaMarca.filter((p) => p.enStock);
+      const mejor = [...(conStock.length ? conStock : delaMarca)].sort((a, b) => a.price - b.price)[0];
+      return { brand, mejor, modelos: delaMarca.length, enStock: conStock.length > 0 };
+    })
+    .sort((a, b) => Number(b.enStock) - Number(a.enStock) || a.mejor.price - b.mejor.price);
 
   // Alternativas con stock para que nadie se quede sólo con "sin stock":
   // primero las del mismo rodado (sirven con las mismas llantas), con el
@@ -302,6 +313,62 @@ export function SizeLanding({
           </p>
         )}
       </section>
+
+      {/* Datos técnicos: números derivados de la medida, útiles al comparar o convertir */}
+      <section className="mb-14">
+        <h2 className="mb-3 text-2xl font-black text-navy-900">Datos técnicos de la medida {label}</h2>
+        <p className="mb-5 max-w-3xl leading-relaxed text-slate-600">
+          Todo lo que se calcula a partir de {label}: es lo que cambia (o no) cuando pasás a otra medida y lo que
+          usa el auto para calcular la velocidad y el recorrido.
+        </p>
+        <div className="overflow-x-auto rounded-2xl border border-slate-200">
+          <table className="w-full text-left text-sm">
+            <tbody className="divide-y divide-slate-100">
+              {filasTecnicas(size).map((f) => (
+                <tr key={f.dato}>
+                  <th scope="row" className="whitespace-nowrap px-4 py-3 font-black text-navy-900">{f.dato}</th>
+                  <td className="whitespace-nowrap px-4 py-3 font-black text-navy-900">{f.valor}</td>
+                  <td className="px-4 py-3 text-slate-500">{f.nota}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      {/* Precio por marca, con los datos del catálogo */}
+      {porMarca.length > 1 && (
+        <section className="mb-14">
+          <h2 className="mb-3 text-2xl font-black text-navy-900">Precio de {label} por marca</h2>
+          <p className="mb-5 max-w-3xl leading-relaxed text-slate-600">
+            El neumático {label} más económico de cada marca que tenemos hoy, con IVA incluido y por unidad.
+          </p>
+          <div className="overflow-x-auto rounded-2xl border border-slate-200">
+            <table className="w-full text-left text-sm">
+              <thead className="bg-slate-50 text-xs font-black uppercase tracking-wide text-slate-500">
+                <tr>
+                  <th className="px-4 py-3">Marca</th>
+                  <th className="px-4 py-3">Desde</th>
+                  <th className="px-4 py-3">Modelos</th>
+                  <th className="px-4 py-3">Stock</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {porMarca.map((m) => (
+                  <tr key={m.brand}>
+                    <td className="px-4 py-3 font-black text-navy-900">
+                      <Link href={`/productos/${m.mejor.slug}`} className="hover:text-orange-600">{m.brand}</Link>
+                    </td>
+                    <td className="px-4 py-3 font-black text-navy-900">{formatPrice(m.mejor.price)}</td>
+                    <td className="px-4 py-3 text-slate-600">{m.modelos}</td>
+                    <td className="px-4 py-3 text-slate-600">{m.enStock ? "Disponible" : "Sin stock hoy"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      )}
 
       {/* Autos que usan la medida */}
       {vehiculos.length > 0 && (

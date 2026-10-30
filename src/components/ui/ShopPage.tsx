@@ -7,6 +7,7 @@ import Link from "@/components/ui/Link";
 import { BRANDS } from "@/lib/data";
 import { getBrandLogo } from "@/lib/brand-utils";
 import { EconomicChip } from "@/components/ui/EconomicChip";
+import { MedidaInfoBloque } from "@/components/ui/MedidaInfoBloque";
 import { PriceTagIcon } from "@/components/ui/PriceTagIcon";
 import { ProductCard } from "@/components/ui/ProductCard";
 import { bestPriceByGroup, peersByGroup } from "@/lib/best-price";
@@ -1009,6 +1010,8 @@ export function ShopPage({
                 </div>
               </section>
             )}
+
+            {searchedSize && <MedidaInfoBloque size={searchedSize} />}
           </div>
         </div>
       </div>

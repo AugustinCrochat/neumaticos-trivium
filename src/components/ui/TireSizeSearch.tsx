@@ -89,7 +89,6 @@ function rodadoProbable(rim: string, width: string, profile: string, opciones: {
 export function TireSizeSearch({
   initialMedida,
   compact = false,
-  forceVoiceButton = false,
   hideLearnLink = false,
   embedded = false,
   economicos = false,
@@ -642,14 +641,6 @@ export function TireSizeSearch({
   const measureInputClass = "w-full min-w-0 bg-white border-2 border-slate-300 rounded-xl px-2 sm:px-3 py-3 text-navy-950 font-black text-center shadow-sm transition-all outline-none placeholder:text-slate-600 focus:bg-white focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20 focus:shadow-lg focus:shadow-orange-500/10";
   const measureSeparatorClass = "flex h-[52px] items-center justify-center text-lg font-black text-slate-500";
   
-  const voiceButtonClass = `h-[52px] w-12 shrink-0 flex items-center justify-center rounded-xl border transition-all ${
-    listening
-      ? "bg-red-700 text-white border-red-400 shadow-lg shadow-red-700/25"
-      : "bg-red-600 text-white border-red-400 shadow-lg shadow-red-700/20 hover:bg-red-500 hover:border-red-300"
-  }`;
-
-  const searchButtonClass = `h-[52px] w-12 shrink-0 flex items-center justify-center rounded-xl border transition-all bg-orange-500 text-white border-orange-400 shadow-lg shadow-orange-500/20 hover:bg-orange-400`;
-
   const selectInputText = (e: React.SyntheticEvent<HTMLInputElement>) => {
     e.currentTarget.select();
   };
@@ -758,98 +749,14 @@ export function TireSizeSearch({
           placeholderSize={placeholderSize}
           focused={focused}
           compact={compact}
-          slim={!compact}
+          slim
           onSegmentSelect={focusDiagramSegment}
         />
       </div>
 
       <div className="flex flex-col gap-3">
         <div ref={containerRef} className="relative" onPaste={handlePaste}>
-          {compact ? (
-            // Compact: single DOM — 3-column + button on mobile, stacked on desktop
-            <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)_auto_minmax(0,1fr)_auto] lg:grid-cols-1 gap-2">
-              <input
-                ref={widthRef}
-                type="text"
-                inputMode="numeric"
-                pattern="[0-9]*"
-                autoComplete="off"
-                value={width}
-                onFocus={(e) => handleMeasureInputFocus(e, 'width')}
-                onBlur={() => setFocused(null)}
-                onClick={(e) => { selectInputText(e); setShowPopular(true); }}
-                onChange={(e) => {
-                  const v = e.target.value.replace(/[^0-9]/g, '').slice(0,3);
-                  setWidth(v);
-                  if (v.length >= 3 && profileRef.current) { autoAdvancingRef.current = true; profileRef.current.focus(); }
-                }}
-                onKeyDown={handleKeyDown}
-                placeholder="ancho"
-                aria-label="Ancho del neumático"
-                className={measureInputClass}
-              />
-              <span aria-hidden="true" className={`${measureSeparatorClass} lg:hidden`}>/</span>
-              <input
-                ref={profileRef}
-                type="text"
-                inputMode="numeric"
-                pattern="[0-9]*"
-                autoComplete="off"
-                value={profile}
-                onFocus={(e) => handleMeasureInputFocus(e, 'aspect')}
-                onBlur={() => setFocused(null)}
-                onClick={(e) => { selectInputText(e); setShowPopular(true); }}
-                onChange={(e) => {
-                  // En flotation el ancho de sección es decimal (ej. "10.5"): avanzar
-                  // al llegar a 2 cifras le comía la chance de escribir el punto. Solo
-                  // avanzamos solo en modo métrico (perfil entero de 2 cifras).
-                  const v = e.target.value.replace(/[^0-9.,]/g, '').replace(',', '.').slice(0, 5);
-                  setProfile(v);
-                  if (!isFlotation && v.length >= 2 && rimRef.current) { autoAdvancingRef.current = true; rimRef.current.focus(); }
-                }}
-                onKeyDown={handleKeyDown}
-                placeholder="perfil"
-                aria-label="Perfil del neumático"
-                className={measureInputClass}
-              />
-              <span aria-hidden="true" className={`${measureSeparatorClass} lg:hidden`}>R</span>
-              <input
-                ref={rimRef}
-                type="text"
-                inputMode="numeric"
-                pattern="[0-9]*"
-                autoComplete="off"
-                value={rim}
-                onFocus={(e) => handleMeasureInputFocus(e, 'rim')}
-                onBlur={() => setFocused(null)}
-                onClick={(e) => { selectInputText(e); setShowPopular(true); }}
-                onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, '').slice(0,2); setRim(v); autoBuscarAlCompletar(v); }}
-                onKeyDown={handleKeyDown}
-                placeholder="rodado"
-                aria-label="Rodado del neumático"
-                className={measureInputClass}
-              />
-              {/* Inline button: mobile only (desktop gets full-width button below) */}
-              <div className="lg:hidden">
-                {!forceVoiceButton && hasInput ? (
-                  <button type="button" onClick={executeSearch} aria-label="Buscar medida" className={searchButtonClass}>
-                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <circle cx="11" cy="11" r="7" strokeWidth={3} />
-                      <path strokeLinecap="round" strokeWidth={3} d="M21 21l-4.3-4.3" />
-                    </svg>
-                  </button>
-                ) : (
-                  <button type="button" onClick={startVoiceForMeasure} aria-label="Ingresar medida por voz" className={voiceButtonClass}>
-                    <svg className="w-5 h-5" viewBox="0 0 82.05 122.88" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                      <path d="M59.89,20.83V52.3c0,27-37.73,27-37.73,0V20.83c0-27.77,37.73-27.77,37.73,0Zm-14.18,76V118.2a4.69,4.69,0,0,1-9.37,0V96.78a40.71,40.71,0,0,1-12.45-3.51A41.63,41.63,0,0,1,12.05,85L12,84.91A41.31,41.31,0,0,1,3.12,71.68,40.73,40.73,0,0,1,0,56a4.67,4.67,0,0,1,8-3.31l.1.1A4.68,4.68,0,0,1,9.37,56a31.27,31.27,0,0,0,2.4,12.06A32,32,0,0,0,29,85.28a31.41,31.41,0,0,0,24.13,0,31.89,31.89,0,0,0,10.29-6.9l.08-.07a32,32,0,0,0,6.82-10.22A31.27,31.27,0,0,0,72.68,56a4.69,4.69,0,0,1,9.37,0,40.65,40.65,0,0,1-3.12,15.65A41.45,41.45,0,0,1,70,85l-.09.08a41.34,41.34,0,0,1-11.75,8.18,40.86,40.86,0,0,1-12.46,3.51Z"/>
-                    </svg>
-                  </button>
-                )}
-              </div>
-            </div>
-          ) : (
-            // Non-compact: always horizontal
-            <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)_auto_minmax(0,1fr)] items-end gap-2 sm:gap-3">
+            <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)_auto_minmax(0,1fr)] items-end gap-1.5 sm:gap-3">
               <label className="block min-w-0">
                 <span className="mb-1.5 flex items-center justify-center gap-1.5 text-[11px] font-black uppercase tracking-wider text-slate-500">
                   <span aria-hidden="true" className="h-2.5 w-2.5 rounded-full" style={{ background: "#ff1e00" }} />
@@ -873,10 +780,10 @@ export function TireSizeSearch({
                   onKeyDown={handleKeyDown}
                   placeholder="ancho"
                   aria-label="Ancho del neumático"
-                  className={`${measureInputClass} h-16 text-2xl placeholder:text-base placeholder:font-bold`}
+                  className={`${measureInputClass} ${compact ? "h-14 text-xl !px-1" : "h-16 text-2xl"} placeholder:text-base placeholder:font-bold`}
                 />
               </label>
-              <span aria-hidden="true" className={`${measureSeparatorClass} !h-16 !text-2xl`}>/</span>
+              <span aria-hidden="true" className={`${measureSeparatorClass} ${compact ? "!h-14 !text-lg" : "!h-16 !text-2xl"}`}>/</span>
               <label className="block min-w-0">
                 <span className="mb-1.5 flex items-center justify-center gap-1.5 text-[11px] font-black uppercase tracking-wider text-slate-500">
                   <span aria-hidden="true" className="h-2.5 w-2.5 rounded-full" style={{ background: "#6ba0d8" }} />
@@ -903,10 +810,10 @@ export function TireSizeSearch({
                   onKeyDown={handleKeyDown}
                   placeholder="perfil"
                   aria-label="Perfil del neumático"
-                  className={`${measureInputClass} h-16 text-2xl placeholder:text-base placeholder:font-bold`}
+                  className={`${measureInputClass} ${compact ? "h-14 text-xl !px-1" : "h-16 text-2xl"} placeholder:text-base placeholder:font-bold`}
                 />
               </label>
-              <span aria-hidden="true" className={`${measureSeparatorClass} !h-16 !text-2xl`}>R</span>
+              <span aria-hidden="true" className={`${measureSeparatorClass} ${compact ? "!h-14 !text-lg" : "!h-16 !text-2xl"}`}>R</span>
               <label className="block min-w-0">
                 <span className="mb-1.5 flex items-center justify-center gap-1.5 text-[11px] font-black uppercase tracking-wider text-slate-500">
                   <span aria-hidden="true" className="h-2.5 w-2.5 rounded-full" style={{ background: "#ff8066" }} />
@@ -926,14 +833,13 @@ export function TireSizeSearch({
                   onKeyDown={handleKeyDown}
                   placeholder="rodado"
                   aria-label="Rodado del neumático"
-                  className={`${measureInputClass} h-16 text-2xl placeholder:text-base placeholder:font-bold`}
+                  className={`${measureInputClass} ${compact ? "h-14 text-xl !px-1" : "h-16 text-2xl"} placeholder:text-base placeholder:font-bold`}
                 />
               </label>
 
             </div>
-          )}
 
-          {!compact && (
+          {(
             <div className="mt-3 flex gap-2">
               <button
                 type="button"
@@ -944,7 +850,7 @@ export function TireSizeSearch({
                   <circle cx="11" cy="11" r="7" strokeWidth={3} />
                   <path strokeLinecap="round" strokeWidth={3} d="M21 21l-4.3-4.3" />
                 </svg>
-                Buscar neumáticos
+                {compact ? "Buscar" : "Buscar neumáticos"}
               </button>
               <button
                 type="button"
@@ -1128,34 +1034,6 @@ export function TireSizeSearch({
             </div>
           )}
         </div>
-
-        {compact && (
-          <div className="hidden lg:block">
-            {/* La medida estándar se busca sola; el botón queda solo para flotation, que no. */}
-            {!forceVoiceButton && hasInput && isFlotation ? (
-              <button type="button" onClick={executeSearch} aria-label="Buscar medida"
-                className="w-full h-[52px] bg-orange-500 hover:bg-orange-400 text-white font-black rounded-xl border border-orange-400 shadow-lg shadow-orange-500/20 transition-all flex items-center justify-center gap-2">
-                Buscar medida
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <circle cx="11" cy="11" r="7" strokeWidth={3} />
-                  <path strokeLinecap="round" strokeWidth={3} d="M21 21l-4.3-4.3" />
-                </svg>
-              </button>
-            ) : (
-              <button type="button" onClick={startVoiceForMeasure} aria-label="Ingresar medida por voz"
-                className={`w-full h-[52px] font-bold text-sm rounded-xl border transition-all flex items-center justify-center gap-2 ${
-                  listening
-                    ? "bg-red-700 text-white border-red-400 shadow-lg shadow-red-700/25"
-                    : "bg-red-600 text-white border-red-400 shadow-lg shadow-red-700/20 hover:bg-red-500 hover:border-red-300"
-                }`}>
-                <svg className="w-4 h-4" viewBox="0 0 82.05 122.88" fill="currentColor">
-                  <path d="M59.89,20.83V52.3c0,27-37.73,27-37.73,0V20.83c0-27.77,37.73-27.77,37.73,0Zm-14.18,76V118.2a4.69,4.69,0,0,1-9.37,0V96.78a40.71,40.71,0,0,1-12.45-3.51A41.63,41.63,0,0,1,12.05,85L12,84.91A41.31,41.31,0,0,1,3.12,71.68,40.73,40.73,0,0,1,0,56a4.67,4.67,0,0,1,8-3.31l.1.1A4.68,4.68,0,0,1,9.37,56a31.27,31.27,0,0,0,2.4,12.06A32,32,0,0,0,29,85.28a31.41,31.41,0,0,0,24.13,0,31.89,31.89,0,0,0,10.29-6.9l.08-.07a32,32,0,0,0,6.82-10.22A31.27,31.27,0,0,0,72.68,56a4.69,4.69,0,0,1,9.37,0,40.65,40.65,0,0,1-3.12,15.65A41.45,41.45,0,0,1,70,85l-.09.08a41.34,41.34,0,0,1-11.75,8.18,40.86,40.86,0,0,1-12.46,3.51Z"/>
-                </svg>
-                {listening ? 'Escuchando...' : 'Ingresar por voz'}
-              </button>
-            )}
-          </div>
-        )}
 
         {isFlotation && flotationEquivalent && (
           <p className={`font-bold text-navy-900 ${compact ? 'text-xs' : 'text-sm'}`}>
