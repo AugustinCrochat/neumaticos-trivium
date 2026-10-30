@@ -10,6 +10,40 @@ function formatPrice(price: number) {
   }).format(price);
 }
 
+/** Fotos reales del taller (un Fiat Ducato con cubiertas de carga nuevas). */
+export const FOTOS_CARGA = [
+  {
+    src: "/images/local/cubierta-de-carga-nueva-colocada-en-fiat-ducato-trivium.webp",
+    alt: "Cubierta de carga nueva ya colocada en la llanta de un Fiat Ducato",
+    caption: "Cubierta de carga nueva, ya colocada en una Ducato.",
+    position: "center 60%",
+  },
+  {
+    src: "/images/local/tecnico-colocando-rueda-de-carga-en-fiat-ducato-trivium.webp",
+    alt: "Técnico del taller colocando una rueda con cubierta de carga en un Fiat Ducato sobre el elevador",
+    caption: "Colocación en el momento, con el utilitario sobre el elevador.",
+    position: "center 55%",
+  },
+  {
+    src: "/images/local/fiat-ducato-con-cubiertas-de-carga-nuevas-en-el-taller-trivium.webp",
+    alt: "Fiat Ducato furgón con cubiertas de carga nuevas en el taller de Trivium",
+    caption: "La Ducato lista, con las cubiertas de carga nuevas.",
+    position: "center 70%",
+  },
+] as const;
+
+/** Una foto por pantalla de medida, rotando para no repetir siempre la misma. */
+export function FotoCarga({ indice }: { indice: number }) {
+  const foto = FOTOS_CARGA[indice % FOTOS_CARGA.length];
+  return (
+    <figure className="mb-10 max-w-md overflow-hidden rounded-2xl border border-slate-200">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={foto.src} alt={foto.alt} loading="lazy" width={960} height={1280} className="aspect-[4/3] w-full object-cover" style={{ objectPosition: foto.position }} />
+      <figcaption className="bg-slate-50 px-4 py-2 text-xs text-slate-500">{foto.caption}</figcaption>
+    </figure>
+  );
+}
+
 /**
  * Contenido editorial de /neumaticos/carga: la tabla de precios por medida sale
  * del catálogo (se actualiza con cada deploy), el resto es texto fijo que no
@@ -112,6 +146,24 @@ export function CargaExtra({ productos }: { productos: TireProduct[] }) {
               </tr>
             </tbody>
           </table>
+        </div>
+      </section>
+
+      <section className="mb-14">
+        <h2 className="font-display mb-2 text-3xl font-bold uppercase tracking-wide text-slate-900">
+          Colocadas en el taller
+        </h2>
+        <p className="mb-5 max-w-3xl text-slate-600">
+          Fotos reales de un furgón que cambió sus cubiertas de carga en nuestro local: arme, desarme y colocación en el día.
+        </p>
+        <div className="grid grid-cols-3 gap-2 sm:gap-4">
+          {FOTOS_CARGA.map((foto) => (
+            <figure key={foto.src} className="overflow-hidden rounded-2xl border border-slate-200">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={foto.src} alt={foto.alt} loading="lazy" width={960} height={1280} className="aspect-[3/4] w-full object-cover" style={{ objectPosition: foto.position }} />
+              <figcaption className="hidden bg-slate-50 px-3 py-2 text-xs text-slate-500 sm:block">{foto.caption}</figcaption>
+            </figure>
+          ))}
         </div>
       </section>
 

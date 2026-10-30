@@ -20,6 +20,7 @@ import { SortedProductGrid } from "@/components/ui/SortedProductGrid";
 import { bestPriceByGroup, peersByGroup } from "@/lib/best-price";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 import { poolShare } from "@/lib/share-image";
+import { FotoCarga } from "../CargaExtra";
 
 /**
  * Landing por medida de carga (/neumaticos/carga/195-70-r15c).
@@ -257,6 +258,8 @@ export default async function CargaMedidaPage({ params }: Props) {
           </p>
         </section>
       )}
+
+      <FotoCarga indice={size.width + size.rim} />
 
       <FaqSection faqs={faqs} />
 

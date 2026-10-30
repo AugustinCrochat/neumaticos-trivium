@@ -76,7 +76,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url("/neumaticos", 0.9, "weekly"),
     url("/neumaticos/ht", 0.7, "weekly"),
     url("/neumaticos/at", 0.7, "weekly"),
-    url("/neumaticos/carga", 0.7, "weekly"),
+    url("/neumaticos/carga", 0.7, "weekly", undefined, [abs("/images/local/cubierta-de-carga-nueva-colocada-en-fiat-ducato-trivium.webp"), abs("/images/local/tecnico-colocando-rueda-de-carga-en-fiat-ducato-trivium.webp"), abs("/images/local/fiat-ducato-con-cubiertas-de-carga-nuevas-en-el-taller-trivium.webp")]),
     url("/neumaticos-baratos", 0.9, "daily"),
     url("/opiniones-y-comparativas", 0.8, "weekly"),
     url("/neumaticos-para-remises-taxis-y-uber", 0.9, "daily", undefined, [abs("/images/local/remis-cambio-de-cuatro-neumaticos-con-alineacion-y-balanceo-trivium-cordoba.webp"), abs("/images/local/taxi-entrando-al-local-neumaticos-trivium-cordoba.webp"), abs("/images/local/remis-en-el-taller-con-balanceadora-y-neumaticos-trivium-cordoba.webp"), abs("/images/local/taxi-rueda-delantera-en-el-taller-neumaticos-trivium-cordoba.webp"), abs("/images/local/remis-chevrolet-classic-cambio-de-neumaticos-y-balanceo-trivium-cordoba.webp")]),
