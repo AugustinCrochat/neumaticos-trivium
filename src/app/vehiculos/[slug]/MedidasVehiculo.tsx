@@ -12,6 +12,8 @@ export type MedidaItem = {
   /** Precio mínimo con stock, ya formateado; null si hoy no hay. */
   desde: string | null;
   masElegida: boolean;
+  /** Foto de un neumático de esa medida; null si hoy no hay con stock. */
+  foto: string | null;
 };
 
 /**
@@ -66,6 +68,18 @@ export function MedidasVehiculo({ items }: { items: MedidaItem[] }) {
                   esLaTuya ? "border-emerald-500 bg-emerald-50/40" : "border-slate-200"
                 }`}
               >
+                {m.foto && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={m.foto}
+                    alt={`Neumático ${m.label}`}
+                    width={80}
+                    height={80}
+                    loading="lazy"
+                    decoding="async"
+                    className="h-16 w-16 shrink-0 object-contain mix-blend-multiply sm:h-20 sm:w-20"
+                  />
+                )}
                 <span className="min-w-0 flex-1">
                   {(esLaTuya || m.masElegida) && (
                     <span className="mb-1.5 flex flex-wrap gap-1.5">

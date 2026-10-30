@@ -159,6 +159,8 @@ export default async function VehiclePage({ params }: Props) {
     years: m.years,
     desde: m.desde ? formatPrice(m.desde) : null,
     masElegida: medidas.length > 1 && formatSize(m.size) === masElegida,
+    // Foto del neumático más barato con stock de esa medida.
+    foto: [...m.disponibles].sort((x, y) => x.price - y.price)[0]?.imageUrl ?? null,
   }));
   // Respuesta directa, antes de las tarjetas: es lo que busca quien llega con la pregunta.
   const respuestaCorta =
