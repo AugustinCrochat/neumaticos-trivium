@@ -115,25 +115,35 @@ export default async function ComprarOnlineOLocalPage() {
 
       <section className="mb-14">
         <h2 className="mb-4 text-2xl font-black text-navy-900">Qué cambia entre una y otra</h2>
-        <div className="overflow-x-auto rounded-2xl border border-slate-200">
-          <table className="w-full text-left text-sm">
-            <thead className="bg-slate-50 text-xs font-black uppercase tracking-wide text-slate-500">
-              <tr>
-                <th className="px-4 py-3"> </th>
-                <th className="px-4 py-3">Comprar online y colocar aparte</th>
-                <th className="px-4 py-3 text-orange-600">Comprar en {SITE_NAME}</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {FILAS.map(([dato, otro, nuestro]) => (
-                <tr key={dato}>
-                  <th scope="row" className="px-4 py-3 font-black text-navy-900">{dato}</th>
-                  <td className="px-4 py-3 text-slate-600">{otro}</td>
-                  <td className="px-4 py-3 font-bold text-navy-900">{nuestro}</td>
-                </tr>
+        <div className="grid gap-4 md:grid-cols-2">
+          <div className="rounded-3xl border border-slate-200 bg-slate-50 p-6">
+            <p className="text-xs font-black uppercase tracking-widest text-slate-500">Comprar online y colocar aparte</p>
+            <ul className="mt-4 space-y-4">
+              {FILAS.map(([dato, otro]) => (
+                <li key={dato} className="flex gap-3">
+                  <span aria-hidden className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-slate-200 text-sm font-black text-slate-500">–</span>
+                  <span>
+                    <span className="block text-xs font-black uppercase tracking-wide text-slate-400">{dato}</span>
+                    <span className="block text-slate-600">{otro}</span>
+                  </span>
+                </li>
               ))}
-            </tbody>
-          </table>
+            </ul>
+          </div>
+          <div className="rounded-3xl border-2 border-orange-500 bg-white p-6 shadow-lg shadow-orange-500/10">
+            <p className="text-xs font-black uppercase tracking-widest text-orange-600">Comprar en {SITE_NAME}</p>
+            <ul className="mt-4 space-y-4">
+              {FILAS.map(([dato, , nuestro]) => (
+                <li key={dato} className="flex gap-3">
+                  <span aria-hidden className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-sm font-black text-emerald-700">✓</span>
+                  <span>
+                    <span className="block text-xs font-black uppercase tracking-wide text-slate-400">{dato}</span>
+                    <span className="block font-bold text-navy-900">{nuestro}</span>
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </section>
 
