@@ -61,7 +61,7 @@ function tituloLocal(localidad: Localidad): string {
       : `Neumáticos baratos en ${localidad.name} — precios de outlet, local en ${sucursal.shortName}`;
   }
   return localidad.esCabecera
-    ? `Neumáticos baratos en ${localidad.name} — outlet con stock y local propio`
+    ? `Neumáticos baratos en ${localidad.name}: precios y stock hoy, colocación gratis`
     : `Neumáticos baratos en ${localidad.name} — precios de outlet a ${localidad.minutosHastaSucursal} min`;
 }
 
@@ -76,7 +76,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     ? `Neumáticos baratos para ${localidad.name} a precio de importación directa. ` +
       `Mirá medidas y precios en la web y pasá por nuestro local de ${branch.address}, ${branch.city}.`
     : `Comprá neumáticos baratos en ${localidad.name}, ${localidad.province}, a precio de importación directa. ` +
-      `Cubiertas con stock real, colocación sin cargo y gomería con taller de alineación y balanceo en ${branch.address}, a ` +
+      `Medidas y precios con stock real, colocación sin cargo en el día y taller de alineación y balanceo en ${branch.address}, a ` +
       `${localidad.minutosHastaSucursal} minutos de ${localidad.name}.`;
 
   return {

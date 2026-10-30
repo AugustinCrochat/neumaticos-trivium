@@ -7,9 +7,9 @@ import { blogShare } from "@/lib/blog-meta";
 
 export const metadata: Metadata = {
   ...blogShare("grenlander"),
-  title: "Grenlander: ¿Son buenos los neumáticos? Análisis y comparativa — Trivium",
+  title: "¿Son buenos los neumáticos Grenlander? Opinión, precios y comparativa",
   description:
-    "Analizamos la marca Grenlander en profundidad: homologación europea, agarre en curvas, evacuación de agua, tecnología, comparación con Zmax, Pirelli y BFGoodrich, y cuándo conviene elegirlos.",
+    "Grenlander: ¿vale la pena? Homologación europea, agarre, agua y duración, comparados con Zmax, Pirelli y BFGoodrich. Cuándo conviene y para quién, con las medidas que colocamos en el día.",
   alternates: canonical("/blog/grenlander"),
 };
 

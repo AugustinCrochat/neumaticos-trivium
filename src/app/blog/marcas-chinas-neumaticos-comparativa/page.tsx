@@ -3,12 +3,14 @@ import type { Metadata } from "next";
 import { ClusterLinks } from "@/components/blog/ClusterLinks";
 import { BlogCoverStrip, BlogSearchStrip } from "@/components/blog/BlogShop";
 import { blogShare } from "@/lib/blog-meta";
+import { canonical } from "@/lib/seo";
 
 export const metadata: Metadata = {
   ...blogShare("marcas-chinas-neumaticos-comparativa"),
-  title: "Marcas chinas de neumáticos: ¿cuál es la mejor? — Trivium",
+  title: "Marcas chinas de neumáticos: cuál es la mejor y en qué se diferencian",
   description:
-    "Comparamos las distintas franjas de calidad de los neumáticos chinos —de entrada, intermedios y de calidad real— y por qué Grenlander (Zodo Tyre) lidera el ranking.",
+    "Ranking de marcas de neumáticos chinos por franja: de entrada, intermedias y de calidad real. Cuál conviene según tu uso, qué diferencia hay y por qué Grenlander (Zodo Tyre) lidera.",
+  alternates: canonical("/blog/marcas-chinas-neumaticos-comparativa"),
 };
 
 export default function MarcasChinasComparativaPage() {

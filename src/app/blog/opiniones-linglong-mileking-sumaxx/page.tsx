@@ -6,9 +6,9 @@ import { blogShare } from "@/lib/blog-meta";
 
 export const metadata: Metadata = {
   ...blogShare("opiniones-linglong-mileking-sumaxx"),
-  title: "Opiniones sobre neumáticos Linglong, Mileking y Sumaxx: ¿Valen la pena?",
+  title: "Linglong, Mileking y Sumaxx: opiniones y si valen la pena",
   description:
-    "Analizamos las marcas de cubiertas importadas más buscadas: Linglong, Mileking y Sumaxx. Conocé sus ventajas, desventajas y si son la opción ideal para tu auto.",
+    "Opinión sobre Linglong, Mileking y Sumaxx: ventajas, desventajas, para qué uso sirve cada una y cuánto se ahorra frente a una marca premium. Las colocamos en el día, sin cargo.",
   alternates: canonical("/blog/opiniones-linglong-mileking-sumaxx"),
 };
 
