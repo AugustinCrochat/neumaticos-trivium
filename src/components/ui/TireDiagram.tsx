@@ -62,7 +62,7 @@ export function TireDiagram({
     return {
       fontSize: isFocused ? `${100 * 1.12}px` : "100px",
       fontWeight: isFocused ? "800" : "700",
-      fill: isFocused || !isPlaceholder ? COLOR[segment] : "#7f898e",
+      fill: isFocused || !isPlaceholder ? COLOR[segment] : slim ? "#e2e8f0" : "#7f898e",
       opacity: isFocused ? 1 : isPlaceholder ? 0.88 : 1,
       transition: "font-size 0.2s, fill 0.2s",
       letterSpacing: "0.04em",
@@ -76,9 +76,11 @@ export function TireDiagram({
 
   return (
     <div className={`flex flex-col items-center ${compact ? 'py-1' : 'py-3'}`}>
+      {/* En slim el dibujo va sobre un panel de gris medio: el neumático negro y la llanta clara se despegan del fondo claro del buscador. */}
+      <div className={slim ? "flex w-full max-w-[260px] justify-center rounded-2xl bg-gradient-to-b from-slate-400 to-slate-600 px-3 pb-0 pt-5 ring-1 ring-slate-500/40" : "contents"}>
       <svg
         viewBox="0 0 1416.1177 691.15723"
-        className={`w-full h-auto ${compact ? 'max-w-[200px]' : slim ? 'max-w-[260px]' : 'max-w-lg'}`}
+        className={`w-full h-auto ${compact ? 'max-w-[200px]' : slim ? 'max-w-[236px]' : 'max-w-lg'}`}
         xmlns="http://www.w3.org/2000/svg"
       >
         <defs>
@@ -192,6 +194,7 @@ export function TireDiagram({
           </textPath>
         </text>
       </svg>
+      </div>
 
       <div className={`mt-1 w-full max-w-lg gap-1.5 ${slim ? "hidden" : "flex"}`}>
         {(["width", "aspect", "rim"] as const).map((seg) => {
