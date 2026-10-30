@@ -6,6 +6,18 @@ import { BlogCover } from '@/components/blog/BlogCover';
 import { BlogSearchStrip, BlogShopLinks } from '@/components/blog/BlogShop';
 import { getProductosDesdePOS } from '@/lib/pos-api';
 import { getTireLabel } from '@/lib/tire-labels';
+import type { Metadata } from "next";
+import { canonical } from "@/lib/seo";
+import { blogShare } from "@/lib/blog-meta";
+
+export const metadata: Metadata = {
+  ...blogShare("verano-vs-allseason"),
+  title: "Neumáticos de verano o all-season: cuál conviene en Argentina",
+  description:
+    "Diferencias entre neumáticos de verano y all-season, qué clima de Argentina favorece a cada uno y cuál te conviene según dónde y cómo manejes.",
+  alternates: canonical("/blog/verano-vs-allseason"),
+};
+
 
 export default async function VeranoVsAllSeasonArticle() {
   const productos = await getProductosDesdePOS('arguello');

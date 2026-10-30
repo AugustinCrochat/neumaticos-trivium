@@ -93,6 +93,26 @@ function buildFaqs(size: TireSize, productos: TireProduct[], desde: number | nul
     },
   ];
 
+  const modelos = [...new Set(sortVehiclesByPopularity(vehiclesUsingSize(size)).map((v) => `${v.brand} ${v.model}`))].slice(0, 6);
+  if (modelos.length > 0) {
+    faqs.splice(1, 0, {
+      question: `¿Qué autos llevan neumáticos ${label}?`,
+      answer:
+        `Entre los modelos que usan ${label} de fábrica están ${modelos.join(", ")}. La medida correcta de tu auto figura ` +
+        `en la etiqueta del marco de la puerta del conductor o en el manual; si tenés dudas, buscá tu modelo en la sección ` +
+        `de vehículos de esta web.`,
+    });
+  }
+
+  if (desde) {
+    faqs.splice(2, 0, {
+      question: `¿Cuánto sale el juego de 4 neumáticos ${label}?`,
+      answer:
+        `Con el neumático más económico que tenemos hoy, el juego de cuatro sale desde ${formatPrice(desde * 4)} ` +
+        `(${formatPrice(desde)} cada uno, IVA incluido), con colocación y válvulas sin cargo el mismo día.`,
+    });
+  }
+
   if (productos.length > 0) {
     const marcas = [...new Set(productos.map((p) => p.brand))];
     faqs.splice(2, 0, {

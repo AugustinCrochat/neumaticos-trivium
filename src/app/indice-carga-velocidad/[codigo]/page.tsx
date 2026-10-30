@@ -22,8 +22,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!info) return {};
   const label = info.code;
   return {
-    title: `¿Qué significa ${label} en un neumático? Carga y velocidad`,
-    description: `${label} en un neumático significa índice de carga ${info.loadIndex} (hasta ${info.loadKg} kg por rueda) e índice de velocidad ${info.speedRating} (hasta ${info.speedKmh} km/h).`,
+    title: `${label} en un neumático: ${info.loadKg} kg y ${info.speedKmh} km/h (qué significa)`,
+    description: `${label} = hasta ${info.loadKg} kg por rueda (índice ${info.loadIndex}) y ${info.speedKmh} km/h (letra ${info.speedRating}). Cuándo podés usar otro índice, qué códigos son parecidos y neumáticos ${label} con stock y colocación sin cargo.`,
     alternates: canonical(`/indice-carga-velocidad/${label.toLowerCase()}`),
   };
 }
@@ -34,6 +34,15 @@ export default async function LoadSpeedCodePage({ params }: Props) {
   if (!info) notFound();
 
   const path = `/indice-carga-velocidad/${info.code.toLowerCase()}`;
+  const todos = LOAD_SPEED_CODES.map((c) => getLoadSpeedInfo(c)).filter((c): c is NonNullable<typeof c> => !!c);
+  // Mismo índice de carga con otra letra, y misma letra con otra carga.
+  const mismaCarga = todos.filter((c) => c.loadIndex === info.loadIndex && c.code !== info.code);
+  const mismaVelocidad = todos
+    .filter((c) => c.speedRating === info.speedRating && c.code !== info.code)
+    .sort((a, b) => Math.abs(a.loadKg - info.loadKg) - Math.abs(b.loadKg - info.loadKg))
+    .slice(0, 4);
+  const menosVelocidad = mismaCarga.filter((c) => c.speedKmh < info.speedKmh);
+  const masVelocidad = mismaCarga.filter((c) => c.speedKmh > info.speedKmh);
   const faqs = [
     {
       question: `¿Qué significa ${info.code} en un neumático?`,
@@ -42,6 +51,14 @@ export default async function LoadSpeedCodePage({ params }: Props) {
     {
       question: `¿Puedo reemplazar un neumático ${info.code} por otro con un índice menor?`,
       answer: "No. La medida puede coincidir, pero el índice de carga y el de velocidad deben ser iguales o superiores a la especificación de fábrica del vehículo. Confirmala en la etiqueta de la puerta del conductor o en el manual.",
+    },
+    {
+      question: `¿Cuánto pueden cargar cuatro neumáticos ${info.code}?`,
+      answer: `Cada uno soporta hasta ${info.loadKg} kg, así que el juego de cuatro admite ${(info.loadKg * 4).toLocaleString("es-AR")} kg en total. Ese número es del neumático, no del auto: la carga máxima del vehículo la define el fabricante.`,
+    },
+    {
+      question: `¿Qué pasa si pongo un neumático con menos velocidad que ${info.speedRating}?`,
+      answer: `Si tu auto pide ${info.code}, la letra ${info.speedRating} (${info.speedKmh} km/h) es el mínimo recomendado. Una letra inferior tiene menor resistencia al calor a alta velocidad y puede no estar homologada para ese vehículo; una letra superior es compatible y suele ser más firme y algo más cara.`,
     },
   ];
 
@@ -92,6 +109,10 @@ export default async function LoadSpeedCodePage({ params }: Props) {
           </section>
         </div>
 
+        <p className="mt-6 rounded-2xl bg-orange-50 p-5 !text-navy-900">
+          <strong>Respuesta rápida:</strong> {info.code} significa que cada neumático soporta hasta <strong>{info.loadKg} kg</strong> ({(info.loadKg * 4).toLocaleString("es-AR")} kg el juego de cuatro) y está homologado hasta <strong>{info.speedKmh} km/h</strong>.
+        </p>
+
         <h2>Cómo se lee {info.code}</h2>
         <p>
           En una inscripción como <strong>195/65 R15 {info.code}</strong>, los primeros números describen la medida. El <strong>{info.loadIndex}</strong> significa que cada cubierta admite hasta <strong>{info.loadKg} kg</strong>; la <strong>{info.speedRating}</strong> señala una velocidad máxima de <strong>{info.speedKmh} km/h</strong> en condiciones de homologación.
@@ -104,6 +125,26 @@ export default async function LoadSpeedCodePage({ params }: Props) {
         <p>
           Revisá la etiqueta del marco de la puerta del conductor o el manual. Ahí figura la medida completa y los índices requeridos. El código de los neumáticos que tiene hoy el vehículo no siempre es una referencia confiable porque pudieron haberlos cambiado antes.
         </p>
+
+        <h2>Otros códigos parecidos a {info.code}</h2>
+        <p>
+          {menosVelocidad.length > 0 && (
+            <>Con la misma carga ({info.loadIndex}) pero menos velocidad hay {menosVelocidad.map((c) => c.code).join(", ")}: no son un reemplazo directo de {info.code}. </>
+          )}
+          {masVelocidad.length > 0 && (
+            <>Con la misma carga y más velocidad: {masVelocidad.map((c) => c.code).join(", ")}, que sí cumplen lo que pide {info.code}. </>
+          )}
+          Con la misma letra {info.speedRating} y otra carga están {mismaVelocidad.map((c) => c.code).join(", ")}.
+        </p>
+        <ul className="!mb-6 flex flex-wrap gap-2 !pl-0">
+          {[...mismaCarga, ...mismaVelocidad].map((c) => (
+            <li key={c.code} className="list-none">
+              <Link href={`/indice-carga-velocidad/${c.code.toLowerCase()}`} className="inline-flex rounded-full border border-slate-200 px-4 py-2 text-sm font-black text-navy-900 no-underline hover:border-orange-400">
+                {c.code} · {c.loadKg} kg · {c.speedKmh} km/h
+              </Link>
+            </li>
+          ))}
+        </ul>
 
         <CatalogWidget
           loadIndex={info.loadIndex}

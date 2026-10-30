@@ -6,6 +6,18 @@ import { BlogCover } from '@/components/blog/BlogCover';
 import { BlogSearchStrip, BlogShopLinks } from '@/components/blog/BlogShop';
 import { getProductosDesdePOS } from '@/lib/pos-api';
 import { getTireLabel } from '@/lib/tire-labels';
+import type { Metadata } from "next";
+import { canonical } from "@/lib/seo";
+import { blogShare } from "@/lib/blog-meta";
+
+export const metadata: Metadata = {
+  ...blogShare("ruido-neumaticos"),
+  title: "Ruido de los neumáticos: decibeles, causas y cómo elegir uno silencioso",
+  description:
+    "Cómo se mide el ruido de las cubiertas (dB), por qué un neumático hace ruido al rodar y qué mirar en la etiqueta europea para elegir uno silencioso.",
+  alternates: canonical("/blog/ruido-neumaticos"),
+};
+
 
 export default async function RuidoNeumaticosArticle() {
   const productos = await getProductosDesdePOS('arguello');
