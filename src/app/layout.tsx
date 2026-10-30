@@ -31,6 +31,7 @@ const display = Barlow_Condensed({
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
+  applicationName: SITE_NAME,
   title: {
     // Cada página define su título propio y hereda el sufijo de marca; sin el
     // template había que repetir "— Neumáticos Trivium" a mano en cada archivo
