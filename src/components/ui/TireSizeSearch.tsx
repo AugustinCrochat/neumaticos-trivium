@@ -726,7 +726,7 @@ export function TireSizeSearch({
   }
 
   return (
-    <div className={embedded ? "relative group w-full" : `bg-slate-100 rounded-2xl border border-slate-200 ${compact ? 'p-4' : 'p-6'} shadow-xl shadow-slate-300/40 relative group w-full`}>
+    <div className={embedded ? "@container relative group w-full" : `@container bg-slate-100 rounded-2xl border border-slate-200 ${compact ? 'p-4' : 'p-6'} shadow-xl shadow-slate-300/40 relative group w-full`}>
       {!embedded && (
         <p className={`font-black text-navy-900 ${compact ? 'text-sm mb-2' : 'text-base mb-3'}`}>
           Buscar por medida
@@ -738,6 +738,7 @@ export function TireSizeSearch({
         </div>
       )}
 
+      <div className={compact ? undefined : "grid gap-4 @xl:grid-cols-[250px_minmax(0,1fr)] @xl:items-center @xl:gap-6"}>
       <div
         ref={tireEditorRef}
         tabIndex={0}
@@ -757,6 +758,7 @@ export function TireSizeSearch({
           placeholderSize={placeholderSize}
           focused={focused}
           compact={compact}
+          slim={!compact}
           onSegmentSelect={focusDiagramSegment}
         />
       </div>
@@ -847,8 +849,12 @@ export function TireSizeSearch({
             </div>
           ) : (
             // Non-compact: always horizontal
-            <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)_auto_minmax(0,1fr)_auto] gap-2 sm:gap-3">
-              <div className="min-w-0">
+            <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)_auto_minmax(0,1fr)] items-end gap-2 sm:gap-3">
+              <label className="block min-w-0">
+                <span className="mb-1.5 flex items-center justify-center gap-1.5 text-[11px] font-black uppercase tracking-wider text-slate-500">
+                  <span aria-hidden="true" className="h-2.5 w-2.5 rounded-full" style={{ background: "#ff1e00" }} />
+                  Ancho <span className="font-bold normal-case text-slate-400">(mm)</span>
+                </span>
                 <input
                   ref={widthRef}
                   type="text"
@@ -867,11 +873,15 @@ export function TireSizeSearch({
                   onKeyDown={handleKeyDown}
                   placeholder="ancho"
                   aria-label="Ancho del neumático"
-                  className={measureInputClass}
+                  className={`${measureInputClass} h-16 text-2xl placeholder:text-base placeholder:font-bold`}
                 />
-              </div>
-              <span aria-hidden="true" className={measureSeparatorClass}>/</span>
-              <div className="min-w-0">
+              </label>
+              <span aria-hidden="true" className={`${measureSeparatorClass} !h-16 !text-2xl`}>/</span>
+              <label className="block min-w-0">
+                <span className="mb-1.5 flex items-center justify-center gap-1.5 text-[11px] font-black uppercase tracking-wider text-slate-500">
+                  <span aria-hidden="true" className="h-2.5 w-2.5 rounded-full" style={{ background: "#6ba0d8" }} />
+                  Perfil <span className="font-bold normal-case text-slate-400">(%)</span>
+                </span>
                 <input
                   ref={profileRef}
                   type="text"
@@ -893,11 +903,15 @@ export function TireSizeSearch({
                   onKeyDown={handleKeyDown}
                   placeholder="perfil"
                   aria-label="Perfil del neumático"
-                  className={measureInputClass}
+                  className={`${measureInputClass} h-16 text-2xl placeholder:text-base placeholder:font-bold`}
                 />
-              </div>
-              <span aria-hidden="true" className={measureSeparatorClass}>R</span>
-              <div className="min-w-0">
+              </label>
+              <span aria-hidden="true" className={`${measureSeparatorClass} !h-16 !text-2xl`}>R</span>
+              <label className="block min-w-0">
+                <span className="mb-1.5 flex items-center justify-center gap-1.5 text-[11px] font-black uppercase tracking-wider text-slate-500">
+                  <span aria-hidden="true" className="h-2.5 w-2.5 rounded-full" style={{ background: "#ff8066" }} />
+                  Rodado <span className="font-bold normal-case text-slate-400">(″)</span>
+                </span>
                 <input
                   ref={rimRef}
                   type="text"
@@ -912,24 +926,37 @@ export function TireSizeSearch({
                   onKeyDown={handleKeyDown}
                   placeholder="rodado"
                   aria-label="Rodado del neumático"
-                  className={measureInputClass}
+                  className={`${measureInputClass} h-16 text-2xl placeholder:text-base placeholder:font-bold`}
                 />
-              </div>
+              </label>
 
-              {!forceVoiceButton && hasInput ? (
-                <button type="button" onClick={executeSearch} aria-label="Buscar medida" className={searchButtonClass}>
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <circle cx="11" cy="11" r="7" strokeWidth={3} />
-                    <path strokeLinecap="round" strokeWidth={3} d="M21 21l-4.3-4.3" />
-                  </svg>
-                </button>
-              ) : (
-                <button type="button" onClick={startVoiceForMeasure} aria-label="Ingresar medida por voz" className={voiceButtonClass}>
-                  <svg className="w-5 h-5" viewBox="0 0 82.05 122.88" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                    <path d="M59.89,20.83V52.3c0,27-37.73,27-37.73,0V20.83c0-27.77,37.73-27.77,37.73,0Zm-14.18,76V118.2a4.69,4.69,0,0,1-9.37,0V96.78a40.71,40.71,0,0,1-12.45-3.51A41.63,41.63,0,0,1,12.05,85L12,84.91A41.31,41.31,0,0,1,3.12,71.68,40.73,40.73,0,0,1,0,56a4.67,4.67,0,0,1,8-3.31l.1.1A4.68,4.68,0,0,1,9.37,56a31.27,31.27,0,0,0,2.4,12.06A32,32,0,0,0,29,85.28a31.41,31.41,0,0,0,24.13,0,31.89,31.89,0,0,0,10.29-6.9l.08-.07a32,32,0,0,0,6.82-10.22A31.27,31.27,0,0,0,72.68,56a4.69,4.69,0,0,1,9.37,0,40.65,40.65,0,0,1-3.12,15.65A41.45,41.45,0,0,1,70,85l-.09.08a41.34,41.34,0,0,1-11.75,8.18,40.86,40.86,0,0,1-12.46,3.51Z"/>
-                  </svg>
-                </button>
-              )}
+            </div>
+          )}
+
+          {!compact && (
+            <div className="mt-3 flex gap-2">
+              <button
+                type="button"
+                onClick={() => (hasInput ? executeSearch() : widthRef.current?.focus())}
+                className="flex h-14 min-w-0 flex-1 items-center justify-center gap-2 rounded-xl border border-orange-400 bg-orange-500 px-5 text-base font-black text-white shadow-lg shadow-orange-500/25 transition-colors hover:bg-orange-400"
+              >
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                  <circle cx="11" cy="11" r="7" strokeWidth={3} />
+                  <path strokeLinecap="round" strokeWidth={3} d="M21 21l-4.3-4.3" />
+                </svg>
+                Buscar neumáticos
+              </button>
+              <button
+                type="button"
+                onClick={startVoiceForMeasure}
+                aria-label="Ingresar medida por voz"
+                className={`flex h-14 shrink-0 items-center justify-center gap-2 rounded-xl border px-4 text-sm font-black transition-colors ${listening ? "border-red-400 bg-red-700 text-white" : "border-slate-300 bg-white text-navy-900 hover:border-red-400 hover:text-red-600"}`}
+              >
+                <svg className="h-4 w-4" viewBox="0 0 82.05 122.88" fill="currentColor" aria-hidden="true">
+                  <path d="M59.89,20.83V52.3c0,27-37.73,27-37.73,0V20.83c0-27.77,37.73-27.77,37.73,0Zm-14.18,76V118.2a4.69,4.69,0,0,1-9.37,0V96.78a40.71,40.71,0,0,1-12.45-3.51A41.63,41.63,0,0,1,12.05,85L12,84.91A41.31,41.31,0,0,1,3.12,71.68,40.73,40.73,0,0,1,0,56a4.67,4.67,0,0,1,8-3.31l.1.1A4.68,4.68,0,0,1,9.37,56a31.27,31.27,0,0,0,2.4,12.06A32,32,0,0,0,29,85.28a31.41,31.41,0,0,0,24.13,0,31.89,31.89,0,0,0,10.29-6.9l.08-.07a32,32,0,0,0,6.82-10.22A31.27,31.27,0,0,0,72.68,56a4.69,4.69,0,0,1,9.37,0,40.65,40.65,0,0,1-3.12,15.65A41.45,41.45,0,0,1,70,85l-.09.08a41.34,41.34,0,0,1-11.75,8.18,40.86,40.86,0,0,1-12.46,3.51Z" />
+                </svg>
+                <span className="hidden sm:inline">{listening ? "Escuchando…" : "Por voz"}</span>
+              </button>
             </div>
           )}
 
@@ -1166,6 +1193,7 @@ export function TireSizeSearch({
           </p>
         )}
 
+      </div>
       </div>
     </div>
   );

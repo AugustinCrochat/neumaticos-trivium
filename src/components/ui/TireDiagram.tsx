@@ -12,6 +12,8 @@ type TireDiagramProps = {
   focused?: 'width' | 'aspect' | 'rim' | null;
   onSegmentSelect?: (segment: 'width' | 'aspect' | 'rim') => void;
   compact?: boolean;
+  /** Dibujo chico y sin la leyenda de colores: la etiqueta va sobre cada campo. */
+  slim?: boolean;
   theme?: {
     bg?: string;
     accent?: string;
@@ -38,6 +40,7 @@ export function TireDiagram({
   focused = null,
   onSegmentSelect,
   compact = false,
+  slim = false,
   theme = { accent: "#ff6a3d" }
 }: TireDiagramProps) {
   const cx = 708.06;
@@ -75,7 +78,7 @@ export function TireDiagram({
     <div className={`flex flex-col items-center ${compact ? 'py-1' : 'py-3'}`}>
       <svg
         viewBox="0 0 1416.1177 691.15723"
-        className={`w-full h-auto ${compact ? 'max-w-[200px]' : 'max-w-lg'}`}
+        className={`w-full h-auto ${compact ? 'max-w-[200px]' : slim ? 'max-w-[260px]' : 'max-w-lg'}`}
         xmlns="http://www.w3.org/2000/svg"
       >
         <defs>
@@ -190,7 +193,7 @@ export function TireDiagram({
         </text>
       </svg>
 
-      <div className="mt-1 flex w-full max-w-lg gap-1.5">
+      <div className={`mt-1 w-full max-w-lg gap-1.5 ${slim ? "hidden" : "flex"}`}>
         {(["width", "aspect", "rim"] as const).map((seg) => {
           const on = focused === seg;
           const valor = seg === "width" ? widthStr : seg === "aspect" ? aspectStr : rimStr;
