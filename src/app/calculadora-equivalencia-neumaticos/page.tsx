@@ -163,6 +163,11 @@ export default async function CalculadoraEquivalenciaNeumaticosPage() {
           <div id="calculadora" className="mt-5 scroll-mt-20">
             <EquivalenceCalculator products={productos} />
           </div>
+          <p className="mt-4 text-sm text-slate-300">
+            ¿Ya sabés tu medida?{" "}
+            <Link href="/neumaticos" className="font-black text-white underline underline-offset-4">Buscá neumáticos por medida</Link>{" "}
+            y mirá precio y stock al instante.
+          </p>
         </div>
       </section>
 
@@ -177,7 +182,7 @@ export default async function CalculadoraEquivalenciaNeumaticosPage() {
                 Dos medidas de neumáticos son <strong className="text-navy-900">equivalentes</strong> cuando entran en la misma llanta y su <strong className="text-navy-900">diámetro total difiere hasta un 3 %</strong>. Así la rueda recorre prácticamente la misma distancia por vuelta: el velocímetro marca bien, el ABS y el control de estabilidad leen la velocidad correcta y el auto mantiene su altura.
               </p>
               <p className="mt-4 text-lg leading-relaxed text-slate-600">
-                Sirve cuando no conseguís tu medida original, cuando querés más agarre (más ancho) o más confort (perfil más alto) o cuando evaluás cambiar de rodado.
+                Sirve cuando no conseguís tu medida original, cuando querés más agarre (más ancho) o más confort (perfil más alto) o cuando evaluás cambiar de rodado. Una vez que elegiste la medida, podés <Link href="/neumaticos" className="font-bold text-navy-900 underline underline-offset-4">buscar neumáticos por medida</Link> y ver cuáles hay con stock.
               </p>
             </div>
             <dl className="grid grid-cols-3 gap-3 text-center lg:grid-cols-1">
@@ -312,9 +317,9 @@ export default async function CalculadoraEquivalenciaNeumaticosPage() {
         <div className="mx-auto max-w-6xl px-4">
           <div className="flex flex-wrap items-end justify-between gap-5">
             <Head kicker="Catálogo" title="Neumáticos en stock, medida por medida" dark>
-              Lo más barato con stock de las medidas más pedidas, con colocación y balanceo en nuestro taller de Córdoba.
+              Lo más barato con stock de las medidas más pedidas, con colocación sin cargo en nuestros locales.
             </Head>
-            <Link href="/neumaticos" className="mb-10 rounded-xl bg-orange-500 px-5 py-3 text-sm font-black text-white transition-colors hover:bg-orange-600">Ver todo el catálogo →</Link>
+            <Link href="/neumaticos" className="mb-10 rounded-xl bg-orange-500 px-5 py-3 text-sm font-black text-white transition-colors hover:bg-orange-600">Buscar neumáticos por medida →</Link>
           </div>
           <SizesCatalog
             branch={branch}
