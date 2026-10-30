@@ -29,12 +29,12 @@ import { vehiclesUsingSize } from "@/lib/tire-sizes";
 import { itemListJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Neumáticos por medida en Córdoba: precios, stock y autos",
+  title: "Buscar neumáticos por medida: precio y stock al instante",
   description:
-    "Buscá tu medida de neumático (185/65 R15, 205/55 R16, 175/70 R14 y más) y mirá precio y stock al instante, con los autos que la usan y sus equivalencias. Importación directa: retiro en Córdoba con colocación sin cargo.",
+    "Buscá neumáticos por medida (185/65 R15, 205/55 R16, 175/70 R14 y más) o por tu auto y mirá precio y stock al instante, con las equivalencias de cada medida. Importación directa, colocación sin cargo y 1 año de garantía.",
   alternates: canonical("/neumaticos"),
   openGraph: {
-    title: `Neumáticos económicos por medida — ${SITE_NAME}`,
+    title: `Buscar neumáticos por medida — ${SITE_NAME}`,
     url: "/neumaticos",
     ...poolShare("neumaticos").openGraph,
   },
@@ -73,15 +73,22 @@ const parseMedida = (k: string): TireSize => {
 };
 
 const USOS = [
-  { href: "/neumaticos/ht", titulo: "H/T · Highway Terrain", texto: "Para camionetas y SUV que andan sobre todo en asfalto: silenciosas y cómodas." },
-  { href: "/neumaticos/at", titulo: "A/T · All Terrain", texto: "Para pickups que también salen a tierra y ripio: dibujo más agresivo." },
-  { href: "/neumaticos/carga", titulo: "De carga (C)", texto: "Para utilitarios y furgones: construcción reforzada y más índice de carga." },
-  { href: "/neumaticos-baratos", titulo: "Los más económicos", texto: "Juegos de cuatro a buen precio, de marcas importadas homologadas." },
+  { href: "/neumaticos/ht", titulo: "H/T · Highway Terrain", texto: "Para camionetas y SUV que andan sobre todo en asfalto: silenciosas y cómodas.", foto: "/images/usos/ht.webp" },
+  { href: "/neumaticos/at", titulo: "A/T · All Terrain", texto: "Para pickups que también salen a tierra y ripio: dibujo más agresivo.", foto: "/images/usos/at.webp" },
+  { href: "/neumaticos/carga", titulo: "De carga (C)", texto: "Para utilitarios y furgones: construcción reforzada y más índice de carga.", foto: "/images/usos/carga.webp" },
+];
+
+// Los autos que más se patentan en Argentina en 2026 (Hilux, Cronos, 208 y
+// Ranger al frente según El Cero Km), para entrar por el modelo.
+const AUTOS_POPULARES: [string, string][] = [
+  ["Toyota", "Hilux"], ["Fiat", "Cronos"], ["Peugeot", "208"], ["Ford", "Ranger"],
+  ["Ford", "Territory"], ["Volkswagen", "Amarok"], ["Chevrolet", "Tracker"], ["Toyota", "Yaris"],
+  ["Fiat", "Argo"], ["Fiat", "Strada"], ["Renault", "Kwid"], ["Chevrolet", "Onix"],
 ];
 
 const CONFIANZA = [
   "Colocación sin cargo",
-  "Retiro en el local de Argüello",
+  "Retiro en el local",
   "1 año de garantía de fábrica",
   "Importación directa",
 ];
@@ -147,18 +154,25 @@ export default async function NeumaticosPage() {
     }
     const orden = POPULAR_VEHICLES.map((v) => `${v.brand} ${v.model}`);
     const lista = [...modelos.values()].sort((a, b) => orden.indexOf(a.nombre) - orden.indexOf(b.nombre));
-    const foto = lista.map((m) => vehiclePhoto(m.slug)).find(Boolean) ?? null;
+    // Foto del neumático: el más barato con stock de esa medida.
+    const foto = enStock.filter((p) => sizesEqual(p.size, t)).sort((a, b) => a.price - b.price)[0]?.imageUrl ?? null;
     return { slug, size, t, total: lista.length, nombres: lista.slice(0, 3).map((m) => m.nombre), foto, desde: desde.get(sizeSlug(t)) };
   });
 
-  // Los más económicos con stock de las medidas populares: una tarjeta por medida.
-  const destacados = populares
-    .map(({ t }) => firmes.filter((p) => sizesEqual(p.size, t)).sort((a, b) => a.price - b.price)[0])
-    .filter(Boolean)
-    .slice(0, 8);
+  // Los más baratos de todo el catálogo con stock, de menor a mayor precio y
+  // una tarjeta por medida (si no, un mismo modelo ocuparía toda la fila).
+  const destacados: typeof firmes = [];
+  const vistas = new Set<string>();
+  for (const p of [...(firmes.length ? firmes : enStock)].sort((a, b) => a.price - b.price)) {
+    const k = sizeSlug(p.size);
+    if (vistas.has(k)) continue;
+    vistas.add(k);
+    destacados.push(p);
+    if (destacados.length === 4) break;
+  }
 
-  // Autos más buscados, con foto, para entrar por el modelo.
-  const autos = POPULAR_VEHICLES.filter((v) => vehiclePhoto(vehicleSlug(v.brand, v.model))).slice(0, 12);
+  // Autos más vendidos del país, con foto, para entrar por el modelo.
+  const autos = AUTOS_POPULARES.map(([brand, model]) => ({ brand, model })).filter((v) => vehiclePhoto(vehicleSlug(v.brand, v.model)));
 
   return (
     <div className="bg-white pb-16">
@@ -169,8 +183,9 @@ export default async function NeumaticosPage() {
       />
 
       {/* Héroe: lo primero es encontrar la medida. */}
-      <section className="bg-black px-4 pb-14 pt-8 text-white">
-        <div className="mx-auto max-w-6xl">
+      <section className="bg-black px-4 pb-14 pt-8 text-center text-white">
+        <div className="mx-auto max-w-4xl">
+          <div className="[&_ol]:justify-center">
           <Breadcrumbs
             dark
             crumbs={[
@@ -178,20 +193,29 @@ export default async function NeumaticosPage() {
               { name: "Neumáticos", path: "/neumaticos" },
             ]}
           />
-          <h1 className="mt-4 max-w-3xl text-4xl font-black leading-tight md:text-6xl">
-            Neumáticos por medida <span className="text-orange-500">en Córdoba</span>
+          </div>
+          <h1 className="mt-6 text-balance text-4xl font-black leading-tight md:text-5xl">
+            Buscá tus neumáticos <span className="text-orange-500">por medida</span>
           </h1>
-          <p className="mt-4 max-w-2xl text-lg leading-relaxed text-slate-300">
-            Elegí tu medida o tu auto y mirá en la misma página qué modelos hay, a qué precio y si están en stock ahora.
+          <p className="mx-auto mt-4 max-w-2xl text-lg leading-relaxed text-slate-300">
+            Escribí tu medida o elegí tu auto y mirá en la misma página qué modelos hay, a qué precio y si están en stock ahora.
             Importamos directo de fábrica: sin distribuidor en el medio.
           </p>
-          <div className="mt-8 max-w-2xl rounded-2xl bg-white p-4 text-navy-900 shadow-2xl md:p-6">
+          <div className="mx-auto mt-8 max-w-3xl rounded-3xl bg-white p-4 text-left text-navy-900 shadow-2xl ring-4 ring-white/10 md:p-6">
             <SizeOrVehicleSearch />
           </div>
-          <p className="mt-3 text-sm text-slate-400">
+          <div className="mx-auto mt-5 flex max-w-3xl flex-wrap items-center justify-center gap-2">
+            <span className="text-sm font-bold text-slate-400">Las más pedidas:</span>
+            {populares.slice(0, 5).map((m) => (
+              <Link key={m.slug} href={`/neumaticos/${sizeSlug(m.t)}`} className="rounded-full border border-white/20 px-3 py-1 text-sm font-black !text-white hover:border-orange-500 hover:bg-white/10">
+                {m.size}
+              </Link>
+            ))}
+          </div>
+          <p className="mt-4 text-sm text-slate-400">
             <Link href="/buscador" className="font-bold text-slate-200 underline underline-offset-4">Cómo funciona el buscador</Link>: stock real, equivalentes si tu medida está agotada y búsqueda por auto.
           </p>
-          <ul className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm font-bold text-slate-200">
+          <ul className="mt-6 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm font-bold text-slate-200">
             {CONFIANZA.map((c) => (
               <li key={c} className="flex items-center gap-2">
                 <span aria-hidden="true" className="text-orange-500">✓</span>
@@ -212,22 +236,22 @@ export default async function NeumaticosPage() {
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {populares.map((m) => (
               <div key={m.slug} className="flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-shadow hover:shadow-md">
-                <Link href={`/neumaticos/${sizeSlug(m.t)}`} className="block bg-black px-3 pt-4">
-                  <span className="block text-center text-2xl font-black italic text-white">{m.size}</span>
-                  <span className="mt-1 flex h-28 items-end justify-center">
+                <Link href={`/neumaticos/${sizeSlug(m.t)}`} className="relative block bg-slate-100">
+                  <span className="flex aspect-[4/3] items-center justify-center p-3">
                     {m.foto && (
                       // eslint-disable-next-line @next/next/no-img-element
-                      <img src={m.foto} alt="" loading="lazy" decoding="async" className="max-h-28 w-auto max-w-full object-contain" />
+                      <img src={m.foto} alt={`Neumático ${m.size}`} loading="lazy" decoding="async" className="h-full w-auto max-w-full object-contain mix-blend-multiply" />
                     )}
                   </span>
+                  <span className="absolute left-3 top-3 rounded-lg bg-black px-3 py-1 text-lg font-black italic text-white">{m.size}</span>
                 </Link>
                 <div className="flex flex-1 flex-col p-4">
-                  <p className="text-sm text-slate-600">
-                    {m.nombres.join(", ")}
-                    {m.total > 3 ? ` y ${m.total - 3} modelos más` : ""}
-                  </p>
-                  <p className="mt-2 text-sm font-black text-navy-900">
+                  <p className="text-sm font-black text-navy-900">
                     {m.desde ? `Desde ${money(m.desde)}` : "Consultá stock"}
+                  </p>
+                  <p className="mt-2 text-sm leading-snug text-slate-600">
+                    Lo llevan {m.nombres.join(", ")}
+                    {m.total > 3 ? ` y ${m.total - 3} modelos más` : ""}.
                   </p>
                   <div className="mt-auto flex flex-wrap gap-x-4 gap-y-1 pt-3 text-sm font-bold">
                     <Link href={`/neumaticos/${sizeSlug(m.t)}`} className="text-orange-600 underline underline-offset-2">
@@ -245,10 +269,18 @@ export default async function NeumaticosPage() {
 
         {/* Los más económicos hoy */}
         {destacados.length > 0 && (
-          <section className="pt-14">
-            <h2 className="text-2xl font-black text-navy-900 md:text-3xl">Lo más económico en stock hoy</h2>
-            <p className="mt-2 max-w-2xl text-slate-600">El neumático más barato con stock de cada medida popular.</p>
-            <div className="mt-6 [&_a]:!no-underline">
+          <section className="mt-14 rounded-3xl bg-orange-500 p-5 text-white md:p-8">
+            <div className="flex flex-wrap items-end justify-between gap-3">
+              <div>
+                <p className="text-sm font-black uppercase tracking-widest text-white/80">Precio bajo de verdad</p>
+                <h2 className="mt-1 text-3xl font-black md:text-4xl">Lo más económico en stock hoy</h2>
+                <p className="mt-2 max-w-2xl text-white/90">Los neumáticos nuevos más baratos que tenemos ahora, ordenados de menor a mayor precio.</p>
+              </div>
+              <Link href="/neumaticos-baratos" className="inline-flex min-h-11 items-center rounded-xl bg-black px-5 text-sm font-black !text-white hover:bg-slate-900">
+                Ver todos los económicos →
+              </Link>
+            </div>
+            <div className="mt-6 rounded-2xl bg-white p-3 text-navy-900 sm:p-4 [&_a]:!no-underline">
               <SortedProductGrid
                 className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4"
                 items={destacados.map((p) => ({ product: p, peers: peers.get(p.id) }))}
@@ -287,11 +319,15 @@ export default async function NeumaticosPage() {
         {/* Por uso */}
         <section className="pt-14">
           <h2 className="text-2xl font-black text-navy-900 md:text-3xl">Por tipo de uso</h2>
-          <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-6 grid gap-4 sm:grid-cols-3">
             {USOS.map((u) => (
-              <Link key={u.href} href={u.href} className="rounded-2xl border border-slate-200 bg-slate-50 p-5 transition-colors hover:border-navy-400 hover:bg-white">
-                <span className="block font-black text-navy-900">{u.titulo}</span>
-                <span className="mt-2 block text-sm leading-relaxed text-slate-600">{u.texto}</span>
+              <Link key={u.href} href={u.href} className="group overflow-hidden rounded-2xl border border-slate-200 bg-white transition-colors hover:border-orange-400">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={u.foto} alt={u.titulo} loading="lazy" decoding="async" className="aspect-[4/3] w-full object-cover transition-transform duration-300 group-hover:scale-105" />
+                <span className="block p-5">
+                  <span className="block font-black text-navy-900">{u.titulo}</span>
+                  <span className="mt-2 block text-sm leading-relaxed text-slate-600">{u.texto}</span>
+                </span>
               </Link>
             ))}
           </div>
@@ -389,7 +425,7 @@ export default async function NeumaticosPage() {
         <section className="mt-14 rounded-3xl bg-black p-8 text-white md:p-10">
           <h2 className="text-2xl font-black md:text-3xl">Los colocamos en el momento</h2>
           <p className="mt-3 max-w-2xl text-slate-300">
-            Comprás, retirás y los montamos en el taller de Argüello, con alineado y balanceado si los necesitás.
+            Comprás, retirás y los montamos en el taller del local, con alineado y balanceado si los necesitás.
           </p>
           <div className="mt-5 flex flex-wrap gap-3">
             <Link href="/servicios" className="inline-flex min-h-12 items-center rounded-xl bg-orange-500 px-6 text-sm font-black !text-white hover:bg-orange-600">
