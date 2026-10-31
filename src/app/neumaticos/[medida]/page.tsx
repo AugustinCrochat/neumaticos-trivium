@@ -106,7 +106,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   // modelos de auto entran cuando hay, para captar "neumáticos para <modelo>".
   const partesDescripcion = [
     desde
-      ? `Neumáticos ${label} desde $${desde.toLocaleString("es-AR")} con stock disponible.`
+      ? `Neumáticos y cubiertas ${label} desde $${desde.toLocaleString("es-AR")} con stock disponible.`
       : `Neumáticos ${label}: precios, equivalencias y disponibilidad.`,
     "Colocación sin cargo en el día y garantía de 1 año.",
     vehiculos.length
@@ -115,9 +115,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     "Importación directa, retiro en el local.",
   ].filter(Boolean);
 
+  // "Cubiertas" es como se busca la medida en Argentina ("cubiertas 185 65
+  // r15"); "neumáticos" ya está en el H1 y en la marca que suma el layout.
   const title = desde
-    ? `Neumáticos ${label} desde $${desde.toLocaleString("es-AR")}`
-    : `Neumáticos ${label} — precios y equivalencias`;
+    ? `Cubiertas ${label} desde $${desde.toLocaleString("es-AR")}, colocación sin cargo`
+    : `Cubiertas ${label}: precios, equivalencias y stock`;
 
   return {
     title,

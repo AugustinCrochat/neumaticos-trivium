@@ -5,6 +5,7 @@ import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { AhorroLinks } from "@/components/blog/AhorroLinks";
 import { TallerLinks } from "@/components/blog/TallerLinks";
 import { EquipoHofmann } from "@/components/blog/EquipoHofmann";
+import { ServicioHoyCTA } from "@/components/servicios/ServicioHoyCTA";
 import { canonical } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
@@ -68,6 +69,7 @@ export default function Page() {
         siquiera se parecen. Entender cuál es cuál te sirve para dos cosas: describir bien el
         síntoma cuando llegás al taller, y no pagar por algo que no necesitás.
       </p>
+      <ServicioHoyCTA />
       <DesgasteFoto className="my-8" />
 
       <h2>Balanceo: que la rueda gire sin vibrar</h2>

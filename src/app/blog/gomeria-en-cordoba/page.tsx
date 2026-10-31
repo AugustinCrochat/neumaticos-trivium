@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { canonical } from "@/lib/seo";
+import { ServicioHoyCTA } from "@/components/servicios/ServicioHoyCTA";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "gomeria-en-cordoba";
@@ -63,6 +64,7 @@ export default function Page() {
         alineación antes de gastar un juego entero. Esta guía explica qué hace cada servicio, cuáles
         conviene combinar y qué mirar para elegir bien.
       </p>
+      <ServicioHoyCTA />
 
       <h2>Los servicios de una gomería, uno por uno</h2>
 

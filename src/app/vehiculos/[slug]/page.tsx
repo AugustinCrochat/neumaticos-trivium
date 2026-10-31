@@ -363,7 +363,15 @@ export default async function VehiclePage({ params }: Props) {
             {medidas.map((m) => (
               <div key={sizeSlug(m.size)} className="border-b border-slate-100 pb-12 last:border-0 last:pb-0">
                 <div className="mb-6">
-                  <h2 className="mb-2 text-2xl font-bold text-navy-900">Medida {formatSize(m.size)}</h2>
+                  <h2 className="mb-2 text-2xl font-bold text-navy-900">
+                    {/* El enlace con el texto con que se busca la medida le pasa a
+                        la página de la medida la fuerza de las fichas de auto,
+                        que rankean mejor. */}
+                    Medida{" "}
+                    <Link href={`/neumaticos/${sizeSlug(m.size)}`} className="underline decoration-orange-500 decoration-2 underline-offset-4 hover:text-orange-600">
+                      {formatSize(m.size)}
+                    </Link>
+                  </h2>
                   <p className="text-slate-500">
                     Suele venir de fábrica en versiones como: {m.versions.join(", ") || "varias versiones"}.
                   </p>
@@ -374,6 +382,12 @@ export default async function VehiclePage({ params }: Props) {
                 ) : (
                   <SinStockMedida name={name} size={m.size} profile={m.profile} />
                 )}
+                <Link
+                  href={`/neumaticos/${sizeSlug(m.size)}`}
+                  className="mt-5 inline-block text-sm font-black text-navy-800 underline decoration-orange-500 decoration-2 underline-offset-4 hover:text-orange-600"
+                >
+                  Ver todas las cubiertas {formatSize(m.size)}, equivalencias y precios →
+                </Link>
               </div>
             ))}
           </div>

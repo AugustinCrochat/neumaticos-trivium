@@ -63,7 +63,10 @@ export function PopularSizesSection({ productos }: { productos: TireProduct[] })
             ["/neumaticos-baratos", "Neumáticos baratos", "El mejor precio de cada rodado."],
             ["/neumaticos/at", "Neumáticos A/T", "All Terrain para camionetas y 4x4."],
             ["/neumaticos/carga", "Neumáticos de carga", "Para furgones y utilitarios."],
-            ["/servicios", null, null],
+            // Va directo a la ficha del combo: desde la página más fuerte del
+            // sitio, con el texto "alineado y balanceado", es la señal para que
+            // Google la prefiera a la nota del blog.
+            ["/servicios/combo-alineado-y-balanceado", null, null],
           ] as [string, string | null, string | null][]).map(([href, titulo, detalle]) => (
             <Link
               key={href}

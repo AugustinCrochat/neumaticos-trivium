@@ -60,8 +60,12 @@ function tituloLocal(localidad: Localidad): string {
       ? `Neumáticos baratos en ${localidad.name} — outlet de importación directa`
       : `Neumáticos baratos en ${localidad.name} — precios de outlet, local en ${sucursal.shortName}`;
   }
+  // La cabecera con local abierto (Córdoba) no repite el título de la home:
+  // las dos competían por "neumáticos baratos en Córdoba" y se pisaban. La
+  // home se queda con esa búsqueda; esta apunta a "cubiertas en Córdoba" y a
+  // los barrios, que es lo que la diferencia.
   return localidad.esCabecera
-    ? `Neumáticos baratos en ${localidad.name}: precios y stock hoy, colocación gratis`
+    ? `Cubiertas en ${localidad.name}: ofertas con stock hoy, barrio por barrio`
     : `Neumáticos baratos en ${localidad.name} — precios de outlet a ${localidad.minutosHastaSucursal} min`;
 }
 
@@ -75,6 +79,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const description = branch.provisorio
     ? `Neumáticos baratos para ${localidad.name} a precio de importación directa. ` +
       `Mirá medidas y precios en la web y pasá por nuestro local de ${branch.address}, ${branch.city}.`
+    : localidad.esCabecera && localidad.incluye?.length
+      ? `Cubiertas con stock y precio publicado para ${localidad.name} y sus barrios (${localidad.incluye.slice(0, 4).join(", ")} y más). ` +
+        `Colocación sin cargo en el día en ${branch.address}, a ${localidad.minutosHastaSucursal} minutos del centro.`
     : `Comprá neumáticos baratos en ${localidad.name}, ${localidad.province}, a precio de importación directa. ` +
       `Medidas y precios con stock real, colocación sin cargo en el día y taller de alineación y balanceo en ${branch.address}, a ` +
       `${localidad.minutosHastaSucursal} minutos de ${localidad.name}.`;
@@ -193,7 +200,7 @@ export default async function LocalidadPage({ params }: Props) {
           {localidad.name}, {localidad.province}
         </p>
         <h1 className="text-3xl font-black leading-tight text-navy-900 md:text-5xl">
-          Neumáticos baratos en {localidad.name}
+          {localidad.esCabecera && !branch.provisorio ? `Cubiertas en ${localidad.name}, barrio por barrio` : `Neumáticos baratos en ${localidad.name}`}
         </h1>
         <p className="mt-5 max-w-3xl text-lg leading-relaxed text-slate-600">{localidad.intro}</p>
         <p className="mt-4 max-w-3xl leading-relaxed text-slate-600">{localidad.porQue}</p>
