@@ -94,6 +94,7 @@ export const VEHICLE_PHOTOS = new Set([
   "ford-fiesta",
   "ford-focus",
   "ford-ka",
+  "ford-mondeo",
   "ford-mustang",
   "ford-ranger",
   "ford-ranger-raptor",
