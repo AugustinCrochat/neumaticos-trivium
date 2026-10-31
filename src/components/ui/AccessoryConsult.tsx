@@ -9,6 +9,7 @@ import { getPickupLabel, type PickupTiming } from "@/lib/branch-status";
 import type { Accessory } from "@/lib/types";
 import { isLowStock, stockLabel } from "@/lib/stock";
 import { WhatsAppLink } from "./WhatsAppLink";
+import { mensajeAvisameApertura, waHref } from "@/lib/whatsapp";
 import { DirectionsIcon } from "@/components/ui/DirectionsIcon";
 
 export function AccessoryConsult({ accessory }: { accessory: Accessory }) {
@@ -45,15 +46,24 @@ export function AccessoryConsult({ accessory }: { accessory: Accessory }) {
             Sin stock
           </button>
         )}
-        <a
-          href={selectedBranch.mapUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex-1 flex items-center justify-center gap-2 bg-white border-2 border-navy-900 hover:bg-slate-50 text-navy-900 font-semibold py-3 rounded-xl text-base transition-colors"
-        >
-          <DirectionsIcon className="h-6 w-6 shrink-0" />
-          Cómo llegar
-        </a>
+        {selectedBranch.apertura ? (
+          <WhatsAppLink
+            href={waHref(selectedBranch.whatsapp, mensajeAvisameApertura(selectedBranch.shortName))}
+            className="flex-1 flex items-center justify-center gap-2 bg-white border-2 border-navy-900 hover:bg-slate-50 text-navy-900 font-semibold py-3 rounded-xl text-base transition-colors"
+          >
+            Avisame cuando abra
+          </WhatsAppLink>
+        ) : (
+          <a
+            href={selectedBranch.mapUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-1 flex items-center justify-center gap-2 bg-white border-2 border-navy-900 hover:bg-slate-50 text-navy-900 font-semibold py-3 rounded-xl text-base transition-colors"
+          >
+            <DirectionsIcon className="h-6 w-6 shrink-0" />
+            Cómo llegar
+          </a>
+        )}
       </div>
       </div>
 

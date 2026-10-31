@@ -10,6 +10,7 @@ import { BranchStatusBadge } from "@/app/sucursales/[id]/BranchStatusBadge";
 import { PaymentMethodsSection } from "@/components/ui/PaymentMethodsSection";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 import { DirectionsIcon } from "@/components/ui/DirectionsIcon";
+import { mensajeAvisameApertura, waHref } from "@/lib/whatsapp";
 
 type Foto = { src: string; alt: string };
 type Variante = { label: string; precio: number };
@@ -120,10 +121,20 @@ export function ServicioFicha({
                   <span className="text-4xl font-black text-navy-900">{formatPrecio(variante.precio)}</span>
                   {priceNote && <span className="text-sm font-bold text-slate-500">{priceNote}</span>}
                 </p>
-                <p className="mt-1 flex items-center gap-1.5 text-xs font-bold text-emerald-600">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                  Sin turno · atención por orden de llegada
-                </p>
+                {selectedBranch.apertura || selectedBranch.provisorio ? (
+                  // Los precios del build son los de Argüello: en una sucursal
+                  // que todavía no abrió se aclaran como referencia, sin
+                  // prometer atención por orden de llegada.
+                  <p className="mt-1 text-xs font-bold text-slate-500">
+                    Precio del taller de Argüello (Córdoba).{" "}
+                    {selectedBranch.apertura ? `${selectedBranch.shortName} abre ${selectedBranch.apertura}.` : ""}
+                  </p>
+                ) : (
+                  <p className="mt-1 flex items-center gap-1.5 text-xs font-bold text-emerald-600">
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                    Sin turno · atención por orden de llegada
+                  </p>
+                )}
               </div>
             ) : (
               <p className="rounded-xl border border-slate-100 bg-slate-50 p-4 text-sm text-slate-600">
@@ -152,15 +163,24 @@ export function ServicioFicha({
                 </svg>
                 WhatsApp
               </WhatsAppLink>
-              <a
-                href={selectedBranch.mapUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex flex-1 items-center justify-center gap-2 rounded-xl border-2 border-navy-900 bg-white py-3 text-base font-semibold text-navy-900 transition-colors hover:bg-slate-50"
-              >
-                <DirectionsIcon className="h-6 w-6 shrink-0" />
-                Cómo llegar
-              </a>
+              {selectedBranch.apertura ? (
+                <WhatsAppLink
+                  href={waHref(selectedBranch.whatsapp, mensajeAvisameApertura(selectedBranch.shortName))}
+                  className="flex flex-1 items-center justify-center gap-2 rounded-xl border-2 border-navy-900 bg-white py-3 text-base font-semibold text-navy-900 transition-colors hover:bg-slate-50"
+                >
+                  Avisame cuando abra
+                </WhatsAppLink>
+              ) : (
+                <a
+                  href={selectedBranch.mapUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex flex-1 items-center justify-center gap-2 rounded-xl border-2 border-navy-900 bg-white py-3 text-base font-semibold text-navy-900 transition-colors hover:bg-slate-50"
+                >
+                  <DirectionsIcon className="h-6 w-6 shrink-0" />
+                  Cómo llegar
+                </a>
+              )}
             </div>
 
             {comboVariante && (

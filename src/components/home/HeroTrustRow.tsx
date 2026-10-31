@@ -1,7 +1,6 @@
-import Link from "@/components/ui/Link";
-import { GoogleRatingBadge } from "@/components/ui/GoogleRatingBadge";
 import { MEDIDAS_PRIORITARIAS, formatSize, sizeSlug, sizesEqual } from "@/lib/tire-sizes";
 import type { TireProduct } from "@/lib/types";
+import { HeroChips } from "@/components/home/HeroChips";
 
 const money = (n: number) =>
   new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 }).format(n);
@@ -20,27 +19,15 @@ export function precioAncla(productos: TireProduct[]) {
 
 /**
  * Fila de confianza en la primera pantalla de la home: puntaje de Google, un
- * precio real de la medida más pedida y lo que diferencia al local (colocación
- * sin cargo, sin turno; la garantía ya está en la franja de abajo). Antes sólo estaba la marca: nada que dijera
- * "barato" o "confiable" sin bajar.
+ * precio real de la medida más pedida y lo que diferencia al local. El precio
+ * se calcula acá (catálogo del build); lo que depende de la sucursal elegida
+ * lo resuelve HeroChips en el cliente.
  */
 export function HeroTrustRow({ productos }: { productos: TireProduct[] }) {
   const ancla = precioAncla(productos);
-  const chip = "rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-sm font-bold text-white backdrop-blur-sm";
-
   return (
-    <div className="mt-6 flex flex-wrap items-center gap-2">
-      <GoogleRatingBadge className={`${chip} text-white`} />
-      {ancla && (
-        <Link
-          href={`/neumaticos/${sizeSlug(ancla.size)}`}
-          className="rounded-full bg-orange-500 px-3 py-1.5 text-sm font-black !text-white !no-underline transition-colors hover:bg-orange-600"
-        >
-          {formatSize(ancla.size)} a {money(ancla.precio)}
-        </Link>
-      )}
-      <span className={chip}>Colocación sin cargo</span>
-      <span className={chip}>Sin turno</span>
-    </div>
+    <HeroChips
+      ancla={ancla ? { href: `/neumaticos/${sizeSlug(ancla.size)}`, texto: `${formatSize(ancla.size)} a ${money(ancla.precio)}` } : null}
+    />
   );
 }

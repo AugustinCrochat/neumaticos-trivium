@@ -2,6 +2,7 @@ import Link from "@/components/ui/Link";
 import { TIRE_RIMS } from "@/lib/config";
 import { MEDIDAS_PRIORITARIAS, formatSize, rimSlug, sizeSlug, sizesEqual } from "@/lib/tire-sizes";
 import type { TireProduct } from "@/lib/types";
+import { GomeriaAtajo } from "@/components/home/GomeriaAtajo";
 
 const money = (n: number) =>
   new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 }).format(n);
@@ -58,19 +59,25 @@ export function PopularSizesSection({ productos }: { productos: TireProduct[] })
         </div>
 
         <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {[
+          {([
             ["/neumaticos-baratos", "Neumáticos baratos", "El mejor precio de cada rodado."],
             ["/neumaticos/at", "Neumáticos A/T", "All Terrain para camionetas y 4x4."],
             ["/neumaticos/carga", "Neumáticos de carga", "Para furgones y utilitarios."],
-            ["/servicios", "Gomería: alineación y balanceo", "Por orden de llegada, en Córdoba."],
-          ].map(([href, titulo, detalle]) => (
+            ["/servicios", null, null],
+          ] as [string, string | null, string | null][]).map(([href, titulo, detalle]) => (
             <Link
               key={href}
               href={href}
               className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-navy-400 hover:shadow-md"
             >
-              <span className="block font-black text-navy-900">{titulo}</span>
-              <span className="mt-1 block text-sm text-slate-600">{detalle}</span>
+              {titulo ? (
+                <>
+                  <span className="block font-black text-navy-900">{titulo}</span>
+                  <span className="mt-1 block text-sm text-slate-600">{detalle}</span>
+                </>
+              ) : (
+                <GomeriaAtajo />
+              )}
             </Link>
           ))}
         </div>
