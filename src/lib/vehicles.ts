@@ -717,6 +717,29 @@ export const VEHICLE_DB: VehicleDBEntry[] = [
   { brand: "DS Automobiles", model: "DS 7", sizes: [{ w: "235", p: "50", r: "19" }, { w: "235", p: "45", r: "20" }] },
   { brand: "DS Automobiles", model: "DS 9", sizes: [{ w: "235", p: "45", r: "19" }] },
 
+  // Modelos de mayor patentamiento 2018-2026 que faltaban (DNRPA); medidas de fichas públicas, a confirmar en el taller.
+  { brand: "BAIC", model: "BJ30", sizes: [{ w: "235", p: "60", r: "19" }] },
+  { brand: "Citroen", model: "C-Elysée", sizes: [{ w: "185", p: "65", r: "15" }, { w: "195", p: "55", r: "16" }] },
+  { brand: "Chevrolet", model: "Captiva", sizes: [{ w: "235", p: "55", r: "18" }] },
+  { brand: "Chevrolet", model: "Sonic", sizes: [{ w: "205", p: "50", r: "17" }] },
+  { brand: "BYD", model: "Atto 3", sizes: [{ w: "235", p: "50", r: "18" }] },
+  { brand: "BYD", model: "Seal", sizes: [{ w: "235", p: "45", r: "19" }] },
+  { brand: "Ford", model: "Everest", sizes: [{ w: "255", p: "55", r: "20" }] },
+  { brand: "RAM", model: "Dakota", sizes: [{ w: "265", p: "65", r: "17" }, { w: "265", p: "60", r: "18" }] },
+  { brand: "Renault", model: "Boreal", sizes: [{ w: "205", p: "55", r: "19" }, { w: "225", p: "55", r: "18" }] },
+  { brand: "Fiat", model: "500X", sizes: [{ w: "215", p: "55", r: "17" }, { w: "225", p: "45", r: "18" }] },
+  { brand: "Toyota", model: "C-HR", sizes: [{ w: "215", p: "60", r: "17" }] },
+  { brand: "Toyota", model: "GR86", sizes: [{ w: "215", p: "45", r: "17" }] },
+  { brand: "Jetour", model: "X50", sizes: [{ w: "215", p: "55", r: "18" }] },
+  { brand: "Jetour", model: "T2", sizes: [{ w: "255", p: "55", r: "20" }] },
+  { brand: "JAC", model: "JS4", sizes: [{ w: "215", p: "50", r: "17" }] },
+  { brand: "JAC", model: "JS8", sizes: [{ w: "235", p: "50", r: "19" }] },
+  { brand: "Hyundai", model: "Kona", sizes: [{ w: "215", p: "55", r: "17" }] },
+  { brand: "Suzuki", model: "Baleno", sizes: [{ w: "185", p: "65", r: "15" }, { w: "195", p: "55", r: "16" }] },
+  { brand: "Subaru", model: "WRX", sizes: [{ w: "235", p: "45", r: "17" }, { w: "245", p: "40", r: "18" }] },
+  { brand: "Alfa Romeo", model: "Tonale", sizes: [{ w: "235", p: "50", r: "18" }, { w: "235", p: "45", r: "19" }] },
+  { brand: "Volvo", model: "EX30", sizes: [{ w: "225", p: "55", r: "18" }, { w: "245", p: "45", r: "19" }] },
+
   // Zotye
   { brand: "Zotye", model: "Z100", sizes: [{ w: "165", p: "60", r: "14" }] }
 ].sort((a, b) => a.brand.localeCompare(b.brand) || a.model.localeCompare(b.model));
