@@ -25,6 +25,7 @@ export type VehicleTireProfile = "passenger" | "pickup" | "commercial";
 const COMMERCIAL_MODELS = new Set([
   "Fiat Ducato",
   "Fiat Fiorino",
+  "Iveco Daily",
   "Ford Transit",
   "Mercedes-Benz Sprinter",
   "Peugeot Boxer",
@@ -688,6 +689,33 @@ export const VEHICLE_DB: VehicleDBEntry[] = [
   { brand: "Renault", model: "Scenic", sizes: [{ w: "195", p: "65", r: "15" }] },
   { brand: "Chevrolet", model: "Spark EUV", sizes: [{ w: "215", p: "55", r: "17", version: "102 cv" }] },
   { brand: "Chevrolet", model: "Cobalt", sizes: [{ w: "195", p: "65", r: "15" }] },
+
+  // Marcas que llegaron o crecieron en 2024-2026 (patentamientos DNRPA); medidas de fichas
+  // públicas, a confirmar en el taller con el primer auto de cada modelo.
+  { brand: "Arcfox", model: "T1", sizes: [{ w: "215", p: "55", r: "18" }] },
+  { brand: "Arcfox", model: "S5", sizes: [{ w: "235", p: "55", r: "18" }] },
+  { brand: "GAC", model: "Emkoo", sizes: [{ w: "235", p: "55", r: "19" }] },
+  { brand: "GAC", model: "GS3 Emzoom", sizes: [{ w: "235", p: "45", r: "19" }, { w: "225", p: "55", r: "18" }] },
+  { brand: "GAC", model: "GS8", sizes: [{ w: "255", p: "55", r: "19" }] },
+  { brand: "GAC", model: "Aion UT", sizes: [{ w: "215", p: "55", r: "17" }] },
+  { brand: "Leapmotor", model: "B10", sizes: [{ w: "225", p: "50", r: "18" }, { w: "235", p: "50", r: "18" }] },
+  { brand: "Leapmotor", model: "C10", sizes: [{ w: "245", p: "45", r: "20" }, { w: "235", p: "55", r: "18" }] },
+  { brand: "Lynk & Co", model: "01", sizes: [{ w: "235", p: "50", r: "19" }, { w: "235", p: "45", r: "20" }] },
+  { brand: "Lynk & Co", model: "08", sizes: [{ w: "235", p: "55", r: "19" }, { w: "255", p: "40", r: "21" }] },
+  { brand: "Forthing", model: "T5 EVO", sizes: [{ w: "235", p: "55", r: "19" }] },
+  { brand: "Kaiyi", model: "X3", sizes: [{ w: "215", p: "60", r: "17" }] },
+  { brand: "Kaiyi", model: "X3 Pro", sizes: [{ w: "215", p: "55", r: "18" }] },
+  { brand: "JMEV", model: "Easy 3", sizes: [{ w: "165", p: "65", r: "15" }] },
+  { brand: "Dongfeng", model: "Mage", sizes: [{ w: "235", p: "55", r: "19" }, { w: "235", p: "50", r: "20" }] },
+  { brand: "Dongfeng", model: "Captain W", sizes: [{ w: "215", p: "75", r: "16" }] },
+  { brand: "Maxus", model: "T60", sizes: [{ w: "265", p: "60", r: "18" }] },
+  { brand: "Maxus", model: "T90", sizes: [{ w: "265", p: "60", r: "18" }] },
+  { brand: "Iveco", model: "Daily", sizes: [{ w: "195", p: "75", r: "16" }, { w: "205", p: "70", r: "16" }] },
+  { brand: "Smart", model: "Fortwo", sizes: [{ w: "155", p: "60", r: "15" }, { w: "175", p: "55", r: "15" }] },
+  { brand: "Smart", model: "Forfour", sizes: [{ w: "185", p: "60", r: "15" }, { w: "165", p: "65", r: "15" }] },
+  { brand: "Mazda", model: "3", sizes: [{ w: "195", p: "65", r: "15" }, { w: "205", p: "55", r: "16" }] },
+  { brand: "DS Automobiles", model: "DS 7", sizes: [{ w: "235", p: "50", r: "19" }, { w: "235", p: "45", r: "20" }] },
+  { brand: "DS Automobiles", model: "DS 9", sizes: [{ w: "235", p: "45", r: "19" }] },
 
   // Zotye
   { brand: "Zotye", model: "Z100", sizes: [{ w: "165", p: "60", r: "14" }] }
