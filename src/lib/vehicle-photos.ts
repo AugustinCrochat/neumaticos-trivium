@@ -65,6 +65,7 @@ export const VEHICLE_PHOTOS = new Set([
   "dfsk-c32",
   "dfsk-glory-580",
   "faw-n5",
+  "faw-x40",
   "fiat-147",
   "fiat-600",
   "fiat-argo",
