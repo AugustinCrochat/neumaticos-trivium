@@ -97,7 +97,7 @@ export type Branch = {
       muestra como badge de confianza en el sitio (pedido explicito de la
       politica de Misrepresentation de Merchant Center: "promote your online
       reputation by showing reviews"). Actualizar a mano cuando cambien. */
-  googleRating?: { value: number };
+  googleRating?: { value: number; /** Piso de reseñas que se muestra como "+N"; actualizar a mano. */ count?: number };
   coordinates: {
     lat: number;
     lng: number;
@@ -155,7 +155,7 @@ export const BRANCHES: Branch[] = [
     reviewUrl: "https://g.page/r/CWBPMZ1uJwaREBI/review",
     googleMapsEmbedUrl:
       "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3408.039257943254!2d-64.2649636!3d-31.3302889!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94329d0062c9b4d7%3A0x9106276e9d314f60!2sNeum%C3%A1ticos%20Trivium%20-%20El%20Outlet%20del%20Neum%C3%A1tico!5e0!3m2!1ses!2sar!4v1785420975436!5m2!1ses!2sar",
-    googleRating: { value: 4.9 },
+    googleRating: { value: 4.9, count: 40 },
     coordinates: {
       lat: -31.3302015,
       lng: -64.2650135,

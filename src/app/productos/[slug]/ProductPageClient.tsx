@@ -14,6 +14,7 @@ import { PaymentMethodsSection } from "@/components/ui/PaymentMethodsSection";
 import { CotizadorClient, type CotizadorHandle } from "@/app/cotizador/CotizadorClient";
 import { getPickupLabel, type PickupTiming } from "@/lib/branch-status";
 import { DirectionsIcon } from "@/components/ui/DirectionsIcon";
+import { mensajeAvisameApertura, mensajeAvisameStock, waHref } from "@/lib/whatsapp";
 
 // Debajo de este número el dato no suma confianza (y un "1 vendido" juega en contra).
 const VENDIDOS_MINIMO = 5;
@@ -86,15 +87,26 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
           </svg>
           WhatsApp
         </WhatsAppLink>
-        <a
-          href={selectedBranch.mapUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex-1 flex items-center justify-center gap-2 bg-white border-2 border-navy-900 hover:bg-slate-50 text-navy-900 font-semibold py-3 rounded-xl text-base transition-colors"
-        >
-          <DirectionsIcon className="h-6 w-6 shrink-0" />
-          Cómo llegar
-        </a>
+        {selectedBranch.apertura ? (
+          // A un local que todavía no abrió no hay cómo llegar: se deja el
+          // pedido para avisarle el día de la apertura.
+          <WhatsAppLink
+            href={waHref(selectedBranch.whatsapp, mensajeAvisameApertura(selectedBranch.shortName))}
+            className="flex-1 flex items-center justify-center gap-2 bg-white border-2 border-navy-900 hover:bg-slate-50 text-navy-900 font-semibold py-3 rounded-xl text-base transition-colors"
+          >
+            Avisame cuando abra
+          </WhatsAppLink>
+        ) : (
+          <a
+            href={selectedBranch.mapUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-1 flex items-center justify-center gap-2 bg-white border-2 border-navy-900 hover:bg-slate-50 text-navy-900 font-semibold py-3 rounded-xl text-base transition-colors"
+          >
+            <DirectionsIcon className="h-6 w-6 shrink-0" />
+            Cómo llegar
+          </a>
+        )}
       </div>
 
       <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
@@ -115,6 +127,8 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
               >
                 {pickup?.label ?? "Retiro el mismo día"} · <span className="font-semibold">atendemos por orden de llegada</span>
               </p>
+            ) : selectedBranch.apertura ? (
+              <p className="text-sm font-bold text-navy-700 mt-0.5">Abrimos {selectedBranch.apertura}</p>
             ) : (
               <p className="text-sm font-bold text-red-600 mt-0.5">Sin stock para retiro</p>
             )}
@@ -122,6 +136,14 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
             <div className="mt-2">
               <BranchStatusBadge branch={selectedBranch} />
             </div>
+            {!enStock && !selectedBranch.apertura && (
+              <WhatsAppLink
+                href={waHref(selectedBranch.whatsapp, mensajeAvisameStock(`${product.brand} ${product.model}`, selectedBranch.shortName))}
+                className="mt-2 flex w-full items-center justify-center rounded-xl border-2 border-navy-900 bg-white py-2 text-sm font-black text-navy-900 transition-colors hover:bg-navy-900 hover:text-white"
+              >
+                Avisame cuando entre
+              </WhatsAppLink>
+            )}
             {!enStock && (
               <button
                 onClick={() => openModal()}

@@ -16,7 +16,7 @@ export function GoogleRatingBadge({
 }) {
   const branch = BRANCHES.find((b) => b.googleRating && (!branchId || b.id === branchId));
   if (!branch?.googleRating) return null;
-  const { value } = branch.googleRating;
+  const { value, count } = branch.googleRating;
 
   return (
     <a
@@ -34,6 +34,7 @@ export function GoogleRatingBadge({
         {/* Coma decimal: el resto del sitio ya formatea los precios en es-AR. */}
         {value.toLocaleString("es-AR", { minimumFractionDigits: 1, maximumFractionDigits: 1 })}
         {" en Google"}
+        {count ? ` · +${count} reseñas` : ""}
       </span>
     </a>
   );

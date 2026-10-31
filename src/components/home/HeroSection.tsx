@@ -1,8 +1,10 @@
 import ReactDOM from "react-dom";
 import { SizeOrVehicleSearch } from "@/components/ui/SizeOrVehicleSearch";
 import { BRANCHES } from "@/lib/config";
+import { HeroTrustRow } from "@/components/home/HeroTrustRow";
+import type { TireProduct } from "@/lib/types";
 
-export function HeroSection() {
+export function HeroSection({ productos }: { productos: TireProduct[] }) {
   const foto = BRANCHES[0].facadePhoto;
   // La foto de fondo es el LCP de la portada: en celular bajaba el archivo de
   // escritorio (207 KB, 1445 px) para pintarlo a 412 px. Se sirven tres
@@ -53,6 +55,7 @@ export function HeroSection() {
               con stock real y precio publicado. Retiro en nuestro local de Córdoba con colocación
               incluida, y gomería propia (alineación, balanceo y rotación).
             </p>
+            <HeroTrustRow productos={productos} />
           </div>
 
           {/* Right: search */}

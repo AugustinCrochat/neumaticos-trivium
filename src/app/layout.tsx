@@ -14,6 +14,7 @@ import { LazyOverlays } from "@/components/layout/LazyOverlays";
 import { CartProvider } from "@/contexts/cart-context";
 import { FloatingSearchWidget } from "@/components/ui/FloatingSearchWidget";
 import { FloatingWhatsAppButton } from "@/components/ui/FloatingWhatsAppButton";
+import { MobileContactBar } from "@/components/ui/MobileContactBar";
 import { GoogleReviewsBadge } from "@/components/ui/GoogleReviewsBadge";
 import { GoogleAdsTag } from "@/components/ui/GoogleAdsTag";
 import { getAllVehicleOptions } from "@/lib/vehicles";
@@ -146,6 +147,7 @@ export default function RootLayout({
                 <GoogleReviewsBadge />
                 <main className="flex-1">{children}</main>
                 <Footer />
+                <MobileContactBar />
               </CartProvider>
             </VehicleProvider>
           </LiveStockProvider>

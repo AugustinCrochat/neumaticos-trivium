@@ -1,6 +1,10 @@
 import Link from "@/components/ui/Link";
 import { TIRE_RIMS } from "@/lib/config";
-import { MEDIDAS_PRIORITARIAS, formatSize, rimSlug, sizeSlug } from "@/lib/tire-sizes";
+import { MEDIDAS_PRIORITARIAS, formatSize, rimSlug, sizeSlug, sizesEqual } from "@/lib/tire-sizes";
+import type { TireProduct } from "@/lib/types";
+
+const money = (n: number) =>
+  new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 }).format(n);
 
 /**
  * Grilla de medidas en la home.
@@ -9,17 +13,20 @@ import { MEDIDAS_PRIORITARIAS, formatSize, rimSlug, sizeSlug } from "@/lib/tire-
  * directos desde la página de más autoridad del sitio hacia las landings de
  * medida. Sin esta grilla, esas páginas cuelgan sólo del hub y del footer.
  *
- * NO consulta el catálogo, a propósito. Una versión anterior mostraba acá la
- * cantidad de modelos en stock por medida, lo que obligaba a un fetch al POS
- * para renderizar la home. Como el caché incremental de OpenNext está sin R2
- * (ver open-next.config.ts), la revalidación no persiste entre isolates: cada
- * isolate frío de Cloudflare rehacía el render y esperaba la red, y el primer
- * visitante después de un rato de calma se comía 3 segundos. El dato de stock
- * no valía ese costo en la página más visitada del sitio: quien entra a la
- * medida lo ve ahí, ya con el precio al lado.
+ * Cada tarjeta muestra el precio del neumático más barato con stock de esa
+ * medida: un número concreto invita a entrar más que "Ver precios". El
+ * catálogo llega de la home, que ya lo trae en build (el sitio es estático y
+ * se redespliega cada 2 h, así que no hay fetch en runtime); sin stock, la
+ * tarjeta vuelve a "Ver precios".
  */
-export function PopularSizesSection() {
+export function PopularSizesSection({ productos }: { productos: TireProduct[] }) {
   const medidas = MEDIDAS_PRIORITARIAS.slice(0, 18);
+  const precio = (size: (typeof medidas)[number]) => {
+    const precios = productos
+      .filter((p) => p.enStock !== false && !p.isCarga && sizesEqual(p.size, size))
+      .map((p) => p.price);
+    return precios.length ? Math.min(...precios) : null;
+  };
 
   return (
     <section className="bg-slate-50 py-16">
@@ -41,7 +48,11 @@ export function PopularSizesSection() {
               className="rounded-xl border border-slate-200 bg-white p-4 text-center shadow-sm transition hover:-translate-y-0.5 hover:border-navy-400 hover:shadow-md"
             >
               <span className="font-display block text-xl font-bold tracking-wide text-navy-900">{formatSize(size)}</span>
-              <span className="mt-1 block text-xs font-bold text-slate-500">Ver precios</span>
+              {precio(size) ? (
+                <span className="mt-1 block text-sm font-black text-red-600">{money(precio(size)!)}</span>
+              ) : (
+                <span className="mt-1 block text-xs font-bold text-slate-500">Ver precios</span>
+              )}
             </Link>
           ))}
         </div>

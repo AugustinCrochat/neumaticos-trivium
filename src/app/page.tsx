@@ -68,9 +68,9 @@ export default async function HomePage() {
 
   return (
     <>
-      <HeroSection />
+      <HeroSection productos={productos} />
       <TrustStrip />
-      <PopularSizesSection />
+      <PopularSizesSection productos={productos} />
       <LocalSection />
       <FeaturedProductsSection productos={productos} />
       <AboutSection />

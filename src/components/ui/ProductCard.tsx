@@ -11,6 +11,9 @@ import { groupLabel, isBestPriceLive, type PricePeer } from "@/lib/best-price";
 import { productAlt, productThumb } from "@/lib/image-seo";
 import type { TireProduct } from "@/lib/types";
 import type { ReactNode } from "react";
+import { useBranch } from "@/contexts/branch-context";
+import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
+import { mensajeAvisameApertura, mensajeAvisameStock, waHref } from "@/lib/whatsapp";
 
 function formatPrice(price: number) {
   return new Intl.NumberFormat("es-AR", {
@@ -62,6 +65,7 @@ export function ProductCard({
 
   // Corrige stock/precio horneados en el build con el valor real del POS
   // apenas se resuelve el fetch del catálogo vivo (ver LiveStockProvider).
+  const { selectedBranch: branch } = useBranch();
   const live = useLiveStock(product.id);
   const price = live?.price ?? product.price;
   const stock = live?.stock ?? product.stock;
@@ -194,25 +198,29 @@ export function ProductCard({
             </p>
           )}
 
-          <Link
-            href={`/productos/${product.slug}`}
-            className={`mt-3 flex w-full items-center justify-center gap-1.5 rounded-xl py-2.5 text-sm font-black !text-white !no-underline transition-all ${
-              enStock
-                ? "bg-orange-500 text-white shadow-md shadow-orange-500/20 hover:bg-orange-600 hover:shadow-lg hover:shadow-orange-500/30 active:scale-[0.98]"
-                : "bg-slate-300 text-white pointer-events-none"
-            }`}
-          >
-            {enStock ? (
-              <>
-                Ver detalle
-                <svg className="h-4 w-4 transition-transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-                </svg>
-              </>
-            ) : (
-              "Sin stock"
-            )}
-          </Link>
+          {enStock ? (
+            <Link
+              href={`/productos/${product.slug}`}
+              className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-xl bg-orange-500 py-2.5 text-sm font-black !text-white !no-underline shadow-md shadow-orange-500/20 transition-all hover:bg-orange-600 hover:shadow-lg hover:shadow-orange-500/30 active:scale-[0.98]"
+            >
+              Ver detalle
+              <svg className="h-4 w-4 transition-transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
+          ) : (
+            // Sin stock no es un callejón sin salida: deja el pedido por
+            // WhatsApp para avisarle cuando entre (o cuando abra la sucursal).
+            <>
+              <p className="mt-1.5 text-[11px] font-bold text-slate-500">Sin stock en {branch.shortName}</p>
+              <WhatsAppLink
+                href={waHref(branch.whatsapp, branch.apertura ? mensajeAvisameApertura(branch.shortName) : mensajeAvisameStock(`${product.brand} ${product.model}`, branch.shortName))}
+                className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-xl border-2 border-navy-900 bg-white py-2 text-sm font-black text-navy-900 transition-colors hover:bg-navy-900 hover:text-white"
+              >
+                Avisame cuando entre
+              </WhatsAppLink>
+            </>
+          )}
         </div>
       </div>
     </article>

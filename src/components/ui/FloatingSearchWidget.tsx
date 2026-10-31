@@ -78,7 +78,7 @@ export function FloatingSearchWidget() {
         onFocus={() => setHover(true)}
         onBlur={() => setHover(false)}
         aria-label="Abrir buscador de neumáticos"
-        className="fixed bottom-5 right-5 z-40 sm:bottom-6 sm:right-6 group flex h-14 items-center justify-center border-2 border-white bg-orange-500 hover:bg-orange-600 text-white font-black px-3 rounded-full shadow-xl shadow-navy-900/30 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
+        className="fixed bottom-20 right-4 z-40 sm:bottom-6 sm:right-6 group flex h-14 items-center justify-center border-2 border-white bg-orange-500 hover:bg-orange-600 text-white font-black px-3 rounded-full shadow-xl shadow-navy-900/30 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
       >
         <div className="relative flex h-7 w-7 items-center justify-center">
           <svg

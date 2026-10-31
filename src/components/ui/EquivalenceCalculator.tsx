@@ -4,6 +4,9 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "@/components/ui/Link";
 import { ProductCard } from "@/components/ui/ProductCard";
 import type { TireProduct, TireSize } from "@/lib/types";
+import { useBranch } from "@/contexts/branch-context";
+import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
+import { waHref } from "@/lib/whatsapp";
 
 // Tolerancia estándar de la industria: más de ±3% de diámetro desvía el
 // velocímetro y puede interferir con el ABS y el control de estabilidad.
@@ -144,6 +147,7 @@ export function EquivalenceCalculator({ products }: { products: TireProduct[] })
   const [a, setA] = useState<Fields>({ w: "", p: "", r: "" });
   const [b, setB] = useState<Fields>({ w: "", p: "", r: "" });
   const [copied, setCopied] = useState(false);
+  const { selectedBranch: branch } = useBranch();
   const w2Ref = useRef<HTMLInputElement>(null);
 
   // Link compartido: ?modo=check|list&original=195-65-15&equivalente=205-60-15
@@ -227,6 +231,13 @@ export function EquivalenceCalculator({ products }: { products: TireProduct[] })
     }
     return out.sort((x, y) => Math.abs(diffPercent(s1, x)) - Math.abs(diffPercent(s1, y))).slice(0, 6);
   }, [s1]);
+
+  // Stock y precio más barato de la medida a verificar: el resultado termina en
+  // una oferta concreta, no sólo en un porcentaje.
+  const s2Stock = s2 ? stock.find((e) => same(e.size, s2)) : undefined;
+  const consulta = s1 && s2
+    ? `Hola! Tengo ${label(s1)} y quiero pasar a ${label(s2)}. ¿Me confirman si me sirve y si tienen stock?`
+    : s1 ? `Hola! Busco neumáticos ${label(s1)} o una medida equivalente. ¿Qué tienen?` : "";
 
   const diff = s1 && s2 ? diffPercent(s1, s2) : null;
   const sameRim = !!s1 && !!s2 && s1.rim === s2.rim;
@@ -339,8 +350,13 @@ export function EquivalenceCalculator({ products }: { products: TireProduct[] })
 
               <div className="mt-4 flex flex-wrap items-center gap-3">
                 <Link href={`/neumaticos/${slug(s2)}`} className="rounded-xl bg-orange-500 px-5 py-3 text-sm font-black text-white transition-colors hover:bg-orange-600">
-                  Ver neumáticos {label(s2)} →
+                  {s2Stock
+                    ? `${label(s2)} en stock: ${s2Stock.count === 1 ? "1 modelo" : `${s2Stock.count} modelos`}, el más barato a ${money(s2Stock.from)} →`
+                    : `Ver neumáticos ${label(s2)} →`}
                 </Link>
+                <WhatsAppLink href={waHref(branch.whatsapp, consulta)} className="rounded-xl bg-[#25D366] px-5 py-3 text-sm font-black text-white transition-colors hover:bg-[#1ebe57]">
+                  Consultar por WhatsApp
+                </WhatsAppLink>
                 {shareBtn}
               </div>
 
@@ -376,7 +392,10 @@ export function EquivalenceCalculator({ products }: { products: TireProduct[] })
                 ))}
               </div>
             ) : (
-              <p className="mt-3 rounded-xl bg-slate-50 p-4 text-sm text-slate-600">Hoy no tenemos equivalentes de {label(s1)} en stock. Mirá las que existen más abajo o consultanos: podemos conseguirlas.</p>
+              <p className="mt-3 rounded-xl bg-slate-50 p-4 text-sm text-slate-600">
+                Hoy no tenemos equivalentes de {label(s1)} en stock. Mirá las que existen más abajo o{" "}
+                <WhatsAppLink href={waHref(branch.whatsapp, consulta)} className="font-black text-navy-900 underline decoration-[#25D366] decoration-2 underline-offset-4">consultanos por WhatsApp</WhatsAppLink>: podemos conseguirlas.
+              </p>
             )}
           </div>
           {groups.otherRim.length > 0 && (
