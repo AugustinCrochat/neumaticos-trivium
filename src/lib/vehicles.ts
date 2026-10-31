@@ -729,6 +729,7 @@ export const VEHICLE_DB: VehicleDBEntry[] = [
   { brand: "Renault", model: "Boreal", sizes: [{ w: "205", p: "55", r: "19" }, { w: "225", p: "55", r: "18" }] },
   { brand: "Fiat", model: "500X", sizes: [{ w: "215", p: "55", r: "17" }, { w: "225", p: "45", r: "18" }] },
   { brand: "Toyota", model: "C-HR", sizes: [{ w: "215", p: "60", r: "17" }] },
+  { brand: "Toyota", model: "Innova", sizes: [{ w: "205", p: "65", r: "16" }] },
   { brand: "Toyota", model: "GR86", sizes: [{ w: "215", p: "45", r: "17" }] },
   { brand: "Jetour", model: "X50", sizes: [{ w: "215", p: "55", r: "18" }] },
   { brand: "Jetour", model: "T2", sizes: [{ w: "255", p: "55", r: "20" }] },
