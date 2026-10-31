@@ -13,9 +13,11 @@ export const metadata: Metadata = {
   // servicio en Argentina, y no aparecía en ningún lado del título ni la
   // descripción: la página competía por "alineación" y se quedaba afuera de
   // "gomería en Córdoba" / "gomería cerca".
-  title: "Gomería en Córdoba: alineación, balanceo y montaje",
+  // En Córdoba se busca "alineado y balanceado" (en Buenos Aires,
+  // "alineación y balanceo"): el título usa la forma local.
+  title: "Gomería en Córdoba: alineado, balanceado y colocación sin turno",
   description:
-    "Gomería y taller propio en Córdoba (Argüello): alineación computarizada 3D, balanceo dinámico y arme y desarme de neumáticos a precio económico. Colocación sin cargo comprando las cubiertas en el local.",
+    "Gomería y taller propio en Córdoba (Argüello): alineado computarizado 3D, balanceado dinámico y arme y desarme de neumáticos con precios publicados. Colocación sin cargo comprando las cubiertas en el local. Sin turno.",
   alternates: canonical("/servicios"),
 };
 
@@ -23,7 +25,7 @@ const FAQS = [
   {
     question: "¿Cuánto sale el service en una gomería?",
     answer:
-      "En nuestro taller la colocación y el cambio de válvulas no tienen cargo si comprás las cubiertas en el local. El balanceo y la alineación computarizada 3D se cotizan aparte, y el precio se confirma en el momento por WhatsApp o en el mostrador, según el vehículo.",
+      "En nuestro taller la colocación y el cambio de válvulas no tienen cargo si comprás las cubiertas en el local. El alineado computarizado 3D y el balanceado se cobran aparte, con el precio publicado en la ficha de cada servicio según sea auto o camioneta.",
   },
   {
     question: "¿La gomería tiene stock de todas las medidas?",

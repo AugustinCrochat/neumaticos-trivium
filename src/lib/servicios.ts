@@ -23,8 +23,11 @@ export function splitAutoCamioneta(precios: ServicioPrecio[]) {
 
 /**
  * En Córdoba (sucursal Argüello) el taller y la gente dicen "alineado" y
- * "balanceado" en vez de "alineación" y "balanceo". Es solo el nombre que se
- * muestra: los títulos SEO y las descripciones siguen con el término general.
+ * "balanceado" en vez de "alineación" y "balanceo", y así se busca en Google
+ * desde Córdoba. Esto cambia el nombre que se muestra según la sucursal; los
+ * títulos SEO de las fichas (servicios-seo.ts) también usan "alineado y
+ * balanceado" porque esas páginas son de Córdoba. Para Buenos Aires va
+ * "alineación y balanceo".
  */
 const NOMBRES_ARGUELLO: Record<string, string> = {
   alineacion: "Alineado",

@@ -84,6 +84,7 @@ export function Footer() {
                 { href: "/servicios", label: "Gomería y servicios" },
                 { href: "/blog", label: "Blog" },
                 { href: "/sucursales", label: "Sucursales" },
+                { href: "/sobre-trivium", label: "Sobre Trivium" },
                 { href: "/contacto", label: "Contacto" },
                 { href: "/mapa-del-sitio", label: "Todas las páginas →" },
               ].map((link) => (

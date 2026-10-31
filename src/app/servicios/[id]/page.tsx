@@ -8,7 +8,7 @@ import { getServiciosPrecios } from "@/lib/pos-api";
 import { getSelectedBranchSlug } from "@/lib/branch-server";
 import { splitAutoCamioneta } from "@/lib/servicios";
 import { FaqSection } from "@/components/seo/FaqSection";
-import { COMBO_ID, COMBO_SERVICE, EXTRA_SERVICES, SERVICIOS_SEO } from "@/lib/servicios-seo";
+import { COMBO_ID, COMBO_SERVICE, EXTRA_SERVICES, SERVICIOS_SEO, conPrecios, preciosTaller } from "@/lib/servicios-seo";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { HorarioBloque } from "@/components/tools/HorarioBloque";
 import { ServicioFicha } from "./ServicioFicha";
@@ -32,9 +32,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const service = findService(id);
   if (!service) return {};
   const seo = SERVICIOS_SEO[service.id];
+  const p = preciosTaller(await getServiciosPrecios(undefined, await getSelectedBranchSlug()));
   return {
-    title: seo?.title ?? service.title,
-    description: seo?.metaDescription ?? service.description,
+    title: (seo?.titleConPrecio && conPrecios(seo.titleConPrecio, p)) || (seo?.title ?? service.title),
+    description: (seo?.metaDescriptionConPrecio && conPrecios(seo.metaDescriptionConPrecio, p)) || (seo?.metaDescription ?? service.description),
     alternates: canonical(`/servicios/${service.id}`),
   };
 }
@@ -53,6 +54,13 @@ export default async function ServicioPage({ params }: Props) {
   const ofreceCombo = service.id === "alineacion" || service.id === "balanceo";
   const ofreceNeumaticos = ofreceCombo || service.id === COMBO_ID;
   const comboPrecios = splitAutoCamioneta(ofreceCombo ? await getServiciosPrecios("combo", await getSelectedBranchSlug()) : []);
+  // Las preguntas con {precio} se completan con el POS del build; si falta un
+  // precio, esa pregunta no se muestra en vez de quedar con un hueco.
+  const preciosSeo = preciosTaller(await getServiciosPrecios(undefined, await getSelectedBranchSlug()));
+  const faqs = (seo?.faqs ?? []).flatMap((f) => {
+    const answer = conPrecios(f.answer, preciosSeo);
+    return answer ? [{ ...f, answer }] : [];
+  });
 
   return (
     <div className="min-h-screen bg-white">
@@ -129,7 +137,7 @@ export default async function ServicioPage({ params }: Props) {
                 )}
               </section>
             ))}
-            <FaqSection faqs={seo.faqs} />
+            <FaqSection faqs={faqs} />
             {ofreceNeumaticos && <EquipoHofmann />}
             <section>
               <h2 className="text-xl font-black text-navy-900 mb-3">Más información</h2>

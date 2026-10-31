@@ -19,7 +19,9 @@ Neumáticos comerciales con la C después del rodado (por ejemplo 195/70 R15C, 2
 
 ## Gomería y taller
 
-Local propio en Córdoba (Argüello) con taller integrado: alineación computarizada 3D, balanceo dinámico y arme/desarme de neumáticos. La colocación y el cambio de válvulas son sin cargo al comprar las cubiertas en el local. Atención por orden de llegada, sin sistema de turnos.
+Local propio en Córdoba (Argüello) con taller integrado: alineado computarizado 3D, balanceado dinámico y arme/desarme de neumáticos (en Córdoba se dice "alineado y balanceado"; en Buenos Aires, "alineación y balanceo"). La colocación y el cambio de válvulas son sin cargo al comprar las cubiertas en el local. Atención por orden de llegada, sin sistema de turnos. Precios publicados del combo, del alineado y del balanceado: https://neumaticos.trivium.ar/servicios/combo-alineado-y-balanceado
+
+Datos de la empresa (razón social, local, garantía, cantidad de alineados del taller): https://neumaticos.trivium.ar/sobre-trivium
 
 ## Buscador de neumáticos
 

@@ -1,9 +1,16 @@
 import type { Service } from "@/lib/types";
+import type { ServicioPrecio } from "@/lib/pos-api";
+import { formatPrecio, splitAutoCamioneta } from "@/lib/servicios";
 
 export type ServicioSeo = {
   /** Título de la pestaña/SERP (el layout le suma " — Neumáticos Trivium"). */
   title: string;
+  /** Variante con precio ({comboAuto}, etc.): se usa sólo si el POS devolvió
+      todos los precios que nombra; si no, queda `title`. Un precio en el
+      título de Google sube el CTR de búsquedas como "alineado y balanceado". */
+  titleConPrecio?: string;
   metaDescription: string;
+  metaDescriptionConPrecio?: string;
   h1: string;
   /** Párrafos introductorios visibles, con las frases que busca la gente. */
   intro: string[];
@@ -83,18 +90,63 @@ export const COMBO_SERVICE: Service = {
   ],
 };
 
+/** Precios del taller por clave, para completar textos con {clave}. */
+export type PreciosTaller = Partial<Record<"comboAuto" | "comboCamioneta" | "alineadoAuto" | "alineadoCamioneta" | "balanceoAuto" | "balanceoCamioneta", number>>;
+
+export function preciosTaller(todos: ServicioPrecio[]): PreciosTaller {
+  const grupo = (g: string) => splitAutoCamioneta(todos.filter((s) => s.grupo === g));
+  const combo = grupo("combo"), alineado = grupo("alineacion"), balanceo = grupo("balanceo");
+  return {
+    comboAuto: combo.auto?.precio,
+    comboCamioneta: combo.camioneta?.precio,
+    alineadoAuto: alineado.auto?.precio,
+    alineadoCamioneta: alineado.camioneta?.precio,
+    balanceoAuto: balanceo.auto?.precio,
+    balanceoCamioneta: balanceo.camioneta?.precio,
+  };
+}
+
+/** Reemplaza {clave} por el precio. Devuelve null si falta alguno, para que
+    quien llama use el texto sin precio en vez de uno con un hueco. */
+export function conPrecios(texto: string, p: PreciosTaller): string | null {
+  let falta = false;
+  const out = texto.replace(/\{(\w+)\}/g, (_, k: keyof PreciosTaller) => {
+    const v = p[k];
+    if (!v) { falta = true; return ""; }
+    return formatPrecio(v);
+  });
+  return falta ? null : out;
+}
+
+/**
+ * Datos reales del taller de Argüello (órdenes de trabajo del POS, agosto a
+ * octubre de 2026): cantidad de autos alineados y tiempo de trabajo. Le dan a
+ * la página algo que ninguna otra gomería publica, y a un buscador o una IA
+ * un dato concreto para citar. Actualizar a mano cada tanto.
+ */
+export const DATOS_TALLER = {
+  periodo: "agosto a octubre de 2026",
+  alineados: 603,
+  ruedasBalanceadas: 888,
+  minutosMediana: 39,
+};
+
 /** Páginas de servicio fuera del listado y sin precio propio en el POS. */
 export const EXTRA_SERVICES: Service[] = [ROTACION_SERVICE, PINCHADURAS_SERVICE, TUERCAS_SERVICE];
 
 export const SERVICIOS_SEO: Record<string, ServicioSeo> = {
   [COMBO_ID]: {
-    title: "Combo de alineado y balanceado en Córdoba",
+    title: "Alineado y balanceado en Córdoba: precio y sin turno",
+    titleConPrecio: "Alineado y balanceado en Córdoba: {comboAuto} el auto, sin turno",
     metaDescription:
-      "Combo de alineado 3D y balanceado de las cuatro ruedas con rotación incluida en Córdoba (Argüello): todo en una visita y a menor precio que por separado. Sin turno, por orden de llegada.",
-    h1: "Combo de alineado y balanceado en Córdoba",
+      "Alineado 3D y balanceado de las cuatro ruedas con rotación incluida en Córdoba (Argüello): todo en una visita y a menor precio que por separado. Sin turno, por orden de llegada.",
+    metaDescriptionConPrecio:
+      "Alineado 3D + balanceado de las 4 ruedas con rotación en Argüello, Córdoba: {comboAuto} el auto y {comboCamioneta} la camioneta. Sin turno, por orden de llegada, en unos 40 minutos.",
+    h1: "Alineado y balanceado en Córdoba",
     intro: [
       "El combo junta lo que casi siempre hace falta al mismo tiempo: alinear el auto y balancear las cuatro ruedas, con la rotación incluida. Es lo que más conviene hacer cuando se cambian las cubiertas o después de un golpe fuerte, y sale menos que contratar cada servicio por separado.",
       "Lo hacemos en nuestra gomería de Argüello, Córdoba, con alineadora 3D y balanceadora computarizada. Atendemos por orden de llegada, sin turno.",
+      `Entre ${DATOS_TALLER.periodo} alineamos ${DATOS_TALLER.alineados} vehículos en el taller de Argüello, y la mitad de los trabajos con alineado se terminó en menos de ${DATOS_TALLER.minutosMediana} minutos desde que el auto entró al elevador.`,
     ],
     secciones: [
       {
@@ -123,14 +175,19 @@ export const SERVICIOS_SEO: Record<string, ServicioSeo> = {
           "Alineado computarizado 3D, balanceado de las cuatro ruedas y la rotación, en la misma visita. El precio publicado en esta página es el del combo completo, según sea auto o camioneta.",
       },
       {
+        question: "¿Cuánto sale el alineado y balanceado en Córdoba?",
+        answer:
+          "En nuestro taller de Argüello el combo de alineado 3D y balanceado de las cuatro ruedas, con rotación, cuesta {comboAuto} para auto y {comboCamioneta} para camioneta. Es el precio de lista del día, sin turno ni recargos.",
+      },
+      {
         question: "¿Es más barato que hacerlos por separado?",
         answer:
-          "Sí: el combo cuesta menos que sumar el alineado y los cuatro balanceados por separado. Podés comparar el precio del combo con los de la ficha de alineado y de balanceado.",
+          "Sí. En un auto, el alineado solo sale {alineadoAuto} y cada rueda balanceada {balanceoAuto}: hechos por separado suman más que el combo de {comboAuto}, que además incluye la rotación.",
       },
       {
         question: "¿Cuánto tarda?",
         answer:
-          "Depende de la cola del día. Atendemos por orden de llegada, y podés consultar por WhatsApp el tiempo de espera estimado antes de venir.",
+          `El trabajo en sí lleva unos 40 minutos en un auto (la mitad de los alineados de ${DATOS_TALLER.periodo} se terminó en menos de ${DATOS_TALLER.minutosMediana} minutos) y un poco más en una camioneta. A eso se suma la espera según la cola del día: atendemos por orden de llegada y en la web podés ver a qué hora suele estar más tranquilo.`,
       },
       {
         question: "¿Si compro los neumáticos conviene hacer el combo?",
@@ -144,13 +201,17 @@ export const SERVICIOS_SEO: Record<string, ServicioSeo> = {
     ],
   },
   alineacion: {
-    title: "Alineación computarizada 3D en Córdoba",
+    title: "Alineado 3D en Córdoba: precio y sin turno",
+    titleConPrecio: "Alineado 3D en Córdoba: {alineadoAuto} el auto, sin turno",
     metaDescription:
-      "Alineación computarizada 3D en Córdoba (Argüello): corregimos camber, caster y convergencia para que el auto no tire, el volante quede derecho y las cubiertas duren más. Sin turno, por orden de llegada.",
-    h1: "Alineación computarizada 3D en Córdoba",
+      "Alineado computarizado 3D en Córdoba (Argüello): corregimos camber, caster y convergencia para que el auto no tire, el volante quede derecho y las cubiertas duren más. Sin turno, por orden de llegada.",
+    metaDescriptionConPrecio:
+      "Alineado computarizado 3D en Argüello, Córdoba: {alineadoAuto} el auto y {alineadoCamioneta} la camioneta. Para que no tire y las cubiertas no se coman un costado. Sin turno, por orden de llegada.",
+    h1: "Alineado computarizado 3D en Córdoba",
     intro: [
       "La alineación deja las cuatro ruedas en el ángulo que indica el fabricante. Con los ángulos bien, el auto va derecho sin que corrijas el volante, frena más estable y los neumáticos se gastan parejo en lugar de comerse un costado.",
-      "Hacemos alineación computarizada 3D en nuestra gomería de Argüello, Córdoba. Medimos los ángulos, los corregimos y te dejamos el resultado antes y después. Atendemos por orden de llegada, sin turno.",
+      "Hacemos alineado computarizado 3D (la alineación, como se la llama en otras provincias) en nuestra gomería de Argüello, Córdoba. Medimos los ángulos, los corregimos y te dejamos el resultado antes y después. Atendemos por orden de llegada, sin turno.",
+      `Entre ${DATOS_TALLER.periodo} alineamos ${DATOS_TALLER.alineados} vehículos en Argüello: es el servicio que más hacemos después de la colocación de cubiertas.`,
     ],
     secciones: [
       {
@@ -183,6 +244,11 @@ export const SERVICIOS_SEO: Record<string, ServicioSeo> = {
           "No. La alineación corrige los ángulos de las ruedas respecto del auto; el balanceo compensa el peso de cada conjunto rueda-neumático para que no vibre. Se hacen juntos al cambiar neumáticos, pero resuelven problemas distintos: la alineación, que el auto tire o se gaste mal la cubierta; el balanceo, la vibración en el volante.",
       },
       {
+        question: "¿Cuánto sale alinear el auto en Córdoba?",
+        answer:
+          "En nuestro taller de Argüello el alineado 3D cuesta {alineadoAuto} para auto y {alineadoCamioneta} para camioneta. Si además balanceás las cuatro ruedas, el combo sale {comboAuto} en auto.",
+      },
+      {
         question: "¿Necesito turno para alinear en Córdoba?",
         answer:
           "No. Atendemos por orden de llegada en el local de Argüello. Podés escribirnos por WhatsApp antes para confirmar el precio según tu vehículo.",
@@ -199,12 +265,15 @@ export const SERVICIOS_SEO: Record<string, ServicioSeo> = {
     ],
   },
   balanceo: {
-    title: "Balanceo y rotación de ruedas en Córdoba",
+    title: "Balanceado y rotación de ruedas en Córdoba: precio por rueda",
+    titleConPrecio: "Balanceado en Córdoba: {balanceoAuto} por rueda, sin turno",
     metaDescription:
-      "Balanceo dinámico computarizado y rotación de ruedas en Córdoba (Argüello): eliminamos la vibración del volante y repartimos el desgaste de las cubiertas. Por orden de llegada, sin turno.",
-    h1: "Balanceo y rotación de ruedas en Córdoba",
+      "Balanceado dinámico computarizado y rotación de ruedas en Córdoba (Argüello): eliminamos la vibración del volante y repartimos el desgaste de las cubiertas. Por orden de llegada, sin turno.",
+    metaDescriptionConPrecio:
+      "Balanceado dinámico y rotación de ruedas en Argüello, Córdoba: {balanceoAuto} por rueda en auto y {balanceoCamioneta} en camioneta. Chau vibración en el volante. Sin turno, por orden de llegada.",
+    h1: "Balanceado y rotación de ruedas en Córdoba",
     intro: [
-      "Si el volante vibra a cierta velocidad, lo más probable es que alguna rueda esté desbalanceada. El balanceo dinámico compensa con contrapesos la diferencia de peso de cada conjunto llanta-neumático y elimina la vibración.",
+      "Si el volante vibra a cierta velocidad, lo más probable es que alguna rueda esté desbalanceada. El balanceado dinámico compensa con contrapesos la diferencia de peso de cada conjunto llanta-neumático y elimina la vibración.",
       "En nuestra gomería de Argüello, Córdoba, también hacemos la rotación de ruedas: pasamos las cubiertas de lugar según la tracción del auto para que el desgaste sea parejo y el juego completo dure más.",
     ],
     secciones: [
@@ -237,9 +306,9 @@ export const SERVICIOS_SEO: Record<string, ServicioSeo> = {
           "No tiene un intervalo fijo: se balancea al montar neumáticos nuevos y cada vez que aparece vibración. Muchos conductores lo repiten al rotar las ruedas, cada 8.000 a 10.000 km.",
       },
       {
-        question: "¿El balanceo se hace por rueda?",
+        question: "¿El balanceado se cobra por rueda?",
         answer:
-          "Sí, se cotiza por rueda. El precio depende del tipo de vehículo; escribinos por WhatsApp y te lo confirmamos.",
+          "Sí: {balanceoAuto} por rueda en auto y {balanceoCamioneta} en camioneta. Si además alineás, el combo con las cuatro ruedas balanceadas sale {comboAuto} en auto.",
       },
     ],
     relacionados: [

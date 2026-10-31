@@ -116,6 +116,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url("/terminos", 0.2, "yearly"),
     url("/privacidad", 0.2, "yearly"),
     url("/garantia-neumaticos", 0.6, "monthly"),
+    url("/sobre-trivium", 0.5, "monthly"),
     url("/politica-de-devoluciones", 0.3, "yearly"),
     url("/arrepentimiento", 0.3, "yearly"),
   ];
