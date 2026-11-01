@@ -1,6 +1,6 @@
 import Link from "@/components/ui/Link";
+import { AtencionLocal } from "@/components/ui/SucursalBits";
 import type { TireProduct } from "@/lib/types";
-import { BRANCHES } from "@/lib/config";
 import { SortedProductGrid } from "@/components/ui/SortedProductGrid";
 import { bestPriceByGroup, peersByGroup } from "@/lib/best-price";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
@@ -101,7 +101,6 @@ export function EjeLanding({ eje, valor, productos }: { eje: Eje; valor: number;
   const peers = peersByGroup(delEje);
   const enStock = delEje.filter((p) => p.enStock);
   const desde = enStock.length ? Math.min(...enStock.map((p) => p.price)) : null;
-  const branch = BRANCHES[0];
 
   const enCatalogo = sizesFromCatalog(delEje);
   const medidasConStock = new Set(enStock.map((p) => sizeSlug(p.size))).size;
@@ -267,7 +266,7 @@ export function EjeLanding({ eje, valor, productos }: { eje: Eje; valor: number;
         <h2 className="text-xl font-black text-navy-900">¿No encontrás tu medida?</h2>
         <p className="mt-2 max-w-2xl leading-relaxed text-slate-600">
           Escribinos con la medida que buscás y te decimos si la tenemos, cuándo ingresa o qué equivalencia te
-          sirve. Atendemos de {branch.hours.toLowerCase()} en {branch.address}, {branch.city}.
+          sirve. <AtencionLocal />
         </p>
         <div className="mt-5 flex flex-wrap gap-3">
           <Link

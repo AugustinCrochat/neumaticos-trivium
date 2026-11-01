@@ -1,4 +1,5 @@
 import Link from "@/components/ui/Link";
+import { AtencionLocal } from "@/components/ui/SucursalBits";
 import type { TireProduct } from "@/lib/types";
 import { BRANCHES, TIRE_RIMS } from "@/lib/config";
 import { SortedProductGrid } from "@/components/ui/SortedProductGrid";
@@ -59,7 +60,6 @@ export function RimLanding({ rim, productos }: { rim: number; productos: TirePro
   const peers = peersByGroup(delRodado);
   const enStock = delRodado.filter((p) => p.enStock);
   const desde = enStock.length ? Math.min(...enStock.map((p) => p.price)) : null;
-  const branch = BRANCHES[0];
   const { anchos, perfiles } = anchosYPerfiles(productos);
 
   // Medidas de este rodado: las que hay en catálogo primero, después las
@@ -196,8 +196,7 @@ export function RimLanding({ rim, productos }: { rim: number; productos: TirePro
         <h2 className="text-xl font-black text-navy-900">¿No encontrás tu medida?</h2>
         <p className="mt-2 max-w-2xl leading-relaxed text-slate-600">
           Escribinos con la medida que buscás y te decimos si la tenemos, cuándo ingresa o qué
-          equivalencia te sirve. Atendemos de {branch.hours.toLowerCase()} en {branch.address},{" "}
-          {branch.city}.
+          equivalencia te sirve. <AtencionLocal />
         </p>
         <div className="mt-5 flex flex-wrap gap-3">
           <Link

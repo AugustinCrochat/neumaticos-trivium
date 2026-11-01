@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useBranch } from "@/contexts/branch-context";
+import { useLiveStockMap } from "@/contexts/live-stock-context";
 
 function formatPrice(price: number) {
   return new Intl.NumberFormat("es-AR", {
@@ -21,19 +23,61 @@ type FlotationOrigin = { label: string; width: number; profile: number; rim: num
  * como protagonista y el métrico como aclaración — no al revés, que es como
  * lo escribe/reconoce el usuario que tipeó "31x10.5R15".
  */
+type Item = { id: string; price: number; enStock: boolean };
+
+/**
+ * Cuántos modelos hay y desde cuánto, para la sucursal elegida: parte de lo
+ * horneado en el build (Argüello) y lo corrige con el stock vivo de esa
+ * sucursal. Una sucursal por abrir no tiene stock propio: sólo el precio.
+ */
+function useResumen(items: Item[]) {
+  const { selectedBranch: b } = useBranch();
+  const live = useLiveStockMap();
+  const vistos = items.map((i) => {
+    const l = live[i.id];
+    return { price: l?.price ?? i.price, enStock: l?.enStock ?? i.enStock };
+  });
+  const enStock = vistos.filter((i) => i.enStock);
+  const desdeSiempre = vistos.length ? Math.min(...vistos.map((i) => i.price)) : null;
+  return {
+    b,
+    cantidad: enStock.length,
+    desde: enStock.length ? Math.min(...enStock.map((i) => i.price)) : null,
+    desdeSiempre,
+    lugar: b.province === "Córdoba" ? b.city : b.shortName,
+  };
+}
+
+/** Texto largo de la landing (de dónde vienen las cubiertas y cómo se paga), debajo del listado. */
+export function SizeNota({ items, label }: { items: Item[]; label: string }) {
+  const { b, cantidad, lugar } = useResumen(items);
+  if (b.apertura) {
+    return (
+      <p className="mt-6 max-w-3xl leading-relaxed text-slate-600">
+        Son cubiertas de importación directa y el precio publicado es el que se cobra en el mostrador. El local de {b.shortName}{" "}
+        abre {b.apertura}: escribinos por WhatsApp y te avisamos cuando haya stock de {label}.
+      </p>
+    );
+  }
+  if (cantidad === 0) return null;
+  return (
+    <p className="mt-6 max-w-3xl leading-relaxed text-slate-600">
+      Son cubiertas de importación directa, con stock físico en el local de {lugar}. El precio que ves es el que pagás: sin
+      sorpresas al llegar al mostrador.
+    </p>
+  );
+}
+
 export function SizeHeader({
   size,
   label,
-  enStockCount,
-  desde,
-  branchCity,
+  items,
 }: {
   size: { width: number; profile: number; rim: number };
   label: string;
-  enStockCount: number;
-  desde: number | null;
-  branchCity: string;
+  items: Item[];
 }) {
+  const { b, cantidad: enStockCount, desde, desdeSiempre } = useResumen(items);
   const [origin, setOrigin] = useState<FlotationOrigin | null>(null);
 
   useEffect(() => {
@@ -63,26 +107,31 @@ export function SizeHeader({
       {origin && (
         <p className="mt-2 text-sm font-bold text-slate-500">Equivalente métrico: {label}</p>
       )}
-      <p className="mt-4 max-w-3xl text-lg leading-relaxed text-slate-600">
-        {enStockCount > 0 ? (
+      <p className="mt-3 max-w-3xl text-lg leading-snug text-slate-600">
+        {b.apertura ? (
           <>
-            Tenemos <strong className="text-navy-900">{enStockCount}</strong>{" "}
-            {enStockCount === 1 ? "modelo disponible" : "modelos disponibles"} en medida {displayLabel}
-            {desde && (
+            {b.shortName} abre {b.apertura}.
+            {desdeSiempre && (
               <>
-                {" "}
-                desde <strong className="text-navy-900">{formatPrice(desde)}</strong> por unidad
+                {" "}Precio desde <strong className="text-navy-900">{formatPrice(desdeSiempre)}</strong> por unidad.
               </>
             )}
-            . Son cubiertas de importación directa, con stock físico en el local de {branchCity}. El precio que ves es el que pagás: sin sorpresas al llegar al
-            mostrador.
+          </>
+        ) : enStockCount > 0 ? (
+          <>
+            <strong className="text-navy-900">{enStockCount}</strong>{" "}
+            {enStockCount === 1 ? "modelo disponible" : "modelos disponibles"}
+            {desde && (
+              <>
+                {" "}desde <strong className="text-navy-900">{formatPrice(desde)}</strong> por unidad
+              </>
+            )}
+            .
           </>
         ) : (
           <>
-            Ahora mismo no tenemos stock en medida {displayLabel}, pero recibimos mercadería todas
-            las semanas. Abajo vas a encontrar las medidas equivalentes que sí están disponibles y
-            el detalle técnico de {displayLabel} para chequear cuál te sirve. También podés
-            escribirnos por WhatsApp y te avisamos apenas ingrese.
+            Ahora mismo no hay stock en medida {displayLabel}. Abajo están las medidas equivalentes que sí hay, y podés
+            escribirnos por WhatsApp para que te avisemos apenas ingrese.
           </>
         )}
       </p>

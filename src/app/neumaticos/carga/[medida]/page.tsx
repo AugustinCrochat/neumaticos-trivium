@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { AtencionLocal, WhatsAppSucursal } from "@/components/ui/SucursalBits";
 import Link from "@/components/ui/Link";
 import { notFound } from "next/navigation";
 import { BRANCHES, DEFAULT_BRANCH_ID } from "@/lib/config";
@@ -18,7 +19,6 @@ import { FaqSection } from "@/components/seo/FaqSection";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { SortedProductGrid } from "@/components/ui/SortedProductGrid";
 import { bestPriceByGroup, peersByGroup } from "@/lib/best-price";
-import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 import { poolShare } from "@/lib/share-image";
 import { FotoCarga } from "../CargaExtra";
 
@@ -268,15 +268,14 @@ export default async function CargaMedidaPage({ params }: Props) {
           ¿Dudas con tu <span className="text-[#ff1e00]">medida</span>?
         </h2>
         <p className="mt-2 max-w-xl text-slate-300">
-          Pasanos marca, modelo y año del vehículo y te confirmamos la medida y el índice de carga correctos. Atendemos
-          en {branch.address}, {branch.city}.
+          Pasanos marca, modelo y año del vehículo y te confirmamos la medida y el índice de carga correctos. <AtencionLocal conHorario={false} />
         </p>
-        <WhatsAppLink
-          href={`https://wa.me/${branch.whatsapp}?text=${encodeURIComponent(`Hola! Consulto por neumáticos ${label}`)}`}
+        <WhatsAppSucursal
+          texto={`Hola! Consulto por neumáticos ${label}`}
           className="mt-4 inline-flex min-h-12 items-center justify-center rounded-xl bg-[#ff1e00] px-6 text-sm font-black text-white transition-transform active:scale-[0.98]"
         >
           Consultar por WhatsApp
-        </WhatsAppLink>
+        </WhatsAppSucursal>
       </section>
     </div>
   );

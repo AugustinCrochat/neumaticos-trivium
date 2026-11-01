@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { WhatsAppSucursal } from "@/components/ui/SucursalBits";
 import { FotoNeumaticoBloque } from "@/components/tools/FotoNeumaticoBloque";
 import Link from "@/components/ui/Link";
 import { notFound } from "next/navigation";
@@ -11,7 +12,6 @@ import { DEFAULT_BRANCH_ID } from "@/lib/config";
 import { formatSize, sizeSlug, sizesEqual, diameterDiffPercent } from "@/lib/tire-sizes";
 import { SortedProductGrid } from "@/components/ui/SortedProductGrid";
 import { peersByGroup } from "@/lib/best-price";
-import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 import { BRANCHES } from "@/lib/config";
 import type { TireProduct, TireSize } from "@/lib/types";
 import { poolShare } from "@/lib/share-image";
@@ -469,12 +469,12 @@ async function SinStockMedida({ name, size, profile }: { name: string; size: Tir
         <p className="mt-1 text-sm text-slate-600">
           Escribinos y te avisamos cuándo entra, o te proponemos una medida equivalente.
         </p>
-        <WhatsAppLink
-          href={`https://wa.me/${branch.whatsapp}?text=${texto}`}
+        <WhatsAppSucursal
+          texto={decodeURIComponent(texto)}
           className="mt-4 inline-flex min-h-12 items-center justify-center rounded-xl bg-orange-500 px-6 text-sm font-black !text-white !no-underline hover:bg-orange-600"
         >
           Consultar {formatSize(size)} por WhatsApp
-        </WhatsAppLink>
+        </WhatsAppSucursal>
       </div>
       {equivalentes.length > 0 && (
         <div className="rounded-2xl border border-slate-100 bg-slate-50 p-3 sm:p-6 not-prose [&_a]:!no-underline">

@@ -5,8 +5,8 @@ import { BRANCHES } from "@/lib/config";
 import { esRangoFlotation, formatFlotationEquivalent, metricToFlotation } from "@/lib/flotation";
 import { SizeProductsGrid } from "@/components/ui/SizeProductsGrid";
 import { bestPriceByGroup, peersByGroup } from "@/lib/best-price";
-import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
-import { SizeHeader } from "./SizeHeader";
+import { SizeHeader, SizeNota } from "./SizeHeader";
+import { CierreMedida, ConsultaMedidaWa } from "./SizeSucursal";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { LocalProductCarousel } from "@/app/neumaticos-en/LocalProductCarousel";
 import { FaqSection } from "@/components/seo/FaqSection";
@@ -158,7 +158,7 @@ export function SizeLanding({
       return acc;
     }, [])
     .sort((a, b) => Number(!!vehiclePhoto(b.slug)) - Number(!!vehiclePhoto(a.slug)));
-  const branch = BRANCHES[0];
+  const items = productos.map((p) => ({ id: p.id, price: p.price, enStock: !!p.enStock }));
 
   // Una fila por marca: su neumático más barato (con stock si lo hay).
   const porMarca = [...new Set(productos.map((p) => p.brand))]
@@ -223,9 +223,7 @@ export function SizeLanding({
       <SizeHeader
         size={size}
         label={label}
-        enStockCount={enStock.length}
-        desde={desde}
-        branchCity={branch.city}
+        items={items}
       />
 
       {ordenados.length > 0 ? (
@@ -237,6 +235,7 @@ export function SizeLanding({
             className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 md:gap-6"
             items={ordenados.map((product) => ({ product, isCheapest: mejores.has(product.id), cheapestLabel: mejores.get(product.id), peers: peers.get(product.id) }))}
           />
+          <SizeNota items={items} label={label} />
         </section>
       ) : (
         <section className="mb-14 rounded-2xl border border-orange-200 bg-orange-50 p-6">
@@ -247,14 +246,7 @@ export function SizeLanding({
             Escribinos con tu medida y te avisamos apenas ingrese, o te proponemos una equivalencia
             segura si necesitás resolverlo ya.
           </p>
-          <WhatsAppLink
-            href={`https://wa.me/${branch.whatsapp}?text=${encodeURIComponent(
-              `Hola, busco neumáticos en medida ${label}. ¿Tienen stock o fecha de ingreso?`
-            )}`}
-            className="mt-4 inline-flex min-h-12 items-center justify-center rounded-xl bg-[#25d366] px-6 text-sm font-black text-white transition-transform active:scale-[0.98]"
-          >
-            Consultar {label} por WhatsApp
-          </WhatsAppLink>
+          <ConsultaMedidaWa label={label} />
         </section>
       )}
 
@@ -521,40 +513,14 @@ export function SizeLanding({
       <FaqSection faqs={buildFaqs(size, enStock, desde)} title={`Preguntas frecuentes sobre ${label}`} />
 
       {/* Cierre: dónde comprar */}
-      <section className="mt-14 overflow-hidden rounded-2xl bg-gradient-to-br from-navy-950 to-black p-8 text-white">
-        <h2 className="text-2xl font-black">Dónde comprar neumáticos {label}</h2>
-        <p className="mt-3 max-w-2xl leading-relaxed text-slate-300">
-          Podés retirarlo sin cargo en {branch.address},{" "}
-          {branch.city}. Si retirás, la colocación y el cambio de válvulas van sin cargo, y tenés
-          alineación y balanceo en el mismo local para dejar el auto listo en una sola visita.
-        </p>
-        <div className="mt-6 flex flex-wrap gap-3">
-          <Link
-            href={`/sucursales/${branch.id}`}
-            className="inline-flex min-h-12 items-center justify-center rounded-xl bg-orange-500 px-6 text-sm font-black text-white transition-transform active:scale-[0.98] hover:bg-orange-600"
-          >
-            Ver la sucursal {branch.shortName}
-          </Link>
-          <Link
-            href={`/neumaticos/${rimSlug(size.rim)}`}
-            className="inline-flex min-h-12 items-center justify-center rounded-xl border border-white/20 bg-white/5 px-6 text-sm font-black text-white transition-colors hover:bg-white/10"
-          >
-            Ver todas las medidas rodado {size.rim}
-          </Link>
-          <Link
-            href={`/neumaticos/${widthSlug(size.width)}`}
-            className="inline-flex min-h-12 items-center justify-center rounded-xl border border-white/20 bg-white/5 px-6 text-sm font-black text-white transition-colors hover:bg-white/10"
-          >
-            Todo en ancho {size.width}
-          </Link>
-          <Link
-            href={`/neumaticos/${profileSlug(size.profile)}`}
-            className="inline-flex min-h-12 items-center justify-center rounded-xl border border-white/20 bg-white/5 px-6 text-sm font-black text-white transition-colors hover:bg-white/10"
-          >
-            Todo en perfil {size.profile}
-          </Link>
-        </div>
-      </section>
+      <CierreMedida
+        label={label}
+        enlaces={[
+          { href: `/neumaticos/${rimSlug(size.rim)}`, texto: `Ver todas las medidas rodado ${size.rim}` },
+          { href: `/neumaticos/${widthSlug(size.width)}`, texto: `Todo en ancho ${size.width}` },
+          { href: `/neumaticos/${profileSlug(size.profile)}`, texto: `Todo en perfil ${size.profile}` },
+        ]}
+      />
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import Link from "@/components/ui/Link";
+import { LugarLocal } from "@/components/ui/SucursalBits";
 import type { TireProduct } from "@/lib/types";
 import { rimSlug } from "@/lib/tire-sizes";
 
@@ -29,7 +30,7 @@ export function BaratosExtra({ productos }: { productos: TireProduct[] }) {
           </h2>
           <p className="mb-5 max-w-3xl text-slate-600">
             El neumático más económico con stock en cada rodado, con IVA incluido y precio por unidad. Es el mismo
-            precio que se cobra en el local de Córdoba.
+            precio que se cobra en el local de <LugarLocal />.
           </p>
           <div className="overflow-x-auto rounded-2xl border border-slate-200">
             <table className="w-full text-left text-sm">

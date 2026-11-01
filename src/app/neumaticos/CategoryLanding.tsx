@@ -1,9 +1,8 @@
 import Link from "@/components/ui/Link";
+import { AtencionLocal, WhatsAppSucursal } from "@/components/ui/SucursalBits";
 import type { ReactNode } from "react";
 import type { TireProduct, TireSize } from "@/lib/types";
-import { BRANCHES } from "@/lib/config";
 import { CategoryProductGrid } from "./CategoryProductGrid";
-import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { FaqSection } from "@/components/seo/FaqSection";
 import type { Faq } from "@/lib/seo";
@@ -51,7 +50,6 @@ export function CategoryLanding({
   /** Contenido editorial propio de la categoría, antes de las preguntas frecuentes. */
   extra?: ReactNode;
 }) {
-  const branch = BRANCHES[0];
   const ordenados = [...productos].sort(
     (a, b) => Number(b.enStock) - Number(a.enStock) || a.price - b.price
   );
@@ -224,18 +222,17 @@ export function CategoryLanding({
               </h2>
               <p className="mt-2 max-w-xl text-slate-300">
                 ¿No encontrás tu medida? Escribinos con la medida o el uso que necesitás y te decimos si la tenemos,
-                cuándo ingresa o qué alternativa te sirve. Atendemos de {branch.hours.toLowerCase()} en{" "}
-                {branch.address}, {branch.city}.
+                cuándo ingresa o qué alternativa te sirve. <AtencionLocal />
               </p>
             </div>
           </div>
           <div className="flex flex-wrap gap-3 md:shrink-0">
-            <WhatsAppLink
-              href={`https://wa.me/${branch.whatsapp}?text=${encodeURIComponent(`Hola! Consulto por neumáticos: ${crumbLabel}`)}`}
+            <WhatsAppSucursal
+              texto={`Hola! Consulto por neumáticos: ${crumbLabel}`}
               className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#ff1e00] px-6 text-sm font-black text-white transition-transform active:scale-[0.98]"
             >
               Consultar por WhatsApp
-            </WhatsAppLink>
+            </WhatsAppSucursal>
             <Link
               href="/neumaticos"
               className="inline-flex min-h-12 items-center justify-center rounded-xl border border-white/30 px-6 text-sm font-black text-white transition-colors hover:border-white"

@@ -1,13 +1,12 @@
 "use client";
 
+import { WhatsAppSucursal } from "@/components/ui/SucursalBits";
 import { useState, useRef, useEffect, useMemo, useSyncExternalStore } from "react";
 import Link from "@/components/ui/Link";
 import { sizeCatalogHref } from "@/lib/size-href";
 import { flotationToMetric, formatFlotationLabel } from "@/lib/flotation";
 import { TireDiagram } from "./TireDiagram";
 import { MedidaHelpDialog } from "./MedidaHelpDialog";
-import { WhatsAppLink } from "./WhatsAppLink";
-import { BRANCHES } from "@/lib/config";
 import type { MedidaCatalogo } from "@/app/api/medidas/route";
 import { irA } from "@/lib/navigate";
 
@@ -968,12 +967,12 @@ export function TireSizeSearch({
                 </div>
               )}
               <div className="mt-3 flex flex-wrap gap-2">
-                <WhatsAppLink
-                  href={`https://wa.me/${BRANCHES[0].whatsapp}?text=${encodeURIComponent(`Hola! Busco neumáticos ${medidaObjetivo.w}/${medidaObjetivo.p} R${medidaObjetivo.r}, ¿los pueden conseguir?`)}`}
+                <WhatsAppSucursal
+                  texto={`Hola! Busco neumáticos ${medidaObjetivo.w}/${medidaObjetivo.p} R${medidaObjetivo.r}, ¿los pueden conseguir?`}
                   className="inline-flex min-h-10 items-center justify-center rounded-lg bg-[#ff1e00] px-4 text-sm font-black text-white"
                 >
                   Consultar por WhatsApp
-                </WhatsAppLink>
+                </WhatsAppSucursal>
                 <Link
                   href={sizeCatalogHref(String(medidaObjetivo.w), String(medidaObjetivo.p), String(medidaObjetivo.r), economicos)}
                   className="inline-flex min-h-10 items-center justify-center rounded-lg border border-slate-300 px-4 text-sm font-bold text-slate-700 hover:border-slate-500"
