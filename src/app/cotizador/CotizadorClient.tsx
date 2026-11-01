@@ -72,7 +72,7 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
   // Colapsado por defecto cuando está embebido en la ficha de producto, para
   // no ocupar espacio si nadie lo va a usar; en /cotizador (compact=false) va
   // siempre expandido, no tiene sentido colapsar la página entera.
-  const [expanded, setExpanded] = useState(!compact);
+  const [expanded, setExpanded] = useState(true);
 
   const [query, setQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);

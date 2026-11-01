@@ -8,7 +8,6 @@ import { SITE_URL } from "@/lib/config";
 import { isLowStock, stockLabel } from "@/lib/stock";
 import { BranchStatusBadge } from "@/app/sucursales/[id]/BranchStatusBadge";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
-import { PaymentMethodsSection } from "@/components/ui/PaymentMethodsSection";
 import { CotizadorClient, type CotizadorHandle } from "@/app/cotizador/CotizadorClient";
 import { getPickupLabel, type PickupTiming } from "@/lib/branch-status";
 import { DirectionsIcon } from "@/components/ui/DirectionsIcon";
@@ -143,8 +142,6 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
           </div>
         </div>
       </div>
-
-      <PaymentMethodsSection basePrice={price} />
 
       <div className="rounded-xl border border-slate-200 bg-white p-4">
         <CotizadorClient
