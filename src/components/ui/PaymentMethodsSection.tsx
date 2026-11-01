@@ -70,13 +70,7 @@ const METODOS: Metodo[] = [
  * pintura (server y cliente) coincide siempre — sin eso, un miércoles
  * generaría un mismatch de hidratación.
  */
-export function PaymentMethodsSection({
-  basePrice,
-  onCalcularCuotas,
-}: {
-  basePrice: number;
-  onCalcularCuotas?: () => void;
-}) {
+export function PaymentMethodsSection({ basePrice }: { basePrice: number }) {
   const [isPromoDay, setIsPromoDay] = useState(false);
   useEffect(() => {
     const update = () => setIsPromoDay(isVisaMasterPromoDay());
@@ -135,31 +129,16 @@ export function PaymentMethodsSection({
   }
 
   return (
-    <section id="metodos-pago" className="scroll-mt-36 rounded-xl border border-slate-200 bg-white p-4">
-      <div className="mb-3 flex items-center justify-between gap-2">
-        <div className="min-w-0">
-          <h2 className="text-xs font-black uppercase tracking-wide text-navy-900">Medios de pago</h2>
-          {/* Sólo miércoles y sábados. Discreto a propósito: el detalle completo
-              está al tocar Visa o Mastercard. */}
-          {isPromoDay && VISA_MASTER_PROMO_ACTIVA && (
-            <p className="mt-0.5 flex items-center gap-1.5 text-[11px] font-bold text-emerald-700">
-              <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500" aria-hidden="true" />
-              Hoy 3 cuotas sin interés con Visa o Mastercard
-            </p>
-          )}
-        </div>
-        {onCalcularCuotas && (
-          <button
-            type="button"
-            onClick={onCalcularCuotas}
-            className="shrink-0 rounded-lg border border-navy-200 px-2.5 py-1.5 text-xs font-black text-navy-700 transition-colors hover:border-orange-500 hover:bg-orange-50 hover:text-orange-700"
-          >
-            Calcular cuotas
-          </button>
-        )}
-      </div>
-
-      <div className="rounded-lg border border-slate-200 p-3">
+    <section id="metodos-pago" className="scroll-mt-36 rounded-xl border border-slate-200 bg-white px-3 py-2">
+      {/* Sólo miércoles y sábados. Discreto a propósito: el detalle completo
+          está al tocar Visa o Mastercard. */}
+      {isPromoDay && VISA_MASTER_PROMO_ACTIVA && (
+        <p className="mb-1 flex items-center gap-1.5 text-[11px] font-bold text-emerald-700">
+          <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500" aria-hidden="true" />
+          Hoy 3 cuotas sin interés con Visa o Mastercard
+        </p>
+      )}
+      <div>
         <div className="flex flex-nowrap items-center justify-between gap-2 overflow-x-auto sm:gap-3">
           {METODOS.map((m) => (
             <button
@@ -173,7 +152,7 @@ export function PaymentMethodsSection({
               onFocus={() => mostrar(m.id)}
               onBlur={() => ocultar(m.id)}
               onClick={() => setActivo(activoAntesDelToqueRef.current === m.id ? null : m.id)}
-              className={`shrink-0 rounded-md p-1.5 transition-colors ${activo === m.id ? "bg-slate-100" : "hover:bg-slate-50"}`}
+              className={`shrink-0 rounded-md p-1 transition-colors ${activo === m.id ? "bg-slate-100" : "hover:bg-slate-50"}`}
               aria-expanded={activo === m.id}
             >
               <Image src={m.logo} alt={m.alt} width={80} height={40} className={m.logoClassName} />

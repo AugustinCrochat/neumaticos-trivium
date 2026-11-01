@@ -96,7 +96,7 @@ export function AccessoryConsult({ accessory }: { accessory: Accessory }) {
         </div>
       </div>
 
-      <PaymentMethodsSection basePrice={accessory.price} onCalcularCuotas={() => cotizadorRef.current?.openConUnaUnidad()} />
+      <PaymentMethodsSection basePrice={accessory.price} />
 
       {/* Mismo presupuesto que en neumáticos. Quien viene por la tuerca suele
           tener las cubiertas en la cabeza: el buscador del cotizador permite
