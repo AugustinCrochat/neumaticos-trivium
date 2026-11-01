@@ -77,6 +77,13 @@ export default function Page() {
         <li><strong>Taladrar sin guía:</strong> se corre la broca y se estropea la rosca.</li>
       </ul>
 
+      <h2>La extracción la hacemos nosotros</h2>
+      <p>
+        En Trivium hacemos la extracción de tuercas de seguridad en el local, con dado extractor y
+        sin dañar el espárrago ni la llanta. Si no tenés la llave o quedó redondeada, acercate con el
+        auto y te la sacamos; después te colocamos una tuerca nueva al torque correcto.
+      </p>
+
       <h2>Qué hacer en la gomería</h2>
       <ol>
         <li>Llevá el auto con las ruedas puestas; si podés, llevá también lo que tengas del juego.</li>
@@ -87,7 +94,7 @@ export default function Page() {
 
       <h2>Cómo evitar que vuelva a pasar</h2>
       <p>
-        Guardá la llave en la guantera, anotá el código y, cada tanto, revisá que no esté gastada. Más
+        No dejes la llave en la guantera: si alguien logra entrar al auto, es el primer lugar donde mira para llevarse las ruedas. Conviene un sitio más escondido (un compartimiento poco evidente, o con el auxilio), y mejor aún tener la otra llave del juego en tu casa. Anotá el código y, cada tanto, revisá que no esté gastada. Más
         sobre uso y cuidado en{" "}
         <Link href="/blog/tuercas-y-bulones-de-seguridad">Tuercas y bulones de seguridad</Link>. Si
         necesitás un juego nuevo, mirá las{" "}

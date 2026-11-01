@@ -31,7 +31,7 @@ const FAQS = [
   {
     question: "¿Dónde conviene guardar la llave?",
     answer:
-      "Como el juego trae dos llaves, guardá una en la guantera o junto al auxilio y la otra en tu casa: así, si perdés una, tenés la de repuesto. Nunca la dejes en la gomería ni en la tapa del baúl. Anotá el código que viene en el juego: si perdés la llave, con el código se puede pedir otra al fabricante.",
+      "Como el juego trae dos llaves, guardá una en tu casa y la otra en un lugar escondido del auto, no a la vista: la guantera es el primer lugar donde miran si logran entrar. Así, si perdés una, tenés la de repuesto. Nunca la dejes en la gomería ni en la tapa del baúl. Anotá el código que viene en el juego: si perdés la llave, con el código se puede pedir otra al fabricante.",
   },
   {
     question: "¿Qué pasa si pierdo la llave?",
