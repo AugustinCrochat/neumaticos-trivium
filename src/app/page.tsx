@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { HomeTabTitle } from "@/components/home/HomeTabTitle";
 import { HeroSection } from "@/components/home/HeroSection";
 import { TrustStrip } from "@/components/home/TrustStrip";
 import { ArrepentimientoBanner } from "@/components/home/ArrepentimientoBanner";
@@ -68,6 +69,7 @@ export default async function HomePage() {
 
   return (
     <>
+      <HomeTabTitle />
       <HeroSection productos={productos} />
       <TrustStrip />
       <PopularSizesSection productos={productos} />
