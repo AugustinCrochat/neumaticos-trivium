@@ -89,13 +89,10 @@ export function InstallmentCalculator({
   basePrice,
   notaPrecio,
   onShare,
-  onBuy,
 }: {
   basePrice: number;
   notaPrecio?: string;
   onShare?: (pago: PagoElegido) => void;
-  /** Agrega el presupuesto al carrito y abre el pago con Mercado Pago. */
-  onBuy?: () => void;
 }) {
   const recargos = useRecargosTarjeta();
   const [grupoSel, setGrupoSel] = useState<string | null>(null);
@@ -117,22 +114,24 @@ export function InstallmentCalculator({
   const grupos = [EFECTIVO_GRUPO, MERCADO_PAGO_GRUPO, GOCUOTAS_GRUPO, ...gruposPOS].sort((a, b) => ordenGrupo(a) - ordenGrupo(b));
   const planesDe = (g: string) => (g === EFECTIVO_GRUPO ? [EFECTIVO_PLAN] : planesParaGrupo(g, basePrice, recargos, esDiaPromo));
 
-  // Por defecto queda elegido el primer medio con cuotas (no el efectivo): el
-  // total inicial es el precio publicado, y el descuento se ve al elegirlo.
-  const grupoActual = grupoSel && grupos.includes(grupoSel) ? grupoSel : grupos.find((g) => g !== EFECTIVO_GRUPO)!;
+  // Sin medio elegido de entrada: el total es el precio de lista hasta que el
+  // cliente toca uno. Al elegir un medio queda marcada su primera opción.
+  const grupoActual = grupoSel && grupos.includes(grupoSel) ? grupoSel : null;
   const esEfectivo = grupoActual === EFECTIVO_GRUPO;
-  const planesDelGrupo = planesDe(grupoActual);
-  const planActual = planesDelGrupo.find((p) => p.id === cuotaId) ?? planesDelGrupo[0];
-  const coeficiente = planActual.coeficiente ?? 1;
+  const planesDelGrupo = grupoActual ? planesDe(grupoActual) : [];
+  const planActual = grupoActual ? (planesDelGrupo.find((p) => p.id === cuotaId) ?? planesDelGrupo[0]) : null;
+  const coeficiente = planActual?.coeficiente ?? 1;
   const total = Math.round(basePrice * coeficiente);
   const recargo = total - basePrice;
   const descuento = basePrice - total;
-  const nCuotas = parseInt(planActual.cuotas, 10) || 1;
+  const nCuotas = planActual ? parseInt(planActual.cuotas, 10) || 1 : 1;
   const sinInteres = nCuotas > 1 && recargo === 0;
+  const nombreMedio = grupoActual ? (esEfectivo ? "Efectivo" : displayGrupoLabel(grupoActual)) : "";
 
   return (
     <div className="rounded-xl border border-slate-200 bg-white p-4">
       <h3 className="text-xs font-black uppercase tracking-wide text-navy-900">Elegí cómo pagar</h3>
+      <p className="mt-0.5 text-xs text-slate-500">Tocá un medio para ver las cuotas y el total.</p>
 
       {/* Medios: mosaico parejo; el elegido muestra abajo sus cuotas. */}
       <div className="mt-3 grid grid-cols-6 gap-2" role="radiogroup" aria-label="Medio de pago">
@@ -147,7 +146,8 @@ export function InstallmentCalculator({
               aria-checked={elegido}
               aria-label={g === EFECTIVO_GRUPO ? "Efectivo" : displayGrupoLabel(g)}
               onClick={() => {
-                setGrupoSel(g);
+                // Tocar el medio ya elegido lo deselecciona.
+                setGrupoSel(elegido ? null : g);
                 setCuotaId(null);
               }}
               className={`${spanDe(i, grupos.length)} flex h-[76px] flex-col items-center justify-center gap-1.5 rounded-xl border-2 px-1 transition-colors ${
@@ -177,10 +177,10 @@ export function InstallmentCalculator({
         })}
       </div>
 
-      {(() => {
+      {grupoActual && planActual && (() => {
         const g = grupoActual;
         const planes = planesDelGrupo;
-        const nombre = g === EFECTIVO_GRUPO ? "Efectivo" : displayGrupoLabel(g);
+        const nombre = nombreMedio;
         const nota = maxSinInteres(planes) > 0 ? notaSinInteres(g) : null;
         return (
           <div className="mt-3 rounded-xl bg-slate-50 p-3">
@@ -242,76 +242,46 @@ export function InstallmentCalculator({
         );
       })()}
 
-      <div className="mt-4 overflow-hidden rounded-xl bg-navy-900 text-white" aria-live="polite">
-        <div className="flex items-center justify-between gap-3 border-b border-white/10 px-4 py-2.5">
-          <span className="text-xs font-bold uppercase tracking-wide text-white/70">Total a pagar</span>
-          <span className="text-xs font-semibold text-white/90">
-            {esEfectivo ? "Efectivo" : displayGrupoLabel(grupoActual)} · {planActual.cuotas}
-          </span>
-        </div>
-        <div className="px-4 py-4">
-          <div className="flex items-baseline justify-between gap-3">
-            <span className="text-3xl font-black tracking-tight">{formatPrice(total)}</span>
-            {sinInteres && (
-              <span className="rounded-full bg-white/15 px-2.5 py-1 text-xs font-bold">Sin interés</span>
-            )}
-          </div>
-          {nCuotas > 1 && (
-            <p className="mt-1 text-sm font-semibold text-white/90">
-              {nCuotas} cuotas de {formatPrice(total / nCuotas)}
-            </p>
-          )}
-          <dl className="mt-3 space-y-1 border-t border-white/10 pt-3 text-xs text-white/70">
-            <div className="flex justify-between">
-              <dt>Precio</dt>
-              <dd>{formatPrice(basePrice)}</dd>
-            </div>
-            {esEfectivo ? (
-              <div className="flex justify-between text-emerald-300">
-                <dt>Descuento por pago en efectivo (10%)</dt>
-                <dd>−{formatPrice(descuento)}</dd>
-              </div>
-            ) : (
-              <div className="flex justify-between">
-                <dt>Recargo por financiación</dt>
-                <dd>{recargo > 0 ? formatPrice(recargo) : "Sin recargo"}</dd>
-              </div>
-            )}
-          </dl>
-          {notaPrecio && <p className="mt-3 text-xs text-slate-400">{notaPrecio}</p>}
-          {esEfectivo && (
-            <p className="mt-2 text-xs text-slate-400">El descuento por efectivo aplica pagando en el local.</p>
-          )}
-          {(onShare || (onBuy && !esEfectivo)) && (
-            <div className="mt-4 flex flex-col gap-2">
-              {onBuy && !esEfectivo && (
-                <button
-                  type="button"
-                  onClick={onBuy}
-                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#FFE600] px-3 py-3.5 text-center text-sm font-black leading-snug text-navy-900 transition-colors hover:bg-[#f5dc00] sm:text-base"
-                >
-                  <span className="min-w-0">Comprar con</span>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/images/mercadopago-logo.svg" alt="Mercado Pago" width={180} height={45} className="h-6 w-auto shrink-0" />
-                </button>
+      <div className="mt-4 rounded-xl bg-navy-900 px-4 py-4 text-white" aria-live="polite">
+        <p className="text-xs font-bold uppercase tracking-wide text-white/60">Total a pagar</p>
+        <p className="mt-1 text-4xl font-black leading-none tracking-tight">{formatPrice(total)}</p>
+        <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm font-semibold text-white/85">
+          {grupoActual && planActual ? (
+            <>
+              <span>{nombreMedio}</span>
+              <span className="text-white/40" aria-hidden="true">·</span>
+              <span>{nCuotas > 1 ? `${nCuotas} cuotas de ${formatPrice(total / nCuotas)}` : esEfectivo ? "en el local" : "1 pago"}</span>
+              {sinInteres && <span className="rounded-full bg-emerald-500 px-2 py-0.5 text-[11px] font-black uppercase tracking-wide text-white">Sin interés</span>}
+              {esEfectivo && descuento > 0 && (
+                <span className="rounded-full bg-emerald-500 px-2 py-0.5 text-[11px] font-black uppercase tracking-wide text-white">Ahorrás {formatPrice(descuento)}</span>
               )}
-              {onShare && (
-            <button
-              type="button"
-              onClick={() =>
-                onShare({ total, medio: esEfectivo ? EFECTIVO_GRUPO : displayGrupoLabel(grupoActual), cuotas: planActual.cuotas, esEfectivo })
-              }
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#25D366] px-3 py-3.5 text-center text-sm font-black leading-snug text-white transition-colors hover:bg-[#1ebe57] sm:text-base"
-            >
-              <svg className="h-6 w-6 shrink-0" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-              </svg>
-              <span>Compartir por WhatsApp</span>
-            </button>
-              )}
-            </div>
+              {recargo > 0 && <span className="text-xs font-medium text-white/60">(incluye {formatPrice(recargo)} de financiación)</span>}
+            </>
+          ) : (
+            <span>Precio de lista</span>
           )}
         </div>
+        {notaPrecio && <p className="mt-3 text-xs text-white/50">{notaPrecio}</p>}
+        {esEfectivo && <p className="mt-1 text-xs text-white/50">El descuento por efectivo aplica pagando en el local.</p>}
+        {onShare && (
+          <button
+            type="button"
+            onClick={() =>
+              onShare({
+                total,
+                medio: grupoActual ? nombreMedio : "",
+                cuotas: planActual?.cuotas ?? "",
+                esEfectivo,
+              })
+            }
+            className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-[#25D366] px-3 py-3.5 text-center text-sm font-black leading-snug text-white transition-colors hover:bg-[#1ebe57] sm:text-base"
+          >
+            <svg className="h-6 w-6 shrink-0" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+            </svg>
+            <span>Compartir por WhatsApp</span>
+          </button>
+        )}
       </div>
     </div>
   );

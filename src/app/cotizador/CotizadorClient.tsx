@@ -2,14 +2,13 @@
 
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import Image from "next/image";
-import { useCart } from "@/contexts/cart-context";
 import { useBranch } from "@/contexts/branch-context";
 import { useUpsellCombo } from "@/hooks/use-upsell-combo";
 import { AlineacionBalanceoIcon } from "@/components/ui/AlineacionBalanceoIcon";
 import { TuercaPicker } from "@/components/ui/TuercaPicker";
 import type { Accessory } from "@/lib/types";
 import { InstallmentCalculator, type PagoElegido } from "@/components/ui/InstallmentCalculator";
-import { goToWhatsApp, trackEvent } from "@/lib/gtag";
+import { goToWhatsApp } from "@/lib/gtag";
 import { CotizadorSelector, type MedidaDisponible } from "./CotizadorSelector";
 
 function formatPrice(price: number) {
@@ -62,7 +61,6 @@ export type CotizadorHandle = {
 export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: QuoteProduct; /** Unidades del ítem precargado (4 = juego de neumáticos). */ initialQuantity?: number; compact?: boolean; /** Medidas y neumáticos destacados: con ellos (y sin `compact`) el cotizador es la versión guiada de /cotizador. */ medidas?: MedidaDisponible[]; destacados?: (QuoteProduct & { medida: string })[]; /** Avisa si el presupuesto incluye alineación + balanceo. */ onComboChange?: (incluido: boolean) => void }>(
   function CotizadorClient({ initialProduct, initialQuantity = 4, compact = false, medidas, destacados = [], onComboChange }, ref) {
   const { selectedBranch } = useBranch();
-  const { addTireLine, addService, addAccessory, openCart } = useCart();
   // En Córdoba (Argüello) se dice "alineado y balanceado"; "alineación y
   // balanceo" es como se lo llama en Buenos Aires. El nombre del servicio en
   // el POS (combo.nombre) queda fijo con una sola forma, así que la variante
@@ -162,20 +160,6 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
   const total = itemsTotal + comboTotal + tuercasTotal;
   const hasItems = items.length > 0;
   const canAddCombo = hasItems && !!combo;
-
-  // Pasa el presupuesto al carrito (cantidades incluidas) y abre el pago. El
-  // precio que se cobra lo vuelve a leer /api/checkout del POS, no de acá.
-  function buyOnline() {
-    for (const it of items) {
-      const { brand, model, slug } = it.product;
-      if (!brand || !model || !slug) continue;
-      addTireLine({ id: it.product.id, brand, model, slug, price: it.product.price, imageUrl: it.product.imageUrl ?? "" }, it.quantity);
-    }
-    if (includeCombo && combo) addService({ id: combo.id, nombre: combo.nombre, price: combo.precio }, 1);
-    for (const t of tuercas) addAccessory(t, 1);
-    trackEvent("begin_checkout", { currency: "ARS", value: total });
-    openCart();
-  }
 
   function shareByWhatsApp(pago?: PagoElegido) {
     const lineas = items.map(
@@ -417,7 +401,6 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
           basePrice={total}
           notaPrecio={`Precio con IVA incluido, retirando en ${selectedBranch.shortName}. No incluye envío.`}
           onShare={shareByWhatsApp}
-          onBuy={items.every((it) => it.product.slug) ? buyOnline : undefined}
         />
       )}
       {guiado && hasItems && (
