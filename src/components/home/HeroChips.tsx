@@ -20,7 +20,7 @@ export function HeroChips({ anclas }: { anclas: { href: string; texto: string }[
   const { selectedBranch: b } = useBranch();
   const [i, setI] = useState(0);
   useEffect(() => {
-    if (anclas.length < 2 || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (anclas.length < 2) return;
     const t = setInterval(() => setI((n) => (n + 1) % anclas.length), 3000);
     return () => clearInterval(t);
   }, [anclas.length]);
@@ -40,7 +40,7 @@ export function HeroChips({ anclas }: { anclas: { href: string; texto: string }[
             <span
               key={a.href}
               aria-hidden={n !== i}
-              className={`col-start-1 row-start-1 text-center transition-opacity duration-500 ${n === i ? "opacity-100" : "opacity-0"}`}
+              className={`col-start-1 row-start-1 text-center transition-opacity duration-500 motion-reduce:transition-none ${n === i ? "opacity-100" : "opacity-0"}`}
             >
               {a.texto}
             </span>
