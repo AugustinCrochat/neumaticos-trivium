@@ -15,27 +15,41 @@ export type ModeloCompatible = {
   href: string;
   /** Página de la marca (/vehiculos/marca/<slug>). */
   brandHref: string;
+  /** Foto del auto sin fondo, si la tiene. */
+  foto: string | null;
+  /** Posición en la lista de modelos populares (0 = el más popular), -1 si no está. */
+  rank: number;
 };
 
 const norm = (t: string) => t.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
-const VISIBLES = 12;
+const POPULARES = 8;
+const VISIBLES = 36;
 
 /**
- * "Modelos de auto compatibles" de la ficha de un neumático: agrupados por
- * marca (con logo y enlace a la página de la marca), con un buscador de modelo
- * y atajos por marca, porque en medidas comunes (185/65 R15, 205/55 R16) la
- * lista pasa los cien modelos y a ojo no se encuentra el propio.
+ * "Modelos de auto compatibles" de la ficha de un neumático: primero los autos
+ * más populares con su foto, y el resto en una sola lista (sin separar por
+ * marca). Un buscador filtra ambos, porque en medidas comunes (185/65 R15,
+ * 205/55 R16) la lista pasa los cien modelos y a ojo no se encuentra el propio.
  */
 export function ModelosCompatibles({ items }: { items: ModeloCompatible[] }) {
   const [q, setQ] = useState("");
-  const [abiertas, setAbiertas] = useState<Set<string>>(new Set());
+  const [todos, setTodos] = useState(false);
   const query = norm(q.trim());
 
-  const filtrados = query ? items.filter((i) => norm(`${i.brand} ${i.model}`).includes(query)) : items;
-  const porMarca = new Map<string, ModeloCompatible[]>();
-  for (const i of filtrados) porMarca.set(i.brand, [...(porMarca.get(i.brand) ?? []), i]);
-  const marcas = [...porMarca.keys()].sort((a, b) => a.localeCompare(b, "es"));
-  const idDe = (b: string) => `compat-${norm(b).replace(/[^a-z0-9]+/g, "-")}`;
+  const populares = items
+    .filter((i) => i.rank >= 0 && i.foto)
+    .sort((a, b) => a.rank - b.rank)
+    .slice(0, POPULARES);
+  const esPopular = new Set(populares.map((i) => i.href));
+  const resto = items
+    .filter((i) => !esPopular.has(i.href))
+    .sort((a, b) => `${a.brand} ${a.model}`.localeCompare(`${b.brand} ${b.model}`, "es", { numeric: true }));
+
+  const coincide = (i: ModeloCompatible) => norm(`${i.brand} ${i.model}`).includes(query);
+  const popFiltrados = query ? populares.filter(coincide) : populares;
+  const restoFiltrado = query ? resto.filter(coincide) : resto;
+  const abierta = todos || !!query;
+  const visibles = abierta ? restoFiltrado : restoFiltrado.slice(0, VISIBLES);
 
   return (
     <div>
@@ -48,76 +62,67 @@ export function ModelosCompatibles({ items }: { items: ModeloCompatible[] }) {
         value={q}
         onChange={(e) => setQ(e.target.value)}
         placeholder={`Buscá tu modelo entre ${items.length}: Cronos, Corsa, 208...`}
-        className="mb-4 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-base text-navy-900 outline-none focus:border-navy-400"
+        className="mb-5 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-base text-navy-900 outline-none focus:border-navy-400"
       />
 
-      {marcas.length > 1 && (
-        <ul className="mb-6 flex flex-wrap gap-2" aria-label="Ir a una marca">
-          {marcas.map((b) => (
-            <li key={b}>
-              <a
-                href={`#${idDe(b)}`}
-                className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white py-1 pl-2 pr-3 text-xs font-bold text-navy-900 hover:border-navy-300"
+      {popFiltrados.length === 0 && restoFiltrado.length === 0 && (
+        <p className="text-sm text-slate-600">No hay un modelo con ese nombre para esta medida.</p>
+      )}
+
+      {popFiltrados.length > 0 && (
+        <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {popFiltrados.map((v) => (
+            <li key={v.href}>
+              <Link
+                href={v.href}
+                title={v.full || undefined}
+                className="group flex h-full flex-col items-center rounded-xl border border-slate-200 bg-white p-3 text-center transition-colors hover:border-orange-400"
               >
-                <MarcaLogo brand={b} className="h-4 w-4" />
-                {b}
-                <span className="font-normal text-slate-400">{porMarca.get(b)!.length}</span>
-              </a>
+                <span className="flex h-20 items-center justify-center">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={v.foto!} alt={`${v.brand} ${v.model}`} loading="lazy" decoding="async" className="max-h-20 w-auto max-w-full object-contain" />
+                </span>
+                <span className="mt-2 flex items-center justify-center gap-1.5 text-sm font-black text-navy-900">
+                  <MarcaLogo brand={v.brand} className="h-4 w-4" />
+                  {v.brand} {v.model}
+                </span>
+                {v.detail && <span className="mt-0.5 text-xs text-slate-500">{v.detail}</span>}
+              </Link>
             </li>
           ))}
         </ul>
       )}
 
-      {marcas.length === 0 && <p className="text-sm text-slate-600">No hay un modelo con ese nombre para esta medida.</p>}
-
-      <div className="space-y-6">
-        {marcas.map((b) => {
-          const lista = porMarca.get(b)!;
-          const abierta = abiertas.has(b) || !!query;
-          const visibles = abierta ? lista : lista.slice(0, VISIBLES);
-          return (
-            <section key={b} id={idDe(b)} className="scroll-mt-24">
-              <h3 className="mb-2 flex items-center gap-2 text-base font-black text-navy-900">
-                <MarcaLogo brand={b} className="h-6 w-6" />
-                <Link href={lista[0].brandHref} className="hover:text-orange-600">
-                  {b}
+      {restoFiltrado.length > 0 && (
+        <div className={popFiltrados.length > 0 ? "mt-6" : ""}>
+          {popFiltrados.length > 0 && <p className="mb-2 text-sm font-black text-navy-900">Más modelos</p>}
+          <ul className="flex flex-wrap gap-2">
+            {visibles.map((v) => (
+              <li key={v.href}>
+                <Link
+                  href={v.href}
+                  title={v.full || undefined}
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 px-3 py-1.5 text-sm font-bold text-navy-900 hover:border-navy-300"
+                >
+                  {v.brand} {v.model}
+                  {v.detail && <span className="text-xs font-normal text-slate-500">{v.detail}</span>}
                 </Link>
-                <span className="text-sm font-normal text-slate-400">
-                  {lista.length} {lista.length === 1 ? "modelo" : "modelos"}
-                </span>
-                <Link href={lista[0].brandHref} className="ml-auto text-xs font-bold text-navy-700 underline underline-offset-4 hover:text-navy-900">
-                  Ver todos los {b} →
-                </Link>
-              </h3>
-              <ul className="flex flex-wrap gap-2">
-                {visibles.map((v) => (
-                  <li key={`${v.model}-${v.detail}`}>
-                    <Link
-                      href={v.href}
-                      title={v.full || undefined}
-                      className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 px-3 py-1.5 text-sm font-bold text-navy-900 hover:border-navy-300"
-                    >
-                      {v.model}
-                      {v.detail && <span className="text-xs font-normal text-slate-500">{v.detail}</span>}
-                    </Link>
-                  </li>
-                ))}
-                {!abierta && lista.length > VISIBLES && (
-                  <li>
-                    <button
-                      type="button"
-                      onClick={() => setAbiertas(new Set(abiertas).add(b))}
-                      className="rounded-xl border border-dashed border-slate-300 px-3 py-1.5 text-sm font-bold text-slate-600 hover:border-navy-300 hover:text-navy-900"
-                    >
-                      + {lista.length - VISIBLES} más
-                    </button>
-                  </li>
-                )}
-              </ul>
-            </section>
-          );
-        })}
-      </div>
+              </li>
+            ))}
+            {!abierta && restoFiltrado.length > VISIBLES && (
+              <li>
+                <button
+                  type="button"
+                  onClick={() => setTodos(true)}
+                  className="rounded-xl border border-dashed border-slate-300 px-3 py-1.5 text-sm font-bold text-slate-600 hover:border-navy-300 hover:text-navy-900"
+                >
+                  + {restoFiltrado.length - VISIBLES} más
+                </button>
+              </li>
+            )}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }

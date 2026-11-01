@@ -159,6 +159,11 @@ const ORDEN_POPULARIDAD = [
   "Renault Twingo",
 ];
 
+/** Posición del modelo en la lista de populares (0 = el más popular), o -1 si no está. */
+export function popularityRank(brand: string, model: string): number {
+  return ORDEN_POPULARIDAD.indexOf(`${brand} ${model}`);
+}
+
 /** Reordena una lista de `VehicleUsingSize` poniendo primero los modelos de
     `ORDEN_POPULARIDAD`, en ese orden, y dejando el resto como venían (ver
     `vehiclesUsingSize`, que ya los entrega alfabético) — así una marca de

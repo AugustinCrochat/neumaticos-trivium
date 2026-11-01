@@ -34,7 +34,8 @@ import { ProductImageGallery } from "@/components/ui/ProductImageGallery";
 import { ProductPageClient } from "./ProductPageClient";
 import { CompatibilidadVehiculo } from "./CompatibilidadVehiculo";
 import { ModelosCompatibles, type ModeloCompatible } from "./ModelosCompatibles";
-import { vehicleSlug } from "@/lib/vehicles";
+import { vehicleSlug, popularityRank } from "@/lib/vehicles";
+import { vehiclePhoto } from "@/lib/vehicle-photos";
 import { marcaSlug } from "@/lib/marcas-autos";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -233,7 +234,7 @@ export default async function ProductPage({ params }: Props) {
       if (v.years && !existente.detail.split(", ").includes(v.years)) existente.detail = [existente.detail, v.years].filter(Boolean).join(", ");
       if (full) existente.full = [existente.full, full].filter(Boolean).join(" | ");
     } else {
-      modelosCompatibles.push({ brand: v.brand, model: v.model, detail: v.years ?? "", full, href, brandHref: `/vehiculos/marca/${marcaSlug(v.brand)}` });
+      modelosCompatibles.push({ brand: v.brand, model: v.model, detail: v.years ?? "", full, href, brandHref: `/vehiculos/marca/${marcaSlug(v.brand)}`, foto: vehiclePhoto(vehicleSlug(v.brand, v.model)), rank: popularityRank(v.brand, v.model) });
     }
   }
   // Mismo criterio que los listados: el más barato con stock de su medida y tipo.
