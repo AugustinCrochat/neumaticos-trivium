@@ -352,7 +352,7 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
                 <AlineacionBalanceoIcon size={36} />
                 <span className="flex-1 text-sm">
                   <span className="block text-base font-black leading-snug text-navy-900">
-                    ¿Sumamos {terminoAlineacion} de las 4 ruedas?
+                    Sumar {terminoAlineacion} de las 4 ruedas
                   </span>
                   <span className="font-black text-orange-700">+{formatPrice(combo!.precio)}</span>
                 </span>
@@ -393,7 +393,7 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
               className="flex w-full items-center gap-3 p-4 text-left text-sm transition-colors hover:bg-slate-50"
             >
               <span className="flex-1">
-                <span className="block font-black text-navy-900">¿Sumás tuercas antirrobo?</span>
+                <span className="block font-black text-navy-900">Sumar tuercas antirrobo</span>
                 <span className="text-slate-500">Elegí tu auto y agregá la que le corresponde.</span>
               </span>
               <span className="shrink-0 text-xs font-black text-orange-600">{buscandoTuerca ? "Cerrar" : "Buscar"}</span>

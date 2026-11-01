@@ -41,6 +41,23 @@ function logoClassName(logo: string): string {
   return "h-5 w-auto";
 }
 
+/** Mayor cantidad de cuotas sin interés del medio (0 si no tiene). */
+function maxSinInteres(planes: Plan[]): number {
+  return planes.reduce((max, p) => {
+    const n = parseInt(p.cuotas, 10) || 1;
+    return p.coeficiente === 1 && n > 1 ? Math.max(max, n) : max;
+  }, 0);
+}
+
+/** Aclaración de cómo se accede a las cuotas sin interés de cada medio. */
+function notaSinInteres(g: string): string | null {
+  if (g === MERCADO_PAGO_GRUPO) return "Las cuotas sin interés son pagando con la tarjeta de crédito Mercado Pago.";
+  if (g === GOCUOTAS_GRUPO) return "Pagás con GOcuotas, sin interés.";
+  if (esNaranja(g)) return "Plan Z con Tarjeta Naranja.";
+  if (esBanco(g)) return "Promo con Visa o Mastercard de banco, miércoles y sábados.";
+  return null;
+}
+
 /** Orden en que se muestran los medios: banco, Mercado Pago, Naranja,
     GOcuotas y, si el POS carga alguno más, al final. */
 function ordenGrupo(grupo: string): number {
@@ -132,61 +149,104 @@ export function InstallmentCalculator({
                   setCuotaId(null);
                 }
               }}
-              className={`flex min-h-11 items-center gap-2 rounded-lg border-2 px-3 py-1.5 transition-colors ${
+              className={`flex min-h-11 flex-col items-center justify-center gap-1 rounded-lg border-2 px-3 py-1.5 transition-colors ${
                 abiertoAhora ? "border-navy-900 bg-slate-50" : activo ? "border-slate-300 bg-white" : "border-slate-200 bg-white hover:border-slate-300"
               }`}
             >
+              <span className="flex items-center gap-2">
+                {g === EFECTIVO_GRUPO ? (
+                  <>
+                    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-600 text-base font-black leading-none text-white" aria-hidden="true">
+                      $
+                    </span>
+                    <span className="text-xs font-black text-navy-900">Efectivo</span>
+                  </>
+                ) : (
+                  logosDelGrupo(g).map((logo) => (
+                    <Image key={logo} src={logo} alt="" width={140} height={40} className={logoClassName(logo)} />
+                  ))
+                )}
+              </span>
               {g === EFECTIVO_GRUPO ? (
-                <>
-                  <span className="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-600 text-base font-black leading-none text-white" aria-hidden="true">
-                    $
-                  </span>
-                  <span className="rounded-full bg-emerald-100 px-1.5 py-0.5 text-[11px] font-black uppercase tracking-wide text-emerald-800">10% OFF</span>
-                </>
+                <span className="rounded-full bg-emerald-600 px-1.5 py-0.5 text-[10px] font-black uppercase leading-none tracking-wide text-white">10% OFF</span>
               ) : (
-                logosDelGrupo(g).map((logo) => (
-                  <Image key={logo} src={logo} alt="" width={140} height={40} className={logoClassName(logo)} />
-                ))
+                maxSinInteres(planesDe(g)) > 0 && (
+                  <span className="rounded-full bg-emerald-600 px-1.5 py-0.5 text-[10px] font-black uppercase leading-none tracking-wide text-white">
+                    {maxSinInteres(planesDe(g))} cuotas sin interés
+                  </span>
+                )
               )}
             </button>
           );
         })}
       </div>
 
-      {abierto && grupos.includes(abierto) && (
-        <div className="mt-3 rounded-lg border border-slate-200 bg-slate-50 p-3">
-          <p className="mb-2 text-sm font-bold text-navy-900">{abierto === EFECTIVO_GRUPO ? "Efectivo" : displayGrupoLabel(abierto)}</p>
-          <div role="radiogroup" aria-label={abierto === EFECTIVO_GRUPO ? "Efectivo" : displayGrupoLabel(abierto)} className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-            {planesDe(abierto).map((p) => {
-              const g = abierto;
-              const seleccionado = g === grupoActual && p.id === planActual.id;
-              const n = parseInt(p.cuotas, 10) || 1;
-              const t = Math.round(basePrice * (p.coeficiente ?? 1));
-              return (
-                <button
-                  key={p.id}
-                  type="button"
-                  role="radio"
-                  aria-checked={seleccionado}
-                  disabled={p.coeficiente == null}
-                  onClick={() => {
-                    setGrupoSel(g);
-                    setCuotaId(p.id);
-                  }}
-                  className={`rounded-lg border px-2.5 py-2 text-left transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
-                    seleccionado ? "border-navy-900 bg-navy-900 text-white" : "border-slate-200 bg-white text-navy-900 hover:border-navy-400"
-                  }`}
-                >
-                  <span className="block text-xs font-bold leading-tight">{p.coeficiente == null ? `${p.cuotas} (consultar)` : p.cuotas}</span>
-                  <span className={`mt-0.5 block text-xs ${seleccionado ? "text-white/80" : "text-slate-500"}`}>
-                    {n > 1 ? `${formatPrice(t / n)} c/u · total ${formatPrice(t)}` : g === EFECTIVO_GRUPO ? `${formatPrice(t)} en el local` : formatPrice(t)}
-                  </span>
-                </button>
-              );
-            })}
+      {abierto && grupos.includes(abierto) && (() => {
+        const g = abierto;
+        const planes = planesDe(g);
+        const nota = notaSinInteres(g);
+        const hayCuotasSinInteres = maxSinInteres(planes) > 0;
+        const nombre = g === EFECTIVO_GRUPO ? "Efectivo" : displayGrupoLabel(g);
+        return (
+          <div className="mt-3 rounded-lg border border-slate-200 bg-slate-50 p-3">
+            <p className="text-sm font-bold text-navy-900">{nombre}</p>
+            {planes.length === 1 ? (
+              // Una sola opción (efectivo, GOcuotas): no hay nada que elegir.
+              (() => {
+                const p = planes[0];
+                const n = parseInt(p.cuotas, 10) || 1;
+                const t = Math.round(basePrice * (p.coeficiente ?? 1));
+                return (
+                  <p className="mt-1 text-sm font-semibold text-navy-900">
+                    {g === EFECTIVO_GRUPO
+                      ? `Pagás ${formatPrice(t)} en el local (10% de descuento).`
+                      : n > 1
+                        ? `${n} cuotas${p.coeficiente === 1 ? " sin interés" : ""} de ${formatPrice(t / n)} · total ${formatPrice(t)}`
+                        : formatPrice(t)}
+                  </p>
+                );
+              })()
+            ) : (
+              <div role="radiogroup" aria-label={nombre} className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-3">
+                {planes.map((p) => {
+                  const seleccionado = g === grupoActual && p.id === planActual.id;
+                  const n = parseInt(p.cuotas, 10) || 1;
+                  const t = Math.round(basePrice * (p.coeficiente ?? 1));
+                  const sinInt = n > 1 && p.coeficiente === 1;
+                  return (
+                    <button
+                      key={p.id}
+                      type="button"
+                      role="radio"
+                      aria-checked={seleccionado}
+                      disabled={p.coeficiente == null}
+                      onClick={() => {
+                        setGrupoSel(g);
+                        setCuotaId(p.id);
+                      }}
+                      className={`rounded-lg border px-2.5 py-2 text-left transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
+                        seleccionado
+                          ? "border-navy-900 bg-navy-900 text-white"
+                          : sinInt
+                            ? "border-emerald-400 bg-emerald-50 text-navy-900 hover:border-emerald-600"
+                            : "border-slate-200 bg-white text-navy-900 hover:border-navy-400"
+                      }`}
+                    >
+                      <span className="block text-xs font-bold leading-tight">{p.coeficiente == null ? `${p.cuotas} (consultar)` : p.cuotas}</span>
+                      <span className={`mt-0.5 block text-xs ${seleccionado ? "text-white/80" : "text-slate-500"}`}>
+                        {n > 1 ? `${formatPrice(t / n)} c/u · total ${formatPrice(t)}` : formatPrice(t)}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+            {nota && hayCuotasSinInteres && (
+              <p className="mt-2 text-xs font-semibold text-emerald-700">{nota}</p>
+            )}
           </div>
-        </div>
-      )}
+        );
+      })()}
 
       <div className="mt-4 overflow-hidden rounded-xl bg-navy-900 text-white" aria-live="polite">
         <div className="flex items-center justify-between gap-3 border-b border-white/10 px-4 py-2.5">
