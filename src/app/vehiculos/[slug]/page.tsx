@@ -459,7 +459,6 @@ async function SinStockMedida({ name, size, profile }: { name: string; size: Tir
     .filter((x) => x.diff <= 3)
     .sort((a, b) => a.diff - b.diff || a.p.price - b.p.price)
     .slice(0, 4);
-  const branch = BRANCHES[0];
   const texto = encodeURIComponent(`Hola! Busco neumáticos ${formatSize(size)} para mi ${name}. ¿Los tienen o me pueden conseguir?`);
 
   return (

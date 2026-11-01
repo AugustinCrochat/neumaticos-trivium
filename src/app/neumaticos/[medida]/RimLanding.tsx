@@ -1,7 +1,6 @@
 import Link from "@/components/ui/Link";
 import { AtencionLocal } from "@/components/ui/SucursalBits";
 import type { TireProduct } from "@/lib/types";
-import { BRANCHES, TIRE_RIMS } from "@/lib/config";
 import { SortedProductGrid } from "@/components/ui/SortedProductGrid";
 import { bestPriceByGroup, peersByGroup } from "@/lib/best-price";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";

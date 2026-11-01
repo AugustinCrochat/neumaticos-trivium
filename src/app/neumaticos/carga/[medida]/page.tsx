@@ -86,7 +86,6 @@ export default async function CargaMedidaPage({ params }: Props) {
   const label = formatCargaSize(size);
   const path = `/neumaticos/carga/${cargaSlug(size)}`;
   const content = cargaContent(size);
-  const branch = BRANCHES[0];
   const ordenados = [...productos].sort((a, b) => Number(b.enStock) - Number(a.enStock) || a.price - b.price);
   const enStock = ordenados.filter((p) => p.enStock);
   const mejores = bestPriceByGroup(ordenados);
