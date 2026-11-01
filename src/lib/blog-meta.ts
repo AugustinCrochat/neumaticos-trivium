@@ -296,7 +296,7 @@ export const BLOG_META: Record<string, BlogMeta> = {
     shopLinks: [{ label: "Medida 175/65 R14", href: "/neumaticos/175-65-r14" }, L.todos, L.ofertas],
   },
   "neumaticos-195-65-r15-autos-que-la-usan": {
-    cover: { src: "/images/blog/medida-195-65-r15-portada.webp", alt: "Neumáticos 195/65 R15 con los autos que la usan: Ford EcoSport, Renault Megane" },
+    cover: { src: "/images/blog/medida-195-65-r15-portada.webp", alt: "Neumáticos 195/65 R15 con los autos que la usan: Ford EcoSport, Peugeot 307" },
     figure: { src: "/images/blog/medida-195-65-r15-autos.webp", alt: "Autos que usan la medida 195/65 R15", caption: "Algunos de los autos que llevan la medida 195/65 R15 de fábrica." },
     shopIntro: "Mirá la medida 195/65 R15 en stock:",
     shopLinks: [{ label: "Medida 195/65 R15", href: "/neumaticos/195-65-r15" }, L.todos, L.ofertas],

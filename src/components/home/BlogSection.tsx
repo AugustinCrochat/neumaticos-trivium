@@ -43,7 +43,7 @@ export function BlogSection() {
                 i === 0 ? "md:col-span-1" : ""
               }`}
             >
-              <BlogCover image={blogMeta(post.slug).cover} className="h-44" />
+              <BlogCover image={blogMeta(post.slug).cover} className="aspect-[2/1]" />
 
               <div className="p-5">
                 <div className="flex items-center gap-2 mb-3">

@@ -41,7 +41,7 @@ export default function BlogPage() {
               key={post.id}
               className="group relative bg-white rounded-2xl overflow-hidden border border-slate-100 hover:border-navy-200 hover:shadow-lg transition-all duration-200 flex flex-col"
             >
-              <BlogCover image={blogMeta(post.slug).cover} className="h-44" />
+              <BlogCover image={blogMeta(post.slug).cover} className="aspect-[2/1]" />
 
               <div className="p-5 flex flex-col flex-1">
                 <div className="flex items-center gap-2 mb-3">
