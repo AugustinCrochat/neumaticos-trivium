@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "@/components/ui/Link";
 import { GoogleRatingBadge } from "@/components/ui/GoogleRatingBadge";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
@@ -15,19 +16,35 @@ const chip = "rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-s
  * abierto con servicios confirmados. Una sucursal por abrir muestra la fecha y
  * el "Avisame".
  */
-export function HeroChips({ ancla }: { ancla: { href: string; texto: string } | null }) {
+export function HeroChips({ anclas }: { anclas: { href: string; texto: string }[] }) {
   const { selectedBranch: b } = useBranch();
+  const [i, setI] = useState(0);
+  useEffect(() => {
+    if (anclas.length < 2 || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const t = setInterval(() => setI((n) => (n + 1) % anclas.length), 3000);
+    return () => clearInterval(t);
+  }, [anclas.length]);
   const abierta = !b.apertura && !b.provisorio;
 
   return (
     <div className="mt-6 flex flex-wrap items-center gap-2">
       {b.googleRating && <GoogleRatingBadge branchId={b.id} className={chip} />}
-      {ancla && (
+      {anclas.length > 0 && (
+        // Todas las medidas apiladas en la misma celda (las que no tocan, invisibles):
+        // la píldora mide lo que la más larga y los chips vecinos no saltan.
         <Link
-          href={ancla.href}
-          className="rounded-full bg-orange-500 px-3 py-1.5 text-sm font-black !text-white !no-underline transition-colors hover:bg-orange-600"
+          href={anclas[i].href}
+          className="inline-grid rounded-full bg-orange-500 px-3 py-1.5 text-sm font-black !text-white !no-underline transition-colors hover:bg-orange-600"
         >
-          {ancla.texto}
+          {anclas.map((a, n) => (
+            <span
+              key={a.href}
+              aria-hidden={n !== i}
+              className={`col-start-1 row-start-1 text-center transition-opacity duration-500 ${n === i ? "opacity-100" : "opacity-0"}`}
+            >
+              {a.texto}
+            </span>
+          ))}
         </Link>
       )}
       {abierta ? (

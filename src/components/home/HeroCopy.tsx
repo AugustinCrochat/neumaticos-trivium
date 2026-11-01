@@ -26,14 +26,11 @@ export function HeroEtiqueta() {
 
 export function HeroTexto() {
   const { selectedBranch: b } = useBranch();
-  const taller = b.province === "Córdoba" ? "alineado, balanceado y rotación" : "alineación, balanceo y rotación";
   return (
-    <p className="mt-5 max-w-lg text-lg leading-relaxed text-slate-300">
-      Cubiertas al mejor precio para auto, camioneta, A/T y carga, de importación directa, con stock real y precio
-      publicado.{" "}
+    <p className="mt-4 max-w-md text-lg leading-snug text-slate-300">
       {b.apertura
-        ? `Nuestro local de ${b.shortName} abre ${b.apertura} en ${b.address}: ya podés ver los precios y dejarnos tu consulta por WhatsApp.`
-        : `Retiro en nuestro local de ${lugar(b)} con colocación incluida, y gomería propia (${taller}).`}
+        ? `Abrimos en ${b.shortName} ${b.apertura}. Mirá los precios y dejanos tu consulta.`
+        : "Precio publicado, stock real y colocación sin cargo."}
     </p>
   );
 }

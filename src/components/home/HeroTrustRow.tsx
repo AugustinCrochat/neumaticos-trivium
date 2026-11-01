@@ -5,16 +5,19 @@ import { HeroChips } from "@/components/home/HeroChips";
 const money = (n: number) =>
   new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 }).format(n);
 
-/** El neumático más barato con stock de la medida más pedida que tenga stock:
-    un precio real ("175/65 R14 a $71.000") convence más que un "desde". */
-export function precioAncla(productos: TireProduct[]) {
+/** El neumático más barato con stock de cada una de las medidas más pedidas
+    (hasta `max`): un precio real ("175/65 R14 a $71.000") convence más que un
+    "desde", y la píldora de la portada los va rotando. */
+export function preciosAncla(productos: TireProduct[], max = 6) {
+  const out: { size: TireProduct["size"]; precio: number }[] = [];
   for (const size of MEDIDAS_PRIORITARIAS) {
     const precios = productos
       .filter((p) => p.enStock !== false && !p.isCarga && sizesEqual(p.size, size))
       .map((p) => p.price);
-    if (precios.length) return { size, precio: Math.min(...precios) };
+    if (precios.length) out.push({ size, precio: Math.min(...precios) });
+    if (out.length === max) break;
   }
-  return null;
+  return out;
 }
 
 /**
@@ -24,10 +27,9 @@ export function precioAncla(productos: TireProduct[]) {
  * lo resuelve HeroChips en el cliente.
  */
 export function HeroTrustRow({ productos }: { productos: TireProduct[] }) {
-  const ancla = precioAncla(productos);
-  return (
-    <HeroChips
-      ancla={ancla ? { href: `/neumaticos/${sizeSlug(ancla.size)}`, texto: `${formatSize(ancla.size)} a ${money(ancla.precio)}` } : null}
-    />
-  );
+  const anclas = preciosAncla(productos).map((a) => ({
+    href: `/neumaticos/${sizeSlug(a.size)}`,
+    texto: `${formatSize(a.size)} a ${money(a.precio)}`,
+  }));
+  return <HeroChips anclas={anclas} />;
 }
