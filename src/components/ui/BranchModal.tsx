@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useBranch } from "@/contexts/branch-context";
 import { BRANCHES } from "@/lib/config";
 import { getBranchDistances, formatDistance } from "@/lib/branch-geo";
+import { getBranchStatus } from "@/lib/branch-status";
 import { DirectionsIcon } from "./DirectionsIcon";
 import { WhatsAppLink } from "./WhatsAppLink";
 
@@ -79,6 +80,14 @@ function BranchModalContent() {
       { timeout: 10000, maximumAge: 10 * 60 * 1000 }
     );
   }
+
+  // Hora real para "abierta ahora": el modal se monta sólo en el cliente, así
+  // que no hay riesgo de desajuste de hidratación. Se refresca cada minuto.
+  const [ahora, setAhora] = useState(() => new Date());
+  useEffect(() => {
+    const timer = setInterval(() => setAhora(new Date()), 60_000);
+    return () => clearInterval(timer);
+  }, []);
 
   // Primero la activa, después la más cercana detectada, después el resto.
   const rank = (id: string) =>
@@ -212,9 +221,20 @@ function BranchModalContent() {
                         Abre {branch.apertura}
                       </span>
                     ) : (
-                      <span className="rounded-full bg-green-50 px-2 py-0.5 text-[11px] font-bold text-green-700">
-                        Abierta
-                      </span>
+                      (() => {
+                        const estado = getBranchStatus(branch, ahora);
+                        return (
+                          <span
+                            className={`inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[11px] font-bold ${
+                              estado.isOpen ? "bg-green-50 text-green-700" : "bg-slate-100 text-slate-600"
+                            }`}
+                          >
+                            <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${estado.isOpen ? "bg-green-500" : "bg-slate-400"}`} />
+                            {estado.label}
+                            {estado.detail && <span className="font-medium opacity-80">· {estado.detail}</span>}
+                          </span>
+                        );
+                      })()
                     )}
                     {isNearest && (
                       <span className="inline-flex items-center gap-1.5 rounded-full bg-neutral-900 px-2 py-0.5 text-[11px] font-bold text-white">
