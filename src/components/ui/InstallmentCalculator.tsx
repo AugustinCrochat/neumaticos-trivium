@@ -35,10 +35,19 @@ function formatPrice(price: number) {
     Visa/Mastercard/Naranja), así que cada uno tiene su propia altura acá. */
 function logoClassName(logo: string): string {
   if (logo === "/images/payments/mercadopago.svg") return "h-9 w-auto";
-  if (logo === "/images/payments/gocuotas.svg") return "h-6 w-auto";
-  if (logo === "/images/payments/visa.svg") return "h-4 w-auto";
-  if (logo === "/images/payments/mastercard.svg") return "h-8 w-auto";
+  if (logo === "/images/payments/gocuotas.svg") return "h-5 w-auto";
+  if (logo === "/images/payments/visa.svg") return "h-3.5 w-auto";
+  if (logo === "/images/payments/mastercard.svg") return "h-7 w-auto";
   return "h-5 w-auto";
+}
+
+/** Ancho de cada medio en una grilla de 6 columnas: con 5 medios quedan 3 arriba
+    y 2 abajo, más anchos, así la fila de abajo también llena el ancho. */
+function spanDe(i: number, n: number): string {
+  if (n === 5) return i < 3 ? "col-span-2" : "col-span-3";
+  if (n === 4 || n === 2) return "col-span-3";
+  if (n === 3 || n === 6) return "col-span-2";
+  return "col-span-6";
 }
 
 /** Mayor cantidad de cuotas sin interés del medio (0 si no tiene). */
@@ -52,8 +61,8 @@ function maxSinInteres(planes: Plan[]): number {
 /** Aclaración de cómo se accede a las cuotas sin interés de cada medio. */
 function notaSinInteres(g: string): string | null {
   if (g === MERCADO_PAGO_GRUPO) return "Las cuotas sin interés son pagando con la tarjeta de crédito Mercado Pago.";
-  if (g === GOCUOTAS_GRUPO) return "Pagás con GOcuotas, sin interés.";
-  if (esNaranja(g)) return "Plan Z con Tarjeta Naranja.";
+  if (g === GOCUOTAS_GRUPO) return "Se paga con GOcuotas, sin interés.";
+  if (esNaranja(g)) return "Es el Plan Z de Tarjeta Naranja.";
   if (esBanco(g)) return "Promo con Visa o Mastercard de banco, miércoles y sábados.";
   return null;
 }
@@ -91,8 +100,6 @@ export function InstallmentCalculator({
   const recargos = useRecargosTarjeta();
   const [grupoSel, setGrupoSel] = useState<string | null>(null);
   const [cuotaId, setCuotaId] = useState<string | null>(null);
-  // Todos los medios arrancan colapsados; se abre uno a la vez.
-  const [abierto, setAbierto] = useState<string | null>(null);
 
   // Igual que en PaymentMethodsSection: se calcula en el cliente, no en el
   // build (página estática), así que arranca en false y se corrige al
@@ -127,89 +134,82 @@ export function InstallmentCalculator({
     <div className="rounded-xl border border-slate-200 bg-white p-4">
       <h3 className="text-xs font-black uppercase tracking-wide text-navy-900">Elegí cómo pagar</h3>
 
-      {/* Fila de medios: tocar uno lo elige y despliega abajo sus cuotas. */}
-      <div className="mt-3 flex flex-wrap gap-2">
-        {grupos.map((g) => {
-          const activo = g === grupoActual;
-          const abiertoAhora = abierto === g;
+      {/* Medios: mosaico parejo; el elegido muestra abajo sus cuotas. */}
+      <div className="mt-3 grid grid-cols-6 gap-2" role="radiogroup" aria-label="Medio de pago">
+        {grupos.map((g, i) => {
+          const elegido = g === grupoActual;
+          const sinInteresMax = g === EFECTIVO_GRUPO ? 0 : maxSinInteres(planesDe(g));
           return (
             <button
               key={g}
               type="button"
-              aria-expanded={abiertoAhora}
+              role="radio"
+              aria-checked={elegido}
               aria-label={g === EFECTIVO_GRUPO ? "Efectivo" : displayGrupoLabel(g)}
               onClick={() => {
-                if (abiertoAhora) {
-                  setAbierto(null);
-                  return;
-                }
-                setAbierto(g);
-                if (!activo) {
-                  setGrupoSel(g);
-                  setCuotaId(null);
-                }
+                setGrupoSel(g);
+                setCuotaId(null);
               }}
-              className={`flex min-h-11 flex-col items-center justify-center gap-1 rounded-lg border-2 px-3 py-1.5 transition-colors ${
-                abiertoAhora ? "border-navy-900 bg-slate-50" : activo ? "border-slate-300 bg-white" : "border-slate-200 bg-white hover:border-slate-300"
+              className={`${spanDe(i, grupos.length)} flex h-[76px] flex-col items-center justify-center gap-1.5 rounded-xl border-2 px-1 transition-colors ${
+                elegido ? "border-navy-900 bg-white shadow-sm" : "border-slate-200 bg-white hover:border-slate-300"
               }`}
             >
-              <span className="flex items-center gap-2">
+              <span className="flex h-9 items-center justify-center gap-1.5">
                 {g === EFECTIVO_GRUPO ? (
-                  <>
-                    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-600 text-base font-black leading-none text-white" aria-hidden="true">
-                      $
-                    </span>
-                    <span className="text-xs font-black text-navy-900">Efectivo</span>
-                  </>
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-600 text-lg font-black leading-none text-white" aria-hidden="true">
+                    $
+                  </span>
                 ) : (
                   logosDelGrupo(g).map((logo) => (
                     <Image key={logo} src={logo} alt="" width={140} height={40} className={logoClassName(logo)} />
                   ))
                 )}
               </span>
-              {g === EFECTIVO_GRUPO ? (
-                <span className="rounded-full bg-emerald-600 px-1.5 py-0.5 text-[10px] font-black uppercase leading-none tracking-wide text-white">10% OFF</span>
-              ) : (
-                maxSinInteres(planesDe(g)) > 0 && (
-                  <span className="rounded-full bg-emerald-600 px-1.5 py-0.5 text-[10px] font-black uppercase leading-none tracking-wide text-white">
-                    {maxSinInteres(planesDe(g))} cuotas sin interés
-                  </span>
-                )
-              )}
+              <span
+                className={`text-[11px] font-bold leading-none ${
+                  g === EFECTIVO_GRUPO || sinInteresMax > 0 ? "text-emerald-700" : "text-slate-500"
+                }`}
+              >
+                {g === EFECTIVO_GRUPO ? "10% OFF" : sinInteresMax > 0 ? "Sin interés" : "En cuotas"}
+              </span>
             </button>
           );
         })}
       </div>
 
-      {abierto && grupos.includes(abierto) && (() => {
-        const g = abierto;
-        const planes = planesDe(g);
-        const nota = notaSinInteres(g);
-        const hayCuotasSinInteres = maxSinInteres(planes) > 0;
+      {(() => {
+        const g = grupoActual;
+        const planes = planesDelGrupo;
         const nombre = g === EFECTIVO_GRUPO ? "Efectivo" : displayGrupoLabel(g);
+        const nota = maxSinInteres(planes) > 0 ? notaSinInteres(g) : null;
         return (
-          <div className="mt-3 rounded-lg border border-slate-200 bg-slate-50 p-3">
-            <p className="text-sm font-bold text-navy-900">{nombre}</p>
+          <div className="mt-3 rounded-xl bg-slate-50 p-3">
+            <p className="text-sm font-black text-navy-900">{nombre}</p>
             {planes.length === 1 ? (
-              // Una sola opción (efectivo, GOcuotas): no hay nada que elegir.
               (() => {
                 const p = planes[0];
                 const n = parseInt(p.cuotas, 10) || 1;
                 const t = Math.round(basePrice * (p.coeficiente ?? 1));
+                const sinInt = n > 1 && p.coeficiente === 1;
                 return (
-                  <p className="mt-1 text-sm font-semibold text-navy-900">
-                    {g === EFECTIVO_GRUPO
-                      ? `Pagás ${formatPrice(t)} en el local (10% de descuento).`
-                      : n > 1
-                        ? `${n} cuotas${p.coeficiente === 1 ? " sin interés" : ""} de ${formatPrice(t / n)} · total ${formatPrice(t)}`
-                        : formatPrice(t)}
-                  </p>
+                  <div className="mt-2 rounded-lg border border-slate-200 bg-white px-3 py-2.5">
+                    <p className="text-base font-black text-navy-900">
+                      {n > 1 ? `${n} cuotas de ${formatPrice(t / n)}` : formatPrice(t)}
+                    </p>
+                    <p className={`text-xs font-semibold ${sinInt || g === EFECTIVO_GRUPO ? "text-emerald-700" : "text-slate-500"}`}>
+                      {g === EFECTIVO_GRUPO
+                        ? "10% de descuento pagando en el local"
+                        : sinInt
+                          ? `Sin interés · total ${formatPrice(t)}`
+                          : `Total ${formatPrice(t)}`}
+                    </p>
+                  </div>
                 );
               })()
             ) : (
-              <div role="radiogroup" aria-label={nombre} className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-3">
-                {planes.map((p) => {
-                  const seleccionado = g === grupoActual && p.id === planActual.id;
+              <div role="radiogroup" aria-label={`Cuotas ${nombre}`} className={`mt-2 grid gap-2 ${planes.length % 3 === 0 ? "grid-cols-3" : "grid-cols-2"}`}>
+                {planes.map((p, idx) => {
+                  const seleccionado = p.id === planActual.id;
                   const n = parseInt(p.cuotas, 10) || 1;
                   const t = Math.round(basePrice * (p.coeficiente ?? 1));
                   const sinInt = n > 1 && p.coeficiente === 1;
@@ -220,30 +220,24 @@ export function InstallmentCalculator({
                       role="radio"
                       aria-checked={seleccionado}
                       disabled={p.coeficiente == null}
-                      onClick={() => {
-                        setGrupoSel(g);
-                        setCuotaId(p.id);
-                      }}
-                      className={`rounded-lg border px-2.5 py-2 text-left transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
-                        seleccionado
-                          ? "border-navy-900 bg-navy-900 text-white"
-                          : sinInt
-                            ? "border-emerald-400 bg-emerald-50 text-navy-900 hover:border-emerald-600"
-                            : "border-slate-200 bg-white text-navy-900 hover:border-navy-400"
+                      onClick={() => setCuotaId(p.id)}
+                      className={`${planes.length % 3 !== 0 && planes.length % 2 === 1 && idx === planes.length - 1 ? "col-span-2 " : ""}flex flex-col gap-0.5 rounded-lg border-2 px-3 py-2 text-left transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
+                        seleccionado ? "border-navy-900 bg-white shadow-sm" : "border-slate-200 bg-white hover:border-slate-300"
                       }`}
                     >
-                      <span className="block text-xs font-bold leading-tight">{p.coeficiente == null ? `${p.cuotas} (consultar)` : p.cuotas}</span>
-                      <span className={`mt-0.5 block text-xs ${seleccionado ? "text-white/80" : "text-slate-500"}`}>
-                        {n > 1 ? `${formatPrice(t / n)} c/u · total ${formatPrice(t)}` : formatPrice(t)}
+                      <span className="text-sm font-black leading-tight text-navy-900">
+                        {p.coeficiente == null ? `${n} cuotas (consultar)` : n > 1 ? `${n} cuotas` : "1 pago"}
+                      </span>
+                      <span className="text-xs font-semibold text-slate-600">{n > 1 ? `${formatPrice(t / n)} c/u` : formatPrice(t)}</span>
+                      <span className={`text-[11px] font-bold ${sinInt ? "text-emerald-700" : "text-slate-400"}`}>
+                        {sinInt ? "Sin interés" : n > 1 ? `Total ${formatPrice(t)}` : "\u00a0"}
                       </span>
                     </button>
                   );
                 })}
               </div>
             )}
-            {nota && hayCuotasSinInteres && (
-              <p className="mt-2 text-xs font-semibold text-emerald-700">{nota}</p>
-            )}
+            {nota && <p className="mt-2 text-xs font-semibold text-emerald-700">{nota}</p>}
           </div>
         );
       })()}
