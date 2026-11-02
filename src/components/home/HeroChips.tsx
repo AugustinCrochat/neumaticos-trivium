@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "@/components/ui/Link";
 import { GoogleRatingBadge } from "@/components/ui/GoogleRatingBadge";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
@@ -19,11 +19,30 @@ const chip = "rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-s
 export function HeroChips({ anclas }: { anclas: { href: string; texto: string }[] }) {
   const { selectedBranch: b } = useBranch();
   const [i, setI] = useState(0);
+  const pastilla = useRef<HTMLAnchorElement>(null);
+  const pausaHasta = useRef(0);
   useEffect(() => {
     if (anclas.length < 2) return;
-    const t = setInterval(() => setI((n) => (n + 1) % anclas.length), 3000);
-    return () => clearInterval(t);
+    // Con "reducir movimiento" la medida cambia sin fundido y más despacio (el CSS ya quita la transición).
+    const quieto = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let visible = true;
+    const io = new IntersectionObserver(([x]) => (visible = x.isIntersecting));
+    if (pastilla.current) io.observe(pastilla.current);
+    const t = setInterval(() => {
+      // No cambia mientras se la mira de cerca (mouse, foco, toque) ni si no se ve.
+      if (!visible || document.hidden || performance.now() < pausaHasta.current) return;
+      setI((n) => (n + 1) % anclas.length);
+    }, quieto ? 4500 : 3000);
+    return () => {
+      clearInterval(t);
+      io.disconnect();
+    };
   }, [anclas.length]);
+  const pausar = (ms: number, soloMouse = false) => (e?: { pointerType?: string } | object) => {
+    // En celulares tocar dispara un "enter" falso sin "leave": sólo cuenta el mouse de verdad.
+    if (soloMouse && (e as { pointerType?: string } | undefined)?.pointerType !== "mouse") return;
+    pausaHasta.current = ms === Infinity ? Infinity : performance.now() + ms;
+  };
   const abierta = !b.apertura && !b.provisorio;
 
   return (
@@ -33,7 +52,13 @@ export function HeroChips({ anclas }: { anclas: { href: string; texto: string }[
         // Todas las medidas apiladas en la misma celda (las que no tocan, invisibles):
         // la píldora mide lo que la más larga y los chips vecinos no saltan.
         <Link
+          ref={pastilla}
           href={anclas[i].href}
+          onPointerEnter={pausar(Infinity, true)}
+          onPointerLeave={pausar(600, true)}
+          onFocus={pausar(Infinity)}
+          onBlur={pausar(600)}
+          onTouchStart={pausar(3000)}
           className="inline-grid rounded-full bg-orange-500 px-3 py-1.5 text-sm font-black !text-white !no-underline transition-colors hover:bg-orange-600"
         >
           {anclas.map((a, n) => (
