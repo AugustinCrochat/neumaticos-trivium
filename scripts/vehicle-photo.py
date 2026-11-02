@@ -26,7 +26,7 @@ Después de cambiar una foto hay que regenerar lo que la usa fuera de la ficha
 """
 import functools, io, os, re, sys, urllib.request
 import numpy as np
-from PIL import Image, ImageDraw, ImageFilter, ImageFont, ImageOps
+from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont, ImageOps
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 DIR = os.path.join(ROOT, "public/images/vehiculos")
@@ -239,6 +239,14 @@ def red_panel(w, h):
     return Image.fromarray(np.clip(base + (red - base) * glow * 0.85, 0, 255).astype("uint8").repeat(1, 0), "RGB")
 
 
+def paste_shadow(out, shadow, pos, panel_mask):
+    """Sombra del auto sólo sobre el fondo oscuro: sobre el panel blanco se ve como una mancha."""
+    x, y = pos
+    libre = ImageOps.invert(panel_mask.crop((x, y, x + shadow.width, y + shadow.height)))
+    shadow.putalpha(ImageChops.multiply(shadow.getchannel("A"), libre))
+    out.paste(shadow, pos, shadow)
+
+
 def put_tire(out, name, sizes, h, anchor):
     path, exact = tire_photo(sizes, name)
     if not path:
@@ -281,7 +289,7 @@ def card(slug, variant="a"):
         out.paste(panel, (0, 0), mask.filter(ImageFilter.GaussianBlur(0.6)))
         # El auto va por encima del panel blanco: la trompa pisa la diagonal en vez de quedar tapada.
         cx, cy = 1200 - car.width - 14, 560 - car.height
-        out.paste(shadow, (cx, cy + 18), shadow)
+        paste_shadow(out, shadow, (cx, cy + 18), mask)
         out.paste(car, (cx, cy), car)
         d = ImageDraw.Draw(out)
         d.text((46, 28), "NEUMÁTICOS PARA", font=fit_font("ExtraBold", "NEUMÁTICOS PARA", 60, 540), fill=(70, 70, 70))
@@ -361,7 +369,7 @@ def brand_card(brand):
         car = car.resize((round(car.width * k), round(car.height * k)), Image.LANCZOS)
         shadow = Image.new("RGBA", car.size, (0, 0, 0, 0))
         shadow.putalpha(car.getchannel("A").point(lambda v: v // 2).filter(ImageFilter.GaussianBlur(10)))
-        out.paste(shadow, (x, y + 12), shadow)
+        paste_shadow(out, shadow, (x, y + 12), mask)
         out.paste(car, (x, y), car)
     d = ImageDraw.Draw(out)
     d.text((46, 28), "NEUMÁTICOS PARA", font=fit_font("ExtraBold", "NEUMÁTICOS PARA", 52, 500), fill=(70, 70, 70))
