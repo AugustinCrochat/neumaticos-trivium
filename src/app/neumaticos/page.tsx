@@ -17,6 +17,7 @@ import {
 import type { TireSize } from "@/lib/types";
 import { poolShare } from "@/lib/share-image";
 import { SizeOrVehicleSearch } from "@/components/ui/SizeOrVehicleSearch";
+import { VehicleSizeSearch } from "@/components/ui/VehicleSizeSearch";
 import { SortedProductGrid } from "@/components/ui/SortedProductGrid";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { MarcaLogo } from "@/components/ui/MarcaLogo";
@@ -313,7 +314,12 @@ export default async function NeumaticosPage() {
               Ver todas las marcas →
             </Link>
           </div>
-          <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+          <div className="mt-5 max-w-xl rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+            <p className="mb-2 text-sm font-bold text-slate-600">Elegí marca y modelo y te decimos qué medida lleva</p>
+            <VehicleSizeSearch />
+          </div>
+          <p className="mt-6 text-sm font-bold text-slate-500">O elegí uno de los más buscados</p>
+          <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
             {autos.map((v) => {
               const slug = vehicleSlug(v.brand, v.model);
               return (
