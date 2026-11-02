@@ -63,16 +63,19 @@ export function LocalProductCarousel({
     let puesta = pos;
     let pausaHasta = 0;
     let visible = true;
-    const pausar = (ms = Infinity) => () => {
+    const pausar = (ms = Infinity, soloMouse = false) => (ev: Event) => {
+      // En celulares, tocar dispara un "mouseenter" falso y nunca el "mouseleave": sólo cuenta el mouse de verdad.
+      if (soloMouse && (ev as PointerEvent).pointerType !== "mouse") return;
       pausaHasta = ms === Infinity ? Infinity : performance.now() + ms;
     };
-    const eventos: [string, () => void][] = [
-      ["mouseenter", pausar()],
-      ["mouseleave", pausar(600)],
+    const eventos: [string, (ev: Event) => void][] = [
+      ["pointerenter", pausar(Infinity, true)],
+      ["pointerleave", pausar(600, true)],
       ["focusin", pausar()],
       ["focusout", pausar(600)],
       ["touchstart", pausar()],
-      ["touchend", pausar(3000)],
+      ["touchend", pausar(2000)],
+      ["touchcancel", pausar(2000)],
       ["wheel", pausar(3000)],
     ];
     eventos.forEach(([e, f]) => el.addEventListener(e, f, { passive: true }));
