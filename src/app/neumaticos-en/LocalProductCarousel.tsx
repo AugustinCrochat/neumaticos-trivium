@@ -197,7 +197,7 @@ export function LocalProductCarousel({
         </button>
         {rodados.map((r) => (
           <button key={r} type="button" className={pill(rim === r)} onClick={() => setRim(r)}>
-            Rodado {r}
+            R{r}
           </button>
         ))}
       </div>

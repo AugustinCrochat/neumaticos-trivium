@@ -18,7 +18,7 @@ export function HomeProductCarousel({ productos }: { productos: TireProduct[] })
 
   return (
     <div className="mx-auto max-w-7xl px-4 pt-10 2xl:max-w-[96rem]">
-      <LocalProductCarousel autoplay productos={conStock} mejores={mejores} titulo="Neumáticos con stock y precio hoy" />
+      <LocalProductCarousel autoplay productos={conStock} mejores={mejores} titulo="Neumáticos con stock y precio" />
     </div>
   );
 }
