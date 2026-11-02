@@ -14,11 +14,13 @@ import type { TireProduct } from "@/lib/types";
  * acotan la lista; el scroll es nativo (snap) y las flechas son un extra para
  * escritorio.
  *
- * Con `autoplay` se mueve solo, despacio y en continuo (cinta sin fin): se
- * pausa al pasar el mouse, tocar o enfocar, y no se mueve si la persona pidió
- * reducir movimiento. La cinta sin fin se arma duplicando las tarjetas sólo en
- * el navegador (el HTML del servidor trae una sola copia, la que lee Google).
+ * Con `autoplay` se mueve solo y se pausa al pasar el mouse, tocar o enfocar.
+ * Normalmente es una cinta continua y lenta (sin fin: se arma duplicando las
+ * tarjetas sólo en el navegador; el HTML del servidor trae una sola copia, la
+ * que lee Google). Si la persona pidió reducir movimiento, en vez de deslizar
+ * pasa de a una tarjeta cada unos segundos, sin animación.
  */
+const PASO_MS = 4500;
 const VELOCIDAD_PX_S = 38;
 
 export function LocalProductCarousel({
@@ -46,16 +48,17 @@ export function LocalProductCarousel({
   const lista = useMemo(() => sortInStockFirst(filtrada, (p) => p.id, (p) => p.enStock, liveStock), [filtrada, liveStock]);
 
   // Cinta sin fin: se activa en el navegador (si hay movimiento permitido y alcanzan las tarjetas para llenar la fila).
-  const [cinta, setCinta] = useState(false);
+  const [modo, setModo] = useState<"cinta" | "pasos" | null>(null);
+  const cinta = modo === "cinta";
   useEffect(() => {
     const quieto = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setCinta(autoplay && !quieto && lista.length >= 4);
+    setModo(autoplay && lista.length >= 4 ? (quieto ? "pasos" : "cinta") : null);
   }, [autoplay, lista.length]);
 
   useEffect(() => {
     const el = scroller.current;
-    if (!cinta || !el) return;
+    if (!modo || !el) return;
     const n = lista.length + 1; // tarjetas + "Ver todo el catálogo"
     let raf = 0;
     let last = performance.now();
@@ -82,6 +85,17 @@ export function LocalProductCarousel({
     const io = new IntersectionObserver(([x]) => (visible = x.isIntersecting));
     io.observe(el);
 
+    // Reducción de movimiento: una tarjeta cada PASO_MS, de golpe (sin deslizar); al final vuelve al principio.
+    let timer = 0;
+    if (modo === "pasos") {
+      timer = window.setInterval(() => {
+        if (!visible || document.hidden || performance.now() < pausaHasta) return;
+        const paso = (el.children[1] as HTMLElement).offsetLeft - (el.children[0] as HTMLElement).offsetLeft;
+        const alFinal = el.scrollLeft + el.clientWidth >= el.scrollWidth - 4;
+        el.scrollTo({ left: alFinal ? 0 : el.scrollLeft + paso, behavior: "instant" });
+      }, PASO_MS);
+    }
+
     const frame = (t: number) => {
       const dt = Math.min(t - last, 64);
       last = t;
@@ -101,13 +115,14 @@ export function LocalProductCarousel({
       }
       raf = requestAnimationFrame(frame);
     };
-    raf = requestAnimationFrame(frame);
+    if (modo === "cinta") raf = requestAnimationFrame(frame);
     return () => {
       cancelAnimationFrame(raf);
+      window.clearInterval(timer);
       io.disconnect();
       eventos.forEach(([e, f]) => el.removeEventListener(e, f));
     };
-  }, [cinta, lista]);
+  }, [modo, lista]);
 
   const mover = (dir: 1 | -1) => {
     const el = scroller.current;
@@ -189,7 +204,7 @@ export function LocalProductCarousel({
 
       <div
         ref={scroller}
-        className={`-mx-4 flex gap-4 overflow-x-auto px-4 py-3 ${cinta ? "" : "snap-x snap-mandatory scroll-smooth"}`}
+        className={`-mx-4 flex gap-4 overflow-x-auto px-4 py-3 ${cinta ? "" : "snap-x snap-mandatory scroll-smooth scroll-pl-4"}`}
       >
         {tarjetas(false)}
         {cinta && tarjetas(true)}
