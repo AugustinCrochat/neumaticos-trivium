@@ -168,9 +168,10 @@ export function InstallmentCalculator({
               <span
                 className={`text-[11px] font-bold leading-none ${
                   g === EFECTIVO_GRUPO || sinInteresMax > 0 ? "text-emerald-700" : "text-slate-500"
-                }`}
+                } ${sinInteresMax > 0 ? "font-black" : ""}`}
               >
-                {g === EFECTIVO_GRUPO ? "10% OFF" : sinInteresMax > 0 ? "Sin interés" : "En cuotas"}
+                {/* "x3 sin interés" a la vista en el mosaico: que se entienda de entrada cuántas cuotas son sin interés. */}
+                {g === EFECTIVO_GRUPO ? "10% OFF" : sinInteresMax > 0 ? `x${sinInteresMax} sin interés` : "En cuotas"}
               </span>
             </button>
           );

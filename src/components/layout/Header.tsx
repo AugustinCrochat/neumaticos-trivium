@@ -27,18 +27,20 @@ export function Header() {
   // Histéresis: se achica pasados 60px y vuelve a crecer recién cerca del tope,
   // porque el cambio de alto mueve el contenido y de otro modo parpadearía.
   const [compact, setCompact] = useState(false);
-  // Franja roja: los miércoles y sábados alterna sola, en celular y en
-  // escritorio, entre "colocación sin cargo" y "hoy 3 cuotas sin interés". El
-  // cambio es instantáneo (sin animación), por eso no se frena con la
-  // preferencia de reducir movimiento. Arranca en false y se corrige al montar
-  // (el sitio es estático: calcularlo en el build lo congelaría).
+  // Franja roja: alterna sola, en celular y en escritorio, entre "colocación
+  // sin cargo" y las cuotas con Visa o Mastercard. Los miércoles y sábados el
+  // mensaje de cuotas dice "Hoy 3 cuotas sin interés"; los demás días sólo
+  // "Pagá en cuotas" (sin mencionar el sin interés, que no rige). El cambio es
+  // instantáneo (sin animación), por eso no se frena con la preferencia de
+  // reducir movimiento. `promoHoy` arranca en false y se corrige al montar (el
+  // sitio es estático: calcularlo en el build lo congelaría).
   const [promoHoy, setPromoHoy] = useState(false);
   const [slide, setSlide] = useState(0);
   useEffect(() => {
     const update = () => setPromoHoy(isVisaMasterPromoDay());
     update();
   }, []);
-  const haySlides = promoHoy && !selectedBranch.apertura;
+  const haySlides = !selectedBranch.apertura;
   useEffect(() => {
     if (!haySlides || compact) return;
     const t = setInterval(() => setSlide((n) => (n + 1) % 2), 5000);
@@ -73,7 +75,8 @@ export function Header() {
             className="flex h-7 items-center justify-center gap-2 px-4 text-center text-[11px] font-bold hover:bg-slate-100 md:text-xs"
           >
             <span>
-              Hoy 3 cuotas sin interés<span className="hidden md:inline"> con Visa o Mastercard</span>
+              {promoHoy ? "Hoy 3 cuotas sin interés" : "Pagá en cuotas"}
+              <span className="hidden md:inline"> con Visa o Mastercard</span>
             </span>
             {/* Mismas proporciones que en Medios de pago de la ficha: Visa a la mitad de alto que Mastercard. */}
             <span className="flex shrink-0 items-center gap-1.5">
