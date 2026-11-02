@@ -138,12 +138,16 @@ def normalize(cut, flip):
 VEHICLES_TS = os.path.join(ROOT, "src/lib/vehicles.ts")
 PRODUCTS = os.path.join(ROOT, "public/images/products")
 FONTS = os.environ.get("CARD_FONTS", "/usr/share/fonts/truetype/noto/NotoSans-Condensed{}.ttf")
-FALLBACK_FONT = "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf"  # sólo para previsualizar sin Noto (más ancha: el ajuste de tamaño la achica)
+# Sin Noto Sans Condensed (p. ej. en un contenedor): Roboto Condensed (Apache 2.0, scripts/fonts), de proporciones casi iguales.
+FALLBACK = {"Black": "900Black", "ExtraBold": "800ExtraBold", "Bold": "700Bold"}
 
 
 def font(kind, size):
     path = FONTS.format(kind)
-    return ImageFont.truetype(path if os.path.exists(path) else FALLBACK_FONT, size)
+    if not os.path.exists(path):
+        k = FALLBACK[kind]
+        path = os.path.join(ROOT, "scripts/fonts", f"RobotoCondensed_{k}.ttf")
+    return ImageFont.truetype(path, size)
 
 
 RED = (255, 30, 0)
@@ -175,7 +179,7 @@ def tire_files():
     for f in sorted(os.listdir(PRODUCTS)):
         # Los pack x2/x4 son composiciones de varios neumáticos, y los archivos que empiezan con un código numérico
         # (1010925-...: Michelin, Bridgestone) son del catálogo de Autocenter Norte: no son fotos de Neumáticos Trivium.
-        if not f.endswith(".webp") or "pack-x" in f or f[0].isdigit():
+        if not f.endswith(".webp") or "pack-x" in f or f[0].isdigit() or re.search(r"-aa1\d\d-", f):  # AA112/AA122: camión
             continue
         m = re.search(r"(\d{3})-?(\d{2})-?z?r(\d{2})", f)
         if m:
@@ -280,19 +284,19 @@ def card(slug, variant="a"):
         out.paste(shadow, (cx, cy + 18), shadow)
         out.paste(car, (cx, cy), car)
         d = ImageDraw.Draw(out)
-        d.text((46, 28), "NEUMÁTICOS PARA", font=fit_font("ExtraBold", "NEUMÁTICOS PARA", 52, 540), fill=(70, 70, 70))
-        d.text((46, 84), name.upper(), font=fit_font("Black", name.upper(), 66, 540), fill=(0, 0, 0))
+        d.text((46, 28), "NEUMÁTICOS PARA", font=fit_font("ExtraBold", "NEUMÁTICOS PARA", 60, 540), fill=(70, 70, 70))
+        d.text((46, 92), name.upper(), font=fit_font("Black", name.upper(), 80, 540), fill=(0, 0, 0))
         # La medida va sobre la foto del auto (overlay) para dejarle el panel blanco entero al neumático.
         if sizes:
             d.text((1176, 26), "MEDIDA ORIGINAL", font=font("Bold", 24), fill=(235, 235, 235), anchor="ra")
             main = fmt(sizes[0])
-            f = fit_font("Black", main, 104, 470)
+            f = fit_font("Black", main, 124, 470)
             d.text((1179, 51), main, font=f, fill=(0, 0, 0), anchor="ra")  # sombra
             d.text((1176, 48), main, font=f, fill=RED, anchor="ra")
             if len(sizes) > 1:
                 otras = "También: " + " · ".join(fmt(x) for x in sizes[1:3])
                 d.text((1176, 48 + f.size + 14), otras, font=fit_font("Bold", otras, 28, 470, 18), fill=(255, 255, 255), anchor="ra")
-        put_tire(out, name, sizes, 440, lambda t: (max(16, 235 - t.width // 2), 604 - t.height))
+        put_tire(out, name, sizes, 420, lambda t: (max(16, 235 - t.width // 2), 604 - t.height))
         out.paste(trivium_plate_img().resize((168, 56)), (1002, 556))
         d.rectangle((0, 620, 1200, 630), fill=RED)
         dest = os.path.join(CARDS, "b")

@@ -217,6 +217,7 @@ export const VEHICLE_PHOTOS = new Set([
   "suzuki-fun",
   "suzuki-jimny",
   "suzuki-swift",
+  "toyota-c-hr",
   "toyota-camry",
   "toyota-corolla",
   "toyota-corolla-cross",
