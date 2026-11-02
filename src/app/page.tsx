@@ -4,6 +4,7 @@ import { HeroSection } from "@/components/home/HeroSection";
 import { TrustStrip } from "@/components/home/TrustStrip";
 import { ArrepentimientoBanner } from "@/components/home/ArrepentimientoBanner";
 import { FeaturedProductsSection } from "@/components/home/FeaturedProductsSection";
+import { HomeProductCarousel } from "@/components/home/HomeProductCarousel";
 import { PopularSizesSection } from "@/components/home/PopularSizesSection";
 import { AboutSection } from "@/components/home/AboutSection";
 import { LocalSection } from "@/components/home/LocalSection";
@@ -72,6 +73,7 @@ export default async function HomePage() {
       <HomeTabTitle />
       <HeroSection productos={productos} />
       <TrustStrip />
+      <HomeProductCarousel productos={productos} />
       <PopularSizesSection productos={productos} />
       <LocalSection />
       <FeaturedProductsSection productos={productos} />
