@@ -9,7 +9,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { canonical, breadcrumbJsonLd, faqJsonLd, itemListJsonLd, type Faq } from "@/lib/seo";
 import { formatSize, sizeSlug } from "@/lib/tire-sizes";
 import { poolShare } from "@/lib/share-image";
-import { vehiclePhoto } from "@/lib/vehicle-photos";
+import { vehiclePhoto, marcaCardUrl } from "@/lib/vehicle-photos";
 
 /**
  * Neumáticos para una marca de auto (/vehiculos/marca/chevrolet): lista los
@@ -25,6 +25,9 @@ const findBrand = (slug: string) => marcas().find((b) => marcaSlug(b) === slug);
 export async function generateStaticParams() {
   return marcas().map((b) => ({ marca: marcaSlug(b) }));
 }
+
+/** La tarjeta de marca (scripts/vehicle-photo.py --brand-cards) existe si algún modelo de la marca tiene foto. */
+const tieneTarjeta = (brand: string) => POPULAR_VEHICLES.some((v) => v.brand === brand && vehiclePhoto(vehicleSlug(v.brand, v.model)));
 
 function datos(brand: string) {
   const vehiculos = POPULAR_VEHICLES.filter((v) => v.brand === brand);
@@ -47,17 +50,25 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const brand = findBrand(marca);
   if (!brand) return {};
   const { vehiculos } = datos(brand);
-  const title = `Medida de neumáticos de cada ${brand}: todos los modelos`;
+  const title = `Neumáticos para ${brand}: medida de cada modelo y precios`;
   const description = `¿Qué medida de neumático lleva tu ${brand}? Medida original de los modelos más comunes (${vehiculos
     .slice(0, 4)
     .map((v) => v.model)
     .join(", ")}${vehiculos.length > 4 ? " y más" : ""}), con stock y precio reales. Garantía de 1 año y colocación sin cargo en Córdoba.`;
+  // Con modelos con foto, se comparte la tarjeta de la marca; si no, una foto del local.
+  const card = tieneTarjeta(brand) ? marcaCardUrl(marca) : null;
+  const share = card
+    ? {
+        openGraph: { images: [{ url: card, width: 1200, height: 630, alt: `Neumáticos para ${brand}` }] },
+        twitter: { card: "summary_large_image" as const, images: [card] },
+      }
+    : poolShare(marca);
   return {
     title,
     description,
     alternates: canonical(`/vehiculos/marca/${marca}`),
-    openGraph: { title, description, url: `/vehiculos/marca/${marca}`, ...poolShare(marca).openGraph },
-    twitter: poolShare(marca).twitter,
+    openGraph: { title, description, url: `/vehiculos/marca/${marca}`, ...share.openGraph },
+    twitter: share.twitter,
   };
 }
 
@@ -101,14 +112,27 @@ export default async function MarcaPage({ params }: Props) {
           <span className="mx-auto mb-5 flex h-24 w-24 items-center justify-center">
             <MarcaLogo brand={brand} sobreNegro className="h-24 w-24" />
           </span>
-          <h1 className="mb-4 text-4xl font-black text-white md:text-5xl">Medida de neumáticos de {brand}</h1>
+          <h1 className="mb-4 text-4xl font-black text-white md:text-5xl">Neumáticos para {brand}</h1>
           <p className="mx-auto max-w-2xl text-lg text-slate-300">
-            Elegí tu modelo para ver la medida original de cada versión y los neumáticos que tenemos en stock.
+            Medida original de cada modelo {brand} y los neumáticos que tenemos en stock. Elegí tu modelo para ver todas las versiones.
           </p>
         </div>
       </div>
 
       <div className="mx-auto max-w-4xl px-4 pt-10">
+        {tieneTarjeta(brand) && (
+          <figure className="mb-8">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={`/images/vehiculos/share/marca/${marca}.jpg`}
+              alt={`Neumáticos para ${brand}: medidas más usadas y modelos`}
+              width={1200}
+              height={630}
+              decoding="async"
+              className="h-auto w-full rounded-2xl border border-slate-200"
+            />
+          </figure>
+        )}
         <FotoNeumaticoBloque className="mb-8" />
         <section>
           <h2 className="mb-4 text-2xl font-black text-navy-900">Modelos {brand}</h2>

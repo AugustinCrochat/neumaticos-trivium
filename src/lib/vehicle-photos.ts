@@ -262,6 +262,33 @@ export const VEHICLE_PHOTOS = new Set([
 export const vehiclePhoto = (slug: string): string | null =>
   VEHICLE_PHOTOS.has(slug as never) ? `/images/vehiculos/${slug}.webp` : null;
 
-/** Tarjeta 1200x630 (JPEG) de la ficha, o null si no tiene foto. */
+/**
+ * Test A/B de portadas. A: tarjeta blanca (share/<slug>.jpg). B: estilo "panel
+ * diagonal" con el auto sobre fondo oscuro, la medida en overlay y un neumático
+ * grande (share/b/<slug>.jpg). La miniatura de Google y de las redes la elige el
+ * rastreador, no el visitante, así que no se puede partir por persona: ahí cada
+ * ficha usa siempre la misma variante, según la paridad de un hash de su slug
+ * (mitad A, mitad B), y se comparan los CTR de los dos grupos en Search Console
+ * (filtro de página por /vehiculos/ y comparar los grupos de URLs de `docs/test-ab-portadas.md`).
+ * Para dar por terminado el test, poner `PORTADA_TEST` en false (todo A) o cambiar
+ * `cardVariant` para que devuelva siempre "b".
+ */
+export const PORTADA_TEST = true;
+export type PortadaVariante = "a" | "b";
+
+export function cardVariant(slug: string): PortadaVariante {
+  if (!PORTADA_TEST) return "a";
+  let h = 0;
+  for (const c of slug) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+  return h % 2 === 0 ? "a" : "b";
+}
+
+export const vehicleCardPath = (slug: string, variant: PortadaVariante): string =>
+  variant === "b" ? `/images/vehiculos/share/b/${slug}.jpg` : `/images/vehiculos/share/${slug}.jpg`;
+
+/** Tarjeta 1200x630 (JPEG) de la ficha para compartir/buscadores (la variante que le toca a ese slug), o null si no tiene foto. */
 export const vehicleCardUrl = (slug: string): string | null =>
-  VEHICLE_PHOTOS.has(slug as never) ? `${SITE_URL}/images/vehiculos/share/${slug}.jpg` : null;
+  VEHICLE_PHOTOS.has(slug as never) ? `${SITE_URL}${vehicleCardPath(slug, cardVariant(slug))}` : null;
+
+/** Tarjeta de una marca (share/marca/<marca>.jpg): existe si algún modelo de la marca tiene foto. */
+export const marcaCardUrl = (marcaSlug: string): string => `${SITE_URL}/images/vehiculos/share/marca/${marcaSlug}.jpg`;
