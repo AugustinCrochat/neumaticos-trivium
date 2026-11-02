@@ -267,17 +267,18 @@ def card(slug, variant="a"):
     car = car.crop(car.getchannel("A").getbbox())
     if variant == "b":
         out = red_panel(1200, 630)
-        k = min(780 / car.width, 400 / car.height)
+        k = min(700 / car.width, 400 / car.height)
         car = car.resize((round(car.width * k), round(car.height * k)), Image.LANCZOS)
         shadow = Image.new("RGBA", car.size, (0, 0, 0, 0))
         shadow.putalpha(car.getchannel("A").point(lambda v: v // 2).filter(ImageFilter.GaussianBlur(14)))
-        cx, cy = 1200 - car.width - 14, 560 - car.height
-        out.paste(shadow, (cx, cy + 18), shadow)
-        out.paste(car, (cx, cy), car)
         panel = Image.new("RGB", (1200, 630), (255, 255, 255))
         mask = Image.new("L", (1200, 630), 0)
         ImageDraw.Draw(mask).polygon([(0, 0), (620, 0), (450, 630), (0, 630)], fill=255)
         out.paste(panel, (0, 0), mask.filter(ImageFilter.GaussianBlur(0.6)))
+        # El auto va por encima del panel blanco: la trompa pisa la diagonal en vez de quedar tapada.
+        cx, cy = 1200 - car.width - 14, 560 - car.height
+        out.paste(shadow, (cx, cy + 18), shadow)
+        out.paste(car, (cx, cy), car)
         d = ImageDraw.Draw(out)
         d.text((46, 28), "NEUMÁTICOS PARA", font=fit_font("ExtraBold", "NEUMÁTICOS PARA", 52, 540), fill=(70, 70, 70))
         d.text((46, 84), name.upper(), font=fit_font("Black", name.upper(), 66, 540), fill=(0, 0, 0))
@@ -344,6 +345,10 @@ def brand_card(brand):
     medidas = sorted(conteo, key=lambda x: (-conteo[x], x))
     out = red_panel(1200, 630)
     # hasta 3 autos escalonados: el más popular adelante y a la derecha
+    panel = Image.new("RGB", (1200, 630), (255, 255, 255))
+    mask = Image.new("L", (1200, 630), 0)
+    ImageDraw.Draw(mask).polygon([(0, 0), (620, 0), (450, 630), (0, 630)], fill=255)
+    out.paste(panel, (0, 0), mask.filter(ImageFilter.GaussianBlur(0.6)))
     pos = [(1200 - 560 - 6, 385, 560, 225), (590, 290, 420, 185), (700, 195, 340, 145)]
     for (slug, _, _), (x, y, mw, mh) in reversed(list(zip(vs[:3], pos))):
         car = Image.open(os.path.join(DIR, slug + ".webp")).convert("RGBA")
@@ -354,10 +359,6 @@ def brand_card(brand):
         shadow.putalpha(car.getchannel("A").point(lambda v: v // 2).filter(ImageFilter.GaussianBlur(10)))
         out.paste(shadow, (x, y + 12), shadow)
         out.paste(car, (x, y), car)
-    panel = Image.new("RGB", (1200, 630), (255, 255, 255))
-    mask = Image.new("L", (1200, 630), 0)
-    ImageDraw.Draw(mask).polygon([(0, 0), (620, 0), (450, 630), (0, 630)], fill=255)
-    out.paste(panel, (0, 0), mask.filter(ImageFilter.GaussianBlur(0.6)))
     d = ImageDraw.Draw(out)
     d.text((46, 28), "NEUMÁTICOS PARA", font=fit_font("ExtraBold", "NEUMÁTICOS PARA", 52, 500), fill=(70, 70, 70))
     d.text((46, 84), brand.upper(), font=fit_font("Black", brand.upper(), 96, 440), fill=(0, 0, 0))
