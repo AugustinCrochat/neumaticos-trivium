@@ -56,6 +56,8 @@ function Chapa({
     <div
       className={`relative mx-auto w-full [container-type:inline-size] ${pequena ? "max-w-full" : "max-w-sm"}`}
       style={{
+        // La anterior es más angosta que la Mercosur (294 de 400 mm) y casi igual de alta.
+        width: mercosur ? undefined : `${(294 / 400) * 100}%`,
         // Medidas reales: Mercosur 400×130 mm, formato anterior 294×129 mm.
         aspectRatio: mercosur ? "400 / 130" : "294 / 129",
         backgroundImage: `url(/images/patente/${mercosur ? "chapa-mercosur" : "chapa-anterior"}.svg)`,

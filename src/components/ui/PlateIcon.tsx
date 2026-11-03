@@ -19,8 +19,10 @@ export function PlateIcon({ className }: { className?: string }) {
   return (
     <span aria-hidden="true" className={`inline-flex items-center justify-center ${className ?? ""}`}>
       <span
-        className="relative block w-full [container-type:inline-size]"
+        className="relative block [container-type:inline-size]"
         style={{
+          // Misma altura real (130 y 129 mm): la anterior es más angosta (294 de 400 mm).
+          width: mercosur ? "100%" : `${(294 / 400) * 100}%`,
           aspectRatio: mercosur ? "400 / 130" : "294 / 129",
           backgroundImage: `url(/images/patente/${mercosur ? "chapa-mercosur" : "chapa-anterior"}.svg)`,
           backgroundSize: "100% 100%",
