@@ -1,17 +1,24 @@
 import type { Metadata } from "next";
 import { OfertasMediosPago } from "./OfertasMediosPago";
 import { formatSize } from "@/lib/tire-sizes";
-import { ProductCard } from "@/components/ui/ProductCard";
 import { AccessoryCard } from "@/components/ui/AccessoryCard";
 import { getProductosDesdePOS, getAccesoriosDesdePOS } from "@/lib/pos-api";
 import { getSelectedBranchSlug } from "@/lib/branch-server";
 import { canonical } from "@/lib/seo";
-import { OFFER_TIRE_SLUGS, OFFER_ACCESSORY_SLUGS } from "@/lib/offers";
+import { OFFER_TIRE_SLUGS, esTuercaDeSeguridad } from "@/lib/offers";
+import Link from "@/components/ui/Link";
+import Image from "next/image";
+import { SortedProductGrid } from "@/components/ui/SortedProductGrid";
+import { SizeOrVehicleSearch } from "@/components/ui/SizeOrVehicleSearch";
+import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
+import { FaqSection } from "@/components/seo/FaqSection";
+import { peersByGroup } from "@/lib/best-price";
+import type { TireProduct } from "@/lib/types";
 
 export const metadata: Metadata = {
-  title: "Ofertas de neumáticos: mejor precio",
+  title: "Ofertas de neumáticos y tuercas de seguridad",
   description:
-    "Ofertas de la semana en Neumáticos Trivium: precios especiales en neumáticos Grenlander y tuercas antirrobo, por tiempo limitado y hasta agotar stock.",
+    "Ofertas en neumáticos para auto, camioneta, A/T y carga (Grenlander, Arivo, Pirelli) y en todas las tuercas de seguridad: precio con descuento, colocación y válvulas sin cargo, hasta agotar stock.",
   alternates: canonical("/ofertas"),
 };
 
@@ -64,6 +71,45 @@ function SectionHeading({ titulo, detalle, cantidad }: { titulo: string; detalle
   );
 }
 
+const FAQS = [
+  {
+    question: "¿Los precios de oferta incluyen la colocación?",
+    answer:
+      "Sí. Si comprás los neumáticos en el local, el armado, el desarmado y el cambio de válvulas no se cobran. El balanceo y la alineación se cotizan aparte (o en combo, más barato).",
+  },
+  {
+    question: "¿Hasta cuándo valen las ofertas?",
+    answer:
+      "Hasta agotar stock. El stock de cada medida se actualiza durante el día; si una oferta figura disponible, está en el local.",
+  },
+  {
+    question: "¿El precio de la web es el mismo que en el local?",
+    answer: "Sí, es el mismo. El precio con descuento que ves acá es el que pagás en el mostrador.",
+  },
+  {
+    question: "¿Qué tuercas de seguridad tienen?",
+    answer:
+      "Todos los modelos de la lista, con el 15 % de descuento. Elegí la de tu auto y, si no la encontrás, escribinos con tu marca y modelo.",
+  },
+  {
+    question: "¿Qué medios de pago aceptan?",
+    answer:
+      "Efectivo, transferencia, débito y tarjetas de crédito, con cuotas. Los miércoles y sábados hay 3 cuotas sin interés con Visa o Mastercard.",
+  },
+];
+
+const pct = (p: TireProduct) => (p.priceOld ? Math.round((1 - p.price / p.priceOld) * 100) : 0);
+const fmt = (n: number) => `$${n.toLocaleString("es-AR")}`;
+
+function Atajo({ href, titulo, detalle }: { href: string; titulo: string; detalle: string }) {
+  return (
+    <a href={href} className="rounded-xl border border-slate-200 bg-white px-4 py-3 transition-colors hover:border-[#ff1e00]">
+      <span className="block text-sm font-black text-slate-900">{titulo}</span>
+      <span className="block text-xs text-slate-500">{detalle}</span>
+    </a>
+  );
+}
+
 export default async function OfertasPage() {
   const sucursal = await getSelectedBranchSlug();
   const [productos, accesorios] = await Promise.all([
@@ -71,39 +117,85 @@ export default async function OfertasPage() {
     getAccesoriosDesdePOS(sucursal),
   ]);
 
-  const ofertasNeumaticos = OFFER_TIRE_SLUGS.map((slug) => productos.find((p) => p.slug === slug)).filter(
-    (p): p is NonNullable<typeof p> => !!p
+  const ofertas = OFFER_TIRE_SLUGS.map((slug) => productos.find((p) => p.slug === slug)).filter(
+    (p): p is TireProduct => !!p
   );
-  const ofertasAccesorios = OFFER_ACCESSORY_SLUGS.map((slug) => accesorios.find((a) => a.slug === slug)).filter(
-    (a): a is NonNullable<typeof a> => !!a
+  // Primero lo que hay en stock; dentro de eso, lo más vendido.
+  const porVenta = [...ofertas].sort(
+    (a, b) => Number(b.enStock) - Number(a.enStock) || (b.vendidos ?? 0) - (a.vendidos ?? 0)
+  );
+  const masVendidas = porVenta.slice(0, 4);
+  const auto = ofertas.filter((p) => !p.isAT && !p.isCarga);
+  const camioneta = ofertas.filter((p) => p.isAT);
+  const carga = ofertas.filter((p) => p.isCarga);
+  const tuercas = accesorios
+    .filter((a) => esTuercaDeSeguridad(a.nombre))
+    .sort((a, b) => Number(b.enStock) - Number(a.enStock) || (b.vendidos ?? 0) - (a.vendidos ?? 0));
+
+  const peers = peersByGroup(productos);
+  const grid = (lista: TireProduct[]) => (
+    <SortedProductGrid
+      className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-5 lg:grid-cols-4"
+      items={lista.map((product) => ({ product, peers: peers.get(product.id) }))}
+    />
   );
 
+  const maxPct = Math.max(0, ...ofertas.map(pct), tuercas.length ? 15 : 0);
+  const desde = ofertas.length ? Math.min(...ofertas.map((p) => p.price)) : 0;
   const itemsCotizables = [
-    ...ofertasNeumaticos.map((p) => ({ id: p.id, label: `${p.brand} ${p.model} ${formatSize(p.size)}`, price: p.price })),
-    ...ofertasAccesorios.map((a) => ({ id: a.id, label: a.nombre, price: a.price })),
+    ...ofertas.map((p) => ({ id: p.id, label: `${p.brand} ${p.model} ${formatSize(p.size)}`, price: p.price })),
+    ...tuercas.map((a) => ({ id: a.id, label: a.nombre, price: a.price })),
   ];
+
+  const secciones = [
+    { id: "mas-vendidas", titulo: "Las más elegidas", n: masVendidas.length },
+    { id: "auto", titulo: "Auto", n: auto.length },
+    { id: "camioneta", titulo: "Camioneta y 4x4", n: camioneta.length },
+    { id: "carga", titulo: "Carga", n: carga.length },
+    { id: "tuercas", titulo: "Tuercas de seguridad", n: tuercas.length },
+  ].filter((x) => x.n > 0);
 
   return (
     <div className="min-h-screen bg-slate-50">
-      {/* Hero */}
       <header className="relative overflow-hidden bg-black">
+        <Image
+          src="/images/local/taller-de-gomeria-con-cuatro-autos-neumaticos-trivium-arguello-cordoba.webp"
+          alt=""
+          fill
+          priority
+          className="object-cover opacity-30"
+          sizes="100vw"
+        />
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1 bg-[#ff1e00]" />
         <div className="relative mx-auto max-w-7xl 2xl:max-w-[96rem] px-4 py-12 md:py-20">
           <span className="inline-block rounded-md bg-[#ff1e00] px-3 py-1 text-xs font-bold uppercase tracking-widest text-white">
-            Ofertas de la semana
+            Ofertas
           </span>
           <h1 className="font-display mt-4 text-5xl font-bold uppercase leading-[0.95] tracking-wide text-white md:text-7xl">
             Precios especiales,
             <br />
             <span className="text-[#ff1e00]">hasta agotar stock</span>
           </h1>
-          <p className="mt-5 max-w-xl text-base text-slate-300 md:text-lg">
-            Neumáticos y accesorios seleccionados con descuento. Retirás y te los colocamos en el local, sin cargo.
+          <p className="mt-5 max-w-xl text-base text-slate-200 md:text-lg">
+            {ofertas.length} neumáticos{tuercas.length ? ` y ${tuercas.length} tuercas de seguridad` : ""} con descuento. Retirás y te los colocamos en el local, sin cargo.
           </p>
+          <dl className="mt-8 flex flex-wrap gap-3">
+            {[
+              [`Hasta ${maxPct}% OFF`, "sobre el precio de lista"],
+              desde ? [`Desde ${fmt(desde)}`, "por neumático"] : null,
+              ["Sin cargo", "colocación y válvulas"],
+            ]
+              .filter((x): x is string[] => !!x)
+              .map(([t, d]) => (
+                <div key={t} className="rounded-xl bg-white/10 px-4 py-3 backdrop-blur">
+                  <dt className="font-display text-2xl font-bold uppercase text-white">{t}</dt>
+                  <dd className="text-xs text-slate-300">{d}</dd>
+                </div>
+              ))}
+          </dl>
         </div>
       </header>
 
-      {/* Beneficios */}
       <section className="border-b border-slate-200 bg-white">
         <ul className="mx-auto grid max-w-7xl 2xl:max-w-[96rem] grid-cols-1 gap-px bg-slate-200 sm:grid-cols-3">
           {BENEFICIOS.map((b) => (
@@ -122,42 +214,89 @@ export default async function OfertasPage() {
         </ul>
       </section>
 
+      {/* Atajos a cada sección: la página es larga, esto evita scrollear de más. */}
+      <nav aria-label="Secciones de ofertas" className="border-b border-slate-200 bg-white">
+        <ul className="mx-auto flex max-w-7xl 2xl:max-w-[96rem] gap-2 overflow-x-auto px-4 py-2.5">
+          {secciones.map((x) => (
+            <li key={x.id} className="shrink-0">
+              <a href={`#${x.id}`} className="inline-flex items-center gap-1.5 rounded-full border border-slate-300 bg-white px-4 py-1.5 text-sm font-bold text-slate-800 transition-colors hover:border-[#ff1e00] hover:text-[#ff1e00]">
+                {x.titulo}
+                <span className="rounded-full bg-slate-900 px-1.5 text-[11px] text-white">{x.n}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
       <main className="mx-auto max-w-7xl 2xl:max-w-[96rem] px-4 py-10 md:py-14">
-        {ofertasNeumaticos.length === 0 && ofertasAccesorios.length === 0 ? (
+        <Breadcrumbs crumbs={[{ name: "Inicio", path: "/" }, { name: "Ofertas", path: "/ofertas" }]} />
+
+        {ofertas.length === 0 && tuercas.length === 0 ? (
           <p className="py-20 text-center text-lg text-slate-500">
             No hay ofertas activas en este momento. ¡Volvé a pasar pronto!
           </p>
         ) : (
           <div className="space-y-14">
-            {ofertasNeumaticos.length > 0 && (
-              <section>
-                <SectionHeading
-                  titulo="Neumáticos"
-                  detalle="Con colocación y válvulas sin cargo en nuestros locales"
-                  cantidad={ofertasNeumaticos.length}
-                />
-                <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-5 lg:grid-cols-4">
-                  {ofertasNeumaticos.map((producto) => (
-                    <ProductCard key={producto.id} product={producto} />
-                  ))}
-                </div>
+            <section className="rounded-2xl bg-white p-5 shadow-sm md:p-6">
+              <h2 className="mb-3 text-xl font-black text-slate-900">¿No ves tu medida? Buscala</h2>
+              <SizeOrVehicleSearch compact hideLearnLink />
+            </section>
+
+            {masVendidas.length > 0 && (
+              <section id="mas-vendidas" className="scroll-mt-24">
+                <SectionHeading titulo="Las más elegidas" detalle="Las medidas que más salen del local, con descuento" cantidad={masVendidas.length} />
+                {grid(masVendidas)}
               </section>
             )}
 
-            {ofertasAccesorios.length > 0 && (
-              <section>
+            {auto.length > 0 && (
+              <section id="auto" className="scroll-mt-24">
+                <SectionHeading titulo="Auto" detalle="Rodados 13 a 17 · colocación y válvulas sin cargo" cantidad={auto.length} />
+                {grid(auto)}
+              </section>
+            )}
+
+            {camioneta.length > 0 && (
+              <section id="camioneta" className="scroll-mt-24">
+                <SectionHeading titulo="Camioneta y 4x4" detalle="Todo terreno (A/T) para pick-ups y SUV" cantidad={camioneta.length} />
+                {grid(camioneta)}
+              </section>
+            )}
+
+            {carga.length > 0 && (
+              <section id="carga" className="scroll-mt-24">
+                <SectionHeading titulo="Carga y utilitarios" detalle="Cubiertas C para utilitarios, furgones y reparto" cantidad={carga.length} />
+                {grid(carga)}
+              </section>
+            )}
+
+            {tuercas.length > 0 && (
+              <section id="tuercas" className="scroll-mt-24">
                 <SectionHeading
-                  titulo="Accesorios"
-                  detalle="Completá tu compra con estos accesorios en promoción"
-                  cantidad={ofertasAccesorios.length}
+                  titulo="Tuercas de seguridad"
+                  detalle="Todos los modelos con 15 % de descuento · protegen tus llantas del robo"
+                  cantidad={tuercas.length}
                 />
                 <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-5 lg:grid-cols-4">
-                  {ofertasAccesorios.map((accesorio) => (
+                  {tuercas.map((accesorio) => (
                     <AccessoryCard key={accesorio.id} accessory={accesorio} priceOld={accesorio.priceOld} />
                   ))}
                 </div>
+                <p className="mt-4 text-sm text-slate-600">
+                  ¿Dudás cuál es la de tu auto? <Link href="/tuercas-antirrobo" className="font-bold text-slate-900 underline underline-offset-2">Buscala por marca y modelo</Link>.
+                </p>
               </section>
             )}
+
+            <section>
+              <h2 className="mb-4 text-2xl font-black text-slate-900">Completá tu compra</h2>
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                <Atajo href="/servicios" titulo="Alineado y balanceado" detalle="Combo con las 4 ruedas, sin turno" />
+                <Atajo href="/catalogo" titulo="Todo el catálogo" detalle="Todas las marcas y medidas" />
+                <Atajo href="/neumaticos-baratos" titulo="Neumáticos baratos" detalle="Los precios más bajos por medida" />
+                <Atajo href="/sucursales" titulo="Cómo llegar" detalle="Direcciones y horarios de los locales" />
+              </div>
+            </section>
 
             <section>
               <SectionHeading
@@ -166,6 +305,8 @@ export default async function OfertasPage() {
               />
               <OfertasMediosPago items={itemsCotizables} />
             </section>
+
+            <FaqSection faqs={FAQS} title="Preguntas sobre las ofertas" />
           </div>
         )}
       </main>
