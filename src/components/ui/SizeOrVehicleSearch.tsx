@@ -106,7 +106,10 @@ export function SizeOrVehicleSearch({
         aria-expanded={abierto === id}
         className="flex w-full items-center gap-3 rounded-xl border border-slate-300 bg-white px-4 shadow-sm py-3 text-left transition-colors hover:border-orange-400"
       >
-        <Icono className={`shrink-0 text-navy-900 ${Icono === PlateIcon ? "h-8 w-[4.75rem]" : Icono === HalfTireIcon ? "h-6 w-11" : "h-6 w-6"}`} aria-hidden="true" />
+        {/* Misma caja para todos los íconos: los textos de las barras arrancan en el mismo punto. */}
+        <span className="flex h-9 w-[4.75rem] shrink-0 items-center justify-center">
+          <Icono className={`text-navy-900 ${Icono === PlateIcon ? "h-8 w-[4.75rem]" : Icono === HalfTireIcon ? "h-9 w-[4.5rem]" : "h-7 w-7"}`} aria-hidden="true" />
+        </span>
         <span className="min-w-0 flex-1">
           <span className="block text-sm font-black text-navy-900">{titulo}</span>
           <span className="block truncate text-xs font-semibold text-slate-500">{ejemplo}</span>
