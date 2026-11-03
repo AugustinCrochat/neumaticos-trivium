@@ -69,10 +69,10 @@ export function RegionHub({ region }: { region: Region }) {
         <p className="mt-4 max-w-3xl leading-relaxed text-slate-600">{region.contexto}</p>
         <div className="mt-6 flex flex-wrap gap-3">
           <Link
-            href="/catalogo"
+            href={`/${region.slug}/catalogo`}
             className="inline-flex min-h-12 items-center justify-center rounded-xl bg-orange-500 px-6 text-sm font-black text-white transition-transform active:scale-[0.98]"
           >
-            Ver el catálogo
+            Ver el catálogo de {region.nombre}
           </Link>
           <Link
             href="/ofertas"

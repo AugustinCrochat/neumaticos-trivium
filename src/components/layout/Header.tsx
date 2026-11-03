@@ -38,7 +38,7 @@ export function Header() {
     const update = () => setPromoHoy(isVisaMasterPromoDay());
     update();
   }, []);
-  const haySlides = promoHoy && !selectedBranch.apertura;
+  const haySlides = promoHoy;
   useEffect(() => {
     if (!haySlides || compact) return;
     const t = setInterval(() => setSlide((n) => (n + 1) % 2), 5000);

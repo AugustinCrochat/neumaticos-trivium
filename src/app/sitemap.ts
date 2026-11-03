@@ -83,6 +83,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url("/neumaticos-en", 0.7, "monthly"),
     url("/cordoba", 0.9, "monthly"),
     url("/buenos-aires", 0.9, "monthly"),
+    url("/cordoba/catalogo", 0.8, "weekly"),
+    url("/buenos-aires/catalogo", 0.7, "weekly"),
     url("/marcas", 0.7, "weekly"),
     url("/marcas-de-neumaticos-chinos", 0.8, "weekly"),
     url("/alternativas", 0.8, "weekly"),
