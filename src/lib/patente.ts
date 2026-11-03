@@ -51,3 +51,42 @@ export function medidasParaAnio<T extends ConAnios>(sizes: T[], anio: number | n
   if (delAnio.length === 0) return { sizes, filtrado: false };
   return { sizes: [...delAnio, ...sizes.filter((s) => !s.years)], filtrado: true };
 }
+
+const sinAcentos = (s: string) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+
+/** Palabras útiles de una versión: sin cilindrada ni números sueltos ("1.5", "16v"). */
+function palabrasDeVersion(s: string): string[] {
+  return sinAcentos(s)
+    .split(/[^a-z0-9+]+/)
+    .filter((t) => t.length >= 2 && /[a-z]/.test(t) && !/^\d+(v|cv|hp)$/.test(t));
+}
+
+/**
+ * Elige la medida cuya versión coincide con la que escribe el registro
+ * ("PRIVILEGE NAV", "XLS 1.5"). Sólo devuelve una si hay UNA mejor que las
+ * demás: ante un empate o ninguna coincidencia devuelve null y la persona
+ * elige. Nunca adivina.
+ */
+export function medidaPorVersion<T extends { version?: string }>(
+  sizes: T[],
+  versionRegistro: string | null | undefined
+): T | null {
+  if (!versionRegistro) return null;
+  const buscadas = new Set(palabrasDeVersion(versionRegistro));
+  if (buscadas.size === 0) return null;
+  let mejor = 0;
+  let ganadoras: T[] = [];
+  for (const s of sizes) {
+    if (!s.version) continue;
+    const propias = new Set(palabrasDeVersion(s.version));
+    let puntos = 0;
+    for (const t of propias) if (buscadas.has(t)) puntos++;
+    if (puntos > mejor) {
+      mejor = puntos;
+      ganadoras = [s];
+    } else if (puntos === mejor && puntos > 0) {
+      ganadoras.push(s);
+    }
+  }
+  return ganadoras.length === 1 ? ganadoras[0] : null;
+}

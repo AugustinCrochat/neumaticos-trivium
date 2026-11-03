@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { VehiculoOption } from "@/lib/pos-api";
-import { vehiculoDesdePatente } from "@/lib/patente-match";
+import { resolverPatente } from "@/lib/patente-match";
 import { PATENTE_RE, estiloPatente, formatearPatente, normalizarPatente } from "@/lib/patente";
 
 const SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
@@ -93,7 +93,7 @@ export function PlateLookup({
   autoFocus,
 }: {
   vehiculos: VehiculoOption[];
-  onFound: (v: VehiculoOption, anio: number | null) => void;
+  onFound: (v: VehiculoOption, anio: number | null, version: string) => void;
   autoFocus?: boolean;
 }) {
   const [patente, setPatente] = useState("");
@@ -146,8 +146,8 @@ export function PlateLookup({
         setMensaje("La búsqueda por patente no está disponible ahora. Usá “Por mi auto”.");
       } else {
         const d = (await res.json()) as { marca: string; modelo: string | null; anio: number | null };
-        const v = vehiculoDesdePatente(d.marca, d.modelo, vehiculos);
-        if (v) onFound(v, d.anio);
+        const r = resolverPatente(d.marca, d.modelo, vehiculos);
+        if (r) onFound(r.vehiculo, d.anio, r.version);
         else setMensaje(`Encontramos ${d.marca} ${d.modelo ?? ""}, pero todavía no lo tenemos en la lista. Probá con “Por mi auto”.`);
       }
     } catch {

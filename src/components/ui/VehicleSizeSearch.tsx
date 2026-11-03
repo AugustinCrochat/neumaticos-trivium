@@ -28,7 +28,7 @@ function findVersionIndexBySize(sizes: Sizes | null, size?: Sizes[number]): numb
   return sizes.findIndex((s) => s.w === size.w && s.p === size.p && s.r === size.r);
 }
 
-export function VehicleSizeSearch({ initialMedida, economicos = false, anio, desdePatente = false, onClear, onNavigate }: { initialMedida?: string; economicos?: boolean; /** Año del auto (viene de la patente): deja sólo las medidas de esa generación. */ anio?: number | null; /** El auto vino de una patente: se muestra la tarjeta "Vehículo encontrado". */ desdePatente?: boolean; onClear?: () => void; onNavigate?: () => void }) {
+export function VehicleSizeSearch({ initialMedida, economicos = false, anio, desdePatente = false, versionPatente, onClear, onNavigate }: { initialMedida?: string; economicos?: boolean; /** Año del auto (viene de la patente): deja sólo las medidas de esa generación. */ anio?: number | null; /** El auto vino de una patente: se muestra la tarjeta "Vehículo encontrado". */ desdePatente?: boolean; /** Versión que escribe el registro ("PRIVILEGE NAV"); se muestra en la tarjeta. */ versionPatente?: string; onClear?: () => void; onNavigate?: () => void }) {
   const { selectedBranch } = useBranch();
   const { vehiculos, selectedVehicle, setSelectedVehicle, clearSelectedVehicle } = useVehicle();
 
@@ -122,6 +122,12 @@ export function VehicleSizeSearch({ initialMedida, economicos = false, anio, des
               <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Modelo</p>
               <p className="break-words text-sm font-black leading-tight text-navy-900">{selectedVehicle.modelo}</p>
             </div>
+            {versionPatente && (
+              <div className="col-span-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-center">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Versión</p>
+                <p className="break-words text-sm font-black leading-tight text-navy-900">{versionPatente}</p>
+              </div>
+            )}
           </div>
         </div>
       ) : (
