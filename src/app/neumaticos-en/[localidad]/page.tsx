@@ -23,6 +23,10 @@ import { LocalPhotos } from "../LocalPhotos";
 import { ZonasAgrupadas } from "@/components/seo/ZonasAgrupadas";
 import { poolShare } from "@/lib/share-image";
 import { DirectionsIcon } from "@/components/ui/DirectionsIcon";
+import Image from "next/image";
+import { SizeOrVehicleSearch } from "@/components/ui/SizeOrVehicleSearch";
+import { GoogleRatingBadge } from "@/components/ui/GoogleRatingBadge";
+import { BLOG_POSTS } from "@/lib/data";
 
 /**
  * Landings de SEO local: "neumáticos en Villa Allende", "gomería en Saldán".
@@ -177,6 +181,9 @@ export default async function LocalidadPage({ params }: Props) {
     .sort((a, b) => (b.vendidos ?? 0) - (a.vendidos ?? 0) || a.price - b.price);
   const mejores = [...bestPriceByGroup(conStock)];
   const otras = LOCALIDADES.filter((l) => l.slug !== localidad.slug);
+  // Notas ya publicadas del mismo local (las programadas todavía no existen y darían 404).
+  const claveNota = branch.province === "Córdoba" ? /cordoba/ : /(buenos-aires|san-justo|lomas|oeste)/;
+  const notasLocales = BLOG_POSTS.filter((p) => claveNota.test(p.slug)).slice(0, 4);
 
   const waLink = `https://wa.me/${branch.whatsapp}?text=${encodeURIComponent(
     `Hola, escribo desde ${localidad.name}. Quería consultar por neumáticos.`
@@ -194,7 +201,8 @@ export default async function LocalidadPage({ params }: Props) {
         ]}
       />
 
-      <header className="mb-10">
+      <header className="mb-10 grid items-center gap-8 lg:grid-cols-[1.25fr_1fr]">
+        <div>
         <p className="mb-2 text-sm font-black uppercase tracking-widest text-orange-500">
           {localidad.name}, {localidad.province}
         </p>
@@ -211,6 +219,12 @@ export default async function LocalidadPage({ params }: Props) {
           >
             Consultar por WhatsApp
           </WhatsAppLink>
+          <a
+            href={`tel:${branch.phone.replace(/[^\d+]/g, "")}`}
+            className="inline-flex min-h-12 items-center justify-center rounded-xl border-2 border-navy-900 bg-white px-6 text-sm font-black text-navy-900 transition-transform active:scale-[0.98]"
+          >
+            Llamar
+          </a>
           <Link
             href={`/sucursales/${branch.id}`}
             className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-black px-6 text-sm font-black text-white transition-transform active:scale-[0.98]"
@@ -219,7 +233,48 @@ export default async function LocalidadPage({ params }: Props) {
             Cómo llegar al local
           </Link>
         </div>
+        </div>
+        {branch.facadePhoto && (
+          <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-slate-100 shadow-lg">
+            <Image
+              src={branch.facadePhoto}
+              alt={`Fachada del local de ${SITE_NAME} en ${branch.neighborhood ?? branch.city}`}
+              fill
+              priority
+              className="object-cover"
+              sizes="(max-width: 1024px) 100vw, 40vw"
+            />
+            {branch.googleRating && !branch.provisorio && (
+              <div className="absolute bottom-3 left-3 rounded-xl bg-white/95 px-3 py-2 shadow">
+                <GoogleRatingBadge branchId={branch.id} />
+              </div>
+            )}
+          </div>
+        )}
       </header>
+
+      {!branch.provisorio && (
+        <ul className="mb-10 grid grid-cols-2 gap-3 md:grid-cols-4">
+          {[
+            ["Colocación sin cargo", "Armado y válvulas incluidas", "/servicios"],
+            ["1 año de garantía", "Por defecto de fabricación", "/garantia-neumaticos"],
+            ["Sin turno", "Por orden de llegada", "/servicios"],
+            ["Precio publicado", "El mismo que en el local", "/catalogo"],
+          ].map(([t, d, href]) => (
+            <li key={t}>
+              <Link href={href} className="block h-full rounded-xl border border-slate-200 bg-white p-4 transition-colors hover:border-orange-400">
+                <span className="block font-black text-navy-900">{t}</span>
+                <span className="mt-0.5 block text-sm text-slate-500">{d}</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <section className="mb-12 rounded-2xl bg-slate-50 p-5 md:p-6">
+        <h2 className="mb-3 text-xl font-black text-navy-900">Encontrá tus neumáticos</h2>
+        <SizeOrVehicleSearch compact hideLearnLink />
+      </section>
 
       <LocalProductCarousel
         productos={conStock}
@@ -277,6 +332,15 @@ export default async function LocalidadPage({ params }: Props) {
         <div className="rounded-xl bg-slate-50 p-5">
           <h3 className="mb-2 font-black text-navy-900">Cómo llegar desde {localidad.name}</h3>
           <p className="leading-relaxed text-slate-600">{localidad.comoLlegar}</p>
+          {branch.googleMapsEmbedUrl && !branch.provisorio && (
+            <iframe
+              src={branch.googleMapsEmbedUrl}
+              title={`Mapa del local de ${branch.shortName}`}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="mb-5 mt-5 h-56 w-full rounded-xl border-0"
+            />
+          )}
           {localidad.incluye && localidad.incluye.length > 0 && (
             <>
               <h3 className="mb-2 mt-5 font-black text-navy-900">También atendemos</h3>
@@ -335,6 +399,30 @@ export default async function LocalidadPage({ params }: Props) {
         </div>
       </section>
 
+      <section className="mb-12">
+        <h2 className="mb-2 text-2xl font-black text-navy-900">¿Qué necesitás para tu auto?</h2>
+        <p className="mb-5 max-w-3xl leading-relaxed text-slate-600">
+          Elegí lo tuyo y vas directo a los precios con stock.
+        </p>
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6">
+          {[
+            ["Neumáticos baratos", "/neumaticos-baratos", "/images/local/cubierta-perfil-bajo-grenlander-colocada-neumaticos-trivium.webp"],
+            ["Ofertas", "/ofertas", "/images/local/neumatico-grenlander-kingpro-one-pickup-trivium.webp"],
+            ["Camioneta y 4x4 (A/T)", "/neumaticos/at", "/images/local/neumatico-at-grenlander-maga-at-two-camioneta-clasica-trivium.webp"],
+            ["Cubiertas de carga", "/neumaticos/carga", "/images/local/fiat-ducato-con-cubiertas-de-carga-nuevas-en-el-taller-trivium.webp"],
+            ["Remises, taxis y apps", "/neumaticos-para-remises-taxis-y-uber", "/images/local/taxi-en-el-taller-neumaticos-trivium-cordoba.webp"],
+            ["Alineado y balanceado", "/servicios", "/images/local/tecnico-colocando-target-de-alineacion-3d-en-auto-trivium-cordoba.webp"],
+          ].map(([t, href, img]) => (
+            <Link key={href} href={href} className="group overflow-hidden rounded-2xl border border-slate-200 bg-white transition-colors hover:border-orange-400">
+              <span className="relative block aspect-[4/3] bg-slate-100">
+                <Image src={img} alt={t} fill className="object-cover transition-transform duration-300 group-hover:scale-105" sizes="(max-width: 768px) 50vw, 17vw" />
+              </span>
+              <span className="block p-3 text-sm font-black text-navy-900">{t} →</span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
       <section className="mb-12 rounded-2xl border border-slate-200 bg-slate-50 p-6">
         <h2 className="text-xl font-black text-navy-900">Mirá todo el catálogo</h2>
         <p className="mt-2 max-w-2xl leading-relaxed text-slate-600">
@@ -347,6 +435,43 @@ export default async function LocalidadPage({ params }: Props) {
           Ver el catálogo completo
         </Link>
       </section>
+
+      <section className="mb-12 rounded-2xl bg-black p-6 text-white md:flex md:items-center md:justify-between md:gap-6 md:p-8">
+        <div>
+          <h2 className="text-2xl font-black">¿Tu medida está en stock?</h2>
+          <p className="mt-1 max-w-xl text-slate-300">
+            Escribinos con la medida o la patente y te confirmamos precio y disponibilidad en el momento.
+          </p>
+        </div>
+        <div className="mt-4 flex flex-wrap gap-3 md:mt-0 md:shrink-0">
+          <WhatsAppLink
+            href={waLink}
+            className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#25d366] px-6 text-sm font-black text-white"
+          >
+            WhatsApp
+          </WhatsAppLink>
+          <a
+            href={`tel:${branch.phone.replace(/[^\d+]/g, "")}`}
+            className="inline-flex min-h-12 items-center justify-center rounded-xl border-2 border-white px-6 text-sm font-black text-white"
+          >
+            Llamar
+          </a>
+        </div>
+      </section>
+
+      {notasLocales.length > 0 && (
+        <section className="mb-12">
+          <h2 className="mb-4 text-xl font-black text-navy-900">Guías para decidir mejor</h2>
+          <div className="grid gap-3 md:grid-cols-2">
+            {notasLocales.map((n) => (
+              <Link key={n.slug} href={`/blog/${n.slug}`} className="rounded-xl border border-slate-200 bg-white p-4 transition-colors hover:border-orange-400">
+                <span className="block font-black text-navy-900">{n.title}</span>
+                <span className="mt-1 block text-sm text-slate-500">{n.excerpt}</span>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       <FaqSection
         faqs={buildFaqs(localidad, branch)}

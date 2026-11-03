@@ -126,8 +126,11 @@ export function conPrecios(texto: string, p: PreciosTaller): string | null {
  */
 export const DATOS_TALLER = {
   periodo: "agosto a octubre de 2026",
-  alineados: 603,
-  ruedasBalanceadas: 888,
+  // Vehículos con un alineado (incluye los combos). Recontado el 2026-11-03 con las órdenes de agosto a octubre.
+  alineados: 615,
+  // Ruedas: los balanceos sueltos (916) más 4 por cada combo "alineación + 4 balanceos" (486 combos).
+  // Antes se contaban solo los sueltos y quedaba muy por debajo de lo real.
+  ruedasBalanceadas: 2860,
   minutosMediana: 39,
 };
 

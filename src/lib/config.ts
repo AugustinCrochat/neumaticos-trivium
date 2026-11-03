@@ -127,7 +127,7 @@ export const BRANCHES: Branch[] = [
     neighborhood: "Argüello",
     areaServed: [
       "Argüello",
-      "Córdoba",
+      "Córdoba Capital",
       "Villa Allende",
       "Saldán",
       "La Calera",

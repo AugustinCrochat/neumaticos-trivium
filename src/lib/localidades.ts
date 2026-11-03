@@ -42,7 +42,7 @@ export type Localidad = {
 export const LOCALIDADES: Localidad[] = [
   {
     slug: "cordoba",
-    name: "Córdoba",
+    name: "Córdoba Capital",
     province: "Córdoba",
     branchId: "arguello",
     esCabecera: true,
