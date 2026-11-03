@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { VehiculoOption } from "@/lib/pos-api";
 import { resolverPatente } from "@/lib/patente-match";
-import { PATENTE_RE, estiloPatente, formatearPatente, normalizarPatente } from "@/lib/patente";
+import { PATENTE_RE, estiloPatente, formatearPatente, normalizarPatente, type EstiloPatente } from "@/lib/patente";
 
 const SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
@@ -38,18 +38,19 @@ function cargarTurnstile(): Promise<void> {
  */
 function Chapa({
   valor,
+  estilo,
   onChange,
   onEnter,
   autoFocus,
   pequena,
 }: {
   valor: string;
+  estilo: EstiloPatente;
   onChange: (normalizada: string) => void;
   onEnter: () => void;
   autoFocus?: boolean;
   pequena?: boolean;
 }) {
-  const estilo = estiloPatente(valor);
   const mercosur = estilo === "mercosur";
   // La chapa es una imagen (SVG propio) y las letras se escriben en vivo encima.
   return (
@@ -87,6 +88,28 @@ function Chapa({
   );
 }
 
+/** Interruptor de formato: por si alguien no entiende que el campo se adapta solo. */
+function SelectorFormato({ estilo, onChange }: { estilo: EstiloPatente; onChange: (e: EstiloPatente) => void }) {
+  const op = (valor: EstiloPatente, texto: string) => (
+    <button
+      type="button"
+      aria-pressed={estilo === valor}
+      onClick={() => onChange(valor)}
+      className={`flex-1 rounded-full px-3 py-1.5 text-xs font-black transition-colors ${
+        estilo === valor ? "bg-navy-900 text-white" : "text-slate-600 hover:text-navy-900"
+      }`}
+    >
+      {texto}
+    </button>
+  );
+  return (
+    <div role="group" aria-label="Formato de la patente" className="mx-auto mt-2 flex w-full max-w-xs gap-1 rounded-full bg-slate-100 p-1">
+      {op("mercosur", "Nueva (AB 123 CD)")}
+      {op("anterior", "Anterior (ABC 123)")}
+    </div>
+  );
+}
+
 /**
  * Campo de patente + verificación + consulta. Devuelve el vehículo de la
  * lista del buscador y el año. Es una ayuda: si algo falla (sin cupo, modelo
@@ -107,14 +130,35 @@ export function PlateLookup({
   /** La patente no se pudo resolver: quien llama pasa a elegir el auto a mano. */
   onNoEncontrada?: (motivo: string) => void;
 }) {
-  const [patente, setPatente] = useState("");
+  // Última patente consultada: evita repetir la misma consulta sola.
+  const ultima = useRef<string | null>(null);
+  const [patente, setPatenteCrudo] = useState("");
+  // Formato elegido a mano con el interruptor; null = el campo lo decide según lo que se escribe.
+  const [manual, setManual] = useState<EstiloPatente | null>(null);
+  const estilo = manual ?? estiloPatente(patente);
+  // ¿Lo escrito define el formato sin dudas? (letra de la serie vieja, o ya hay un dígito en 3.ª posición)
+  const definido = (v: string): EstiloPatente | null =>
+    estiloPatente(v) === "anterior" ? "anterior" : v.length >= 3 ? "mercosur" : null;
+  const setPatente = (v: string) => {
+    const d = definido(v);
+    if (manual && d && d !== manual) setManual(null);
+    setPatenteCrudo(v);
+  };
+  const cambiarFormato = (nuevo: EstiloPatente) => {
+    setManual(nuevo);
+    // Si lo escrito es del otro formato, se borra (no se puede reinterpretar).
+    const d = definido(patente);
+    if (d && d !== nuevo) {
+      ultima.current = null;
+      setPatenteCrudo("");
+      setMensaje(null);
+    }
+  };
   const [token, setToken] = useState<string | null>(null);
   const [cargando, setCargando] = useState(false);
   const [mensaje, setMensaje] = useState<string | null>(null);
   const cajaRef = useRef<HTMLDivElement>(null);
   const widgetId = useRef<string | undefined>(undefined);
-  // Última patente consultada: evita repetir la misma consulta sola.
-  const ultima = useRef<string | null>(null);
 
   useEffect(() => {
     if (!SITE_KEY) return;
@@ -197,7 +241,7 @@ export function PlateLookup({
         <p className="mb-2 text-center text-sm font-bold text-navy-900">Buscá tu auto por patente</p>
         <div className="flex items-center justify-center gap-2">
           <div className="min-w-0 flex-1 sm:max-w-[15rem]">
-            <Chapa valor={patente} onChange={setPatente} onEnter={buscar} autoFocus={autoFocus} pequena />
+            <Chapa valor={patente} estilo={estilo} onChange={setPatente} onEnter={buscar} autoFocus={autoFocus} pequena />
           </div>
           <button
             type="button"
@@ -219,6 +263,7 @@ export function PlateLookup({
             </button>
           )}
         </div>
+        <SelectorFormato estilo={estilo} onChange={cambiarFormato} />
         <div ref={cajaRef} className="mt-2 flex justify-center" />
         {mensaje && (
           <p className="mt-2 rounded-lg bg-slate-50 px-3 py-2 text-center text-sm text-slate-600">{mensaje}</p>
@@ -230,7 +275,8 @@ export function PlateLookup({
   return (
     <div className="w-full">
       <p className="mb-2 text-center text-sm font-bold text-navy-900">Buscá tu auto por patente</p>
-      <Chapa valor={patente} onChange={setPatente} onEnter={buscar} autoFocus={autoFocus} pequena={pequena} />
+      <Chapa valor={patente} estilo={estilo} onChange={setPatente} onEnter={buscar} autoFocus={autoFocus} pequena={pequena} />
+      <SelectorFormato estilo={estilo} onChange={cambiarFormato} />
       <div ref={cajaRef} className="mt-2 flex justify-center" />
       <div className="mt-3 flex gap-2">
         <button
