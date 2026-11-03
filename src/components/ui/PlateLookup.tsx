@@ -90,22 +90,35 @@ function Chapa({
 
 /** Interruptor de formato: por si alguien no entiende que el campo se adapta solo. */
 function SelectorFormato({ estilo, onChange }: { estilo: EstiloPatente; onChange: (e: EstiloPatente) => void }) {
-  const op = (valor: EstiloPatente, texto: string) => (
-    <button
-      type="button"
-      aria-pressed={estilo === valor}
-      onClick={() => onChange(valor)}
-      className={`flex-1 rounded-full px-3 py-1.5 text-xs font-black transition-colors ${
-        estilo === valor ? "bg-navy-900 text-white" : "text-slate-600 hover:text-navy-900"
-      }`}
-    >
-      {texto}
-    </button>
-  );
+  const op = (valor: EstiloPatente, texto: string, ejemplo: string) => {
+    const activo = estilo === valor;
+    return (
+      <button
+        type="button"
+        aria-pressed={activo}
+        onClick={() => onChange(valor)}
+        className={`flex min-w-0 flex-1 flex-col items-center gap-1.5 rounded-xl border-2 px-2 py-2 transition-colors ${
+          activo ? "border-orange-500 bg-orange-50" : "border-slate-200 bg-white hover:border-slate-300"
+        }`}
+      >
+        {/* Misma proporción real que cada chapa (400×130 y 294×129 mm). */}
+        <span
+          aria-hidden="true"
+          className="block h-7 bg-contain bg-center bg-no-repeat"
+          style={{
+            aspectRatio: valor === "mercosur" ? "400 / 130" : "294 / 129",
+            backgroundImage: `url(/images/patente/${valor === "mercosur" ? "chapa-mercosur" : "chapa-anterior"}.svg)`,
+          }}
+        />
+        <span className="text-xs font-black leading-tight text-navy-900">{texto}</span>
+        <span className="text-[11px] font-bold leading-none text-slate-500">{ejemplo}</span>
+      </button>
+    );
+  };
   return (
-    <div role="group" aria-label="Formato de la patente" className="mx-auto mt-2 flex w-full max-w-xs gap-1 rounded-full bg-slate-100 p-1">
-      {op("mercosur", "Nueva (AB 123 CD)")}
-      {op("anterior", "Anterior (ABC 123)")}
+    <div role="group" aria-label="Formato de la patente" className="mx-auto mt-3 flex w-full max-w-sm gap-4">
+      {op("anterior", "Anterior a 2016", "ABC 123")}
+      {op("mercosur", "Nueva (Mercosur)", "AB 123 CD")}
     </div>
   );
 }
@@ -133,8 +146,8 @@ export function PlateLookup({
   // Última patente consultada: evita repetir la misma consulta sola.
   const ultima = useRef<string | null>(null);
   const [patente, setPatenteCrudo] = useState("");
-  // Formato elegido a mano con el interruptor; null = el campo lo decide según lo que se escribe.
-  const [manual, setManual] = useState<EstiloPatente | null>(null);
+  // Formato del interruptor: arranca en la anterior y el campo lo corrige solo apenas lo escrito define otro; null = lo decide el campo.
+  const [manual, setManual] = useState<EstiloPatente | null>("anterior");
   const estilo = manual ?? estiloPatente(patente);
   // ¿Lo escrito define el formato sin dudas? (letra de la serie vieja, o ya hay un dígito en 3.ª posición)
   const definido = (v: string): EstiloPatente | null =>
