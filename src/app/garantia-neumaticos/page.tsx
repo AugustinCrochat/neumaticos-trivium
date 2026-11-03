@@ -8,9 +8,9 @@ import { BRANCHES } from "@/lib/config";
 import { absoluteUrl, breadcrumbJsonLd, canonical, SITE_NAME } from "@/lib/seo";
 import { poolShare } from "@/lib/share-image";
 
-const TITLE = "Neumáticos nuevos con 1 año de garantía en Córdoba";
+const TITLE = "Neumáticos nuevos con 1 año de garantía";
 const DESCRIPTION =
-  "Todos los neumáticos de Neumáticos Trivium tienen 1 año de garantía por defecto de fabricación, gestionada directo con nosotros en el local de Córdoba. Qué cubre, qué no y cómo se reclama.";
+  "Todos los neumáticos de Neumáticos Trivium tienen 1 año de garantía por defecto de fabricación, gestionada directo con nosotros en nuestros locales. Qué cubre, qué no y cómo se reclama.";
 
 export const metadata: Metadata = {
   title: TITLE,

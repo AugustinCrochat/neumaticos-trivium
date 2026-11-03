@@ -9,7 +9,7 @@ import { canonical } from "@/lib/seo";
 import { OFFER_TIRE_SLUGS, OFFER_ACCESSORY_SLUGS } from "@/lib/offers";
 
 export const metadata: Metadata = {
-  title: "Ofertas de neumáticos en Córdoba: mejor precio",
+  title: "Ofertas de neumáticos: mejor precio",
   description:
     "Ofertas de la semana en Neumáticos Trivium: precios especiales en neumáticos Grenlander y tuercas antirrobo, por tiempo limitado y hasta agotar stock.",
   alternates: canonical("/ofertas"),

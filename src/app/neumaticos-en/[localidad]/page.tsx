@@ -60,12 +60,11 @@ function tituloLocal(localidad: Localidad): string {
       ? `Neumáticos baratos en ${localidad.name} — outlet de importación directa`
       : `Neumáticos baratos en ${localidad.name} — precios de outlet, local en ${sucursal.shortName}`;
   }
-  // La cabecera con local abierto (Córdoba) no repite el título de la home:
-  // las dos competían por "neumáticos baratos en Córdoba" y se pisaban. La
-  // home se queda con esa búsqueda; esta apunta a "cubiertas en Córdoba" y a
-  // los barrios, que es lo que la diferencia.
+  // Las páginas comunes (home, catálogo, ofertas…) ya no nombran ninguna ciudad:
+  // la búsqueda "neumáticos baratos en Córdoba" es de esta página, la dedicada
+  // a la región. El resto de las localidades se diferencian por zona y minutos.
   return localidad.esCabecera
-    ? `Cubiertas en ${localidad.name}: ofertas con stock hoy, barrio por barrio`
+    ? `Neumáticos baratos en ${localidad.name}: cubiertas con stock hoy y colocación sin cargo`
     : `Neumáticos baratos en ${localidad.name} — precios de outlet a ${localidad.minutosHastaSucursal} min`;
 }
 

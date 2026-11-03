@@ -67,7 +67,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description:
       `${desde ? `Neumáticos ${label} desde $${desde.toLocaleString("es-AR")} con stock.` : `Neumáticos ${label}.`} ` +
       `Cubiertas de carga (serie C) para furgones y utilitarios, de importación directa, con garantía de 1 año. ` +
-      `Colocación sin cargo en Córdoba.`,
+      `Colocación sin cargo en nuestros locales.`,
     alternates: canonical(path),
     openGraph: { title: `${title} — ${SITE_NAME}`, url: path, ...poolShare(medida).openGraph },
     twitter: poolShare(medida).twitter,

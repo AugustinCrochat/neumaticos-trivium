@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const desde = enStock.length ? Math.min(...enStock.map((p) => p.price)) : null;
 
   const description = desde
-    ? `Neumáticos ${brand.name} desde $${desde.toLocaleString("es-AR")} con stock disponible. ${brand.description ?? `Cubiertas ${brand.name} de importación directa`} Retiro sin cargo en Córdoba.`
+    ? `Neumáticos ${brand.name} desde $${desde.toLocaleString("es-AR")} con stock disponible. ${brand.description ?? `Cubiertas ${brand.name} de importación directa`} Retiro sin cargo en nuestros locales.`
     : `Catálogo de neumáticos ${brand.name}: medidas, precios y disponibilidad. ${brand.description ?? ""} Importación directa con garantía de 1 año.`;
 
   return {

@@ -12,9 +12,9 @@ import { CiudadSucursal } from "./CiudadSucursal";
 import { CotizadorClient, type QuoteProduct } from "./CotizadorClient";
 import type { MedidaDisponible } from "./CotizadorSelector";
 
-const TITLE = "Cotizador de neumáticos en Córdoba: armá tu presupuesto";
+const TITLE = "Cotizador de neumáticos: armá tu presupuesto";
 const DESCRIPTION =
-  "Elegí tu medida o tu auto, mirá los neumáticos con stock y precio real, sumá alineado y balanceado y armá tu presupuesto al instante. Compartilo por WhatsApp y coordiná en el local de Córdoba.";
+  "Elegí tu medida o tu auto, mirá los neumáticos con stock y precio real, sumá alineado y balanceado y armá tu presupuesto al instante. Compartilo por WhatsApp y coordiná en el local más cercano.";
 
 export const metadata: Metadata = {
   title: TITLE,

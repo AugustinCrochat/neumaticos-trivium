@@ -8,9 +8,9 @@ import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { poolShare } from "@/lib/share-image";
 
 export const metadata: Metadata = {
-  title: "Zonas donde atendemos — neumáticos baratos en Córdoba y Sierras Chicas",
+  title: "Zonas donde atendemos — neumáticos baratos en Córdoba y Buenos Aires",
   description:
-    "Vendemos neumáticos baratos, a precio de outlet, en Córdoba Capital, Argüello, Villa Allende, Saldán, La Calera, Mendiolaza, Unquillo y Río Ceballos, con gomería propia y taller de alineación y balanceo.",
+    "Vendemos neumáticos baratos, a precio de outlet, en Córdoba (Argüello, Villa Allende, Saldán, La Calera y Sierras Chicas) y en Buenos Aires (Lomas del Mirador, San Justo, La Matanza y zona oeste), con gomería propia y taller de alineación y balanceo.",
   alternates: canonical("/neumaticos-en"),
   openGraph: { title: `Zonas donde atendemos — ${SITE_NAME}`, url: "/neumaticos-en", ...poolShare("zonas").openGraph },
     twitter: poolShare("zonas").twitter,
@@ -34,9 +34,9 @@ export default function ZonasPage() {
           Dónde vendemos neumáticos
         </h1>
         <p className="mt-4 max-w-3xl text-lg leading-relaxed text-slate-600">
-          Tenemos local a la calle en Córdoba y atendemos todo el corredor de Sierras Chicas.
-          Si estás en alguna de estas zonas te conviene acercarte: el retiro es sin cargo y la
-          colocación va incluida.
+          Tenemos local a la calle en Córdoba y estamos abriendo en Buenos Aires, sobre la zona
+          oeste y el límite con Capital Federal. Si estás en alguna de estas zonas te conviene
+          acercarte: el retiro es sin cargo y la colocación va incluida.
         </p>
       </header>
 

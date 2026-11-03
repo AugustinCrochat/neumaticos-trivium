@@ -16,12 +16,12 @@ export async function generateMetadata(): Promise<Metadata> {
   const desde = enStock.length ? Math.min(...enStock.map((p) => p.price)) : null;
   return {
     title: desde
-      ? `Neumáticos baratos en Córdoba desde $${desde.toLocaleString("es-AR")}`
-      : "Neumáticos baratos en Córdoba: cubiertas al mejor precio",
+      ? `Neumáticos baratos desde $${desde.toLocaleString("es-AR")}`
+      : "Neumáticos baratos: cubiertas al mejor precio",
     description:
-      "Cubiertas nuevas al mejor precio: importación directa, precio publicado igual al del local, un año de garantía y colocación sin cargo en Córdoba. Mirá el neumático más barato de cada rodado y comprá con envío a todo el país.",
+      "Cubiertas nuevas al mejor precio: importación directa, precio publicado igual al del local, un año de garantía y colocación sin cargo en nuestros locales. Mirá el neumático más barato de cada rodado y comprá con envío a todo el país.",
     alternates: canonical("/neumaticos-baratos"),
-    openGraph: { title: `Neumáticos baratos en Córdoba — ${SITE_NAME}`, url: "/neumaticos-baratos", ...poolShare("baratos").openGraph },
+    openGraph: { title: `Neumáticos baratos — ${SITE_NAME}`, url: "/neumaticos-baratos", ...poolShare("baratos").openGraph },
     twitter: poolShare("baratos").twitter,
   };
 }
@@ -63,7 +63,7 @@ export default async function NeumaticosBaratosPage() {
     <CategoryLanding
       crumbLabel="Neumáticos baratos"
       path="/neumaticos-baratos"
-      title="Neumáticos baratos en Córdoba"
+      title="Neumáticos baratos"
       productos={lista}
       faqs={FAQS}
       extra={<BaratosExtra productos={lista} />}
@@ -76,7 +76,7 @@ export default async function NeumaticosBaratosPage() {
         headline: "Cubiertas nuevas",
         accent: "al mejor precio.",
         bajada:
-          "Importamos directo y vendemos desde nuestro local de Córdoba: precio publicado, stock real y colocación sin cargo.",
+          "Importamos directo y vendemos desde nuestros locales: precio publicado, stock real y colocación sin cargo.",
         highlights: [
           {
             titulo: "Importación directa",

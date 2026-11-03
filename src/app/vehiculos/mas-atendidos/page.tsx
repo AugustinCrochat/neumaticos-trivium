@@ -9,7 +9,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { canonical, breadcrumbJsonLd, itemListJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Medidas de neumáticos más cambiadas en Córdoba y los autos que las llevan",
+  title: "Medidas de neumáticos más cambiadas y los autos que las llevan",
   description: `Ranking real de nuestro taller de Argüello: qué medidas de neumático se cambian más y en qué autos y camionetas, con datos al ${VENTAS_DATOS_AL}.`,
   alternates: canonical("/vehiculos/mas-atendidos"),
 };

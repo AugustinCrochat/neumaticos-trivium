@@ -481,6 +481,18 @@ export const BLOG_META: Record<string, BlogMeta> = {
     shopIntro: "Si ya toca cambiarlas, estas son las cubiertas para trabajo:",
     shopLinks: [L.carga, L.servicios, L.todos],
   },
+  "comprar-neumaticos-en-buenos-aires-zona-oeste": {
+    cover: cover("fachada"),
+    figure: { src: IMG.tallerCuatroAutos, alt: "Interior del taller de Neumáticos Trivium en Argüello con cuatro autos en servicio", caption: "Así trabaja el taller de Argüello; los locales de Buenos Aires abren en diciembre y enero." },
+    shopIntro: "Mirá precios y stock mientras abrimos:",
+    shopLinks: [L.todos, L.ofertas, L.servicios],
+  },
+  "neumaticos-baratos-en-cordoba": {
+    cover: cover("fachada"),
+    figure: { src: IMG.taxi, alt: "Taxi dentro del taller de Neumáticos Trivium", caption: "Un taxi en el taller: cubierta económica, colocada en el mismo lugar." },
+    shopIntro: "Elegí por medida o por categoría:",
+    shopLinks: [L.todos, L.ofertas, L.marcas],
+  },
   "comprar-neumaticos-en-cordoba": {
     cover: cover("fachada"),
     figure: { src: IMG.taxi, alt: "Taxi dentro del taller de Neumáticos Trivium", caption: "Un taxi en el taller: la cubierta se compra y se coloca en el mismo lugar." },

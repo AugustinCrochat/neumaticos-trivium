@@ -10,7 +10,7 @@ import { FaqSection } from "@/components/seo/FaqSection";
 import { poolShare } from "@/lib/share-image";
 
 export const metadata: Metadata = {
-  title: "Marcas de neumáticos que vendemos en Córdoba",
+  title: "Marcas de neumáticos que vendemos",
   description:
     "Todas las marcas de neumáticos que vendemos, con su origen, su posicionamiento real y el stock disponible de cada una. Importación directa con garantía de 1 año.",
   alternates: canonical("/marcas"),

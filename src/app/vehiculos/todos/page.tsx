@@ -11,7 +11,7 @@ import { canonical, breadcrumbJsonLd, itemListJsonLd, faqJsonLd } from "@/lib/se
 export const metadata: Metadata = {
   title: `Medida de neumáticos de ${POPULAR_VEHICLES.length} autos y camionetas, por modelo`,
   description:
-    "¿Qué medida de neumático lleva tu auto? Listado por marca de autos, pickups y utilitarios que circulan en Argentina, con la medida original de cada modelo y stock real en Córdoba.",
+    "¿Qué medida de neumático lleva tu auto? Listado por marca de autos, pickups y utilitarios que circulan en Argentina, con la medida original de cada modelo y stock real en nuestros locales.",
   alternates: canonical("/vehiculos/todos"),
 };
 
@@ -34,7 +34,7 @@ const FAQS = [
   {
     question: "¿Tienen stock y precio de la medida de mi auto?",
     answer:
-      "Sí: cada ficha muestra los neumáticos disponibles en nuestras sucursales de Córdoba con precio actualizado.",
+      "Sí: cada ficha muestra los neumáticos disponibles en nuestras sucursales con precio actualizado.",
   },
 ];
 
@@ -88,7 +88,7 @@ export default function TodosLosVehiculosPage() {
           <p className="mb-3 text-slate-700">
             La medida original de tu auto figura en el flanco del neumático que tiene puesto (por ejemplo <strong>185/65 R15</strong>), en la
             etiqueta del marco de la puerta del conductor y en el manual. Si todavía no sabés cuál es, buscá tu modelo arriba: cada ficha trae
-            la medida de cada versión y año, el stock y el precio en nuestras sucursales de Córdoba.
+            la medida de cada versión y año, el stock y el precio en nuestras sucursales.
           </p>
           <p className="mb-6 text-slate-700">
             Muchas versiones de un mismo modelo usan rodados distintos (por ejemplo 15, 16 o 17 pulgadas). Fijate en la ficha cuál corresponde a

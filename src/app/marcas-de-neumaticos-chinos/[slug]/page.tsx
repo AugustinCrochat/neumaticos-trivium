@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const share = poolShare(`marca-${marca.slug}`);
   return {
     title: `Neumáticos ${marca.name}: quién la fabrica, dónde se consigue y alternativas`,
-    description: `Qué se sabe de la marca ${marca.name} (${marca.empresa}), cómo comparar neumáticos chinos y las marcas chinas que tenemos en stock en Córdoba, con precio publicado, garantía y colocación sin cargo.`,
+    description: `Qué se sabe de la marca ${marca.name} (${marca.empresa}), cómo comparar neumáticos chinos y las marcas chinas que tenemos en stock, con precio publicado, garantía y colocación sin cargo.`,
     alternates: canonical(path),
     openGraph: { title: `Neumáticos ${marca.name} y alternativas — ${SITE_NAME}`, url: path, ...share.openGraph },
     twitter: share.twitter,
@@ -98,7 +98,7 @@ export default async function OtraMarcaPage({ params }: Props) {
         highlights: [
           { titulo: "Precio publicado", detalle: "El de la web es el del mostrador, con IVA incluido y por unidad." },
           { titulo: "Garantía", detalle: "Un año por defecto de fabricación." },
-          { titulo: "Colocación sin cargo", detalle: "Colocación y válvulas sin cargo si comprás en el local de Córdoba." },
+          { titulo: "Colocación sin cargo", detalle: "Colocación y válvulas sin cargo si comprás en nuestros locales." },
         ],
         idealPara: [
           "Quien ya compara marcas chinas de entrada y quiere ver precios en su medida",

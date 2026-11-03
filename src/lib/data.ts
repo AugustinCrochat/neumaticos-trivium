@@ -1087,6 +1087,24 @@ const BLOG_POSTS_BASE: BlogPost[] = [
     slug: "gomeria-en-lomas-del-mirador-y-oeste-de-capital",
     category: "Guías",
   },
+  {
+    id: "87",
+    title: "Comprar neumáticos en Buenos Aires (zona oeste y Capital): qué comparar antes de pagar",
+    excerpt: "Cómo comparar presupuestos en La Matanza, el oeste del Gran Buenos Aires y el oeste de Capital, y dónde abren nuestros locales de Lomas del Mirador y San Justo.",
+    imageUrl: "/images/local/fachada-local-neumaticos-trivium-cordoba.webp",
+    date: "2026-11-30",
+    slug: "comprar-neumaticos-en-buenos-aires-zona-oeste",
+    category: "Guías",
+  },
+  {
+    id: "88",
+    title: "Neumáticos baratos en Córdoba: cómo ahorrar sin comprar mal",
+    excerpt: "De dónde sale un precio bajo de verdad, qué no tiene que ser barato (fecha de fabricación, garantía, colocación) y cómo comparar por costo por kilómetro.",
+    imageUrl: "/images/local/fachada-local-neumaticos-trivium-cordoba.webp",
+    date: "2026-12-01",
+    slug: "neumaticos-baratos-en-cordoba",
+    category: "Guías",
+  },
 ];
 
 // La miniatura del listado es siempre la portada de la nota (blog-meta.ts):

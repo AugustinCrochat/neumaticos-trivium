@@ -18,10 +18,10 @@ export async function generateMetadata(): Promise<Metadata> {
   const desde = enStock.length ? Math.min(...enStock.map((p) => p.price)) : null;
   return {
     title: desde
-      ? `Neumáticos para taxi, remis y Uber en Córdoba desde $${desde.toLocaleString("es-AR")}`
-      : "Neumáticos para taxi, remis y Uber en Córdoba: cubiertas económicas",
+      ? `Neumáticos para taxi, remis y Uber desde $${desde.toLocaleString("es-AR")}`
+      : "Neumáticos para taxi, remis y Uber: cubiertas económicas",
     description:
-      "Cubiertas nuevas y económicas para taxis, remises y autos de Uber, DiDi y Cabify: medidas de los autos más usados, precio por unidad, un año de garantía, colocación sin cargo, alineación y balanceo en Argüello, Córdoba.",
+      "Cubiertas nuevas y económicas para taxis, remises y autos de Uber, DiDi y Cabify: medidas de los autos más usados, precio por unidad, un año de garantía, colocación sin cargo, alineación y balanceo en nuestros locales.",
     alternates: canonical("/neumaticos-para-remises-taxis-y-uber"),
     openGraph: { title: `Neumáticos para remises, taxis y Uber — ${SITE_NAME}`, url: "/neumaticos-para-remises-taxis-y-uber", ...(share?.openGraph ?? {}) },
     twitter: share?.twitter,
@@ -75,7 +75,7 @@ export default async function NeumaticosParaRemisesPage() {
     <CategoryLanding
       crumbLabel="Neumáticos para remises, taxis y Uber"
       path="/neumaticos-para-remises-taxis-y-uber"
-      title="Neumáticos para taxis, remises y Uber en Córdoba"
+      title="Neumáticos para taxis, remises y Uber"
       productos={lista}
       faqs={FAQS}
       extra={<RemisesExtra productos={lista} />}

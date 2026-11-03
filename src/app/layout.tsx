@@ -45,7 +45,7 @@ export const metadata: Metadata = {
     template: `%s — ${SITE_NAME}`,
   },
   description:
-    "Outlet de neumáticos con importación directa: comprá cubiertas para auto y camioneta con stock real, precio publicado. Local y taller propio en Córdoba.",
+    "Outlet de neumáticos con importación directa: comprá cubiertas para auto y camioneta con stock real, precio publicado. Locales y taller propio en Córdoba y Buenos Aires.",
   applicationName: SITE_NAME,
   authors: [{ name: SITE_NAME, url: SITE_URL }],
   creator: SITE_NAME,

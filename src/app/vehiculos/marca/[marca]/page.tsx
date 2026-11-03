@@ -51,7 +51,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const description = `¿Qué medida de neumático lleva tu ${brand}? Medida original de los modelos más comunes (${vehiculos
     .slice(0, 4)
     .map((v) => v.model)
-    .join(", ")}${vehiculos.length > 4 ? " y más" : ""}), con stock y precio reales. Garantía de 1 año y colocación sin cargo en Córdoba.`;
+    .join(", ")}${vehiculos.length > 4 ? " y más" : ""}), con stock y precio reales. Garantía de 1 año y colocación sin cargo en nuestros locales.`;
   return {
     title,
     description,
@@ -77,7 +77,7 @@ export default async function MarcaPage({ params }: Props) {
         .join("; ")}. Entrá a la ficha de tu modelo para ver todas las versiones, y confirmá la tuya en el flanco del neumático.`,
     },
     {
-      question: `¿Tienen neumáticos para ${brand} en Córdoba?`,
+      question: `¿Tienen neumáticos para ${brand}?`,
       answer: `Sí. Elegí tu modelo, mirá la medida y te mostramos lo que hay en stock con precio. Tienen garantía de 1 año y la colocación es sin cargo en nuestra sucursal de Argüello.`,
     },
   ];

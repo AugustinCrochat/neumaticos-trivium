@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   // "gomería en Córdoba" / "gomería cerca".
   // En Córdoba se busca "alineado y balanceado" (en Buenos Aires,
   // "alineación y balanceo"): el título usa la forma local.
-  title: "Gomería en Córdoba: alineado, balanceado y colocación sin turno",
+  title: "Gomería: alineado, balanceado y colocación sin turno",
   description:
     "Gomería y taller propio en Córdoba (Argüello): alineado computarizado 3D, balanceado dinámico y arme y desarme de neumáticos con precios publicados. Colocación sin cargo comprando las cubiertas en el local. Sin turno.",
   alternates: canonical("/servicios"),

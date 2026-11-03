@@ -25,8 +25,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const path = `/alternativas/${marca.slug}`;
   const share = poolShare(`alternativa-${marca.slug}`);
   return {
-    title: `Alternativas a ${marca.name}: neumáticos más económicos en Córdoba`,
-    description: `Qué se sabe de ${marca.name} (${marca.origen}), cuándo conviene una marca premium y cuándo una alternativa, y los neumáticos nuevos que tenemos en Córdoba con precio publicado, garantía y colocación sin cargo.`,
+    title: `Alternativas a ${marca.name}: neumáticos más económicos`,
+    description: `Qué se sabe de ${marca.name} (${marca.origen}), cuándo conviene una marca premium y cuándo una alternativa, y los neumáticos nuevos que tenemos con precio publicado, garantía y colocación sin cargo.`,
     alternates: canonical(path),
     openGraph: { title: `Alternativas a ${marca.name} — ${SITE_NAME}`, url: path, ...share.openGraph },
     twitter: share.twitter,
@@ -108,7 +108,7 @@ export default async function AlternativaPage({ params }: Props) {
         highlights: [
           { titulo: "Precio publicado", detalle: "El de la web es el del mostrador, con IVA incluido y por unidad." },
           { titulo: "Garantía", detalle: "Un año por defecto de fabricación." },
-          { titulo: "Colocación sin cargo", detalle: "Colocación y válvulas sin cargo si comprás en el local de Córdoba." },
+          { titulo: "Colocación sin cargo", detalle: "Colocación y válvulas sin cargo si comprás en nuestros locales." },
         ],
         idealPara: [
           "Quien busca una marca conocida y quiere ver qué otras opciones hay en su medida",

@@ -14,12 +14,12 @@ export async function generateMetadata(): Promise<Metadata> {
   // El precio "desde" va en el título porque es lo que decide el clic en la
   // SERP: el posicionamiento de esta página es precio bajo en carga.
   const title = desde
-    ? `Neumáticos de carga desde $${desde.toLocaleString("es-AR")} en Córdoba`
-    : "Neumáticos de carga en Córdoba para furgones y utilitarios";
+    ? `Neumáticos de carga desde $${desde.toLocaleString("es-AR")}`
+    : "Neumáticos de carga para furgones y utilitarios";
   return {
     title,
     description:
-      "Neumáticos de carga (serie C) para furgones, utilitarios y camiones livianos: precios bajos por importación directa, stock real por medida, garantía de 1 año y colocación sin cargo en Córdoba.",
+      "Neumáticos de carga (serie C) para furgones, utilitarios y camiones livianos: precios bajos por importación directa, stock real por medida, garantía de 1 año y colocación sin cargo en nuestros locales.",
     alternates: canonical("/neumaticos/carga"),
     openGraph: { title: `Neumáticos de carga — ${SITE_NAME}`, url: "/neumaticos/carga", ...poolShare("carga").openGraph },
     twitter: poolShare("carga").twitter,

@@ -5,9 +5,9 @@ import { BranchesMap } from "./BranchesMap";
 import { canonical } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Sucursales de neumáticos y gomería en Córdoba",
+  title: "Sucursales de neumáticos y gomería en Córdoba y Buenos Aires",
   description:
-    "Dirección, horarios, teléfono y cómo llegar a las sucursales de Neumáticos Trivium. Local con stock propio y taller de alineación y balanceo en Córdoba.",
+    "Dirección, horarios, teléfono y cómo llegar a las sucursales de Neumáticos Trivium. Local con stock propio y taller de alineación y balanceo, en Córdoba y Buenos Aires.",
   alternates: canonical("/sucursales"),
 };
 
