@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 type TireDiagramProps = {
   width?: string | number;
   aspect?: string | number;
@@ -43,6 +45,8 @@ export function TireDiagram({
   slim = false,
   theme = { accent: "#ff6a3d" }
 }: TireDiagramProps) {
+  // La explicación de cada dato va detrás de una «i» (no ocupa alto en el buscador).
+  const [verAyuda, setVerAyuda] = useState(false);
   const cx = 708.06;
   const cy = 686.9;
   const measureTextCy = 702;
@@ -75,7 +79,25 @@ export function TireDiagram({
   };
 
   return (
-    <div className={`flex flex-col items-center ${compact ? 'py-1' : 'py-3'}`}>
+    <div className={`relative flex flex-col items-center ${compact ? 'py-1' : 'py-3'}`}>
+      <button
+        type="button"
+        tabIndex={-1}
+        onMouseDown={(e) => e.preventDefault()}
+        onClick={() => setVerAyuda((v) => !v)}
+        onMouseEnter={() => setVerAyuda(true)}
+        onMouseLeave={() => setVerAyuda(false)}
+        aria-label="Qué significa este número"
+        aria-expanded={verAyuda}
+        className="absolute left-1 top-1 z-10 flex h-6 w-6 items-center justify-center rounded-full border border-slate-300 bg-white text-xs font-black italic text-slate-600 shadow-sm hover:border-orange-400 hover:text-orange-600"
+      >
+        i
+      </button>
+      {verAyuda && (
+        <p role="tooltip" className="absolute left-1 top-8 z-20 w-60 rounded-lg bg-black px-3 py-2 text-left text-xs leading-snug text-white shadow-lg">
+          {AYUDA[focused ?? "width"]}
+        </p>
+      )}
       {/* En slim el dibujo va sobre un panel de gris medio: el neumático negro y la llanta clara se despegan del fondo claro del buscador. */}
       <div className={slim ? "flex w-full max-w-[260px] justify-center rounded-2xl bg-gradient-to-b from-slate-400 to-slate-600 px-3 pb-0 pt-5 ring-1 ring-slate-500/40" : "contents"}>
       <svg
@@ -223,11 +245,6 @@ export function TireDiagram({
           );
         })}
       </div>
-      {focused && (
-        <p className={`mt-1.5 w-full max-w-lg text-center leading-snug text-slate-600 ${compact ? "text-[11px]" : "text-xs"}`} aria-live="polite">
-          {AYUDA[focused]}
-        </p>
-      )}
     </div>
   );
 }
