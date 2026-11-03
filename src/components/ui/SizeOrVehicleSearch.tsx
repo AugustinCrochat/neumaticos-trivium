@@ -3,7 +3,7 @@
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import { X } from "lucide-react";
-import { Car, ChevronDown, LayoutGrid, RectangleHorizontal } from "lucide-react";
+import { Car, ChevronDown, LayoutGrid } from "lucide-react";
 import { PlateIcon } from "@/components/ui/PlateIcon";
 import { HalfTireIcon } from "@/components/ui/HalfTireIcon";
 import { TireSizeSearch } from "@/components/ui/TireSizeSearch";
@@ -50,9 +50,8 @@ export function SizeOrVehicleSearch({
   onLiveChange?: (v: { w: string; p: string; r: string }) => void;
 }) {
   const { loadVehiculos } = useVehicle();
-  // Abre en "Por patente" si está habilitada y si no en "Por medida", aunque
-  // haya un auto recordado.
-  const [mode, setMode] = useState<"patente" | "medida" | "vehiculo">(PATENTE_HABILITADA ? "patente" : "medida");
+  // Abre siempre en "Por medida" (la opción principal); la patente es la segunda.
+  const [mode, setMode] = useState<"patente" | "medida" | "vehiculo">("medida");
   // Apagado por defecto: sólo se enciende si el visitante lo pide (o si la
   // búsqueda que está viendo ya venía filtrada, ver ShopPage).
   // Fuera del catálogo (compact) la medida se elige en pasos, con botones; se puede pasar a escribirla.
@@ -82,6 +81,9 @@ export function SizeOrVehicleSearch({
       document.body.style.overflow = previo;
     };
   }, [abierto]);
+
+  // La medida se elige con botones salvo en el catálogo (filtra en vivo mientras se escribe) o si ya viene una medida.
+  const conBotones = !onLiveChange && !initialMedida;
 
   if (!compact) {
     const cerrar = () => {
@@ -113,6 +115,15 @@ export function SizeOrVehicleSearch({
         </h2>
         {escritorio ? (
           <div className="grid grid-cols-2 gap-3">
+            <button
+              type="button"
+              onClick={() => setAbierto("medida")}
+              className="flex flex-col items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-5 text-center transition-colors hover:border-orange-400"
+            >
+              <HalfTireIcon className="h-9 w-[4.5rem] text-navy-900" />
+              <span className="text-base font-black text-navy-900">Por medida</span>
+              <span className="text-xs font-semibold text-slate-500">Ej: 205/55 R16</span>
+            </button>
             {PATENTE_HABILITADA && (
               <button
                 type="button"
@@ -124,15 +135,6 @@ export function SizeOrVehicleSearch({
                 <span className="text-xs font-semibold text-slate-500">Ej: AB 123 CD</span>
               </button>
             )}
-            <button
-              type="button"
-              onClick={() => setAbierto("medida")}
-              className="flex flex-col items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-5 text-center transition-colors hover:border-orange-400"
-            >
-              <HalfTireIcon className="h-9 w-[4.5rem] text-navy-900" />
-              <span className="text-base font-black text-navy-900">Por medida</span>
-              <span className="text-xs font-semibold text-slate-500">Ej: 205/55 R16</span>
-            </button>
             {!PATENTE_HABILITADA && (
               <button
                 type="button"
@@ -148,16 +150,16 @@ export function SizeOrVehicleSearch({
           </div>
         ) : (
           <>
-            {PATENTE_HABILITADA && (
-              <div className="mb-3 rounded-xl border border-slate-200 bg-white p-4">
-                <PlateSearch economicos={economicos} onNavigate={onNavigate} autoFocus={autoFocus} pequena />
-              </div>
-            )}
             <div className="space-y-2">
               {barra("medida", HalfTireIcon, "Por medida", "Ej: 205/55 R16")}
               {/* Con la patente habilitada, si no se encuentra el auto la misma búsqueda pasa a elegir marca y modelo. */}
               {!PATENTE_HABILITADA && barra("vehiculo", Car, "Por mi auto", "Marca, modelo y año")}
             </div>
+            {PATENTE_HABILITADA && (
+              <div className="mt-3 rounded-xl border border-slate-200 bg-white p-4">
+                <PlateSearch economicos={economicos} onNavigate={onNavigate} autoFocus={autoFocus} pequena />
+              </div>
+            )}
           </>
         )}
         {abierto &&
@@ -251,16 +253,6 @@ export function SizeOrVehicleSearch({
     <div className={`bg-slate-100 rounded-2xl border border-slate-200 ${compact ? "p-4" : "p-6"} w-full`}>
       <div className="mb-3 flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
       <div className="inline-flex items-center rounded-xl border border-slate-200 bg-white p-1">
-        {PATENTE_HABILITADA && (
-          <button
-            onClick={() => setMode("patente")}
-            className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors ${mode === "patente" ? "bg-black text-white" : "text-slate-500 hover:text-slate-800"}`}
-          >
-            <span className="inline-flex items-center gap-1.5">
-              <RectangleHorizontal className="h-4 w-4" aria-hidden="true" /> Por patente
-            </span>
-          </button>
-        )}
         <button
           onClick={() => setMode("medida")}
           className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors ${mode === "medida" ? "bg-black text-white" : "text-slate-500 hover:text-slate-800"}`}
@@ -269,6 +261,16 @@ export function SizeOrVehicleSearch({
             <HalfTireIcon className="h-3.5 w-auto" /> Por medida
           </span>
         </button>
+        {PATENTE_HABILITADA && (
+          <button
+            onClick={() => setMode("patente")}
+            className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors ${mode === "patente" ? "bg-black text-white" : "text-slate-500 hover:text-slate-800"}`}
+          >
+            <span className="inline-flex items-center gap-1.5">
+              <PlateIcon className="h-4 w-8" /> Por patente
+            </span>
+          </button>
+        )}
         {!PATENTE_HABILITADA && (
         <button
           onClick={() => setMode("vehiculo")}
@@ -289,20 +291,31 @@ export function SizeOrVehicleSearch({
 
       {mode === "patente" ? (
         <PlateSearch economicos={economicos} onNavigate={onNavigate} autoFocus={autoFocus} />
-      ) : mode === "medida" && !compact && !escribir && !initialMedida ? (
+      ) : mode === "medida" && conBotones && !escribir ? (
         <MedidaPasos economicos={economicos} onNavigate={onNavigate} onEscribir={() => setEscribir(true)} />
       ) : mode === "medida" ? (
-        <TireSizeSearch
-          embedded
-          compact={compact}
-          initialMedida={initialMedida}
-          forceVoiceButton={forceVoiceButton}
-          hideLearnLink={hideLearnLink}
-          economicos={economicos}
-          autoFocus={autoFocus}
-          onNavigate={onNavigate}
-          onLiveChange={onLiveChange}
-        />
+        <>
+          {conBotones && (
+            <button
+              type="button"
+              onClick={() => setEscribir(false)}
+              className="mb-3 flex w-full items-center justify-center gap-2 rounded-xl border-2 border-slate-300 bg-white py-2 text-sm font-black text-navy-900 transition-colors hover:border-orange-500 hover:text-orange-600"
+            >
+              <LayoutGrid className="h-4 w-4" aria-hidden="true" /> Elegir la medida con botones
+            </button>
+          )}
+          <TireSizeSearch
+            embedded
+            compact={compact}
+            initialMedida={initialMedida}
+            forceVoiceButton={forceVoiceButton}
+            hideLearnLink={hideLearnLink}
+            economicos={economicos}
+            autoFocus={autoFocus}
+            onNavigate={onNavigate}
+            onLiveChange={onLiveChange}
+          />
+        </>
       ) : (
         // Al quitar el auto se queda en esta pestaña (sin esto el modo por defecto
         // vuelve a "Por medida" porque ya no hay vehículo).
