@@ -728,7 +728,7 @@ export function TireSizeSearch({
         </div>
       )}
 
-      <div className={compact ? undefined : "grid gap-4 @xl:grid-cols-[250px_minmax(0,1fr)] @xl:items-center @xl:gap-6"}>
+      <div className={compact ? undefined : "grid gap-4 @xl:grid-cols-[250px_minmax(0,1fr)] @xl:items-start @xl:gap-6"}>
       <div
         ref={tireEditorRef}
         tabIndex={0}

@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Car, ChevronDown, Ruler } from "lucide-react";
+import { Car, ChevronDown } from "lucide-react";
+import { HalfTireIcon } from "@/components/ui/HalfTireIcon";
 import { TireSizeSearch } from "@/components/ui/TireSizeSearch";
 import { VehicleSizeSearch } from "@/components/ui/VehicleSizeSearch";
 import { MedidaPasos } from "@/components/ui/MedidaPasos";
@@ -50,7 +51,7 @@ export function SizeOrVehicleSearch({
   const [abierto, setAbierto] = useState<"medida" | "vehiculo" | null>(initialMedida ? "medida" : null);
 
   if (!compact) {
-    const barra = (id: "medida" | "vehiculo", Icono: typeof Ruler, titulo: string, ejemplo: string) => (
+    const barra = (id: "medida" | "vehiculo", Icono: typeof Car | typeof HalfTireIcon, titulo: string, ejemplo: string) => (
       <button
         type="button"
         onClick={() => setAbierto((a) => (a === id ? null : id))}
@@ -78,7 +79,7 @@ export function SizeOrVehicleSearch({
           </div>
         )}
         <div className="space-y-2">
-          {barra("medida", Ruler, "Por medida", "Ej: 205/55 R16")}
+          {barra("medida", HalfTireIcon, "Por medida", "Ej: 205/55 R16")}
           {abierto === "medida" && (
             <div className="rounded-xl border border-slate-200 bg-white p-4">
               {escribir || initialMedida ? (

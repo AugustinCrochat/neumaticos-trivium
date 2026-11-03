@@ -54,7 +54,7 @@ function Chapa({
   // La chapa es una imagen (SVG propio) y las letras se escriben en vivo encima.
   return (
     <div
-      className={`relative mx-auto w-full [container-type:inline-size] ${pequena ? "max-w-[17rem]" : "max-w-sm"}`}
+      className={`relative mx-auto w-full [container-type:inline-size] ${pequena ? "max-w-full" : "max-w-sm"}`}
       style={{
         aspectRatio: "400 / 130",
         backgroundImage: `url(/images/patente/${mercosur ? "chapa-mercosur" : "chapa-anterior"}.svg)`,
@@ -175,6 +175,49 @@ export function PlateLookup({
 
   if (!SITE_KEY) return null;
 
+  const borrar = () => {
+    ultima.current = null;
+    setPatente("");
+    setMensaje(null);
+  };
+
+  if (pequena) {
+    // Versión compacta: chapa chica y botones chicos a la derecha.
+    return (
+      <div className="w-full">
+        <p className="mb-2 text-center text-sm font-bold text-navy-900">Buscá tu auto por patente</p>
+        <div className="flex items-center justify-center gap-2">
+          <div className="min-w-0 flex-1 sm:max-w-[15rem]">
+            <Chapa valor={patente} onChange={setPatente} onEnter={buscar} autoFocus={autoFocus} pequena />
+          </div>
+          <button
+            type="button"
+            onClick={buscar}
+            disabled={patente.length < 6 || !token || cargando}
+            aria-label="Buscar mi auto"
+            className="flex h-11 shrink-0 items-center justify-center rounded-xl bg-orange-500 px-4 text-sm font-black text-white transition-colors hover:bg-orange-600 disabled:opacity-40"
+          >
+            {cargando ? "…" : "Buscar"}
+          </button>
+          {patente && (
+            <button
+              type="button"
+              onClick={borrar}
+              aria-label="Borrar patente"
+              className="flex h-11 w-9 shrink-0 items-center justify-center rounded-xl border border-slate-300 bg-white text-lg font-bold text-slate-500 hover:bg-slate-50"
+            >
+              ×
+            </button>
+          )}
+        </div>
+        <div ref={cajaRef} className="mt-2 flex justify-center" />
+        {mensaje && (
+          <p className="mt-2 rounded-lg bg-slate-50 px-3 py-2 text-center text-sm text-slate-600">{mensaje}</p>
+        )}
+      </div>
+    );
+  }
+
   return (
     <div className="w-full">
       <p className="mb-2 text-center text-sm font-bold text-navy-900">Buscá tu auto por patente</p>
@@ -192,11 +235,7 @@ export function PlateLookup({
         {patente && (
           <button
             type="button"
-            onClick={() => {
-              ultima.current = null;
-              setPatente("");
-              setMensaje(null);
-            }}
+            onClick={borrar}
             aria-label="Borrar patente"
             className="w-12 shrink-0 rounded-xl border border-slate-300 bg-white text-lg font-bold text-slate-500 transition-colors hover:bg-slate-50"
           >
