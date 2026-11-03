@@ -28,6 +28,7 @@ export function PlateSearch({
     return (
       <VehicleSizeSearch
         anio={anio}
+        desdePatente
         economicos={economicos}
         onNavigate={onNavigate}
         onClear={() => setEncontrado(false)}

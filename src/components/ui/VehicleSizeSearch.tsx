@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Check } from "lucide-react";
 import { useBranch } from "@/contexts/branch-context";
 import { useVehicle } from "@/contexts/vehicle-context";
 import { getSizesForVehicle, type VehicleDBEntry } from "@/lib/vehicles";
@@ -27,7 +28,7 @@ function findVersionIndexBySize(sizes: Sizes | null, size?: Sizes[number]): numb
   return sizes.findIndex((s) => s.w === size.w && s.p === size.p && s.r === size.r);
 }
 
-export function VehicleSizeSearch({ initialMedida, economicos = false, anio, onClear, onNavigate }: { initialMedida?: string; economicos?: boolean; /** Año del auto (viene de la patente): deja sólo las medidas de esa generación. */ anio?: number | null; onClear?: () => void; onNavigate?: () => void }) {
+export function VehicleSizeSearch({ initialMedida, economicos = false, anio, desdePatente = false, onClear, onNavigate }: { initialMedida?: string; economicos?: boolean; /** Año del auto (viene de la patente): deja sólo las medidas de esa generación. */ anio?: number | null; /** El auto vino de una patente: se muestra la tarjeta "Vehículo encontrado". */ desdePatente?: boolean; onClear?: () => void; onNavigate?: () => void }) {
   const { selectedBranch } = useBranch();
   const { vehiculos, selectedVehicle, setSelectedVehicle, clearSelectedVehicle } = useVehicle();
 
@@ -92,21 +93,54 @@ export function VehicleSizeSearch({ initialMedida, economicos = false, anio, onC
 
   return (
     <div className="w-full">
-      <div className="flex items-center justify-between gap-3 mb-3 rounded-xl border-2 border-orange-500 bg-orange-50 px-4 py-3">
-        <div className="min-w-0 flex-1">
-          <p className="text-xs font-bold text-orange-600 uppercase tracking-wide">Tu vehículo</p>
-          <p className="text-base font-bold text-navy-900 truncate">{selectedVehicle.marca} {selectedVehicle.modelo}{anio ? ` · ${anio}` : ""}</p>
+      {desdePatente ? (
+        <div className="mb-3 rounded-xl border border-emerald-200 bg-emerald-50/60 p-3">
+          <div className="mb-2 flex items-center justify-between gap-3">
+            <span className="inline-flex items-center gap-1 rounded-md border border-emerald-300 bg-white px-2 py-0.5 text-[11px] font-black uppercase tracking-wide text-emerald-700">
+              <Check className="h-3 w-3" aria-hidden="true" /> Vehículo encontrado
+            </span>
+            <button
+              onClick={() => {
+                onClear?.();
+                clearSelectedVehicle();
+              }}
+              className="shrink-0 text-xs font-bold text-slate-500 transition-colors hover:text-slate-700"
+            >
+              Cambiar
+            </button>
+          </div>
+          <div className="grid grid-cols-2 gap-2">
+            <div className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-center">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Marca</p>
+              <p className="text-sm font-black leading-tight text-navy-900">{selectedVehicle.marca}</p>
+            </div>
+            <div className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-center">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Año</p>
+              <p className="text-sm font-black leading-tight text-navy-900">{anio ?? "—"}</p>
+            </div>
+            <div className="col-span-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-center">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Modelo</p>
+              <p className="break-words text-sm font-black leading-tight text-navy-900">{selectedVehicle.modelo}</p>
+            </div>
+          </div>
         </div>
-        <button
-          onClick={() => {
-            onClear?.();
-            clearSelectedVehicle();
-          }}
-          className="text-xs font-bold text-slate-500 hover:text-slate-700 transition-colors shrink-0"
-        >
-          Cambiar
-        </button>
-      </div>
+      ) : (
+        <div className="flex items-center justify-between gap-3 mb-3 rounded-xl border-2 border-orange-500 bg-orange-50 px-4 py-3">
+          <div className="min-w-0 flex-1">
+            <p className="text-xs font-bold text-orange-600 uppercase tracking-wide">Tu vehículo</p>
+            <p className="text-base font-bold text-navy-900 truncate">{selectedVehicle.marca} {selectedVehicle.modelo}{anio ? ` · ${anio}` : ""}</p>
+          </div>
+          <button
+            onClick={() => {
+              onClear?.();
+              clearSelectedVehicle();
+            }}
+            className="text-xs font-bold text-slate-500 hover:text-slate-700 transition-colors shrink-0"
+          >
+            Cambiar
+          </button>
+        </div>
+      )}
 
       {sizes && sizes.length > 0 ? (
         <>

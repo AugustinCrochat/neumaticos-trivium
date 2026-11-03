@@ -51,12 +51,14 @@ function Chapa({
   const mercosur = estilo === "mercosur";
   return (
     <div
-      className={`mx-auto w-full max-w-xs overflow-hidden rounded-xl border-[3px] shadow-sm transition-colors ${
+      className={`mx-auto w-full max-w-xs overflow-hidden rounded-xl border-[3px] shadow-md transition-colors ${
         mercosur ? "border-slate-800 bg-white" : "border-white bg-black ring-2 ring-slate-800"
       }`}
     >
-      {mercosur && (
+      {mercosur ? (
         <div className="bg-[#1b4f9c] py-0.5 text-center text-[10px] font-bold tracking-[0.3em] text-white">ARGENTINA</div>
+      ) : (
+        <div className="pt-1 text-center text-[10px] font-bold tracking-[0.3em] text-sky-300">ARGENTINA</div>
       )}
       <input
         id="patente-input"
@@ -157,17 +159,35 @@ export function PlateLookup({
 
   return (
     <div className="w-full">
+      <p className="mb-2 text-center text-sm font-bold text-navy-900">Buscá tu auto por patente</p>
       <Chapa valor={patente} onChange={setPatente} onEnter={buscar} autoFocus={autoFocus} />
       <div ref={cajaRef} className="mt-2 flex justify-center" />
-      <button
-        type="button"
-        onClick={buscar}
-        disabled={!valida || !token || cargando}
-        className="mt-3 w-full rounded-xl bg-orange-500 py-3.5 text-base font-black text-white transition-colors hover:bg-orange-600 disabled:opacity-40"
-      >
-        {cargando ? "Buscando…" : "Buscar mi auto"}
-      </button>
-      {mensaje && <p className="mt-2 text-center text-sm text-slate-600">{mensaje}</p>}
+      <div className="mt-3 flex gap-2">
+        <button
+          type="button"
+          onClick={buscar}
+          disabled={!valida || !token || cargando}
+          className="flex-1 rounded-xl bg-orange-500 py-3.5 text-base font-black text-white transition-colors hover:bg-orange-600 disabled:opacity-40"
+        >
+          {cargando ? "Buscando…" : "Buscar mi auto"}
+        </button>
+        {patente && (
+          <button
+            type="button"
+            onClick={() => {
+              setPatente("");
+              setMensaje(null);
+            }}
+            aria-label="Borrar patente"
+            className="w-12 shrink-0 rounded-xl border border-slate-300 bg-white text-lg font-bold text-slate-500 transition-colors hover:bg-slate-50"
+          >
+            ×
+          </button>
+        )}
+      </div>
+      {mensaje && (
+        <p className="mt-2 rounded-lg bg-slate-50 px-3 py-2 text-center text-sm text-slate-600">{mensaje}</p>
+      )}
     </div>
   );
 }
