@@ -70,7 +70,7 @@ export function VehicleModal() {
             </div>
           )}
 
-          <PlateLookup vehiculos={vehiculos} onSelect={setSelectedVehicle} />
+          <div className="mb-4"><PlateLookup vehiculos={vehiculos} onFound={(v) => setSelectedVehicle(v)} /></div>
 
           <VehicleCombobox vehiculos={vehiculos} onSelect={setSelectedVehicle} autoFocus />
         </div>

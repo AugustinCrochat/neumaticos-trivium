@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useBranch } from "@/contexts/branch-context";
 import { useVehicle } from "@/contexts/vehicle-context";
 import { getSizesForVehicle, type VehicleDBEntry } from "@/lib/vehicles";
+import { medidasParaAnio } from "@/lib/patente";
 import { VehicleCombobox } from "@/components/ui/VehicleCombobox";
 import { VersionSelect } from "@/components/ui/VersionSelect";
 import type { VehiculoOption } from "@/lib/pos-api";
@@ -26,11 +27,12 @@ function findVersionIndexBySize(sizes: Sizes | null, size?: Sizes[number]): numb
   return sizes.findIndex((s) => s.w === size.w && s.p === size.p && s.r === size.r);
 }
 
-export function VehicleSizeSearch({ initialMedida, economicos = false, onClear, onNavigate }: { initialMedida?: string; economicos?: boolean; onClear?: () => void; onNavigate?: () => void }) {
+export function VehicleSizeSearch({ initialMedida, economicos = false, anio, onClear, onNavigate }: { initialMedida?: string; economicos?: boolean; /** Año del auto (viene de la patente): deja sólo las medidas de esa generación. */ anio?: number | null; onClear?: () => void; onNavigate?: () => void }) {
   const { selectedBranch } = useBranch();
   const { vehiculos, selectedVehicle, setSelectedVehicle, clearSelectedVehicle } = useVehicle();
 
-  const sizes = selectedVehicle ? getSizesForVehicle(selectedVehicle.marca, selectedVehicle.modelo) : null;
+  const todasLasMedidas = selectedVehicle ? getSizesForVehicle(selectedVehicle.marca, selectedVehicle.modelo) : null;
+  const { sizes, filtrado } = todasLasMedidas ? medidasParaAnio(todasLasMedidas, anio) : { sizes: null, filtrado: false };
 
   // Prioridad para la versión inicial: la medida de la URL actual (por si
   // vino de un link puntual) y si no, la última versión que el usuario
@@ -93,7 +95,7 @@ export function VehicleSizeSearch({ initialMedida, economicos = false, onClear, 
       <div className="flex items-center justify-between gap-3 mb-3 rounded-xl border-2 border-orange-500 bg-orange-50 px-4 py-3">
         <div className="min-w-0 flex-1">
           <p className="text-xs font-bold text-orange-600 uppercase tracking-wide">Tu vehículo</p>
-          <p className="text-base font-bold text-navy-900 truncate">{selectedVehicle.marca} {selectedVehicle.modelo}</p>
+          <p className="text-base font-bold text-navy-900 truncate">{selectedVehicle.marca} {selectedVehicle.modelo}{anio ? ` · ${anio}` : ""}</p>
         </div>
         <button
           onClick={() => {
@@ -108,6 +110,9 @@ export function VehicleSizeSearch({ initialMedida, economicos = false, onClear, 
 
       {sizes && sizes.length > 0 ? (
         <>
+          {filtrado && (
+            <p className="mb-2 text-xs font-semibold text-slate-500">Mostramos las medidas de tu año ({anio}).</p>
+          )}
           {sizes.length > 1 && (
             <div className="mb-3">
               <VersionSelect

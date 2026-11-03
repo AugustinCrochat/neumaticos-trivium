@@ -3,9 +3,12 @@
 import { useEffect, useRef, useState } from "react";
 import type { VehiculoOption } from "@/lib/pos-api";
 import { vehiculoDesdePatente } from "@/lib/patente-match";
+import { PATENTE_RE, estiloPatente, formatearPatente, normalizarPatente } from "@/lib/patente";
 
 const SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
-const PATENTE_RE = /^([A-Z]{3}\d{3}|[A-Z]{2}\d{3}[A-Z]{2})$/;
+
+/** La búsqueda por patente sólo existe si está configurada la verificación. */
+export const PATENTE_HABILITADA = Boolean(SITE_KEY);
 
 type Turnstile = {
   render: (el: HTMLElement, opts: Record<string, unknown>) => string;
@@ -30,17 +33,64 @@ function cargarTurnstile(): Promise<void> {
 }
 
 /**
- * "Buscá por patente": completa el vehículo con marca/modelo del registro.
- * Es una ayuda opcional: si algo falla (sin cupo, no se reconoce el modelo)
- * se avisa y la persona elige a mano en el listado de abajo.
- * Sin NEXT_PUBLIC_TURNSTILE_SITE_KEY no se muestra.
+ * Chapa que se dibuja mientras se escribe: Mercosur (blanca con franja azul)
+ * o formato anterior (negra con letras blancas), según lo que se tipea.
+ */
+function Chapa({
+  valor,
+  onChange,
+  onEnter,
+  autoFocus,
+}: {
+  valor: string;
+  onChange: (normalizada: string) => void;
+  onEnter: () => void;
+  autoFocus?: boolean;
+}) {
+  const estilo = estiloPatente(valor);
+  const mercosur = estilo === "mercosur";
+  return (
+    <div
+      className={`mx-auto w-full max-w-xs overflow-hidden rounded-xl border-[3px] shadow-sm transition-colors ${
+        mercosur ? "border-slate-800 bg-white" : "border-white bg-black ring-2 ring-slate-800"
+      }`}
+    >
+      {mercosur && (
+        <div className="bg-[#1b4f9c] py-0.5 text-center text-[10px] font-bold tracking-[0.3em] text-white">ARGENTINA</div>
+      )}
+      <input
+        id="patente-input"
+        aria-label="Patente"
+        value={formatearPatente(valor, estilo)}
+        onChange={(e) => onChange(normalizarPatente(e.target.value))}
+        onKeyDown={(e) => e.key === "Enter" && onEnter()}
+        placeholder={mercosur ? "AB 123 CD" : "ABC 123"}
+        autoFocus={autoFocus}
+        autoCapitalize="characters"
+        autoComplete="off"
+        spellCheck={false}
+        inputMode="text"
+        className={`w-full bg-transparent px-3 py-2 text-center text-3xl font-black uppercase tracking-[0.12em] outline-none sm:text-4xl ${
+          mercosur ? "text-slate-900 placeholder:text-slate-300" : "text-white placeholder:text-slate-600"
+        }`}
+      />
+    </div>
+  );
+}
+
+/**
+ * Campo de patente + verificación + consulta. Devuelve el vehículo de la
+ * lista del buscador y el año. Es una ayuda: si algo falla (sin cupo, modelo
+ * que no está en la lista) avisa y la persona elige a mano.
  */
 export function PlateLookup({
   vehiculos,
-  onSelect,
+  onFound,
+  autoFocus,
 }: {
   vehiculos: VehiculoOption[];
-  onSelect: (v: VehiculoOption) => void;
+  onFound: (v: VehiculoOption, anio: number | null) => void;
+  autoFocus?: boolean;
 }) {
   const [patente, setPatente] = useState("");
   const [token, setToken] = useState<string | null>(null);
@@ -57,7 +107,8 @@ export function PlateLookup({
         if (!vivo || !cajaRef.current || !window.turnstile || widgetId.current) return;
         widgetId.current = window.turnstile.render(cajaRef.current, {
           sitekey: SITE_KEY,
-          size: "flexible",
+          // Sólo se ve si Cloudflare necesita que la persona haga algo.
+          appearance: "interaction-only",
           callback: (t: string) => setToken(t),
           "expired-callback": () => setToken(null),
           "error-callback": () => setToken(null),
@@ -71,8 +122,7 @@ export function PlateLookup({
 
   if (!SITE_KEY) return null;
 
-  const normalizada = patente.toUpperCase().replace(/[^A-Z0-9]/g, "");
-  const valida = PATENTE_RE.test(normalizada);
+  const valida = PATENTE_RE.test(patente);
 
   const buscar = async () => {
     if (!valida || !token || cargando) return;
@@ -82,22 +132,22 @@ export function PlateLookup({
       const res = await fetch("/api/patente", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ patente: normalizada, token }),
+        body: JSON.stringify({ patente, token }),
       });
       if (res.status === 404) {
-        setMensaje("No encontramos esa patente. Elegí tu auto en la lista.");
+        setMensaje("No encontramos esa patente. Probá con “Por mi auto”.");
       } else if (res.status === 429) {
-        setMensaje("Hiciste muchas consultas seguidas. Probá en unos minutos o elegí tu auto en la lista.");
+        setMensaje("Hiciste muchas consultas seguidas. Probá en unos minutos o usá “Por mi auto”.");
       } else if (!res.ok) {
-        setMensaje("La búsqueda por patente no está disponible ahora. Elegí tu auto en la lista.");
+        setMensaje("La búsqueda por patente no está disponible ahora. Usá “Por mi auto”.");
       } else {
-        const d = (await res.json()) as { marca: string; modelo: string | null };
+        const d = (await res.json()) as { marca: string; modelo: string | null; anio: number | null };
         const v = vehiculoDesdePatente(d.marca, d.modelo, vehiculos);
-        if (v) onSelect(v);
-        else setMensaje(`Encontramos ${d.marca} ${d.modelo ?? ""}, pero no está en la lista. Buscalo abajo.`);
+        if (v) onFound(v, d.anio);
+        else setMensaje(`Encontramos ${d.marca} ${d.modelo ?? ""}, pero todavía no lo tenemos en la lista. Probá con “Por mi auto”.`);
       }
     } catch {
-      setMensaje("No pudimos consultar la patente. Elegí tu auto en la lista.");
+      setMensaje("No pudimos consultar la patente. Probá con “Por mi auto”.");
     }
     // El token de Turnstile sirve una sola vez.
     setToken(null);
@@ -106,34 +156,18 @@ export function PlateLookup({
   };
 
   return (
-    <div className="mb-4 rounded-xl border border-slate-200 p-3">
-      <label htmlFor="patente-input" className="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-2">
-        Buscá por patente
-      </label>
-      <div className="flex gap-2">
-        <input
-          id="patente-input"
-          value={patente}
-          onChange={(e) => setPatente(e.target.value.toUpperCase())}
-          onKeyDown={(e) => e.key === "Enter" && buscar()}
-          placeholder="AB123CD"
-          maxLength={8}
-          autoCapitalize="characters"
-          autoComplete="off"
-          spellCheck={false}
-          className="min-w-0 flex-1 rounded-lg border border-slate-300 px-3 py-2 text-base font-bold tracking-widest uppercase"
-        />
-        <button
-          type="button"
-          onClick={buscar}
-          disabled={!valida || !token || cargando}
-          className="shrink-0 rounded-lg bg-black px-4 py-2 text-sm font-bold text-white disabled:opacity-40"
-        >
-          {cargando ? "Buscando…" : "Buscar"}
-        </button>
-      </div>
-      <div ref={cajaRef} className="mt-2" />
-      {mensaje && <p className="mt-2 text-sm text-slate-600">{mensaje}</p>}
+    <div className="w-full">
+      <Chapa valor={patente} onChange={setPatente} onEnter={buscar} autoFocus={autoFocus} />
+      <div ref={cajaRef} className="mt-2 flex justify-center" />
+      <button
+        type="button"
+        onClick={buscar}
+        disabled={!valida || !token || cargando}
+        className="mt-3 w-full rounded-xl bg-orange-500 py-3.5 text-base font-black text-white transition-colors hover:bg-orange-600 disabled:opacity-40"
+      >
+        {cargando ? "Buscando…" : "Buscar mi auto"}
+      </button>
+      {mensaje && <p className="mt-2 text-center text-sm text-slate-600">{mensaje}</p>}
     </div>
   );
 }

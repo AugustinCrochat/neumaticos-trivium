@@ -6,9 +6,10 @@ const norm = (s: string) =>
 
 /**
  * Lleva la marca/modelo que devuelve el registro (ej. "PEUGEOT" / "308 ALLURE
- * HDI NAV") a una opción de la lista del buscador. Usa el modelo más largo de
- * la lista que sea el inicio del texto, así la versión sobrante se descarta.
- * Devuelve null si la marca o el modelo no están en la lista.
+ * HDI NAV") a una opción de la lista del buscador. Prefiere el modelo más
+ * largo que sea el inicio del texto (la versión sobrante se descarta); si no
+ * hay, lo busca en cualquier parte. Devuelve null si la marca o el modelo no
+ * están en la lista.
  */
 export function vehiculoDesdePatente(
   marca: string,
@@ -19,10 +20,12 @@ export function vehiculoDesdePatente(
   const delaMarca = lista.filter((v) => norm(v.marca) === norm(marca));
   if (delaMarca.length === 0) return null;
   const palabras = modelo.trim().split(/\s+/).filter(Boolean);
-  for (let k = Math.min(4, palabras.length); k >= 1; k--) {
-    const buscado = norm(palabras.slice(0, k).join(" "));
-    const hit = delaMarca.find((v) => norm(v.modelo) === buscado);
-    if (hit) return hit;
+  for (let inicio = 0; inicio < palabras.length; inicio++) {
+    for (let k = Math.min(4, palabras.length - inicio); k >= 1; k--) {
+      const buscado = norm(palabras.slice(inicio, inicio + k).join(" "));
+      const hit = delaMarca.find((v) => norm(v.modelo) === buscado);
+      if (hit) return hit;
+    }
   }
   return null;
 }
