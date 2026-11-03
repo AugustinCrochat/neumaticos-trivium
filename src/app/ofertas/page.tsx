@@ -151,6 +151,7 @@ export default async function OfertasPage() {
     priceOld: p.priceOld!,
     pct: pct(p),
     stock: p.stock ?? 0,
+    tipo: p.isAT ? "at" : p.isCarga ? "carga" : undefined,
   }));
   const tuercas = accesorios
     .filter((a) => esTuercaDeSeguridad(a.nombre))

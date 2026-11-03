@@ -16,6 +16,8 @@ export type Relampago = {
   priceOld: number;
   pct: number;
   stock: number;
+  /** Para el badge de la tarjeta; el auto no lleva. */
+  tipo?: "at" | "carga";
 };
 
 const dos = (n: number) => String(n).padStart(2, "0");
@@ -80,6 +82,11 @@ export function OfertaRelampago({ items }: { items: Relampago[] }) {
                 <span className="absolute left-0 top-0 z-10 rounded-md bg-[#ff1e00] px-2 py-1 text-xs font-black text-white">
                   -{p.pct}%
                 </span>
+                {p.tipo && (
+                  <span className={`absolute right-0 top-0 z-10 rounded-md px-2 py-1 text-xs font-black uppercase tracking-wide text-white ${p.tipo === "at" ? "bg-emerald-700" : "bg-navy-900"}`}>
+                    {p.tipo === "at" ? "A/T 4x4" : "Carga"}
+                  </span>
+                )}
                 <Image src={p.imageUrl} alt={p.titulo} fill className="object-contain" sizes="(max-width: 768px) 112px, 30vw" />
               </span>
               <span className="min-w-0 flex-1">

@@ -35,7 +35,10 @@ function OfertasReloj() {
       ? "--:--:--"
       : `${dos(Math.floor(resto / 3600_000))}:${dos(Math.floor((resto % 3600_000) / 60_000))}:${dos(Math.floor((resto % 60_000) / 1000))}`;
   return (
-    <span aria-label="Tiempo que queda de las ofertas de hoy" className="font-mono text-[11px] font-bold leading-none tabular-nums text-white/90">
+    <span
+      aria-label="Tiempo que queda de las ofertas de hoy"
+      className="rounded bg-black px-1.5 py-[3px] font-display text-[13px] font-bold leading-none tracking-wider tabular-nums text-white"
+    >
       {txt}
     </span>
   );
@@ -162,7 +165,7 @@ export function Header() {
                     {link.href === "/ofertas" ? (
                       <>
                         <PriceTagIcon className="h-9 w-auto drop-shadow" />
-                        <span className="flex flex-col gap-0.5">
+                        <span className="flex flex-col gap-1">
                           <span className="leading-none">{link.label}</span>
                           <OfertasReloj />
                         </span>
