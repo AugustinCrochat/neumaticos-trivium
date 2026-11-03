@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { VehiculoOption } from "@/lib/pos-api";
+import { PlateIcon } from "@/components/ui/PlateIcon";
 import { resolverPatente } from "@/lib/patente-match";
 import { PATENTE_RE, estiloPatente, formatearPatente, normalizarPatente, type EstiloPatente } from "@/lib/patente";
 
@@ -90,35 +91,29 @@ function Chapa({
 
 /** Interruptor de formato: por si alguien no entiende que el campo se adapta solo. */
 function SelectorFormato({ estilo, onChange }: { estilo: EstiloPatente; onChange: (e: EstiloPatente) => void }) {
-  const op = (valor: EstiloPatente, texto: string, ejemplo: string) => {
+  const op = (valor: EstiloPatente, texto: string) => {
     const activo = estilo === valor;
     return (
       <button
         type="button"
         aria-pressed={activo}
+        // El clic no le saca el cursor al campo de la patente.
+        onMouseDown={(e) => e.preventDefault()}
         onClick={() => onChange(valor)}
         className={`flex min-w-0 flex-1 flex-col items-center gap-1.5 rounded-xl border-2 px-2 py-2 transition-colors ${
           activo ? "border-orange-500 bg-orange-50" : "border-slate-200 bg-white hover:border-slate-300"
         }`}
       >
-        {/* Misma proporción real que cada chapa (400×130 y 294×129 mm). */}
-        <span
-          aria-hidden="true"
-          className="block h-7 bg-contain bg-center bg-no-repeat"
-          style={{
-            aspectRatio: valor === "mercosur" ? "400 / 130" : "294 / 129",
-            backgroundImage: `url(/images/patente/${valor === "mercosur" ? "chapa-mercosur" : "chapa-anterior"}.svg)`,
-          }}
-        />
+        {/* Misma proporción real que cada chapa (400×130 y 294×129 mm), con sus letras de ejemplo. */}
+        <PlateIcon formato={valor} className="h-8 w-24" />
         <span className="text-xs font-black leading-tight text-navy-900">{texto}</span>
-        <span className="text-[11px] font-bold leading-none text-slate-500">{ejemplo}</span>
       </button>
     );
   };
   return (
     <div role="group" aria-label="Formato de la patente" className="mx-auto mt-3 flex w-full max-w-sm gap-4">
-      {op("anterior", "Anterior a 2016", "ABC 123")}
-      {op("mercosur", "Nueva (Mercosur)", "AB 123 CD")}
+      {op("anterior", "Anterior a 2016")}
+      {op("mercosur", "Nueva (Mercosur)")}
     </div>
   );
 }
@@ -159,6 +154,8 @@ export function PlateLookup({
   };
   const cambiarFormato = (nuevo: EstiloPatente) => {
     setManual(nuevo);
+    // En el teclado táctil el clic puede quitar el foco igual: se lo devuelve al campo.
+    requestAnimationFrame(() => document.getElementById("patente-input")?.focus());
     // Si lo escrito es del otro formato, se borra (no se puede reinterpretar).
     const d = definido(patente);
     if (d && d !== nuevo) {

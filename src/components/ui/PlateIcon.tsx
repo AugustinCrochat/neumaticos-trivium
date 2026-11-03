@@ -9,12 +9,15 @@ import { useEffect, useState } from "react";
  * El tamaño que se pasa en `className` es la caja: cada chapa ocupa todo el
  * ancho y queda centrada en alto.
  */
-export function PlateIcon({ className }: { className?: string }) {
-  const [mercosur, setMercosur] = useState(true);
+export function PlateIcon({ className, formato }: { className?: string; formato?: "mercosur" | "anterior" }) {
+  const [alterna, setMercosur] = useState(true);
+  // Con `formato` fijo no alterna (selector de formato); sin él, cambia sola.
+  const mercosur = formato ? formato === "mercosur" : alterna;
   useEffect(() => {
+    if (formato) return;
     const t = setInterval(() => setMercosur((m) => !m), 2600);
     return () => clearInterval(t);
-  }, []);
+  }, [formato]);
 
   return (
     <span aria-hidden="true" className={`inline-flex items-center justify-center ${className ?? ""}`}>
