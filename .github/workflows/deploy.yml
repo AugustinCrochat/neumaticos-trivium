@@ -72,7 +72,12 @@ jobs:
       # "prebuild" de npm, así que hay que llamarlo explícito acá.
       - run: npm run prebuild
 
+      # Clave PÚBLICA de Turnstile (no es secreta): se compila dentro del
+      # JS del navegador. Sin ella la pestaña "Por patente" no aparece. El
+      # secreto vive como secret del Worker (TURNSTILE_SECRET_KEY).
       - run: npx opennextjs-cloudflare build
+        env:
+          NEXT_PUBLIC_TURNSTILE_SITE_KEY: 0x4AAAAAAFxeDBIfnp4WGMHI
 
       # Publica el HTML de las páginas prearmadas como archivos estáticos: los
       # sirve el borde de Cloudflare sin ejecutar el Worker, o sea rápido desde
