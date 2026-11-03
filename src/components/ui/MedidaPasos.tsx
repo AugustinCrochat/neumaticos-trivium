@@ -99,7 +99,7 @@ export function MedidaPasos({
             <ArrowLeft className="h-4 w-4" aria-hidden="true" /> Volver
           </button>
         ) : (
-          <span className="text-sm font-bold text-navy-900">Buscá por medida</span>
+          <span aria-hidden="true" />
         )}
         <span className="rounded-lg bg-white px-3 py-1 font-display text-lg font-bold tracking-wide text-navy-900 ring-1 ring-slate-200">
           <span className={paso === "ancho" ? "text-orange-600" : ""}>{w || "205"}</span>

@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
+import { X } from "lucide-react";
 import { Car, ChevronDown } from "lucide-react";
 import { HalfTireIcon } from "@/components/ui/HalfTireIcon";
 import { TireSizeSearch } from "@/components/ui/TireSizeSearch";
@@ -48,9 +50,22 @@ export function SizeOrVehicleSearch({
   }, [mode, compact, loadVehiculos]);
   // Buscador apilado (fuera del catálogo): patente a la vista y las otras dos
   // opciones como barras que se abren de a una.
-  const [abierto, setAbierto] = useState<"medida" | "vehiculo" | null>(initialMedida ? "medida" : null);
+  const [abierto, setAbierto] = useState<"medida" | "vehiculo" | null>(null);
+
+  useEffect(() => {
+    if (!abierto) return;
+    const alTeclear = (e: KeyboardEvent) => e.key === "Escape" && setAbierto(null);
+    document.addEventListener("keydown", alTeclear);
+    const previo = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", alTeclear);
+      document.body.style.overflow = previo;
+    };
+  }, [abierto]);
 
   if (!compact) {
+    const cerrar = () => setAbierto(null);
     const barra = (id: "medida" | "vehiculo", Icono: typeof Car | typeof HalfTireIcon, titulo: string, ejemplo: string) => (
       <button
         type="button"
@@ -80,30 +95,61 @@ export function SizeOrVehicleSearch({
         )}
         <div className="space-y-2">
           {barra("medida", HalfTireIcon, "Por medida", "Ej: 205/55 R16")}
-          {abierto === "medida" && (
-            <div className="rounded-xl border border-slate-200 bg-white p-4">
-              {escribir || initialMedida ? (
-                <TireSizeSearch
-                  embedded
-                  initialMedida={initialMedida}
-                  forceVoiceButton={forceVoiceButton}
-                  hideLearnLink={hideLearnLink}
-                  economicos={economicos}
-                  onNavigate={onNavigate}
-                  onLiveChange={onLiveChange}
-                />
-              ) : (
-                <MedidaPasos economicos={economicos} onNavigate={onNavigate} onEscribir={() => setEscribir(true)} />
-              )}
-            </div>
-          )}
           {barra("vehiculo", Car, "Por mi auto", "Marca, modelo y año")}
-          {abierto === "vehiculo" && (
-            <div className="rounded-xl border border-slate-200 bg-white p-4">
-              <VehicleSizeSearch initialMedida={initialMedida} economicos={economicos} onClear={() => setAbierto("vehiculo")} onNavigate={onNavigate} />
-            </div>
-          )}
         </div>
+        {abierto &&
+          createPortal(
+            <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center sm:p-6" role="dialog" aria-modal="true" aria-label={abierto === "medida" ? "Buscar por medida" : "Buscar por mi auto"}>
+              <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={cerrar} />
+              <div className="relative z-10 flex max-h-[92dvh] w-full max-w-xl flex-col overflow-hidden rounded-t-2xl bg-white shadow-2xl sm:rounded-2xl">
+                <div className="flex shrink-0 items-center justify-between bg-black px-5 py-4">
+                  <h2 className="text-lg font-bold text-white">{abierto === "medida" ? "Buscar por medida" : "Buscar por mi auto"}</h2>
+                  <button type="button" onClick={cerrar} aria-label="Cerrar" className="rounded-lg p-1 text-slate-400 transition-colors hover:text-white">
+                    <X className="h-6 w-6" aria-hidden="true" />
+                  </button>
+                </div>
+                <div className="overflow-y-auto p-4 sm:p-6">
+                  {abierto === "medida" ? (
+                    escribir || initialMedida ? (
+                      <TireSizeSearch
+                        embedded
+                        initialMedida={initialMedida}
+                        forceVoiceButton={forceVoiceButton}
+                        hideLearnLink={hideLearnLink}
+                        economicos={economicos}
+                        autoFocus
+                        onNavigate={() => {
+                          cerrar();
+                          onNavigate?.();
+                        }}
+                        onLiveChange={onLiveChange}
+                      />
+                    ) : (
+                      <MedidaPasos
+                        economicos={economicos}
+                        onNavigate={() => {
+                          cerrar();
+                          onNavigate?.();
+                        }}
+                        onEscribir={() => setEscribir(true)}
+                      />
+                    )
+                  ) : (
+                    <VehicleSizeSearch
+                      initialMedida={initialMedida}
+                      economicos={economicos}
+                      onClear={() => setAbierto("vehiculo")}
+                      onNavigate={() => {
+                        cerrar();
+                        onNavigate?.();
+                      }}
+                    />
+                  )}
+                </div>
+              </div>
+            </div>,
+            document.body
+          )}
       </div>
     );
   }
