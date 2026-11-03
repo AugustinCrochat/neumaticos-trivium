@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "@/components/ui/Link";
 import { useLiveStockMap } from "@/contexts/live-stock-context";
+import { restoDelDia } from "@/lib/fin-del-dia";
 
 export type Relampago = {
   id: string;
@@ -16,15 +17,6 @@ export type Relampago = {
   pct: number;
   stock: number;
 };
-
-const AR_OFFSET_MS = -3 * 3600_000; // Argentina no tiene horario de verano.
-
-/** Milisegundos que faltan para que termine el día en Argentina. */
-function restoDelDia(ahora = Date.now()): number {
-  const local = ahora + AR_OFFSET_MS;
-  const finDia = Math.floor(local / 86400_000) * 86400_000 + 86400_000;
-  return finDia - local;
-}
 
 const dos = (n: number) => String(n).padStart(2, "0");
 const fmt = (n: number) => `$${n.toLocaleString("es-AR")}`;

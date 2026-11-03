@@ -8,6 +8,7 @@ import { useBranch } from "@/contexts/branch-context";
 import { SearchModal } from "@/components/ui/SearchModal";
 import { isVisaMasterPromoDay } from "@/lib/promo-day";
 import { PriceTagIcon } from "@/components/ui/PriceTagIcon";
+import { restoDelDia } from "@/lib/fin-del-dia";
 
 const NAV_LINKS = [
   { href: "/ofertas", label: "Ofertas", match: ["/ofertas"] },
@@ -18,6 +19,27 @@ const NAV_LINKS = [
 
 const isActive = (pathname: string, match: string[]) =>
   match.some((m) => pathname === m || pathname.startsWith(`${m}/`));
+
+/** Cuenta regresiva hasta el fin del día para el botón Ofertas (arranca vacía: el sitio es estático). */
+function OfertasReloj() {
+  const [resto, setResto] = useState<number | null>(null);
+  useEffect(() => {
+    const tick = () => setResto(restoDelDia());
+    tick();
+    const t = setInterval(tick, 1000);
+    return () => clearInterval(t);
+  }, []);
+  const dos = (n: number) => String(n).padStart(2, "0");
+  const txt =
+    resto == null
+      ? "--:--:--"
+      : `${dos(Math.floor(resto / 3600_000))}:${dos(Math.floor((resto % 3600_000) / 60_000))}:${dos(Math.floor((resto % 60_000) / 1000))}`;
+  return (
+    <span aria-label="Tiempo que queda de las ofertas de hoy" className="font-mono text-[11px] font-bold leading-none tabular-nums text-white/90">
+      {txt}
+    </span>
+  );
+}
 
 export function Header() {
   const { selectedBranch, hasConfirmedBranch, openModal } = useBranch();
@@ -125,7 +147,7 @@ export function Header() {
                     aria-current={active ? "page" : undefined}
                     className={
                       link.href === "/ofertas"
-                        ? `ofertas-btn relative flex items-center gap-1.5 overflow-hidden rounded-lg px-4 py-2 text-sm font-black uppercase tracking-wide text-white shadow-md transition-all hover:scale-[1.04] ${
+                        ? `flex items-center gap-2 rounded-lg px-3.5 py-1.5 text-sm font-black uppercase tracking-wide text-white shadow-md transition-transform hover:scale-[1.04] ${
                             active ? "bg-white !text-[#ff1e00]" : "bg-gradient-to-r from-[#ff1e00] to-[#ff5a2e]"
                           }`
                         : // Seleccionado: fondo tenue, texto blanco en negrita y barra roja
@@ -139,8 +161,11 @@ export function Header() {
                   >
                     {link.href === "/ofertas" ? (
                       <>
-                        <PriceTagIcon className="h-5 w-auto" />
-                        {link.label}
+                        <PriceTagIcon className="h-9 w-auto drop-shadow" />
+                        <span className="flex flex-col gap-0.5">
+                          <span className="leading-none">{link.label}</span>
+                          <OfertasReloj />
+                        </span>
                       </>
                     ) : (
                       link.label
@@ -207,7 +232,7 @@ export function Header() {
                   aria-current={active ? "page" : undefined}
                   className={
                     link.href === "/ofertas"
-                      ? `ofertas-btn relative flex items-center gap-2 overflow-hidden rounded-lg px-4 py-2.5 text-sm font-black uppercase tracking-wide text-white ${
+                      ? `flex items-center gap-2.5 rounded-lg px-4 py-2 text-sm font-black uppercase tracking-wide text-white ${
                           active ? "bg-white !text-[#ff1e00]" : "bg-gradient-to-r from-[#ff1e00] to-[#ff5a2e]"
                         }`
                       : `block rounded-lg border-l-4 px-4 py-2.5 text-sm transition-colors ${
@@ -218,8 +243,17 @@ export function Header() {
                   }
                   onClick={() => setMenuOpen(false)}
                 >
-                  {link.href === "/ofertas" && <PriceTagIcon className="h-5 w-auto" />}
-                  {link.label}
+                  {link.href === "/ofertas" ? (
+                    <>
+                      <PriceTagIcon className="h-9 w-auto drop-shadow" />
+                      <span className="flex flex-col gap-0.5">
+                        <span className="leading-none">{link.label}</span>
+                        <OfertasReloj />
+                      </span>
+                    </>
+                  ) : (
+                    link.label
+                  )}
                 </Link>
               );
             })}

@@ -132,25 +132,26 @@ export default async function OfertasPage() {
     (a, b) => Number(b.enStock) - Number(a.enStock) || (b.vendidos ?? 0) - (a.vendidos ?? 0)
   );
   const masVendidas = porVenta.slice(0, 4);
-  // Oferta del día: las tres con mayor descuento que tienen stock.
-  const relampago: Relampago[] = [...ofertas]
-    .filter((p) => p.enStock && p.priceOld)
-    .sort((a, b) => pct(b) - pct(a))
-    .slice(0, 3)
-    .map((p) => ({
-      id: p.id,
-      slug: p.slug,
-      titulo: `${p.brand} ${p.modeloBase}`,
-      medida: formatSize(p.size),
-      imageUrl: p.imageUrl,
-      price: p.price,
-      priceOld: p.priceOld!,
-      pct: pct(p),
-      stock: p.stock ?? 0,
-    }));
+
   const auto = ofertas.filter((p) => !p.isAT && !p.isCarga);
   const camioneta = ofertas.filter((p) => p.isAT);
   const carga = ofertas.filter((p) => p.isCarga);
+  // Oferta del día: una de auto, una de camioneta y una de carga, la de mayor descuento
+  // de cada grupo entre las que tienen más de una unidad (las de 1 no interesan).
+  const mejorDe = (lista: TireProduct[]) =>
+    lista.filter((p) => p.enStock && (p.stock ?? 0) > 1 && p.priceOld).sort((a, b) => pct(b) - pct(a))[0];
+  const elegidas = [mejorDe(auto), mejorDe(camioneta), mejorDe(carga)].filter((p): p is TireProduct => !!p);
+  const relampago: Relampago[] = elegidas.map((p) => ({
+    id: p.id,
+    slug: p.slug,
+    titulo: `${p.brand} ${p.modeloBase}`,
+    medida: formatSize(p.size),
+    imageUrl: p.imageUrl,
+    price: p.price,
+    priceOld: p.priceOld!,
+    pct: pct(p),
+    stock: p.stock ?? 0,
+  }));
   const tuercas = accesorios
     .filter((a) => esTuercaDeSeguridad(a.nombre))
     .sort((a, b) => Number(b.enStock) - Number(a.enStock) || (b.vendidos ?? 0) - (a.vendidos ?? 0));

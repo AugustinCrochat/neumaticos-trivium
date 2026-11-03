@@ -118,21 +118,3 @@ html {
   .branch-pop { animation: none; }
   .branch-nearest { animation: branch-ring 1.5s ease-out 0.2s 4; }
 }
-
-/* Botón "Ofertas" del encabezado: brillo que lo cruza cada pocos segundos. */
-@keyframes ofertas-brillo {
-  0%, 70% { transform: translateX(-120%) skewX(-20deg); }
-  100% { transform: translateX(260%) skewX(-20deg); }
-}
-.ofertas-btn::after {
-  content: "";
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: 40%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent);
-  animation: ofertas-brillo 3.6s ease-in-out infinite;
-  pointer-events: none;
-}
-@media (prefers-reduced-motion: reduce) {
-  .ofertas-btn::after { animation: none; display: none; }
-}
