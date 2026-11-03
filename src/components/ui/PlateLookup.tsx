@@ -72,10 +72,10 @@ function Chapa({
         autoComplete="off"
         spellCheck={false}
         inputMode="text"
-        className={`absolute bottom-[8%] top-[26%] bg-transparent text-center font-display text-[3.4rem] font-bold uppercase leading-none tracking-[0.06em] outline-none sm:text-[3.8rem] ${
+        className={`absolute bg-transparent text-center font-display font-bold uppercase leading-none tracking-[0.06em] outline-none ${
           mercosur
-            ? "inset-x-[8%] w-[84%] text-zinc-700 placeholder:text-zinc-300"
-            : "inset-x-[5%] w-[90%] text-white placeholder:text-zinc-700"
+            ? "inset-x-[8%] bottom-[8%] top-[26%] w-[84%] text-[3.4rem] text-zinc-700 placeholder:text-zinc-300 sm:text-[3.8rem]"
+            : "inset-x-[5%] bottom-[15.5%] top-[22.3%] w-[90%] text-[3.9rem] text-white placeholder:text-zinc-700 sm:text-[4.5rem]"
         }`}
       />
     </div>

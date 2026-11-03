@@ -28,7 +28,7 @@ function findVersionIndexBySize(sizes: Sizes | null, size?: Sizes[number]): numb
   return sizes.findIndex((s) => s.w === size.w && s.p === size.p && s.r === size.r);
 }
 
-export function VehicleSizeSearch({ initialMedida, economicos = false, anio, desdePatente = false, versionPatente, onClear, onNavigate }: { initialMedida?: string; economicos?: boolean; /** Año del auto (viene de la patente): deja sólo las medidas de esa generación. */ anio?: number | null; /** El auto vino de una patente: se muestra la tarjeta "Vehículo encontrado". */ desdePatente?: boolean; /** Versión que escribe el registro ("PRIVILEGE NAV"); se muestra en la tarjeta. */ versionPatente?: string; onClear?: () => void; onNavigate?: () => void }) {
+export function VehicleSizeSearch({ initialMedida, economicos = false, anio, desdePatente = false, versionPatente, versionSugerida = false, onClear, onNavigate }: { initialMedida?: string; economicos?: boolean; /** Año del auto (viene de la patente): deja sólo las medidas de esa generación. */ anio?: number | null; /** El auto vino de una patente: se muestra la tarjeta "Vehículo encontrado". */ desdePatente?: boolean; /** Versión que escribe el registro ("PRIVILEGE NAV"); se muestra en la tarjeta. */ versionPatente?: string; /** La medida marcada es una propuesta (la versión base), no una coincidencia exacta. */ versionSugerida?: boolean; onClear?: () => void; onNavigate?: () => void }) {
   const { selectedBranch } = useBranch();
   const { vehiculos, selectedVehicle, setSelectedVehicle, clearSelectedVehicle } = useVehicle();
 
@@ -51,6 +51,7 @@ export function VehicleSizeSearch({ initialMedida, economicos = false, anio, des
   const [versionKey, setVersionKey] = useState(0);
   // Sólo se abre sola al elegir el auto en este buscador, no al cargar la página con un auto recordado.
   const [freshPick, setFreshPick] = useState(false);
+  const [eligioVersion, setEligioVersion] = useState(false);
   const selectedSize = versionIndex !== null ? sizes?.[versionIndex] : undefined;
 
   function selectVehicle(vehicle: VehiculoOption) {
@@ -63,6 +64,7 @@ export function VehicleSizeSearch({ initialMedida, economicos = false, anio, des
   }
 
   function changeVersion(index: number) {
+    setEligioVersion(true);
     setVersionIndexState(index);
     if (selectedVehicle && sizes?.[index]) setSelectedVehicle(selectedVehicle, sizes[index]);
   }
@@ -162,6 +164,11 @@ export function VehicleSizeSearch({ initialMedida, economicos = false, anio, des
                 onChange={changeVersion}
                 autoOpen={freshPick && versionIndex === null}
               />
+              {versionSugerida && !eligioVersion && versionIndex !== null && (
+                <p className="mt-1.5 text-xs font-semibold text-slate-500">
+                  No pudimos identificar tu versión: te proponemos la base. Si es otra, elegila en la lista.
+                </p>
+              )}
             </div>
           )}
           {selectedSize && (

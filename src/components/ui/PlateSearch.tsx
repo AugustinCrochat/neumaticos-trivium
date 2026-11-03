@@ -24,6 +24,7 @@ export function PlateSearch({
   const [anio, setAnio] = useState<number | null>(null);
   const [version, setVersion] = useState("");
   const [encontrado, setEncontrado] = useState(false);
+  const [sugerida, setSugerida] = useState(false);
 
   if (encontrado) {
     return (
@@ -31,6 +32,7 @@ export function PlateSearch({
         anio={anio}
         desdePatente
         versionPatente={version}
+        versionSugerida={sugerida}
         economicos={economicos}
         onNavigate={onNavigate}
         onClear={() => setEncontrado(false)}
@@ -46,7 +48,10 @@ export function PlateSearch({
         const todas = getSizesForVehicle(v.marca, v.modelo);
         const { sizes } = todas ? medidasParaAnio(todas, a) : { sizes: null };
         // Una sola medida del año, o la que coincide con la versión del registro.
-        const elegida = sizes ? (sizes.length === 1 ? sizes[0] : medidaPorVersion(sizes, ver)) : null;
+        // Si no coincide ninguna se propone la primera (la versión base) y se avisa.
+        const exacta = sizes ? (sizes.length === 1 ? sizes[0] : medidaPorVersion(sizes, ver)) : null;
+        const elegida = exacta ?? (sizes && sizes.length > 1 ? sizes[0] : null);
+        setSugerida(!exacta && Boolean(elegida));
         setSelectedVehicle(v, elegida ?? undefined);
         setAnio(a);
         setVersion(ver);
