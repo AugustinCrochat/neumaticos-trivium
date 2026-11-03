@@ -13,10 +13,17 @@ import { irA } from "@/lib/navigate";
 // Medidas del catálogo (ver /api/medidas): se piden una sola vez por pestaña, la
 // primera vez que alguien enfoca el buscador. Si falla, el buscador sigue con la
 // lista fija de medidas populares.
+const fetchJson = (url: string) =>
+  fetch(url).then((r) => {
+    if (!r.ok) throw new Error(String(r.status));
+    return r.json();
+  });
 let medidasPromise: Promise<MedidaCatalogo[] | null> | null = null;
 export function cargarMedidas(): Promise<MedidaCatalogo[] | null> {
-  medidasPromise ??= fetch("/api/medidas")
-    .then((r) => (r.ok ? r.json() : null))
+  // Primero el archivo estático que arma el deploy (no pasa por el Worker); si no
+  // está (desarrollo) o falla, el endpoint.
+  medidasPromise ??= fetchJson("/datos/medidas.json")
+    .catch(() => fetchJson("/api/medidas"))
     .then((d: { medidas: MedidaCatalogo[] } | null) => d?.medidas ?? null)
     .catch(() => null);
   return medidasPromise.then((m) => {

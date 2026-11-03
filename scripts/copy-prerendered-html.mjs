@@ -67,3 +67,33 @@ for (const ruta of archivos(ORIGEN)) {
   copiados++;
 }
 console.log(`${soloListar ? "Se copiarían" : "Copiadas"} ${copiados} páginas prearmadas a ${DESTINO}.`);
+
+// Listas que arma el build desde el POS y que el buscador pide al abrirse
+// (medidas y vehículos). `next build` las deja prearmadas como
+// `.next/server/app/api/<ruta>.body`; se publican como archivos estáticos
+// (/datos/<nombre>.json) para que no pasen por el Worker, que en el plan
+// gratuito tiene tope diario de peticiones. Si falta alguna o viene vacía, el
+// deploy falla: mejor quedarse con la versión anterior que publicar un buscador sin datos.
+const DATOS = [
+  { origen: "api/medidas.body", destino: "datos/medidas.json", clave: "medidas" },
+  { origen: "api/vehiculos.body", destino: "datos/vehiculos.json", clave: "vehiculos" },
+];
+for (const { origen, destino, clave } of DATOS) {
+  const desde = join(ORIGEN, origen);
+  let lista;
+  try {
+    lista = JSON.parse(readFileSync(desde, "utf8"))[clave];
+  } catch {
+    lista = null;
+  }
+  if (!Array.isArray(lista) || lista.length === 0) {
+    console.error(`${desde} no tiene una lista "${clave}" válida: no se publica el deploy.`);
+    process.exit(1);
+  }
+  if (!soloListar) {
+    const hasta = join(DESTINO, destino);
+    mkdirSync(dirname(hasta), { recursive: true });
+    cpSync(desde, hasta);
+  }
+  console.log(`${soloListar ? "Se copiaría" : "Copiado"} ${destino} (${lista.length} ${clave}).`);
+}

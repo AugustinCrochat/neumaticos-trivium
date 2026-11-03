@@ -70,8 +70,14 @@ export function VehicleProvider({
   const loadVehiculos = useCallback(() => {
     if (loadRequestedRef.current) return;
     loadRequestedRef.current = true;
-    fetch("/api/vehiculos")
-      .then((res) => res.json())
+    // Archivo estático del deploy primero (sin pasar por el Worker); si falla, el endpoint.
+    const pedir = (url: string) =>
+      fetch(url).then((res) => {
+        if (!res.ok) throw new Error(String(res.status));
+        return res.json();
+      });
+    pedir("/datos/vehiculos.json")
+      .catch(() => pedir("/api/vehiculos"))
       .then((data: { vehiculos: VehiculoOption[] }) => {
         if (data.vehiculos?.length) setVehiculos(data.vehiculos);
       })

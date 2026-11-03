@@ -51,6 +51,11 @@ export function MedidaPasos({
     };
   }, []);
 
+  // Si no se pudieron cargar las medidas, se pasa solo al buscador de escribir la medida.
+  useEffect(() => {
+    if (fallo) onEscribir();
+  }, [fallo, onEscribir]);
+
   // Sólo medidas de calle/A-T con stock; si no hay ninguna con stock, todas.
   const base = useMemo(() => {
     if (!medidas) return [];
