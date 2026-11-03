@@ -3,7 +3,7 @@ import { DEFAULT_BRANCH_ID } from "./config";
 import productImagesManifest from "./product-images-manifest.json";
 import { getAllVehicleOptions } from "./vehicles";
 import { getTireLabel } from "./tire-labels";
-import { OFFER_TIRE_SLUGS, withOfferPrice, accessoryPriceOld } from "./offers";
+import { OFFER_TIRE_SLUGS, OFFER_MIN_STOCK, withOfferPrice, accessoryPriceOld } from "./offers";
 
 const AVAILABLE_IMAGES = new Set(productImagesManifest);
 
@@ -270,7 +270,8 @@ function toTireProduct(p: PosProducto): TireProduct | null {
     loadIndex,
     loadIndexDual,
     speedRating,
-    priceOld: OFFER_TIRE_SLUGS.includes(slug) ? withOfferPrice(p.precio, slug) : undefined,
+    // Solo está en descuento mientras queden OFFER_MIN_STOCK unidades o más.
+    priceOld: OFFER_TIRE_SLUGS.includes(slug) && p.en_stock && (p.stock ?? 0) >= OFFER_MIN_STOCK ? withOfferPrice(p.precio, slug) : undefined,
   };
 }
 

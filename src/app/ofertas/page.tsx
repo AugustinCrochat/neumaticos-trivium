@@ -7,7 +7,7 @@ import { preciosTaller } from "@/lib/servicios-seo";
 import { OfertaRelampago, type Relampago } from "./OfertaRelampago";
 import { getSelectedBranchSlug } from "@/lib/branch-server";
 import { canonical } from "@/lib/seo";
-import { OFFER_TIRE_SLUGS, esTuercaDeSeguridad } from "@/lib/offers";
+import { OFFER_TIRE_SLUGS, OFFER_MIN_STOCK, esTuercaDeSeguridad } from "@/lib/offers";
 import Link from "@/components/ui/Link";
 import Image from "next/image";
 import { SortedProductGrid } from "@/components/ui/SortedProductGrid";
@@ -124,8 +124,9 @@ export default async function OfertasPage() {
   const separado = pt.alineadoAuto && pt.balanceoAuto ? pt.alineadoAuto + 4 * pt.balanceoAuto : 0;
   const ahorroCombo = pt.comboAuto && separado > pt.comboAuto ? separado - pt.comboAuto : 0;
 
+  // Solo los que siguen en descuento (con 4 unidades o más; ver OFFER_MIN_STOCK).
   const ofertas = OFFER_TIRE_SLUGS.map((slug) => productos.find((p) => p.slug === slug)).filter(
-    (p): p is TireProduct => !!p
+    (p): p is TireProduct => !!p && !!p.priceOld
   );
   // Primero lo que hay en stock; dentro de eso, lo más vendido.
   const porVenta = [...ofertas].sort(
@@ -137,9 +138,9 @@ export default async function OfertasPage() {
   const camioneta = ofertas.filter((p) => p.isAT);
   const carga = ofertas.filter((p) => p.isCarga);
   // Oferta del día: una de auto, una de camioneta y una de carga, la de mayor descuento
-  // de cada grupo entre las que tienen más de una unidad (las de 1 no interesan).
+  // de cada grupo.
   const mejorDe = (lista: TireProduct[]) =>
-    lista.filter((p) => p.enStock && (p.stock ?? 0) > 1 && p.priceOld).sort((a, b) => pct(b) - pct(a))[0];
+    lista.filter((p) => p.enStock && (p.stock ?? 0) >= OFFER_MIN_STOCK && p.priceOld).sort((a, b) => pct(b) - pct(a))[0];
   const elegidas = [mejorDe(auto), mejorDe(camioneta), mejorDe(carga)].filter((p): p is TireProduct => !!p);
   const relampago: Relampago[] = elegidas.map((p) => ({
     id: p.id,

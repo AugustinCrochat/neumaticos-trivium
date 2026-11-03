@@ -39,6 +39,9 @@ export const OFFER_TIRE_PCT: Record<string, number> = {
 };
 export const OFFER_TIRE_SLUGS = Object.keys(OFFER_TIRE_PCT);
 
+/** Unidades mínimas en stock para que un neumático figure en descuento (con menos, vuelve a precio normal). */
+export const OFFER_MIN_STOCK = 4;
+
 // Todas las tuercas de seguridad ya llevan el 15 % de descuento (ver accessoryPriceOld):
 // /ofertas las lista por nombre en vez de por slug, así una tuerca nueva entra sola.
 export const esTuercaDeSeguridad = (nombre: string): boolean => /antirrobo/i.test(nombre);

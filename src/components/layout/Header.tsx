@@ -21,7 +21,7 @@ const isActive = (pathname: string, match: string[]) =>
   match.some((m) => pathname === m || pathname.startsWith(`${m}/`));
 
 /** Cuenta regresiva hasta el fin del día para el botón Ofertas (arranca vacía: el sitio es estático). */
-function OfertasReloj() {
+function OfertasReloj({ activo = false }: { activo?: boolean }) {
   const [resto, setResto] = useState<number | null>(null);
   useEffect(() => {
     const tick = () => setResto(restoDelDia());
@@ -37,7 +37,7 @@ function OfertasReloj() {
   return (
     <span
       aria-label="Tiempo que queda de las ofertas de hoy"
-      className="rounded bg-black px-1.5 py-[3px] font-display text-[13px] font-bold leading-none tracking-wider tabular-nums text-white"
+      className={`rounded px-1.5 py-[3px] font-display text-[13px] font-bold leading-none tracking-wider tabular-nums text-white ${activo ? "bg-[#ff1e00]" : "bg-black"}`}
     >
       {txt}
     </span>
@@ -167,7 +167,7 @@ export function Header() {
                         <PriceTagIcon className="h-9 w-auto drop-shadow" />
                         <span className="flex flex-col gap-1">
                           <span className="leading-none">{link.label}</span>
-                          <OfertasReloj />
+                          <OfertasReloj activo={active} />
                         </span>
                       </>
                     ) : (
@@ -251,7 +251,7 @@ export function Header() {
                       <PriceTagIcon className="h-9 w-auto drop-shadow" />
                       <span className="flex flex-col gap-0.5">
                         <span className="leading-none">{link.label}</span>
-                        <OfertasReloj />
+                        <OfertasReloj activo={active} />
                       </span>
                     </>
                   ) : (
