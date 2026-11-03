@@ -129,7 +129,7 @@ export function PlateLookup({
   const valida = PATENTE_RE.test(patente);
 
   const buscar = async () => {
-    if (!valida || !token || cargando) return;
+    if (patente.length < 6 || !token || cargando) return;
     ultima.current = patente;
     setCargando(true);
     setMensaje(null);
@@ -141,6 +141,8 @@ export function PlateLookup({
       });
       if (res.status === 404) {
         setMensaje("No encontramos esa patente. Probá con “Por mi auto”.");
+      } else if (res.status === 400) {
+        setMensaje("Esa patente no tiene un formato válido (ej. AB 123 CD o ABC 123). Revisala.");
       } else if (res.status === 429) {
         setMensaje("Hiciste muchas consultas seguidas. Probá en unos minutos o usá “Por mi auto”.");
       } else if (!res.ok) {
@@ -177,7 +179,7 @@ export function PlateLookup({
         <button
           type="button"
           onClick={buscar}
-          disabled={!valida || !token || cargando}
+          disabled={patente.length < 6 || !token || cargando}
           className="flex-1 rounded-xl bg-orange-500 py-3.5 text-base font-black text-white transition-colors hover:bg-orange-600 disabled:opacity-40"
         >
           {cargando ? "Buscando…" : "Buscar mi auto"}
