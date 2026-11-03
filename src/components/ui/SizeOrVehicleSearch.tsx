@@ -199,17 +199,15 @@ export function SizeOrVehicleSearch({
                       }}
                     />
                   ) : abierto === "medida" ? (
-                    escribir || initialMedida ? (
+                    escribir ? (
                       <>
-                        {!initialMedida && (
-                          <button
-                            type="button"
-                            onClick={() => setEscribir(false)}
-                            className="mb-3 flex w-full items-center justify-center gap-2 rounded-xl border-2 border-slate-300 bg-white py-2 text-sm font-black text-navy-900 transition-colors hover:border-orange-500 hover:text-orange-600"
-                          >
-                            <LayoutGrid className="h-4 w-4" aria-hidden="true" /> Elegir la medida con botones
-                          </button>
-                        )}
+                        <button
+                          type="button"
+                          onClick={() => setEscribir(false)}
+                          className="mb-3 flex w-full items-center justify-center gap-2 rounded-xl border-2 border-slate-300 bg-white py-2 text-sm font-black text-navy-900 transition-colors hover:border-orange-500 hover:text-orange-600"
+                        >
+                          <LayoutGrid className="h-4 w-4" aria-hidden="true" /> Elegir la medida con botones
+                        </button>
                         <TireSizeSearch
                           embedded
                           initialMedida={initialMedida}
