@@ -239,7 +239,7 @@ export default async function MarcasPage() {
       <div className="mx-auto max-w-7xl 2xl:max-w-[96rem] px-4 py-10 md:py-14">
         <section className="mb-12 rounded-2xl bg-white p-5 shadow-sm md:p-6">
           <h2 className="mb-3 text-xl font-black text-navy-900">Encontrá tu medida y compará marcas</h2>
-          <SizeOrVehicleSearch compact hideLearnLink />
+          <SizeOrVehicleSearch compact lado hideLearnLink />
         </section>
 
         <section className="mb-14">

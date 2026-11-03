@@ -267,7 +267,7 @@ export default async function OfertasPage() {
           <div className="space-y-14">
             <section className="rounded-2xl bg-white p-5 shadow-sm md:p-6">
               <h2 className="mb-3 text-xl font-black text-slate-900">¿No ves tu medida? Buscala</h2>
-              <SizeOrVehicleSearch compact hideLearnLink />
+              <SizeOrVehicleSearch compact lado hideLearnLink />
             </section>
 
             {relampago.length === 3 && <OfertaRelampago items={relampago} />}

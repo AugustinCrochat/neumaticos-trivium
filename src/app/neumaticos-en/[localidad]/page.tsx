@@ -300,7 +300,7 @@ export default async function LocalidadPage({ params }: Props) {
 
       <section className="mb-12 rounded-2xl bg-slate-50 p-5 md:p-6">
         <h2 className="mb-3 text-xl font-black text-navy-900">Encontrá tus neumáticos</h2>
-        <SizeOrVehicleSearch compact hideLearnLink />
+        <SizeOrVehicleSearch compact lado hideLearnLink />
       </section>
 
       <LocalProductCarousel

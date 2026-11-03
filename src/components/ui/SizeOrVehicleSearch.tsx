@@ -31,6 +31,7 @@ function useEscritorio() {
 
 export function SizeOrVehicleSearch({
   compact = false,
+  lado = false,
   enModal = false,
   initialMedida,
   forceVoiceButton = false,
@@ -41,6 +42,8 @@ export function SizeOrVehicleSearch({
   onLiveChange,
 }: {
   compact?: boolean;
+  /** Con compact: en escritorio las tarjetas van una al lado de la otra (para bloques anchos). */
+  lado?: boolean;
   /** Ya está dentro de una ventana (buscador flotante): se usan pestañas en vez de abrir otra ventana. */
   enModal?: boolean;
   initialMedida?: string;
@@ -123,7 +126,7 @@ export function SizeOrVehicleSearch({
           Encontrá tus neumáticos
         </h2>
         {escritorio ? (
-          <div className={`grid gap-3 ${compact ? "grid-cols-1" : "grid-cols-2"}`}>
+          <div className={`grid gap-3 ${compact && !lado ? "grid-cols-1" : "grid-cols-2"}`}>
             <button
               type="button"
               onClick={() => setAbierto("medida")}
