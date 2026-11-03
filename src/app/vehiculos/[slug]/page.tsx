@@ -19,6 +19,7 @@ import { MarcaLogo } from "@/components/ui/MarcaLogo";
 import { marcaLogo, marcaSlug } from "@/lib/marcas-autos";
 import { vehiclePhoto, vehicleCardUrl } from "@/lib/vehicle-photos";
 import { MedidasVehiculo, type MedidaItem } from "./MedidasVehiculo";
+import { PortadaAB } from "./PortadaAB";
 import { VENTAS_MODELO, VENTAS_DATOS_AL } from "@/lib/ventas-modelo";
 
 /**
@@ -287,20 +288,9 @@ export default async function VehiclePage({ params }: Props) {
           </section>
 
           {vehicleCardUrl(slug) && (
-            // La portada de la ficha como imagen real de la página (no solo og:image): así Google Imágenes la puede indexar con su alt.
-            <figure className="mb-10">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={`/images/vehiculos/share/${slug}.jpg`}
-                alt={`Neumáticos para ${name}: medida original y precios`}
-                width={1200}
-                height={630}
-                loading="lazy"
-                decoding="async"
-                className="h-auto w-full rounded-2xl border border-slate-200"
-              />
-              <figcaption className="mt-2 text-center text-xs text-slate-500">Medida original del {name} y neumáticos disponibles.</figcaption>
-            </figure>
+            // La portada como imagen real de la página (no solo og:image) para que Google Imágenes la indexe con su alt.
+            // Lleva el test A/B por visitante (ver PortadaAB).
+            <PortadaAB slug={slug} name={name} medidaHref={itemsMedida[0] ? `/neumaticos/${itemsMedida[0].slug}` : null} medida={itemsMedida[0]?.label ?? null} />
           )}
 
           <FotoNeumaticoBloque className="mb-10" titulo={`¿No sabés qué medida lleva tu ${name}?`} />

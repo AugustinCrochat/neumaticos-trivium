@@ -251,6 +251,7 @@ export function SizeLanding({
       )}
 
       <LocalProductCarousel
+        autoplay
         productos={alternativas}
         mejores={mejoresAlternativas}
         titulo={enStock.length > 0 ? "Otros neumáticos disponibles en el local" : `Sin ${label}: estos otros están disponibles en el local`}
