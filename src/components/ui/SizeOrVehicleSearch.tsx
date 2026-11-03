@@ -95,6 +95,8 @@ export function SizeOrVehicleSearch({
       setPatenteManual(false);
     };
     const titulos = { patente: patenteManual ? "Buscar por mi auto" : "Buscar por patente", medida: "Buscar por medida", vehiculo: "Buscar por mi auto" } as const;
+    // Misma caja para todos los íconos: los textos de los mosaicos quedan alineados entre sí.
+    const cajaIcono = compact ? "flex h-9 w-[4.75rem] items-center justify-center" : "flex h-14 w-32 items-center justify-center";
     const barra = (id: "patente" | "medida" | "vehiculo", Icono: typeof Car | typeof HalfTireIcon | typeof PlateIcon, titulo: string, ejemplo: string) => (
       <button
         type="button"
@@ -102,7 +104,7 @@ export function SizeOrVehicleSearch({
         onMouseEnter={id === "vehiculo" ? loadVehiculos : undefined}
         onFocus={id === "vehiculo" ? loadVehiculos : undefined}
         aria-expanded={abierto === id}
-        className="flex w-full items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 text-left transition-colors hover:border-orange-400"
+        className="flex w-full items-center gap-3 rounded-xl border border-slate-300 bg-white px-4 shadow-sm py-3 text-left transition-colors hover:border-orange-400"
       >
         <Icono className={`shrink-0 text-navy-900 ${Icono === PlateIcon ? "h-8 w-[4.75rem]" : Icono === HalfTireIcon ? "h-6 w-11" : "h-6 w-6"}`} aria-hidden="true" />
         <span className="min-w-0 flex-1">
@@ -113,7 +115,7 @@ export function SizeOrVehicleSearch({
       </button>
     );
     return (
-      <div className="w-full rounded-2xl border border-slate-200 bg-slate-100 p-5">
+      <div className="w-full rounded-2xl border border-slate-300 bg-slate-200 p-5">
         <h2 className={`mb-3 text-center font-display font-extrabold uppercase tracking-tight text-navy-900 ${compact ? "text-xl" : "text-2xl"}`}>
           Encontrá tus neumáticos
         </h2>
@@ -122,9 +124,9 @@ export function SizeOrVehicleSearch({
             <button
               type="button"
               onClick={() => setAbierto("medida")}
-              className={`flex items-center rounded-xl border border-slate-200 bg-white px-4 transition-colors hover:border-orange-400 ${compact ? "gap-3 py-3 text-left" : "flex-col gap-2 py-5 text-center"}`}
+              className={`flex items-center rounded-xl border border-slate-300 bg-white px-4 shadow-sm transition-colors hover:border-orange-400 ${compact ? "gap-3 py-3 text-left" : "flex-col gap-2 py-5 text-center"}`}
             >
-              <HalfTireIcon className="h-9 w-[4.5rem] text-navy-900" />
+              <span className={cajaIcono}><HalfTireIcon className="h-9 w-[4.5rem] text-navy-900" /></span>
               <span className="flex flex-col"><span className="text-base font-black text-navy-900">Por medida</span>
               <span className="text-xs font-semibold text-slate-500">Ej: 205/55 R16</span></span>
             </button>
@@ -132,9 +134,9 @@ export function SizeOrVehicleSearch({
               <button
                 type="button"
                 onClick={() => setAbierto("patente")}
-                className={`flex items-center rounded-xl border border-slate-200 bg-white px-4 transition-colors hover:border-orange-400 ${compact ? "gap-3 py-3 text-left" : "flex-col gap-2 py-5 text-center"}`}
+                className={`flex items-center rounded-xl border border-slate-300 bg-white px-4 shadow-sm transition-colors hover:border-orange-400 ${compact ? "gap-3 py-3 text-left" : "flex-col gap-2 py-5 text-center"}`}
               >
-                <PlateIcon className="h-14 w-32" />
+                <span className={cajaIcono}><PlateIcon className={compact ? "h-9 w-[4.75rem]" : "h-14 w-32"} /></span>
                 <span className="flex flex-col"><span className="text-base font-black text-navy-900">Por patente</span>
                 <span className="text-xs font-semibold text-slate-500">Ej: AB 123 CD</span></span>
               </button>
@@ -144,9 +146,9 @@ export function SizeOrVehicleSearch({
                 type="button"
                 onClick={() => setAbierto("vehiculo")}
                 onMouseEnter={loadVehiculos}
-                className={`flex items-center rounded-xl border border-slate-200 bg-white px-4 transition-colors hover:border-orange-400 ${compact ? "gap-3 py-3 text-left" : "flex-col gap-2 py-5 text-center"}`}
+                className={`flex items-center rounded-xl border border-slate-300 bg-white px-4 shadow-sm transition-colors hover:border-orange-400 ${compact ? "gap-3 py-3 text-left" : "flex-col gap-2 py-5 text-center"}`}
               >
-                <Car className="h-9 w-9 text-navy-900" aria-hidden="true" />
+                <span className={cajaIcono}><Car className="h-9 w-9 text-navy-900" aria-hidden="true" /></span>
                 <span className="flex flex-col"><span className="text-base font-black text-navy-900">Por mi auto</span>
                 <span className="text-xs font-semibold text-slate-500">Marca, modelo y año</span></span>
               </button>
@@ -253,24 +255,24 @@ export function SizeOrVehicleSearch({
   }
 
   return (
-    <div className={`bg-slate-100 rounded-2xl border border-slate-200 ${compact ? "p-4" : "p-6"} w-full`}>
+    <div className={`bg-slate-200 rounded-2xl border border-slate-300 ${compact ? "p-4" : "p-6"} w-full`}>
       <div className="mb-3 flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
-      <div className="inline-flex items-center rounded-xl border border-slate-200 bg-white p-1">
+      <div className="grid w-full grid-cols-2 gap-1 rounded-xl border border-slate-300 bg-white p-1">
         <button
           onClick={() => setMode("medida")}
-          className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors ${mode === "medida" ? "bg-black text-white" : "text-slate-500 hover:text-slate-800"}`}
+          className={`flex h-11 items-center justify-center rounded-lg px-3 text-sm font-bold transition-colors ${mode === "medida" ? "bg-black text-white" : "text-slate-500 hover:text-slate-800"}`}
         >
           <span className="inline-flex items-center gap-1.5">
-            <HalfTireIcon className="h-3.5 w-auto" /> Por medida
+            <HalfTireIcon className="h-4 w-8" /> Por medida
           </span>
         </button>
         {PATENTE_HABILITADA && (
           <button
             onClick={() => setMode("patente")}
-            className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors ${mode === "patente" ? "bg-black text-white" : "text-slate-500 hover:text-slate-800"}`}
+            className={`flex h-11 items-center justify-center rounded-lg px-3 text-sm font-bold transition-colors ${mode === "patente" ? "bg-black text-white" : "text-slate-500 hover:text-slate-800"}`}
           >
             <span className="inline-flex items-center gap-1.5">
-              <PlateIcon className="h-7 w-16" /> Por patente
+              <PlateIcon className="h-6 w-14" /> Por patente
             </span>
           </button>
         )}
@@ -282,7 +284,7 @@ export function SizeOrVehicleSearch({
           onMouseEnter={loadVehiculos}
           onFocus={loadVehiculos}
           onTouchStart={loadVehiculos}
-          className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors ${mode === "vehiculo" ? "bg-black text-white" : "text-slate-500 hover:text-slate-800"}`}
+          className={`flex h-11 items-center justify-center rounded-lg px-3 text-sm font-bold transition-colors ${mode === "vehiculo" ? "bg-black text-white" : "text-slate-500 hover:text-slate-800"}`}
         >
           <span className="inline-flex items-center gap-1.5">
             <Car className="h-4 w-4" aria-hidden="true" /> Por mi auto
