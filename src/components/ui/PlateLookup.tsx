@@ -72,10 +72,10 @@ function Chapa({
         autoComplete="off"
         spellCheck={false}
         inputMode="text"
-        className={`absolute bottom-[6%] top-[31%] bg-transparent text-center font-display text-[3.4rem] font-bold uppercase leading-none tracking-[0.06em] outline-none sm:text-[3.8rem] ${
+        className={`absolute bottom-[8%] top-[26%] bg-transparent text-center font-display text-[3.4rem] font-bold uppercase leading-none tracking-[0.06em] outline-none sm:text-[3.8rem] ${
           mercosur
             ? "inset-x-[8%] w-[84%] text-zinc-700 placeholder:text-zinc-300"
-            : "inset-x-[14%] w-[72%] text-white placeholder:text-zinc-700"
+            : "inset-x-[5%] w-[90%] text-white placeholder:text-zinc-700"
         }`}
       />
     </div>
@@ -102,6 +102,8 @@ export function PlateLookup({
   const [mensaje, setMensaje] = useState<string | null>(null);
   const cajaRef = useRef<HTMLDivElement>(null);
   const widgetId = useRef<string | undefined>(undefined);
+  // Última patente consultada: evita repetir la misma consulta sola.
+  const ultima = useRef<string | null>(null);
 
   useEffect(() => {
     if (!SITE_KEY) return;
@@ -124,12 +126,11 @@ export function PlateLookup({
     };
   }, []);
 
-  if (!SITE_KEY) return null;
-
   const valida = PATENTE_RE.test(patente);
 
   const buscar = async () => {
     if (!valida || !token || cargando) return;
+    ultima.current = patente;
     setCargando(true);
     setMensaje(null);
     try {
@@ -159,6 +160,14 @@ export function PlateLookup({
     setCargando(false);
   };
 
+  // Apenas la patente está completa (y la verificación lista) se consulta sola.
+  useEffect(() => {
+    if (valida && token && !cargando && ultima.current !== patente) void buscar();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [valida, token, patente, cargando]);
+
+  if (!SITE_KEY) return null;
+
   return (
     <div className="w-full">
       <p className="mb-2 text-center text-sm font-bold text-navy-900">Buscá tu auto por patente</p>
@@ -177,6 +186,7 @@ export function PlateLookup({
           <button
             type="button"
             onClick={() => {
+              ultima.current = null;
               setPatente("");
               setMensaje(null);
             }}

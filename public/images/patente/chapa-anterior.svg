@@ -1,12 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 130" role="img" aria-label="Chapa patente formato anterior (1995-2016)">
-  <!-- marco claro con extremos blancos -->
-  <rect x="1.5" y="1.5" width="397" height="127" rx="12" fill="#eef0f3" stroke="#c4cad1" stroke-width="2"/>
-  <!-- franja central negra lisa -->
-  <rect x="50" y="6" width="300" height="118" fill="#000000"/>
-  <!-- ARGENTINA en celeste -->
-  <text x="200" y="25" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#4aa8d8" letter-spacing="3">ARGENTINA</text>
+  <defs><linearGradient id="marco" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4f5f7"/><stop offset="1" stop-color="#e3e6ea"/></linearGradient></defs>
+  <!-- marco gris claro -->
+  <rect x="1" y="1" width="398" height="128" rx="12" fill="url(#marco)" stroke="#cfd3d9" stroke-width="2"/>
+  <!-- ARGENTINA en celeste, sobre el marco -->
+  <text x="200" y="21" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="700" fill="#4aa8d8" letter-spacing="1">ARGENTINA</text>
   <!-- escudo nacional (Wikimedia Commons) -->
-  <svg x="13.5" y="5" width="22.4" height="36" viewBox="175 25 2150 3463"><g>
+  <svg x="13" y="3" width="15" height="24" viewBox="175 25 2150 3463"><g>
   <path fill="white" d="M2016 1947c0,561 -342,1016 -763,1016 -421,0 -763,-455 -763,-1016 0,-562 342,-1017 763,-1017 421,0 763,455 763,1017l0 0z"/>
   <path fill="#75AADB" d="M490 1959c0,-561 341,-1016 763,-1016 421,0 762,455 762,1016 0,2 0,4 0,6l-762 -6 -763 0z"/>
   <g>
@@ -557,7 +556,11 @@
    <path fill="white" d="M1251 3138c-17,19 -15,52 -4,90 6,2 13,5 23,1 40,-41 19,-80 12,-93 -7,-3 -25,-3 -31,2z"/>
   </g>
  </g></svg>
+  <!-- campo negro -->
+  <rect x="4" y="29" width="392" height="81" rx="7" fill="#050505"/>
   <!-- ranuras de fijación -->
-  <rect x="14" y="104" width="22" height="5" rx="2.5" fill="#b9bfc7"/>
-  <rect x="364" y="104" width="22" height="5" rx="2.5" fill="#b9bfc7"/>
+  <g fill="none" stroke="#b4b9c1" stroke-width="1.6" stroke-linecap="round">
+    <rect x="42" y="7" width="20" height="5" rx="2.5"/><rect x="338" y="7" width="20" height="5" rx="2.5"/>
+    <rect x="42" y="117" width="20" height="5" rx="2.5"/><rect x="338" y="117" width="20" height="5" rx="2.5"/>
+  </g>
 </svg>
