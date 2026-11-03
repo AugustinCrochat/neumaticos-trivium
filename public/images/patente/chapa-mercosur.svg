@@ -15,10 +15,14 @@
  <path d="m17.977 730c230-80 460-120 685-140 200-20 400-10 580 15" fill="none" stroke="#ffffff" stroke-width="10"/></svg>
     <!-- título -->
     <text x="200" y="26" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14.5" font-weight="700" fill="#ffffff" letter-spacing="0.2">REPUBLICA ARGENTINA</text>
-    <!-- bandera -->
-    <rect x="357" y="10" width="27" height="17" fill="#ffffff"/>
-    <rect x="357" y="10" width="27" height="5.7" fill="#74acdf"/>
-    <rect x="357" y="21.3" width="27" height="5.7" fill="#74acdf"/>
-    <circle cx="370.5" cy="18.5" r="2.2" fill="#f6b40e"/>
+    <!-- bandera: esquinas redondeadas, contorno celeste claro y sol pequeño (como la chapa oficial) -->
+    <clipPath id="bandera"><rect x="363.6" y="8.8" width="28.4" height="20" rx="3.6"/></clipPath>
+    <g clip-path="url(#bandera)">
+      <rect x="363.6" y="8.8" width="28.4" height="20" fill="#ffffff"/>
+      <rect x="363.6" y="8.8" width="28.4" height="6.1" fill="#74acdf"/>
+      <rect x="363.6" y="22.7" width="28.4" height="6.1" fill="#74acdf"/>
+    </g>
+    <rect x="363.6" y="8.8" width="28.4" height="20" rx="3.6" fill="none" stroke="#bfe0ff" stroke-width="1.1"/>
+    <circle cx="377.8" cy="18.8" r="2.5" fill="#c98a35" stroke="#a8651f" stroke-width="0.6"/>
   </g>
 </svg>
