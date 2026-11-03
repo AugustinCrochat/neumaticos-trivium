@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { cargarMedidas } from "@/components/ui/TireSizeSearch";
+import { TireDiagram } from "@/components/ui/TireDiagram";
 import type { MedidaCatalogo } from "@/app/api/medidas/route";
 import { sizeCatalogHref } from "@/lib/size-href";
 import { irA } from "@/lib/navigate";
@@ -89,25 +90,24 @@ export function MedidaPasos({
 
   return (
     <div className="w-full">
-      <div className="mb-3 flex items-center justify-between gap-3">
-        {w ? (
-          <button
-            type="button"
-            onClick={() => (p ? setP("") : setW(""))}
-            className="inline-flex items-center gap-1 text-sm font-bold text-slate-500 transition-colors hover:text-slate-800"
-          >
-            <ArrowLeft className="h-4 w-4" aria-hidden="true" /> Volver
-          </button>
-        ) : (
-          <span aria-hidden="true" />
-        )}
-        <span className="rounded-lg bg-white px-3 py-1 font-display text-lg font-bold tracking-wide text-navy-900 ring-1 ring-slate-200">
-          <span className={paso === "ancho" ? "text-orange-600" : ""}>{w || "205"}</span>
-          <span className="text-slate-400">/</span>
-          <span className={paso === "perfil" ? "text-orange-600" : ""}>{p || "55"}</span>
-          <span className="text-slate-400"> R</span>
-          <span className={paso === "rodado" ? "text-orange-600" : ""}>16</span>
-        </span>
+      {w && (
+        <button
+          type="button"
+          onClick={() => (p ? setP("") : setW(""))}
+          className="mb-2 inline-flex items-center gap-1 text-sm font-bold text-slate-500 transition-colors hover:text-slate-800"
+        >
+          <ArrowLeft className="h-4 w-4" aria-hidden="true" /> Volver
+        </button>
+      )}
+
+      {/* El neumático se va completando con lo elegido y marca el paso actual. */}
+      <div className="mx-auto mb-3 w-full max-w-[250px]">
+        <TireDiagram
+          width={w}
+          aspect={p}
+          focused={paso === "ancho" ? "width" : paso === "perfil" ? "aspect" : "rim"}
+          slim
+        />
       </div>
 
       <p className="mb-2 text-xs font-black uppercase tracking-wide text-slate-500">{titulo}</p>
