@@ -1,11 +1,20 @@
-/** Medio neumático (arco con banda de rodadura), sin color propio: toma el del texto. */
+/** Neumático de frente (cubierta, llanta y rayos), sin color propio: toma el del texto. */
 export function HalfTireIcon({ className }: { className?: string }) {
+  const rayos = [0, 72, 144, 216, 288].map((a) => {
+    const r = (a - 90) * (Math.PI / 180);
+    return `M${(16 + 2.6 * Math.cos(r)).toFixed(2)} ${(16 + 2.6 * Math.sin(r)).toFixed(2)}L${(16 + 8 * Math.cos(r)).toFixed(2)} ${(16 + 8 * Math.sin(r)).toFixed(2)}`;
+  });
+  const tacos = Array.from({ length: 16 }, (_, i) => {
+    const r = ((i * 22.5) - 90) * (Math.PI / 180);
+    return `M${(16 + 12.4 * Math.cos(r)).toFixed(2)} ${(16 + 12.4 * Math.sin(r)).toFixed(2)}L${(16 + 14.6 * Math.cos(r)).toFixed(2)} ${(16 + 14.6 * Math.sin(r)).toFixed(2)}`;
+  });
   return (
-    <svg viewBox="0 0 32 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className={className} aria-hidden="true">
-      <path d="M2 18 A14 14 0 0 1 30 18" />
-      <path d="M8 18 A8 8 0 0 1 24 18" />
-      <path d="M2 18h6M24 18h6" />
-      <path d="M5.2 9.6l2.4 1.6M10.2 5.2l1.6 2.4M16 3.2v2.8M21.8 5.2l-1.6 2.4M26.8 9.6l-2.4 1.6" strokeWidth="1.6" />
+    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" className={className} aria-hidden="true">
+      <circle cx="16" cy="16" r="12.2" />
+      <circle cx="16" cy="16" r="8.4" />
+      <circle cx="16" cy="16" r="2.2" />
+      <path d={rayos.join("")} />
+      <path d={tacos.join("")} strokeWidth="1.8" />
     </svg>
   );
 }

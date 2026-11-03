@@ -29,6 +29,8 @@ export function MedidaPasos({
   const [fallo, setFallo] = useState(false);
   const [w, setW] = useState("");
   const [p, setP] = useState("");
+  // Opción sobre la que está el cursor: se muestra en el neumático antes de elegirla.
+  const [previa, setPrevia] = useState("");
 
   useEffect(() => {
     let vivo = true;
@@ -58,15 +60,18 @@ export function MedidaPasos({
     [base, w, p]
   );
 
+  // Las más buscadas se adaptan a lo que ya se eligió (ancho y perfil).
   const populares = useMemo(() => {
     const porClave = new Map<string, MedidaCatalogo>();
     for (const m of base) {
+      if (w && String(m.w) !== w) continue;
+      if (p && String(m.p) !== p) continue;
       const k = `${m.w}-${m.p}-${m.r}`;
       const prev = porClave.get(k);
       if (!prev || m.s > prev.s) porClave.set(k, m);
     }
     return [...porClave.values()].sort((a, b) => b.s - a.s || b.n - a.n).slice(0, 4);
-  }, [base]);
+  }, [base, w, p]);
 
   function ir(ancho: string, perfil: string, rodado: string) {
     onNavigate?.();
@@ -86,6 +91,8 @@ export function MedidaPasos({
 
   const paso = !w ? "ancho" : !p ? "perfil" : "rodado";
   const opciones = paso === "ancho" ? anchos : paso === "perfil" ? perfiles : rodados;
+  // Mismos colores que el neumático: el botón de cada paso hace juego con su número.
+  const color = paso === "ancho" ? "#ff1e00" : paso === "perfil" ? "#6ba0d8" : "#ff8066";
   const titulo = paso === "ancho" ? "Elegí el ancho" : paso === "perfil" ? "Elegí el perfil" : "Elegí el rodado";
 
   return (
@@ -103,8 +110,9 @@ export function MedidaPasos({
       {/* El neumático se va completando con lo elegido y marca el paso actual. */}
       <div className="mx-auto mb-3 w-full max-w-[250px]">
         <TireDiagram
-          width={w}
-          aspect={p}
+          width={paso === "ancho" ? previa : w}
+          aspect={paso === "perfil" ? previa : p}
+          rim={paso === "rodado" ? previa : ""}
           focused={paso === "ancho" ? "width" : paso === "perfil" ? "aspect" : "rim"}
           slim
         />
@@ -120,8 +128,20 @@ export function MedidaPasos({
             <button
               key={o}
               type="button"
-              onClick={() => (paso === "ancho" ? setW(o) : paso === "perfil" ? setP(o) : ir(w, p, o))}
-              className="rounded-lg border border-slate-300 bg-white py-2.5 text-sm font-black text-navy-900 transition-colors hover:border-orange-500 hover:bg-orange-50 hover:text-orange-600"
+              onClick={() => {
+                setPrevia("");
+                if (paso === "ancho") setW(o);
+                else if (paso === "perfil") setP(o);
+                else ir(w, p, o);
+              }}
+              onMouseEnter={() => setPrevia(o)}
+              onMouseLeave={() => setPrevia("")}
+              onFocus={() => setPrevia(o)}
+              onBlur={() => setPrevia("")}
+              style={{ borderColor: color, color }}
+              className="rounded-lg border-2 bg-white py-2.5 text-sm font-black transition-colors hover:text-white"
+              onPointerOver={(e) => (e.currentTarget.style.backgroundColor = color)}
+              onPointerOut={(e) => (e.currentTarget.style.backgroundColor = "")}
             >
               {o}
             </button>
@@ -129,9 +149,11 @@ export function MedidaPasos({
         </div>
       )}
 
-      {populares.length > 0 && !w && (
+      {populares.length > 0 && (
         <div className="mt-4">
-          <p className="mb-2 text-xs font-black uppercase tracking-wide text-slate-500">Las medidas más buscadas</p>
+          <p className="mb-2 text-xs font-black uppercase tracking-wide text-slate-500">
+            {w ? `Las medidas más buscadas con ${w}${p ? `/${p}` : ""}` : "Las medidas más buscadas"}
+          </p>
           <div className="grid grid-cols-2 gap-2">
             {populares.map((m) => (
               <button
