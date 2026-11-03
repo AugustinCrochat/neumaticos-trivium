@@ -1,60 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 130" role="img" aria-label="Chapa patente formato anterior (1995-2016)">
-  <defs>
-    <clipPath id="forma"><rect x="1" y="1" width="398" height="128" rx="11"/></clipPath>
-    <linearGradient id="negro" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#202226"/>
-      <stop offset="0.5" stop-color="#0d0e10"/>
-      <stop offset="1" stop-color="#050506"/>
-    </linearGradient>
-    <linearGradient id="blanco" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#ffffff"/>
-      <stop offset="0.55" stop-color="#e7eaee"/>
-      <stop offset="1" stop-color="#f6f7f9"/>
-    </linearGradient>
-    <linearGradient id="brillo" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#ffffff" stop-opacity="0.18"/>
-      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
-    </linearGradient>
-    <radialGradient id="tornillo" cx="0.35" cy="0.3" r="0.8">
-      <stop offset="0" stop-color="#f4f6f8"/>
-      <stop offset="1" stop-color="#8f98a2"/>
-    </radialGradient>
-  </defs>
-
-  <g clip-path="url(#forma)">
-    <!-- fondo: extremos blancos refractantes y franja central negra satinada -->
-    <rect x="0" y="0" width="400" height="130" fill="url(#blanco)"/>
-    <rect x="48" y="0" width="304" height="130" fill="url(#negro)"/>
-    <rect x="48" y="0" width="304" height="52" fill="url(#brillo)"/>
-    <rect x="48" y="0" width="1.5" height="130" fill="#000000" opacity="0.5"/>
-    <rect x="350.5" y="0" width="1.5" height="130" fill="#000000" opacity="0.5"/>
-
-    <!-- sellos circulares RNPA en los extremos blancos -->
-    <g fill="none" stroke="#9aa3ad" stroke-width="0.9">
-      <circle cx="24" cy="46" r="13"/><circle cx="24" cy="46" r="9.5" stroke-dasharray="1.6 1.6"/>
-      <circle cx="376" cy="46" r="13"/><circle cx="376" cy="46" r="9.5" stroke-dasharray="1.6 1.6"/>
-    </g>
-    <g font-family="Arial, Helvetica, sans-serif" font-size="6.4" font-weight="700" fill="#8a939d" text-anchor="middle">
-      <text x="24" y="48.4">RNPA</text><text x="376" y="48.4">RNPA</text>
-    </g>
-
-    <!-- ARGENTINA en celeste -->
-    <text x="205" y="27" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700" fill="#6fb6e6" letter-spacing="5">ARGENTINA</text>
-
-    <!-- escudo nacional (arriba a la izquierda) -->
-    <g transform="translate(70 21)">
-      <path d="M-9 -2 C-12 6 -6 13 0 14 C6 13 12 6 9 -2" fill="none" stroke="#5fae5a" stroke-width="1.6" stroke-linecap="round"/>
-      <ellipse cx="0" cy="3" rx="7" ry="9" fill="#ffffff" stroke="#c9ced4" stroke-width="0.6"/>
-      <path d="M-7 -3 A7 9 0 0 1 7 -3 L7 0 L-7 0 Z" fill="#74acdf"/>
-      <path d="M-6.6 7 A7 9 0 0 0 6.6 7 L6.9 4 L-6.9 4 Z" fill="#74acdf"/>
-      <circle cx="0" cy="-12" r="2.6" fill="#f6b40e"/>
-    </g>
-
-    <!-- tornillos -->
-    <circle cx="24" cy="104" r="5" fill="url(#tornillo)" stroke="#8b939c" stroke-width="0.8"/>
-    <rect x="21" y="103.4" width="6" height="1.3" fill="#7d858e"/>
-    <circle cx="376" cy="104" r="5" fill="url(#tornillo)" stroke="#8b939c" stroke-width="0.8"/>
-    <rect x="373" y="103.4" width="6" height="1.3" fill="#7d858e"/>
+  <!-- marco claro con extremos blancos -->
+  <rect x="1.5" y="1.5" width="397" height="127" rx="12" fill="#eef0f3" stroke="#c4cad1" stroke-width="2"/>
+  <!-- franja central negra lisa -->
+  <rect x="50" y="6" width="300" height="118" fill="#000000"/>
+  <!-- ARGENTINA en celeste -->
+  <text x="200" y="25" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" fill="#4aa8d8" letter-spacing="3">ARGENTINA</text>
+  <!-- escudo en el extremo izquierdo -->
+  <g transform="translate(25 24)">
+    <path d="M-8 -1 C-10 6 -5 11 0 12 C5 11 10 6 8 -1" fill="none" stroke="#5fae5a" stroke-width="1.4" stroke-linecap="round"/>
+    <ellipse cx="0" cy="3" rx="6" ry="8" fill="#ffffff" stroke="#c4cad1" stroke-width="0.6"/>
+    <path d="M-6 -2 A6 8 0 0 1 6 -2 L6 0.5 L-6 0.5 Z" fill="#74acdf"/>
+    <path d="M-5.6 7 A6 8 0 0 0 5.6 7 L5.8 4.5 L-5.8 4.5 Z" fill="#74acdf"/>
+    <circle cx="0" cy="-10" r="2.2" fill="#f6b40e"/>
   </g>
-  <rect x="1" y="1" width="398" height="128" rx="11" fill="none" stroke="#9aa3ad" stroke-width="1.2"/>
+  <!-- ranuras de fijación -->
+  <rect x="14" y="104" width="22" height="5" rx="2.5" fill="#b9bfc7"/>
+  <rect x="364" y="104" width="22" height="5" rx="2.5" fill="#b9bfc7"/>
 </svg>
