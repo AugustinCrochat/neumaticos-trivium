@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { X } from "lucide-react";
-import { Car, ChevronDown } from "lucide-react";
+import { Car, ChevronDown, RectangleHorizontal } from "lucide-react";
 import { HalfTireIcon } from "@/components/ui/HalfTireIcon";
 import { TireSizeSearch } from "@/components/ui/TireSizeSearch";
 import { VehicleSizeSearch } from "@/components/ui/VehicleSizeSearch";
@@ -75,7 +75,7 @@ export function SizeOrVehicleSearch({
         aria-expanded={abierto === id}
         className="flex w-full items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 text-left transition-colors hover:border-orange-400"
       >
-        <Icono className="h-6 w-6 shrink-0 text-navy-900" aria-hidden="true" />
+        <Icono className={`h-6 shrink-0 text-navy-900 ${Icono === HalfTireIcon ? "w-11" : "w-6"}`} aria-hidden="true" />
         <span className="min-w-0 flex-1">
           <span className="block text-sm font-black text-navy-900">{titulo}</span>
           <span className="block truncate text-xs font-semibold text-slate-500">{ejemplo}</span>
@@ -164,14 +164,18 @@ export function SizeOrVehicleSearch({
             onClick={() => setMode("patente")}
             className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors ${mode === "patente" ? "bg-black text-white" : "text-slate-500 hover:text-slate-800"}`}
           >
-            Por patente
+            <span className="inline-flex items-center gap-1.5">
+              <RectangleHorizontal className="h-4 w-4" aria-hidden="true" /> Por patente
+            </span>
           </button>
         )}
         <button
           onClick={() => setMode("medida")}
           className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors ${mode === "medida" ? "bg-black text-white" : "text-slate-500 hover:text-slate-800"}`}
         >
-          Por medida
+          <span className="inline-flex items-center gap-1.5">
+            <HalfTireIcon className="h-3.5 w-auto" /> Por medida
+          </span>
         </button>
         {!PATENTE_HABILITADA && (
         <button
@@ -183,7 +187,9 @@ export function SizeOrVehicleSearch({
           onTouchStart={loadVehiculos}
           className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors ${mode === "vehiculo" ? "bg-black text-white" : "text-slate-500 hover:text-slate-800"}`}
         >
-          Por mi auto
+          <span className="inline-flex items-center gap-1.5">
+            <Car className="h-4 w-4" aria-hidden="true" /> Por mi auto
+          </span>
         </button>
         )}
       </div>
