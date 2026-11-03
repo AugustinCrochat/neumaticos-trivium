@@ -103,6 +103,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url("/comprar-neumaticos-online-o-en-el-local", 0.7, "monthly"),
     url("/cotizador", 0.7, "monthly"),
     url("/buscador", 0.8, "monthly"),
+    url("/neumaticos-por-patente", 0.8, "monthly"),
     url("/herramientas", 0.7, "monthly"),
     url("/utqg", 0.8, "weekly"),
     ...TOOLS.map((t) => url(toolPath(t.slug), 0.7, "monthly")),

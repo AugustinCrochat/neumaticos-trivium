@@ -39,6 +39,7 @@ Herramienta gratuita y sin registro para encontrar qué neumático comprar, que 
 
 ## Cómo comprar
 
+- Medida de neumático por patente (autos y camionetas, formato Mercosur y anterior; gratis, sin registro): https://neumaticos.trivium.ar/neumaticos-por-patente
 - Buscador por medida de neumático (ancho/perfil/rodado) o por marca y modelo de vehículo: https://neumaticos.trivium.ar/buscador (resultados en /buscar y /neumaticos/[medida])
 - Catálogo completo con precio y stock real: /catalogo
 - Pago online con Mercado Pago (débito, crédito, dinero en cuenta) o en el local (efectivo, débito, crédito, transferencia)
