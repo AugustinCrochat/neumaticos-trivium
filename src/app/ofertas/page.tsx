@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { OfertasMediosPago } from "./OfertasMediosPago";
 import { formatSize } from "@/lib/tire-sizes";
 import { AccessoryCard } from "@/components/ui/AccessoryCard";
-import { getProductosDesdePOS, getAccesoriosDesdePOS } from "@/lib/pos-api";
+import { getProductosDesdePOS, getAccesoriosDesdePOS, getServiciosPrecios } from "@/lib/pos-api";
+import { preciosTaller } from "@/lib/servicios-seo";
+import { OfertaRelampago, type Relampago } from "./OfertaRelampago";
 import { getSelectedBranchSlug } from "@/lib/branch-server";
 import { canonical } from "@/lib/seo";
 import { OFFER_TIRE_SLUGS, esTuercaDeSeguridad } from "@/lib/offers";
@@ -112,10 +114,15 @@ function Atajo({ href, titulo, detalle }: { href: string; titulo: string; detall
 
 export default async function OfertasPage() {
   const sucursal = await getSelectedBranchSlug();
-  const [productos, accesorios] = await Promise.all([
+  const [productos, accesorios, servicios] = await Promise.all([
     getProductosDesdePOS(sucursal),
     getAccesoriosDesdePOS(sucursal),
+    getServiciosPrecios(undefined, sucursal),
   ]);
+  const pt = preciosTaller(servicios);
+  // Combo vs. por separado: el ahorro es real (alineado + 4 balanceos sueltos contra el precio del combo).
+  const separado = pt.alineadoAuto && pt.balanceoAuto ? pt.alineadoAuto + 4 * pt.balanceoAuto : 0;
+  const ahorroCombo = pt.comboAuto && separado > pt.comboAuto ? separado - pt.comboAuto : 0;
 
   const ofertas = OFFER_TIRE_SLUGS.map((slug) => productos.find((p) => p.slug === slug)).filter(
     (p): p is TireProduct => !!p
@@ -125,6 +132,22 @@ export default async function OfertasPage() {
     (a, b) => Number(b.enStock) - Number(a.enStock) || (b.vendidos ?? 0) - (a.vendidos ?? 0)
   );
   const masVendidas = porVenta.slice(0, 4);
+  // Oferta del día: las tres con mayor descuento que tienen stock.
+  const relampago: Relampago[] = [...ofertas]
+    .filter((p) => p.enStock && p.priceOld)
+    .sort((a, b) => pct(b) - pct(a))
+    .slice(0, 3)
+    .map((p) => ({
+      id: p.id,
+      slug: p.slug,
+      titulo: `${p.brand} ${p.modeloBase}`,
+      medida: formatSize(p.size),
+      imageUrl: p.imageUrl,
+      price: p.price,
+      priceOld: p.priceOld!,
+      pct: pct(p),
+      stock: p.stock ?? 0,
+    }));
   const auto = ofertas.filter((p) => !p.isAT && !p.isCarga);
   const camioneta = ofertas.filter((p) => p.isAT);
   const carga = ofertas.filter((p) => p.isCarga);
@@ -148,11 +171,13 @@ export default async function OfertasPage() {
   ];
 
   const secciones = [
+    { id: "relampago", titulo: "Oferta del día", n: relampago.length },
     { id: "mas-vendidas", titulo: "Las más elegidas", n: masVendidas.length },
     { id: "auto", titulo: "Auto", n: auto.length },
     { id: "camioneta", titulo: "Camioneta y 4x4", n: camioneta.length },
     { id: "carga", titulo: "Carga", n: carga.length },
     { id: "tuercas", titulo: "Tuercas de seguridad", n: tuercas.length },
+    { id: "servicios", titulo: "Servicios", n: ahorroCombo ? 3 : 0 },
   ].filter((x) => x.n > 0);
 
   return (
@@ -242,6 +267,8 @@ export default async function OfertasPage() {
               <SizeOrVehicleSearch compact hideLearnLink />
             </section>
 
+            {relampago.length === 3 && <OfertaRelampago items={relampago} />}
+
             {masVendidas.length > 0 && (
               <section id="mas-vendidas" className="scroll-mt-24">
                 <SectionHeading titulo="Las más elegidas" detalle="Las medidas que más salen del local, con descuento" cantidad={masVendidas.length} />
@@ -284,6 +311,40 @@ export default async function OfertasPage() {
                 </div>
                 <p className="mt-4 text-sm text-slate-600">
                   ¿Dudás cuál es la de tu auto? <Link href="/tuercas-antirrobo" className="font-bold text-slate-900 underline underline-offset-2">Buscala por marca y modelo</Link>.
+                </p>
+              </section>
+            )}
+
+            {ahorroCombo > 0 && pt.alineadoAuto && pt.balanceoAuto && pt.comboAuto && (
+              <section id="servicios" className="scroll-mt-24">
+                <SectionHeading titulo="Servicios" detalle="Hacelo todo en la misma visita y ahorrá · sin turno" cantidad={3} />
+                <div className="grid gap-4 md:grid-cols-3">
+                  <Link href="/servicios/combo-alineado-y-balanceado" className="relative flex flex-col rounded-2xl border-2 border-[#ff1e00] bg-white p-5 transition-shadow hover:shadow-xl md:order-none">
+                    <span className="absolute -top-3 left-5 rounded-md bg-[#ff1e00] px-2.5 py-1 text-xs font-black uppercase tracking-wide text-white">
+                      Ahorrás {fmt(ahorroCombo)}
+                    </span>
+                    <span className="font-display mt-2 text-2xl font-bold uppercase leading-tight text-slate-900">Alineado + balanceo de las 4 ruedas</span>
+                    <span className="mt-1 text-sm text-slate-500">Con rotación incluida · auto</span>
+                    <span className="mt-4 flex items-baseline gap-2">
+                      <span className="text-3xl font-black text-[#ff1e00]">{fmt(pt.comboAuto)}</span>
+                      <span className="text-base text-slate-400 line-through">{fmt(separado)}</span>
+                    </span>
+                    <span className="mt-1 text-xs font-bold text-slate-500">Por separado: alineado + 4 balanceos</span>
+                  </Link>
+                  <Link href="/servicios/alineacion" className="flex flex-col rounded-2xl border border-slate-200 bg-white p-5 transition-colors hover:border-[#ff1e00]">
+                    <span className="font-display text-2xl font-bold uppercase leading-tight text-slate-900">Alineado 3D</span>
+                    <span className="mt-1 text-sm text-slate-500">Corrección de camber, caster y convergencia</span>
+                    <span className="mt-4 text-3xl font-black text-slate-900">{fmt(pt.alineadoAuto)}</span>
+                  </Link>
+                  <Link href="/servicios/balanceo" className="flex flex-col rounded-2xl border border-slate-200 bg-white p-5 transition-colors hover:border-[#ff1e00]">
+                    <span className="font-display text-2xl font-bold uppercase leading-tight text-slate-900">Balanceo</span>
+                    <span className="mt-1 text-sm text-slate-500">Balanceadora computarizada · por rueda</span>
+                    <span className="mt-4 text-3xl font-black text-slate-900">{fmt(pt.balanceoAuto)}</span>
+                  </Link>
+                </div>
+                <p className="mt-4 flex items-center gap-2 text-sm font-bold text-slate-700">
+                  <span className="rounded-md bg-green-600 px-2 py-0.5 text-xs font-black text-white">GRATIS</span>
+                  Armado, desarmado y válvulas si comprás las cubiertas en el local.
                 </p>
               </section>
             )}

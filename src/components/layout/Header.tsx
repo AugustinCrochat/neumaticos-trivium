@@ -7,9 +7,10 @@ import Image from "next/image";
 import { useBranch } from "@/contexts/branch-context";
 import { SearchModal } from "@/components/ui/SearchModal";
 import { isVisaMasterPromoDay } from "@/lib/promo-day";
+import { PriceTagIcon } from "@/components/ui/PriceTagIcon";
 
 const NAV_LINKS = [
-  { href: "/ofertas", label: "% Ofertas", match: ["/ofertas"] },
+  { href: "/ofertas", label: "Ofertas", match: ["/ofertas"] },
   { href: "/catalogo", label: "Neumáticos", match: ["/catalogo", "/neumaticos", "/buscar", "/productos", "/marcas"] },
   { href: "/servicios", label: "Servicios", match: ["/servicios"] },
   { href: "/sucursales", label: "Sucursales", match: ["/sucursales"] },
@@ -124,8 +125,8 @@ export function Header() {
                     aria-current={active ? "page" : undefined}
                     className={
                       link.href === "/ofertas"
-                        ? `px-4 py-2 rounded-lg text-sm font-black text-white transition-colors ${
-                            active ? "bg-white !text-[#ff1e00]" : "bg-[#ff1e00] hover:bg-[#cc1800]"
+                        ? `ofertas-btn relative flex items-center gap-1.5 overflow-hidden rounded-lg px-4 py-2 text-sm font-black uppercase tracking-wide text-white shadow-md transition-all hover:scale-[1.04] ${
+                            active ? "bg-white !text-[#ff1e00]" : "bg-gradient-to-r from-[#ff1e00] to-[#ff5a2e]"
                           }`
                         : // Seleccionado: fondo tenue, texto blanco en negrita y barra roja
                           // debajo; al pasar el mouse la barra crece desde la izquierda.
@@ -136,7 +137,14 @@ export function Header() {
                           }`
                     }
                   >
-                    {link.label}
+                    {link.href === "/ofertas" ? (
+                      <>
+                        <PriceTagIcon className="h-5 w-auto" />
+                        {link.label}
+                      </>
+                    ) : (
+                      link.label
+                    )}
                   </Link>
                 );
               })}
@@ -199,8 +207,8 @@ export function Header() {
                   aria-current={active ? "page" : undefined}
                   className={
                     link.href === "/ofertas"
-                      ? `block px-4 py-2.5 rounded-lg text-sm font-black text-white transition-colors ${
-                          active ? "bg-white !text-[#ff1e00]" : "bg-[#ff1e00] hover:bg-[#cc1800]"
+                      ? `ofertas-btn relative flex items-center gap-2 overflow-hidden rounded-lg px-4 py-2.5 text-sm font-black uppercase tracking-wide text-white ${
+                          active ? "bg-white !text-[#ff1e00]" : "bg-gradient-to-r from-[#ff1e00] to-[#ff5a2e]"
                         }`
                       : `block rounded-lg border-l-4 px-4 py-2.5 text-sm transition-colors ${
                           active
@@ -210,6 +218,7 @@ export function Header() {
                   }
                   onClick={() => setMenuOpen(false)}
                 >
+                  {link.href === "/ofertas" && <PriceTagIcon className="h-5 w-auto" />}
                   {link.label}
                 </Link>
               );

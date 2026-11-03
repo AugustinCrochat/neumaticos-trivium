@@ -270,7 +270,7 @@ function toTireProduct(p: PosProducto): TireProduct | null {
     loadIndex,
     loadIndexDual,
     speedRating,
-    priceOld: OFFER_TIRE_SLUGS.includes(slug) ? withOfferPrice(p.precio) : undefined,
+    priceOld: OFFER_TIRE_SLUGS.includes(slug) ? withOfferPrice(p.precio, slug) : undefined,
   };
 }
 
