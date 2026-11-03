@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Keyboard } from "lucide-react";
 import { cargarMedidas } from "@/components/ui/TireSizeSearch";
 import { TireDiagram } from "@/components/ui/TireDiagram";
+import { MedidaHelpDialog } from "@/components/ui/MedidaHelpDialog";
 import type { MedidaCatalogo } from "@/app/api/medidas/route";
 import { sizeCatalogHref } from "@/lib/size-href";
 import { irA } from "@/lib/navigate";
@@ -31,6 +32,12 @@ export function MedidaPasos({
   const [p, setP] = useState("");
   // Opción sobre la que está el cursor: se muestra en el neumático antes de elegirla.
   const [previa, setPrevia] = useState("");
+  // Las medidas de ejemplo giran en el neumático, como en el buscador libre.
+  const [giro, setGiro] = useState(0);
+  useEffect(() => {
+    const t = window.setInterval(() => setGiro((i) => i + 1), 1800);
+    return () => window.clearInterval(t);
+  }, []);
 
   useEffect(() => {
     let vivo = true;
@@ -73,6 +80,17 @@ export function MedidaPasos({
     return [...porClave.values()].sort((a, b) => b.s - a.s || b.n - a.n).slice(0, 4);
   }, [base, w, p]);
 
+  // Ejemplos que respetan lo ya elegido: con 205 sólo giran medidas que existen con 205.
+  const ejemplos = useMemo(() => {
+    const lista = base
+      .filter((m) => (!w || String(m.w) === w) && (!p || String(m.p) === p))
+      .sort((a, b) => b.s - a.s || b.n - a.n)
+      .slice(0, 12)
+      .map((m) => ({ w: String(m.w), p: String(m.p), r: String(m.r) }));
+    return lista.length > 0 ? lista : [{ w: "205", p: "55", r: "16" }];
+  }, [base, w, p]);
+  const ejemplo = ejemplos[giro % ejemplos.length];
+
   function ir(ancho: string, perfil: string, rodado: string) {
     onNavigate?.();
     irA(sizeCatalogHref(ancho, perfil, rodado, economicos));
@@ -107,6 +125,10 @@ export function MedidaPasos({
         </button>
       )}
 
+      <div className="mb-2">
+        <MedidaHelpDialog compact />
+      </div>
+
       {/* El neumático se va completando con lo elegido y marca el paso actual. */}
       <div className="mx-auto mb-3 w-full max-w-[250px]">
         <TireDiagram
@@ -114,6 +136,7 @@ export function MedidaPasos({
           aspect={paso === "perfil" ? previa : p}
           rim={paso === "rodado" ? previa : ""}
           focused={paso === "ancho" ? "width" : paso === "perfil" ? "aspect" : "rim"}
+          placeholderSize={ejemplo}
           slim
         />
       </div>
@@ -175,9 +198,9 @@ export function MedidaPasos({
       <button
         type="button"
         onClick={onEscribir}
-        className="mt-3 w-full text-center text-xs font-bold text-slate-500 transition-colors hover:text-slate-800"
+        className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl border-2 border-slate-300 bg-white py-2.5 text-sm font-black text-navy-900 transition-colors hover:border-orange-500 hover:text-orange-600"
       >
-        Prefiero escribir la medida
+        <Keyboard className="h-4 w-4" aria-hidden="true" /> Prefiero escribir mi medida
       </button>
     </div>
   );
