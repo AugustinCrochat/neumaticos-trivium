@@ -688,7 +688,7 @@ export function ShopPage({
               aria-expanded={buscadorAbierto}
               className="flex w-full items-center justify-between gap-3 rounded-xl border border-slate-200 bg-slate-100 px-4 py-3 text-left font-bold text-navy-900 lg:hidden"
             >
-              <span className="min-w-0 truncate">{label ? `Medida ${label} · cambiar` : "Buscar por medida o por mi auto"}</span>
+              <span className="min-w-0 truncate">{label ? `Medida ${label} · cambiar` : "Buscar por medida o patente"}</span>
               <svg className={`h-5 w-5 shrink-0 text-slate-500 transition-transform ${buscadorAbierto ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>

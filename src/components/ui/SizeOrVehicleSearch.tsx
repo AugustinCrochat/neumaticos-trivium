@@ -30,6 +30,7 @@ function useEscritorio() {
 
 export function SizeOrVehicleSearch({
   compact = false,
+  enModal = false,
   initialMedida,
   forceVoiceButton = false,
   hideLearnLink = false,
@@ -39,6 +40,8 @@ export function SizeOrVehicleSearch({
   onLiveChange,
 }: {
   compact?: boolean;
+  /** Ya está dentro de una ventana (buscador flotante): se usan pestañas en vez de abrir otra ventana. */
+  enModal?: boolean;
   initialMedida?: string;
   forceVoiceButton?: boolean;
   hideLearnLink?: boolean;
@@ -85,7 +88,7 @@ export function SizeOrVehicleSearch({
   // La medida se elige con botones salvo en el catálogo (filtra en vivo mientras se escribe) o si ya viene una medida.
   const conBotones = !onLiveChange && !initialMedida;
 
-  if (!compact) {
+  if (!enModal) {
     const cerrar = () => {
       setAbierto(null);
       setPatenteManual(false);
@@ -110,29 +113,29 @@ export function SizeOrVehicleSearch({
     );
     return (
       <div className="w-full rounded-2xl border border-slate-200 bg-slate-100 p-5">
-        <h2 className="mb-3 text-center font-display text-2xl font-extrabold uppercase tracking-tight text-navy-900">
+        <h2 className={`mb-3 text-center font-display font-extrabold uppercase tracking-tight text-navy-900 ${compact ? "text-xl" : "text-2xl"}`}>
           Encontrá tus neumáticos
         </h2>
         {escritorio ? (
-          <div className="grid grid-cols-2 gap-3">
+          <div className={`grid gap-3 ${compact ? "grid-cols-1" : "grid-cols-2"}`}>
             <button
               type="button"
               onClick={() => setAbierto("medida")}
-              className="flex flex-col items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-5 text-center transition-colors hover:border-orange-400"
+              className={`flex items-center rounded-xl border border-slate-200 bg-white px-4 transition-colors hover:border-orange-400 ${compact ? "gap-3 py-3 text-left" : "flex-col gap-2 py-5 text-center"}`}
             >
               <HalfTireIcon className="h-9 w-[4.5rem] text-navy-900" />
-              <span className="text-base font-black text-navy-900">Por medida</span>
-              <span className="text-xs font-semibold text-slate-500">Ej: 205/55 R16</span>
+              <span className="flex flex-col"><span className="text-base font-black text-navy-900">Por medida</span>
+              <span className="text-xs font-semibold text-slate-500">Ej: 205/55 R16</span></span>
             </button>
             {PATENTE_HABILITADA && (
               <button
                 type="button"
                 onClick={() => setAbierto("patente")}
-                className="flex flex-col items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-5 text-center transition-colors hover:border-orange-400"
+                className={`flex items-center rounded-xl border border-slate-200 bg-white px-4 transition-colors hover:border-orange-400 ${compact ? "gap-3 py-3 text-left" : "flex-col gap-2 py-5 text-center"}`}
               >
                 <PlateIcon className="h-9 w-[4.5rem]" />
-                <span className="text-base font-black text-navy-900">Por patente</span>
-                <span className="text-xs font-semibold text-slate-500">Ej: AB 123 CD</span>
+                <span className="flex flex-col"><span className="text-base font-black text-navy-900">Por patente</span>
+                <span className="text-xs font-semibold text-slate-500">Ej: AB 123 CD</span></span>
               </button>
             )}
             {!PATENTE_HABILITADA && (
@@ -140,11 +143,11 @@ export function SizeOrVehicleSearch({
                 type="button"
                 onClick={() => setAbierto("vehiculo")}
                 onMouseEnter={loadVehiculos}
-                className="flex flex-col items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-5 text-center transition-colors hover:border-orange-400"
+                className={`flex items-center rounded-xl border border-slate-200 bg-white px-4 transition-colors hover:border-orange-400 ${compact ? "gap-3 py-3 text-left" : "flex-col gap-2 py-5 text-center"}`}
               >
                 <Car className="h-9 w-9 text-navy-900" aria-hidden="true" />
-                <span className="text-base font-black text-navy-900">Por mi auto</span>
-                <span className="text-xs font-semibold text-slate-500">Marca, modelo y año</span>
+                <span className="flex flex-col"><span className="text-base font-black text-navy-900">Por mi auto</span>
+                <span className="text-xs font-semibold text-slate-500">Marca, modelo y año</span></span>
               </button>
             )}
           </div>

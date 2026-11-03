@@ -77,8 +77,24 @@ export function MedidaPasos({
       const prev = porClave.get(k);
       if (!prev || m.s > prev.s) porClave.set(k, m);
     }
-    return [...porClave.values()].sort((a, b) => b.s - a.s || b.n - a.n).slice(0, 4);
+    return [...porClave.values()].sort((a, b) => b.s - a.s || b.n - a.n).slice(0, 12);
   }, [base, w, p]);
+
+  // Se ven de a 4; si hay más, van rotando (y se frenan con el cursor encima).
+  const [paginaPop, setPaginaPop] = useState(0);
+  const [pausaPop, setPausaPop] = useState(false);
+  useEffect(() => {
+    if (populares.length <= 4 || pausaPop) return;
+    const t = window.setInterval(() => setPaginaPop((i) => i + 1), 4000);
+    return () => window.clearInterval(t);
+  }, [populares.length, pausaPop]);
+  const visibles = useMemo(() => {
+    if (populares.length <= 4) return populares;
+    const paginas = Math.ceil(populares.length / 4);
+    const ini = (paginaPop % paginas) * 4;
+    const cola = populares.slice(ini, ini + 4);
+    return cola.length === 4 ? cola : [...cola, ...populares.slice(0, 4 - cola.length)];
+  }, [populares, paginaPop]);
 
   // Ejemplos que respetan lo ya elegido: con 205 sólo giran medidas que existen con 205.
   const ejemplos = useMemo(() => {
@@ -176,8 +192,8 @@ export function MedidaPasos({
           <p className="mb-2 text-xs font-black uppercase tracking-wide text-slate-500">
             {w ? `Las medidas más buscadas con ${w}${p ? `/${p}` : ""}` : "Las medidas más buscadas"}
           </p>
-          <div className="grid grid-cols-2 gap-2">
-            {populares.map((m) => (
+          <div className="grid grid-cols-2 gap-2" onMouseEnter={() => setPausaPop(true)} onMouseLeave={() => setPausaPop(false)}>
+            {visibles.map((m) => (
               <button
                 key={`${m.w}-${m.p}-${m.r}`}
                 type="button"

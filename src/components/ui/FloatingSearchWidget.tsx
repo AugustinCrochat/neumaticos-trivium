@@ -154,7 +154,7 @@ export function FloatingSearchWidget() {
             </div>
 
             <div className="p-4 sm:p-6 overflow-y-auto">
-              <SizeOrVehicleSearch compact autoFocus onNavigate={() => setIsOpen(false)} />
+              <SizeOrVehicleSearch compact enModal autoFocus onNavigate={() => setIsOpen(false)} />
             </div>
           </div>
         </div>
