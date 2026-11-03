@@ -94,12 +94,15 @@ export function PlateLookup({
   onFound,
   autoFocus,
   pequena,
+  onNoEncontrada,
 }: {
   vehiculos: VehiculoOption[];
   onFound: (v: VehiculoOption, anio: number | null, version: string) => void;
   autoFocus?: boolean;
   /** Chapa más chica (buscador apilado con las tres opciones a la vista). */
   pequena?: boolean;
+  /** La patente no se pudo resolver: quien llama pasa a elegir el auto a mano. */
+  onNoEncontrada?: (motivo: string) => void;
 }) {
   const [patente, setPatente] = useState("");
   const [token, setToken] = useState<string | null>(null);
@@ -133,6 +136,9 @@ export function PlateLookup({
 
   const valida = PATENTE_RE.test(patente);
 
+  // Si quien usa el buscador sabe elegir el auto a mano, se le pasa el control; si no, se muestra el aviso.
+  const falla = (texto: string) => (onNoEncontrada ? onNoEncontrada(texto) : setMensaje(texto));
+
   const buscar = async () => {
     if (patente.length < 6 || !token || cargando) return;
     ultima.current = patente;
@@ -145,21 +151,21 @@ export function PlateLookup({
         body: JSON.stringify({ patente, token }),
       });
       if (res.status === 404) {
-        setMensaje("No encontramos esa patente. Probá con “Por mi auto”.");
+        falla("No encontramos esa patente. Elegí tu auto de la lista.");
       } else if (res.status === 400) {
         setMensaje("Esa patente no tiene un formato válido (ej. AB 123 CD o ABC 123). Revisala.");
       } else if (res.status === 429) {
-        setMensaje("Hiciste muchas consultas seguidas. Probá en unos minutos o usá “Por mi auto”.");
+        falla("Hiciste muchas consultas seguidas. Elegí tu auto de la lista.");
       } else if (!res.ok) {
-        setMensaje("La búsqueda por patente no está disponible ahora. Usá “Por mi auto”.");
+        falla("La búsqueda por patente no está disponible ahora. Elegí tu auto de la lista.");
       } else {
         const d = (await res.json()) as { marca: string; modelo: string | null; anio: number | null };
         const r = resolverPatente(d.marca, d.modelo, vehiculos);
         if (r) onFound(r.vehiculo, d.anio, r.version);
-        else setMensaje(`Encontramos ${d.marca} ${d.modelo ?? ""}, pero todavía no lo tenemos en la lista. Probá con “Por mi auto”.`);
+        else falla(`Encontramos ${d.marca} ${d.modelo ?? ""}, pero todavía no lo tenemos en la lista. Elegí tu auto de la lista.`);
       }
     } catch {
-      setMensaje("No pudimos consultar la patente. Probá con “Por mi auto”.");
+      falla("No pudimos consultar la patente. Elegí tu auto de la lista.");
     }
     // El token de Turnstile sirve una sola vez.
     setToken(null);

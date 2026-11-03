@@ -10,7 +10,6 @@ import { VehicleSizeSearch } from "@/components/ui/VehicleSizeSearch";
 import { MedidaPasos } from "@/components/ui/MedidaPasos";
 import { PlateSearch } from "@/components/ui/PlateSearch";
 import { PATENTE_HABILITADA } from "@/components/ui/PlateLookup";
-import { EconomicChip } from "@/components/ui/EconomicChip";
 import { useVehicle } from "@/contexts/vehicle-context";
 
 export function SizeOrVehicleSearch({
@@ -42,7 +41,8 @@ export function SizeOrVehicleSearch({
   // búsqueda que está viendo ya venía filtrada, ver ShopPage).
   // Fuera del catálogo (compact) la medida se elige en pasos, con botones; se puede pasar a escribirla.
   const [escribir, setEscribir] = useState(false);
-  const [economicos, setEconomicos] = useState(initialEconomicos);
+  // El filtro de económicos ya no se ofrece en el buscador: vive en el catálogo y los resultados.
+  const economicos = initialEconomicos;
   // El listado completo del POS solo hace falta acá. Se pide al entrar a la
   // pestaña, no en cada carga de página del sitio.
   useEffect(() => {
@@ -85,9 +85,9 @@ export function SizeOrVehicleSearch({
     );
     return (
       <div className="w-full rounded-2xl border border-slate-200 bg-slate-100 p-5">
-        <div className="mb-3 flex justify-end">
-          <EconomicChip checked={economicos} onChange={setEconomicos} />
-        </div>
+        <h2 className="mb-3 text-center font-display text-2xl font-extrabold uppercase tracking-tight text-navy-900">
+          Encontrá tus neumáticos
+        </h2>
         {PATENTE_HABILITADA && (
           <div className="mb-3 rounded-xl border border-slate-200 bg-white p-4">
             <PlateSearch economicos={economicos} onNavigate={onNavigate} autoFocus={autoFocus} pequena />
@@ -95,7 +95,8 @@ export function SizeOrVehicleSearch({
         )}
         <div className="space-y-2">
           {barra("medida", HalfTireIcon, "Por medida", "Ej: 205/55 R16")}
-          {barra("vehiculo", Car, "Por mi auto", "Marca, modelo y año")}
+          {/* Con la patente habilitada, si no se encuentra el auto la misma búsqueda pasa a elegir marca y modelo. */}
+          {!PATENTE_HABILITADA && barra("vehiculo", Car, "Por mi auto", "Marca, modelo y año")}
         </div>
         {abierto &&
           createPortal(
@@ -172,6 +173,7 @@ export function SizeOrVehicleSearch({
         >
           Por medida
         </button>
+        {!PATENTE_HABILITADA && (
         <button
           onClick={() => setMode("vehiculo")}
           // Adelantar el fetch al primer indicio de intención, así la lista ya
@@ -183,11 +185,7 @@ export function SizeOrVehicleSearch({
         >
           Por mi auto
         </button>
-      </div>
-
-      {/* En el catálogo (compact) el filtro ya está en los filtros del escritorio. */}
-      <div className={compact ? "lg:hidden" : undefined}>
-        <EconomicChip checked={economicos} onChange={setEconomicos} />
+        )}
       </div>
       </div>
 

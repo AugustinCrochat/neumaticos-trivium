@@ -22,11 +22,36 @@ export function PlateSearch({
   autoFocus?: boolean;
   pequena?: boolean;
 }) {
-  const { vehiculos, setSelectedVehicle } = useVehicle();
+  const { vehiculos, setSelectedVehicle, clearSelectedVehicle, loadVehiculos } = useVehicle();
   const [anio, setAnio] = useState<number | null>(null);
   const [version, setVersion] = useState("");
   const [encontrado, setEncontrado] = useState(false);
   const [sugerida, setSugerida] = useState(false);
+  // Patente no encontrada: la misma búsqueda pasa a elegir marca, modelo y año.
+  const [aviso, setAviso] = useState<string | null>(null);
+
+  if (aviso && !encontrado) {
+    return (
+      <div className="w-full">
+        <p className="mb-3 rounded-lg bg-slate-50 px-3 py-2 text-center text-sm text-slate-600">{aviso}</p>
+        <VehicleSizeSearch
+          economicos={economicos}
+          onNavigate={onNavigate}
+          onClear={() => {}}
+        />
+        <button
+          type="button"
+          onClick={() => {
+            clearSelectedVehicle();
+            setAviso(null);
+          }}
+          className="mt-3 w-full text-center text-xs font-bold text-slate-500 transition-colors hover:text-slate-800"
+        >
+          Probar con otra patente
+        </button>
+      </div>
+    );
+  }
 
   if (encontrado) {
     return (
@@ -47,6 +72,11 @@ export function PlateSearch({
       vehiculos={vehiculos}
       autoFocus={autoFocus}
       pequena={pequena}
+      onNoEncontrada={(m) => {
+        loadVehiculos();
+        clearSelectedVehicle();
+        setAviso(m);
+      }}
       onFound={(v, a, ver) => {
         const todas = getSizesForVehicle(v.marca, v.modelo);
         const { sizes } = todas ? medidasParaAnio(todas, a) : { sizes: null };
