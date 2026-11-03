@@ -104,7 +104,7 @@ export function SizeOrVehicleSearch({
         aria-expanded={abierto === id}
         className="flex w-full items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 text-left transition-colors hover:border-orange-400"
       >
-        <Icono className={`h-6 shrink-0 text-navy-900 ${Icono === HalfTireIcon || Icono === PlateIcon ? "w-11" : "w-6"}`} aria-hidden="true" />
+        <Icono className={`shrink-0 text-navy-900 ${Icono === PlateIcon ? "h-8 w-[4.75rem]" : Icono === HalfTireIcon ? "h-6 w-11" : "h-6 w-6"}`} aria-hidden="true" />
         <span className="min-w-0 flex-1">
           <span className="block text-sm font-black text-navy-900">{titulo}</span>
           <span className="block truncate text-xs font-semibold text-slate-500">{ejemplo}</span>
@@ -134,7 +134,7 @@ export function SizeOrVehicleSearch({
                 onClick={() => setAbierto("patente")}
                 className={`flex items-center rounded-xl border border-slate-200 bg-white px-4 transition-colors hover:border-orange-400 ${compact ? "gap-3 py-3 text-left" : "flex-col gap-2 py-5 text-center"}`}
               >
-                <PlateIcon className="h-10 w-[5.5rem]" />
+                <PlateIcon className="h-14 w-32" />
                 <span className="flex flex-col"><span className="text-base font-black text-navy-900">Por patente</span>
                 <span className="text-xs font-semibold text-slate-500">Ej: AB 123 CD</span></span>
               </button>
@@ -179,7 +179,7 @@ export function SizeOrVehicleSearch({
                     ) : abierto === "vehiculo" || patenteManual ? (
                       <Car className="h-6 w-6" aria-hidden="true" />
                     ) : (
-                      <PlateIcon className="h-6 w-[3.4rem]" />
+                      <PlateIcon className="h-8 w-[4.75rem]" />
                     )}
                     {titulos[abierto]}
                   </h2>
@@ -270,7 +270,7 @@ export function SizeOrVehicleSearch({
             className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors ${mode === "patente" ? "bg-black text-white" : "text-slate-500 hover:text-slate-800"}`}
           >
             <span className="inline-flex items-center gap-1.5">
-              <PlateIcon className="h-5 w-[2.7rem]" /> Por patente
+              <PlateIcon className="h-7 w-16" /> Por patente
             </span>
           </button>
         )}

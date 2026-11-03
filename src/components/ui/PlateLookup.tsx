@@ -108,7 +108,7 @@ function SelectorFormato({ estilo, onChange }: { estilo: EstiloPatente; onChange
         }`}
       >
         {/* Misma proporción real que cada chapa (400×130 y 294×129 mm), con sus letras de ejemplo. */}
-        <PlateIcon formato={valor} className="h-8 w-24" />
+        <PlateIcon formato={valor} className="h-11 w-36" />
         <span className="text-xs font-black leading-tight text-navy-900">{texto}</span>
       </button>
     );
