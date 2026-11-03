@@ -52,7 +52,7 @@ function Chapa({
   // La chapa es una imagen (SVG propio) y las letras se escriben en vivo encima.
   return (
     <div
-      className="relative mx-auto w-full max-w-sm"
+      className="relative mx-auto w-full max-w-sm [container-type:inline-size]"
       style={{
         aspectRatio: "400 / 130",
         backgroundImage: `url(/images/patente/${mercosur ? "chapa-mercosur" : "chapa-anterior"}.svg)`,
@@ -72,10 +72,10 @@ function Chapa({
         autoComplete="off"
         spellCheck={false}
         inputMode="text"
-        className={`absolute bg-transparent text-center font-display font-bold uppercase leading-none tracking-[0.06em] outline-none ${
+        className={`absolute bg-transparent text-center font-display uppercase leading-none tracking-[0.06em] outline-none ${
           mercosur
-            ? "inset-x-[8%] bottom-[8%] top-[26%] w-[84%] text-[3.4rem] text-zinc-700 placeholder:text-zinc-300 sm:text-[3.8rem]"
-            : "inset-x-[5%] bottom-[15.5%] top-[22.3%] w-[90%] text-[3.9rem] text-white placeholder:text-zinc-700 sm:text-[4.5rem]"
+            ? "inset-x-[8%] bottom-[8%] top-[26%] w-[84%] text-[14.5cqw] font-bold text-zinc-700 placeholder:text-zinc-300"
+            : "inset-x-[5%] bottom-[15.5%] top-[22.3%] w-[90%] text-[17cqw] font-semibold text-white placeholder:text-zinc-700"
         }`}
       />
     </div>
