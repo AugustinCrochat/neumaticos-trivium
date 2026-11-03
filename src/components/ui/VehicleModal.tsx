@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useVehicle } from "@/contexts/vehicle-context";
 import { VehicleCombobox } from "@/components/ui/VehicleCombobox";
+import { PlateLookup } from "@/components/ui/PlateLookup";
 
 export function VehicleModal() {
   const { vehiculos, loadVehiculos, selectedVehicle, setSelectedVehicle, clearSelectedVehicle, isModalOpen, closeModal } = useVehicle();
@@ -68,6 +69,8 @@ export function VehicleModal() {
               </button>
             </div>
           )}
+
+          <PlateLookup vehiculos={vehiculos} onSelect={setSelectedVehicle} />
 
           <VehicleCombobox vehiculos={vehiculos} onSelect={setSelectedVehicle} autoFocus />
         </div>
