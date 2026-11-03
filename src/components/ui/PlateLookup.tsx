@@ -41,18 +41,20 @@ function Chapa({
   onChange,
   onEnter,
   autoFocus,
+  pequena,
 }: {
   valor: string;
   onChange: (normalizada: string) => void;
   onEnter: () => void;
   autoFocus?: boolean;
+  pequena?: boolean;
 }) {
   const estilo = estiloPatente(valor);
   const mercosur = estilo === "mercosur";
   // La chapa es una imagen (SVG propio) y las letras se escriben en vivo encima.
   return (
     <div
-      className="relative mx-auto w-full max-w-sm [container-type:inline-size]"
+      className={`relative mx-auto w-full [container-type:inline-size] ${pequena ? "max-w-[17rem]" : "max-w-sm"}`}
       style={{
         aspectRatio: "400 / 130",
         backgroundImage: `url(/images/patente/${mercosur ? "chapa-mercosur" : "chapa-anterior"}.svg)`,
@@ -91,10 +93,13 @@ export function PlateLookup({
   vehiculos,
   onFound,
   autoFocus,
+  pequena,
 }: {
   vehiculos: VehiculoOption[];
   onFound: (v: VehiculoOption, anio: number | null, version: string) => void;
   autoFocus?: boolean;
+  /** Chapa más chica (buscador apilado con las tres opciones a la vista). */
+  pequena?: boolean;
 }) {
   const [patente, setPatente] = useState("");
   const [token, setToken] = useState<string | null>(null);
@@ -173,7 +178,7 @@ export function PlateLookup({
   return (
     <div className="w-full">
       <p className="mb-2 text-center text-sm font-bold text-navy-900">Buscá tu auto por patente</p>
-      <Chapa valor={patente} onChange={setPatente} onEnter={buscar} autoFocus={autoFocus} />
+      <Chapa valor={patente} onChange={setPatente} onEnter={buscar} autoFocus={autoFocus} pequena={pequena} />
       <div ref={cajaRef} className="mt-2 flex justify-center" />
       <div className="mt-3 flex gap-2">
         <button

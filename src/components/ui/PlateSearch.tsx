@@ -15,10 +15,12 @@ export function PlateSearch({
   economicos,
   onNavigate,
   autoFocus,
+  pequena,
 }: {
   economicos?: boolean;
   onNavigate?: () => void;
   autoFocus?: boolean;
+  pequena?: boolean;
 }) {
   const { vehiculos, setSelectedVehicle } = useVehicle();
   const [anio, setAnio] = useState<number | null>(null);
@@ -44,6 +46,7 @@ export function PlateSearch({
     <PlateLookup
       vehiculos={vehiculos}
       autoFocus={autoFocus}
+      pequena={pequena}
       onFound={(v, a, ver) => {
         const todas = getSizesForVehicle(v.marca, v.modelo);
         const { sizes } = todas ? medidasParaAnio(todas, a) : { sizes: null };

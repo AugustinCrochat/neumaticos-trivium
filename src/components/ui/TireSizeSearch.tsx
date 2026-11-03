@@ -14,7 +14,7 @@ import { irA } from "@/lib/navigate";
 // primera vez que alguien enfoca el buscador. Si falla, el buscador sigue con la
 // lista fija de medidas populares.
 let medidasPromise: Promise<MedidaCatalogo[] | null> | null = null;
-function cargarMedidas(): Promise<MedidaCatalogo[] | null> {
+export function cargarMedidas(): Promise<MedidaCatalogo[] | null> {
   medidasPromise ??= fetch("/api/medidas")
     .then((r) => (r.ok ? r.json() : null))
     .then((d: { medidas: MedidaCatalogo[] } | null) => d?.medidas ?? null)
