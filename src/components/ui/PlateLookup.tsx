@@ -58,8 +58,11 @@ function Chapa({
   const mercosur = estilo === "mercosur";
   // La chapa es una imagen (SVG propio) y las letras se escriben en vivo encima.
   return (
+    // El tope de ancho es el de la Mercosur; la anterior mide el 73,5 % de ese ancho (si el tope
+    // se pusiera en la propia chapa, las dos terminarían igual de anchas).
+    <div className={`mx-auto w-full ${pequena ? "max-w-full" : "max-w-sm"}`}>
     <div
-      className={`relative mx-auto w-full [container-type:inline-size] ${pequena ? "max-w-full" : "max-w-sm"}`}
+      className="relative mx-auto w-full [container-type:inline-size]"
       style={{
         // La anterior es más angosta que la Mercosur (294 de 400 mm) y casi igual de alta.
         width: mercosur ? undefined : `${(294 / 400) * 100}%`,
@@ -88,6 +91,7 @@ function Chapa({
             : "inset-x-[5%] bottom-[15.5%] top-[22.3%] w-[90%] text-[19.5cqw] font-semibold text-white placeholder:text-zinc-700"
         }`}
       />
+    </div>
     </div>
   );
 }
