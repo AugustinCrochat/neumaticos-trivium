@@ -1,12 +1,42 @@
-/** Chapa patente esquemática (franja azul, cuerpo blanco y letras de ejemplo), para el mosaico "Por patente". */
+"use client";
+
+import { useEffect, useState } from "react";
+
+/**
+ * Chapa en miniatura para el acceso "Por patente": alterna entre el formato
+ * Mercosur (400×130 mm) y el anterior (294×129 mm) con las proporciones reales
+ * y el mismo arte que las chapas grandes (bandera, logo Mercosur, escudo).
+ * El tamaño que se pasa en `className` es la caja: cada chapa ocupa todo el
+ * ancho y queda centrada en alto.
+ */
 export function PlateIcon({ className }: { className?: string }) {
+  const [mercosur, setMercosur] = useState(true);
+  useEffect(() => {
+    const t = setInterval(() => setMercosur((m) => !m), 2600);
+    return () => clearInterval(t);
+  }, []);
+
   return (
-    <svg viewBox="0 0 64 32" className={className} aria-hidden="true">
-      <rect width="64" height="32" rx="5" fill="#0035a1" />
-      <path d="M2.5 9h59v17.5a3 3 0 0 1-3 3h-53a3 3 0 0 1-3-3Z" fill="#fff" />
-      <text x="32" y="23.5" textAnchor="middle" textLength="50" lengthAdjust="spacingAndGlyphs" fontFamily="Arial, Helvetica, sans-serif" fontWeight="700" fontSize="11.5" fill="#161616">
-        AB 123 CD
-      </text>
-    </svg>
+    <span aria-hidden="true" className={`inline-flex items-center justify-center ${className ?? ""}`}>
+      <span
+        className="relative block w-full [container-type:inline-size]"
+        style={{
+          aspectRatio: mercosur ? "400 / 130" : "294 / 129",
+          backgroundImage: `url(/images/patente/${mercosur ? "chapa-mercosur" : "chapa-anterior"}.svg)`,
+          backgroundSize: "100% 100%",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
+        <span
+          className={`absolute text-center font-display uppercase leading-none ${
+            mercosur
+              ? "inset-x-[8%] bottom-[8%] top-[26%] flex items-center justify-center text-[14.5cqw] font-bold tracking-[0.06em] text-zinc-700"
+              : "inset-x-[5%] bottom-[15.5%] top-[22.3%] flex items-center justify-center text-[19.5cqw] font-semibold tracking-[0.06em] text-white"
+          }`}
+        >
+          {mercosur ? "AB 123 CD" : "ABC 123"}
+        </span>
+      </span>
+    </span>
   );
 }

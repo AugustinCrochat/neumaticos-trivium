@@ -56,7 +56,8 @@ function Chapa({
     <div
       className={`relative mx-auto w-full [container-type:inline-size] ${pequena ? "max-w-full" : "max-w-sm"}`}
       style={{
-        aspectRatio: "400 / 130",
+        // Medidas reales: Mercosur 400×130 mm, formato anterior 294×129 mm.
+        aspectRatio: mercosur ? "400 / 130" : "294 / 129",
         backgroundImage: `url(/images/patente/${mercosur ? "chapa-mercosur" : "chapa-anterior"}.svg)`,
         backgroundSize: "100% 100%",
         backgroundRepeat: "no-repeat",
@@ -77,7 +78,7 @@ function Chapa({
         className={`absolute bg-transparent text-center font-display uppercase leading-none tracking-[0.06em] outline-none ${
           mercosur
             ? "inset-x-[8%] bottom-[8%] top-[26%] w-[84%] text-[14.5cqw] font-bold text-zinc-700 placeholder:text-zinc-300"
-            : "inset-x-[5%] bottom-[15.5%] top-[22.3%] w-[90%] text-[17cqw] font-semibold text-white placeholder:text-zinc-700"
+            : "inset-x-[5%] bottom-[15.5%] top-[22.3%] w-[90%] text-[19.5cqw] font-semibold text-white placeholder:text-zinc-700"
         }`}
       />
     </div>

@@ -134,7 +134,7 @@ export function SizeOrVehicleSearch({
                 onClick={() => setAbierto("patente")}
                 className={`flex items-center rounded-xl border border-slate-200 bg-white px-4 transition-colors hover:border-orange-400 ${compact ? "gap-3 py-3 text-left" : "flex-col gap-2 py-5 text-center"}`}
               >
-                <PlateIcon className="h-9 w-[4.5rem]" />
+                <PlateIcon className="h-10 w-[5.5rem]" />
                 <span className="flex flex-col"><span className="text-base font-black text-navy-900">Por patente</span>
                 <span className="text-xs font-semibold text-slate-500">Ej: AB 123 CD</span></span>
               </button>
@@ -179,7 +179,7 @@ export function SizeOrVehicleSearch({
                     ) : abierto === "vehiculo" || patenteManual ? (
                       <Car className="h-6 w-6" aria-hidden="true" />
                     ) : (
-                      <PlateIcon className="h-5 w-10" />
+                      <PlateIcon className="h-6 w-[3.4rem]" />
                     )}
                     {titulos[abierto]}
                   </h2>
@@ -270,7 +270,7 @@ export function SizeOrVehicleSearch({
             className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors ${mode === "patente" ? "bg-black text-white" : "text-slate-500 hover:text-slate-800"}`}
           >
             <span className="inline-flex items-center gap-1.5">
-              <PlateIcon className="h-4 w-8" /> Por patente
+              <PlateIcon className="h-5 w-[2.7rem]" /> Por patente
             </span>
           </button>
         )}
