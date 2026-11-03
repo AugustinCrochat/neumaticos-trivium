@@ -105,7 +105,7 @@ const SECTIONS: Section[] = [
     foto: { src: "/images/local/fachada-local-neumaticos-trivium-cordoba.webp", alt: "Fachada del local de Neumáticos Trivium en Argüello, Córdoba" },
     items: [
       { href: "/sucursales", label: "Sucursales", hint: "Direcciones, horarios y cómo llegar." },
-      { href: "/neumaticos-en", label: "Zonas donde atendemos", hint: "Localidades y barrios de Córdoba." },
+      { href: "/neumaticos-en", label: "Zonas donde atendemos", hint: "Localidades y barrios de Córdoba y Buenos Aires." },
       { href: "/contacto", label: "Contacto", hint: "WhatsApp, teléfono y mail." },
       { href: "/garantia-neumaticos", label: "Garantía de 1 año", hint: "Qué cubre y cómo se reclama." },
       { href: "/politica-de-devoluciones", label: "Cambios y devoluciones", hint: "Arrepentimiento y cambios a 30 días." },

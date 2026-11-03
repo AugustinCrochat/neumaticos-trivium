@@ -205,6 +205,11 @@ export default async function LocalidadPage({ params }: Props) {
         <div>
         <p className="mb-2 text-sm font-black uppercase tracking-widest text-orange-500">
           {localidad.name}, {localidad.province}
+          {branch.apertura && (
+            <span className="ml-3 rounded-full bg-navy-100 px-3 py-1 text-xs font-black normal-case tracking-normal text-navy-800">
+              Abrimos {branch.apertura}
+            </span>
+          )}
         </p>
         <h1 className="text-3xl font-black leading-tight text-navy-900 md:text-5xl">
           {localidad.esCabecera && !branch.provisorio ? `Cubiertas en ${localidad.name}, barrio por barrio` : `Neumáticos baratos en ${localidad.name}`}
@@ -252,6 +257,28 @@ export default async function LocalidadPage({ params }: Props) {
           </div>
         )}
       </header>
+
+      {/* Resumen citable: la respuesta directa a "dónde compro neumáticos en X" */}
+      <section className="mb-10 rounded-2xl border-l-4 border-[#ff1e00] bg-navy-50 p-5 md:p-6">
+        <h2 className="text-sm font-black uppercase tracking-widest text-navy-700">Respuesta rápida</h2>
+        <p data-speakable className="mt-2 text-base leading-relaxed text-slate-800 md:text-lg">
+          {branch.apertura ? (
+            <>
+              Para comprar neumáticos en {localidad.name}, Neumáticos Trivium abre su local de <strong>{branch.shortName}</strong>{" "}
+              ({branch.address}, {branch.city}) <strong>{branch.apertura}</strong>, a unos {localidad.minutosHastaSucursal} minutos.
+              Mientras tanto podés ver precios y medidas en la web y consultar por WhatsApp. Todos los neumáticos son nuevos y tienen
+              1 año de garantía por defecto de fabricación.
+            </>
+          ) : (
+            <>
+              Neumáticos Trivium vende neumáticos nuevos en {localidad.name} desde su local de <strong>{branch.shortName}</strong>{" "}
+              ({branch.address}, {branch.city}), a unos {localidad.minutosHastaSucursal} minutos. Horario: {branch.hours}, sin turno.
+              Colocación y válvulas sin cargo al comprar ahí, alineación y balanceo en el mismo local y 1 año de garantía por defecto de
+              fabricación.
+            </>
+          )}
+        </p>
+      </section>
 
       {!branch.provisorio && (
         <ul className="mb-10 grid grid-cols-2 gap-3 md:grid-cols-4">
