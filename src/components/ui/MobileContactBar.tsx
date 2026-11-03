@@ -14,16 +14,43 @@ import { DirectionsIcon } from "@/components/ui/DirectionsIcon";
  * va "Avisame", que deja el pedido por WhatsApp para avisarle el día de la
  * apertura.
  *
+ * Sin sucursal elegida, los contactos no tienen a quién apuntar: toda la barra
+ * es un solo botón que abre el selector de sucursal.
+ *
  * Los clics se miden igual que en el resto del sitio: WhatsApp por
  * goToWhatsApp, y Maps y tel: por el listener global de GoogleAdsTag.
  */
 export function MobileContactBar() {
-  const { selectedBranch: branch } = useBranch();
+  const { selectedBranch: branch, hasConfirmedBranch, openModal } = useBranch();
   const tel = `tel:${branch.phone.replace(/[^\d+]/g, "")}`;
 
   function whatsapp(e: React.MouseEvent<HTMLAnchorElement>, texto: string) {
     e.preventDefault();
     goToWhatsApp(waHref(branch.whatsapp, texto));
+  }
+
+  if (!hasConfirmedBranch) {
+    return (
+      <>
+        <div aria-hidden className="h-16 sm:hidden" />
+        <nav
+          aria-label="Contacto rápido"
+          className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white pb-[env(safe-area-inset-bottom)] shadow-[0_-4px_16px_rgba(0,0,0,0.08)] sm:hidden"
+        >
+          <button
+            type="button"
+            onClick={openModal}
+            className="flex w-full items-center justify-center gap-2 bg-[#ff1e00] py-4 text-sm font-black uppercase tracking-wide text-white"
+          >
+            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden>
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            Elegí tu sucursal
+          </button>
+        </nav>
+      </>
+    );
   }
 
   const item = "flex flex-1 flex-col items-center justify-center gap-0.5 py-2 text-[11px] font-black uppercase tracking-wide";
