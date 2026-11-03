@@ -348,6 +348,16 @@ export function ProductImageGallery({
                 style={{ left: lensStyle.left, top: lensStyle.top, width: lensStyle.width, height: lensStyle.height }}
               />
             )}
+            {current.kind === "etiqueta" && eprelUrl && (
+              <span className="pointer-events-none absolute inset-x-2 bottom-2 flex items-center justify-center gap-2 rounded-xl bg-[#003399] px-3 py-2 text-center text-[11px] font-bold leading-tight text-white shadow-lg md:text-xs">
+                <svg className="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+                <span>
+                  Verificá este neumático en el registro oficial de la Unión Europea (EPREL)
+                </span>
+              </span>
+            )}
             {current.kind !== "sucursal" && (
               <span className={`absolute right-3 top-3 w-8 h-8 rounded-full bg-white/90 shadow-md flex items-center justify-center text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity`}>
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
