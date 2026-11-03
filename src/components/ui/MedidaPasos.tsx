@@ -161,10 +161,9 @@ export function MedidaPasos({
               onMouseLeave={() => setPrevia("")}
               onFocus={() => setPrevia(o)}
               onBlur={() => setPrevia("")}
-              style={{ borderColor: color, color }}
-              className="rounded-lg border-2 bg-white py-2.5 text-sm font-black transition-colors hover:text-white"
-              onPointerOver={(e) => (e.currentTarget.style.backgroundColor = color)}
-              onPointerOut={(e) => (e.currentTarget.style.backgroundColor = "")}
+              // Con el cursor encima se rellena con el color del paso y el número pasa a blanco.
+              style={{ borderColor: color, color: previa === o ? "#ffffff" : color, backgroundColor: previa === o ? color : undefined }}
+              className="rounded-lg border-2 bg-white py-2.5 text-sm font-black transition-colors"
             >
               {o}
             </button>
