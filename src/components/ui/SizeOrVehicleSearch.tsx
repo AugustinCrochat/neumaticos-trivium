@@ -3,7 +3,8 @@
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import { X } from "lucide-react";
-import { Car, ChevronDown, RectangleHorizontal } from "lucide-react";
+import { Car, ChevronDown, LayoutGrid, RectangleHorizontal } from "lucide-react";
+import { PlateIcon } from "@/components/ui/PlateIcon";
 import { HalfTireIcon } from "@/components/ui/HalfTireIcon";
 import { TireSizeSearch } from "@/components/ui/TireSizeSearch";
 import { VehicleSizeSearch } from "@/components/ui/VehicleSizeSearch";
@@ -66,6 +67,8 @@ export function SizeOrVehicleSearch({
   // Buscador apilado (fuera del catálogo): patente a la vista y las otras dos
   // opciones como barras que se abren de a una.
   const escritorio = useEscritorio();
+  // La patente no se encontró y la búsqueda pasó a elegir el auto: cambia el icono y el título.
+  const [patenteManual, setPatenteManual] = useState(false);
   const [abierto, setAbierto] = useState<"patente" | "medida" | "vehiculo" | null>(null);
 
   useEffect(() => {
@@ -81,8 +84,11 @@ export function SizeOrVehicleSearch({
   }, [abierto]);
 
   if (!compact) {
-    const cerrar = () => setAbierto(null);
-    const titulos = { patente: "Buscar por patente", medida: "Buscar por medida", vehiculo: "Buscar por mi auto" } as const;
+    const cerrar = () => {
+      setAbierto(null);
+      setPatenteManual(false);
+    };
+    const titulos = { patente: patenteManual ? "Buscar por mi auto" : "Buscar por patente", medida: "Buscar por medida", vehiculo: "Buscar por mi auto" } as const;
     const barra = (id: "patente" | "medida" | "vehiculo", Icono: typeof Car | typeof HalfTireIcon, titulo: string, ejemplo: string) => (
       <button
         type="button"
@@ -113,8 +119,7 @@ export function SizeOrVehicleSearch({
                 onClick={() => setAbierto("patente")}
                 className="flex flex-col items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-5 text-center transition-colors hover:border-orange-400"
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/images/patente/chapa-mercosur.svg" alt="" className="h-9 w-auto" />
+                <PlateIcon className="h-9 w-[4.5rem]" />
                 <span className="text-base font-black text-navy-900">Por patente</span>
                 <span className="text-xs font-semibold text-slate-500">Ej: AB 123 CD</span>
               </button>
@@ -161,7 +166,16 @@ export function SizeOrVehicleSearch({
               <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={cerrar} />
               <div className="relative z-10 flex max-h-[92dvh] w-full max-w-xl flex-col overflow-hidden rounded-t-2xl bg-white shadow-2xl sm:rounded-2xl">
                 <div className="flex shrink-0 items-center justify-between bg-black px-5 py-4">
-                  <h2 className="text-lg font-bold text-white">{titulos[abierto]}</h2>
+                  <h2 className="flex items-center gap-3 text-lg font-bold text-white">
+                    {abierto === "medida" ? (
+                      <HalfTireIcon className="h-5 w-10 text-white" />
+                    ) : abierto === "vehiculo" || patenteManual ? (
+                      <Car className="h-6 w-6" aria-hidden="true" />
+                    ) : (
+                      <PlateIcon className="h-5 w-10" />
+                    )}
+                    {titulos[abierto]}
+                  </h2>
                   <button type="button" onClick={cerrar} aria-label="Cerrar" className="rounded-lg p-1 text-slate-400 transition-colors hover:text-white">
                     <X className="h-6 w-6" aria-hidden="true" />
                   </button>
@@ -170,6 +184,7 @@ export function SizeOrVehicleSearch({
                   {abierto === "patente" ? (
                     <PlateSearch
                       economicos={economicos}
+                      onManual={setPatenteManual}
                       autoFocus
                       onNavigate={() => {
                         cerrar();
@@ -178,19 +193,30 @@ export function SizeOrVehicleSearch({
                     />
                   ) : abierto === "medida" ? (
                     escribir || initialMedida ? (
-                      <TireSizeSearch
-                        embedded
-                        initialMedida={initialMedida}
-                        forceVoiceButton={forceVoiceButton}
-                        hideLearnLink={hideLearnLink}
-                        economicos={economicos}
-                        autoFocus
-                        onNavigate={() => {
-                          cerrar();
-                          onNavigate?.();
-                        }}
-                        onLiveChange={onLiveChange}
-                      />
+                      <>
+                        {!initialMedida && (
+                          <button
+                            type="button"
+                            onClick={() => setEscribir(false)}
+                            className="mb-3 flex w-full items-center justify-center gap-2 rounded-xl border-2 border-slate-300 bg-white py-2 text-sm font-black text-navy-900 transition-colors hover:border-orange-500 hover:text-orange-600"
+                          >
+                            <LayoutGrid className="h-4 w-4" aria-hidden="true" /> Elegir la medida con botones
+                          </button>
+                        )}
+                        <TireSizeSearch
+                          embedded
+                          initialMedida={initialMedida}
+                          forceVoiceButton={forceVoiceButton}
+                          hideLearnLink={hideLearnLink}
+                          economicos={economicos}
+                          autoFocus
+                          onNavigate={() => {
+                            cerrar();
+                            onNavigate?.();
+                          }}
+                          onLiveChange={onLiveChange}
+                        />
+                      </>
                     ) : (
                       <MedidaPasos
                         economicos={economicos}

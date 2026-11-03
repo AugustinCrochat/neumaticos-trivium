@@ -16,11 +16,14 @@ export function PlateSearch({
   onNavigate,
   autoFocus,
   pequena,
+  onManual,
 }: {
   economicos?: boolean;
   onNavigate?: () => void;
   autoFocus?: boolean;
   pequena?: boolean;
+  /** Avisa si la búsqueda pasó a elegir el auto a mano (para cambiar el icono y el título). */
+  onManual?: (manual: boolean) => void;
 }) {
   const { vehiculos, setSelectedVehicle, clearSelectedVehicle, loadVehiculos } = useVehicle();
   const [anio, setAnio] = useState<number | null>(null);
@@ -28,7 +31,11 @@ export function PlateSearch({
   const [encontrado, setEncontrado] = useState(false);
   const [sugerida, setSugerida] = useState(false);
   // Patente no encontrada: la misma búsqueda pasa a elegir marca, modelo y año.
-  const [aviso, setAviso] = useState<string | null>(null);
+  const [aviso, setAvisoState] = useState<string | null>(null);
+  const setAviso = (a: string | null) => {
+    setAvisoState(a);
+    onManual?.(a !== null);
+  };
 
   if (aviso && !encontrado) {
     return (
