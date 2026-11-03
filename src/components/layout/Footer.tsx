@@ -84,6 +84,8 @@ export function Footer() {
                 { href: "/servicios", label: "Gomería y servicios" },
                 { href: "/blog", label: "Blog" },
                 { href: "/sucursales", label: "Sucursales" },
+                { href: "/cordoba", label: "Neumáticos en Córdoba" },
+                { href: "/buenos-aires", label: "Neumáticos en Buenos Aires" },
                 { href: "/sobre-trivium", label: "Sobre Trivium" },
                 { href: "/contacto", label: "Contacto" },
                 { href: "/mapa-del-sitio", label: "Todas las páginas →" },

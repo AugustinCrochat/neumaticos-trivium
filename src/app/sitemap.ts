@@ -81,6 +81,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url("/opiniones-y-comparativas", 0.8, "weekly"),
     url("/neumaticos-para-remises-taxis-y-uber", 0.9, "daily", undefined, [abs("/images/local/remis-cambio-de-cuatro-neumaticos-con-alineacion-y-balanceo-trivium-cordoba.webp"), abs("/images/local/taxi-entrando-al-local-neumaticos-trivium-cordoba.webp"), abs("/images/local/remis-en-el-taller-con-balanceadora-y-neumaticos-trivium-cordoba.webp"), abs("/images/local/taxi-rueda-delantera-en-el-taller-neumaticos-trivium-cordoba.webp"), abs("/images/local/remis-chevrolet-classic-cambio-de-neumaticos-y-balanceo-trivium-cordoba.webp")]),
     url("/neumaticos-en", 0.7, "monthly"),
+    url("/cordoba", 0.9, "monthly"),
+    url("/buenos-aires", 0.9, "monthly"),
     url("/marcas", 0.7, "weekly"),
     url("/marcas-de-neumaticos-chinos", 0.8, "weekly"),
     url("/alternativas", 0.8, "weekly"),

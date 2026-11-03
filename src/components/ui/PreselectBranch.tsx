@@ -14,17 +14,18 @@ import { BRANCHES, BRANCH_COOKIE } from "@/lib/config";
  * elección explícita y no se pisa. No renderiza nada, así la landing sigue
  * siendo estática (la cookie se lee en el cliente, no en el servidor).
  */
-export function PreselectBranch({ branchId }: { branchId: string }) {
+export function PreselectBranch({ branchId, forzar }: { branchId: string; forzar?: boolean }) {
   const { setSelectedBranch } = useBranch();
 
   useEffect(() => {
     const hasCookie = document.cookie.split("; ").some((c) => c.startsWith(`${BRANCH_COOKIE}=`));
-    if (hasCookie) return;
+    // `forzar`: la URL misma es la elección (portal de región), así que pisa la cookie.
+    if (hasCookie && !forzar) return;
     const branch = BRANCHES.find((b) => b.id === branchId);
     if (branch) setSelectedBranch(branch);
     // setSelectedBranch cambia en cada render del provider; solo importa al montar.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [branchId]);
+  }, [branchId, forzar]);
 
   return null;
 }

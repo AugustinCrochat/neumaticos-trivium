@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { useBranch } from "@/contexts/branch-context";
+import { regionDePath, regionDeSucursal } from "@/lib/regiones";
 import { BRANCHES } from "@/lib/config";
 import { getBranchDistances, formatDistance } from "@/lib/branch-geo";
 import { getBranchStatus } from "@/lib/branch-status";
@@ -18,7 +20,17 @@ export function BranchModal() {
 }
 
 function BranchModalContent() {
-  const { closeModal, setSelectedBranch, selectedBranch, hasConfirmedBranch, autoSelectBranch } = useBranch();
+  const { closeModal, setSelectedBranch: elegir, selectedBranch, hasConfirmedBranch, autoSelectBranch } = useBranch();
+  const pathname = usePathname();
+  const router = useRouter();
+  // En un portal de región (/cordoba, /buenos-aires) elegir sucursal es navegar
+  // al portal de la región elegida: la URL y la sucursal siempre coinciden.
+  const setSelectedBranch = (branch: (typeof BRANCHES)[number]) => {
+    elegir(branch);
+    const actual = regionDePath(pathname);
+    const destino = regionDeSucursal(branch.id);
+    if (actual && destino && actual.slug !== destino.slug) router.push(`/${destino.slug}`);
+  };
   const [nearestId, setNearestId] = useState<string | null>(null);
   const [distances, setDistances] = useState<Record<string, number>>({});
   const [geoState, setGeoState] = useState<GeoState>("idle");
