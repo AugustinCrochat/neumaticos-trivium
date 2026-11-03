@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 import { Car, ChevronDown, RectangleHorizontal } from "lucide-react";
@@ -11,6 +11,21 @@ import { MedidaPasos } from "@/components/ui/MedidaPasos";
 import { PlateSearch } from "@/components/ui/PlateSearch";
 import { PATENTE_HABILITADA } from "@/components/ui/PlateLookup";
 import { useVehicle } from "@/contexts/vehicle-context";
+
+// En escritorio la patente y la medida son dos mosaicos a la par que abren su ventana;
+// en celular la patente queda a la vista. Server: celular (se ajusta al hidratar).
+const MD = "(min-width: 768px)";
+function useEscritorio() {
+  return useSyncExternalStore(
+    (cb) => {
+      const mq = window.matchMedia(MD);
+      mq.addEventListener("change", cb);
+      return () => mq.removeEventListener("change", cb);
+    },
+    () => window.matchMedia(MD).matches,
+    () => false
+  );
+}
 
 export function SizeOrVehicleSearch({
   compact = false,
@@ -50,7 +65,8 @@ export function SizeOrVehicleSearch({
   }, [mode, compact, loadVehiculos]);
   // Buscador apilado (fuera del catálogo): patente a la vista y las otras dos
   // opciones como barras que se abren de a una.
-  const [abierto, setAbierto] = useState<"medida" | "vehiculo" | null>(null);
+  const escritorio = useEscritorio();
+  const [abierto, setAbierto] = useState<"patente" | "medida" | "vehiculo" | null>(null);
 
   useEffect(() => {
     if (!abierto) return;
@@ -66,7 +82,8 @@ export function SizeOrVehicleSearch({
 
   if (!compact) {
     const cerrar = () => setAbierto(null);
-    const barra = (id: "medida" | "vehiculo", Icono: typeof Car | typeof HalfTireIcon, titulo: string, ejemplo: string) => (
+    const titulos = { patente: "Buscar por patente", medida: "Buscar por medida", vehiculo: "Buscar por mi auto" } as const;
+    const barra = (id: "patente" | "medida" | "vehiculo", Icono: typeof Car | typeof HalfTireIcon, titulo: string, ejemplo: string) => (
       <button
         type="button"
         onClick={() => setAbierto((a) => (a === id ? null : id))}
@@ -88,29 +105,78 @@ export function SizeOrVehicleSearch({
         <h2 className="mb-3 text-center font-display text-2xl font-extrabold uppercase tracking-tight text-navy-900">
           Encontrá tus neumáticos
         </h2>
-        {PATENTE_HABILITADA && (
-          <div className="mb-3 rounded-xl border border-slate-200 bg-white p-4">
-            <PlateSearch economicos={economicos} onNavigate={onNavigate} autoFocus={autoFocus} pequena />
+        {escritorio ? (
+          <div className="grid grid-cols-2 gap-3">
+            {PATENTE_HABILITADA && (
+              <button
+                type="button"
+                onClick={() => setAbierto("patente")}
+                className="flex flex-col items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-5 text-center transition-colors hover:border-orange-400"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/images/patente/chapa-mercosur.svg" alt="" className="h-9 w-auto" />
+                <span className="text-base font-black text-navy-900">Por patente</span>
+                <span className="text-xs font-semibold text-slate-500">Ej: AB 123 CD</span>
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={() => setAbierto("medida")}
+              className="flex flex-col items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-5 text-center transition-colors hover:border-orange-400"
+            >
+              <HalfTireIcon className="h-9 w-[4.5rem] text-navy-900" />
+              <span className="text-base font-black text-navy-900">Por medida</span>
+              <span className="text-xs font-semibold text-slate-500">Ej: 205/55 R16</span>
+            </button>
+            {!PATENTE_HABILITADA && (
+              <button
+                type="button"
+                onClick={() => setAbierto("vehiculo")}
+                onMouseEnter={loadVehiculos}
+                className="flex flex-col items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-5 text-center transition-colors hover:border-orange-400"
+              >
+                <Car className="h-9 w-9 text-navy-900" aria-hidden="true" />
+                <span className="text-base font-black text-navy-900">Por mi auto</span>
+                <span className="text-xs font-semibold text-slate-500">Marca, modelo y año</span>
+              </button>
+            )}
           </div>
+        ) : (
+          <>
+            {PATENTE_HABILITADA && (
+              <div className="mb-3 rounded-xl border border-slate-200 bg-white p-4">
+                <PlateSearch economicos={economicos} onNavigate={onNavigate} autoFocus={autoFocus} pequena />
+              </div>
+            )}
+            <div className="space-y-2">
+              {barra("medida", HalfTireIcon, "Por medida", "Ej: 205/55 R16")}
+              {/* Con la patente habilitada, si no se encuentra el auto la misma búsqueda pasa a elegir marca y modelo. */}
+              {!PATENTE_HABILITADA && barra("vehiculo", Car, "Por mi auto", "Marca, modelo y año")}
+            </div>
+          </>
         )}
-        <div className="space-y-2">
-          {barra("medida", HalfTireIcon, "Por medida", "Ej: 205/55 R16")}
-          {/* Con la patente habilitada, si no se encuentra el auto la misma búsqueda pasa a elegir marca y modelo. */}
-          {!PATENTE_HABILITADA && barra("vehiculo", Car, "Por mi auto", "Marca, modelo y año")}
-        </div>
         {abierto &&
           createPortal(
-            <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center sm:p-6" role="dialog" aria-modal="true" aria-label={abierto === "medida" ? "Buscar por medida" : "Buscar por mi auto"}>
+            <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center sm:p-6" role="dialog" aria-modal="true" aria-label={titulos[abierto]}>
               <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={cerrar} />
               <div className="relative z-10 flex max-h-[92dvh] w-full max-w-xl flex-col overflow-hidden rounded-t-2xl bg-white shadow-2xl sm:rounded-2xl">
                 <div className="flex shrink-0 items-center justify-between bg-black px-5 py-4">
-                  <h2 className="text-lg font-bold text-white">{abierto === "medida" ? "Buscar por medida" : "Buscar por mi auto"}</h2>
+                  <h2 className="text-lg font-bold text-white">{titulos[abierto]}</h2>
                   <button type="button" onClick={cerrar} aria-label="Cerrar" className="rounded-lg p-1 text-slate-400 transition-colors hover:text-white">
                     <X className="h-6 w-6" aria-hidden="true" />
                   </button>
                 </div>
                 <div className="overflow-y-auto p-4 sm:p-6">
-                  {abierto === "medida" ? (
+                  {abierto === "patente" ? (
+                    <PlateSearch
+                      economicos={economicos}
+                      autoFocus
+                      onNavigate={() => {
+                        cerrar();
+                        onNavigate?.();
+                      }}
+                    />
+                  ) : abierto === "medida" ? (
                     escribir || initialMedida ? (
                       <TireSizeSearch
                         embedded
