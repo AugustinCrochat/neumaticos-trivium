@@ -361,7 +361,7 @@ export const VEHICLE_DB: VehicleDBEntry[] = [
   { brand: "Ford", model: "F-150", sizes: [{ w: "275", p: "55", r: "20", version: "Lariat 5.0L V8", generation: "P702", years: "2020-2021" }, { w: "275", p: "60", r: "20", version: "Lariat Luxury PowerBoost Hybrid", generation: "P702", years: "2022-presente" }] },
   { brand: "Ford", model: "Falcon", sizes: [{ w: "185", p: "80", r: "13", version: "Standard / Deluxe", generation: "Falcon I / restyle 1969", years: "1962-1972" }, { w: "195", p: "70", r: "14", version: "Deluxe / Futura (freno a disco)", generation: "Restyle 1969", years: "1969-1972" }, { w: "205", p: "70", r: "14", version: "Sprint", generation: "Sprint", years: "1973-1981" }, { w: "195", p: "70", r: "14", version: "Ghia / Deluxe tardío", generation: "Restyle 1978 / Ghia final", years: "1978-1991" }] },
   { brand: "Ford", model: "Escort", sizes: [{ w: "175", p: "70", r: "13", version: "1.6 / 1.8", generation: "Escort", years: "1992-1999" }] },
-  { brand: "Ford", model: "Mondeo", sizes: [{ w: "195", p: "60", r: "15" }, { w: "225", p: "45", r: "17" }] },
+  { brand: "Ford", model: "Mondeo", sizes: [{ w: "195", p: "60", r: "15" }, { w: "225", p: "45", r: "17" }, { w: "235", p: "45", r: "18", version: "Titanium / SEL", years: "2017-2019" }] },
   { brand: "Ford", model: "Orion", sizes: [{ w: "175", p: "70", r: "13", version: "1.6 / 1.8", generation: "Orion", years: "1992-1996" }] },
   { brand: "Ford", model: "Fiesta", sizes: [{ w: "175", p: "70", r: "13", version: "CLX / Ghia", generation: "Fiesta (importado)", years: "1996-2002" }, { w: "175", p: "70", r: "13", version: "One / Max", generation: "Fiesta Max", years: "2003-2008" }, { w: "185", p: "65", r: "14", version: "Ambiente / Edge", generation: "Fiesta hatch (última gen importada)", years: "2018-2021" }, { w: "195", p: "55", r: "16", version: "SE / Titanium", generation: "Fiesta hatch (última gen importada)", years: "2018-2021" }] },
   { brand: "Ford", model: "Fiesta Kinetic", sizes: [{ w: "185", p: "60", r: "15", version: "S / SE", generation: "Fiesta Kinetic Design", years: "2009-2013" }, { w: "195", p: "50", r: "16", version: "Titanium", generation: "Fiesta Kinetic Design", years: "2009-2013" }, { w: "185", p: "60", r: "15", version: "S", generation: "Fiesta Kinetic Sedán", years: "2013-2019" }] },
@@ -375,7 +375,7 @@ export const VEHICLE_DB: VehicleDBEntry[] = [
   { brand: "Ford", model: "Ranger Raptor", sizes: [{ w: "285", p: "70", r: "17", version: "2.0 Bi-Turbo Diesel", generation: "T6 1ra gen Raptor", years: "2019-2022" }, { w: "285", p: "70", r: "17", version: "3.0 V6 Nafta", generation: "Next-Gen T6.2 Raptor", years: "2024-presente" }] },
   { brand: "Ford", model: "Taunus", sizes: [{ w: "175", p: "70", r: "13", version: "Ghia" }, { w: "185", p: "70", r: "13", version: "GT / GT SP / GT SP5" }] },
   { brand: "Ford", model: "Territory", sizes: [{ w: "235", p: "55", r: "18", version: "SEL", generation: "2da gen (China/JMC, Brasil)", years: "2023-presente" }, { w: "235", p: "50", r: "19", version: "Titanium", generation: "2da gen (China/JMC, Brasil)", years: "2023-presente" }] },
-  { brand: "Ford", model: "Transit", sizes: [{ w: "215", p: "75", r: "16" }] },
+  { brand: "Ford", model: "Transit", sizes: [{ w: "235", p: "65", r: "16", version: "Van (350M / 350L)" }, { w: "195", p: "75", r: "16", version: "Chasis 470E / Minibus 460E" }] },
 
   // Foton
   { brand: "Foton", model: "Gratour", sizes: [{ w: "175", p: "70", r: "14" }] },
@@ -544,7 +544,7 @@ export const VEHICLE_DB: VehicleDBEntry[] = [
   { brand: "Peugeot", model: "206", sizes: [{ w: "175", p: "65", r: "14", version: "XR / XS" }, { w: "185", p: "65", r: "14", version: "XT" }, { w: "185", p: "60", r: "15", version: "XS / XT / GTI" }] },
   { brand: "Peugeot", model: "207", sizes: [{ w: "185", p: "65", r: "14", version: "Active" }, { w: "185", p: "60", r: "15", version: "Allure / Feline" }] },
   { brand: "Peugeot", model: "207 Compact", sizes: [{ w: "185", p: "65", r: "14", version: "Active" }, { w: "185", p: "60", r: "15", version: "Allure / Feline" }] },
-  { brand: "Peugeot", model: "208", sizes: [{ w: "185", p: "65", r: "15", version: "Like" }, { w: "195", p: "55", r: "16", version: "Active / Allure" }, { w: "205", p: "45", r: "17", version: "GT / Feline" }] },
+  { brand: "Peugeot", model: "208", sizes: [{ w: "185", p: "65", r: "15", version: "Like", generation: "208 I", years: "2013-2019" }, { w: "195", p: "55", r: "16", version: "Active / Allure / Feline", generation: "208 I", years: "2013-2019" }, { w: "185", p: "65", r: "15", version: "Active", generation: "208 II", years: "2020-presente" }, { w: "195", p: "55", r: "16", version: "Allure", generation: "208 II", years: "2020-presente" }, { w: "205", p: "45", r: "17", version: "GT / Feline" }] },
   { brand: "Peugeot", model: "3008", sizes: [{ w: "215", p: "65", r: "17", version: "Active" }, { w: "225", p: "55", r: "18", version: "Allure / GT" }] },
   { brand: "Peugeot", model: "301", sizes: [{ w: "185", p: "65", r: "15", version: "Active" }, { w: "195", p: "55", r: "16", version: "Allure" }] },
   { brand: "Peugeot", model: "307", sizes: [{ w: "195", p: "65", r: "15", version: "XR / XS" }, { w: "205", p: "55", r: "16", version: "XT / XS Premium" }, { w: "205", p: "50", r: "17", version: "Feline" }] },
@@ -577,11 +577,11 @@ export const VEHICLE_DB: VehicleDBEntry[] = [
 
   // Renault
   { brand: "Renault", model: "Alaskan", sizes: [{ w: "245", p: "70", r: "16", version: "Zen" }, { w: "255", p: "60", r: "18", version: "Intens / Iconic" }] },
-  { brand: "Renault", model: "Captur", sizes: [{ w: "205", p: "60", r: "16", version: "Zen" }, { w: "215", p: "55", r: "17", version: "Intens / Iconic" }] },
+  { brand: "Renault", model: "Captur", sizes: [{ w: "215", p: "60", r: "17", version: "Zen / Intens" }] },
   { brand: "Renault", model: "Clio", sizes: [{ w: "165", p: "70", r: "13", version: "RL / RN", generation: "Clio I", years: "1996-2000" }, { w: "175", p: "65", r: "14", version: "RT / Authentique / Dynamique", generation: "Clio II", years: "2000-2013" }, { w: "185", p: "60", r: "14", version: "RSi / Sport 1.6", generation: "Clio II", years: "2000-2013" }, { w: "185", p: "55", r: "15", version: "Sport 2.0 / Privilege", generation: "Clio II", years: "2000-2013" }] },
   { brand: "Renault", model: "Clio Mio", sizes: [{ w: "175", p: "65", r: "14", version: "Expression / Dynamique", years: "2013-2016" }] },
   { brand: "Renault", model: "Duster", sizes: [{ w: "215", p: "65", r: "16", version: "Expression / Zen / Intens / Iconic", years: "2012-2023" }, { w: "215", p: "65", r: "16", version: "New Duster", years: "2024-presente" }] },
-  { brand: "Renault", model: "Fluence", sizes: [{ w: "205", p: "60", r: "16", version: "Confort / Dynamique" }, { w: "205", p: "55", r: "17", version: "Privilege / GT / Luxe" }] },
+  { brand: "Renault", model: "Fluence", sizes: [{ w: "205", p: "60", r: "16", version: "Confort / Dynamique / Luxe / Privilege" }, { w: "205", p: "55", r: "17", version: "GT" }, { w: "225", p: "50", r: "17", version: "GT2" }] },
   { brand: "Renault", model: "Kangoo", sizes: [{ w: "175", p: "70", r: "14", version: "Kangoo 1", generation: "Kangoo I", years: "1998-2010" }, { w: "175", p: "70", r: "14", version: "Confort / Authentique", generation: "Kangoo II", years: "2010-2021" }, { w: "195", p: "55", r: "16", version: "Stepway", generation: "Kangoo II", years: "2010-2021" }] },
   { brand: "Renault", model: "Kardian", sizes: [{ w: "205", p: "65", r: "16", version: "Evolution" }, { w: "205", p: "60", r: "16", version: "Techno / Premiere Edition" }, { w: "205", p: "55", r: "17", version: "Iconic" }] },
   { brand: "Renault", model: "Koleos", sizes: [{ w: "225", p: "60", r: "17", generation: "Koleos I", years: "2008-2016" }, { w: "225", p: "55", r: "18", generation: "Koleos I", years: "2008-2016" }, { w: "225", p: "65", r: "17", generation: "Koleos II", years: "2017-presente" }, { w: "225", p: "60", r: "18", generation: "Koleos II", years: "2017-presente" }] },
@@ -592,7 +592,7 @@ export const VEHICLE_DB: VehicleDBEntry[] = [
   { brand: "Renault", model: "Oroch", sizes: [{ w: "215", p: "65", r: "16" }] },
   { brand: "Renault", model: "Sandero", sizes: [{ w: "175", p: "70", r: "14", version: "Authentique / Expression", generation: "Sandero I", years: "2008-2014" }, { w: "185", p: "65", r: "15", version: "Privilege", generation: "Sandero I", years: "2008-2014" }, { w: "185", p: "65", r: "15", version: "Life / Zen / Intens", generation: "Sandero II / Nuevo Sandero", years: "2014-presente" }, { w: "195", p: "55", r: "16", version: "RS / Intens Plus", generation: "Sandero II / Nuevo Sandero", years: "2014-presente" }] },
   { brand: "Renault", model: "Sandero Stepway", sizes: [{ w: "205", p: "55", r: "16", generation: "Stepway I / II", years: "2009-2020" }, { w: "205", p: "60", r: "16", generation: "New Stepway", years: "2021-presente" }] },
-  { brand: "Renault", model: "Symbol", sizes: [{ w: "175", p: "70", r: "14", version: "Authentique" }, { w: "185", p: "65", r: "15", version: "Privilege / Luxe" }] },
+  { brand: "Renault", model: "Symbol", sizes: [{ w: "175", p: "65", r: "14", version: "Authentique / Expression" }, { w: "185", p: "65", r: "15", version: "Privilege / Luxe" }] },
   { brand: "Renault", model: "Trafic", sizes: [{ w: "185", p: "80", r: "14" }, { w: "195", p: "70", r: "15" }] },
   { brand: "Renault", model: "Twingo", sizes: [{ w: "155", p: "70", r: "13" }] },
 
@@ -626,7 +626,7 @@ export const VEHICLE_DB: VehicleDBEntry[] = [
   { brand: "Toyota", model: "Camry", sizes: [{ w: "215", p: "60", r: "16" }, { w: "215", p: "55", r: "17" }] },
   { brand: "Toyota", model: "Corolla", sizes: [{ w: "185", p: "70", r: "14", version: "XLI", generation: "E130", years: "2003-2008" }, { w: "195", p: "60", r: "15", version: "XEI / SE-G", generation: "E130", years: "2003-2008" }, { w: "205", p: "55", r: "16", version: "XLI / XEI / SE-G", generation: "E140/150", years: "2008-2013" }, { w: "205", p: "55", r: "16", version: "XLI / XEI", generation: "E170/180", years: "2014-2018" }, { w: "225", p: "45", r: "17", version: "SE-G", generation: "E170/180", years: "2014-2018" }, { w: "205", p: "55", r: "16", version: "XLI / XEI", generation: "E210", years: "2019-presente" }, { w: "225", p: "45", r: "17", version: "SEG / GR-Sport", generation: "E210", years: "2019-presente" }] },
   { brand: "Toyota", model: "Corolla Cross", sizes: [{ w: "215", p: "60", r: "17", version: "XLI" }, { w: "215", p: "60", r: "17", version: "XEI" }, { w: "225", p: "50", r: "18", version: "SEG / GR-S" }] },
-  { brand: "Toyota", model: "Etios", sizes: [{ w: "175", p: "65", r: "14", version: "X" }, { w: "185", p: "60", r: "15", version: "XS / XLS" }] },
+  { brand: "Toyota", model: "Etios", sizes: [{ w: "175", p: "65", r: "14", version: "X / Aibo" }, { w: "185", p: "60", r: "15", version: "XLS" }] },
   { brand: "Toyota", model: "GR Yaris", sizes: [{ w: "225", p: "40", r: "18" }] },
   { brand: "Toyota", model: "Hiace", sizes: [{ w: "195", p: "80", r: "15", version: "Furgón / Commuter", generation: "H200", years: "2005-2019" }, { w: "215", p: "65", r: "16", version: "Wagon / Executive", generation: "H200", years: "2005-2019" }, { w: "215", p: "70", r: "16", version: "Furgón / Commuter", generation: "H300", years: "2019-presente" }] },
   { brand: "Toyota", model: "Hilux", sizes: [{ w: "265", p: "70", r: "16", version: "DX", generation: "VII", years: "2005-2015" }, { w: "265", p: "65", r: "17", version: "SR / SRV", generation: "VII", years: "2005-2015" }, { w: "265", p: "70", r: "16", version: "DX", generation: "VIII", years: "2015-presente" }, { w: "265", p: "65", r: "17", version: "SR / SRV", generation: "VIII", years: "2015-presente" }, { w: "265", p: "60", r: "18", version: "SRX / GR-Sport", generation: "VIII", years: "2015-presente" }] },
@@ -635,7 +635,7 @@ export const VEHICLE_DB: VehicleDBEntry[] = [
   { brand: "Toyota", model: "Prius", sizes: [{ w: "195", p: "65", r: "15" }] },
   { brand: "Toyota", model: "RAV4", sizes: [{ w: "225", p: "65", r: "17", version: "XLE / VX", generation: "XA40", years: "2016-2022" }, { w: "235", p: "55", r: "18", version: "Limited", generation: "XA40", years: "2016-2022" }, { w: "225", p: "60", r: "18", version: "HEV / PHEV", generation: "XA50", years: "2023-presente" }] },
   { brand: "Toyota", model: "SW4", sizes: [{ w: "265", p: "70", r: "16", version: "SR (base)", generation: "I (AN50/60)", years: "2005-2015" }, { w: "265", p: "65", r: "17", version: "SRV / SRX", generation: "I (AN50/60)", years: "2005-2015" }, { w: "265", p: "65", r: "17", version: "SR", generation: "II (AN150/160)", years: "2015-presente" }, { w: "265", p: "60", r: "18", version: "SRX / Diamond / GR-Sport", generation: "II (AN150/160)", years: "2015-presente" }] },
-  { brand: "Toyota", model: "Yaris", sizes: [{ w: "185", p: "60", r: "15", version: "XS" }, { w: "195", p: "50", r: "16", version: "XLS / S" }] },
+  { brand: "Toyota", model: "Yaris", sizes: [{ w: "185", p: "60", r: "15", version: "XS / XLS" }, { w: "195", p: "50", r: "16", version: "XLS Pack / S", years: "2021-presente" }] },
 
   // Volkswagen
   { brand: "Volkswagen", model: "Amarok", sizes: [{ w: "245", p: "70", r: "16", version: "Trendline / Startline", generation: "Amarok I", years: "2010-2020" }, { w: "245", p: "65", r: "17", version: "Comfortline", generation: "Amarok I", years: "2010-2020" }, { w: "255", p: "60", r: "18", version: "Highline", generation: "Amarok I", years: "2010-2020" }, { w: "255", p: "55", r: "19", version: "V6 Extreme", generation: "Amarok I", years: "2017-2020" }, { w: "245", p: "70", r: "16", version: "Trendline 4x2/4x4", generation: "Amarok II", years: "2023-presente" }, { w: "245", p: "65", r: "17", version: "Comfortline", generation: "Amarok II", years: "2023-presente" }, { w: "255", p: "60", r: "18", version: "V6 Comfortline / Highline", generation: "Amarok II", years: "2023-presente" }, { w: "255", p: "55", r: "19", version: "V6 Highline / Extreme", generation: "Amarok II", years: "2023-presente" }] },
@@ -725,8 +725,8 @@ export const VEHICLE_DB: VehicleDBEntry[] = [
   // Modelos de mayor patentamiento 2018-2026 que faltaban (DNRPA); medidas de fichas públicas, a confirmar en el taller.
   { brand: "BAIC", model: "BJ30", sizes: [{ w: "235", p: "60", r: "19" }] },
   { brand: "Citroen", model: "C-Elysée", sizes: [{ w: "185", p: "65", r: "15" }, { w: "195", p: "55", r: "16" }] },
-  { brand: "Chevrolet", model: "Captiva", sizes: [{ w: "235", p: "55", r: "18" }] },
-  { brand: "Chevrolet", model: "Sonic", sizes: [{ w: "205", p: "50", r: "17" }] },
+  { brand: "Chevrolet", model: "Captiva", sizes: [{ w: "235", p: "60", r: "17", version: "LS / LT" }, { w: "235", p: "55", r: "18", version: "LTZ diésel" }] },
+  { brand: "Chevrolet", model: "Sonic", sizes: [{ w: "205", p: "55", r: "16", version: "LT / LTZ", generation: "Sonic I", years: "2012-2017" }, { w: "205", p: "50", r: "17", generation: "Sonic crossover", years: "2026-presente" }] },
   { brand: "BYD", model: "Atto 3", sizes: [{ w: "235", p: "50", r: "18" }] },
   { brand: "BYD", model: "Seal", sizes: [{ w: "235", p: "45", r: "19" }] },
   { brand: "Ford", model: "Everest", sizes: [{ w: "255", p: "55", r: "20" }] },
