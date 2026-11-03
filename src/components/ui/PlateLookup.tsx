@@ -6,7 +6,10 @@ import { PlateIcon } from "@/components/ui/PlateIcon";
 import { resolverPatente } from "@/lib/patente-match";
 import { PATENTE_RE, estiloPatente, formatearPatente, normalizarPatente, type EstiloPatente } from "@/lib/patente";
 
-const SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+// Clave PÚBLICA de Turnstile (no es secreta; el secreto vive en el Worker). Va con valor
+// por defecto en el código porque un build sin la variable dejaba la búsqueda por patente
+// apagada en todo el sitio sin ningún aviso (pasó el 2026-11-03).
+const SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || "0x4AAAAAAFxeDBIfnp4WGMHI";
 
 /** La búsqueda por patente sólo existe si está configurada la verificación. */
 export const PATENTE_HABILITADA = Boolean(SITE_KEY);
