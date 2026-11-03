@@ -49,28 +49,17 @@ function Chapa({
 }) {
   const estilo = estiloPatente(valor);
   const mercosur = estilo === "mercosur";
+  // La chapa es una imagen (SVG propio) y las letras se escriben en vivo encima.
   return (
     <div
-      className={`mx-auto w-full max-w-sm overflow-hidden rounded-xl border-[4px] shadow-md transition-colors ${
-        mercosur ? "border-slate-900 bg-white" : "border-slate-900 bg-black ring-2 ring-white"
-      }`}
+      className="relative mx-auto w-full max-w-sm drop-shadow-md"
+      style={{
+        aspectRatio: "400 / 130",
+        backgroundImage: `url(/images/patente/${mercosur ? "chapa-mercosur" : "chapa-anterior"}.svg)`,
+        backgroundSize: "100% 100%",
+        backgroundRepeat: "no-repeat",
+      }}
     >
-      {mercosur ? (
-        <div className="flex items-center justify-between bg-[#1b4f9c] px-2 py-1 text-white">
-          <span className="flex items-center gap-0.5 text-[8px] font-bold leading-none tracking-wider opacity-90">
-            <span aria-hidden="true">★</span> MERCOSUR
-          </span>
-          <span className="text-[11px] font-bold leading-none tracking-[0.12em]">REPÚBLICA ARGENTINA</span>
-          <span
-            aria-hidden="true"
-            className="h-3 w-5 rounded-[2px] border border-white/60 bg-[linear-gradient(#74acdf_0_33%,#fff_33%_66%,#74acdf_66%_100%)]"
-          />
-        </div>
-      ) : (
-        <div className="bg-slate-900 py-1 text-center text-[11px] font-bold leading-none tracking-[0.2em] text-sky-300">
-          REPÚBLICA ARGENTINA
-        </div>
-      )}
       <input
         id="patente-input"
         aria-label="Patente"
@@ -83,8 +72,10 @@ function Chapa({
         autoComplete="off"
         spellCheck={false}
         inputMode="text"
-        className={`w-full bg-transparent px-3 py-2 text-center text-4xl font-black uppercase tracking-[0.1em] outline-none sm:text-5xl ${
-          mercosur ? "text-slate-800 placeholder:text-slate-300" : "text-white placeholder:text-slate-600"
+        className={`absolute inset-x-[8%] bottom-[8%] top-[33%] w-[84%] bg-transparent text-center text-[2.6rem] font-black uppercase leading-none tracking-[0.08em] outline-none sm:text-[3rem] ${
+          mercosur
+            ? "text-slate-800 placeholder:text-slate-300 [text-shadow:0_1px_0_rgba(255,255,255,0.9),0_-1px_0_rgba(0,0,0,0.25)]"
+            : "text-white placeholder:text-slate-600 [text-shadow:0_1px_0_#000,0_-1px_0_rgba(255,255,255,0.25)]"
         }`}
       />
     </div>

@@ -25,6 +25,16 @@ export function vehiculoDesdePatente(
       const buscado = norm(palabras.slice(inicio, inicio + k).join(" "));
       const hit = delaMarca.find((v) => norm(v.modelo) === buscado);
       if (hit) return hit;
+      // El registro a veces pega el número de generación al nombre: "CLIO2" es
+      // un Clio. Se prueba sin los dígitos finales sólo en una palabra suelta
+      // y si queda un nombre de al menos 3 letras (así "208" o "C4" no se tocan).
+      if (k === 1) {
+        const sinNumero = buscado.replace(/\d+$/, "");
+        if (sinNumero !== buscado && sinNumero.length >= 3) {
+          const hit2 = delaMarca.find((v) => norm(v.modelo) === sinNumero);
+          if (hit2) return hit2;
+        }
+      }
     }
   }
   return null;
