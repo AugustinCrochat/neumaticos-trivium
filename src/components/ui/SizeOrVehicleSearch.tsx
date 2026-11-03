@@ -8,6 +8,7 @@ import { PlateIcon } from "@/components/ui/PlateIcon";
 import { HalfTireIcon } from "@/components/ui/HalfTireIcon";
 import { TireSizeSearch } from "@/components/ui/TireSizeSearch";
 import { VehicleSizeSearch } from "@/components/ui/VehicleSizeSearch";
+import { MedidaHelpDialog } from "@/components/ui/MedidaHelpDialog";
 import { MedidaPasos } from "@/components/ui/MedidaPasos";
 import { PlateSearch } from "@/components/ui/PlateSearch";
 import { PATENTE_HABILITADA } from "@/components/ui/PlateLookup";
@@ -164,6 +165,11 @@ export function SizeOrVehicleSearch({
               </div>
             )}
           </>
+        )}
+        {!hideLearnLink && (
+          <div className="mt-3 flex justify-center">
+            <MedidaHelpDialog compact />
+          </div>
         )}
         {abierto &&
           createPortal(
