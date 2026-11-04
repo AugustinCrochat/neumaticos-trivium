@@ -60,7 +60,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!product) return {};
   // product.model ya trae el índice de carga/velocidad pegado a la medida
   // (ver toTireProduct en pos-api.ts) — no hace falta insertarlo acá.
-  const fullTitle = `Neumático ${product.model} — Neumáticos Trivium`;
+  const fullTitle = `Neumático ${product.model}`;
   const description = `Comprá el neumático ${product.model} al mejor precio. Outlet de neumáticos importados en Argentina.`;
   const pageUrl = `${SITE_URL}/productos/${product.slug}`;
   // Al compartir se ve la foto del neumático tal cual (JPEG liviano que arma el
@@ -71,7 +71,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description,
     alternates: canonical(`/productos/${product.slug}`),
     openGraph: {
-      title: fullTitle,
+      title: `${fullTitle} — Neumáticos Trivium`,
       description,
       url: pageUrl,
       siteName: "Neumáticos Trivium",
@@ -80,7 +80,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     twitter: {
       card: "summary_large_image",
-      title: fullTitle,
+      title: `${fullTitle} — Neumáticos Trivium`,
       description,
       ...(share && { images: share.twitter.images }),
     },

@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
+import { canonical } from "@/lib/seo";
 import { BRANCHES } from "@/lib/config";
 import { LegalPage, LegalSection } from "@/components/ui/LegalPageLayout";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 
 export const metadata: Metadata = {
-  title: "Política de Devoluciones — Neumáticos Trivium",
+  title: "Política de Devoluciones",
+  alternates: canonical("/politica-de-devoluciones"),
   description: "Cambios, devoluciones, garantía de fábrica y derecho de arrepentimiento en Neumáticos Trivium.",
 };
 

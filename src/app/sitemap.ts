@@ -132,7 +132,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     sizesFromCatalog(productos.filter((p) => p.enStock)).map((s) => sizeSlug(s.size))
   );
   const medidas = new Map<string, Entry>();
+  // Rodados decimales (17.5 de camión) no tienen landing de medida: son de carga.
   for (const { size } of sizesFromCatalog(productos)) {
+    if (!Number.isInteger(size.rim)) continue;
     const slug = sizeSlug(size);
     medidas.set(slug, url(`/neumaticos/${slug}`, medidasConStock.has(slug) ? 0.9 : 0.6, "daily"));
   }
@@ -143,7 +145,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Landings de medida C: una por medida de carga con producto en catálogo.
   const medidasCarga: Entry[] = [
-    ...new Set(productos.filter((p) => p.isCarga).map((p) => cargaSlug(p.size))),
+    ...new Set(productos.filter((p) => p.isCarga && Number.isInteger(p.size.rim)).map((p) => cargaSlug(p.size))),
   ].map((slug) => url(`/neumaticos/carga/${slug}`, 0.8, "daily"));
 
   const rodados: Entry[] = TIRE_RIMS.map((rim) =>
@@ -196,7 +198,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const fichasProducto: Entry[] = productos.flatMap((p) => [
     url(`/productos/${p.slug}`, p.enStock ? 0.8 : 0.4, "daily", undefined, productImagePaths(p).map(abs)),
-    url(`/productos/${p.slug}/ficha-tecnica.pdf`, p.enStock ? 0.4 : 0.2, "monthly"),
   ]);
 
   const comparativas: Entry[] = (await medidasConComparativa()).map((m) => url(`/comparativas/${m.slug}`, 0.7, "weekly"));

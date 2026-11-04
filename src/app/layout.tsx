@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     // aparecer para quien busca sólo "cubiertas". Van por separado: éste dice
     // "neumáticos", la descripción de abajo dice "cubiertas".
     default: "Neumáticos baratos al mejor precio — Neumáticos Trivium",
-    template: `%s — ${SITE_NAME}`,
+    template: `%s | Trivium`,
   },
   description:
     "Outlet de neumáticos con importación directa: comprá cubiertas para auto y camioneta con stock real, precio publicado. Locales y taller propio en Córdoba y Buenos Aires.",
@@ -50,7 +50,6 @@ export const metadata: Metadata = {
   authors: [{ name: SITE_NAME, url: SITE_URL }],
   creator: SITE_NAME,
   publisher: SITE_NAME,
-  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     siteName: SITE_NAME,

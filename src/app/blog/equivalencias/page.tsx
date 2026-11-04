@@ -1,3 +1,4 @@
+import { canonical } from "@/lib/seo";
 import Link from "@/components/ui/Link";
 import { EquivalenceCalculator } from "@/components/ui/EquivalenceCalculator";
 import { getProductosDesdePOS } from "@/lib/pos-api";
@@ -7,7 +8,8 @@ import { blogShare } from "@/lib/blog-meta";
 
 export const metadata = {
   ...blogShare("equivalencias"),
-  title: "Equivalencias de neumáticos: ¿Qué son y cómo funcionan? — Trivium",
+  title: "Equivalencias de neumáticos: ¿Qué son y cómo funcionan?",
+  alternates: canonical("/blog/equivalencias"),
   description: "Entendé cómo funcionan las medidas equivalentes, qué significa el ±3% de diferencia de diámetro y qué consideraciones tener.",
 };
 

@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
+import { canonical } from "@/lib/seo";
 import { BRANCHES, CONTACT_EMAIL } from "@/lib/config";
 import { LegalPage, LegalSection } from "@/components/ui/LegalPageLayout";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 
 export const metadata: Metadata = {
-  title: "Botón de Arrepentimiento — Neumáticos Trivium",
+  title: "Botón de Arrepentimiento",
+  alternates: canonical("/arrepentimiento"),
   description: "Ejercé tu derecho de arrepentimiento (Ley 24.240) sobre una compra realizada en neumaticos.trivium.ar.",
 };
 

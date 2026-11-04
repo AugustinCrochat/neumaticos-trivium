@@ -1,9 +1,11 @@
 import Link from "@/components/ui/Link";
 import type { Metadata } from "next";
+import { canonical } from "@/lib/seo";
 import { LegalPage, LegalSection } from "@/components/ui/LegalPageLayout";
 
 export const metadata: Metadata = {
-  title: "Términos de Uso — Neumáticos Trivium",
+  title: "Términos de Uso",
+  alternates: canonical("/terminos"),
   description: "Condiciones de uso del sitio y de compra en Neumáticos Trivium.",
 };
 

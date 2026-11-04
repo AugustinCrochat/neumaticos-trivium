@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
+import { canonical } from "@/lib/seo";
 import { BRANCHES } from "@/lib/config";
 import { LegalPage, LegalSection } from "@/components/ui/LegalPageLayout";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 
 export const metadata: Metadata = {
-  title: "Política de Privacidad — Neumáticos Trivium",
+  title: "Política de Privacidad",
+  alternates: canonical("/privacidad"),
   description: "Cómo recopilamos, usamos y protegemos tus datos personales en Neumáticos Trivium.",
 };
 

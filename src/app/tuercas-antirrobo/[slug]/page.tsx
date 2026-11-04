@@ -37,6 +37,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title,
     description,
+    alternates: { canonical: pageUrl },
     openGraph: { title, description, url: pageUrl, siteName: "Neumáticos Trivium", images, type: "website" },
     twitter: { card: "summary_large_image", title, description, images },
   };
