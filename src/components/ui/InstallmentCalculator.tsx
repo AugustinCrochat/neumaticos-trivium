@@ -244,11 +244,11 @@ export function InstallmentCalculator({
         );
       })()}
 
-      <div ref={totalRef} className="mt-4 scroll-mt-24 overflow-hidden rounded-2xl ring-1 ring-orange-200" aria-live="polite">
-        <div className="bg-orange-50 px-4 pb-4 pt-3.5">
+      <div ref={totalRef} className="mt-4 scroll-mt-24 overflow-hidden rounded-2xl ring-1 ring-slate-200" aria-live="polite">
+        <div className="bg-slate-100 px-4 pb-4 pt-3.5">
           <div className="flex items-center justify-between gap-3">
             <p className="text-sm font-black text-slate-700">Total a pagar</p>
-            <span className="max-w-[55%] truncate rounded-full bg-white px-3 py-1 text-xs font-black text-slate-700 ring-1 ring-orange-200">
+            <span className="max-w-[55%] truncate rounded-full bg-white px-3 py-1 text-xs font-black text-slate-700 ring-1 ring-slate-200">
               {grupoActual ? nombreMedio : "Precio de lista"}
             </span>
           </div>
