@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "utqg-desgaste-traccion-temperatura";
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   ...blogShare("utqg-desgaste-traccion-temperatura"),
   title: TITLE,
   description:
-    "Qué es el UTQG (Uniform Tire Quality Grading): desgaste relativo (treadwear), tracción y temperatura. Cómo leerlo, sus límites y en qué se diferencia de la etiqueta europea.",
+    resumen("Qué es el UTQG (Uniform Tire Quality Grading): desgaste relativo (treadwear), tracción y temperatura. Cómo leerlo, sus límites y en qué se diferencia de la etiqueta europea."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

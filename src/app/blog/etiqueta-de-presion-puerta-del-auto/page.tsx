@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { AhorroLinks } from "@/components/blog/AhorroLinks";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "etiqueta-de-presion-puerta-del-auto";
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Cómo interpretar la etiqueta de presión del parante de la puerta: bar y PSI, filas por cantidad de ocupantes y carga, medidas de cada llanta y presión de la rueda de auxilio. Con foto de un caso real.",
+    resumen("Cómo interpretar la etiqueta de presión del parante de la puerta: bar y PSI, filas por cantidad de ocupantes y carga, medidas de cada llanta y presión de la rueda de auxilio. Con foto de un caso real."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

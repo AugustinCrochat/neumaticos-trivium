@@ -3,7 +3,7 @@ import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { TallerLinks } from "@/components/blog/TallerLinks";
 import { EquipoHofmann } from "@/components/blog/EquipoHofmann";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "alineado-y-balanceado-en-camionetas-y-4x4";
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Alineado y balanceado en camionetas y 4x4: por qué las ruedas grandes y los neumáticos A/T necesitan más atención, cuándo alinear (kit de elevación, cambio de medida) y qué cuidar en una tracción integral.",
+    resumen("Alineado y balanceado en camionetas y 4x4: por qué las ruedas grandes y los neumáticos A/T necesitan más atención, cuándo alinear (kit de elevación, cambio de medida) y qué cuidar en una tracción integral."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

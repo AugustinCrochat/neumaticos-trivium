@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { Callout } from "@/components/blog/Callout";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "perfil-bajo-o-perfil-alto";
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Ventajas y desventajas del neumático de perfil bajo frente al de perfil alto: confort, dirección, riesgo de daño en baches, costo y cómo mantener el diámetro al subir de rodado.",
+    resumen("Ventajas y desventajas del neumático de perfil bajo frente al de perfil alto: confort, dirección, riesgo de daño en baches, costo y cómo mantener el diámetro al subir de rodado."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

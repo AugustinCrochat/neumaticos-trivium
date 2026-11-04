@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     absolute: "Neumáticos baratos de importación directa — Cubiertas al mejor precio",
   },
   description:
-    "Neumáticos y cubiertas de importación directa al mejor precio, con stock real publicado. Locales con gomería propia en Córdoba y Buenos Aires: alineación, balanceo y colocación sin cargo. Auto, camioneta, A/T y carga.",
+    "Neumáticos y cubiertas de importación directa al mejor precio, con stock real. Gomería propia en Córdoba y Buenos Aires: alineación, balanceo y colocación sin cargo.",
   alternates: canonical("/"),
 };
 

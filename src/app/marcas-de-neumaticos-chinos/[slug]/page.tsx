@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { DEFAULT_BRANCH_ID } from "@/lib/config";
 import { BRANDS } from "@/lib/data";
 import { getProductosDesdePOS } from "@/lib/pos-api";
-import { canonical, SITE_NAME } from "@/lib/seo";
+import { canonical, SITE_NAME, resumen } from "@/lib/seo";
 import { OTRAS_MARCAS, getOtraMarca } from "@/lib/marcas-chinas";
 import { poolShare } from "@/lib/share-image";
 import { CategoryLanding } from "../../neumaticos/CategoryLanding";
@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const share = poolShare(`marca-${marca.slug}`);
   return {
     title: `Neumáticos ${marca.name}: quién la fabrica, dónde se consigue y alternativas`,
-    description: `Qué se sabe de la marca ${marca.name} (${marca.empresa}), cómo comparar neumáticos chinos y las marcas chinas que tenemos en stock, con precio publicado, garantía y colocación sin cargo.`,
+    description: resumen(`Qué se sabe de la marca ${marca.name} (${marca.empresa}), cómo comparar neumáticos chinos y las marcas chinas que tenemos en stock, con precio publicado, garantía y colocación sin cargo.`),
     alternates: canonical(path),
     openGraph: { title: `Neumáticos ${marca.name} y alternativas — ${SITE_NAME}`, url: path, ...share.openGraph },
     twitter: share.twitter,

@@ -6,7 +6,7 @@ import { getProductosDesdePOS, getAccesoriosDesdePOS, getServiciosPrecios } from
 import { preciosTaller } from "@/lib/servicios-seo";
 import { OfertaRelampago, type Relampago } from "./OfertaRelampago";
 import { getSelectedBranchSlug } from "@/lib/branch-server";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { OFFER_TIRE_SLUGS, OFFER_MIN_STOCK, esTuercaDeSeguridad } from "@/lib/offers";
 import Link from "@/components/ui/Link";
 import Image from "next/image";
@@ -20,7 +20,7 @@ import type { TireProduct } from "@/lib/types";
 export const metadata: Metadata = {
   title: "Ofertas de neumáticos y tuercas de seguridad",
   description:
-    "Ofertas en neumáticos para auto, camioneta, A/T y carga (Grenlander, Arivo, Pirelli) y en todas las tuercas de seguridad: precio con descuento, colocación y válvulas sin cargo, hasta agotar stock.",
+    resumen("Ofertas en neumáticos para auto, camioneta, A/T y carga (Grenlander, Arivo, Pirelli) y en todas las tuercas de seguridad: precio con descuento, colocación y válvulas sin cargo, hasta agotar stock."),
   alternates: canonical("/ofertas"),
 };
 

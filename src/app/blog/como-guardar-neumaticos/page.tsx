@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { AhorroLinks } from "@/components/blog/AhorroLinks";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "como-guardar-neumaticos";
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Cómo guardar neumáticos correctamente: lugar fresco y oscuro, con o sin llanta, de pie, apilados o colgados, qué evitar (sol, aceite, calor) y cómo revisar la edad al volver a usarlos.",
+    resumen("Cómo guardar neumáticos correctamente: lugar fresco y oscuro, con o sin llanta, de pie, apilados o colgados, qué evitar (sol, aceite, calor) y cómo revisar la edad al volver a usarlos."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

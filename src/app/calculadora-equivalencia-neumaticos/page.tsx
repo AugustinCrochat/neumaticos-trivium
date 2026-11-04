@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { resumen } from "@/lib/seo";
 import Link from "@/components/ui/Link";
 import { EquivalenceCalculator } from "@/components/ui/EquivalenceCalculator";
 import { SITE_URL } from "@/lib/config";
@@ -17,7 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: "Calculadora de equivalencias de neumáticos: medidas compatibles ±3% | Trivium",
     description:
-      "Calculá en segundos si dos medidas de neumáticos son equivalentes: diferencia de diámetro, velocímetro y alternativas en stock. Tabla de equivalencias de 195/65 R15, 205/55 R16 y más.",
+      resumen("Calculá en segundos si dos medidas de neumáticos son equivalentes: diferencia de diámetro, velocímetro y alternativas en stock. Tabla de equivalencias de 195/65 R15, 205/55 R16 y más."),
     keywords: [
       "calculadora equivalencia neumaticos",
       "equivalencias de neumaticos",

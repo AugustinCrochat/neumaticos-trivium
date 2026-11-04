@@ -3,7 +3,7 @@ import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { CatalogWidget } from "@/components/blog/CatalogWidget";
 import { MedidasLinks } from "@/components/blog/MedidasLinks";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "neumaticos-185-65-r15-autos-que-la-usan";
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Neumáticos 185/65 R15: qué significa, diámetro total (621,5 mm), 24 autos que la usan (Peugeot 208, Chevrolet Onix, Chevrolet Onix Plus, Citroen C3), medidas equivalentes y cómo elegir.",
+    resumen("Neumáticos 185/65 R15: qué significa, diámetro total (621,5 mm), 24 autos que la usan (Peugeot 208, Chevrolet Onix, Chevrolet Onix Plus, Citroen C3), medidas equivalentes y cómo elegir."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

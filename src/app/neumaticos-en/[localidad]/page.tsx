@@ -11,7 +11,7 @@ import {
   getLocalidad,
   type Localidad,
 } from "@/lib/localidades";
-import { canonical, localidadJsonLd, SITE_NAME, type Faq } from "@/lib/seo";
+import { canonical, localidadJsonLd, SITE_NAME, type Faq, resumen } from "@/lib/seo";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { FaqSection } from "@/components/seo/FaqSection";
@@ -91,7 +91,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return {
     title,
-    description,
+    description: resumen(description),
     alternates: canonical(`/neumaticos-en/${localidad.slug}`),
     openGraph: {
       title: `${title} — ${SITE_NAME}`,

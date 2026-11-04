@@ -4,7 +4,7 @@ import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { AhorroLinks } from "@/components/blog/AhorroLinks";
 import { Callout } from "@/components/blog/Callout";
 import { ClusterLinks } from "@/components/blog/ClusterLinks";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "cuatro-economicos-o-dos-de-marca";
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   ...blogShare("cuatro-economicos-o-dos-de-marca"),
   title: TITLE,
   description:
-    "¿4 neumáticos económicos o 2 de marca? Cuándo cambiar los cuatro, cuándo dos, en qué eje colocar los nuevos y qué pasa en autos con tracción integral. Con ejemplos de la cuenta.",
+    resumen("¿4 neumáticos económicos o 2 de marca? Cuándo cambiar los cuatro, cuándo dos, en qué eje colocar los nuevos y qué pasa en autos con tracción integral. Con ejemplos de la cuenta."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

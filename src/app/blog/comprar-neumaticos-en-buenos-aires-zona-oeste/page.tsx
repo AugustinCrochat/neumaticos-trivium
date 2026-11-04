@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "comprar-neumaticos-en-buenos-aires-zona-oeste";
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Guía para comprar neumáticos en la zona oeste del Gran Buenos Aires y el oeste de Capital Federal: cómo comparar presupuestos, qué preguntar por colocación, fecha de fabricación (DOT) y garantía, y dónde abren Lomas del Mirador y San Justo.",
+    resumen("Guía para comprar neumáticos en la zona oeste del Gran Buenos Aires y el oeste de Capital Federal: cómo comparar presupuestos, qué preguntar por colocación, fecha de fabricación (DOT) y garantía, y dónde abren Lomas del Mirador y San Justo."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

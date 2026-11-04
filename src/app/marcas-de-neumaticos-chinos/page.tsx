@@ -3,7 +3,7 @@ import Link from "@/components/ui/Link";
 import { DEFAULT_BRANCH_ID } from "@/lib/config";
 import { BRANDS } from "@/lib/data";
 import { getProductosDesdePOS } from "@/lib/pos-api";
-import { canonical, SITE_NAME } from "@/lib/seo";
+import { canonical, SITE_NAME, resumen } from "@/lib/seo";
 import { OTRAS_MARCAS } from "@/lib/marcas-chinas";
 import { poolShare } from "@/lib/share-image";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
@@ -16,7 +16,7 @@ const share = poolShare("marcas-chinas");
 export const metadata: Metadata = {
   title: "Marcas de neumáticos chinos en Argentina: cuáles son y cómo elegir",
   description:
-    "Las marcas de neumáticos chinos más buscadas en Argentina (Kpatos, Sailun, Goodride, Westlake, Triangle y más): quién las fabrica, cómo comparar una con otra y precios y stock de hoy, con colocación sin cargo.",
+    resumen("Las marcas de neumáticos chinos más buscadas en Argentina (Kpatos, Sailun, Goodride, Westlake, Triangle y más): quién las fabrica, cómo comparar una con otra y precios y stock de hoy, con colocación sin cargo."),
   alternates: canonical("/marcas-de-neumaticos-chinos"),
   openGraph: { title: `Marcas de neumáticos chinos en Argentina — ${SITE_NAME}`, url: "/marcas-de-neumaticos-chinos", ...share.openGraph },
   twitter: share.twitter,

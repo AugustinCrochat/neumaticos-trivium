@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "neumaticos-japoneses-europeos-americanos-y-chinos-origen-de-las-marcas";
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "De dónde es cada marca de neumáticos: japonesas (Bridgestone, Yokohama), europeas (Michelin, Pirelli, Continental), americanas (Goodyear), coreanas (Hankook, Kumho) y chinas (Linglong, Kpatos, Sailun). Y cómo saber dónde se fabricó el tuyo.",
+    resumen("De dónde es cada marca de neumáticos: japonesas (Bridgestone, Yokohama), europeas (Michelin, Pirelli, Continental), americanas (Goodyear), coreanas (Hankook, Kumho) y chinas (Linglong, Kpatos, Sailun). Y cómo saber dónde se fabricó el tuyo."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

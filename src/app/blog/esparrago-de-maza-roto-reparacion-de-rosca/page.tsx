@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "esparrago-de-maza-roto-reparacion-de-rosca";
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Espárrago o bulón de maza roto, rosca pasada o dañada: causas, cómo se repara (cambio de espárrago, repaso de rosca) y qué cuidar para que no vuelva a pasar. Gomería en Córdoba.",
+    resumen("Espárrago o bulón de maza roto, rosca pasada o dañada: causas, cómo se repara (cambio de espárrago, repaso de rosca) y qué cuidar para que no vuelva a pasar. Gomería en Córdoba."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

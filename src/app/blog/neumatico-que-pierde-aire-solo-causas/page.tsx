@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { AhorroLinks } from "@/components/blog/AhorroLinks";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "neumatico-que-pierde-aire-solo-causas";
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Por qué un neumático pierde aire solo: válvula u obús, pinchadura lenta, talón, llanta porosa o sensor. Cómo encontrar la pérdida con agua y detergente y cuál es la solución en cada caso.",
+    resumen("Por qué un neumático pierde aire solo: válvula u obús, pinchadura lenta, talón, llanta porosa o sensor. Cómo encontrar la pérdida con agua y detergente y cuál es la solución en cada caso."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

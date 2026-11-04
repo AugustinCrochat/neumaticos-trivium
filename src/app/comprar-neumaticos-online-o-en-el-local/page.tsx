@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { DEFAULT_BRANCH_ID } from "@/lib/config";
 import { getProductosDesdePOS } from "@/lib/pos-api";
-import { canonical, SITE_NAME } from "@/lib/seo";
+import { canonical, SITE_NAME, resumen } from "@/lib/seo";
 import { formatSize, sizeSlug } from "@/lib/tire-sizes";
 import { poolShare } from "@/lib/share-image";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
@@ -16,7 +16,7 @@ const share = poolShare("comprar-online-o-local");
 export const metadata: Metadata = {
   title: "Comprar neumáticos online o en el local: qué incluye el precio",
   description:
-    "Comprar neumáticos online y llevarlos a un taller suma envío, colocación y días de espera. Hacé la cuenta con tus números y compará con neumáticos colocados en el día y sin cargo.",
+    resumen("Comprar neumáticos online y llevarlos a un taller suma envío, colocación y días de espera. Hacé la cuenta con tus números y compará con neumáticos colocados en el día y sin cargo."),
   alternates: canonical("/comprar-neumaticos-online-o-en-el-local"),
   openGraph: { title: `Comprar neumáticos online o en el local — ${SITE_NAME}`, url: "/comprar-neumaticos-online-o-en-el-local", ...share.openGraph },
   twitter: share.twitter,

@@ -3,7 +3,7 @@ import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { Callout } from "@/components/blog/Callout";
 import { ClusterLinks } from "@/components/blog/ClusterLinks";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "son-malos-los-neumaticos-chinos";
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   ...blogShare("son-malos-los-neumaticos-chinos"),
   title: TITLE,
   description:
-    "¿Son malos los neumáticos chinos? Mitos y realidad: dónde fabrican también las marcas premium, qué homologaciones exigir (ECE, DOT) y qué señales distinguen un buen neumático importado de uno dudoso.",
+    resumen("¿Son malos los neumáticos chinos? Mitos y realidad: dónde fabrican también las marcas premium, qué homologaciones exigir (ECE, DOT) y qué señales distinguen un buen neumático importado de uno dudoso."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

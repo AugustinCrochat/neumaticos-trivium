@@ -3,7 +3,7 @@ import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { TallerLinks } from "@/components/blog/TallerLinks";
 import { EquipoHofmann } from "@/components/blog/EquipoHofmann";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "pesas-de-balanceo-por-que-se-caen";
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Pesas de balanceo: qué son, tipos (adhesivas y de clip), por qué se caen, cómo darte cuenta de que falta una y por qué hay que volver a balancear en lugar de simplemente pegar otra.",
+    resumen("Pesas de balanceo: qué son, tipos (adhesivas y de clip), por qué se caen, cómo darte cuenta de que falta una y por qué hay que volver a balancear en lugar de simplemente pegar otra."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

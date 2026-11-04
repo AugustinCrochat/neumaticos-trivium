@@ -1,6 +1,6 @@
 import Link from "@/components/ui/Link";
 import type { Metadata } from "next";
-import { breadcrumbJsonLd, canonical } from "@/lib/seo";
+import { breadcrumbJsonLd, canonical, resumen } from "@/lib/seo";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { BlogCoverStrip, BlogSearchStrip } from "@/components/blog/BlogShop";
 import { blogShare } from "@/lib/blog-meta";
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   ...blogShare("grenlander"),
   title: "¿Son buenos los neumáticos Grenlander? Opinión, precios y comparativa",
   description:
-    "Grenlander: ¿vale la pena? Homologación europea, agarre, agua y duración, comparados con Zmax, Pirelli y BFGoodrich. Cuándo conviene y para quién, con las medidas que colocamos en el día.",
+    resumen("Grenlander: ¿vale la pena? Homologación europea, agarre, agua y duración, comparados con Zmax, Pirelli y BFGoodrich. Cuándo conviene y para quién, con las medidas que colocamos en el día."),
   alternates: canonical("/blog/grenlander"),
 };
 

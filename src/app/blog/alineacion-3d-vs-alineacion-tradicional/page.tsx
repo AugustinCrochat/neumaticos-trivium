@@ -3,7 +3,7 @@ import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { TallerLinks } from "@/components/blog/TallerLinks";
 import { EquipoHofmann } from "@/components/blog/EquipoHofmann";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "alineacion-3d-vs-alineacion-tradicional";
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Alineación 3D vs. tradicional: cómo funciona una alineadora con targets y cámaras, qué ventajas tiene en rapidez y precisión, qué límites tiene y qué conviene preguntar antes de alinear.",
+    resumen("Alineación 3D vs. tradicional: cómo funciona una alineadora con targets y cámaras, qué ventajas tiene en rapidez y precisión, qué límites tiene y qué conviene preguntar antes de alinear."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

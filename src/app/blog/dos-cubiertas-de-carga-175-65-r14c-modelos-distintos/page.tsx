@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "dos-cubiertas-de-carga-175-65-r14c-modelos-distintos";
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Dos cubiertas de carga Grenlander 175/65 R14C 90/88 de modelos distintos: qué tienen en común, qué cambia en el dibujo y el índice de velocidad, y cómo elegir para tu utilitario.",
+    resumen("Dos cubiertas de carga Grenlander 175/65 R14C 90/88 de modelos distintos: qué tienen en común, qué cambia en el dibujo y el índice de velocidad, y cómo elegir para tu utilitario."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

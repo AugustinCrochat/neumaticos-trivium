@@ -3,7 +3,7 @@ import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { Callout } from "@/components/blog/Callout";
 import { ClusterLinks } from "@/components/blog/ClusterLinks";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "neumaticos-economicos-para-uso-urbano";
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   ...blogShare("neumaticos-economicos-para-uso-urbano"),
   title: TITLE,
   description:
-    "¿Conviene un neumático económico para la ciudad? Cuándo alcanza una alternativa importada homologada, qué cuidar igual (frenado en mojado, índices, presión) y cuándo conviene subir de gama.",
+    resumen("¿Conviene un neumático económico para la ciudad? Cuándo alcanza una alternativa importada homologada, qué cuidar igual (frenado en mojado, índices, presión) y cuándo conviene subir de gama."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

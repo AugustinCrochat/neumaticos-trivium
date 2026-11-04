@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { AhorroLinks } from "@/components/blog/AhorroLinks";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "nitrogeno-en-neumaticos-vale-la-pena";
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Inflar neumáticos con nitrógeno: qué es, cuánta presión se pierde menos (un estudio de 12 meses), qué dice el marketing y si vale la pena pagarlo en el presupuesto de las cubiertas.",
+    resumen("Inflar neumáticos con nitrógeno: qué es, cuánta presión se pierde menos (un estudio de 12 meses), qué dice el marketing y si vale la pena pagarlo en el presupuesto de las cubiertas."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

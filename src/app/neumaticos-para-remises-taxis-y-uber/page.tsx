@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { DEFAULT_BRANCH_ID } from "@/lib/config";
 import { getProductosDesdePOS } from "@/lib/pos-api";
-import { canonical, SITE_NAME } from "@/lib/seo";
+import { canonical, SITE_NAME, resumen } from "@/lib/seo";
 import { CategoryLanding } from "../neumaticos/CategoryLanding";
 import { RemisesExtra } from "./RemisesExtra";
 import { siteShare } from "@/lib/share-image";
@@ -21,7 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
       ? `Neumáticos para taxi, remis y Uber desde $${desde.toLocaleString("es-AR")}`
       : "Neumáticos para taxi, remis y Uber: cubiertas económicas",
     description:
-      "Cubiertas nuevas y económicas para taxis, remises y autos de Uber, DiDi y Cabify: medidas de los autos más usados, precio por unidad, un año de garantía, colocación sin cargo, alineación y balanceo en nuestros locales.",
+      resumen("Cubiertas nuevas y económicas para taxis, remises y autos de Uber, DiDi y Cabify: medidas de los autos más usados, precio por unidad, un año de garantía, colocación sin cargo, alineación y balanceo en nuestros locales."),
     alternates: canonical("/neumaticos-para-remises-taxis-y-uber"),
     openGraph: { title: `Neumáticos para remises, taxis y Uber — ${SITE_NAME}`, url: "/neumaticos-para-remises-taxis-y-uber", ...(share?.openGraph ?? {}) },
     twitter: share?.twitter,

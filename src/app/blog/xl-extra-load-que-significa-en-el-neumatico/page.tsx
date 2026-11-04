@@ -4,7 +4,7 @@ import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { FlancoFoto } from "@/components/blog/FlancoFoto";
 import { FlancoLinks } from "@/components/blog/FlancoLinks";
 import { FotoNeumaticoBloque } from "@/components/tools/FotoNeumaticoBloque";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "xl-extra-load-que-significa-en-el-neumatico";
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Qué significa XL (Extra Load, reforzado) en el flanco de un neumático: más carga a la misma medida, mayor presión de referencia y por qué no conviene reemplazarlo por uno estándar.",
+    resumen("Qué significa XL (Extra Load, reforzado) en el flanco de un neumático: más carga a la misma medida, mayor presión de referencia y por qué no conviene reemplazarlo por uno estándar."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

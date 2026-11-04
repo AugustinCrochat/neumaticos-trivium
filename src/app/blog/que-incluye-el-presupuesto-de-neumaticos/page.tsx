@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { AhorroLinks } from "@/components/blog/AhorroLinks";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "que-incluye-el-presupuesto-de-neumaticos";
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Qué incluye un presupuesto de neumáticos y cómo compararlo: precio por unidad, IVA, colocación, válvulas, balanceo, alineación, nitrógeno, garantía y qué preguntar en la gomería.",
+    resumen("Qué incluye un presupuesto de neumáticos y cómo compararlo: precio por unidad, IVA, colocación, válvulas, balanceo, alineación, nitrógeno, garantía y qué preguntar en la gomería."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

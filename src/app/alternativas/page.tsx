@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
-import { canonical, SITE_NAME } from "@/lib/seo";
+import { canonical, SITE_NAME, resumen } from "@/lib/seo";
 import { MARCAS_PREMIUM } from "@/lib/marcas-premium";
 import { poolShare } from "@/lib/share-image";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
@@ -11,7 +11,7 @@ const share = poolShare("alternativas");
 export const metadata: Metadata = {
   title: "Alternativas a Michelin, Bridgestone, Goodyear, Fate y otras marcas de neumáticos",
   description:
-    "Qué se sabe de las marcas tradicionales de neumáticos (Michelin, Bridgestone, Firestone, Goodyear, Continental, Fate, Hankook, Kumho, Yokohama, Toyo, Nexen, Dunlop), cuándo conviene una premium y qué alternativas tenemos en Córdoba.",
+    resumen("Qué se sabe de las marcas tradicionales de neumáticos (Michelin, Bridgestone, Firestone, Goodyear, Continental, Fate, Hankook, Kumho, Yokohama, Toyo, Nexen, Dunlop), cuándo conviene una premium y qué alternativas tenemos en Córdoba."),
   alternates: canonical("/alternativas"),
   openGraph: { title: `Alternativas a las marcas de neumáticos — ${SITE_NAME}`, url: "/alternativas", ...share.openGraph },
   twitter: share.twitter,

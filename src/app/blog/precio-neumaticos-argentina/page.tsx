@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { DEFAULT_BRANCH_ID } from "@/lib/config";
 import { getProductosDesdePOS } from "@/lib/pos-api";
 import { formatSize, sizeSlug } from "@/lib/tire-sizes";
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   ...blogShare("precio-neumaticos-argentina"),
   title: TITLE,
   description:
-    "Cuánto sale un neumático barato o económico en Argentina según rodado y marca, qué hace que el precio varíe entre negocios y cómo comparar sin que te vendan humo. Con precios reales actualizados.",
+    resumen("Cuánto sale un neumático barato o económico en Argentina según rodado y marca, qué hace que el precio varíe entre negocios y cómo comparar sin que te vendan humo. Con precios reales actualizados."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

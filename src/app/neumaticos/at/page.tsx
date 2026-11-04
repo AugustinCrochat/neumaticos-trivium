@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import { DEFAULT_BRANCH_ID } from "@/lib/config";
 import { getProductosDesdePOS } from "@/lib/pos-api";
-import { canonical, SITE_NAME } from "@/lib/seo";
+import { canonical, SITE_NAME, resumen } from "@/lib/seo";
 import { CategoryLanding } from "../CategoryLanding";
 import { poolShare } from "@/lib/share-image";
 
 export const metadata: Metadata = {
   title: "Neumáticos A/T: precios y medidas",
   description:
-    "Neumáticos A/T (All Terrain) para camionetas, pick-ups y 4x4 al mejor precio, con stock y precio actualizado. Importación directa, garantía de 1 año, colocación sin cargo en nuestros locales.",
+    resumen("Neumáticos A/T (All Terrain) para camionetas, pick-ups y 4x4 al mejor precio, con stock y precio actualizado. Importación directa, garantía de 1 año, colocación sin cargo en nuestros locales."),
   alternates: canonical("/neumaticos/at"),
   openGraph: {
     title: `Neumáticos A/T (All Terrain) — ${SITE_NAME}`,

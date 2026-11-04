@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "arme-y-desarme-de-neumaticos";
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Cómo es el arme y desarme de neumáticos en una gomería: desmontadora automática, cambio de válvula, cuidado de la llanta y balanceo. Qué mirar para que no te rayen las llantas.",
+    resumen("Cómo es el arme y desarme de neumáticos en una gomería: desmontadora automática, cambio de válvula, cuidado de la llanta y balanceo. Qué mirar para que no te rayen las llantas."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

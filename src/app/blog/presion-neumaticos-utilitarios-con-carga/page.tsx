@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "presion-neumaticos-utilitarios-con-carga";
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   ...blogShare("presion-neumaticos-utilitarios-con-carga"),
   title: TITLE,
   description:
-    "Cómo calibrar la presión de los neumáticos de un utilitario o furgón con carga: dónde está la tabla, por qué cambia con el peso, cada cuánto controlarla y los riesgos de andar con poco aire.",
+    resumen("Cómo calibrar la presión de los neumáticos de un utilitario o furgón con carga: dónde está la tabla, por qué cambia con el peso, cada cuánto controlarla y los riesgos de andar con poco aire."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { AhorroLinks } from "@/components/blog/AhorroLinks";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "cambio-de-valvulas-de-neumaticos";
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Cuándo cambiar las válvulas de los neumáticos, cómo saber si una válvula pierde aire, la diferencia con el obús y los sensores de presión, y qué mirar en el presupuesto de la gomería.",
+    resumen("Cuándo cambiar las válvulas de los neumáticos, cómo saber si una válvula pierde aire, la diferencia con el obús y los sensores de presión, y qué mirar en el presupuesto de la gomería."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

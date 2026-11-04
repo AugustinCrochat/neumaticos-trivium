@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "extraccion-de-tuercas-de-seguridad";
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Cómo se saca una tuerca antirrobo cuando no tenés la llave: extractores, qué evitar para no dañar el espárrago ni la llanta, y cuándo conviene llevarla a una gomería.",
+    resumen("Cómo se saca una tuerca antirrobo cuando no tenés la llave: extractores, qué evitar para no dañar el espárrago ni la llanta, y cuándo conviene llevarla a una gomería."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

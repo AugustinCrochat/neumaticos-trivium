@@ -3,7 +3,7 @@ import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { AhorroLinks } from "@/components/blog/AhorroLinks";
 import { EquipoHofmann } from "@/components/blog/EquipoHofmann";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "pozo-o-golpe-que-revisar-en-el-neumatico";
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Qué revisar en el neumático y la llanta después de golpear un pozo, un bache o un cordón: burbujas, vibración, auto que tira, llanta torcida. Cuándo alinear y cuándo cambiar la cubierta.",
+    resumen("Qué revisar en el neumático y la llanta después de golpear un pozo, un bache o un cordón: burbujas, vibración, auto que tira, llanta torcida. Cuándo alinear y cuándo cambiar la cubierta."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

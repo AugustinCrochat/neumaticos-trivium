@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "como-hacer-durar-los-neumaticos-de-taxis-y-remises";
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Cómo alargar la vida de los neumáticos de un taxi, remis o auto de aplicación: presión, alineación, balanceo, rotación, manejo y cuándo cambiarlos. Consejos de un taller de Córdoba.",
+    resumen("Cómo alargar la vida de los neumáticos de un taxi, remis o auto de aplicación: presión, alineación, balanceo, rotación, manejo y cuándo cambiarlos. Consejos de un taller de Córdoba."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

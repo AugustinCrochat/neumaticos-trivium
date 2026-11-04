@@ -3,7 +3,7 @@ import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { TallerLinks } from "@/components/blog/TallerLinks";
 import { EquipoHofmann } from "@/components/blog/EquipoHofmann";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "revision-antes-de-viajar-neumaticos";
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Checklist para revisar los neumáticos antes de un viaje largo: presión con carga completa, profundidad del dibujo, edad (DOT), rueda de auxilio, llave de la tuerca antirrobo y cuándo alinear y balancear.",
+    resumen("Checklist para revisar los neumáticos antes de un viaje largo: presión con carga completa, profundidad del dibujo, edad (DOT), rueda de auxilio, llave de la tuerca antirrobo y cuándo alinear y balancear."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

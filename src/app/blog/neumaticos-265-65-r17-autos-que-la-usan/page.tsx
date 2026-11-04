@@ -3,7 +3,7 @@ import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { CatalogWidget } from "@/components/blog/CatalogWidget";
 import { MedidasLinks } from "@/components/blog/MedidasLinks";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "neumaticos-265-65-r17-autos-que-la-usan";
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Neumáticos 265/65 R17: qué significa, diámetro total (776,3 mm), 11 autos que la usan (Toyota Hilux, Ford Ranger, BAIC BJ40, Fiat Titano), medidas equivalentes y cómo elegir.",
+    resumen("Neumáticos 265/65 R17: qué significa, diámetro total (776,3 mm), 11 autos que la usan (Toyota Hilux, Ford Ranger, BAIC BJ40, Fiat Titano), medidas equivalentes y cómo elegir."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

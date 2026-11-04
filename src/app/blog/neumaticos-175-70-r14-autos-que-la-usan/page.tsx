@@ -3,7 +3,7 @@ import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { CatalogWidget } from "@/components/blog/CatalogWidget";
 import { MedidasLinks } from "@/components/blog/MedidasLinks";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "neumaticos-175-70-r14-autos-que-la-usan";
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Neumáticos 175/70 R14: qué significa, diámetro total (600,6 mm), 23 autos que la usan (Renault Sandero, Volkswagen Gol Trend, Renault Logan, Renault Kangoo), medidas equivalentes y cómo elegir.",
+    resumen("Neumáticos 175/70 R14: qué significa, diámetro total (600,6 mm), 23 autos que la usan (Renault Sandero, Volkswagen Gol Trend, Renault Logan, Renault Kangoo), medidas equivalentes y cómo elegir."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

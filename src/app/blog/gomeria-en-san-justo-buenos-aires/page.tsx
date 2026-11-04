@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "gomeria-en-san-justo-buenos-aires";
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Guía de gomería en San Justo, La Matanza y el oeste de Buenos Aires: arme y desarme, balanceo, alineación, rotación, pinchaduras y tuercas de seguridad. Neumáticos Trivium San Justo abre en enero.",
+    resumen("Guía de gomería en San Justo, La Matanza y el oeste de Buenos Aires: arme y desarme, balanceo, alineación, rotación, pinchaduras y tuercas de seguridad. Neumáticos Trivium San Justo abre en enero."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

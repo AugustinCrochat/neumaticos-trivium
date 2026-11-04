@@ -3,7 +3,7 @@ import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { Callout } from "@/components/blog/Callout";
 import { ClusterLinks } from "@/components/blog/ClusterLinks";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "marca-o-importado-camioneta-at-carga";
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   ...blogShare("marca-o-importado-camioneta-at-carga"),
   title: TITLE,
   description:
-    "Neumáticos para camioneta, A/T y carga: ¿marca o importado? Qué mirar según el uso (carga, ruta, tierra), la importancia del índice de carga y cuándo una alternativa económica es suficiente.",
+    resumen("Neumáticos para camioneta, A/T y carga: ¿marca o importado? Qué mirar según el uso (carga, ruta, tierra), la importancia del índice de carga y cuándo una alternativa económica es suficiente."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

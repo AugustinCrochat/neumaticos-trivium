@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "gomeria-en-lomas-del-mirador-y-oeste-de-capital";
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Guía de gomería para Lomas del Mirador y el oeste de Capital Federal (Liniers, Villa Luro, Versalles, Mataderos, Parque Avellaneda, Villa Lugano): servicios, cómo elegir taller y cómo llegar al local de Av. Mosconi 248. Abre en diciembre.",
+    resumen("Guía de gomería para Lomas del Mirador y el oeste de Capital Federal (Liniers, Villa Luro, Versalles, Mataderos, Parque Avellaneda, Villa Lugano): servicios, cómo elegir taller y cómo llegar al local de Av. Mosconi 248. Abre en diciembre."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

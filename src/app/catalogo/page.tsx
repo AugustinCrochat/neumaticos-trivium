@@ -3,12 +3,12 @@ import type { Metadata } from "next";
 import { ShopPage } from "@/components/ui/ShopPage";
 import { getProductosDesdePOS, getAccesoriosDesdePOS } from "@/lib/pos-api";
 import { getSelectedBranchSlug } from "@/lib/branch-server";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Catálogo de neumáticos y cubiertas",
   description:
-    "Todo el catálogo de neumáticos importados a precio outlet: filtrá por marca, medida, tipo de vehículo y precio. Cubiertas para auto, camioneta, A/T y carga con stock real, retiro en nuestros locales de Córdoba y Buenos Aires.",
+    resumen("Todo el catálogo de neumáticos importados a precio outlet: filtrá por marca, medida, tipo de vehículo y precio. Cubiertas para auto, camioneta, A/T y carga con stock real, retiro en nuestros locales de Córdoba y Buenos Aires."),
   alternates: canonical("/catalogo"),
 };
 

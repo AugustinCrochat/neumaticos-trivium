@@ -2,12 +2,12 @@ import Link from "@/components/ui/Link";
 import type { Metadata } from "next";
 import { BRANCHES } from "@/lib/config";
 import { BranchesMap } from "./BranchesMap";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Sucursales de neumáticos y gomería en Córdoba y Buenos Aires",
   description:
-    "Dirección, horarios, teléfono y cómo llegar a las sucursales de Neumáticos Trivium. Local con stock propio y taller de alineación y balanceo, en Córdoba y Buenos Aires.",
+    resumen("Dirección, horarios, teléfono y cómo llegar a las sucursales de Neumáticos Trivium. Local con stock propio y taller de alineación y balanceo, en Córdoba y Buenos Aires."),
   alternates: canonical("/sucursales"),
 };
 

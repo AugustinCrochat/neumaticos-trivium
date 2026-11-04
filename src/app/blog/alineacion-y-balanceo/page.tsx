@@ -6,7 +6,7 @@ import { AhorroLinks } from "@/components/blog/AhorroLinks";
 import { TallerLinks } from "@/components/blog/TallerLinks";
 import { EquipoHofmann } from "@/components/blog/EquipoHofmann";
 import { ServicioHoyCTA } from "@/components/servicios/ServicioHoyCTA";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "alineacion-y-balanceo";
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Alineado y balanceado (alineación y balanceo): la diferencia entre uno y otro, los síntomas de cada problema, cada cuántos kilómetros conviene hacerlos y qué pasa si los postergás.",
+    resumen("Alineado y balanceado (alineación y balanceo): la diferencia entre uno y otro, los síntomas de cada problema, cada cuántos kilómetros conviene hacerlos y qué pasa si los postergás."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

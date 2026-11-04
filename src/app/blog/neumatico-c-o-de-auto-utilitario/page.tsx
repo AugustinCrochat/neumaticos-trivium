@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "neumatico-c-o-de-auto-utilitario";
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   ...blogShare("neumatico-c-o-de-auto-utilitario"),
   title: TITLE,
   description:
-    "Diferencias entre un neumático C (de carga) y uno de auto en la misma medida: carcasa, índice de carga, presión y riesgos de reemplazar uno por otro en un utilitario o furgón.",
+    resumen("Diferencias entre un neumático C (de carga) y uno de auto en la misma medida: carcasa, índice de carga, presión y riesgos de reemplazar uno por otro en un utilitario o furgón."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

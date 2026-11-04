@@ -3,7 +3,7 @@ import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { Callout } from "@/components/blog/Callout";
 import { ClusterLinks } from "@/components/blog/ClusterLinks";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "como-elegir-neumatico-importado-seguro";
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   ...blogShare("como-elegir-neumatico-importado-seguro"),
   title: TITLE,
   description:
-    "Checklist de 8 puntos para elegir un neumático importado seguro: homologación ECE/DOT, fecha de fabricación (código DOT), medida, índices de carga y velocidad, etiqueta, garantía y montaje.",
+    resumen("Checklist de 8 puntos para elegir un neumático importado seguro: homologación ECE/DOT, fecha de fabricación (código DOT), medida, índices de carga y velocidad, etiqueta, garantía y montaje."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

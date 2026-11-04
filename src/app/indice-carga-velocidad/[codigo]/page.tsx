@@ -6,7 +6,7 @@ import { FaqSection } from "@/components/seo/FaqSection";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { CatalogWidget } from "@/components/blog/CatalogWidget";
 import { LOAD_SPEED_CODES, getLoadSpeedInfo } from "@/lib/load-speed";
-import { absoluteUrl, canonical } from "@/lib/seo";
+import { absoluteUrl, canonical, resumen } from "@/lib/seo";
 
 type Props = { params: Promise<{ codigo: string }> };
 
@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const label = info.code;
   return {
     title: `${label} en un neumático: ${info.loadKg} kg y ${info.speedKmh} km/h (qué significa)`,
-    description: `${label} = hasta ${info.loadKg} kg por rueda (índice ${info.loadIndex}) y ${info.speedKmh} km/h (letra ${info.speedRating}). Cuándo podés usar otro índice, qué códigos son parecidos y neumáticos ${label} con stock y colocación sin cargo.`,
+    description: resumen(`${label} = hasta ${info.loadKg} kg por rueda (índice ${info.loadIndex}) y ${info.speedKmh} km/h (letra ${info.speedRating}). Cuándo podés usar otro índice, qué códigos son parecidos y neumáticos ${label} con stock y colocación sin cargo.`),
     alternates: canonical(`/indice-carga-velocidad/${label.toLowerCase()}`),
   };
 }

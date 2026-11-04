@@ -4,7 +4,7 @@ import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { Callout } from "@/components/blog/Callout";
 import { ClusterLinks } from "@/components/blog/ClusterLinks";
 import { CostPerKmCalculator } from "@/components/blog/CostPerKmCalculator";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "cuanto-duran-los-neumaticos-economicos";
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   ...blogShare("cuanto-duran-los-neumaticos-economicos"),
   title: TITLE,
   description:
-    "¿Cuánto duran los neumáticos económicos? Qué factores definen la vida útil (presión, alineación, uso, edad), cómo medir el desgaste y estimar los kilómetros con tu propio auto.",
+    resumen("¿Cuánto duran los neumáticos económicos? Qué factores definen la vida útil (presión, alineación, uso, edad), cómo medir el desgaste y estimar los kilómetros con tu propio auto."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

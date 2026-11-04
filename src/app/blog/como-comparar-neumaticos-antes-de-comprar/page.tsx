@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { AhorroLinks } from "@/components/blog/AhorroLinks";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "como-comparar-neumaticos-antes-de-comprar";
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Qué mirar al comparar neumáticos: medida, índices de carga y velocidad, etiqueta europea, fecha DOT, garantía, colocación y costo por kilómetro. Guía de nuestra gomería de Córdoba.",
+    resumen("Qué mirar al comparar neumáticos: medida, índices de carga y velocidad, etiqueta europea, fecha DOT, garantía, colocación y costo por kilómetro. Guía de nuestra gomería de Córdoba."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

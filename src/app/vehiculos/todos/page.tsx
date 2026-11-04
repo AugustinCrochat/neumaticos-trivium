@@ -6,12 +6,12 @@ import { marcaSlug } from "@/lib/marcas-autos";
 import { MarcaLogo } from "@/components/ui/MarcaLogo";
 import { CatalogoBuscador } from "./CatalogoBuscador";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { canonical, breadcrumbJsonLd, itemListJsonLd, faqJsonLd } from "@/lib/seo";
+import { canonical, breadcrumbJsonLd, itemListJsonLd, faqJsonLd, resumen } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: `Medida de neumáticos de ${POPULAR_VEHICLES.length} autos y camionetas, por modelo`,
   description:
-    "¿Qué medida de neumático lleva tu auto? Listado por marca de autos, pickups y utilitarios que circulan en Argentina, con la medida original de cada modelo y stock real en nuestros locales.",
+    resumen("¿Qué medida de neumático lleva tu auto? Listado por marca de autos, pickups y utilitarios que circulan en Argentina, con la medida original de cada modelo y stock real en nuestros locales."),
   alternates: canonical("/vehiculos/todos"),
 };
 

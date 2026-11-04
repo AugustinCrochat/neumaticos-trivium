@@ -309,3 +309,20 @@ export function itemListJsonLd(items: { name: string; path: string }[]) {
     })),
   };
 }
+
+/**
+ * Meta description de hasta `max` caracteres (Google corta cerca de 155-160).
+ * Si no entra, corta en el último signo de oración o, si no hay, en la última
+ * palabra completa, y cierra con punto.
+ */
+export function resumen(texto: string, max = 160): string {
+  const t = texto.replace(/\s+/g, " ").trim();
+  if (t.length <= max) return t;
+  const corte = t.slice(0, max);
+  const oracion = Math.max(corte.lastIndexOf(". "), corte.lastIndexOf(". "));
+  if (oracion > max * 0.6) return corte.slice(0, oracion + 1);
+  const coma = Math.max(corte.lastIndexOf(", "), corte.lastIndexOf(": "));
+  if (coma > max * 0.6) return corte.slice(0, coma) + ".";
+  const palabra = corte.lastIndexOf(" ");
+  return corte.slice(0, palabra > 0 ? palabra : max).replace(/[,;:(\s—-]+$/, "") + ".";
+}

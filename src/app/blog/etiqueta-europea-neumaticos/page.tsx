@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "etiqueta-europea-neumaticos";
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   ...blogShare("etiqueta-europea-neumaticos"),
   title: TITLE,
   description:
-    "Qué es la etiqueta europea de eficiencia de neumáticos (Reglamento UE 2020/740): eficiencia de combustible, frenado en mojado, ruido externo y el registro EPREL que la respalda.",
+    resumen("Qué es la etiqueta europea de eficiencia de neumáticos (Reglamento UE 2020/740): eficiencia de combustible, frenado en mojado, ruido externo y el registro EPREL que la respalda."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

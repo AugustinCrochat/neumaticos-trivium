@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { Callout } from "@/components/blog/Callout";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "como-preparar-el-cambio-de-neumaticos";
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Cómo preparar el cambio de neumáticos: qué llevar (llave de seguridad, medida), qué debe incluir el servicio (colocación, válvulas, balanceo) y qué controlar al retirar el auto.",
+    resumen("Cómo preparar el cambio de neumáticos: qué llevar (llave de seguridad, medida), qué debe incluir el servicio (colocación, válvulas, balanceo) y qué controlar al retirar el auto."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

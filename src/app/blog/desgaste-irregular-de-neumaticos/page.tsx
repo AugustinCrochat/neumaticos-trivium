@@ -4,7 +4,7 @@ import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { AhorroLinks } from "@/components/blog/AhorroLinks";
 import { EquipoHofmann } from "@/components/blog/EquipoHofmann";
 import { Callout } from "@/components/blog/Callout";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "desgaste-irregular-de-neumaticos";
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Cómo leer el desgaste de los neumáticos: bordes gastados, centro gastado, un solo lado, dientes de sierra y manchones. Causas (presión, alineación, balanceo, amortiguadores) y qué hacer.",
+    resumen("Cómo leer el desgaste de los neumáticos: bordes gastados, centro gastado, un solo lado, dientes de sierra y manchones. Causas (presión, alineación, balanceo, amortiguadores) y qué hacer."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

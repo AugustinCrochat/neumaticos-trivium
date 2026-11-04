@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "tuercas-y-bulones-de-seguridad";
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Cómo funcionan las tuercas y bulones de seguridad (antirrobo), cómo colocarlas y apretarlas, dónde guardar la llave y qué hacer si se pierde. Guía de nuestra gomería de Córdoba.",
+    resumen("Cómo funcionan las tuercas y bulones de seguridad (antirrobo), cómo colocarlas y apretarlas, dónde guardar la llave y qué hacer si se pierde. Guía de nuestra gomería de Córdoba."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

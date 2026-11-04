@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { ServicioHoyCTA } from "@/components/servicios/ServicioHoyCTA";
 import { blogShare } from "@/lib/blog-meta";
 
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   ...blogShare("gomeria-en-cordoba"),
   title: TITLE,
   description:
-    "Qué servicios hace una gomería en Córdoba, cuáles conviene combinar, cuándo hace falta alinear o balancear y cómo reconocer un taller serio. Con la experiencia de nuestro taller en Argüello.",
+    resumen("Qué servicios hace una gomería en Córdoba, cuáles conviene combinar, cuándo hace falta alinear o balancear y cómo reconocer un taller serio. Con la experiencia de nuestro taller en Argüello."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

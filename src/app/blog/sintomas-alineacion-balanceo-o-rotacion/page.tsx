@@ -5,7 +5,7 @@ import { TallerLinks } from "@/components/blog/TallerLinks";
 import { AhorroLinks } from "@/components/blog/AhorroLinks";
 import { EquipoHofmann } from "@/components/blog/EquipoHofmann";
 import { Callout } from "@/components/blog/Callout";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "sintomas-alineacion-balanceo-o-rotacion";
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Síntomas de que el auto necesita alineación, balanceo o rotación de neumáticos: vibración en el volante o el asiento, tira para un lado, volante torcido y desgaste irregular.",
+    resumen("Síntomas de que el auto necesita alineación, balanceo o rotación de neumáticos: vibración en el volante o el asiento, tira para un lado, volante torcido y desgaste irregular."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

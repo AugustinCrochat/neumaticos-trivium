@@ -4,7 +4,7 @@ import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { AhorroLinks } from "@/components/blog/AhorroLinks";
 import { Callout } from "@/components/blog/Callout";
 import { EquipoHofmann } from "@/components/blog/EquipoHofmann";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "como-ahorrar-en-neumaticos-guia-completa";
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Guía completa para ahorrar en neumáticos: cómo comprar mejor, qué hábitos y mantenimientos los hacen durar más, qué revisar cada mes y cómo evitar los problemas que salen caros.",
+    resumen("Guía completa para ahorrar en neumáticos: cómo comprar mejor, qué hábitos y mantenimientos los hacen durar más, qué revisar cada mes y cómo evitar los problemas que salen caros."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

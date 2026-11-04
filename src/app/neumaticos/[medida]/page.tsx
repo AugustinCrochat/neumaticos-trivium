@@ -3,7 +3,7 @@ import { poolShare } from "@/lib/share-image";
 import { notFound } from "next/navigation";
 import { DEFAULT_BRANCH_ID, TIRE_RIMS } from "@/lib/config";
 import { getProductosDesdePOS } from "@/lib/pos-api";
-import { canonical, SITE_NAME } from "@/lib/seo";
+import { canonical, SITE_NAME, resumen } from "@/lib/seo";
 import {
   MEDIDAS_PRIORITARIAS,
   anchosYPerfiles,
@@ -62,7 +62,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const title = `Neumáticos baratos rodado ${rim} — precios y medidas R${rim}`;
     return {
       title,
-      description: `Todas las medidas de neumáticos rodado ${rim} con stock y precio actualizado. Cubiertas R${rim} de importación directa para auto y camioneta, con colocación sin cargo en el día.`,
+      description: resumen(`Todas las medidas de neumáticos rodado ${rim} con stock y precio actualizado. Cubiertas R${rim} de importación directa para auto y camioneta, con colocación sin cargo en el día.`),
       alternates: canonical(`/neumaticos/${rimSlug(rim)}`),
       openGraph: { title: `${title} — ${SITE_NAME}`, url: `/neumaticos/${rimSlug(rim)}`, ...poolShare(medida).openGraph },
       twitter: poolShare(medida).twitter,
@@ -85,7 +85,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const ruta = `/neumaticos/${eje === "ancho" ? widthSlug(valor) : profileSlug(valor)}`;
     return {
       title,
-      description: `Todas las medidas de neumáticos de ${nombre} con stock y precio actualizado, y los autos que las usan. Cubiertas de importación directa con colocación sin cargo en el día.`,
+      description: resumen(`Todas las medidas de neumáticos de ${nombre} con stock y precio actualizado, y los autos que las usan. Cubiertas de importación directa con colocación sin cargo en el día.`),
       alternates: canonical(ruta),
       openGraph: { title: `${title} — ${SITE_NAME}`, url: ruta, ...poolShare(medida).openGraph },
       twitter: poolShare(medida).twitter,
@@ -123,7 +123,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return {
     title,
-    description: partesDescripcion.join(" ").slice(0, 300),
+    description: resumen(partesDescripcion.join(" ")),
     alternates: canonical(`/neumaticos/${sizeSlug(size)}`),
     openGraph: { title: `${title} — ${SITE_NAME}`, url: `/neumaticos/${sizeSlug(size)}`, ...poolShare(medida).openGraph },
     twitter: poolShare(medida).twitter,

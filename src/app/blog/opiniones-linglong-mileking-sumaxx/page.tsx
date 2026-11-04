@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { ClusterLinks } from "@/components/blog/ClusterLinks";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { blogShare } from "@/lib/blog-meta";
@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   ...blogShare("opiniones-linglong-mileking-sumaxx"),
   title: "Linglong, Mileking y Sumaxx: opiniones y si valen la pena",
   description:
-    "Opinión sobre Linglong, Mileking y Sumaxx: ventajas, desventajas, para qué uso sirve cada una y cuánto se ahorra frente a una marca premium. Las colocamos en el día, sin cargo.",
+    resumen("Opinión sobre Linglong, Mileking y Sumaxx: ventajas, desventajas, para qué uso sirve cada una y cuánto se ahorra frente a una marca premium. Las colocamos en el día, sin cargo."),
   alternates: canonical("/blog/opiniones-linglong-mileking-sumaxx"),
 };
 

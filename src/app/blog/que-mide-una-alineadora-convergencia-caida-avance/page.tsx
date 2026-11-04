@@ -3,7 +3,7 @@ import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { TallerLinks } from "@/components/blog/TallerLinks";
 import { EquipoHofmann } from "@/components/blog/EquipoHofmann";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "que-mide-una-alineadora-convergencia-caida-avance";
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Qué mide una alineadora: convergencia (toe), caída (camber) y avance (caster), y otros ángulos del eje trasero. Qué significa cada uno, qué se puede ajustar y cómo leer el informe.",
+    resumen("Qué mide una alineadora: convergencia (toe), caída (camber) y avance (caster), y otros ángulos del eje trasero. Qué significa cada uno, qué se puede ajustar y cómo leer el informe."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

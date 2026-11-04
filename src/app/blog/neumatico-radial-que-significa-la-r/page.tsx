@@ -4,7 +4,7 @@ import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { FlancoFoto } from "@/components/blog/FlancoFoto";
 import { FlancoLinks } from "@/components/blog/FlancoLinks";
 import { FotoNeumaticoBloque } from "@/components/tools/FotoNeumaticoBloque";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "neumatico-radial-que-significa-la-r";
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Qué significa la R en 195/65 R15: neumático de construcción radial. Cómo se construye, qué ventajas tiene frente al diagonal y por qué casi todos los neumáticos de auto y camioneta son radiales.",
+    resumen("Qué significa la R en 195/65 R15: neumático de construcción radial. Cómo se construye, qué ventajas tiene frente al diagonal y por qué casi todos los neumáticos de auto y camioneta son radiales."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

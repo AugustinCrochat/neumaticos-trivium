@@ -3,7 +3,7 @@ import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { TallerLinks } from "@/components/blog/TallerLinks";
 import { EquipoHofmann } from "@/components/blog/EquipoHofmann";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "auto-tira-para-un-lado-causas";
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Por qué el auto se va para un costado: alineación, presión despareja, neumáticos con conicidad, frenos que arrastran o suspensión gastada. Cómo diferenciarlas y qué hacer primero.",
+    resumen("Por qué el auto se va para un costado: alineación, presión despareja, neumáticos con conicidad, frenos que arrastran o suspensión gastada. Cómo diferenciarlas y qué hacer primero."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

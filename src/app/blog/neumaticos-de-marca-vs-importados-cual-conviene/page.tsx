@@ -5,7 +5,7 @@ import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { Callout } from "@/components/blog/Callout";
 import { ClusterLinks } from "@/components/blog/ClusterLinks";
 import { CostPerKmCalculator } from "@/components/blog/CostPerKmCalculator";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "neumaticos-de-marca-vs-importados-cual-conviene";
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   ...blogShare("neumaticos-de-marca-vs-importados-cual-conviene"),
   title: TITLE,
   description:
-    "Neumáticos de marca (Michelin, Pirelli) vs. importados económicos: costo por kilómetro, frenado en mojado, ruido, garantía y uso. Cuándo conviene cada uno, con una calculadora para comparar.",
+    resumen("Neumáticos de marca (Michelin, Pirelli) vs. importados económicos: costo por kilómetro, frenado en mojado, ruido, garantía y uso. Cuándo conviene cada uno, con una calculadora para comparar."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { AhorroLinks } from "@/components/blog/AhorroLinks";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "aquaplaning-que-es-y-como-evitarlo";
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Qué es el aquaplaning o hidroplaneo, qué lo provoca (velocidad, dibujo gastado, presión baja), cómo reaccionar si pasa y cómo prevenirlo con neumáticos en buen estado.",
+    resumen("Qué es el aquaplaning o hidroplaneo, qué lo provoca (velocidad, dibujo gastado, presión baja), cómo reaccionar si pasa y cómo prevenirlo con neumáticos en buen estado."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

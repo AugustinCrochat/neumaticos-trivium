@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { Callout } from "@/components/blog/Callout";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "neumaticos-nuevos-adelante-o-atras";
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Dónde colocar los neumáticos nuevos cuando cambiás solo dos: por qué van atrás aunque el auto sea de tracción delantera, qué pasa si van adelante y qué hacer con 4x4 y direccionales.",
+    resumen("Dónde colocar los neumáticos nuevos cuando cambiás solo dos: por qué van atrás aunque el auto sea de tracción delantera, qué pasa si van adelante y qué hacer con 4x4 y direccionales."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

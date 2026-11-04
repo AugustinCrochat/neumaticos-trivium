@@ -3,7 +3,7 @@ import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { AhorroLinks } from "@/components/blog/AhorroLinks";
 import { Callout } from "@/components/blog/Callout";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "como-cambiar-una-rueda-paso-a-paso";
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Cómo cambiar una rueda pinchada paso a paso: dónde detenerse, balizas, orden de las tuercas, uso del gato, tuerca antirrobo y qué revisar después en la gomería. Guía segura.",
+    resumen("Cómo cambiar una rueda pinchada paso a paso: dónde detenerse, balizas, orden de las tuercas, uso del gato, tuerca antirrobo y qué revisar después en la gomería. Guía segura."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

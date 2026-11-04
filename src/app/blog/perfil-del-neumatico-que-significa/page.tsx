@@ -4,7 +4,7 @@ import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { FlancoFoto } from "@/components/blog/FlancoFoto";
 import { FlancoLinks } from "@/components/blog/FlancoLinks";
 import { FotoNeumaticoBloque } from "@/components/tools/FotoNeumaticoBloque";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "perfil-del-neumatico-que-significa";
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Qué significa el 65 en 195/65 R15: el perfil del neumático, como porcentaje del ancho. Cómo calcular la altura del flanco y qué cambia entre un perfil alto y uno bajo.",
+    resumen("Qué significa el 65 en 195/65 R15: el perfil del neumático, como porcentaje del ancho. Cómo calcular la altura del flanco y qué cambia entre un perfil alto y uno bajo."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

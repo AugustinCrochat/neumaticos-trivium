@@ -5,7 +5,7 @@ import { BRANDS } from "@/lib/data";
 import { DEFAULT_BRANCH_ID } from "@/lib/config";
 import { getProductosDesdePOS } from "@/lib/pos-api";
 import { getBrandLogo } from "@/lib/brand-utils";
-import { canonical, absoluteUrl, SITE_NAME } from "@/lib/seo";
+import { canonical, absoluteUrl, SITE_NAME, resumen } from "@/lib/seo";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { FaqSection } from "@/components/seo/FaqSection";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -19,7 +19,7 @@ export const dynamic = "force-static";
 export const metadata: Metadata = {
   title: "Marcas de neumáticos: cuál elegir, precios y stock",
   description:
-    "Marcas de neumáticos que vendemos (Grenlander, Zmax, Arivo, Pirelli y más): origen, segmento, modelos, medidas, stock y precio desde. Comparativa y guía para elegir, con garantía de 1 año y colocación sin cargo.",
+    resumen("Marcas de neumáticos que vendemos (Grenlander, Zmax, Arivo, Pirelli y más): origen, segmento, modelos, medidas, stock y precio desde. Comparativa y guía para elegir, con garantía de 1 año y colocación sin cargo."),
   alternates: canonical("/marcas"),
   openGraph: { title: `Marcas de neumáticos — ${SITE_NAME}`, url: "/marcas", ...poolShare("marcas").openGraph },
   twitter: poolShare("marcas").twitter,

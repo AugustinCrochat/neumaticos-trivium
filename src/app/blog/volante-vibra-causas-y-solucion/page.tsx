@@ -3,7 +3,7 @@ import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { TallerLinks } from "@/components/blog/TallerLinks";
 import { EquipoHofmann } from "@/components/blog/EquipoHofmann";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "volante-vibra-causas-y-solucion";
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Por qué vibra el volante: desbalanceo (90 a 120 km/h), vibración al frenar, neumático deforme, llanta golpeada o rulemán. Cómo distinguirlas según la velocidad y el momento.",
+    resumen("Por qué vibra el volante: desbalanceo (90 a 120 km/h), vibración al frenar, neumático deforme, llanta golpeada o rulemán. Cómo distinguirlas según la velocidad y el momento."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

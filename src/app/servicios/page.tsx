@@ -6,7 +6,7 @@ import type { Metadata } from "next";
 import { SERVICES } from "@/lib/data";
 import Link from "@/components/ui/Link";
 import { EXTRA_SERVICES, SERVICIOS_SEO } from "@/lib/servicios-seo";
-import { breadcrumbJsonLd, canonical, serviceJsonLd } from "@/lib/seo";
+import { breadcrumbJsonLd, canonical, serviceJsonLd, resumen } from "@/lib/seo";
 
 export const metadata: Metadata = {
   // "Gomería" es el término que más volumen de búsqueda tiene para este
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   // "alineación y balanceo"): el título usa la forma local.
   title: "Gomería: alineado, balanceado y colocación sin turno",
   description:
-    "Gomería y taller propio en Córdoba (Argüello): alineado computarizado 3D, balanceado dinámico y arme y desarme de neumáticos con precios publicados. Colocación sin cargo comprando las cubiertas en el local. Sin turno.",
+    resumen("Gomería y taller propio en Córdoba (Argüello): alineado computarizado 3D, balanceado dinámico y arme y desarme de neumáticos con precios publicados. Colocación sin cargo comprando las cubiertas en el local. Sin turno."),
   alternates: canonical("/servicios"),
 };
 

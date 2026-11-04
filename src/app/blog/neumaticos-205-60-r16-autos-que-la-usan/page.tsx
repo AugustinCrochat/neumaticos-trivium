@@ -3,7 +3,7 @@ import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { CatalogWidget } from "@/components/blog/CatalogWidget";
 import { MedidasLinks } from "@/components/blog/MedidasLinks";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "neumaticos-205-60-r16-autos-que-la-usan";
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Neumáticos 205/60 R16: qué significa, diámetro total (652,4 mm), 25 autos que la usan (Volkswagen T-Cross, Chevrolet Tracker, Nissan Kicks, Peugeot 2008), medidas equivalentes y cómo elegir.",
+    resumen("Neumáticos 205/60 R16: qué significa, diámetro total (652,4 mm), 25 autos que la usan (Volkswagen T-Cross, Chevrolet Tracker, Nissan Kicks, Peugeot 2008), medidas equivalentes y cómo elegir."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

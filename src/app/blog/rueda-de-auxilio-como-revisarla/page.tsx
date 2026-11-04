@@ -3,7 +3,7 @@ import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { AhorroLinks } from "@/components/blog/AhorroLinks";
 import { Callout } from "@/components/blog/Callout";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "rueda-de-auxilio-como-revisarla";
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Cómo revisar la rueda de auxilio: presión, edad, estado del caucho, gato y llaves (incluida la de la tuerca de seguridad) y diferencias entre auxilio común y de uso temporal.",
+    resumen("Cómo revisar la rueda de auxilio: presión, edad, estado del caucho, gato y llaves (incluida la de la tuerca de seguridad) y diferencias entre auxilio común y de uso temporal."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

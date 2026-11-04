@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "carga-simple-y-dual-neumaticos-c";
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   ...blogShare("carga-simple-y-dual-neumaticos-c"),
   title: TITLE,
   description:
-    "Los neumáticos C (comerciales, para utilitarios y furgones) llevan dos índices de carga: uno para montaje simple y otro para rodado dual. Qué significa cada número, tabla de conversión a kilos y medidas habituales en Argentina.",
+    resumen("Los neumáticos C (comerciales, para utilitarios y furgones) llevan dos índices de carga: uno para montaje simple y otro para rodado dual. Qué significa cada número, tabla de conversión a kilos y medidas habituales en Argentina."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

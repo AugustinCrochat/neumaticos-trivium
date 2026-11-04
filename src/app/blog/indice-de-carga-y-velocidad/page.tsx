@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { LOAD_SPEED_CODES } from "@/lib/load-speed";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { LOAD_INDEX_KG, SPEED_RATING_KMH } from "@/lib/tire-sizes";
 import { blogShare } from "@/lib/blog-meta";
 import { FotoNeumaticoBloque } from "@/components/tools/FotoNeumaticoBloque";
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   ...blogShare("indice-de-carga-y-velocidad"),
   title: TITLE,
   description:
-    "Qué significan el índice de carga y el índice de velocidad de un neumático, tablas de equivalencia en kg y km/h, y por qué no conviene bajar de los valores originales.",
+    resumen("Qué significan el índice de carga y el índice de velocidad de un neumático, tablas de equivalencia en kg y km/h, y por qué no conviene bajar de los valores originales."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

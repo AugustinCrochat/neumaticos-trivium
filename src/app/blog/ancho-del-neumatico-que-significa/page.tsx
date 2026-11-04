@@ -4,7 +4,7 @@ import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { FlancoFoto } from "@/components/blog/FlancoFoto";
 import { FlancoLinks } from "@/components/blog/FlancoLinks";
 import { FotoNeumaticoBloque } from "@/components/tools/FotoNeumaticoBloque";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "ancho-del-neumatico-que-significa";
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Qué significa el 195 en 195/65 R15: el ancho del neumático en milímetros. Qué pasa con un neumático más ancho o más angosto, cómo afecta al diámetro y qué ancho admite tu llanta.",
+    resumen("Qué significa el 195 en 195/65 R15: el ancho del neumático en milímetros. Qué pasa con un neumático más ancho o más angosto, cómo afecta al diámetro y qué ancho admite tu llanta."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

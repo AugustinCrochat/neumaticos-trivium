@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { Callout } from "@/components/blog/Callout";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "neumaticos-double-king-quien-los-fabrica";
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Qué es Double King (Doubleking): empresa que la fabrica, marcas del grupo, cómo comparar sus neumáticos antes de comprar y alternativas nuevas con garantía y colocación sin cargo en Córdoba.",
+    resumen("Qué es Double King (Doubleking): empresa que la fabrica, marcas del grupo, cómo comparar sus neumáticos antes de comprar y alternativas nuevas con garantía y colocación sin cargo en Córdoba."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

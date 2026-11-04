@@ -3,7 +3,7 @@ import Link from "@/components/ui/Link";
 import { DEFAULT_BRANCH_ID } from "@/lib/config";
 import { getProductosDesdePOS } from "@/lib/pos-api";
 import { BRANDS } from "@/lib/data";
-import { canonical, SITE_NAME } from "@/lib/seo";
+import { canonical, SITE_NAME, resumen } from "@/lib/seo";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { FaqSection } from "@/components/seo/FaqSection";
 import {
@@ -32,7 +32,7 @@ import { itemListJsonLd } from "@/lib/seo";
 export const metadata: Metadata = {
   title: "Buscar neumáticos por medida: precio y stock al instante",
   description:
-    "Buscá neumáticos por medida (185/65 R15, 205/55 R16, 175/70 R14 y más) o por tu auto y mirá precio y stock al instante, con las equivalencias de cada medida. Importación directa, colocación sin cargo y 1 año de garantía.",
+    resumen("Buscá neumáticos por medida (185/65 R15, 205/55 R16, 175/70 R14 y más) o por tu auto y mirá precio y stock al instante, con las equivalencias de cada medida. Importación directa, colocación sin cargo y 1 año de garantía."),
   alternates: canonical("/neumaticos"),
   openGraph: {
     title: `Buscar neumáticos por medida — ${SITE_NAME}`,

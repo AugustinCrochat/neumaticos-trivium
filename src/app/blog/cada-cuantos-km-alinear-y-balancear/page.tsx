@@ -3,7 +3,7 @@ import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { TallerLinks } from "@/components/blog/TallerLinks";
 import { EquipoHofmann } from "@/components/blog/EquipoHofmann";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "cada-cuantos-km-alinear-y-balancear";
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Cada cuántos kilómetros alinear y balancear el auto: referencia de 10.000 km o un año, y los casos que lo adelantan (golpes, neumáticos nuevos, suspensión, taxis y remises).",
+    resumen("Cada cuántos kilómetros alinear y balancear el auto: referencia de 10.000 km o un año, y los casos que lo adelantan (golpes, neumáticos nuevos, suspensión, taxis y remises)."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

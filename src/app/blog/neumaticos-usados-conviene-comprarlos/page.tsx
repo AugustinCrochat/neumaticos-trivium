@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { AhorroLinks } from "@/components/blog/AhorroLinks";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "neumaticos-usados-conviene-comprarlos";
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Comprar neumáticos usados: riesgos (edad, daños internos, reparaciones ocultas, desgaste parejo), cuánto se ahorra de verdad y qué alternativas nuevas y económicas conviene mirar.",
+    resumen("Comprar neumáticos usados: riesgos (edad, daños internos, reparaciones ocultas, desgaste parejo), cuánto se ahorra de verdad y qué alternativas nuevas y económicas conviene mirar."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

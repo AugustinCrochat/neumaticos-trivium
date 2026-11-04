@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { TallerLinks } from "@/components/blog/TallerLinks";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "geoliner-630-geodyna-7800p-alineacion-balanceo";
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   ...blogShare("geoliner-630-geodyna-7800p-alineacion-balanceo"),
   title: TITLE,
   description:
-    "Cómo funciona la alineadora 3D Hofmann Geoliner 630 y la balanceadora Hofmann Geodyna 7800P que usamos en nuestro taller, y qué diferencia hacen en la precisión, la duración de los neumáticos y la ausencia de vibraciones.",
+    resumen("Cómo funciona la alineadora 3D Hofmann Geoliner 630 y la balanceadora Hofmann Geodyna 7800P que usamos en nuestro taller, y qué diferencia hacen en la precisión, la duración de los neumáticos y la ausencia de vibraciones."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

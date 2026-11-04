@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { breadcrumbJsonLd, canonical, itemListJsonLd } from "@/lib/seo";
+import { breadcrumbJsonLd, canonical, itemListJsonLd, resumen } from "@/lib/seo";
 import { BLOG_POSTS } from "@/lib/data";
 import { medidasConComparativa } from "@/lib/comparativas";
 import { formatSize } from "@/lib/tire-sizes";
@@ -10,7 +10,7 @@ import { OTRAS_MARCAS } from "@/lib/marcas-chinas";
 export const metadata: Metadata = {
   title: "Opiniones y comparativas de neumáticos: marcas, medidas y precios",
   description:
-    "Comparativas de neumáticos por medida con la etiqueta europea oficial, opiniones sobre marcas chinas y alternativas a las marcas premium, y guías para comparar antes de comprar.",
+    resumen("Comparativas de neumáticos por medida con la etiqueta europea oficial, opiniones sobre marcas chinas y alternativas a las marcas premium, y guías para comparar antes de comprar."),
   alternates: canonical("/opiniones-y-comparativas"),
 };
 

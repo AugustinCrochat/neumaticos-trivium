@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { DEFAULT_BRANCH_ID } from "@/lib/config";
 import { getProductosDesdePOS } from "@/lib/pos-api";
-import { canonical, SITE_NAME } from "@/lib/seo";
+import { canonical, SITE_NAME, resumen } from "@/lib/seo";
 import { getUtqg } from "@/lib/utqg";
 import { sizeLabel } from "@/lib/best-price";
 import { poolShare } from "@/lib/share-image";
@@ -16,7 +16,7 @@ const share = poolShare("utqg");
 export const metadata: Metadata = {
   title: "UTQG: qué significa, para qué sirve y cómo leer 400 A A en un neumático",
   description:
-    "Qué es el UTQG de un neumático, para qué sirve y cómo leerlo: treadwear (desgaste), tracción (AA, A, B, C) y temperatura (A, B, C). Tabla para decodificarlo y los neumáticos de nuestro catálogo que lo tienen.",
+    resumen("Qué es el UTQG de un neumático, para qué sirve y cómo leerlo: treadwear (desgaste), tracción (AA, A, B, C) y temperatura (A, B, C). Tabla para decodificarlo y los neumáticos de nuestro catálogo que lo tienen."),
   alternates: canonical("/utqg"),
   openGraph: { title: `UTQG: qué significa y cómo leerlo — ${SITE_NAME}`, url: "/utqg", ...share.openGraph },
   twitter: share.twitter,

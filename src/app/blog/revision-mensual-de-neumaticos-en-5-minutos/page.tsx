@@ -3,7 +3,7 @@ import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { AhorroLinks } from "@/components/blog/AhorroLinks";
 import { EquipoHofmann } from "@/components/blog/EquipoHofmann";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "revision-mensual-de-neumaticos-en-5-minutos";
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Cómo revisar tus neumáticos en 5 minutos una vez por mes: presión en frío, profundidad del dibujo, cortes y burbujas en los flancos, válvulas y desgaste parejo. Con checklist.",
+    resumen("Cómo revisar tus neumáticos en 5 minutos una vez por mes: presión en frío, profundidad del dibujo, cortes y burbujas en los flancos, válvulas y desgaste parejo. Con checklist."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

@@ -1,6 +1,6 @@
 import Link from "@/components/ui/Link";
 import type { Metadata } from "next";
-import { breadcrumbJsonLd, canonical } from "@/lib/seo";
+import { breadcrumbJsonLd, canonical, resumen } from "@/lib/seo";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { ClusterLinks } from "@/components/blog/ClusterLinks";
 import { BlogCoverStrip, BlogSearchStrip } from "@/components/blog/BlogShop";
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   ...blogShare("precio-calidad-neumaticos-costo-por-km"),
   title: "Precio y calidad en neumáticos: cuánto sale cada kilómetro — Trivium",
   description:
-    "El precio de lista no dice nada solo: lo que importa es cuánto cuesta cada kilómetro recorrido. Comparamos Grenlander contra otras marcas por costo/km, estándares de fabricación y homologación en Europa, Estados Unidos y Argentina.",
+    resumen("El precio de lista no dice nada solo: lo que importa es cuánto cuesta cada kilómetro recorrido. Comparamos Grenlander contra otras marcas por costo/km, estándares de fabricación y homologación en Europa, Estados Unidos y Argentina."),
   alternates: canonical("/blog/precio-calidad-neumaticos-costo-por-km"),
 };
 

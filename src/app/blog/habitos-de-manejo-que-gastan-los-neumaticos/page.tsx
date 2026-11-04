@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { AhorroLinks } from "@/components/blog/AhorroLinks";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "habitos-de-manejo-que-gastan-los-neumaticos";
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Qué hábitos de manejo desgastan más rápido los neumáticos: frenadas fuertes, rozar cordones, curvas rápidas, sobrecarga y velocidad. Cómo corregirlos para que la cubierta rinda más kilómetros.",
+    resumen("Qué hábitos de manejo desgastan más rápido los neumáticos: frenadas fuertes, rozar cordones, curvas rápidas, sobrecarga y velocidad. Cómo corregirlos para que la cubierta rinda más kilómetros."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

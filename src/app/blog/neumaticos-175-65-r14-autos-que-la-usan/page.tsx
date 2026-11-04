@@ -3,7 +3,7 @@ import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { CatalogWidget } from "@/components/blog/CatalogWidget";
 import { MedidasLinks } from "@/components/blog/MedidasLinks";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "neumaticos-175-65-r14-autos-que-la-usan";
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Neumáticos 175/65 R14: qué significa, diámetro total (583,1 mm), 19 autos que la usan (Citroen C3, Fiat Mobi, Volkswagen Gol, Renault Clio), medidas equivalentes y cómo elegir.",
+    resumen("Neumáticos 175/65 R14: qué significa, diámetro total (583,1 mm), 19 autos que la usan (Citroen C3, Fiat Mobi, Volkswagen Gol, Renault Clio), medidas equivalentes y cómo elegir."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

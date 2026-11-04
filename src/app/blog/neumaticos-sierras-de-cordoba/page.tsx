@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "neumaticos-sierras-de-cordoba";
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   ...blogShare("neumaticos-sierras-de-cordoba"),
   title: TITLE,
   description:
-    "Qué neumáticos usar para manejar en las sierras de Córdoba: curvas, pendientes, lluvia y caminos de tierra. Qué revisar antes de un viaje y cuándo conviene una cubierta H/T o A/T.",
+    resumen("Qué neumáticos usar para manejar en las sierras de Córdoba: curvas, pendientes, lluvia y caminos de tierra. Qué revisar antes de un viaje y cuándo conviene una cubierta H/T o A/T."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

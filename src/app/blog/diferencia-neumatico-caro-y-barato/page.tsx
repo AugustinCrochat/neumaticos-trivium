@@ -3,7 +3,7 @@ import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { Callout } from "@/components/blog/Callout";
 import { ClusterLinks } from "@/components/blog/ClusterLinks";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "diferencia-neumatico-caro-y-barato";
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   ...blogShare("diferencia-neumatico-caro-y-barato"),
   title: TITLE,
   description:
-    "Diferencia entre un neumático caro y uno barato: frenado en mojado, ruido, consistencia, durabilidad y garantía. Qué diferencias son reales y cuáles son marketing, con una tabla comparativa.",
+    resumen("Diferencia entre un neumático caro y uno barato: frenado en mojado, ruido, consistencia, durabilidad y garantía. Qué diferencias son reales y cuáles son marketing, con una tabla comparativa."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

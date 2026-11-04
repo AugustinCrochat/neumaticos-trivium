@@ -3,12 +3,12 @@ import type { Metadata } from "next";
 import { BLOG_POSTS } from "@/lib/data";
 import { blogMeta } from "@/lib/blog-meta";
 import { BlogCover } from "@/components/blog/BlogCover";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Guías de neumáticos — mantenimiento, medidas y marcas",
   description:
-    "Cómo leer la medida, cada cuánto cambiar las cubiertas, qué marcas convienen y cómo funcionan las equivalencias. Guías escritas por quienes venden y montan neumáticos todos los días.",
+    resumen("Cómo leer la medida, cada cuánto cambiar las cubiertas, qué marcas convienen y cómo funcionan las equivalencias. Guías escritas por quienes venden y montan neumáticos todos los días."),
   alternates: canonical("/blog"),
 };
 

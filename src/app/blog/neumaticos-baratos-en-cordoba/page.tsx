@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "neumaticos-baratos-en-cordoba";
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Cómo comprar neumáticos baratos en Córdoba sin arriesgar la calidad: importación directa, precio publicado, fecha de fabricación (DOT), costo por kilómetro y colocación incluida en Argüello.",
+    resumen("Cómo comprar neumáticos baratos en Córdoba sin arriesgar la calidad: importación directa, precio publicado, fecha de fabricación (DOT), costo por kilómetro y colocación incluida en Argüello."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

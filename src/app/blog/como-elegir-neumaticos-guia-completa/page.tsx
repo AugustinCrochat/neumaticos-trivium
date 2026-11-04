@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "como-elegir-neumaticos-guia-completa";
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Cómo elegir neumáticos paso a paso: cómo saber tu medida, índice de carga y velocidad, tipo de neumático según el uso, marca o importado, fecha de fabricación y cuántos cambiar. Con enlaces a cada tema.",
+    resumen("Cómo elegir neumáticos paso a paso: cómo saber tu medida, índice de carga y velocidad, tipo de neumático según el uso, marca o importado, fecha de fabricación y cuántos cambiar. Con enlaces a cada tema."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

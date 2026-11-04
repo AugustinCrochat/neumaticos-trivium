@@ -3,7 +3,7 @@ import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { TallerLinks } from "@/components/blog/TallerLinks";
 import { EquipoHofmann } from "@/components/blog/EquipoHofmann";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "cuanto-tarda-alineado-y-balanceado";
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Cuánto tarda el alineado y balanceado completo: unos 50 minutos en un auto y alrededor de 1 hora 20 en una camioneta. Qué se hace en ese tiempo, cuánto demora cada servicio por separado y qué lo alarga.",
+    resumen("Cuánto tarda el alineado y balanceado completo: unos 50 minutos en un auto y alrededor de 1 hora 20 en una camioneta. Qué se hace en ese tiempo, cuánto demora cada servicio por separado y qué lo alarga."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

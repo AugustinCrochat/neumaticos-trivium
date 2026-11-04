@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { DEFAULT_BRANCH_ID } from "@/lib/config";
 import { getProductosDesdePOS } from "@/lib/pos-api";
-import { canonical, SITE_NAME } from "@/lib/seo";
+import { canonical, SITE_NAME, resumen } from "@/lib/seo";
 import { MARCAS_PREMIUM, getMarcaPremium } from "@/lib/marcas-premium";
 import { poolShare } from "@/lib/share-image";
 import { CategoryLanding } from "../../neumaticos/CategoryLanding";
@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const share = poolShare(`alternativa-${marca.slug}`);
   return {
     title: `Alternativas a ${marca.name}: neumáticos más económicos`,
-    description: `Qué se sabe de ${marca.name} (${marca.origen}), cuándo conviene una marca premium y cuándo una alternativa, y los neumáticos nuevos que tenemos con precio publicado, garantía y colocación sin cargo.`,
+    description: resumen(`Qué se sabe de ${marca.name} (${marca.origen}), cuándo conviene una marca premium y cuándo una alternativa, y los neumáticos nuevos que tenemos con precio publicado, garantía y colocación sin cargo.`),
     alternates: canonical(path),
     openGraph: { title: `Alternativas a ${marca.name} — ${SITE_NAME}`, url: path, ...share.openGraph },
     twitter: share.twitter,

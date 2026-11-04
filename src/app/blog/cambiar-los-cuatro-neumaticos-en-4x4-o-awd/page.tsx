@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { Callout } from "@/components/blog/Callout";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "cambiar-los-cuatro-neumaticos-en-4x4-o-awd";
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Cambiar neumáticos en 4x4, AWD o tracción integral: por qué se recomienda cambiar los cuatro, qué diferencia de desgaste se tolera y qué pasa con la transmisión si mezclás cubiertas.",
+    resumen("Cambiar neumáticos en 4x4, AWD o tracción integral: por qué se recomienda cambiar los cuatro, qué diferencia de desgaste se tolera y qué pasa con la transmisión si mezclás cubiertas."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

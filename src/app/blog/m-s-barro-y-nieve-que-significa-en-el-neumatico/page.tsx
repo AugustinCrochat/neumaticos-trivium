@@ -4,7 +4,7 @@ import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { FlancoFoto } from "@/components/blog/FlancoFoto";
 import { FlancoLinks } from "@/components/blog/FlancoLinks";
 import { FotoNeumaticoBloque } from "@/components/tools/FotoNeumaticoBloque";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "m-s-barro-y-nieve-que-significa-en-el-neumatico";
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    "Qué significa M+S en el flanco de un neumático: «Mud and Snow», barro y nieve. Qué garantiza, en qué se diferencia del símbolo 3PMSF del copo de nieve y para qué uso conviene.",
+    resumen("Qué significa M+S en el flanco de un neumático: «Mud and Snow», barro y nieve. Qué garantiza, en qué se diferencia del símbolo 3PMSF del copo de nieve y para qué uso conviene."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 

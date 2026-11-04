@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { CatalogWidget } from "@/components/blog/CatalogWidget";
-import { canonical } from "@/lib/seo";
+import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "neumaticos-para-utilitarios-furgones-reparto";
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   ...blogShare("neumaticos-para-utilitarios-furgones-reparto"),
   title: TITLE,
   description:
-    "Guía para elegir neumáticos de carga (serie C) en utilitarios, furgones y vehículos de reparto: medida, índice de carga, simple o dual, cada cuánto cambiarlos y cómo ahorrar sin comprometer la seguridad.",
+    resumen("Guía para elegir neumáticos de carga (serie C) en utilitarios, furgones y vehículos de reparto: medida, índice de carga, simple o dual, cada cuánto cambiarlos y cómo ahorrar sin comprometer la seguridad."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 
