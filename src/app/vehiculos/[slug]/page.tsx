@@ -92,13 +92,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     : medidaTitulo.desde
       ? `Neumáticos para ${name}: ${principal}, desde ${formatPrice(medidaTitulo.desde)}`
       : `Neumáticos para ${name}: medida ${principal}`;
-  const description = [
+  // Google muestra ~155 caracteres: lo importante va primero (medida y precio)
+  // y la frase de cierre sólo entra si no hace que se corte la descripción.
+  const partes = [
     medidas.length === 1
       ? `¿Qué medida de neumático lleva el ${name}? La original es ${lista}.`
       : `¿Qué medida de neumático lleva el ${name}? Según la versión: ${lista}${medidas.length > 3 ? " y más" : ""}.`,
-    desde ? `Neumáticos económicos desde ${formatPrice(desde)}, con stock real y precio de outlet.` : "Consultá stock y precio de tu medida.",
-    "Colocación sin cargo en el día y garantía de 1 año.",
-  ].join(" ");
+    desde ? `Desde ${formatPrice(desde)}, con stock real.` : "Consultá stock y precio de tu medida.",
+    "Colocación sin cargo y 1 año de garantía.",
+  ];
+  const description = partes.join(" ").length <= 160 ? partes.join(" ") : partes.slice(0, 2).join(" ");
 
   // Con foto del modelo se comparte la tarjeta del auto; sin ella, una foto del local.
   const card = vehicleCardUrl(slug);
