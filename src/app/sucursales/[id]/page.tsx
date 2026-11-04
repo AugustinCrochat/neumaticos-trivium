@@ -4,7 +4,14 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { BRANCHES, FREE_SHIPPING_THRESHOLD, SHIPPING_FLAT_RATE, SITE_URL, type Branch } from "@/lib/config";
-import { canonical, SITE_NAME, type Faq } from "@/lib/seo";
+import { branchNodeId, canonical, itemListJsonLd, SITE_NAME, type Faq } from "@/lib/seo";
+import { absoluteUrl } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { GoogleRatingBadge } from "@/components/ui/GoogleRatingBadge";
+import { formatPrecio, nombreServicio } from "@/lib/servicios";
+import { DATOS_TALLER } from "@/lib/servicios-seo";
+import { datosSucursal, type DatosSucursal } from "./datos";
+import { ProductosSucursal } from "./ProductosSucursal";
 import { localidadesDeSucursal } from "@/lib/localidades";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { FaqSection } from "@/components/seo/FaqSection";
@@ -23,15 +30,29 @@ export function generateStaticParams() {
   return BRANCHES.map((branch) => ({ id: branch.id }));
 }
 
+/** "Alineado y balanceado" en Córdoba (así se busca ahí); "alineación y balanceo" en el resto. */
+function serviciosTaller(branch: Branch): string {
+  return branch.id === "arguello" ? "Alineado y balanceado" : "Alineación y balanceo";
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   const branch = BRANCHES.find((b) => b.id === id);
   if (!branch) return { title: "Sucursal no encontrada" };
 
   // El título lleva "gomería" además de la marca: es como se busca el rubro en
-  // Argentina, y la ficha de sucursal es la página que tiene que capturarlo.
-  const title = `Gomería y neumáticos baratos en ${branch.neighborhood ?? branch.city} — ${branch.address}`;
-  const description = `${SITE_NAME} ${branch.shortName}: neumáticos económicos con stock propio, alineación y balanceo en ${branch.address}, ${branch.city}. ${branch.hours}. Atención por orden de llegada, sin turno.`;
+  // Argentina. Y los dos servicios y el producto que la ficha tiene que capturar:
+  // alineación y balanceo (en Córdoba se dice "alineado y balanceado") y neumáticos baratos.
+  const datos = await datosSucursal(branch);
+  const lugar = branch.neighborhood ?? branch.city;
+  const title = `Gomería en ${lugar}: ${serviciosTaller(branch).toLowerCase()} · neumáticos baratos`;
+  const precios = [
+    datos.combo.auto ? `combo de ${serviciosTaller(branch).toLowerCase()} desde ${formatPrecio(datos.combo.auto.precio)}` : null,
+    datos.desde ? `neumáticos nuevos desde ${formatPrecio(datos.desde)}` : null,
+  ].filter(Boolean);
+  const description = branch.apertura
+    ? `${SITE_NAME} ${branch.shortName} abre ${branch.apertura} en ${branch.address}, ${branch.city}: neumáticos baratos con stock propio, ${serviciosTaller(branch).toLowerCase()} y gomería. Mirá precios y medidas en la web.`
+    : `Gomería en ${branch.address}, ${branch.city}: ${precios.length ? precios.join(" y ") + ". " : ""}${serviciosTaller(branch)} con taller propio, ${branch.hours}. Sin turno y colocación sin cargo comprando las cubiertas.`;
 
   return {
     title,
@@ -56,9 +77,46 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
  * duplicar el mismo @id en la página sólo agrega ruido al parser. Lo que sí es
  * propio de esta página son las migas y las preguntas frecuentes.
  */
-function buildFaqs(branch: Branch): Faq[] {
+function buildFaqs(branch: Branch, datos: DatosSucursal): Faq[] {
   const zonas = localidadesDeSucursal(branch.id).map((l) => l.name);
+  const lugar = branch.neighborhood ?? branch.city;
+  const ali = nombreServicio("alineacion", "alineación", branch.id).toLowerCase();
+  const bal = nombreServicio("balanceo", "balanceo", branch.id).toLowerCase();
+  const taller = serviciosTaller(branch).toLowerCase();
+  const precioServicios = [
+    datos.alineacion.auto && `${ali} de auto ${formatPrecio(datos.alineacion.auto.precio)}`,
+    datos.alineacion.camioneta && `de camioneta ${formatPrecio(datos.alineacion.camioneta.precio)}`,
+    datos.combo.auto && `el combo ${ali} + 4 ${bal} para auto ${formatPrecio(datos.combo.auto.precio)}`,
+    datos.combo.camioneta && `para camioneta ${formatPrecio(datos.combo.camioneta.precio)}`,
+  ].filter(Boolean);
+  const nuevas: Faq[] = branch.apertura
+    ? [
+        {
+          question: `¿Cuándo abre la sucursal ${branch.shortName}?`,
+          answer: `Abrimos ${branch.apertura} en ${branch.address}, ${branch.city}. Con neumáticos baratos con stock propio, ${taller} con taller propio. Mientras tanto podés ver precios y medidas en la web, y escribirnos por WhatsApp para que te avisemos el día de la apertura.`,
+        },
+      ]
+    : [
+        {
+          question: `¿Dónde hacer ${taller} en ${lugar}?`,
+          answer:
+            `En Neumáticos Trivium ${branch.shortName}, ${branch.address}, ${branch.city}. Es un taller propio con equipos computarizados, ` +
+            `abierto ${branch.hours.toLowerCase()}, por orden de llegada y sin turno. ` +
+            (precioServicios.length ? `Hoy: ${precioServicios.join(", ")}. ` : "") +
+            (branch.id === "arguello"
+              ? `Entre ${DATOS_TALLER.periodo} alineamos ${DATOS_TALLER.alineados} vehículos y balanceamos ${DATOS_TALLER.ruedasBalanceadas} ruedas en este local.`
+              : ""),
+        },
+        {
+          question: `¿Cuál es el neumático más barato en ${lugar}?`,
+          answer: datos.masBarato
+            ? `Hoy el más económico con stock en ${branch.shortName} es el ${datos.masBarato.brand} ${datos.masBarato.model} ${datos.masBarato.size.width}/${datos.masBarato.size.profile} R${datos.masBarato.size.rim}, a ${formatPrecio(datos.masBarato.price)} por unidad. ` +
+              `Son neumáticos nuevos de importación directa, con un año de garantía, y el precio publicado en la web es el mismo que en el mostrador. En esta página ves el stock actualizado.`
+            : `Los precios y el stock de ${branch.shortName} se publican en la web y son los mismos que en el mostrador. Son neumáticos nuevos de importación directa, con un año de garantía.`,
+        },
+      ];
   return [
+    ...nuevas,
     {
       question: "¿Necesito turno para cambiar los neumáticos?",
       answer:
@@ -104,11 +162,14 @@ export default async function BranchPage({ params }: Props) {
   );
   const waLink = `https://wa.me/${branch.whatsapp}?text=${waMessage}`;
   const telLink = `tel:${branch.phone.replace(/[^\d+]/g, "")}`;
-  const zonas = localidadesDeSucursal(branch.id);
+  const datos = await datosSucursal(branch);
+  const faqs = buildFaqs(branch, datos);
+  const lugar = branch.neighborhood ?? branch.city;
 
   return (
     <div className="min-h-screen bg-slate-50">
       <SetActiveBranch branchId={branch.id} />
+      <JsonLd data={sucursalJsonLd(branch, datos)} />
 
       {/* Hero */}
       <header className="bg-black pb-8 pt-8 md:pb-12 md:pt-12">
@@ -127,11 +188,14 @@ export default async function BranchPage({ params }: Props) {
             Sucursal {branch.shortName}
           </p>
           <h1 className="text-3xl font-black leading-tight text-white md:text-4xl">
-            Gomería y neumáticos baratos en {branch.neighborhood ?? branch.city}
+            Gomería en {lugar}: {serviciosTaller(branch).toLowerCase()} y neumáticos baratos
           </h1>
           <p className="mt-3 text-lg font-bold text-slate-300">
             Neumáticos Trivium {branch.shortName}
           </p>
+          {branch.googleRating && !branch.provisorio && (
+            <GoogleRatingBadge branchId={branch.id} className="mt-2 text-slate-200" />
+          )}
           <p className="mt-3 flex items-start gap-2 text-base leading-relaxed text-slate-300">
             <svg className="mt-0.5 h-5 w-5 flex-shrink-0 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -157,6 +221,41 @@ export default async function BranchPage({ params }: Props) {
             { name: branch.shortName, path: `/sucursales/${branch.id}` },
           ]}
         />
+
+        {/* Respuesta rápida: lo que contestaría un asistente a "dónde hago alineación y balanceo / compro neumáticos baratos en X" */}
+        <section className="rounded-2xl border-l-4 border-[#ff1e00] bg-navy-50 p-5 md:p-6">
+          <h2 className="text-sm font-black uppercase tracking-widest text-navy-700">Respuesta rápida</h2>
+          <p data-speakable className="mt-2 text-base leading-relaxed text-slate-800 md:text-lg">
+            {branch.apertura ? (
+              <>
+                Neumáticos Trivium <strong>{branch.shortName}</strong> abre <strong>{branch.apertura}</strong> en {branch.address},{" "}
+                {branch.city}: gomería con neumáticos nuevos baratos de importación directa, {serviciosTaller(branch).toLowerCase()} con taller propio.
+              </>
+            ) : (
+              <>
+                Neumáticos Trivium <strong>{branch.shortName}</strong> es una gomería en {branch.address}, {branch.city}, con{" "}
+                <strong>{serviciosTaller(branch).toLowerCase()}</strong> computarizados
+                {datos.combo.auto && (
+                  <> (combo desde <strong>{formatPrecio(datos.combo.auto.precio)}</strong>)</>
+                )}{" "}
+                y <strong>neumáticos nuevos baratos</strong>
+                {datos.desde !== null && (
+                  <> desde <strong>{formatPrecio(datos.desde)}</strong></>
+                )}
+                . Abrimos {branch.hours.toLowerCase()}, por orden de llegada y sin turno; la colocación va sin cargo comprando las
+                cubiertas en el local.
+                {branch.id === "arguello" && (
+                  <> La mitad de los alineados se termina en menos de {DATOS_TALLER.minutosMediana} minutos.</>
+                )}
+              </>
+            )}
+          </p>
+          <ul className="mt-3 flex flex-wrap gap-2 text-xs font-bold text-navy-800">
+            {["Sin turno", "Colocación sin cargo", "1 año de garantía", "Precio igual al del local"].map((t) => (
+              <li key={t} className="rounded-full bg-white px-3 py-1.5 shadow-sm">{t}</li>
+            ))}
+          </ul>
+        </section>
 
         <div className="grid gap-6 lg:grid-cols-2 lg:items-start">
         {branch.facadePhoto && (
@@ -254,6 +353,9 @@ export default async function BranchPage({ params }: Props) {
         {/* Servicios */}
         <ServiciosSucursal branch={branch} />
 
+        {/* Productos: fichas con stock y precio de esta sucursal */}
+        <ProductosSucursal branch={branch} datos={datos} />
+
         {/* Resena en Google */}
         {branch.reviewUrl && (
           <section className="rounded-2xl border border-orange-100 bg-orange-50 p-5 text-center shadow-sm">
@@ -317,7 +419,7 @@ export default async function BranchPage({ params }: Props) {
             frecuentes, no como botonera de accesos directos. La señal local la
             da el texto y el areaServed del schema; las landings de
             /neumaticos-en se descubren por el footer y el sitemap. */}
-        <FaqSection faqs={buildFaqs(branch)} />
+        <FaqSection faqs={faqs} />
       </main>
     </div>
   );
@@ -334,4 +436,59 @@ function formatDays(days: number[]): string {
     return `${DAY_SHORT[sorted[0]]} a ${DAY_SHORT[sorted[sorted.length - 1]]}`;
   }
   return sorted.map((d) => DAY_SHORT[d]).join(", ");
+}
+
+/**
+ * Datos estructurados propios de la ficha: los servicios de taller con su
+ * precio por tipo de vehículo (colgados del TireShop de la sucursal) y el
+ * listado de neumáticos con stock. La ficha local y las preguntas ya salen del
+ * grafo del layout y de FaqSection, así que no se repiten acá.
+ */
+function sucursalJsonLd(branch: Branch, datos: DatosSucursal) {
+  const proveedor = { "@id": branchNodeId(branch) };
+  const lugar = branch.neighborhood ?? branch.city;
+  const oferta = (nombre: string, precio: number) => ({
+    "@type": "Offer",
+    name: nombre,
+    price: precio,
+    priceCurrency: "ARS",
+    availability: "https://schema.org/InStock",
+    seller: proveedor,
+  });
+  const servicio = (
+    id: string,
+    nombre: string,
+    descripcion: string,
+    p: { auto?: { precio: number }; camioneta?: { precio: number } }
+  ) => {
+    const ofertas = [p.auto && oferta("Auto", p.auto.precio), p.camioneta && oferta("Camioneta", p.camioneta.precio)].filter(Boolean);
+    return {
+      "@type": "Service",
+      "@id": `${absoluteUrl(`/sucursales/${branch.id}`)}#${id}`,
+      name: `${nombre} en ${lugar}`,
+      serviceType: nombre,
+      description: descripcion,
+      provider: proveedor,
+      areaServed: { "@type": "City", name: branch.city },
+      ...(ofertas.length ? { offers: ofertas } : {}),
+    };
+  };
+  const ali = nombreServicio("alineacion", "Alineación", branch.id);
+  const bal = nombreServicio("balanceo", "Balanceo", branch.id);
+  const servicios = [
+    servicio("alineacion", ali, `${ali} computarizado 3D en ${branch.address}, ${branch.city}.`, datos.alineacion),
+    servicio("balanceo", bal, `${bal} dinámico computarizado de las ruedas en ${branch.address}, ${branch.city}.`, datos.balanceo),
+    servicio("combo", `Combo ${ali.toLowerCase()} + 4 ${bal.toLowerCase()}`, `${ali} más balanceo de las cuatro ruedas en la misma visita.`, datos.combo),
+  ];
+  const lista = datos.conStock.slice(0, 12).map((p) => ({
+    name: `${p.brand} ${p.model} ${p.size.width}/${p.size.profile} R${p.size.rim}`,
+    path: `/productos/${p.slug}`,
+  }));
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      ...(datos.abierta ? servicios : []),
+      ...(lista.length ? [{ ...itemListJsonLd(lista), "@context": undefined, name: `Neumáticos con stock en ${branch.shortName}` }] : []),
+    ],
+  };
 }

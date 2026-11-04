@@ -28,12 +28,15 @@ export function LocalProductCarousel({
   mejores,
   titulo,
   autoplay = false,
+  sinTitulo = false,
 }: {
   productos: TireProduct[];
   /** id -> medida del tag "Mejor precio" (Map no serializa entre server y client). */
   mejores: [string, string][];
   titulo: string;
   autoplay?: boolean;
+  /** El título queda sólo para lectores de pantalla y buscadores (la página ya tiene el suyo). */
+  sinTitulo?: boolean;
 }) {
   const [rim, setRim] = useState<number | null>(null);
   const scroller = useRef<HTMLDivElement>(null);
@@ -168,9 +171,9 @@ export function LocalProductCarousel({
   if (productos.length === 0) return null;
 
   return (
-    <section className="mb-12" aria-label={titulo}>
+    <section className={sinTitulo ? "" : "mb-12"} aria-label={titulo}>
       <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
-        <h2 className="text-2xl font-black text-navy-900">{titulo}</h2>
+        <h2 className={sinTitulo ? "sr-only" : "text-2xl font-black text-navy-900"}>{titulo}</h2>
         <div className="hidden gap-2 md:flex">
           <button
             type="button"
