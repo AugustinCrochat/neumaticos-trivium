@@ -54,6 +54,8 @@ export type CotizadorHandle = {
       PaymentMethodsSection, que quiere ver el precio de 1 sola cubierta, no
       el juego de 4 que carga por defecto al embeber el cotizador. */
   openConUnaUnidad: () => void;
+  /** Expande el cotizador y baja hasta él, sin tocar lo que ya está cargado. */
+  irAlCotizador: () => void;
   /** Expande el cotizador y suma alineación + balanceo al presupuesto. */
   agregarCombo: () => void;
 };
@@ -108,6 +110,10 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
       if (initialProduct) setItems([{ product: initialProduct, quantity: 1 }]);
       setExpanded(true);
       containerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    },
+    irAlCotizador() {
+      setExpanded(true);
+      setTimeout(() => containerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 60);
     },
     agregarCombo() {
       setIncludeCombo(true);
@@ -347,23 +353,6 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
               <span className="text-2xl font-black text-navy-900">{formatPrice(total)}</span>
             </div>
 
-            {canAddCombo && !includeCombo && (
-              <button
-                onClick={() => setIncludeCombo(true)}
-                className="flex w-full items-center gap-4 bg-orange-50 p-4 text-left transition-colors hover:bg-orange-100"
-              >
-                <AlineacionBalanceoIcon size={36} />
-                <span className="flex-1 text-sm">
-                  <span className="block text-base font-black leading-snug text-navy-900">
-                    Sumar {terminoAlineacion} de las 4 ruedas
-                  </span>
-                  <span className="font-black text-orange-700">+{formatPrice(combo!.precio)}</span>
-                </span>
-                <span className="shrink-0 rounded-full bg-orange-500 px-4 py-2 text-xs font-black text-white shadow-md shadow-orange-500/30">
-                  Agregar
-                </span>
-              </button>
-            )}
             {includeCombo && combo && (
               <div className="flex items-center gap-4 bg-emerald-50 p-4">
                 <AlineacionBalanceoIcon size={36} />
@@ -389,18 +378,38 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
                 </button>
               </div>
             ))}
-            <button
-              type="button"
-              onClick={() => setBuscandoTuerca((v) => !v)}
-              aria-expanded={buscandoTuerca}
-              className="flex w-full items-center gap-3 p-4 text-left text-sm transition-colors hover:bg-slate-50"
-            >
-              <span className="flex-1">
-                <span className="block font-black text-navy-900">Sumar tuercas antirrobo</span>
-                <span className="text-slate-500">Elegí tu auto y agregá la que le corresponde.</span>
-              </span>
-              <span className="shrink-0 text-xs font-black text-orange-600">{buscandoTuerca ? "Cerrar" : "Buscar"}</span>
-            </button>
+            <div className={`grid divide-x divide-slate-100 ${canAddCombo && !includeCombo ? "grid-cols-2" : "grid-cols-1"}`}>
+              {canAddCombo && !includeCombo && (
+                <button
+                  type="button"
+                  onClick={() => setIncludeCombo(true)}
+                  className="flex flex-col items-start gap-2 bg-orange-50 p-3 text-left transition-colors hover:bg-orange-100"
+                >
+                  <span className="flex items-center gap-2">
+                    <AlineacionBalanceoIcon size={28} />
+                    <span className="text-sm font-black leading-tight text-navy-900">
+                      {terminoAlineacion.charAt(0).toUpperCase() + terminoAlineacion.slice(1)}
+                    </span>
+                  </span>
+                  <span className="flex w-full items-center justify-between gap-2">
+                    <span className="text-sm font-black text-orange-700">+{formatPrice(combo!.precio)}</span>
+                    <span className="rounded-full bg-orange-500 px-3 py-1 text-xs font-black text-white shadow-sm shadow-orange-500/30">Agregar</span>
+                  </span>
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={() => setBuscandoTuerca((v) => !v)}
+                aria-expanded={buscandoTuerca}
+                className="flex flex-col items-start gap-2 p-3 text-left transition-colors hover:bg-slate-50"
+              >
+                <span className="text-sm font-black leading-tight text-navy-900">Tuercas antirrobo</span>
+                <span className="flex w-full items-center justify-between gap-2">
+                  <span className="text-xs leading-tight text-slate-500">Para tu auto</span>
+                  <span className="rounded-full border border-orange-300 px-3 py-1 text-xs font-black text-orange-600">{buscandoTuerca ? "Cerrar" : "Buscar"}</span>
+                </span>
+              </button>
+            </div>
             {buscandoTuerca && (
               <TuercaPicker
                 agregadas={tuercas.map((t) => t.id)}

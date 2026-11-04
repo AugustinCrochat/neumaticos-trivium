@@ -13,6 +13,15 @@ import { getPickupLabel, type PickupTiming } from "@/lib/branch-status";
 import { DirectionsIcon } from "@/components/ui/DirectionsIcon";
 import { mensajeAvisameApertura, mensajeAvisameStock, waHref } from "@/lib/whatsapp";
 
+// Logos chicos de los medios de pago: al tocarlos se baja al cotizador de esta ficha.
+const MEDIOS_PAGO = [
+  { logo: "visa", alt: "Visa", cls: "h-2.5" },
+  { logo: "mastercard", alt: "Mastercard", cls: "h-5" },
+  { logo: "mercadopago", alt: "Mercado Pago", cls: "h-6" },
+  { logo: "naranja-x", alt: "Tarjeta Naranja", cls: "h-4" },
+  { logo: "gocuotas", alt: "GOcuotas", cls: "h-4" },
+];
+
 // Debajo de este número el dato no suma confianza (y un "1 vendido" juega en contra).
 const VENDIDOS_MINIMO = 5;
 
@@ -142,6 +151,21 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
           </div>
         </div>
       </div>
+
+      <button
+        type="button"
+        onClick={() => cotizadorRef.current?.irAlCotizador()}
+        className="flex w-full flex-wrap items-center justify-between gap-x-3 gap-y-1.5 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-left transition-colors hover:border-slate-300 hover:bg-slate-50"
+        aria-label="Ver cuotas y medios de pago"
+      >
+        <span className="flex items-center gap-3">
+          {MEDIOS_PAGO.map((m) => (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img key={m.logo} src={`/images/payments/${m.logo}.svg`} alt={m.alt} className={`${m.cls} w-auto`} loading="lazy" />
+          ))}
+        </span>
+        <span className="text-xs font-black text-slate-600">Ver cuotas ↓</span>
+      </button>
 
       <div className="rounded-xl border border-slate-200 bg-white p-4">
         <CotizadorClient
