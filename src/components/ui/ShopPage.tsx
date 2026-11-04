@@ -927,11 +927,33 @@ export function ShopPage({
                     ({exactResults.length} resultado{exactResults.length !== 1 ? "s" : ""})
                   </span>
                 </div>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  {exactResults.map((product, i) => (
-                    <ProductCard key={product.id} product={product} priority={i < 2} isCheapest={mejoresExactos.has(product.id)} cheapestLabel={mejoresExactos.get(product.id)} peers={peersCatalogo.get(product.id)} />
-                  ))}
-                </div>
+                {(() => {
+                  // Si la medida existe en más de un tipo, cada uno va en su bloque:
+                  // ruta, A/T (todo terreno) y carga (C), así no se mezclan en una sola grilla.
+                  const grupos = [
+                    { id: "calle", titulo: null as string | null, nota: null as string | null, lista: exactResults.filter((p) => !p.isCarga && !p.isAT) },
+                    { id: "at", titulo: "Todo terreno (A/T)", nota: "Más tacos y flancos reforzados para tierra, ripio y barro, sin dejar el asfalto.", lista: exactResults.filter((p) => p.isAT && !p.isCarga) },
+                    { id: "carga", titulo: "De carga (C)", nota: "Carcasa reforzada para furgones y utilitarios. No reemplazan a un neumático de auto en la misma medida.", lista: exactResults.filter((p) => p.isCarga) },
+                  ].filter((g) => g.lista.length > 0);
+                  const separados = grupos.length > 1;
+                  let n = 0;
+                  return grupos.map((g) => (
+                    <div key={g.id} className={separados && g.titulo ? "mt-10" : ""}>
+                      {separados && g.titulo && (
+                        <div className="mb-4 border-t border-slate-100 pt-6">
+                          <h3 className="text-xl font-black text-navy-900">{g.titulo}</h3>
+                          {g.nota && <p className="mt-1 text-sm text-slate-500">{g.nota}</p>}
+                        </div>
+                      )}
+                      {separados && !g.titulo && <h3 className="sr-only">De ruta</h3>}
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        {g.lista.map((product) => (
+                          <ProductCard key={product.id} product={product} priority={n++ < 2} isCheapest={mejoresExactos.has(product.id)} cheapestLabel={mejoresExactos.get(product.id)} peers={peersCatalogo.get(product.id)} />
+                        ))}
+                      </div>
+                    </div>
+                  ));
+                })()}
               </section>
             )}
 
