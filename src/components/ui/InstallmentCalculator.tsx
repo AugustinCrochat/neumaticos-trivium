@@ -200,7 +200,7 @@ export function InstallmentCalculator({
                     </p>
                     <p className={`text-xs font-semibold ${sinInt || g === EFECTIVO_GRUPO ? "text-emerald-700" : "text-slate-500"}`}>
                       {g === EFECTIVO_GRUPO
-                        ? "10% de descuento pagando en el local"
+                        ? "10% de descuento pagando en efectivo en el local"
                         : sinInt
                           ? `Sin interés · total ${formatPrice(t)}`
                           : `Total ${formatPrice(t)}`}
@@ -255,7 +255,7 @@ export function InstallmentCalculator({
             {grupoActual && planActual ? (
               <>
                 <span className="font-black text-navy-900">
-                  {nCuotas > 1 ? `${nCuotas} cuotas de ${formatPrice(total / nCuotas)}` : esEfectivo ? "Pagando en el local" : "1 pago"}
+                  {nCuotas > 1 ? `${nCuotas} cuotas de ${formatPrice(total / nCuotas)}` : esEfectivo ? "Efectivo en el local" : "1 pago"}
                 </span>
                 {sinInteres && <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-[11px] font-black uppercase tracking-wide text-emerald-700">Sin interés</span>}
                 {esEfectivo && descuento > 0 && (
@@ -273,7 +273,7 @@ export function InstallmentCalculator({
       {(notaPrecio || esEfectivo) && (
         <p className="mt-3 text-xs text-slate-500">
           {notaPrecio}
-          {esEfectivo && " El descuento por efectivo aplica pagando en el local."}
+          {esEfectivo && " El 10% de descuento aplica solo pagando en efectivo en el local."}
         </p>
       )}
       {onShare && (
