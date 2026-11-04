@@ -56,7 +56,9 @@ export function SizeOrVehicleSearch({
   onNavigate?: () => void;
   onLiveChange?: (v: { w: string; p: string; r: string }) => void;
 }) {
-  const { loadVehiculos } = useVehicle();
+  const { loadVehiculos, clearSelectedVehicle } = useVehicle();
+  // Tocar la pestaña "Por patente" estando en ella vuelve a dejar escribir otra patente.
+  const [plateKey, setPlateKey] = useState(0);
   // Abre siempre en "Por medida" (la opción principal); la patente es la segunda.
   const [mode, setMode] = useState<"patente" | "medida" | "vehiculo">("medida");
   // Apagado por defecto: sólo se enciende si el visitante lo pide (o si la
@@ -177,9 +179,9 @@ export function SizeOrVehicleSearch({
         )}
         {abierto &&
           createPortal(
-            <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center sm:p-6" role="dialog" aria-modal="true" aria-label={titulos[abierto]}>
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6" role="dialog" aria-modal="true" aria-label={titulos[abierto]}>
               <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={cerrar} />
-              <div className="relative z-10 flex max-h-[92dvh] w-full max-w-xl flex-col overflow-hidden rounded-t-2xl bg-white shadow-2xl sm:rounded-2xl">
+              <div className="relative z-10 flex max-h-[90dvh] w-full max-w-xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl">
                 <div className="flex shrink-0 items-center justify-between bg-black px-5 py-4">
                   <h2 className="flex items-center gap-3 text-lg font-bold text-white">
                     {abierto === "medida" ? (
@@ -274,7 +276,13 @@ export function SizeOrVehicleSearch({
         </button>
         {PATENTE_HABILITADA && (
           <button
-            onClick={() => setMode("patente")}
+            onClick={() => {
+              if (mode === "patente") {
+                clearSelectedVehicle();
+                setPlateKey((k) => k + 1);
+              }
+              setMode("patente");
+            }}
             className={`flex h-11 items-center justify-center rounded-lg px-3 text-sm font-bold transition-colors ${mode === "patente" ? "bg-black text-white" : "text-slate-500 hover:text-slate-800"}`}
           >
             <span className="inline-flex items-center gap-1.5">
@@ -301,7 +309,7 @@ export function SizeOrVehicleSearch({
       </div>
 
       {mode === "patente" ? (
-        <PlateSearch economicos={economicos} onNavigate={onNavigate} autoFocus={autoFocus} />
+        <PlateSearch key={plateKey} economicos={economicos} onNavigate={onNavigate} autoFocus={autoFocus || plateKey > 0} />
       ) : mode === "medida" && conBotones && !escribir ? (
         <MedidaPasos economicos={economicos} onNavigate={onNavigate} onEscribir={() => setEscribir(true)} />
       ) : mode === "medida" ? (

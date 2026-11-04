@@ -497,7 +497,7 @@ export const VEHICLE_DB: VehicleDBEntry[] = [
   { brand: "Lifan", model: "X70", sizes: [{ w: "215", p: "60", r: "17" }] },
 
   // Mercedes-Benz
-  { brand: "Mercedes-Benz", model: "Clase A", sizes: [{ w: "205", p: "60", r: "16", version: "A200 Style" }, { w: "225", p: "45", r: "18", version: "A250 AMG Line" }] },
+  { brand: "Mercedes-Benz", model: "Clase A", sizes: [{ w: "195", p: "50", r: "16", version: "A 190 Elegance", generation: "Clase A (W168)", years: "1998-2004" }, { w: "205", p: "60", r: "16", version: "A200 Style" }, { w: "225", p: "45", r: "18", version: "A250 AMG Line" }] },
   { brand: "Mercedes-Benz", model: "Clase B", sizes: [{ w: "205", p: "60", r: "16", version: "B200 Style" }] },
   { brand: "Mercedes-Benz", model: "Clase C", sizes: [{ w: "225", p: "50", r: "17", version: "C200 Avantgarde" }, { w: "225", p: "45", r: "18", version: "C300 AMG-Line - Delantero" }, { w: "245", p: "40", r: "18", version: "C300 AMG-Line - Trasero" }] },
   { brand: "Mercedes-Benz", model: "Clase E", sizes: [{ w: "245", p: "45", r: "17", version: "E350 Elegance (generación anterior)" }, { w: "245", p: "40", r: "19", version: "E400 4Matic AMG Line - Delantero" }, { w: "275", p: "35", r: "19", version: "E400 4Matic AMG Line - Trasero" }] },

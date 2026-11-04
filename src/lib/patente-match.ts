@@ -25,6 +25,16 @@ export function resolverPatente(
   const delaMarca = lista.filter((v) => norm(v.marca) === norm(marca));
   if (delaMarca.length === 0) return null;
   const palabras = modelo.trim().split(/\s+/).filter(Boolean);
+  // Mercedes-Benz escribe la clase como letra + número ("A 190", "C 200 K", "A190"):
+  // en la lista es "Clase A", "Clase C". Va antes de la búsqueda general porque "190"
+  // suelto es otro modelo (el 190 E de los 80).
+  if (norm(marca) === "mercedesbenz") {
+    const m = palabras[0]?.match(/^([A-Za-z])(\d*)$/);
+    if (m && (m[2] || /^\d/.test(palabras[1] ?? ""))) {
+      const hit = delaMarca.find((v) => norm(v.modelo) === `clase${m[1].toLowerCase()}`);
+      if (hit) return { vehiculo: hit, version: (m[2] ? [m[2], ...palabras.slice(1)] : palabras.slice(1)).join(" ") };
+    }
+  }
   for (let inicio = 0; inicio < palabras.length; inicio++) {
     for (let k = Math.min(4, palabras.length - inicio); k >= 1; k--) {
       const buscado = norm(palabras.slice(inicio, inicio + k).join(" "));

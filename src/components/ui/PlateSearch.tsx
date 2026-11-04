@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { ArrowLeft } from "lucide-react";
 import { useVehicle } from "@/contexts/vehicle-context";
 import { getSizesForVehicle } from "@/lib/vehicles";
 import { medidaPorVersion, medidasParaAnio } from "@/lib/patente";
@@ -52,9 +53,9 @@ export function PlateSearch({
             clearSelectedVehicle();
             setAviso(null);
           }}
-          className="mt-3 w-full text-center text-xs font-bold text-slate-500 transition-colors hover:text-slate-800"
+          className="mx-auto mt-3 flex items-center gap-1 rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-black text-slate-600 transition-colors hover:border-slate-500 hover:text-slate-900"
         >
-          Probar con otra patente
+          <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" /> Probar con otra patente
         </button>
       </div>
     );

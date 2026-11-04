@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Check } from "lucide-react";
+import { ArrowLeft, Check } from "lucide-react";
 import { useBranch } from "@/contexts/branch-context";
 import { useVehicle } from "@/contexts/vehicle-context";
 import { getSizesForVehicle, type VehicleDBEntry } from "@/lib/vehicles";
@@ -102,13 +102,15 @@ export function VehicleSizeSearch({ initialMedida, economicos = false, anio, des
               <Check className="h-3 w-3" aria-hidden="true" /> Vehículo encontrado
             </span>
             <button
+              type="button"
               onClick={() => {
                 onClear?.();
                 clearSelectedVehicle();
               }}
-              className="shrink-0 text-xs font-bold text-slate-500 transition-colors hover:text-slate-700"
+              aria-label="Volver a ingresar la patente"
+              className="inline-flex shrink-0 items-center gap-1 rounded-lg border border-slate-300 bg-white px-2.5 py-1 text-xs font-black text-slate-600 transition-colors hover:border-slate-500 hover:text-slate-900"
             >
-              Cambiar
+              <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" /> Otra patente
             </button>
           </div>
           <div className="grid grid-cols-2 gap-2">
