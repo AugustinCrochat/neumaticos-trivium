@@ -56,7 +56,22 @@ export function ProductPageClient({ product, tuercasMuestra }: { product: TirePr
   );
 
   return (
-    <div className="mt-6 flex flex-col gap-3">
+    <div className="mt-4 flex flex-col gap-3">
+      <button
+        type="button"
+        onClick={() => cotizadorRef.current?.irAlCotizador()}
+        className="-mt-1 flex w-full flex-wrap items-center justify-between gap-x-3 gap-y-1.5 rounded-lg px-0.5 py-1 text-left opacity-90 transition-opacity hover:opacity-100"
+        aria-label="Ver cuotas y medios de pago"
+      >
+        <span className="flex items-center gap-3">
+          {MEDIOS_PAGO.map((m) => (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img key={m.logo} src={`/images/payments/${m.logo}.svg`} alt={m.alt} className={`${m.cls} w-auto`} loading="lazy" />
+          ))}
+        </span>
+        <span className="text-xs font-bold text-slate-500 underline-offset-2 hover:underline">Ver cuotas ↓</span>
+      </button>
+
       {enStock && stock > 0 && (
         <p className={`text-xs font-bold flex items-center gap-1.5 ${isLowStock(stock) ? "text-amber-600" : "text-emerald-600"}`}>
           <span className={`w-1.5 h-1.5 rounded-full ${isLowStock(stock) ? "bg-amber-500" : "bg-emerald-500"}`} />
@@ -151,21 +166,6 @@ export function ProductPageClient({ product, tuercasMuestra }: { product: TirePr
           </div>
         </div>
       </div>
-
-      <button
-        type="button"
-        onClick={() => cotizadorRef.current?.irAlCotizador()}
-        className="flex w-full flex-wrap items-center justify-between gap-x-3 gap-y-1.5 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-left transition-colors hover:border-slate-300 hover:bg-slate-50"
-        aria-label="Ver cuotas y medios de pago"
-      >
-        <span className="flex items-center gap-3">
-          {MEDIOS_PAGO.map((m) => (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img key={m.logo} src={`/images/payments/${m.logo}.svg`} alt={m.alt} className={`${m.cls} w-auto`} loading="lazy" />
-          ))}
-        </span>
-        <span className="text-xs font-black text-slate-600">Ver cuotas ↓</span>
-      </button>
 
       <div className="rounded-xl border border-slate-200 bg-white p-4">
         <CotizadorClient
