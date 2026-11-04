@@ -394,11 +394,12 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
                   className="flex items-stretch bg-white text-left transition-colors hover:bg-slate-50"
                 >
                   <span className="flex w-20 shrink-0 items-center justify-center self-stretch bg-white">
-                    <AlineacionBalanceoIcon size={30} />
+                    <AlineacionBalanceoIcon size={36} />
                   </span>
-                  <span className="flex min-w-0 flex-1 flex-col items-start justify-center gap-2 py-3 pr-3">
+                  <span className="flex min-w-0 flex-1 flex-col items-start justify-center gap-2 py-3 pl-1.5 pr-1">
                     <span className="text-sm font-black leading-tight text-navy-900">
-                      {terminoAlineacion.charAt(0).toUpperCase() + terminoAlineacion.slice(1)}
+                      {selectedBranch.id === "arguello" ? "Alineado" : "Alineación"}
+                      <br /><span className="whitespace-nowrap">+ 4 {selectedBranch.id === "arguello" ? "balanceado" : "balanceo"}</span>
                     </span>
                     <span className="text-sm font-black leading-none text-orange-700">{formatPrice(combo!.precio)}</span>
                     <span className="rounded-full bg-orange-500 px-3 py-1 text-xs font-black text-white">Agregar</span>
@@ -413,10 +414,10 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
               >
                 <span className="relative flex w-20 shrink-0 items-center justify-center self-stretch bg-white">
                   {tuercaFoto?.imageUrl && (
-                    <Image src={tuercaFoto.imageUrl} alt={tuercaFoto.nombre} fill sizes="80px" className="object-contain p-1" />
+                    <Image src={tuercaFoto.imageUrl} alt={tuercaFoto.nombre} fill sizes="96px" className="object-contain p-0.5" />
                   )}
                 </span>
-                <span className="flex min-w-0 flex-1 flex-col items-start justify-center gap-2 py-3 pr-3">
+                <span className="flex min-w-0 flex-1 flex-col items-start justify-center gap-2 py-3 pl-1.5 pr-1">
                   <span className="text-sm font-black leading-tight text-navy-900">Tuercas antirrobo</span>
                   {tuercaFoto && <span className="text-sm font-black leading-none text-orange-700">{formatPrice(tuercaFoto.price)}</span>}
                   <span className="rounded-full bg-orange-500 px-3 py-1 text-xs font-black text-white">{buscandoTuerca ? "Cerrar" : "Buscar"}</span>
