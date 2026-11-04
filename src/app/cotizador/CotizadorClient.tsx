@@ -1,6 +1,6 @@
 "use client";
 
-import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from "react";
 import Image from "next/image";
 import { useBranch } from "@/contexts/branch-context";
 import { useUpsellCombo } from "@/hooks/use-upsell-combo";
@@ -85,6 +85,20 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
   const [hayMedida, setHayMedida] = useState(false);
   const presupuestoRef = useRef<HTMLDivElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  // Total con el medio de pago elegido: lo reporta la calculadora y lo muestra
+  // la barra fija mientras el bloque del total no está a la vista.
+  const totalRef = useRef<HTMLDivElement | null>(null);
+  const [pagoActual, setPagoActual] = useState<PagoElegido | null>(null);
+  const [totalVisible, setTotalVisible] = useState(false);
+  const onPago = useCallback((p: PagoElegido) => setPagoActual(p), []);
+  const hayCalculadora = items.length > 0;
+  useEffect(() => {
+    const el = totalRef.current;
+    if (!el || !hayCalculadora) return;
+    const io = new IntersectionObserver(([e]) => setTotalVisible(e.isIntersecting), { threshold: 0.3 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [hayCalculadora, expanded]);
   useEffect(() => {
     onComboChange?.(includeCombo);
   }, [includeCombo, onComboChange]);
@@ -328,6 +342,11 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
               </div>
             ))}
 
+            <div className="flex items-baseline justify-between gap-3 bg-slate-50 px-4 py-3">
+              <span className="text-sm font-bold text-slate-600">Total (precio de lista)</span>
+              <span className="text-2xl font-black text-navy-900">{formatPrice(total)}</span>
+            </div>
+
             {canAddCombo && !includeCombo && (
               <button
                 onClick={() => setIncludeCombo(true)}
@@ -401,17 +420,26 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
           basePrice={total}
           notaPrecio={`Precio con IVA incluido, retirando en ${selectedBranch.shortName}. No incluye envío.`}
           onShare={shareByWhatsApp}
+          onPago={onPago}
+          totalRef={totalRef}
         />
       )}
-      {guiado && hasItems && (
-        <div className="sticky bottom-3 z-30 md:hidden">
+      {!compact && hasItems && !totalVisible && (
+        <div className="sticky bottom-20 z-30 md:bottom-3">
           <button
             type="button"
-            onClick={() => presupuestoRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })}
-            className="flex w-full items-center justify-between rounded-2xl bg-black px-5 py-3.5 text-white shadow-2xl"
+            onClick={() => totalRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })}
+            className="flex w-full items-center justify-between gap-3 rounded-2xl bg-black py-3.5 pl-5 pr-20 text-left text-white shadow-2xl md:pr-5"
           >
-            <span className="text-sm font-bold">{items.reduce((n, it) => n + it.quantity, 0)} neumático(s) · Total</span>
-            <span className="text-lg font-black">{formatPrice(total)}</span>
+            <span className="min-w-0">
+              <span className="block text-sm font-bold">
+                {items.reduce((n, it) => n + it.quantity, 0)} neumático(s) · Total
+              </span>
+              <span className="block truncate text-xs font-semibold text-white/60">
+                {pagoActual?.medio ? `${pagoActual.medio}${pagoActual.esEfectivo ? " · 10% OFF" : ""}` : "Elegí cómo pagar"}
+              </span>
+            </span>
+            <span className="shrink-0 text-2xl font-black">{formatPrice(pagoActual?.total ?? total)}</span>
           </button>
         </div>
       )}

@@ -348,17 +348,6 @@ export function ProductImageGallery({
                 style={{ left: lensStyle.left, top: lensStyle.top, width: lensStyle.width, height: lensStyle.height }}
               />
             )}
-            {current.kind === "etiqueta" && eprelUrl && (
-              <span
-                title="Verificá este neumático en el registro oficial de la Unión Europea (EPREL)"
-                className="pointer-events-none absolute right-2 top-2 flex h-12 w-12 flex-col items-center justify-center gap-0.5 rounded-full bg-[#003399] text-white shadow-lg ring-2 ring-white md:h-14 md:w-14"
-              >
-                <svg className="h-3.5 w-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                </svg>
-                <span className="text-[9px] font-black leading-none tracking-wide md:text-[10px]">EPREL</span>
-              </span>
-            )}
             {current.kind !== "sucursal" && current.kind !== "etiqueta" && (
               <span className={`absolute right-3 top-3 w-8 h-8 rounded-full bg-white/90 shadow-md flex items-center justify-center text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity`}>
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -371,6 +360,22 @@ export function ProductImageGallery({
           <div className="w-48 h-48">{TIRE_SVG}</div>
         )}
         </div>
+        {current?.kind === "etiqueta" && eprelUrl && (
+          <a
+            href={eprelUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Verificá este neumático en el registro oficial de la Unión Europea (EPREL)"
+            aria-label="Verificar este neumático en el registro oficial EPREL (se abre en una pestaña nueva)"
+            onClick={(e) => e.stopPropagation()}
+            className="absolute right-2 top-2 z-10 flex h-12 w-12 cursor-pointer flex-col items-center justify-center gap-0.5 rounded-full bg-[#003399] text-white shadow-lg ring-2 ring-white transition-transform hover:scale-110 md:h-14 md:w-14"
+          >
+            <svg className="h-3.5 w-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+            <span className="text-[9px] font-black leading-none tracking-wide md:text-[10px]">EPREL</span>
+          </a>
+        )}
         {current?.kind === "sucursal" && (
           <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent px-5 pb-5 pt-16 text-left text-white">
             <p className="text-2xl font-black">{current.branchName}</p>

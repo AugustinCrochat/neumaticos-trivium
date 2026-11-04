@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type RefObject } from "react";
 import Image from "next/image";
 import { useRecargosTarjeta } from "@/hooks/use-recargos-tarjeta";
 import { isVisaMasterPromoDay } from "@/lib/promo-day";
@@ -34,20 +34,11 @@ function formatPrice(price: number) {
     alargado que Mastercard, y Mercado Pago/GOcuotas quedan chicos al lado de
     Visa/Mastercard/Naranja), así que cada uno tiene su propia altura acá. */
 function logoClassName(logo: string): string {
-  if (logo === "/images/payments/mercadopago.svg") return "h-9 w-auto";
-  if (logo === "/images/payments/gocuotas.svg") return "h-5 w-auto";
-  if (logo === "/images/payments/visa.svg") return "h-3.5 w-auto";
-  if (logo === "/images/payments/mastercard.svg") return "h-7 w-auto";
-  return "h-5 w-auto";
-}
-
-/** Ancho de cada medio en una grilla de 6 columnas: con 5 medios quedan 3 arriba
-    y 2 abajo, más anchos, así la fila de abajo también llena el ancho. */
-function spanDe(i: number, n: number): string {
-  if (n === 5) return i < 3 ? "col-span-2" : "col-span-3";
-  if (n === 4 || n === 2) return "col-span-3";
-  if (n === 3 || n === 6) return "col-span-2";
-  return "col-span-6";
+  if (logo === "/images/payments/mercadopago.svg") return "h-7 w-auto sm:h-9";
+  if (logo === "/images/payments/gocuotas.svg") return "h-4 w-auto sm:h-5";
+  if (logo === "/images/payments/visa.svg") return "h-3 w-auto sm:h-3.5";
+  if (logo === "/images/payments/mastercard.svg") return "h-5 w-auto sm:h-7";
+  return "h-4 w-auto sm:h-5";
 }
 
 /** Mayor cantidad de cuotas sin interés del medio (0 si no tiene). */
@@ -89,10 +80,16 @@ export function InstallmentCalculator({
   basePrice,
   notaPrecio,
   onShare,
+  onPago,
+  totalRef,
 }: {
   basePrice: number;
   notaPrecio?: string;
   onShare?: (pago: PagoElegido) => void;
+  /** Avisa el total con el medio elegido cada vez que cambia (para mostrarlo en una barra fija). */
+  onPago?: (pago: PagoElegido) => void;
+  /** Referencia al bloque del total, para saber si está a la vista. */
+  totalRef?: RefObject<HTMLDivElement | null>;
 }) {
   const recargos = useRecargosTarjeta();
   const [grupoSel, setGrupoSel] = useState<string | null>(null);
@@ -128,14 +125,18 @@ export function InstallmentCalculator({
   const sinInteres = nCuotas > 1 && recargo === 0;
   const nombreMedio = grupoActual ? (esEfectivo ? "Efectivo" : displayGrupoLabel(grupoActual)) : "";
 
+  useEffect(() => {
+    onPago?.({ total, medio: grupoActual ? nombreMedio : "", cuotas: planActual?.cuotas ?? "", esEfectivo });
+  }, [onPago, total, grupoActual, nombreMedio, planActual?.cuotas, esEfectivo]);
+
   return (
     <div className="rounded-xl border border-slate-200 bg-white p-4">
       <h3 className="text-xs font-black uppercase tracking-wide text-navy-900">Elegí cómo pagar</h3>
       <p className="mt-0.5 text-xs text-slate-500">Tocá un medio para ver las cuotas y el total.</p>
 
       {/* Medios: mosaico parejo; el elegido muestra abajo sus cuotas. */}
-      <div className="mt-3 grid grid-cols-6 gap-2" role="radiogroup" aria-label="Medio de pago">
-        {grupos.map((g, i) => {
+      <div className="mt-3 grid auto-cols-fr grid-flow-col gap-1.5 sm:gap-2" role="radiogroup" aria-label="Medio de pago">
+        {grupos.map((g) => {
           const elegido = g === grupoActual;
           const sinInteresMax = g === EFECTIVO_GRUPO ? 0 : maxSinInteres(planesDe(g));
           return (
@@ -150,11 +151,11 @@ export function InstallmentCalculator({
                 setGrupoSel(elegido ? null : g);
                 setCuotaId(null);
               }}
-              className={`${spanDe(i, grupos.length)} flex h-[76px] flex-col items-center justify-center gap-1.5 rounded-xl border-2 px-1 transition-colors ${
+              className={`flex h-[72px] min-w-0 flex-col items-center justify-center gap-1 rounded-xl border-2 px-0.5 transition-colors sm:h-[76px] sm:gap-1.5 sm:px-1 ${
                 elegido ? "border-navy-900 bg-white shadow-sm" : "border-slate-200 bg-white hover:border-slate-300"
               }`}
             >
-              <span className="flex h-9 items-center justify-center gap-1.5">
+              <span className="flex h-8 items-center justify-center gap-1 sm:h-9 sm:gap-1.5">
                 {g === EFECTIVO_GRUPO ? (
                   <span className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-600 text-lg font-black leading-none text-white" aria-hidden="true">
                     $
@@ -166,7 +167,7 @@ export function InstallmentCalculator({
                 )}
               </span>
               <span
-                className={`text-[11px] font-bold leading-none ${
+                className={`text-center text-[10px] font-bold leading-tight sm:text-[11px] ${
                   g === EFECTIVO_GRUPO || sinInteresMax > 0 ? "text-emerald-700" : "text-slate-500"
                 } ${sinInteresMax > 0 ? "font-black" : ""}`}
               >
@@ -243,7 +244,7 @@ export function InstallmentCalculator({
         );
       })()}
 
-      <div className="mt-4 rounded-xl bg-navy-900 px-4 py-4 text-white" aria-live="polite">
+      <div ref={totalRef} className="mt-4 scroll-mt-24 rounded-xl bg-navy-900 px-4 py-4 text-white" aria-live="polite">
         <p className="text-xs font-bold uppercase tracking-wide text-white/60">Total a pagar</p>
         <p className="mt-1 text-4xl font-black leading-none tracking-tight">{formatPrice(total)}</p>
         <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm font-semibold text-white/85">
