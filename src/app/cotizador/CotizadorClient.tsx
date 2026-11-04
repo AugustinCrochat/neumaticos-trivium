@@ -368,7 +368,7 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
                   <span className="block text-base font-black text-navy-900">
                     {terminoAlineacion.charAt(0).toUpperCase() + terminoAlineacion.slice(1)} de las 4 ruedas
                   </span>
-                  <span className="font-black text-emerald-700">+{formatPrice(combo.precio)}</span>
+                  <span className="font-black text-emerald-700">{formatPrice(combo.precio)}</span>
                 </span>
                 <button onClick={() => setIncludeCombo(false)} className="shrink-0 text-xs font-bold text-slate-400 hover:text-red-600">
                   Quitar
@@ -379,29 +379,29 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
               <div key={t.id} className="flex items-center gap-4 bg-emerald-50 p-4">
                 <span className="flex-1 text-sm">
                   <span className="block text-base font-black text-navy-900">{t.nombre}</span>
-                  <span className="font-black text-emerald-700">+{formatPrice(t.price)}</span>
+                  <span className="font-black text-emerald-700">{formatPrice(t.price)}</span>
                 </span>
                 <button onClick={() => setTuercas((prev) => prev.filter((x) => x.id !== t.id))} className="shrink-0 text-xs font-bold text-slate-400 hover:text-red-600">
                   Quitar
                 </button>
               </div>
             ))}
-            <div className={`grid gap-2 p-3 ${canAddCombo && !includeCombo ? "grid-cols-2" : "grid-cols-1"}`}>
+            <div className={`grid divide-x divide-slate-100 bg-white ${canAddCombo && !includeCombo ? "grid-cols-2" : "grid-cols-1"}`}>
               {canAddCombo && !includeCombo && (
                 <button
                   type="button"
                   onClick={() => setIncludeCombo(true)}
-                  className="group flex min-w-0 items-stretch overflow-hidden rounded-xl border border-orange-200 bg-orange-50 text-left transition-colors hover:border-orange-400 hover:bg-orange-100"
+                  className="flex items-stretch bg-white text-left transition-colors hover:bg-slate-50"
                 >
-                  <span className="flex w-16 shrink-0 items-center justify-center self-stretch overflow-hidden bg-white/70">
-                    <AlineacionBalanceoIcon size={24} />
+                  <span className="flex w-20 shrink-0 items-center justify-center self-stretch bg-white">
+                    <AlineacionBalanceoIcon size={30} />
                   </span>
-                  <span className="flex min-w-0 flex-1 flex-col justify-center gap-1.5 p-2.5">
+                  <span className="flex min-w-0 flex-1 flex-col items-start justify-center gap-2 py-3 pr-3">
                     <span className="text-sm font-black leading-tight text-navy-900">
                       {terminoAlineacion.charAt(0).toUpperCase() + terminoAlineacion.slice(1)}
                     </span>
-                    <span className="text-sm font-black leading-none text-orange-700">+{formatPrice(combo!.precio)}</span>
-                    <span className="w-fit rounded-full bg-orange-500 px-3 py-1 text-xs font-black text-white shadow-sm shadow-orange-500/30 group-hover:bg-orange-600">Agregar</span>
+                    <span className="text-sm font-black leading-none text-orange-700">{formatPrice(combo!.precio)}</span>
+                    <span className="rounded-full bg-orange-500 px-3 py-1 text-xs font-black text-white">Agregar</span>
                   </span>
                 </button>
               )}
@@ -409,17 +409,17 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
                 type="button"
                 onClick={() => setBuscandoTuerca((v) => !v)}
                 aria-expanded={buscandoTuerca}
-                className="group flex min-w-0 items-stretch overflow-hidden rounded-xl border border-slate-200 bg-white text-left transition-colors hover:border-slate-400"
+                className="flex items-stretch bg-white text-left transition-colors hover:bg-slate-50"
               >
-                {tuercaFoto?.imageUrl && (
-                  <span className="relative w-16 shrink-0 self-stretch bg-slate-50">
-                    <Image src={tuercaFoto.imageUrl} alt={tuercaFoto.nombre} fill sizes="64px" className="object-contain p-1" />
-                  </span>
-                )}
-                <span className="flex min-w-0 flex-1 flex-col justify-center gap-1.5 p-2.5">
+                <span className="relative flex w-20 shrink-0 items-center justify-center self-stretch bg-white">
+                  {tuercaFoto?.imageUrl && (
+                    <Image src={tuercaFoto.imageUrl} alt={tuercaFoto.nombre} fill sizes="80px" className="object-contain p-1" />
+                  )}
+                </span>
+                <span className="flex min-w-0 flex-1 flex-col items-start justify-center gap-2 py-3 pr-3">
                   <span className="text-sm font-black leading-tight text-navy-900">Tuercas antirrobo</span>
-                  {tuercaFoto && <span className="text-sm font-black leading-none text-slate-700">{formatPrice(tuercaFoto.price)}</span>}
-                  <span className="w-fit rounded-full border border-slate-300 px-3 py-1 text-xs font-black text-slate-700 group-hover:border-slate-500">{buscandoTuerca ? "Cerrar" : "Buscar"}</span>
+                  {tuercaFoto && <span className="text-sm font-black leading-none text-orange-700">{formatPrice(tuercaFoto.price)}</span>}
+                  <span className="rounded-full bg-orange-500 px-3 py-1 text-xs font-black text-white">{buscandoTuerca ? "Cerrar" : "Buscar"}</span>
                 </span>
               </button>
             </div>
