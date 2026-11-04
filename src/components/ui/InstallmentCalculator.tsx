@@ -131,38 +131,7 @@ export function InstallmentCalculator({
 
   return (
     <div className="rounded-xl border border-slate-200 bg-white p-4">
-      <div ref={totalRef} className="scroll-mt-24 overflow-hidden rounded-xl bg-navy-900 text-white" aria-live="polite">
-        <div className="flex items-end justify-between gap-3 px-4 pb-3 pt-4">
-          <div className="min-w-0">
-            <p className="text-xs font-bold uppercase tracking-wide text-white/60">Total a pagar</p>
-            <p className="mt-1 text-4xl font-black leading-none tracking-tight sm:text-5xl">{formatPrice(total)}</p>
-          </div>
-          {esEfectivo && descuento > 0 && (
-            <span className="mb-1 shrink-0 rounded-full bg-emerald-500 px-2.5 py-1 text-[11px] font-black uppercase tracking-wide text-white">
-              Ahorrás {formatPrice(descuento)}
-            </span>
-          )}
-          {sinInteres && !esEfectivo && (
-            <span className="mb-1 shrink-0 rounded-full bg-emerald-500 px-2.5 py-1 text-[11px] font-black uppercase tracking-wide text-white">
-              Sin interés
-            </span>
-          )}
-        </div>
-        <div className="border-t border-white/10 bg-white/5 px-4 py-2.5 text-sm font-semibold text-white/85">
-          {grupoActual && planActual ? (
-            <p>
-              <span className="font-black text-white">{nombreMedio}</span>
-              <span className="text-white/40" aria-hidden="true"> · </span>
-              {nCuotas > 1 ? `${nCuotas} cuotas de ${formatPrice(total / nCuotas)}` : esEfectivo ? "pagando en el local" : "1 pago"}
-              {recargo > 0 && <span className="text-xs font-medium text-white/60"> (incluye {formatPrice(recargo)} de financiación)</span>}
-            </p>
-          ) : (
-            <p>Precio de lista · elegí un medio de pago para ver las cuotas</p>
-          )}
-        </div>
-      </div>
-
-      <h3 className="mt-5 text-xs font-black uppercase tracking-wide text-navy-900">Elegí cómo pagar</h3>
+      <h3 className="text-xs font-black uppercase tracking-wide text-navy-900">Elegí cómo pagar</h3>
       <p className="mt-0.5 text-xs text-slate-500">Tocá un medio para ver las cuotas y el total.</p>
 
       {/* Medios: mosaico parejo; el elegido muestra abajo sus cuotas. */}
@@ -274,6 +243,32 @@ export function InstallmentCalculator({
           </div>
         );
       })()}
+
+      <div ref={totalRef} className="mt-4 scroll-mt-24 overflow-hidden rounded-2xl border-2 border-navy-900 bg-white" aria-live="polite">
+        <div className="flex items-center justify-between gap-3 bg-navy-900 px-4 py-2 text-white">
+          <p className="text-xs font-black uppercase tracking-widest">Total a pagar</p>
+          <p className="truncate text-xs font-bold text-white/80">{grupoActual ? nombreMedio : "Precio de lista"}</p>
+        </div>
+        <div className="px-4 pb-4 pt-3">
+          <p className="text-5xl font-black leading-none tracking-tight text-navy-900">{formatPrice(total)}</p>
+          <div className="mt-3 flex flex-wrap items-center gap-2 text-sm font-semibold text-slate-600">
+            {grupoActual && planActual ? (
+              <>
+                <span className="font-black text-navy-900">
+                  {nCuotas > 1 ? `${nCuotas} cuotas de ${formatPrice(total / nCuotas)}` : esEfectivo ? "Pagando en el local" : "1 pago"}
+                </span>
+                {sinInteres && <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-[11px] font-black uppercase tracking-wide text-emerald-700">Sin interés</span>}
+                {esEfectivo && descuento > 0 && (
+                  <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-[11px] font-black uppercase tracking-wide text-emerald-700">Ahorrás {formatPrice(descuento)}</span>
+                )}
+                {recargo > 0 && <span className="text-xs font-medium text-slate-500">incluye {formatPrice(recargo)} de financiación</span>}
+              </>
+            ) : (
+              <span>Elegí un medio de pago para ver las cuotas.</span>
+            )}
+          </div>
+        </div>
+      </div>
 
       {(notaPrecio || esEfectivo) && (
         <p className="mt-3 text-xs text-slate-500">
