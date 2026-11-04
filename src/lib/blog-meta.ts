@@ -211,6 +211,12 @@ export const BLOG_META: Record<string, BlogMeta> = {
     shopIntro: "Para alinear tu auto:",
     shopLinks: [L.servicios, L.todos, L.ofertas],
   },
+  "cuanto-cuesta-cambiar-los-cuatro-neumaticos": {
+    cover: cover("tallerCuatroAutos"),
+    figure: figure("tecnicosAlineando"),
+    shopIntro: "Para armar tu presupuesto:",
+    shopLinks: [L.todos, L.servicios, L.ofertas],
+  },
   "cuanto-tarda-alineado-y-balanceado": {
     cover: cover("tallerCuatroAutos"),
     figure: figure("tecnicosAlineando"),

@@ -249,6 +249,15 @@ const BLOG_POSTS_BASE: BlogPost[] = [
     category: "Servicios",
   },
   {
+    id: "89",
+    title: "¿Cuánto cuesta cambiar los 4 neumáticos? Costo total con alineado y balanceado",
+    excerpt: "Cuánto sale el juego completo según el rodado, qué incluye la colocación y cuánto suma el alineado y balanceado, con precios reales del día.",
+    imageUrl: "/images/local/taller-de-gomeria-con-cuatro-autos-neumaticos-trivium-arguello-cordoba.webp",
+    date: "2026-11-05",
+    slug: "cuanto-cuesta-cambiar-los-cuatro-neumaticos",
+    category: "Guías",
+  },
+  {
     id: "79",
     title: "¿Cuánto tarda el alineado y balanceado? Tiempos para auto y camioneta",
     excerpt: "Unos 50 minutos para un auto y alrededor de una hora y veinte para una camioneta; qué incluye y qué lo alarga.",
