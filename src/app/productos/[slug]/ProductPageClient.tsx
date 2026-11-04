@@ -60,7 +60,7 @@ export function ProductPageClient({ product, tuercasMuestra }: { product: TirePr
       <button
         type="button"
         onClick={() => cotizadorRef.current?.irAlCotizador()}
-        className="-mt-1 flex w-full flex-wrap items-center justify-between gap-x-3 gap-y-1.5 rounded-lg px-0.5 py-1 text-left opacity-90 transition-opacity hover:opacity-100"
+        className="-mt-1 flex w-full flex-wrap items-center justify-start gap-x-4 gap-y-1.5 rounded-lg px-0.5 py-1 text-left opacity-90 transition-opacity hover:opacity-100"
         aria-label="Ver cuotas y medios de pago"
       >
         <span className="flex items-center gap-3">
