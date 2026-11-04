@@ -244,30 +244,32 @@ export function InstallmentCalculator({
         );
       })()}
 
-      <div ref={totalRef} className="mt-4 scroll-mt-24 overflow-hidden rounded-2xl border-2 border-navy-900 bg-white" aria-live="polite">
-        <div className="flex items-center justify-between gap-3 bg-navy-900 px-4 py-2 text-white">
-          <p className="text-xs font-black uppercase tracking-widest">Total a pagar</p>
-          <p className="truncate text-xs font-bold text-white/80">{grupoActual ? nombreMedio : "Precio de lista"}</p>
-        </div>
-        <div className="px-4 pb-4 pt-3">
-          <p className="text-5xl font-black leading-none tracking-tight text-navy-900">{formatPrice(total)}</p>
-          <div className="mt-3 flex flex-wrap items-center gap-2 text-sm font-semibold text-slate-600">
-            {grupoActual && planActual ? (
-              <>
-                <span className="font-black text-navy-900">
-                  {nCuotas > 1 ? `${nCuotas} cuotas de ${formatPrice(total / nCuotas)}` : esEfectivo ? "Efectivo en el local" : "1 pago"}
-                </span>
-                {sinInteres && <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-[11px] font-black uppercase tracking-wide text-emerald-700">Sin interés</span>}
-                {esEfectivo && descuento > 0 && (
-                  <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-[11px] font-black uppercase tracking-wide text-emerald-700">Ahorrás {formatPrice(descuento)}</span>
-                )}
-                {recargo > 0 && <span className="text-xs font-medium text-slate-500">incluye {formatPrice(recargo)} de financiación</span>}
-              </>
-            ) : (
-              <span>Elegí un medio de pago para ver las cuotas.</span>
-            )}
+      <div ref={totalRef} className="mt-4 scroll-mt-24 rounded-2xl border-l-4 border-[#ff1e00] bg-slate-50 p-4 ring-1 ring-slate-200" aria-live="polite">
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <p className="text-xs font-bold uppercase tracking-widest text-slate-500">Total a pagar</p>
+            <p className="mt-1 text-5xl font-black leading-none tracking-tight text-[#ff1e00]">{formatPrice(total)}</p>
           </div>
+          <span className="mt-0.5 max-w-[45%] shrink-0 truncate rounded-full bg-white px-3 py-1 text-xs font-black text-slate-700 ring-1 ring-slate-200">
+            {grupoActual ? nombreMedio : "Precio de lista"}
+          </span>
         </div>
+        {grupoActual && planActual ? (
+          <div className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1.5 border-t border-dashed border-slate-300 pt-3 text-sm font-semibold text-slate-700">
+            <span className="font-black text-slate-900">
+              {nCuotas > 1 ? `${nCuotas} cuotas de ${formatPrice(total / nCuotas)}` : esEfectivo ? "Efectivo en el local" : "1 pago"}
+            </span>
+            {sinInteres && <span className="rounded-full bg-emerald-600 px-2.5 py-0.5 text-[11px] font-black uppercase tracking-wide text-white">Sin interés</span>}
+            {esEfectivo && descuento > 0 && (
+              <span className="rounded-full bg-emerald-600 px-2.5 py-0.5 text-[11px] font-black uppercase tracking-wide text-white">Ahorrás {formatPrice(descuento)}</span>
+            )}
+            {recargo > 0 && <span className="text-xs font-medium text-slate-500">incluye {formatPrice(recargo)} de financiación</span>}
+          </div>
+        ) : (
+          <p className="mt-3 border-t border-dashed border-slate-300 pt-3 text-sm font-semibold text-slate-500">
+            Elegí un medio de pago para ver las cuotas.
+          </p>
+        )}
       </div>
 
       {(notaPrecio || esEfectivo) && (
