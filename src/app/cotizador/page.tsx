@@ -4,7 +4,7 @@ import { absoluteUrl, breadcrumbJsonLd, canonical, SITE_NAME } from "@/lib/seo";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { FaqSection } from "@/components/seo/FaqSection";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { getProductosDesdePOS } from "@/lib/pos-api";
+import { getProductosDesdePOS, getAccesoriosDesdePOS } from "@/lib/pos-api";
 import { getSelectedBranchSlug } from "@/lib/branch-server";
 import { sizeCatalogHref } from "@/lib/size-href";
 import { poolShare } from "@/lib/share-image";
@@ -71,7 +71,8 @@ const COMO_FUNCIONA = [
 
 export default async function CotizadorPage() {
   const sucursal = await getSelectedBranchSlug();
-  const productos = await getProductosDesdePOS(sucursal);
+  const [productos, accesorios] = await Promise.all([getProductosDesdePOS(sucursal), getAccesoriosDesdePOS(sucursal)]);
+  const tuercasMuestra = accesorios.filter((a) => a.imageUrl && a.codigoTango && a.enStock);
   const conStock = productos.filter((p) => p.enStock);
 
   const porMedida = new Map<string, MedidaDisponible>();
@@ -155,7 +156,7 @@ export default async function CotizadorPage() {
       </section>
 
       <div className="mx-auto max-w-4xl px-4 py-8">
-        <CotizadorClient medidas={medidas} destacados={destacados} />
+        <CotizadorClient medidas={medidas} destacados={destacados} tuercasMuestra={tuercasMuestra} />
 
         <section className="mt-16">
           <h2 className="text-2xl font-black text-navy-900 md:text-3xl">Cómo funciona el cotizador</h2>

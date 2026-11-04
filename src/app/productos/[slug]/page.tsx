@@ -3,7 +3,7 @@ import Link from "@/components/ui/Link";
 import type { Metadata } from "next";
 import { productShare } from "@/lib/share-image";
 import { productImagePaths } from "@/lib/image-seo";
-import { getProductosDesdePOS, esRodadoCamion } from "@/lib/pos-api";
+import { getProductosDesdePOS, getAccesoriosDesdePOS, esRodadoCamion } from "@/lib/pos-api";
 import { getSelectedBranchSlug } from "@/lib/branch-server";
 import { getBrandLogo } from "@/lib/brand-utils";
 import { BRANDS } from "@/lib/data";
@@ -210,9 +210,12 @@ function buildProductJsonLd(product: {
 
 export default async function ProductPage({ params }: Props) {
   const { slug } = await params;
-  const productos = await getProductosDesdePOS(await getSelectedBranchSlug());
+  const sucursalSlug = await getSelectedBranchSlug();
+  const [productos, accesorios] = await Promise.all([getProductosDesdePOS(sucursalSlug), getAccesoriosDesdePOS(sucursalSlug)]);
   const product = productos.find((p) => p.slug === slug);
   if (!product) notFound();
+  // Sólo las tuercas con foto y código (las que se pueden mostrar y emparejar con un auto).
+  const tuercasMuestra = accesorios.filter((a) => a.imageUrl && a.codigoTango && a.enStock);
 
   const tireLabel = getTireLabel(product.slug);
   const utqg = getUtqg(product.brandId, product.modeloBase, product.slug);
@@ -397,7 +400,7 @@ export default async function ProductPage({ params }: Props) {
             <LivePrice id={product.id} price={product.price} priceOld={product.priceOld} peers={peers} groupLabel={groupLabel(product)} />
 
             {/* Client component handles branch-specific WhatsApp link */}
-            <ProductPageClient product={product} />
+            <ProductPageClient product={product} tuercasMuestra={tuercasMuestra} />
           </div>
         </div>
       </div>

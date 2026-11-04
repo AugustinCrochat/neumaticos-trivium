@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useBranch } from "@/contexts/branch-context";
 import { useLiveStock } from "@/contexts/live-stock-context";
-import type { TireProduct } from "@/lib/types";
+import type { Accessory, TireProduct } from "@/lib/types";
 import { SITE_URL } from "@/lib/config";
 import { isLowStock, stockLabel } from "@/lib/stock";
 import { BranchStatusBadge } from "@/app/sucursales/[id]/BranchStatusBadge";
@@ -25,7 +25,7 @@ const MEDIOS_PAGO = [
 // Debajo de este número el dato no suma confianza (y un "1 vendido" juega en contra).
 const VENDIDOS_MINIMO = 5;
 
-export function ProductPageClient({ product }: { product: TireProduct }) {
+export function ProductPageClient({ product, tuercasMuestra }: { product: TireProduct; tuercasMuestra?: Accessory[] }) {
   const { selectedBranch, openModal } = useBranch();
   const cotizadorRef = useRef<CotizadorHandle | null>(null);
 
@@ -171,6 +171,7 @@ export function ProductPageClient({ product }: { product: TireProduct }) {
         <CotizadorClient
           ref={cotizadorRef}
           compact
+          tuercasMuestra={tuercasMuestra}
           initialProduct={{ id: product.id, label: `${product.brand} ${product.model}`, price, imageUrl: product.imageUrl, brand: product.brand, model: product.model, slug: product.slug }}
         />
       </div>

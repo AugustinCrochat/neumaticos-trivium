@@ -6,6 +6,8 @@ import { useBranch } from "@/contexts/branch-context";
 import { useUpsellCombo } from "@/hooks/use-upsell-combo";
 import { AlineacionBalanceoIcon } from "@/components/ui/AlineacionBalanceoIcon";
 import { TuercaPicker } from "@/components/ui/TuercaPicker";
+import { useVehicle } from "@/contexts/vehicle-context";
+import { getCompatibleAccessories } from "@/lib/tuercas-vehiculos";
 import type { Accessory } from "@/lib/types";
 import { InstallmentCalculator, type PagoElegido } from "@/components/ui/InstallmentCalculator";
 import { goToWhatsApp } from "@/lib/gtag";
@@ -60,8 +62,8 @@ export type CotizadorHandle = {
   agregarCombo: () => void;
 };
 
-export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: QuoteProduct; /** Unidades del ítem precargado (4 = juego de neumáticos). */ initialQuantity?: number; compact?: boolean; /** Medidas y neumáticos destacados: con ellos (y sin `compact`) el cotizador es la versión guiada de /cotizador. */ medidas?: MedidaDisponible[]; destacados?: (QuoteProduct & { medida: string })[]; /** Avisa si el presupuesto incluye alineación + balanceo. */ onComboChange?: (incluido: boolean) => void }>(
-  function CotizadorClient({ initialProduct, initialQuantity = 4, compact = false, medidas, destacados = [], onComboChange }, ref) {
+export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: QuoteProduct; /** Unidades del ítem precargado (4 = juego de neumáticos). */ initialQuantity?: number; compact?: boolean; /** Tuercas con foto para mostrar en la oferta de tuercas antirrobo. */ tuercasMuestra?: Accessory[]; /** Medidas y neumáticos destacados: con ellos (y sin `compact`) el cotizador es la versión guiada de /cotizador. */ medidas?: MedidaDisponible[]; destacados?: (QuoteProduct & { medida: string })[]; /** Avisa si el presupuesto incluye alineación + balanceo. */ onComboChange?: (incluido: boolean) => void }>(
+  function CotizadorClient({ initialProduct, initialQuantity = 4, compact = false, tuercasMuestra = [], medidas, destacados = [], onComboChange }, ref) {
   const { selectedBranch } = useBranch();
   // En Córdoba (Argüello) se dice "alineado y balanceado"; "alineación y
   // balanceo" es como se lo llama en Buenos Aires. El nombre del servicio en
@@ -69,6 +71,12 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
   // regional se resuelve acá según la sucursal elegida, no en el dato.
   const terminoAlineacion = selectedBranch.id === "arguello" ? "alineado + balanceado" : "alineación + balanceo";
   const combo = useUpsellCombo();
+  // Foto de la tuerca de la oferta: la del auto elegido si ya hay uno, sino la primera con foto.
+  const { selectedVehicle } = useVehicle();
+  const tuercaFoto =
+    (selectedVehicle ? getCompatibleAccessories(selectedVehicle.marca, selectedVehicle.modelo, tuercasMuestra)[0] : null) ??
+    tuercasMuestra[0] ??
+    null;
   // Colapsado por defecto cuando está embebido en la ficha de producto, para
   // no ocupar espacio si nadie lo va a usar; en /cotizador (compact=false) va
   // siempre expandido, no tiene sentido colapsar la página entera.
@@ -401,11 +409,15 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
                 type="button"
                 onClick={() => setBuscandoTuerca((v) => !v)}
                 aria-expanded={buscandoTuerca}
-                className="flex flex-col items-start gap-2 p-3 text-left transition-colors hover:bg-slate-50"
+                className="flex items-stretch text-left transition-colors hover:bg-slate-50"
               >
-                <span className="text-sm font-black leading-tight text-navy-900">Tuercas antirrobo</span>
-                <span className="flex w-full items-center justify-between gap-2">
-                  <span className="text-xs leading-tight text-slate-500">Para tu auto</span>
+                {tuercaFoto?.imageUrl && (
+                  <span className="relative w-20 shrink-0 self-stretch bg-white">
+                    <Image src={tuercaFoto.imageUrl} alt={tuercaFoto.nombre} fill sizes="80px" className="object-contain p-1" />
+                  </span>
+                )}
+                <span className="flex min-w-0 flex-1 flex-col items-start justify-center gap-2 p-3">
+                  <span className="text-sm font-black leading-tight text-navy-900">Tuercas antirrobo</span>
                   <span className="rounded-full border border-orange-300 px-3 py-1 text-xs font-black text-orange-600">{buscandoTuerca ? "Cerrar" : "Buscar"}</span>
                 </span>
               </button>
