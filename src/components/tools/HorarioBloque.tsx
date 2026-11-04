@@ -50,7 +50,7 @@ export function HorarioBloque({ className = "", titulo = "¿A qué hora conviene
         </p>
         <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm font-bold">
           <a href={branch.mapUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 !text-emerald-800 underline underline-offset-4">
-            <MapPin className="h-4 w-4" aria-hidden /> {branch.shortName} en Google Maps
+            <MapPin className="h-4 w-4" aria-hidden /> Ver en Google Maps
           </a>
         </div>
       </section>

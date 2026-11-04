@@ -90,7 +90,7 @@ export function MejorHorario({ sucursal }: { sucursal?: Branch }) {
         </p>
         <div className="mt-5 flex flex-wrap gap-3">
           <a href={branch.mapUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full bg-tire-950 px-5 py-3 text-sm font-bold text-white hover:bg-black">
-            <MapPin className="h-4 w-4" aria-hidden /> Ver {branch.shortName} en Google Maps
+            <MapPin className="h-4 w-4" aria-hidden /> Ver en Google Maps
           </a>
           <a
             href={`https://wa.me/${branch.whatsapp}?text=${encodeURIComponent(`Hola, quiero ir a ${branch.shortName}. ¿Cómo está la espera?`)}`}

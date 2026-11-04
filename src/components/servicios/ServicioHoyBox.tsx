@@ -38,7 +38,7 @@ export function ServicioHoyBox({ href, auto, camioneta }: { href: string; auto?:
             href={waHref(b.whatsapp, mensajeAvisameApertura(b.shortName))}
             className="rounded-xl border-2 border-navy-900 bg-white px-4 py-2 text-sm font-black text-navy-900 hover:bg-navy-900 hover:text-white"
           >
-            Avisame cuando abra {b.shortName}
+            Avisame cuando abra
           </WhatsAppLink>
         ) : (
           <WhatsAppLink

@@ -48,7 +48,7 @@ export function CierreMedida({ label, enlaces }: { label: string; enlaces: { hre
           href={`/sucursales/${b.id}`}
           className="inline-flex min-h-12 items-center justify-center rounded-xl bg-orange-500 px-6 text-sm font-black text-white transition-transform active:scale-[0.98] hover:bg-orange-600"
         >
-          Ver la sucursal {b.shortName}
+          Ver la sucursal
         </Link>
         {b.apertura && (
           <WhatsAppLink href={waHref(b.whatsapp, mensajeAvisameApertura(b.shortName))} className={secundario}>
