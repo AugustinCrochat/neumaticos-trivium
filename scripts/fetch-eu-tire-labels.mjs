@@ -138,7 +138,15 @@ async function downloadLabel(registrationNumber, destSlug) {
     headers: REFERER,
   });
   if (!res.ok) throw new Error(`labels endpoint respondió ${res.status}`);
-  const buffer = Buffer.from(await res.arrayBuffer());
+  // Desde 2026 el endpoint responde JSON {"address": "/labels/tyres/Labels_<id>.zip"}
+  // y el zip se baja de esa ruta; antes devolvía el zip directo.
+  let buffer = Buffer.from(await res.arrayBuffer());
+  if (res.headers.get("content-type")?.includes("json")) {
+    const { address } = JSON.parse(buffer.toString("utf-8"));
+    const zipRes = await fetch(`${EPREL_BASE}${address}`, { headers: REFERER });
+    if (!zipRes.ok) throw new Error(`zip de etiquetas respondió ${zipRes.status}`);
+    buffer = Buffer.from(await zipRes.arrayBuffer());
+  }
 
   const tmpDir = path.join(os.tmpdir(), `eprel-${registrationNumber}`);
   mkdirSync(tmpDir, { recursive: true });

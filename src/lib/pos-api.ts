@@ -165,6 +165,8 @@ function fixBrandAndModel(rawMarca: string, rawModelo: string): { marca: string;
 // llevan el nombre completo para SEO: "<marca>-<modelo>" del POS -> base del archivo.
 const IMAGE_NAME_ALIASES: Record<string, string> = {
   "yokohama-g018": "yokohama-geolandar-at-g018",
+  // "ARIVO PREMIO 195/55 R15 85V" está cargado en el POS sin modelo; es el ECO 6.
+  "arivo-premio-": "arivo-premio-eco-6",
 };
 
 // Mientras el POS no tenga imagen_url cargada, usamos la foto que ya subimos

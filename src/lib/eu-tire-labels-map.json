@@ -702,5 +702,13 @@
     "noiseDb": 69,
     "noiseClass": "A",
     "tyreDesignation": "205/60R16 96 V XL"
+  },
+  "arivo-premio-195-55-r15-85v": {
+    "eprelId": "2586133",
+    "energyClass": "C",
+    "wetGripClass": "A",
+    "noiseDb": 68,
+    "noiseClass": "A",
+    "tyreDesignation": "195/55R15 85 V"
   }
 }
