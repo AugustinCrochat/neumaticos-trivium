@@ -69,24 +69,8 @@ export function ProductPageClient({ product, tuercasMuestra }: { product: TirePr
             <img key={m.logo} src={`/images/payments/${m.logo}.svg`} alt={m.alt} className={`${m.cls} w-auto`} loading="lazy" />
           ))}
         </span>
-        <span className="text-xs font-bold text-slate-500 underline-offset-2 hover:underline">Ver cuotas ↓</span>
+        <span className="inline-flex items-center rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-black text-navy-900 shadow-sm transition-colors hover:border-navy-900 hover:bg-navy-900 hover:text-white">Ver cuotas ↓</span>
       </button>
-
-      {enStock && stock > 0 && (
-        <p className={`text-xs font-bold flex items-center gap-1.5 ${isLowStock(stock) ? "text-amber-600" : "text-emerald-600"}`}>
-          <span className={`w-1.5 h-1.5 rounded-full ${isLowStock(stock) ? "bg-amber-500" : "bg-emerald-500"}`} />
-          {stockLabel(stock)}
-        </p>
-      )}
-
-      {vendidos >= VENDIDOS_MINIMO && (
-        <p className="text-xs font-bold text-slate-600 flex items-center gap-1.5">
-          <svg className="w-3.5 h-3.5 text-navy-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-          </svg>
-          {vendidos} {vendidos === 1 ? "unidad vendida" : "unidades vendidas"} en {selectedBranch.shortName} en los últimos 6 meses
-        </p>
-      )}
 
       <div className="flex gap-2">
         <WhatsAppLink
@@ -118,6 +102,24 @@ export function ProductPageClient({ product, tuercasMuestra }: { product: TirePr
             Cómo llegar
           </a>
         )}
+      </div>
+
+      <div className="flex flex-col gap-1.5">
+      {enStock && stock > 0 && (
+        <p className={`text-xs font-bold flex items-center gap-1.5 ${isLowStock(stock) ? "text-amber-600" : "text-emerald-600"}`}>
+          <span className={`w-1.5 h-1.5 rounded-full ${isLowStock(stock) ? "bg-amber-500" : "bg-emerald-500"}`} />
+          {stockLabel(stock)}
+        </p>
+      )}
+
+      {vendidos >= VENDIDOS_MINIMO && (
+        <p className="text-xs font-bold text-slate-600 flex items-center gap-1.5">
+          <svg className="w-3.5 h-3.5 text-navy-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+          </svg>
+          {vendidos} {vendidos === 1 ? "unidad vendida" : "unidades vendidas"} en {selectedBranch.shortName} en los últimos 6 meses
+        </p>
+      )}
       </div>
 
       <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4">

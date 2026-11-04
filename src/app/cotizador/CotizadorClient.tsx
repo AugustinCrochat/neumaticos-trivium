@@ -377,6 +377,11 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
             )}
             {tuercas.map((t) => (
               <div key={t.id} className="flex items-center gap-4 bg-emerald-50 p-4">
+                {t.imageUrl && (
+                  <span className="relative h-14 w-14 shrink-0">
+                    <Image src={t.imageUrl} alt={t.nombre} fill sizes="56px" className="object-contain" />
+                  </span>
+                )}
                 <span className="flex-1 text-sm">
                   <span className="block text-base font-black text-navy-900">{t.nombre}</span>
                   <span className="font-black text-emerald-700">{formatPrice(t.price)}</span>
@@ -386,7 +391,8 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
                 </button>
               </div>
             ))}
-            <div className={`grid divide-x divide-slate-100 bg-white ${canAddCombo && !includeCombo ? "grid-cols-2" : "grid-cols-1"}`}>
+            {(!(tuercas.length > 0) || (canAddCombo && !includeCombo)) && (
+            <div className={`grid divide-x divide-slate-100 bg-white ${canAddCombo && !includeCombo && tuercas.length === 0 ? "grid-cols-2" : "grid-cols-1"}`}>
               {canAddCombo && !includeCombo && (
                 <button
                   type="button"
@@ -397,7 +403,7 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
                     <AlineacionBalanceoIcon size={36} />
                   </span>
                   <span className="flex min-w-0 flex-1 flex-col items-start justify-center gap-2 py-3 pl-1.5 pr-1">
-                    <span className="text-sm font-black leading-tight text-navy-900">
+                    <span className="min-h-[2.5em] text-sm font-black leading-tight text-navy-900">
                       {selectedBranch.id === "arguello" ? "Alineado" : "Alineación"}
                       <br /><span className="whitespace-nowrap">+ 4 {selectedBranch.id === "arguello" ? "balanceado" : "balanceo"}</span>
                     </span>
@@ -406,6 +412,7 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
                   </span>
                 </button>
               )}
+              {tuercas.length === 0 && (
               <button
                 type="button"
                 onClick={() => setBuscandoTuerca((v) => !v)}
@@ -418,13 +425,15 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
                   )}
                 </span>
                 <span className="flex min-w-0 flex-1 flex-col items-start justify-center gap-2 py-3 pl-1.5 pr-1">
-                  <span className="text-sm font-black leading-tight text-navy-900">Tuercas antirrobo</span>
+                  <span className="min-h-[2.5em] text-sm font-black leading-tight text-navy-900">Tuercas<br />antirrobo</span>
                   {tuercaFoto && <span className="text-sm font-black leading-none text-orange-700">{formatPrice(tuercaFoto.price)}</span>}
                   <span className="rounded-full bg-orange-500 px-3 py-1 text-xs font-black text-white">{buscandoTuerca ? "Cerrar" : "Buscar"}</span>
                 </span>
               </button>
+              )}
             </div>
-            {buscandoTuerca && (
+            )}
+            {buscandoTuerca && tuercas.length === 0 && (
               <TuercaPicker
                 agregadas={tuercas.map((t) => t.id)}
                 onAdd={(a) => {
