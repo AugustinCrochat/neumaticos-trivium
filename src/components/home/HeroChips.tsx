@@ -74,8 +74,7 @@ export function HeroChips({ anclas }: { anclas: { href: string; texto: string }[
       )}
       {abierta ? (
         <>
-          <span className={chip}>Colocación sin cargo</span>
-          <span className={chip}>Sin turno</span>
+          <span className={chip}>Colocación sin cargo en el acto</span>
         </>
       ) : b.apertura ? (
         <>

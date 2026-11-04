@@ -318,7 +318,7 @@ export default async function ProductPage({ params }: Props) {
           { name: "Inicio", path: "/" },
           { name: "Neumáticos", path: "/neumaticos" },
           { name: `Rodado ${product.size.rim}`, path: `/neumaticos/${rimSlug(product.size.rim)}` },
-          { name: formatSize(product.size), path: `/neumaticos/${sizeSlug(product.size)}` },
+          { name: formatSize(product.size, product.isCarga), path: `/neumaticos/${sizeSlug(product.size)}` },
           { name: `${product.brand} ${product.model}`, path: `/productos/${product.slug}` },
         ])}
       />
@@ -347,7 +347,7 @@ export default async function ProductPage({ params }: Props) {
               href={`/neumaticos/${sizeSlug(product.size)}`}
               className="font-semibold text-navy-700 transition-colors hover:text-navy-900"
             >
-              {formatSize(product.size)}
+              {formatSize(product.size, product.isCarga)}
             </Link>
           </li>
         </ol>
@@ -407,7 +407,7 @@ export default async function ProductPage({ params }: Props) {
         <div>
           <h2 className="text-lg font-black text-navy-900 mb-4 uppercase tracking-wide">Descripción</h2>
           <p className="text-slate-600 leading-relaxed">
-            Neumático {product.brand} pensado para {vehicleLabel(product)}, en la medida {product.size.width}/{product.size.profile} R{product.size.rim}.{" "}
+            Neumático {product.brand} pensado para {vehicleLabel(product)}, en la medida {product.size.width}/{product.size.profile} R{product.size.rim}{product.isCarga ? "C" : ""}.{" "}
             {brand?.fullDescription || brand?.description || `${product.brand} ofrece una relación costo-beneficio competitiva, con buen agarre y durabilidad para uso diario.`}
           </p>
           <p className="mt-3 text-sm text-slate-500">
@@ -530,17 +530,17 @@ export default async function ProductPage({ params }: Props) {
                 <svg className="w-5 h-5 text-navy-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
                 </svg>
-                Modelos de auto compatibles ({formatSize(product.size)})
+                Modelos de auto compatibles ({formatSize(product.size, product.isCarga)})
               </h2>
               <p className="text-sm text-slate-600 mt-1">
-                Modelos que utilizan neumáticos {formatSize(product.size)} de fábrica en alguna de sus versiones:
+                Modelos que utilizan neumáticos {formatSize(product.size, product.isCarga)} de fábrica en alguna de sus versiones:
               </p>
             </div>
             <Link
               href={`/neumaticos/${sizeSlug(product.size)}`}
               className="text-xs font-bold text-navy-700 hover:text-navy-900 underline decoration-navy-300 hover:decoration-navy-900 whitespace-nowrap self-start sm:self-center transition-colors"
             >
-              Ver todos en {formatSize(product.size)} →
+              Ver todos en {formatSize(product.size, product.isCarga)} →
             </Link>
           </div>
 
@@ -558,7 +558,7 @@ export default async function ProductPage({ params }: Props) {
             <svg className="w-5 h-5 text-emerald-500" viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
             </svg>
-            {formatSize(product.size)} en otras marcas
+            {formatSize(product.size, product.isCarga)} en otras marcas
           </h2>
           <p className="text-sm text-slate-600 mb-6">
             Misma medida, con stock disponible ahora en otras marcas:

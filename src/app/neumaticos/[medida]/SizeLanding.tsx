@@ -46,7 +46,7 @@ function sidewallMm(size: TireSize) {
 function buildFaqs(size: TireSize, productos: TireProduct[], desde: number | null): Faq[] {
   const label = formatSize(size);
   const branch = BRANCHES[0];
-  const equivalentes = equivalentSizes(size).slice(0, 3).map(formatSize);
+  const equivalentes = equivalentSizes(size).slice(0, 3).map((s) => formatSize(s));
 
   const faqs: Faq[] = [
     {

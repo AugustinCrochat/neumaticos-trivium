@@ -1,7 +1,7 @@
 import type { TireProduct } from "@/lib/types";
 
 export function sizeLabel(p: TireProduct) {
-  return `${p.size.width}/${p.size.profile} R${p.size.rim}`;
+  return `${p.size.width}/${p.size.profile} R${p.size.rim}${p.isCarga ? "C" : ""}`;
 }
 
 /**

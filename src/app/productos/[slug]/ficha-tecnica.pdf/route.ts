@@ -87,7 +87,7 @@ export async function GET(_req: Request, { params }: Props) {
   const label = getTireLabel(p.slug);
   const utqg = getUtqg(p.brandId, p.modeloBase, p.slug);
   const url = `${SITE_URL}/productos/${p.slug}`;
-  const sizeText = formatSize(p.size);
+  const sizeText = formatSize(p.size, p.isCarga);
   const tipo = p.isCarga ? "Carga (serie C)" : p.isAT ? "A/T (All Terrain)" : "H/T (Highway Terrain), de calle";
   const linea = p.modeloBase.replace(new RegExp(`^${p.brand}\\s+`, "i"), "");
 

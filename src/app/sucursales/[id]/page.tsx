@@ -110,7 +110,7 @@ function buildFaqs(branch: Branch, datos: DatosSucursal): Faq[] {
         {
           question: `¿Cuál es el neumático más barato en ${lugar}?`,
           answer: datos.masBarato
-            ? `Hoy el más económico con stock en ${branch.shortName} es el ${datos.masBarato.brand} ${datos.masBarato.model} ${datos.masBarato.size.width}/${datos.masBarato.size.profile} R${datos.masBarato.size.rim}, a ${formatPrecio(datos.masBarato.price)} por unidad. ` +
+            ? `Hoy el más económico con stock en ${branch.shortName} es el ${datos.masBarato.brand} ${datos.masBarato.model} ${datos.masBarato.size.width}/${datos.masBarato.size.profile} R${datos.masBarato.size.rim}${datos.masBarato.isCarga ? "C" : ""}, a ${formatPrecio(datos.masBarato.price)} por unidad. ` +
               `Son neumáticos nuevos de importación directa, con un año de garantía, y el precio publicado en la web es el mismo que en el mostrador. En esta página ves el stock actualizado.`
             : `Los precios y el stock de ${branch.shortName} se publican en la web y son los mismos que en el mostrador. Son neumáticos nuevos de importación directa, con un año de garantía.`,
         },

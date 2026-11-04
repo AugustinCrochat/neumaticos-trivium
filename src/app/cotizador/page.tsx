@@ -102,7 +102,7 @@ export default async function CotizadorPage() {
       brand: p.brand,
       model: p.model,
       slug: p.slug,
-      medida: `${p.size.width}/${p.size.profile} R${p.size.rim}`,
+      medida: `${p.size.width}/${p.size.profile} R${p.size.rim}${p.isCarga ? "C" : ""}`,
     }));
 
   const medidasPopulares = [...medidas].sort((a, b) => b.n - a.n).slice(0, 12);

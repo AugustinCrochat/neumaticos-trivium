@@ -50,8 +50,9 @@ export function diameterDiffPercent(a: TireSize, b: TireSize): number {
 }
 
 /** "205/55 R16" — como se lee en el flanco. */
-export function formatSize(size: TireSize): string {
-  return `${size.width}/${size.profile} R${size.rim}`;
+/** "195/70 R15"; con `carga` lleva la C de "Commercial" después del rodado: "195/70 R15C". */
+export function formatSize(size: TireSize, carga = false): string {
+  return `${size.width}/${size.profile} R${size.rim}${carga ? "C" : ""}`;
 }
 
 /** "205-55-r16" — el segmento de URL. Minúsculas y guiones, sin barras ni
