@@ -418,7 +418,7 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
                 )}
                 <span className="flex min-w-0 flex-1 flex-col justify-center gap-1.5 p-2.5">
                   <span className="text-sm font-black leading-tight text-navy-900">Tuercas antirrobo</span>
-                  <span className="text-xs font-medium leading-tight text-slate-500">Protegen tus llantas</span>
+                  {tuercaFoto && <span className="text-sm font-black leading-none text-slate-700">{formatPrice(tuercaFoto.price)}</span>}
                   <span className="w-fit rounded-full border border-slate-300 px-3 py-1 text-xs font-black text-slate-700 group-hover:border-slate-500">{buscandoTuerca ? "Cerrar" : "Buscar"}</span>
                 </span>
               </button>
