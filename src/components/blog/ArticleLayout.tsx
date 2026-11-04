@@ -10,6 +10,7 @@ import { BlogCover } from "@/components/blog/BlogCover";
 import { BlogSearchCard, BlogShopLinks } from "@/components/blog/BlogShop";
 import { BRANCHES } from "@/lib/config";
 import { absoluteUrl, ORGANIZATION_ID, SITE_NAME } from "@/lib/seo";
+import { WhatsAppSucursal } from "@/components/ui/SucursalBits";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { FaqSection } from "@/components/seo/FaqSection";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -214,6 +215,12 @@ export function ArticleLayout({
             >
               Ver el local
             </Link>
+            <WhatsAppSucursal
+              texto={`Hola! Leí la nota "${title}" y quiero consultar por neumáticos.`}
+              className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#25D366] px-6 text-sm font-black !text-white !no-underline transition-transform active:scale-[0.98] hover:brightness-95"
+            >
+              Consultar por WhatsApp
+            </WhatsAppSucursal>
           </div>
         </aside>
 

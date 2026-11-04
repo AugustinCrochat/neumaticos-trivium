@@ -296,6 +296,21 @@ export default async function VehiclePage({ params }: Props) {
             <PortadaAB slug={slug} name={name} medidaHref={itemsMedida[0] ? `/neumaticos/${itemsMedida[0].slug}` : null} medida={itemsMedida[0]?.label ?? null} />
           )}
 
+          <section className="mb-10 rounded-2xl bg-slate-50 p-5 sm:flex sm:items-center sm:justify-between sm:gap-6">
+            <div>
+              <p className="text-lg font-black text-navy-900">¿Cotizamos los neumáticos de tu {name}?</p>
+              <p className="mt-1 text-sm text-slate-600">
+                Te pasamos precio, stock y turno. Garantía de 1 año{desde ? ` y neumáticos desde ${formatPrice(desde)}` : ""}.
+              </p>
+            </div>
+            <WhatsAppSucursal
+              texto={`Hola! Tengo un ${name} y quiero cotizar neumáticos.`}
+              className="mt-4 inline-flex min-h-12 shrink-0 items-center justify-center rounded-xl bg-[#25D366] px-6 text-sm font-black !text-white !no-underline hover:brightness-95 sm:mt-0"
+            >
+              Consultar por WhatsApp
+            </WhatsAppSucursal>
+          </section>
+
           <FotoNeumaticoBloque className="mb-10" titulo={`¿No sabés qué medida lleva tu ${name}?`} />
 
           {masBaratos.length > 0 && (
