@@ -664,7 +664,7 @@ const BLOG_POSTS_BASE: BlogPost[] = [
   },
   {
     id: "21",
-    title: "Gomería en Córdoba: qué servicios hacen y cómo elegir una buena",
+    title: "Gomería en Córdoba: alineado y balanceado, pinchaduras y cómo elegir una buena",
     excerpt: "Pinchadura, balanceo, alineación, rotación y válvulas: qué hace cada servicio, cuáles conviene combinar y qué mirar en un taller.",
     imageUrl: "/images/local/fachada-local-neumaticos-trivium-cordoba.webp",
     date: "2026-10-09",
@@ -789,7 +789,7 @@ const BLOG_POSTS_BASE: BlogPost[] = [
   },
   {
     id: "9",
-    title: "Alineación y balanceo: qué es cada cosa y cada cuánto se hacen",
+    title: "Alineado y balanceado en Córdoba: alineación + balanceo de las 4 ruedas, qué incluye y cada cuánto",
     excerpt:
       "Se nombran juntos pero resuelven problemas distintos: uno corrige hacia dónde apuntan las ruedas y el otro cómo giran. La diferencia en criollo.",
     imageUrl: "/images/local/taxi-en-el-taller-neumaticos-trivium-cordoba.webp",

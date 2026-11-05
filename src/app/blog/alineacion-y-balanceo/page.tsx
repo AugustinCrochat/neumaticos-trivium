@@ -10,7 +10,7 @@ import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "alineacion-y-balanceo";
-const TITLE = "Alineado y balanceado (alineación y balanceo): qué es cada cosa y cada cuánto se hacen";
+const TITLE = "Alineado y balanceado en Córdoba: alineación + balanceo de las 4 ruedas, qué incluye y cada cuánto";
 const SUBTITLE =
   "Se nombran juntos pero resuelven problemas distintos. Uno corrige hacia dónde apuntan las ruedas; el otro, cómo giran. Acá va la diferencia en criollo.";
 

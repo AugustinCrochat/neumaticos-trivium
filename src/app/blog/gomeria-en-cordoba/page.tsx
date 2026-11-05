@@ -6,7 +6,7 @@ import { ServicioHoyCTA } from "@/components/servicios/ServicioHoyCTA";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "gomeria-en-cordoba";
-const TITLE = "Gomería en Córdoba: qué servicios hacen y cómo elegir una buena";
+const TITLE = "Gomería en Córdoba: alineado y balanceado, pinchaduras y cómo elegir una buena";
 const SUBTITLE =
   "Pinchadura, balanceo, alineación, rotación, válvulas: qué hace una gomería, qué conviene hacer junto y qué mirar antes de dejar el auto.";
 
