@@ -33,6 +33,11 @@ const FAQS = [
       "El stock real de cada medida está publicado en el sitio (buscador por medida o por auto), así que no hace falta llamar para confirmar disponibilidad antes de venir.",
   },
   {
+    question: "¿Colocan neumáticos comprados en Mercado Libre?",
+    answer:
+      "Sí. En el local de Argüello colocamos los neumáticos comprados en Mercado Libre cuando elegís Trivium como punto de envío y colocación. Si en cambio comprás las cubiertas con nosotros, se colocan el mismo día y la colocación y el cambio de válvulas no se cobran. En Mercado Libre la instalación siempre tiene un costo y el envío llega unos días después.",
+  },
+  {
     question: "¿Necesito turno para ir a la gomería?",
     answer:
       "No. Atendemos por orden de llegada, sin turnos. Si querés estimar el tiempo de espera antes de salir, podés consultarlo por WhatsApp.",

@@ -697,6 +697,12 @@ export const BLOG_META: Record<string, BlogMeta> = {
     shopIntro: "Mirá lo que tenemos:",
     shopLinks: [L.pirelli, L.marcas],
   },
+  "compraste-neumaticos-en-mercado-libre-donde-colocarlos-en-cordoba": {
+    cover: cover("tallerCuatroAutos"),
+    figure: figure("montaje"),
+    shopIntro: "Si todavía no compraste:",
+    shopLinks: [L.todos, L.servicios, L.ofertas],
+  },
   "cubiertas-o-neumaticos-como-se-dice-y-como-buscar-tu-medida": {
     cover: cover("fachada"),
     figure: figure("fachada"),

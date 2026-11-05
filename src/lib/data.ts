@@ -1186,6 +1186,15 @@ const BLOG_POSTS_BASE: BlogPost[] = [
     slug: "goodyear-historia-y-por-que-se-llama-asi",
     category: "Marcas",
   },
+  {
+    id: "98",
+    title: "Compraste neumáticos en Mercado Libre: dónde colocarlos en Córdoba y cuánto cambia comprarlos directo",
+    excerpt: "Cómo funciona la instalación de Mercado Libre, que también hacemos en Argüello, y qué ahorrás en colocación y válvulas si comprás las cubiertas directo con nosotros.",
+    imageUrl: "/images/local/fachada-local-neumaticos-trivium-cordoba.webp",
+    date: "2026-11-26",
+    slug: "compraste-neumaticos-en-mercado-libre-donde-colocarlos-en-cordoba",
+    category: "Guías",
+  },
 ];
 
 // La miniatura del listado es siempre la portada de la nota (blog-meta.ts):
