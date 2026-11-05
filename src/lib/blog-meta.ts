@@ -709,6 +709,30 @@ export const BLOG_META: Record<string, BlogMeta> = {
     shopIntro: "Mirá los precios:",
     shopLinks: [L.servicios, L.todos],
   },
+  "fate-que-paso-con-la-marca-y-que-hacer-con-tus-cubiertas": {
+    cover: cover("tallerCuatroAutos"),
+    figure: figure("tallerCuatroAutos"),
+    shopIntro: "Mirá lo que tenemos:",
+    shopLinks: [L.todos, {label:"Alternativas a Fate", href:"/alternativas/fate"}, L.servicios],
+  },
+  "pirelli-historia-de-la-marca-y-que-neumaticos-tenemos": {
+    cover: cover("tallerCuatroAutos"),
+    figure: figure("tallerCuatroAutos"),
+    shopIntro: "Mirá lo que tenemos:",
+    shopLinks: [L.pirelli, L.todos, L.marcas],
+  },
+  "bridgestone-y-firestone-historia-y-como-elegir": {
+    cover: cover("tallerCuatroAutos"),
+    figure: figure("tallerCuatroAutos"),
+    shopIntro: "Mirá lo que tenemos:",
+    shopLinks: [L.todos, {label:"Alternativas a Bridgestone", href:"/alternativas/bridgestone"}, L.marcas],
+  },
+  "goodyear-historia-y-por-que-se-llama-asi": {
+    cover: cover("tallerCuatroAutos"),
+    figure: figure("tallerCuatroAutos"),
+    shopIntro: "Mirá lo que tenemos:",
+    shopLinks: [L.todos, {label:"Alternativas a Goodyear", href:"/alternativas/goodyear"}, L.marcas],
+  },
   "alternativas-a-michelin-y-pirelli": {
     cover: cover("rotacion"),
     figure: { src: IMG.kingpro, alt: "Cubierta Grenlander Kingpro One junto a una pickup", portrait: true, caption: "Una alternativa importada junto a una pickup." },

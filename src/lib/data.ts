@@ -1150,6 +1150,42 @@ const BLOG_POSTS_BASE: BlogPost[] = [
     slug: "alineado-y-balanceado-juntos-o-por-separado",
     category: "Servicios",
   },
+  {
+    id: "94",
+    title: "Fate: qué pasó con la marca y qué hacer si todavía tenés cubiertas Fate",
+    excerpt: "Historia de Fate, el anuncio de cierre de febrero de 2026 y qué hacer con las cubiertas que ya tenés puestas.",
+    imageUrl: "/images/local/fachada-local-neumaticos-trivium-cordoba.webp",
+    date: "2026-11-14",
+    slug: "fate-que-paso-con-la-marca-y-que-hacer-con-tus-cubiertas",
+    category: "Marcas",
+  },
+  {
+    id: "95",
+    title: "Pirelli: historia de la marca desde 1872 y qué neumáticos Pirelli tenemos",
+    excerpt: "Cuándo nació Pirelli, qué se sabe de su presencia en Argentina y qué medidas Pirelli hay con stock.",
+    imageUrl: "/images/local/fachada-local-neumaticos-trivium-cordoba.webp",
+    date: "2026-11-15",
+    slug: "pirelli-historia-de-la-marca-y-que-neumaticos-tenemos",
+    category: "Marcas",
+  },
+  {
+    id: "96",
+    title: "Bridgestone y Firestone: historia, qué relación tienen y cómo elegir",
+    excerpt: "Bridgestone nació en Japón en 1931 y compró Firestone en 1988. Qué significa para quien busca cubiertas.",
+    imageUrl: "/images/local/fachada-local-neumaticos-trivium-cordoba.webp",
+    date: "2026-11-21",
+    slug: "bridgestone-y-firestone-historia-y-como-elegir",
+    category: "Marcas",
+  },
+  {
+    id: "97",
+    title: "Goodyear: historia de la marca y por qué se llama así",
+    excerpt: "Goodyear se fundó en 1898 en Akron y su nombre homenajea a Charles Goodyear, que no tuvo relación con la empresa.",
+    imageUrl: "/images/local/fachada-local-neumaticos-trivium-cordoba.webp",
+    date: "2026-11-22",
+    slug: "goodyear-historia-y-por-que-se-llama-asi",
+    category: "Marcas",
+  },
 ];
 
 // La miniatura del listado es siempre la portada de la nota (blog-meta.ts):
