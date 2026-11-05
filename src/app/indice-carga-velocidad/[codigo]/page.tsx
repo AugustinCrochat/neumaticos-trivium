@@ -22,8 +22,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!info) return {};
   const label = info.code;
   return {
-    title: `${label} en un neumático: ${info.loadKg} kg y ${info.speedKmh} km/h (qué significa)`,
-    description: resumen(`${label} = hasta ${info.loadKg} kg por rueda (índice ${info.loadIndex}) y ${info.speedKmh} km/h (letra ${info.speedRating}). Cuándo podés usar otro índice, qué códigos son parecidos y neumáticos ${label} con stock y colocación sin cargo.`),
+    title: `Qué significa ${label} en la cubierta: ${info.loadKg} kg y ${info.speedKmh} km/h`,
+    description: resumen(`${label} = hasta ${info.loadKg} kg por rueda (índice ${info.loadIndex}) y ${info.speedKmh} km/h (letra ${info.speedRating}). Está en el flanco del neumático, no en el rin. Cuándo podés usar otro índice y qué hay en stock con ese código.`),
     alternates: canonical(`/indice-carga-velocidad/${label.toLowerCase()}`),
   };
 }
@@ -87,7 +87,7 @@ export default async function LoadSpeedCodePage({ params }: Props) {
             Guía rápida
           </span>
           <h1 className="mt-3 text-3xl font-black leading-tight text-navy-900 md:text-4xl">
-            ¿Qué significa {info.code} en un neumático?
+            ¿Qué significa {info.code} en una cubierta?
           </h1>
           <p className="mt-4 text-lg leading-relaxed text-slate-600">
             Es la combinación de índice de carga {info.loadIndex} e índice de velocidad {info.speedRating} que aparece después de la medida en el flanco.
@@ -119,6 +119,11 @@ export default async function LoadSpeedCodePage({ params }: Props) {
         </p>
         <p>
           No multipliques ese valor para elegir una cubierta sin mirar la ficha del auto: el fabricante ya define la combinación correcta considerando peso, distribución de carga y comportamiento. Como regla, nunca bajes ninguno de los dos índices respecto del original; uno superior puede ser válido si la medida y el resto de las especificaciones corresponden.
+        </p>
+
+        <h2>¿Lo buscaste como «{info.code} en la llanta»?</h2>
+        <p>
+          Mucha gente pregunta por el {info.code} «de la llanta», pero ese código no está en el rin (la llanta de aleación o de chapa). Está estampado en el costado de la cubierta, justo después de la medida, y es el mismo número que figura en la ficha de cualquier neumático.
         </p>
 
         <h2>Dónde comprobar el valor correcto</h2>

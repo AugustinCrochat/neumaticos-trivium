@@ -94,8 +94,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const minimo = desde.length ? Math.min(...desde) : null;
     const nombre = eje === "ancho" ? `ancho ${valor}` : `perfil ${valor}`;
     const title = minimo
-      ? `Neumáticos ${nombre} desde $${minimo.toLocaleString("es-AR")}`
-      : `Neumáticos ${nombre} — medidas y precios`;
+      ? `Cubiertas ${nombre} desde $${minimo.toLocaleString("es-AR")}, todas las medidas`
+      : `Cubiertas ${nombre} — medidas y precios`;
     const ruta = `/neumaticos/${eje === "ancho" ? widthSlug(valor) : profileSlug(valor)}`;
     return {
       title,
