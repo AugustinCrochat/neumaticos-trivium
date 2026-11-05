@@ -1132,6 +1132,24 @@ const BLOG_POSTS_BASE: BlogPost[] = [
     slug: "norauto-argentina-historia-y-como-comparar",
     category: "Marcas",
   },
+  {
+    id: "92",
+    title: "Cubiertas o neumáticos: son lo mismo, y así encontrás la medida de tu auto",
+    excerpt: "Cubierta, neumático y goma son sinónimos; la llanta es el rin. Cómo leer la medida y buscar por rodado.",
+    imageUrl: "/images/local/fachada-local-neumaticos-trivium-cordoba.webp",
+    date: "2026-11-07",
+    slug: "cubiertas-o-neumaticos-como-se-dice-y-como-buscar-tu-medida",
+    category: "Guías",
+  },
+  {
+    id: "93",
+    title: "Alineado y balanceado: ¿juntos o por separado? Cuándo conviene cada uno",
+    excerpt: "Dos servicios distintos que se pueden pedir sueltos o en combo; cuándo hace falta cada uno y cuánto se ahorra.",
+    imageUrl: "/images/local/fachada-local-neumaticos-trivium-cordoba.webp",
+    date: "2026-11-08",
+    slug: "alineado-y-balanceado-juntos-o-por-separado",
+    category: "Servicios",
+  },
 ];
 
 // La miniatura del listado es siempre la portada de la nota (blog-meta.ts):

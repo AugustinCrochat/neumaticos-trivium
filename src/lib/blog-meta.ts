@@ -697,6 +697,18 @@ export const BLOG_META: Record<string, BlogMeta> = {
     shopIntro: "Mirá lo que tenemos:",
     shopLinks: [L.pirelli, L.marcas],
   },
+  "cubiertas-o-neumaticos-como-se-dice-y-como-buscar-tu-medida": {
+    cover: cover("fachada"),
+    figure: figure("fachada"),
+    shopIntro: "Buscá tu medida:",
+    shopLinks: [L.todos, L.r14, L.equivalencias],
+  },
+  "alineado-y-balanceado-juntos-o-por-separado": {
+    cover: cover("tallerCuatroAutos"),
+    figure: figure("tallerCuatroAutos"),
+    shopIntro: "Mirá los precios:",
+    shopLinks: [L.servicios, L.todos],
+  },
   "alternativas-a-michelin-y-pirelli": {
     cover: cover("rotacion"),
     figure: { src: IMG.kingpro, alt: "Cubierta Grenlander Kingpro One junto a una pickup", portrait: true, caption: "Una alternativa importada junto a una pickup." },
