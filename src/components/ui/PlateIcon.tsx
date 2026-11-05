@@ -15,7 +15,7 @@ export function PlateIcon({ className, formato }: { className?: string; formato?
   const mercosur = formato ? formato === "mercosur" : alterna;
   useEffect(() => {
     if (formato) return;
-    const t = setInterval(() => setMercosur((m) => !m), 2600);
+    const t = setInterval(() => setMercosur((m) => !m), 3000);
     return () => clearInterval(t);
   }, [formato]);
 

@@ -113,7 +113,7 @@ export function SizeOrVehicleSearch({
       >
         {/* Misma caja para todos los íconos: los textos de las barras arrancan en el mismo punto. */}
         <span className="flex h-14 w-28 shrink-0 items-center justify-center">
-          <Icono className={`text-navy-900 ${Icono === PlateIcon ? "h-8 w-[4.75rem]" : Icono === HalfTireIcon ? "h-14 w-28" : "h-7 w-7"}`} aria-hidden="true" {...(Icono === HalfTireIcon ? { medidas: true } : {})} />
+          <Icono className={`text-navy-900 ${Icono === PlateIcon ? "h-9 w-[5.5rem]" : Icono === HalfTireIcon ? "h-14 w-28" : "h-7 w-7"}`} aria-hidden="true" {...(Icono === HalfTireIcon ? { medidas: true } : {})} />
         </span>
         <span className="min-w-0 flex-1">
           <span className="block text-sm font-black text-navy-900">{titulo}</span>
@@ -144,7 +144,7 @@ export function SizeOrVehicleSearch({
                 onClick={() => setAbierto("patente")}
                 className={`flex items-center rounded-xl border border-slate-300 bg-white px-4 shadow-sm transition-colors hover:border-orange-400 ${compact ? "gap-3 py-3 text-left" : "flex-col gap-2 py-5 text-center"}`}
               >
-                <span className={cajaIcono}><PlateIcon className={compact ? "h-9 w-[4.75rem]" : "h-14 w-32"} /></span>
+                <span className={cajaIcono}><PlateIcon className={compact ? "h-10 w-[5.5rem]" : "h-16 w-36"} /></span>
                 <span className="flex flex-col"><span className="text-base font-black text-navy-900">Por patente</span>
                 <span className="text-xs font-semibold text-slate-500">Ej: AB 123 CD</span></span>
               </button>
@@ -185,11 +185,11 @@ export function SizeOrVehicleSearch({
                 <div className="flex shrink-0 items-center justify-between bg-black px-5 py-4">
                   <h2 className="flex items-center gap-3 text-lg font-bold text-white">
                     {abierto === "medida" ? (
-                      <HalfTireIcon className="h-5 w-10 text-white" />
+                      <HalfTireIcon medidas className="h-9 w-[4.5rem] text-white" />
                     ) : abierto === "vehiculo" || patenteManual ? (
                       <Car className="h-6 w-6" aria-hidden="true" />
                     ) : (
-                      <PlateIcon className="h-8 w-[4.75rem]" />
+                      <PlateIcon className="h-9 w-[5.5rem]" />
                     )}
                     {titulos[abierto]}
                   </h2>
@@ -271,7 +271,7 @@ export function SizeOrVehicleSearch({
           className={`flex h-11 items-center justify-center rounded-lg px-3 text-sm font-bold transition-colors ${mode === "medida" ? "bg-black text-white" : "text-slate-500 hover:text-slate-800"}`}
         >
           <span className="inline-flex items-center gap-1.5">
-            <HalfTireIcon className="h-4 w-8" /> Por medida
+            <HalfTireIcon medidas className="h-7 w-14" /> Por medida
           </span>
         </button>
         {PATENTE_HABILITADA && (
@@ -286,7 +286,7 @@ export function SizeOrVehicleSearch({
             className={`flex h-11 items-center justify-center rounded-lg px-3 text-sm font-bold transition-colors ${mode === "patente" ? "bg-black text-white" : "text-slate-500 hover:text-slate-800"}`}
           >
             <span className="inline-flex items-center gap-1.5">
-              <PlateIcon className="h-6 w-14" /> Por patente
+              <PlateIcon className="h-7 w-16" /> Por patente
             </span>
           </button>
         )}

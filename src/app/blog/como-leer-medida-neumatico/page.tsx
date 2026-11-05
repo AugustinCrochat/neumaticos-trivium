@@ -4,7 +4,7 @@ import Link from "@/components/ui/Link";
 import { BlogShopLinks } from "@/components/blog/BlogShop";
 import { SizesCatalog } from "@/components/blog/SizesCatalog";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { TireSizeSearch } from "@/components/ui/TireSizeSearch";
+import { SizeOrVehicleSearch } from "@/components/ui/SizeOrVehicleSearch";
 import { absoluteUrl, canonical, ORGANIZATION_ID } from "@/lib/seo";
 import { sizeSearchHref } from "@/lib/size-href";
 import { blogShare } from "@/lib/blog-meta";
@@ -381,7 +381,7 @@ export default function ComoLeerMedidaPage() {
           </div>
 
           <div className="mt-8 rounded-2xl bg-white p-4 text-slate-900 sm:p-6">
-            <TireSizeSearch compact hideLearnLink />
+            <SizeOrVehicleSearch compact hideLearnLink />
           </div>
 
           <div className="mt-10">

@@ -5,6 +5,38 @@ export function normalizarPatente(raw: string): string {
   return raw.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 7);
 }
 
+/**
+ * Filtra lo que se escribe según el formato: sólo entra el tipo de carácter que
+ * corresponde en cada posición. Las dos primeras son siempre letras; la tercera
+ * define el formato (letra = anterior, ABC 123; número = Mercosur, AB 123 CD).
+ * - Anterior: LLL NNN. - Mercosur: LL NNN LL.
+ * Lo que no corresponde se descarta (por ejemplo, un número donde va una letra).
+ */
+export function filtrarPatenteEscrita(raw: string): string {
+  const limpio = raw.toUpperCase().replace(/[^A-Z0-9]/g, "");
+  let out = "";
+  let formato: "anterior" | "mercosur" | null = null;
+  for (const ch of limpio) {
+    const letra = ch >= "A" && ch <= "Z";
+    const pos = out.length;
+    if (pos >= 7) break;
+    if (pos < 2) {
+      if (letra) out += ch;
+    } else if (pos === 2) {
+      formato = letra ? "anterior" : "mercosur";
+      out += ch;
+    } else if (formato === "anterior") {
+      if (!letra && pos <= 5) out += ch;
+    } else if (pos <= 4) {
+      if (!letra) out += ch;
+    } else if (letra) {
+      out += ch;
+    }
+    if (out.length >= (formato === "anterior" ? 6 : 7)) break;
+  }
+  return out;
+}
+
 export type EstiloPatente = "mercosur" | "anterior";
 
 /**

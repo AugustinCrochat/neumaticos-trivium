@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import type { VehiculoOption } from "@/lib/pos-api";
 import { PlateIcon } from "@/components/ui/PlateIcon";
 import { resolverPatente } from "@/lib/patente-match";
-import { PATENTE_RE, estiloPatente, formatearPatente, normalizarPatente, type EstiloPatente } from "@/lib/patente";
+import { PATENTE_RE, estiloPatente, filtrarPatenteEscrita, formatearPatente, type EstiloPatente } from "@/lib/patente";
 
 // Clave PÚBLICA de Turnstile (no es secreta; el secreto vive en el Worker). Va con valor
 // por defecto en el código porque un build sin la variable dejaba la búsqueda por patente
@@ -77,7 +77,7 @@ function Chapa({
         id="patente-input"
         aria-label="Patente"
         value={formatearPatente(valor, estilo)}
-        onChange={(e) => onChange(normalizarPatente(e.target.value))}
+        onChange={(e) => onChange(filtrarPatenteEscrita(e.target.value))}
         onKeyDown={(e) => e.key === "Enter" && onEnter()}
         placeholder={mercosur ? "AB 123 CD" : "ABC 123"}
         autoFocus={autoFocus}
@@ -204,7 +204,7 @@ export function PlateLookup({
   const falla = (texto: string) => (onNoEncontrada ? onNoEncontrada(texto) : setMensaje(texto));
 
   const buscar = async () => {
-    if (patente.length < 6 || !token || cargando) return;
+    if (!PATENTE_RE.test(patente) || !token || cargando) return;
     ultima.current = patente;
     setCargando(true);
     setMensaje(null);
@@ -263,7 +263,7 @@ export function PlateLookup({
           <button
             type="button"
             onClick={buscar}
-            disabled={patente.length < 6 || !token || cargando}
+            disabled={!valida || !token || cargando}
             aria-label="Buscar mi auto"
             className="flex h-11 shrink-0 items-center justify-center rounded-xl bg-orange-500 px-4 text-sm font-black text-white transition-colors hover:bg-orange-600 disabled:opacity-40"
           >
@@ -299,7 +299,7 @@ export function PlateLookup({
         <button
           type="button"
           onClick={buscar}
-          disabled={patente.length < 6 || !token || cargando}
+          disabled={!valida || !token || cargando}
           className="flex-1 rounded-xl bg-orange-500 py-3.5 text-base font-black text-white transition-colors hover:bg-orange-600 disabled:opacity-40"
         >
           {cargando ? "Buscando…" : "Buscar mi auto"}
