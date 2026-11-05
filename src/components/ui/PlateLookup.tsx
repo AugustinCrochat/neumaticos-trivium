@@ -225,7 +225,11 @@ export function PlateLookup({
       } else {
         const d = (await res.json()) as { marca: string; modelo: string | null; anio: number | null };
         const r = resolverPatente(d.marca, d.modelo, vehiculos);
-        if (r) onFound(r.vehiculo, d.anio, r.version);
+        if (r) {
+          // El catálogo recuerda qué tipo de chapa se buscó para dejarla marcada en su buscador.
+          try { sessionStorage.setItem("trivium-patente-estilo", estiloPatente(patente)); } catch {}
+          onFound(r.vehiculo, d.anio, r.version);
+        }
         else falla(`Encontramos ${d.marca} ${d.modelo ?? ""}, pero todavía no lo tenemos en la lista. Elegí tu auto de la lista.`);
       }
     } catch {

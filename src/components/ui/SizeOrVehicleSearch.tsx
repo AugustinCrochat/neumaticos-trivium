@@ -38,6 +38,7 @@ export function SizeOrVehicleSearch({
   hideLearnLink = false,
   initialEconomicos = false,
   autoFocus = false,
+  activa,
   onNavigate,
   onLiveChange,
 }: {
@@ -52,6 +53,8 @@ export function SizeOrVehicleSearch({
   initialEconomicos?: boolean;
   /** Cursor en "ancho" al abrir (modal del buscador flotante). */
   autoFocus?: boolean;
+  /** Opción con la que se hizo la búsqueda que se está viendo (catálogo): queda marcada y, si es la patente, con su tipo de chapa fijo. */
+  activa?: "medida" | "patente" | "vehiculo";
   /** Se llama justo antes de navegar a los resultados. */
   onNavigate?: () => void;
   onLiveChange?: (v: { w: string; p: string; r: string }) => void;
@@ -78,6 +81,19 @@ export function SizeOrVehicleSearch({
   // La patente no se encontró y la búsqueda pasó a elegir el auto: cambia el icono y el título.
   const [patenteManual, setPatenteManual] = useState(false);
   const [abierto, setAbierto] = useState<"patente" | "medida" | "vehiculo" | null>(null);
+  // Tipo de chapa de la última patente buscada (se guarda al encontrarla). Solo se usa en el
+  // catálogo, que se arma en el cliente, así que leerlo al montar no desfasa la hidratación.
+  const [estiloChapa] = useState<"mercosur" | "anterior" | undefined>(() => {
+    if (activa !== "patente" || typeof window === "undefined") return undefined;
+    try {
+      const e = sessionStorage.getItem("trivium-patente-estilo");
+      return e === "mercosur" || e === "anterior" ? e : undefined;
+    } catch {
+      return undefined;
+    }
+  });
+  const marcada = (id: "patente" | "medida" | "vehiculo") =>
+    activa === id ? "border-orange-500 bg-orange-50 ring-2 ring-orange-500" : "border-slate-300 bg-white hover:border-orange-400";
 
   useEffect(() => {
     if (!abierto) return;
@@ -101,7 +117,7 @@ export function SizeOrVehicleSearch({
     };
     const titulos = { patente: patenteManual ? "Buscar por mi auto" : "Buscar por patente", medida: "Buscar por medida", vehiculo: "Buscar por mi auto" } as const;
     // Misma caja para todos los íconos: los textos de los mosaicos quedan alineados entre sí.
-    const cajaIcono = compact ? "flex h-14 w-28 items-center justify-center" : "flex h-16 w-32 items-center justify-center";
+    const cajaIcono = compact ? "flex h-14 w-28 items-center justify-center" : "flex h-16 w-40 items-center justify-center";
     const barra = (id: "patente" | "medida" | "vehiculo", Icono: typeof Car | typeof HalfTireIcon | typeof PlateIcon, titulo: string, ejemplo: string) => (
       <button
         type="button"
@@ -109,11 +125,11 @@ export function SizeOrVehicleSearch({
         onMouseEnter={id === "vehiculo" ? loadVehiculos : undefined}
         onFocus={id === "vehiculo" ? loadVehiculos : undefined}
         aria-expanded={abierto === id}
-        className="flex w-full items-center gap-3 rounded-xl border border-slate-300 bg-white px-4 shadow-sm py-3 text-left transition-colors hover:border-orange-400"
+        className={`flex w-full items-center gap-3 rounded-xl border px-4 shadow-sm py-3 text-left transition-colors ${marcada(id)}`}
       >
         {/* Misma caja para todos los íconos: los textos de las barras arrancan en el mismo punto. */}
         <span className="flex h-14 w-28 shrink-0 items-center justify-center">
-          <Icono className={`text-navy-900 ${Icono === PlateIcon ? "h-9 w-[5.5rem]" : Icono === HalfTireIcon ? "h-14 w-28" : "h-7 w-7"}`} aria-hidden="true" {...(Icono === HalfTireIcon ? { medidas: true } : {})} />
+          <Icono className={`text-navy-900 ${Icono === PlateIcon ? "h-11 w-28" : Icono === HalfTireIcon ? "h-14 w-28" : "h-7 w-7"}`} aria-hidden="true" {...(Icono === HalfTireIcon ? { medidas: true } : {})} {...(Icono === PlateIcon && activa === "patente" ? { formato: estiloChapa } : {})} />
         </span>
         <span className="min-w-0 flex-1">
           <span className="block text-sm font-black text-navy-900">{titulo}</span>
@@ -132,7 +148,7 @@ export function SizeOrVehicleSearch({
             <button
               type="button"
               onClick={() => setAbierto("medida")}
-              className={`flex items-center rounded-xl border border-slate-300 bg-white px-4 shadow-sm transition-colors hover:border-orange-400 ${compact ? "gap-3 py-3 text-left" : "flex-col gap-2 py-5 text-center"}`}
+              className={`flex items-center rounded-xl border px-4 shadow-sm transition-colors ${marcada("medida")} ${compact ? "gap-3 py-3 text-left" : "flex-col gap-2 py-5 text-center"}`}
             >
               <span className={cajaIcono}><HalfTireIcon medidas className={compact ? "h-14 w-28 text-navy-900" : "h-16 w-32 text-navy-900"} /></span>
               <span className="flex flex-col"><span className="text-base font-black text-navy-900">Por medida</span>
@@ -142,9 +158,9 @@ export function SizeOrVehicleSearch({
               <button
                 type="button"
                 onClick={() => setAbierto("patente")}
-                className={`flex items-center rounded-xl border border-slate-300 bg-white px-4 shadow-sm transition-colors hover:border-orange-400 ${compact ? "gap-3 py-3 text-left" : "flex-col gap-2 py-5 text-center"}`}
+                className={`flex items-center rounded-xl border px-4 shadow-sm transition-colors ${marcada("patente")} ${compact ? "gap-3 py-3 text-left" : "flex-col gap-2 py-5 text-center"}`}
               >
-                <span className={cajaIcono}><PlateIcon className={compact ? "h-10 w-[5.5rem]" : "h-16 w-36"} /></span>
+                <span className={cajaIcono}><PlateIcon className={compact ? "h-11 w-28" : "h-16 w-40"} {...(activa === "patente" ? { formato: estiloChapa } : {})} /></span>
                 <span className="flex flex-col"><span className="text-base font-black text-navy-900">Por patente</span>
                 <span className="text-xs font-semibold text-slate-500">Ej: AB 123 CD</span></span>
               </button>
@@ -154,7 +170,7 @@ export function SizeOrVehicleSearch({
                 type="button"
                 onClick={() => setAbierto("vehiculo")}
                 onMouseEnter={loadVehiculos}
-                className={`flex items-center rounded-xl border border-slate-300 bg-white px-4 shadow-sm transition-colors hover:border-orange-400 ${compact ? "gap-3 py-3 text-left" : "flex-col gap-2 py-5 text-center"}`}
+                className={`flex items-center rounded-xl border px-4 shadow-sm transition-colors ${marcada("vehiculo")} ${compact ? "gap-3 py-3 text-left" : "flex-col gap-2 py-5 text-center"}`}
               >
                 <span className={cajaIcono}><Car className="h-9 w-9 text-navy-900" aria-hidden="true" /></span>
                 <span className="flex flex-col"><span className="text-base font-black text-navy-900">Por mi auto</span>
@@ -185,11 +201,11 @@ export function SizeOrVehicleSearch({
                 <div className="flex shrink-0 items-center justify-between bg-black px-5 py-4">
                   <h2 className="flex items-center gap-3 text-lg font-bold text-white">
                     {abierto === "medida" ? (
-                      <HalfTireIcon medidas className="h-9 w-[4.5rem] text-white" />
+                      <HalfTireIcon className="h-9 w-[4.5rem] text-white" />
                     ) : abierto === "vehiculo" || patenteManual ? (
                       <Car className="h-6 w-6" aria-hidden="true" />
                     ) : (
-                      <PlateIcon className="h-9 w-[5.5rem]" />
+                      <PlateIcon className="h-10 w-24" />
                     )}
                     {titulos[abierto]}
                   </h2>
@@ -271,7 +287,7 @@ export function SizeOrVehicleSearch({
           className={`flex h-11 items-center justify-center rounded-lg px-3 text-sm font-bold transition-colors ${mode === "medida" ? "bg-black text-white" : "text-slate-500 hover:text-slate-800"}`}
         >
           <span className="inline-flex items-center gap-1.5">
-            <HalfTireIcon medidas className="h-7 w-14" /> Por medida
+            <HalfTireIcon className="h-7 w-14" /> Por medida
           </span>
         </button>
         {PATENTE_HABILITADA && (
@@ -286,7 +302,7 @@ export function SizeOrVehicleSearch({
             className={`flex h-11 items-center justify-center rounded-lg px-3 text-sm font-bold transition-colors ${mode === "patente" ? "bg-black text-white" : "text-slate-500 hover:text-slate-800"}`}
           >
             <span className="inline-flex items-center gap-1.5">
-              <PlateIcon className="h-7 w-16" /> Por patente
+              <PlateIcon className="h-8 w-[4.5rem]" /> Por patente
             </span>
           </button>
         )}

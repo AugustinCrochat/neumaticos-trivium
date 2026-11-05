@@ -51,7 +51,7 @@ export default function ServiciosPage() {
       {SERVICES.map((service) => (
         <JsonLd key={service.id} data={serviceJsonLd(service)} />
       ))}
-      <ServicesSection />
+      <ServicesSection comoPagina />
       <section className="mx-auto max-w-4xl px-4 pb-10">
         <h2 className="mb-3 text-xl font-black text-tire-950">Más servicios de gomería</h2>
         <ul className="grid gap-2 sm:grid-cols-2">

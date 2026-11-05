@@ -60,8 +60,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!product) return {};
   // product.model ya trae el índice de carga/velocidad pegado a la medida
   // (ver toTireProduct en pos-api.ts) — no hace falta insertarlo acá.
-  const fullTitle = `Neumático ${product.model}`;
-  const description = `Comprá el neumático ${product.model} al mejor precio. Outlet de neumáticos importados en Argentina.`;
+  // El precio y la disponibilidad reales en el título y la descripción son lo que
+  // decide el clic frente a los resultados que solo repiten el nombre del modelo.
+  const precio = product.price > 0 ? `$${product.price.toLocaleString("es-AR")}` : null;
+  const fullTitle = precio ? `Cubierta ${product.model} a ${precio}, colocación sin cargo` : `Neumático ${product.model}`;
+  const description = [
+    `Neumático ${product.model}${precio ? ` a ${precio} con IVA` : ""}${product.enStock ? ", con stock en el local" : ""}.`,
+    "Importación directa, garantía de 1 año por defecto de fábrica y colocación sin cargo en el día.",
+    "Retiro en el local o envío a todo el país.",
+  ].join(" ");
   const pageUrl = `${SITE_URL}/productos/${product.slug}`;
   // Al compartir se ve la foto del neumático tal cual (JPEG liviano que arma el
   // prebuild); si el producto no tiene foto local queda la imagen del sitio.

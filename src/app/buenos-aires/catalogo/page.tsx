@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import { ShopPage } from "@/components/ui/ShopPage";
+import { CatalogoCrawlable } from "@/components/ui/CatalogoCrawlable";
 import { PreselectBranch } from "@/components/ui/PreselectBranch";
 import { getProductosDesdePOS, getAccesoriosDesdePOS } from "@/lib/pos-api";
 import { getRegion, sucursalesDeRegion } from "@/lib/regiones";
@@ -20,7 +21,7 @@ export const metadata: Metadata = {
 export default async function Page() {
   const [productos, accesorios] = await Promise.all([getProductosDesdePOS(sucursal.id), getAccesoriosDesdePOS(sucursal.id)]);
   return (
-    <Suspense>
+    <Suspense fallback={<CatalogoCrawlable productos={productos} />}>
       <PreselectBranch branchId={sucursal.id} forzar />
       <ShopPage showCatalogTitle products={productos} accesorios={accesorios} />
     </Suspense>

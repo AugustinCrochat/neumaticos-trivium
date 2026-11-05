@@ -253,7 +253,7 @@ function PriceTag({
   );
 }
 
-export async function ServicesSection() {
+export async function ServicesSection({ comoPagina = false }: { /** En /servicios es el título de la página (h1); en la home es una sección más (h2). */ comoPagina?: boolean } = {}) {
   const precios = await getServiciosPrecios(undefined, await getSelectedBranchSlug());
   const combo = splitAutoCamioneta(precios.filter((p) => p.grupo === "combo"));
 
@@ -265,9 +265,10 @@ export async function ServicesSection() {
           <span className="inline-block text-orange-500 text-sm font-bold uppercase tracking-widest mb-3">
             Nuestros servicios
           </span>
-          <h2 className="text-3xl font-black text-navy-900 mb-3">
-            Gomería y taller propio
-          </h2>
+          {(() => {
+            const Titulo = comoPagina ? "h1" : "h2";
+            return <Titulo className="text-3xl font-black text-navy-900 mb-3">Gomería y taller propio</Titulo>;
+          })()}
           <p className="text-slate-500 text-lg max-w-xl mx-auto">
             Equipos de última generación y colocación incluida al comprar. Atención por orden de llegada, sin esperas.
           </p>

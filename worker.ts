@@ -28,7 +28,7 @@ const NO_CACHEAR = ["/api/", "/admin", "/carrito", "/pago", "/stock/", "/feed/",
 const HEADERS_DE_NEXT = ["rsc", "next-router-prefetch", "next-router-state-tree", "next-router-segment-prefetch", "next-url"];
 
 type Contexto = { waitUntil(p: Promise<unknown>): void };
-type Entorno = { CF_VERSION_METADATA?: { id?: string } };
+type Entorno = { CF_VERSION_METADATA?: { id?: string }; ASSETS?: { fetch(r: Request): Promise<Response> } };
 type EdgeCache = { match(r: Request): Promise<Response | undefined>; put(r: Request, res: Response): Promise<void> };
 
 function edgeCache(): EdgeCache | undefined {
@@ -43,9 +43,36 @@ function esCacheable(request: Request, url: URL): boolean {
   return !NO_CACHEAR.some((p) => url.pathname.startsWith(p));
 }
 
+// Lo que nunca puede salir de un archivo estático: lo arma el Worker en cada pedido.
+const SOLO_WORKER = ["/api/", "/admin", "/carrito", "/pago", "/stock/", "/cdn-cgi/"];
+
+/**
+ * El deploy copia el HTML prearmado, los feeds y las listas del buscador a
+ * `.open-next/assets` (scripts/copy-prerendered-html.mjs). En producción esos
+ * archivos existían pero el Worker de OpenNext respondía igual (pagina vía
+ * caché R2, 1102 en frío, /datos/*.json en 404). Acá se prueban primero: si el
+ * archivo existe y da 200 se devuelve tal cual, sin arrancar OpenNext; si no
+ * (ruta dinámica, 404, redirect) se sigue como siempre.
+ */
+async function desdeAssets(request: Request, env: Entorno, url: URL): Promise<Response | null> {
+  if (!env.ASSETS) return null;
+  if (request.method !== "GET" && request.method !== "HEAD") return null;
+  if (request.headers.has("range") || request.headers.has("authorization")) return null;
+  if (HEADERS_DE_NEXT.some((h) => request.headers.has(h)) || url.searchParams.has("_rsc")) return null;
+  if (SOLO_WORKER.some((p) => url.pathname.startsWith(p))) return null;
+  try {
+    const r = await env.ASSETS.fetch(request);
+    return r.status === 200 ? r : null;
+  } catch {
+    return null;
+  }
+}
+
 export default {
   async fetch(request: Request, env: Entorno, ctx: Contexto): Promise<Response> {
     const url = new URL(request.url);
+    const estatica = await desdeAssets(request, env, url);
+    if (estatica) return estatica;
     const cache = edgeCache();
     if (!cache || !esCacheable(request, url)) {
       return (openNext as { fetch: (r: Request, e: unknown, c: Contexto) => Promise<Response> }).fetch(request, env, ctx);

@@ -11,6 +11,7 @@ import { PriceTagIcon } from "@/components/ui/PriceTagIcon";
 import { ProductCard } from "@/components/ui/ProductCard";
 import { bestPriceByGroup, peersByGroup } from "@/lib/best-price";
 import { SizeOrVehicleSearch } from "@/components/ui/SizeOrVehicleSearch";
+import { PATENTE_HABILITADA } from "@/components/ui/PlateLookup";
 import { useBranch } from "@/contexts/branch-context";
 import { useVehicle } from "@/contexts/vehicle-context";
 import { useLiveStockMap } from "@/contexts/live-stock-context";
@@ -694,7 +695,7 @@ export function ShopPage({
               </svg>
             </button>
             <div className={buscadorAbierto ? "mt-3 lg:mt-0" : "hidden lg:block"}>
-              <SizeOrVehicleSearch key={`${medida ?? "empty"}-${economicosParam}-${searchResetKey}`} compact initialMedida={medida} forceVoiceButton initialEconomicos={economicosParam} onLiveChange={onLiveSize} />
+              <SizeOrVehicleSearch key={`${medida ?? "empty"}-${economicosParam}-${searchResetKey}`} activa={searchParams.get("marca") && searchParams.get("modelo") ? (PATENTE_HABILITADA ? "patente" : "vehiculo") : medida ? "medida" : undefined} compact initialMedida={medida} forceVoiceButton initialEconomicos={economicosParam} onLiveChange={onLiveSize} />
             </div>
           </aside>
 

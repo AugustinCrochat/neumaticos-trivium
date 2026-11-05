@@ -1,0 +1,11 @@
+# Encabezados de seguridad para todo lo que se sirve como asset estático
+# (https://developers.cloudflare.com/workers/static-assets/headers). Las
+# respuestas que genera el Worker (api, carrito, pago) no pasan por acá.
+# Sin CSP a propósito: el sitio carga Turnstile, Google Analytics, mapas y
+# Mercado Pago, y una política mal armada rompería la compra o la patente.
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+  Strict-Transport-Security: max-age=31536000
+  Permissions-Policy: camera=(self), microphone=(self), geolocation=(self), payment=(self), usb=(), bluetooth=()

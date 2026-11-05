@@ -17,6 +17,32 @@ const NAV_LINKS = [
   { href: "/sucursales", label: "Sucursales", match: ["/sucursales"] },
 ];
 
+/** Ícono de cada opción del menú (Ofertas lleva su etiqueta propia). Hereda el color del texto. */
+function NavIcon({ href, compact = false }: { href: string; compact?: boolean }) {
+  if (href === "/catalogo") {
+    // Neumático del logo con su etiqueta de precio, en blanco.
+    // eslint-disable-next-line @next/next/no-img-element
+    return <img src="/icons/neumatico-blanco.svg?v=8" alt="" aria-hidden="true" className={`w-auto shrink-0 ${compact ? "h-6" : "h-8"}`} />;
+  }
+  if (href === "/sucursales") {
+    // Local con el cartel del logo (neumático con etiqueta), como la fachada real.
+    // eslint-disable-next-line @next/next/no-img-element
+    return <img src="/icons/local-trivium.svg?v=8" alt="" aria-hidden="true" className={`w-auto shrink-0 ${compact ? "h-6" : "h-8"}`} />;
+  }
+  if (href === "/servicios") {
+    // La alineadora del taller, pintada con el color del texto.
+    const url = "url(/icons/servicios/alineadora.svg)";
+    return (
+      <span
+        aria-hidden="true"
+        className={`block shrink-0 bg-white ${compact ? "h-6 w-6" : "h-8 w-8"}`}
+        style={{ WebkitMask: `${url} center / contain no-repeat`, mask: `${url} center / contain no-repeat` }}
+      />
+    );
+  }
+  return null;
+}
+
 const isActive = (pathname: string, match: string[]) =>
   match.some((m) => pathname === m || pathname.startsWith(`${m}/`));
 
@@ -155,10 +181,10 @@ export function Header() {
                           }`
                         : // Seleccionado: fondo tenue, texto blanco en negrita y barra roja
                           // debajo; al pasar el mouse la barra crece desde la izquierda.
-                          `relative rounded-lg px-3 py-2 text-sm transition-colors after:absolute after:inset-x-3 lg:px-5 lg:after:inset-x-5 after:bottom-0.5 after:h-0.5 after:origin-left after:rounded-full after:bg-[#ff1e00] after:transition-transform after:duration-200 ${
+                          `relative rounded-lg px-3 ${compact ? "py-1" : "py-1.5"} text-sm transition-colors after:absolute after:inset-x-3 lg:px-5 lg:after:inset-x-5 after:bottom-0.5 after:h-0.5 after:origin-left after:rounded-full after:bg-[#ff1e00] after:transition-transform after:duration-200 ${
                             active
                               ? "bg-white/10 font-bold text-white after:scale-x-100"
-                              : "font-medium text-zinc-300 hover:bg-white/5 hover:text-white after:scale-x-0 hover:after:scale-x-100"
+                              : "font-semibold text-zinc-300 hover:bg-white/5 hover:text-white after:scale-x-0 hover:after:scale-x-100"
                           }`
                     }
                   >
@@ -171,7 +197,10 @@ export function Header() {
                         </span>
                       </>
                     ) : (
-                      link.label
+                      <span className={`flex flex-col items-center leading-none ${compact ? "gap-1.5" : "gap-2"}`}>
+                        <span className={`flex shrink-0 items-end ${compact ? "h-6" : "h-9"}`}><NavIcon href={link.href} compact={compact} /></span>
+                        {link.label}
+                      </span>
                     )}
                   </Link>
                 );
@@ -255,7 +284,12 @@ export function Header() {
                       </span>
                     </>
                   ) : (
-                    link.label
+                    <span className="flex items-center gap-3">
+                      <span className="flex h-9 w-12 shrink-0 items-center justify-center">
+                        <NavIcon href={link.href} />
+                      </span>
+                      {link.label}
+                    </span>
                   )}
                 </Link>
               );
