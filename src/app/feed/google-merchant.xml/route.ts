@@ -29,7 +29,10 @@ function shippingBlock(price: number): string {
 // antirrobo) — los servicios (alineación, balanceo, etc.) quedan afuera:
 // el feed estándar de Merchant Center es para bienes, no servicios, y
 // listarlos ahí arriesga que Google rechace/​suspenda la cuenta por política.
-export const dynamic = "force-dynamic";
+// Estático: se arma en el build (el sitio se redespliega cada 2 h) y el deploy lo
+// publica como archivo (scripts/copy-prerendered-html.mjs). Como `force-dynamic`
+// pasaba por el Worker en cada pedido de Google y daba 1102 / respuestas cortadas.
+export const dynamic = "force-static";
 
 function escapeXml(text: string): string {
   return text

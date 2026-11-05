@@ -14,7 +14,10 @@ import type { TireProduct, Accessory } from "@/lib/types";
 // el sitio permita comprar online y elegir retiro en tienda, y el carrito está
 // oculto (Google la rechazó en Merchant Center, 2026-10). Sin esos atributos
 // el producto igual aparece como "disponible en tienda" con su stock y precio.
-export const dynamic = "force-dynamic";
+// Estático: se arma en el build (el sitio se redespliega cada 2 h) y el deploy lo
+// publica como archivo (scripts/copy-prerendered-html.mjs). Como `force-dynamic`
+// pasaba por el Worker en cada pedido de Google y daba 1102 / respuestas cortadas.
+export const dynamic = "force-static";
 
 function cdata(text: string): string {
   return `<![CDATA[${text.replace(/]]>/g, "]]]]><![CDATA[>")}]]>`;

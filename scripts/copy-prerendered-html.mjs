@@ -97,3 +97,34 @@ for (const { origen, destino, clave } of DATOS) {
   }
   console.log(`${soloListar ? "Se copiaría" : "Copiado"} ${destino} (${lista.length} ${clave}).`);
 }
+
+// Feeds de Merchant Center y sitemap: rutas que `next build` deja prearmadas como
+// `.next/server/app/<ruta>.body` (+ `.meta` con status). Se publican como archivos
+// estáticos para que Google los lea sin pasar por el Worker (que daba 1102 y
+// respuestas cortadas). Si falta alguno o no es un 200 con contenido, el deploy
+// falla: mejor quedarse con la versión anterior que publicar un feed roto.
+const ARCHIVOS = [
+  { origen: "feed/google-merchant.xml", marca: "<item>" },
+  { origen: "feed/google-local-inventory.xml", marca: "<item>" },
+  { origen: "sitemap.xml", marca: "<url>" },
+];
+for (const { origen, marca } of ARCHIVOS) {
+  const cuerpo = join(ORIGEN, `${origen}.body`);
+  let ok = false;
+  try {
+    const meta = existsSync(`${cuerpo.replace(/\.body$/, "")}.meta`) ? JSON.parse(readFileSync(`${cuerpo.replace(/\.body$/, "")}.meta`, "utf8")) : {};
+    ok = (meta.status ?? 200) === 200 && readFileSync(cuerpo, "utf8").includes(marca);
+  } catch {
+    ok = false;
+  }
+  if (!ok) {
+    console.error(`${cuerpo} no existe, no es un 200 o está vacío: no se publica el deploy.`);
+    process.exit(1);
+  }
+  if (!soloListar) {
+    const hasta = join(DESTINO, origen);
+    mkdirSync(dirname(hasta), { recursive: true });
+    cpSync(cuerpo, hasta);
+  }
+  console.log(`${soloListar ? "Se copiaría" : "Copiado"} ${origen}.`);
+}
