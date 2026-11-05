@@ -685,6 +685,18 @@ export const BLOG_META: Record<string, BlogMeta> = {
     shopIntro: "Para camioneta, A/T y carga:",
     shopLinks: [L.at, L.carga, L.ht],
   },
+  "neumen-historia-sucursales-y-como-comparar": {
+    cover: cover("fachada"),
+    figure: figure("fachada", "El local de Neumáticos Trivium en Argüello, Córdoba."),
+    shopIntro: "Mirá lo que tenemos:",
+    shopLinks: [L.pirelli, L.marcas],
+  },
+  "norauto-argentina-historia-y-como-comparar": {
+    cover: cover("tallerCuatroAutos"),
+    figure: figure("tallerCuatroAutos", "El taller de Argüello, con alineado y balanceo en el mismo lugar."),
+    shopIntro: "Mirá lo que tenemos:",
+    shopLinks: [L.pirelli, L.marcas],
+  },
   "alternativas-a-michelin-y-pirelli": {
     cover: cover("rotacion"),
     figure: { src: IMG.kingpro, alt: "Cubierta Grenlander Kingpro One junto a una pickup", portrait: true, caption: "Una alternativa importada junto a una pickup." },

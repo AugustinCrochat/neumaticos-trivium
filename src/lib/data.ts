@@ -1114,6 +1114,24 @@ const BLOG_POSTS_BASE: BlogPost[] = [
     slug: "neumaticos-baratos-en-cordoba",
     category: "Guías",
   },
+  {
+    id: "90",
+    title: "Neumen: historia, sucursales y cómo comparar antes de comprar neumáticos",
+    excerpt: "Qué se sabe de la cadena Neumen según fuentes públicas y qué mirar para comparar dónde comprar, más allá del precio.",
+    imageUrl: "/images/local/fachada-local-neumaticos-trivium-cordoba.webp",
+    date: "2026-11-12",
+    slug: "neumen-historia-sucursales-y-como-comparar",
+    category: "Marcas",
+  },
+  {
+    id: "91",
+    title: "Norauto en Argentina: historia, sucursales y cómo comparar antes de comprar neumáticos",
+    excerpt: "Qué se sabe de Norauto Argentina, qué cambió con la compra de Stellantis y cómo comparar con otras opciones.",
+    imageUrl: "/images/local/fachada-local-neumaticos-trivium-cordoba.webp",
+    date: "2026-11-19",
+    slug: "norauto-argentina-historia-y-como-comparar",
+    category: "Marcas",
+  },
 ];
 
 // La miniatura del listado es siempre la portada de la nota (blog-meta.ts):

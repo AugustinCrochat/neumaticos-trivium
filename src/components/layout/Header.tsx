@@ -126,7 +126,7 @@ export function Header() {
       {/* Main nav */}
       <nav className="bg-black shadow-lg">
         <div className="max-w-7xl 2xl:max-w-[96rem] mx-auto px-4">
-          <div className={`flex items-center gap-6 transition-[height] duration-200 md:gap-12 lg:gap-16 ${compact ? "h-[3.25rem] md:h-14" : "h-14 md:h-[4.5rem]"}`}>
+          <div className={`flex items-center gap-6 transition-[height] duration-200 md:gap-4 lg:gap-12 xl:gap-16 ${compact ? "h-[3.25rem] md:h-14" : "h-14 md:h-[4.5rem]"}`}>
             {/* Logo */}
             <Link href="/" className="flex-shrink-0">
               <Image
@@ -134,13 +134,13 @@ export function Header() {
                 alt="Neumáticos Trivium"
                 width={175}
                 height={60}
-                className={`w-auto transition-[height] duration-200 ${compact ? "h-9 md:h-11" : "h-10 md:h-16"}`}
+                className={`w-auto transition-[height] duration-200 ${compact ? "h-9 md:h-9 lg:h-11" : "h-10 md:h-12 lg:h-16"}`}
                 priority
               />
             </Link>
 
             {/* Desktop nav links */}
-            <div className="hidden md:flex items-center gap-1.5 flex-1">
+            <div className="hidden md:flex min-w-0 flex-1 items-center gap-1 lg:gap-1.5">
               {NAV_LINKS.map((link) => {
                 const active = isActive(pathname, link.match);
                 return (
@@ -150,12 +150,12 @@ export function Header() {
                     aria-current={active ? "page" : undefined}
                     className={
                       link.href === "/ofertas"
-                        ? `flex items-center gap-2 rounded-lg px-3.5 py-1.5 text-sm font-black uppercase tracking-wide text-white shadow-md transition-transform hover:scale-[1.04] ${
+                        ? `flex shrink-0 items-center gap-2 rounded-lg px-2.5 py-1.5 text-sm font-black lg:px-3.5 uppercase tracking-wide text-white shadow-md transition-transform hover:scale-[1.04] ${
                             active ? "bg-white !text-[#ff1e00]" : "bg-gradient-to-r from-[#ff1e00] to-[#ff5a2e]"
                           }`
                         : // Seleccionado: fondo tenue, texto blanco en negrita y barra roja
                           // debajo; al pasar el mouse la barra crece desde la izquierda.
-                          `relative rounded-lg px-5 py-2 text-sm transition-colors after:absolute after:inset-x-5 after:bottom-0.5 after:h-0.5 after:origin-left after:rounded-full after:bg-[#ff1e00] after:transition-transform after:duration-200 ${
+                          `relative rounded-lg px-3 py-2 text-sm transition-colors after:absolute after:inset-x-3 lg:px-5 lg:after:inset-x-5 after:bottom-0.5 after:h-0.5 after:origin-left after:rounded-full after:bg-[#ff1e00] after:transition-transform after:duration-200 ${
                             active
                               ? "bg-white/10 font-bold text-white after:scale-x-100"
                               : "font-medium text-zinc-300 hover:bg-white/5 hover:text-white after:scale-x-0 hover:after:scale-x-100"
@@ -178,7 +178,7 @@ export function Header() {
               })}
             </div>
 
-            <div className="flex items-center gap-3 ml-auto md:ml-0">
+            <div className="flex shrink-0 items-center gap-2 lg:gap-3 ml-auto md:ml-0">
               <button
                 onClick={openModal}
                 className="flex items-center gap-1.5 bg-white hover:bg-slate-100 text-navy-900 pl-2.5 pr-2 py-1 rounded-full text-xs font-bold transition-colors group shadow-sm"
