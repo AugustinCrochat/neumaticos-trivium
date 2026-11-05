@@ -89,7 +89,7 @@ export function RimLanding({ rim, productos }: { rim: number; productos: TirePro
 
       <section className="mb-14">
         <div className="mb-5 flex flex-wrap items-center gap-3">
-          <h1 className="text-2xl font-black text-navy-900">Cubiertas R{rim}</h1>
+          <h1 className="text-2xl font-black text-navy-900">Cubiertas rodado {rim} (R{rim})</h1>
           {medidasConStock > 0 && (
             <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-xs font-black text-emerald-700">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />

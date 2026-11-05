@@ -66,10 +66,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const rim = parseRimSlug(medida);
   if (rim !== null) {
-    const title = `Neumáticos baratos rodado ${rim} — precios y medidas R${rim}`;
+    // "Cubiertas rodado 13" (1.300 búsquedas/mes) y "cubiertas rodado 15"
+    // (720): la gente dice cubiertas. El precio inicial real mejora el clic.
+    const productosRim = await getProductosDesdePOS(DEFAULT_BRANCH_ID);
+    const preciosRim = productosRim.filter((p) => p.enStock && p.size.rim === rim).map((p) => p.price);
+    const minimoRim = preciosRim.length ? Math.min(...preciosRim) : null;
+    const title = minimoRim
+      ? `Cubiertas rodado ${rim} desde $${minimoRim.toLocaleString("es-AR")} — medidas R${rim}`
+      : `Cubiertas rodado ${rim} — precios y medidas R${rim}`;
     return {
       title,
-      description: resumen(`Todas las medidas de neumáticos rodado ${rim} con stock y precio actualizado. Cubiertas R${rim} de importación directa para auto y camioneta, con colocación sin cargo en el día.`),
+      description: resumen(`Cubiertas y neumáticos rodado ${rim} (R${rim}) con stock y precio actualizado, para auto y camioneta. Importación directa, colocación sin cargo en el día y garantía de 1 año.`),
       alternates: canonical(`/neumaticos/${rimSlug(rim)}`),
       openGraph: { title: `${title} — ${SITE_NAME}`, url: `/neumaticos/${rimSlug(rim)}`, ...poolShare(medida).openGraph },
       twitter: poolShare(medida).twitter,
