@@ -101,7 +101,7 @@ export function SizeOrVehicleSearch({
     };
     const titulos = { patente: patenteManual ? "Buscar por mi auto" : "Buscar por patente", medida: "Buscar por medida", vehiculo: "Buscar por mi auto" } as const;
     // Misma caja para todos los íconos: los textos de los mosaicos quedan alineados entre sí.
-    const cajaIcono = compact ? "flex h-12 w-24 items-center justify-center" : "flex h-16 w-32 items-center justify-center";
+    const cajaIcono = compact ? "flex h-14 w-28 items-center justify-center" : "flex h-16 w-32 items-center justify-center";
     const barra = (id: "patente" | "medida" | "vehiculo", Icono: typeof Car | typeof HalfTireIcon | typeof PlateIcon, titulo: string, ejemplo: string) => (
       <button
         type="button"
@@ -112,8 +112,8 @@ export function SizeOrVehicleSearch({
         className="flex w-full items-center gap-3 rounded-xl border border-slate-300 bg-white px-4 shadow-sm py-3 text-left transition-colors hover:border-orange-400"
       >
         {/* Misma caja para todos los íconos: los textos de las barras arrancan en el mismo punto. */}
-        <span className="flex h-12 w-24 shrink-0 items-center justify-center">
-          <Icono className={`text-navy-900 ${Icono === PlateIcon ? "h-8 w-[4.75rem]" : Icono === HalfTireIcon ? "h-12 w-24" : "h-7 w-7"}`} aria-hidden="true" {...(Icono === HalfTireIcon ? { medidas: true } : {})} />
+        <span className="flex h-14 w-28 shrink-0 items-center justify-center">
+          <Icono className={`text-navy-900 ${Icono === PlateIcon ? "h-8 w-[4.75rem]" : Icono === HalfTireIcon ? "h-14 w-28" : "h-7 w-7"}`} aria-hidden="true" {...(Icono === HalfTireIcon ? { medidas: true } : {})} />
         </span>
         <span className="min-w-0 flex-1">
           <span className="block text-sm font-black text-navy-900">{titulo}</span>
@@ -134,7 +134,7 @@ export function SizeOrVehicleSearch({
               onClick={() => setAbierto("medida")}
               className={`flex items-center rounded-xl border border-slate-300 bg-white px-4 shadow-sm transition-colors hover:border-orange-400 ${compact ? "gap-3 py-3 text-left" : "flex-col gap-2 py-5 text-center"}`}
             >
-              <span className={cajaIcono}><HalfTireIcon medidas className={compact ? "h-12 w-24 text-navy-900" : "h-16 w-32 text-navy-900"} /></span>
+              <span className={cajaIcono}><HalfTireIcon medidas className={compact ? "h-14 w-28 text-navy-900" : "h-16 w-32 text-navy-900"} /></span>
               <span className="flex flex-col"><span className="text-base font-black text-navy-900">Por medida</span>
               <span className="text-xs font-semibold text-slate-500">Ej: 205/55 R16</span></span>
             </button>

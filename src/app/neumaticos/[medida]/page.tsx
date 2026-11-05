@@ -42,6 +42,13 @@ import { EjeLanding } from "./EjeLanding";
 
 type Props = { params: Promise<{ medida: string }> };
 
+// Solo las medidas prearmadas (catálogo + prioritarias + rodados/anchos/perfiles).
+// Una medida que salió de stock y no se prearma se renderizaba on-demand en el
+// Worker y devolvía 503 o se colgaba (Search Console mostraba 294 URLs con 5xx):
+// con `false` responde un 404 inmediato y la medida vuelve sola en el próximo
+// deploy (cada 2 h) si el catálogo la trae de nuevo.
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
   const productos = await getProductosDesdePOS(DEFAULT_BRANCH_ID);
   const slugs = new Set<string>();
