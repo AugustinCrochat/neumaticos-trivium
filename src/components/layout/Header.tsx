@@ -260,22 +260,6 @@ export function Header() {
         {/* Mobile dropdown menu */}
         {menuOpen && (
           <div className="md:hidden border-t border-zinc-900 bg-black px-4 py-3 space-y-1">
-            {/* En celular el buscador va como primer ítem del menú: libera lugar en la barra. */}
-            <button
-              type="button"
-              onClick={() => {
-                setMenuOpen(false);
-                setSearchOpen(true);
-              }}
-              className="flex w-full items-center gap-3 rounded-xl border border-white/15 bg-white/[0.05] px-4 py-2.5 text-left text-sm font-semibold text-zinc-200 transition-colors hover:border-white/35 hover:bg-white/10 hover:text-white"
-            >
-              <span className="flex h-9 w-12 shrink-0 items-center justify-center">
-                <svg aria-hidden="true" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z" />
-                </svg>
-              </span>
-              <span className="flex-1">Buscar neumáticos</span>
-            </button>
             {NAV_LINKS.map((link) => {
               const active = isActive(pathname, link.match);
               return (
@@ -322,6 +306,20 @@ export function Header() {
                 </Link>
               );
             })}
+            {/* En celular el buscador va al final del menú, separado de las secciones: libera lugar en la barra. */}
+            <button
+              type="button"
+              onClick={() => {
+                setMenuOpen(false);
+                setSearchOpen(true);
+              }}
+              className="mt-4 flex w-full items-center justify-center gap-2.5 rounded-full bg-white px-5 py-3 text-sm font-black uppercase tracking-wide text-black shadow-md transition-colors hover:bg-zinc-200 active:scale-[0.99]"
+            >
+              <svg aria-hidden="true" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z" />
+              </svg>
+              Buscar
+            </button>
           </div>
         )}
       </nav>
