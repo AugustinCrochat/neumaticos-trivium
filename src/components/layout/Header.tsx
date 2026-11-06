@@ -161,7 +161,7 @@ export function Header() {
                 alt="Neumáticos Trivium"
                 width={175}
                 height={60}
-                className={`w-auto transition-[height] duration-200 ${compact ? "h-9 md:h-9 lg:h-11" : "h-10 md:h-12 lg:h-16"} max-[339px]:!h-8`}
+                className={`w-auto transition-[height] duration-200 ${compact ? "h-9 md:h-9 lg:h-11" : "h-10 md:h-12 lg:h-16"}`}
                 priority
               />
             </Link>
@@ -214,14 +214,14 @@ export function Header() {
                 className="flex min-w-0 items-center gap-1 sm:gap-1.5 bg-white hover:bg-slate-100 text-navy-900 pl-2 sm:pl-2.5 pr-1.5 sm:pr-2 py-1 rounded-full text-xs font-bold transition-colors group shadow-sm"
                 title="Cambiar sucursal"
               >
-                <svg className="w-3.5 h-3.5 text-[#ff1e00] flex-shrink-0 max-[339px]:hidden" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <svg className="w-3.5 h-3.5 text-[#ff1e00] flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5Z" />
                 </svg>
-                {/* "Lomas" solo se confunde con Lomas de Zamora: en pantallas muy angostas se abrevia a "Lomas del Mir."; desde 380 px va el nombre completo. */}
-                <span className="min-w-0 whitespace-nowrap text-[11px] leading-none min-[380px]:hidden">
+                {/* "Lomas" solo se confunde con Lomas de Zamora: en pantallas muy angostas se abrevia a "Lomas del Mir."; desde 360 px va el nombre completo. */}
+                <span className="min-w-0 whitespace-nowrap text-[11px] leading-none min-[360px]:hidden">
                   {hasConfirmedBranch ? selectedBranch.pillName ?? selectedBranch.shortName : "Sucursal"}
                 </span>
-                <span className="hidden min-w-0 whitespace-nowrap text-[11px] leading-none min-[380px]:inline min-[400px]:text-xs">
+                <span className="hidden min-w-0 whitespace-nowrap text-[11px] leading-none min-[360px]:inline min-[400px]:text-xs">
                   {hasConfirmedBranch ? selectedBranch.shortName : "Sucursal"}
                 </span>
                 <svg className="w-3 h-3 text-slate-400 group-hover:text-slate-600 transition-colors flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -231,7 +231,7 @@ export function Header() {
 
               <button
                 onClick={() => setSearchOpen(true)}
-                className="text-zinc-200 hover:text-white p-1.5"
+                className="hidden md:block text-zinc-200 hover:text-white p-1.5"
                 aria-label="Buscar productos"
               >
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -260,6 +260,22 @@ export function Header() {
         {/* Mobile dropdown menu */}
         {menuOpen && (
           <div className="md:hidden border-t border-zinc-900 bg-black px-4 py-3 space-y-1">
+            {/* En celular el buscador va como primer ítem del menú: libera lugar en la barra. */}
+            <button
+              type="button"
+              onClick={() => {
+                setMenuOpen(false);
+                setSearchOpen(true);
+              }}
+              className="flex w-full items-center gap-3 rounded-xl border border-white/15 bg-white/[0.05] px-4 py-2.5 text-left text-sm font-semibold text-zinc-200 transition-colors hover:border-white/35 hover:bg-white/10 hover:text-white"
+            >
+              <span className="flex h-9 w-12 shrink-0 items-center justify-center">
+                <svg aria-hidden="true" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z" />
+                </svg>
+              </span>
+              <span className="flex-1">Buscar neumáticos</span>
+            </button>
             {NAV_LINKS.map((link) => {
               const active = isActive(pathname, link.match);
               return (
