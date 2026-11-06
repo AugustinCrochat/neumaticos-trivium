@@ -20,7 +20,7 @@
 	"vars": {
 		// Sin sucursal al final (antes terminaba en "/arguello") — cada fetch en
 		// pos-api.ts arma /{sucursal}/productos, etc. según la sucursal elegida.
-		"POS_API_BASE_URL": "https://pos-neumaticos.vercel.app/api/public",
+		"POS_API_BASE_URL": "https://trivium-erp.vercel.app/api/public",
 		"MERCADOPAGO_ACCESS_TOKEN": "APP_USR-6323540170330488-071417-4413e75117545308b4946db2d376bbf4-3541709725",
 		// GOCUOTAS_ENV: "sandbox" para probar contra su ambiente de pruebas,
 		// cualquier otro valor (o ausente) usa producción — ver src/lib/gocuotas.ts.
