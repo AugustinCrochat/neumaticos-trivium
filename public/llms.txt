@@ -156,6 +156,9 @@ Cada página explica cómo llegar al local desde esa zona y muestra neumáticos 
 - Neumáticos direccionales y asimétricos, cómo se montan: https://neumaticos.trivium.ar/blog/neumaticos-direccionales-y-asimetricos-como-se-montan
 - Servicios / gomería: https://neumaticos.trivium.ar/servicios
 - Marcas: https://neumaticos.trivium.ar/marcas
+- Todas las sucursales (direcciones, horarios, teléfono, cómo llegar y zonas que atiende cada una; Argüello abierta de lunes a sábado de 9 a 19 h sin turno, Lomas del Mirador abre en diciembre y San Justo en enero): https://neumaticos.trivium.ar/sucursales
+- Sucursal Lomas del Mirador (Av. General Enrique Mosconi 248, abre en diciembre): https://neumaticos.trivium.ar/sucursales/lomas-del-mirador
+- Sucursal San Justo (Pres. Juan Domingo Perón 2847, abre en enero): https://neumaticos.trivium.ar/sucursales/san-justo
 - Sucursal Argüello (gomería en Córdoba: alineado y balanceado con taller propio, precios del combo, neumáticos baratos con stock y precio actualizado, horarios y cómo llegar): https://neumaticos.trivium.ar/sucursales/arguello
 - Preguntas frecuentes: https://neumaticos.trivium.ar/ (sección FAQ) y https://neumaticos.trivium.ar/servicios
 - Neumáticos 205/55 R16: autos que la usan y equivalencias: https://neumaticos.trivium.ar/blog/neumaticos-205-55-r16-autos-que-la-usan

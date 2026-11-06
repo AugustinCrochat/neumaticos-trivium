@@ -23,6 +23,8 @@ type BranchesMapProps = {
       las interacciones de una sucursal real (no tiene POS, teléfono ni
       horarios: no se puede seleccionar como sucursal activa). */
   comingSoon?: ComingSoonBranch[];
+  /** Muestra la grilla de tarjetas debajo del mapa (default). En /sucursales las tarjetas van arriba. */
+  conLista?: boolean;
 };
 
 type UserLocation = {
@@ -190,6 +192,11 @@ function BranchSummary({
         </span>
       </button>
 
+      {branch.apertura ? (
+        <p className="mt-4 rounded-xl bg-orange-50 px-3 py-2 text-sm font-bold text-orange-700">
+          Próxima apertura: abrimos {branch.apertura}.
+        </p>
+      ) : (
       <dl className="mt-4 grid grid-cols-1 gap-3 text-sm">
         <div>
           <dt className="text-xs font-bold uppercase tracking-wide text-slate-400">
@@ -204,15 +211,16 @@ function BranchSummary({
           <dd className="mt-0.5 text-slate-700">{branch.phone}</dd>
         </div>
       </dl>
+      )}
 
-      <div className="mt-5 grid grid-cols-1 gap-2 sm:grid-cols-2">
-        <WhatsAppLink
+      <div className={`mt-5 grid grid-cols-1 gap-2 ${branch.apertura ? "" : "sm:grid-cols-2"}`}>
+        {!branch.apertura && <WhatsAppLink
           href={`https://wa.me/${branch.whatsapp}`}
           className="inline-flex min-h-11 items-center justify-center rounded-xl bg-[#25d366] px-4 py-2.5 text-sm font-black text-white shadow-sm shadow-[#25d366]/20 transition-colors hover:bg-[#1fbd59]"
         >
           <WhatsAppIcon className="mr-2 h-5 w-5" />
           WhatsApp
-        </WhatsAppLink>
+        </WhatsAppLink>}
         <a
           href={branch.mapUrl}
           target="_blank"
@@ -238,7 +246,7 @@ function BranchSummary({
   );
 }
 
-export function BranchesMap({ branches, comingSoon = NO_COMING_SOON }: BranchesMapProps) {
+export function BranchesMap({ branches, comingSoon = NO_COMING_SOON, conLista = true }: BranchesMapProps) {
   const { selectedBranch, hasConfirmedBranch } = useBranch();
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<Map | null>(null);
@@ -602,7 +610,7 @@ export function BranchesMap({ branches, comingSoon = NO_COMING_SOON }: BranchesM
             </div>
           </div>
 
-          <div className="grid grid-cols-1 content-start gap-4 lg:grid-cols-2">
+          <div className={`grid grid-cols-1 content-start gap-4 lg:grid-cols-2 ${conLista ? "" : "hidden"}`}>
             {geoError && (
               <p className="rounded-xl border border-orange-200 bg-orange-50 px-4 py-3 text-sm font-semibold text-orange-700">
                 {geoError}

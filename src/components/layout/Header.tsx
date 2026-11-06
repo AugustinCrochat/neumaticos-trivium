@@ -19,23 +19,24 @@ const NAV_LINKS = [
 
 /** Ícono de cada opción del menú (Ofertas lleva su etiqueta propia). Hereda el color del texto. */
 function NavIcon({ href, compact = false }: { href: string; compact?: boolean }) {
+  // Los tres miden casi lo mismo y van centrados en una caja de igual alto.
   if (href === "/catalogo") {
-    // Neumático del logo con su etiqueta de precio, en blanco.
+    // Neumático del logo, en blanco.
     // eslint-disable-next-line @next/next/no-img-element
-    return <img src="/icons/neumatico-blanco.svg?v=8" alt="" aria-hidden="true" className={`w-auto shrink-0 ${compact ? "h-6" : "h-8"}`} />;
+    return <img src="/icons/neumatico-blanco.svg?v=12" alt="" aria-hidden="true" className={`w-auto shrink-0 ${compact ? "h-5" : "h-6"}`} />;
   }
   if (href === "/sucursales") {
-    // Local con el cartel del logo (neumático con etiqueta), como la fachada real.
+    // Frente del local: portón y el cartel con el logo.
     // eslint-disable-next-line @next/next/no-img-element
-    return <img src="/icons/local-trivium.svg?v=8" alt="" aria-hidden="true" className={`w-auto shrink-0 ${compact ? "h-6" : "h-8"}`} />;
+    return <img src="/icons/local-trivium.svg?v=10" alt="" aria-hidden="true" className={`w-auto shrink-0 ${compact ? "h-[18px]" : "h-[22px]"}`} />;
   }
   if (href === "/servicios") {
-    // La alineadora del taller, pintada con el color del texto.
-    const url = "url(/icons/servicios/alineadora.svg)";
+    // La alineadora del taller, simplificada y pintada con el color del texto.
+    const url = "url(/icons/servicios/alineadora-simple.svg)";
     return (
       <span
         aria-hidden="true"
-        className={`block shrink-0 bg-white ${compact ? "h-6 w-6" : "h-8 w-8"}`}
+        className={`block shrink-0 aspect-[4/5] bg-white ${compact ? "h-5" : "h-6"}`}
         style={{ WebkitMask: `${url} center / contain no-repeat`, mask: `${url} center / contain no-repeat` }}
       />
     );
@@ -181,10 +182,10 @@ export function Header() {
                           }`
                         : // Seleccionado: fondo tenue, texto blanco en negrita y barra roja
                           // debajo; al pasar el mouse la barra crece desde la izquierda.
-                          `relative rounded-lg px-3 ${compact ? "py-1" : "py-1.5"} text-sm transition-colors after:absolute after:inset-x-3 lg:px-5 lg:after:inset-x-5 after:bottom-0.5 after:h-0.5 after:origin-left after:rounded-full after:bg-[#ff1e00] after:transition-transform after:duration-200 ${
+                          `flex min-w-[5.75rem] justify-center rounded-xl border px-3 lg:min-w-[6.75rem] lg:px-4 py-1 text-sm transition-colors ${
                             active
-                              ? "bg-white/10 font-bold text-white after:scale-x-100"
-                              : "font-semibold text-zinc-300 hover:bg-white/5 hover:text-white after:scale-x-0 hover:after:scale-x-100"
+                              ? "border-[#ff1e00] bg-white/15 font-bold text-white"
+                              : "border-white/20 bg-white/[0.06] font-semibold text-zinc-200 hover:border-white/40 hover:bg-white/15 hover:text-white"
                           }`
                     }
                   >
@@ -197,8 +198,8 @@ export function Header() {
                         </span>
                       </>
                     ) : (
-                      <span className={`flex flex-col items-center leading-none ${compact ? "gap-1.5" : "gap-2"}`}>
-                        <span className={`flex shrink-0 items-end ${compact ? "h-6" : "h-9"}`}><NavIcon href={link.href} compact={compact} /></span>
+                      <span className={`flex flex-col items-center leading-none gap-1`}>
+                        <span className={`flex shrink-0 items-center justify-center ${compact ? "h-5" : "h-6"}`}><NavIcon href={link.href} compact={compact} /></span>
                         {link.label}
                       </span>
                     )}
@@ -267,10 +268,10 @@ export function Header() {
                       ? `flex items-center gap-2.5 rounded-lg px-4 py-2 text-sm font-black uppercase tracking-wide text-white ${
                           active ? "bg-white !text-[#ff1e00]" : "bg-gradient-to-r from-[#ff1e00] to-[#ff5a2e]"
                         }`
-                      : `block rounded-lg border-l-4 px-4 py-2.5 text-sm transition-colors ${
+                      : `block rounded-xl border px-4 py-2.5 text-sm transition-colors ${
                           active
-                            ? "border-[#ff1e00] bg-white/10 font-bold text-white"
-                            : "border-transparent font-medium text-zinc-300 hover:bg-white/5 hover:text-white"
+                            ? "border-[#ff1e00] bg-[#ff1e00]/15 font-bold text-white"
+                            : "border-white/15 bg-white/[0.05] font-semibold text-zinc-200 hover:border-white/35 hover:bg-white/10 hover:text-white"
                         }`
                   }
                   onClick={() => setMenuOpen(false)}
@@ -288,7 +289,14 @@ export function Header() {
                       <span className="flex h-9 w-12 shrink-0 items-center justify-center">
                         <NavIcon href={link.href} />
                       </span>
-                      {link.label}
+                      <span className="flex-1">{link.label}</span>
+                      {active ? (
+                        <span aria-hidden="true" className="h-2.5 w-2.5 rounded-full bg-[#ff1e00] shadow-[0_0_0_3px_rgba(255,30,0,0.25)]" />
+                      ) : (
+                        <svg aria-hidden="true" className="h-4 w-4 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                        </svg>
+                      )}
                     </span>
                   )}
                 </Link>
