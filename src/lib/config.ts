@@ -53,6 +53,8 @@ export type Branch = {
   id: string;
   name: string;
   shortName: string;
+  /** Abreviatura para pantallas muy angostas (pill de sucursal del header). Si falta se usa shortName. */
+  pillName?: string;
   address: string;
   city: string;
   /** Provincia — `addressRegion` en el schema local. Google lo usa para
@@ -170,6 +172,7 @@ export const BRANCHES: Branch[] = [
     id: "lomas-del-mirador",
     name: "Neumáticos Trivium Lomas del Mirador",
     shortName: "Lomas del Mirador",
+    pillName: "Lomas del Mir.",
     address: "Av. General Enrique Mosconi 248",
     // Google Maps lo muestra como CABA, pero el CPA B1752 es de Lomas del
     // Mirador (La Matanza, provincia de Buenos Aires), pegado a la General Paz.

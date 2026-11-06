@@ -211,13 +211,17 @@ export function Header() {
             <div className="flex shrink-0 items-center gap-2 lg:gap-3 ml-auto md:ml-0">
               <button
                 onClick={openModal}
-                className="flex items-center gap-1.5 bg-white hover:bg-slate-100 text-navy-900 pl-2.5 pr-2 py-1 rounded-full text-xs font-bold transition-colors group shadow-sm"
+                className="flex min-w-0 items-center gap-1 sm:gap-1.5 bg-white hover:bg-slate-100 text-navy-900 pl-2 sm:pl-2.5 pr-1.5 sm:pr-2 py-1 rounded-full text-xs font-bold transition-colors group shadow-sm"
                 title="Cambiar sucursal"
               >
                 <svg className="w-3.5 h-3.5 text-[#ff1e00] flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5Z" />
                 </svg>
-                <span className="truncate min-w-0 max-w-[90px]">
+                {/* "Lomas" solo se confunde con Lomas de Zamora: en pantallas muy angostas se abrevia a "Lomas del Mir."; desde 380 px va el nombre completo. */}
+                <span className="min-w-0 whitespace-nowrap text-[11px] leading-none min-[380px]:hidden">
+                  {hasConfirmedBranch ? selectedBranch.pillName ?? selectedBranch.shortName : "Sucursal"}
+                </span>
+                <span className="hidden min-w-0 whitespace-nowrap text-[11px] leading-none min-[380px]:inline min-[400px]:text-xs">
                   {hasConfirmedBranch ? selectedBranch.shortName : "Sucursal"}
                 </span>
                 <svg className="w-3 h-3 text-slate-400 group-hover:text-slate-600 transition-colors flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
