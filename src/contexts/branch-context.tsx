@@ -8,6 +8,7 @@ import {
   type ReactNode,
 } from "react";
 import { BRANCHES, DEFAULT_BRANCH_ID, BRANCH_COOKIE, type Branch } from "@/lib/config";
+import { EVENTO_ELEGIR_SUCURSAL, goToWhatsApp } from "@/lib/gtag";
 
 type BranchContextType = {
   selectedBranch: Branch;
@@ -105,6 +106,25 @@ export function BranchProvider({ children }: { children: ReactNode }) {
     return () => {
       cancelado = true;
     };
+  }, []);
+
+  // Un botón de WhatsApp tocado sin sucursal elegida (ver goToWhatsApp): se abre
+  // el selector y el chat sale hacia la sucursal que se elija, con su número y
+  // su nombre en el mensaje.
+  useEffect(() => {
+    function alElegir(e: Event) {
+      const { url, origenId } = (e as CustomEvent<{ url: string; origenId: string }>).detail;
+      const origen = BRANCHES.find((b) => b.id === origenId);
+      setPendingAction(() => (branch: Branch) => {
+        if (!origen) return;
+        const texto = new URLSearchParams(url.split("?")[1] ?? "").get("text");
+        const nuevo = texto ? texto.split(origen.shortName).join(branch.shortName) : null;
+        goToWhatsApp(`https://wa.me/${branch.whatsapp}${nuevo ? `?text=${encodeURIComponent(nuevo)}` : ""}`);
+      });
+      setIsModalOpen(true);
+    }
+    window.addEventListener(EVENTO_ELEGIR_SUCURSAL, alElegir);
+    return () => window.removeEventListener(EVENTO_ELEGIR_SUCURSAL, alElegir);
   }, []);
 
   const setSelectedBranch = (branch: Branch) => {
