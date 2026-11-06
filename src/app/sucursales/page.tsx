@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "@/components/ui/Link";
 import type { Metadata } from "next";
 import { BRANCHES, SITE_URL, type Branch } from "@/lib/config";
@@ -150,7 +151,17 @@ export default async function SucursalesPage() {
     <div className="min-h-screen bg-slate-50">
       <JsonLd data={jsonLd} />
 
-      <header className="bg-black pb-8 pt-6 md:pb-12 md:pt-8">
+      <header className="relative isolate overflow-hidden bg-black pb-8 pt-6 md:pb-12 md:pt-8">
+        {/* Foto del local de fondo, con transparencia: se funde con el negro hacia la izquierda, donde va el texto. */}
+        <Image
+          src="/images/branches/arguello-fachada.webp"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="-z-10 object-cover object-[center_35%] opacity-60"
+        />
+        <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-r from-black via-black/75 to-transparent md:via-black/60" />
         <div className="mx-auto max-w-7xl px-4 2xl:max-w-[96rem]">
           <Breadcrumbs
             dark
@@ -163,7 +174,7 @@ export default async function SucursalesPage() {
             <h1 className="text-3xl font-black leading-tight text-white md:text-5xl">
               Sucursales de Neumáticos Trivium
             </h1>
-            <p className="mt-2 text-lg font-bold text-orange-400 md:text-xl">
+            <p className="mt-2 text-lg font-bold text-[#ff1e00] md:text-xl">
               Gomería y neumáticos baratos en Córdoba y Buenos Aires
             </p>
             <p data-speakable className="mt-4 text-base leading-relaxed text-slate-300 md:text-lg">
