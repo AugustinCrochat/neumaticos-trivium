@@ -12,6 +12,11 @@ export type SearchResult = {
   price: number;
   imageUrl: string | null;
   enStock: boolean;
+  /** Solo neumáticos: marca, modelo, medida ("175/65 R14") e índice ("82T"), para que el buscador muestre lo que la gente compara. */
+  marca?: string;
+  modelo?: string;
+  medida?: string;
+  indice?: string;
 };
 
 // El dropdown del header muestra una vista previa corta; la lista completa
@@ -21,7 +26,12 @@ const PREVIEW_LIMIT = 8;
 function toSearchResult(match: ScoredMatch): SearchResult {
   if (match.type === "tire") {
     const p = match.item;
-    return { type: "tire", id: p.id, slug: p.slug, title: p.model, subtitle: p.brand, price: p.price, imageUrl: p.imageUrl, enStock: !!p.enStock };
+    return {
+      type: "tire", id: p.id, slug: p.slug, title: p.model, subtitle: p.brand, price: p.price, imageUrl: p.imageUrl, enStock: !!p.enStock,
+      marca: p.brand, modelo: p.model,
+      medida: `${p.size.width}/${p.size.profile} R${p.size.rim}${p.isCarga ? "C" : ""}`,
+      indice: `${p.loadIndex ?? ""}${p.speedRating ?? ""}` || undefined,
+    };
   }
   const a = match.item;
   return { type: "accessory", id: a.id, slug: a.slug, title: a.nombre, subtitle: a.descripcion ?? "Tuerca antirrobo", price: a.price, imageUrl: a.imageUrl, enStock: a.enStock };

@@ -5,8 +5,28 @@ export type ScoredMatch =
   | { type: "tire"; item: TireProduct; score: number }
   | { type: "accessory"; item: Accessory; score: number };
 
+// Palabras que alguien escribe de más ("neumaticos para mi auto", "precio de ...")
+// y que no están en ningún producto: como la búsqueda exige que pegue cada
+// palabra, una sola de estas hacía que no apareciera nada.
+const RELLENO = new Set(["de", "del", "la", "el", "los", "las", "para", "con", "un", "una", "mi", "en", "y", "o", "por", "que", "quiero", "necesito", "busco", "precio", "precios", "comprar", "valor", "cuanto", "sale", "cuesta"]);
+
+/**
+ * Deja la consulta en la forma en que están guardados los productos: una
+ * medida escrita como "175/65r14", "175-65-14" o "175 65 R14" pasa a
+ * "175 65 r14" (así matchea el ancho, el perfil y el rodado, tolerando cómo
+ * la haya escrito cada uno), y se sacan las palabras de relleno.
+ */
+export function prepararConsulta(query: string): string {
+  let q = query.toLowerCase().replace(/\s+/g, " ").trim();
+  q = q.replace(/(\d{3})\s*[/\-x ]\s*(\d{2})\s*[/\-x ]?\s*(?:zr|r)?\s*[/\-x ]?\s*(\d{2})(?!\d)/g, "$1 $2 r$3");
+  q = q.replace(/(\d{3})\s*[/\-x ]?\s*(\d{2})\s*(?:zr|r)\s*(\d{2})(?!\d)/g, "$1 $2 r$3");
+  const sinRelleno = q.split(" ").filter((t) => !RELLENO.has(t));
+  return sinRelleno.length ? sinRelleno.join(" ") : q;
+}
+
 /** Todos los matches, ordenados por puntaje (sin recortar) — el llamador decide cuánto mostrar. */
-export function searchCatalog(query: string, productos: TireProduct[], accesorios: Accessory[]): ScoredMatch[] {
+export function searchCatalog(rawQuery: string, productos: TireProduct[], accesorios: Accessory[]): ScoredMatch[] {
+  const query = prepararConsulta(rawQuery);
   const scored: ScoredMatch[] = [];
 
   for (const p of productos) {
@@ -30,6 +50,7 @@ export function searchCatalog(query: string, productos: TireProduct[], accesorio
       `${width} ${profile}`,
       `r${rim}`,
       String(rim),
+      "rodado aro",
       ...digitCombos,
       p.loadIndex,
       p.speedRating,
