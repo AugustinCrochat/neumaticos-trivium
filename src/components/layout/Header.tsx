@@ -152,8 +152,8 @@ export function Header() {
 
       {/* Main nav */}
       <nav className="bg-black shadow-lg">
-        <div className="max-w-7xl 2xl:max-w-[96rem] mx-auto px-4">
-          <div className={`flex items-center gap-6 transition-[height] duration-200 md:gap-4 lg:gap-12 xl:gap-16 ${compact ? "h-[3.25rem] md:h-14" : "h-14 md:h-[4.5rem]"}`}>
+        <div className="max-w-7xl 2xl:max-w-[96rem] mx-auto px-3 min-[380px]:px-4">
+          <div className={`flex items-center gap-2 min-[380px]:gap-6 transition-[height] duration-200 md:gap-4 lg:gap-12 xl:gap-16 ${compact ? "h-[3.25rem] md:h-14" : "h-14 md:h-[4.5rem]"}`}>
             {/* Logo */}
             <Link href="/" className="flex-shrink-0">
               <Image
@@ -161,7 +161,7 @@ export function Header() {
                 alt="Neumáticos Trivium"
                 width={175}
                 height={60}
-                className={`w-auto transition-[height] duration-200 ${compact ? "h-9 md:h-9 lg:h-11" : "h-10 md:h-12 lg:h-16"}`}
+                className={`w-auto transition-[height] duration-200 ${compact ? "h-9 md:h-9 lg:h-11" : "h-10 md:h-12 lg:h-16"} max-[339px]:!h-8`}
                 priority
               />
             </Link>
@@ -208,13 +208,13 @@ export function Header() {
               })}
             </div>
 
-            <div className="flex shrink-0 items-center gap-2 lg:gap-3 ml-auto md:ml-0">
+            <div className="flex shrink-0 items-center gap-1 min-[380px]:gap-2 lg:gap-3 ml-auto md:ml-0">
               <button
                 onClick={openModal}
                 className="flex min-w-0 items-center gap-1 sm:gap-1.5 bg-white hover:bg-slate-100 text-navy-900 pl-2 sm:pl-2.5 pr-1.5 sm:pr-2 py-1 rounded-full text-xs font-bold transition-colors group shadow-sm"
                 title="Cambiar sucursal"
               >
-                <svg className="w-3.5 h-3.5 text-[#ff1e00] flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <svg className="w-3.5 h-3.5 text-[#ff1e00] flex-shrink-0 max-[339px]:hidden" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5Z" />
                 </svg>
                 {/* "Lomas" solo se confunde con Lomas de Zamora: en pantallas muy angostas se abrevia a "Lomas del Mir."; desde 380 px va el nombre completo. */}
