@@ -152,7 +152,7 @@ export function ProductPageClient({ product, tuercasMuestra }: { product: TirePr
             {!enStock && !selectedBranch.apertura && (
               <WhatsAppLink
                 href={waHref(selectedBranch.whatsapp, mensajeAvisameStock(`${product.brand} ${product.model}`, selectedBranch.shortName))}
-                className="mt-2 flex w-full items-center justify-center rounded-xl border-2 border-navy-900 bg-white py-2 text-sm font-black text-navy-900 transition-colors hover:bg-navy-900 hover:text-white"
+                className="mt-2 flex w-full items-center justify-center rounded-xl border-2 border-navy-900 bg-white px-4 py-2.5 text-center text-sm leading-tight font-black text-navy-900 transition-colors hover:bg-navy-900 hover:text-white"
               >
                 Avisame cuando entre
               </WhatsAppLink>

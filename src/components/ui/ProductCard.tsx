@@ -215,7 +215,7 @@ export function ProductCard({
               <p className="mt-1.5 text-[11px] font-bold text-slate-500">Sin stock en {branch.shortName}</p>
               <WhatsAppLink
                 href={waHref(branch.whatsapp, branch.apertura ? mensajeAvisameApertura(branch.shortName) : mensajeAvisameStock(`${product.brand} ${product.model}`, branch.shortName))}
-                className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-xl border-2 border-navy-900 bg-white py-2 text-sm font-black text-navy-900 transition-colors hover:bg-navy-900 hover:text-white"
+                className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-xl border-2 border-navy-900 bg-white px-3 py-2.5 text-center text-[13px] leading-tight min-[400px]:text-sm font-black text-navy-900 transition-colors hover:bg-navy-900 hover:text-white"
               >
                 Avisame cuando entre
               </WhatsAppLink>
