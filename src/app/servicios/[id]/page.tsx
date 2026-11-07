@@ -16,6 +16,7 @@ import { EquipoHofmann } from "@/components/blog/EquipoHofmann";
 import { UpsellNeumaticos } from "@/components/servicios/UpsellNeumaticos";
 import { SERVICIOS_FOTOS } from "@/lib/servicios-fotos";
 import { BRANCHES } from "@/lib/config";
+import { LOCALIDADES } from "@/lib/localidades";
 import { breadcrumbJsonLd, canonical, serviceJsonLd } from "@/lib/seo";
 
 type Props = { params: Promise<{ id: string }> };
@@ -128,7 +129,10 @@ export default async function ServicioPage({ params }: Props) {
                   <Link href={`/sucursales/${b.id}`} className="font-bold text-orange-700 underline underline-offset-4">
                     {b.name}
                   </Link>{" "}
-                  · {b.address}, {b.city}, {b.province}. {service.title} sin turno, por orden de llegada.
+                  · {b.address}, {b.city}, {b.province}. {service.title} sin turno, por orden de llegada.{" "}
+                  <Link href={`/servicios/${service.id}/${LOCALIDADES.find((l) => l.esCabecera && l.branchId === b.id)?.slug ?? ""}`} className="underline underline-offset-4">
+                    Ver {service.title.toLowerCase()} en {b.city}
+                  </Link>
                 </li>
               ))}
             </ul>

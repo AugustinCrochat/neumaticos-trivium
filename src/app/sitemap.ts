@@ -185,6 +185,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   };
   const servicios: Entry[] = [...SERVICES, COMBO_SERVICE, ...EXTRA_SERVICES].map((s) => url(`/servicios/${s.id}`, 0.7, "monthly", undefined, SERVICE_IMAGES[s.id]?.map(abs)));
 
+  // Servicio x ciudad: solo de sucursales ya abiertas (las otras van noindex).
+  const serviciosCiudad: Entry[] = [...SERVICES, COMBO_SERVICE, ...EXTRA_SERVICES].flatMap((s) =>
+    LOCALIDADES.filter((l) => l.esCabecera && !BRANCHES.find((b) => b.id === l.branchId)?.apertura).map((l) =>
+      url(`/servicios/${s.id}/${l.slug}`, 0.7, "monthly")
+    )
+  );
+
   // Imágenes propias que queremos que se descubran en la búsqueda de imágenes.
   const POST_IMAGES: Record<string, string[]> = {
     "como-leer-medida-neumatico": [`${SITE_URL}/como-leer-medida-neumatico-205-55-r16.webp`],
@@ -223,6 +230,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...sucursales,
     ...marcas,
     ...servicios,
+    ...serviciosCiudad,
     ...posts,
     ...fichasProducto,
     ...fichasAccesorio,
