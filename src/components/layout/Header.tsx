@@ -294,9 +294,7 @@ export function Header() {
                         <NavIcon href={link.href} />
                       </span>
                       <span className="flex-1">{link.label}</span>
-                      {active ? (
-                        <span aria-hidden="true" className="h-2.5 w-2.5 rounded-full bg-[#ff1e00] shadow-[0_0_0_3px_rgba(255,30,0,0.25)]" />
-                      ) : (
+                      {active ? null : (
                         <svg aria-hidden="true" className="h-4 w-4 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                           <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                         </svg>

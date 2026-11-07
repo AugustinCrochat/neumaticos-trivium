@@ -17,8 +17,8 @@ export function Footer() {
   return (
     <footer id="contacto" className="bg-black text-zinc-300">
       {/* Main content */}
-      <div className="max-w-7xl 2xl:max-w-[96rem] mx-auto px-4 py-14">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+      <div className="max-w-7xl 2xl:max-w-[96rem] mx-auto px-4 py-8 md:py-14">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-10">
           {/* Brand */}
           <div className="lg:col-span-1">
             <div className="mb-4">
@@ -169,7 +169,7 @@ export function Footer() {
             Van en el footer para que cada landing quede a un clic de cualquier
             página del sitio: sin esto, /neumaticos/175-65-r14 sólo se alcanza
             desde el hub y el crawler la visita mucho menos seguido. */}
-        <div className="mt-12 grid gap-8 border-t border-zinc-900 pt-10 md:grid-cols-2">
+        <div className="mt-8 md:mt-12 grid gap-6 md:gap-8 border-t border-zinc-900 pt-6 md:pt-10 md:grid-cols-2">
           <div>
             <h4 className="mb-4 text-sm font-bold uppercase tracking-wide text-white">
               Medidas más buscadas

@@ -3,8 +3,9 @@
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import { X } from "lucide-react";
-import { Car, ChevronDown, LayoutGrid } from "lucide-react";
-import { PlateIcon } from "@/components/ui/PlateIcon";
+import { irA } from "@/lib/navigate";
+import { Car, ChevronDown, LayoutGrid, Search } from "lucide-react";
+import { PlateIcon, ejemploPatente } from "@/components/ui/PlateIcon";
 import { HalfTireIcon } from "@/components/ui/HalfTireIcon";
 import { TireSizeSearch } from "@/components/ui/TireSizeSearch";
 import { VehicleSizeSearch } from "@/components/ui/VehicleSizeSearch";
@@ -78,6 +79,15 @@ export function SizeOrVehicleSearch({
   // Buscador apilado (fuera del catálogo): patente a la vista y las otras dos
   // opciones como barras que se abren de a una.
   const escritorio = useEscritorio();
+  // Chapa de ejemplo que va cambiando; el texto de al lado nombra el auto de esa chapa.
+  const [texto, setTexto] = useState("");
+  const [ej, setEj] = useState(0);
+  useEffect(() => {
+    if (enModal) return;
+    const t = setInterval(() => setEj((n) => n + 1), 3000);
+    return () => clearInterval(t);
+  }, [enModal]);
+  const ejemplo = ejemploPatente(ej);
   // La patente no se encontró y la búsqueda pasó a elegir el auto: cambia el icono y el título.
   const [patenteManual, setPatenteManual] = useState(false);
   const [abierto, setAbierto] = useState<"patente" | "medida" | "vehiculo" | null>(null);
@@ -117,8 +127,8 @@ export function SizeOrVehicleSearch({
     };
     const titulos = { patente: patenteManual ? "Buscar por mi auto" : "Buscar por patente", medida: "Buscar por medida", vehiculo: "Buscar por mi auto" } as const;
     // Misma caja para todos los íconos: los textos de los mosaicos quedan alineados entre sí.
-    const cajaIcono = compact ? "flex h-14 w-28 items-center justify-center" : "flex h-16 w-40 items-center justify-center";
-    const barra = (id: "patente" | "medida" | "vehiculo", Icono: typeof Car | typeof HalfTireIcon | typeof PlateIcon, titulo: string, ejemplo: string) => (
+    const cajaIcono = compact ? "flex h-12 w-24 items-center justify-center" : "flex h-14 w-32 items-center justify-center";
+    const barra = (id: "patente" | "medida" | "vehiculo", Icono: typeof Car | typeof HalfTireIcon | typeof PlateIcon, titulo: string, textoEj: string) => (
       <button
         type="button"
         onClick={() => setAbierto((a) => (a === id ? null : id))}
@@ -128,12 +138,12 @@ export function SizeOrVehicleSearch({
         className={`flex w-full items-center gap-3 rounded-xl border px-4 shadow-sm py-3 text-left transition-colors ${marcada(id)}`}
       >
         {/* Misma caja para todos los íconos: los textos de las barras arrancan en el mismo punto. */}
-        <span className="flex h-14 w-28 shrink-0 items-center justify-center">
-          <Icono className={`text-navy-900 ${Icono === PlateIcon ? "h-11 w-28" : Icono === HalfTireIcon ? "h-14 w-28" : "h-7 w-7"}`} aria-hidden="true" {...(Icono === HalfTireIcon ? { medidas: true } : {})} {...(Icono === PlateIcon && activa === "patente" ? { formato: estiloChapa } : {})} />
+        <span className="flex h-12 w-24 shrink-0 items-center justify-center">
+          <Icono className={`text-navy-900 ${Icono === PlateIcon ? "h-9 w-24" : Icono === HalfTireIcon ? "h-12 w-24" : "h-7 w-7"}`} aria-hidden="true" {...(Icono === HalfTireIcon ? { medidas: true } : {})} {...(Icono === PlateIcon ? (activa === "patente" ? { formato: estiloChapa } : { ejemplo }) : {})} />
         </span>
-        <span className="min-w-0 flex-1">
+        <span className="w-0 min-w-0 flex-1">
           <span className="block text-sm font-black text-navy-900">{titulo}</span>
-          <span className="block truncate text-xs font-semibold text-slate-500">{ejemplo}</span>
+          <span className="block h-4 truncate whitespace-nowrap text-xs font-semibold text-slate-500">{textoEj}</span>
         </span>
         <ChevronDown className={`h-5 w-5 shrink-0 text-orange-500 transition-transform ${abierto === id ? "rotate-180" : ""}`} aria-hidden="true" />
       </button>
@@ -143,6 +153,32 @@ export function SizeOrVehicleSearch({
         <h2 className={`mb-3 text-center font-display font-extrabold uppercase tracking-tight text-navy-900 ${compact ? "text-xl" : "text-2xl"}`}>
           Encontrá tus neumáticos
         </h2>
+        {/* Búsqueda libre: marca, modelo o medida escritos como cada uno quiera. */}
+        <form
+          role="search"
+          onSubmit={(e) => {
+            e.preventDefault();
+            const q = texto.trim();
+            if (q.length < 2) return;
+            onNavigate?.();
+            irA(`/busqueda?q=${encodeURIComponent(q)}`);
+          }}
+          className="mb-3 flex items-center gap-2 rounded-xl border border-slate-300 bg-white py-1 pl-3 pr-1 shadow-sm focus-within:border-orange-500 focus-within:ring-2 focus-within:ring-orange-500/30"
+        >
+          <Search className="h-5 w-5 shrink-0 text-slate-400" aria-hidden="true" />
+          <input
+            type="search"
+            value={texto}
+            onChange={(e) => setTexto(e.target.value)}
+            placeholder="Marca, modelo o medida"
+            aria-label="Buscar neumáticos"
+            enterKeyHint="search"
+            className="w-0 min-w-0 flex-1 bg-transparent py-2 text-base text-navy-900 placeholder:text-slate-400 focus:outline-none"
+          />
+          <button type="submit" className="shrink-0 rounded-lg bg-[#ff1e00] px-4 py-2 text-sm font-black text-white transition-colors hover:bg-[#d91a00]">
+            Buscar
+          </button>
+        </form>
         {escritorio ? (
           <div className={`grid gap-3 ${compact && !lado ? "grid-cols-1" : "grid-cols-2"}`}>
             <button
@@ -150,7 +186,7 @@ export function SizeOrVehicleSearch({
               onClick={() => setAbierto("medida")}
               className={`flex items-center rounded-xl border px-4 shadow-sm transition-colors ${marcada("medida")} ${compact ? "gap-3 py-3 text-left" : "flex-col gap-2 py-5 text-center"}`}
             >
-              <span className={cajaIcono}><HalfTireIcon medidas className={compact ? "h-14 w-28 text-navy-900" : "h-16 w-32 text-navy-900"} /></span>
+              <span className={cajaIcono}><HalfTireIcon medidas className={compact ? "h-12 w-24 text-navy-900" : "h-14 w-28 text-navy-900"} /></span>
               <span className="flex flex-col"><span className="text-base font-black text-navy-900">Por medida</span>
               <span className="text-xs font-semibold text-slate-500">Ej: 205/55 R16</span></span>
             </button>
@@ -160,9 +196,9 @@ export function SizeOrVehicleSearch({
                 onClick={() => setAbierto("patente")}
                 className={`flex items-center rounded-xl border px-4 shadow-sm transition-colors ${marcada("patente")} ${compact ? "gap-3 py-3 text-left" : "flex-col gap-2 py-5 text-center"}`}
               >
-                <span className={cajaIcono}><PlateIcon className={compact ? "h-11 w-28" : "h-16 w-40"} {...(activa === "patente" ? { formato: estiloChapa } : {})} /></span>
+                <span className={cajaIcono}><PlateIcon className={compact ? "h-9 w-24" : "h-11 w-32"} {...(activa === "patente" ? { formato: estiloChapa } : { ejemplo })} /></span>
                 <span className="flex flex-col"><span className="text-base font-black text-navy-900">Por patente</span>
-                <span className="text-xs font-semibold text-slate-500">Ej: AB 123 CD</span></span>
+                <span className="text-xs font-semibold text-slate-500">{ejemplo.auto}</span></span>
               </button>
             )}
             {!PATENTE_HABILITADA && (
@@ -183,7 +219,7 @@ export function SizeOrVehicleSearch({
             <div className="space-y-2">
               {barra("medida", HalfTireIcon, "Por medida", "Ej: 205/55 R16")}
               {/* Con la patente habilitada, si no se encuentra el auto la misma búsqueda pasa a elegir marca y modelo. */}
-              {PATENTE_HABILITADA && barra("patente", PlateIcon, "Por patente", "Ej: AB 123 CD")}
+              {PATENTE_HABILITADA && barra("patente", PlateIcon, "Por patente", ejemplo.auto)}
               {!PATENTE_HABILITADA && barra("vehiculo", Car, "Por mi auto", "Marca, modelo y año")}
             </div>
           </>

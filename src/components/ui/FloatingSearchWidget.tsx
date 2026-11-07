@@ -78,7 +78,7 @@ export function FloatingSearchWidget() {
         onFocus={() => setHover(true)}
         onBlur={() => setHover(false)}
         aria-label="Abrir buscador de neumáticos"
-        className="fixed bottom-20 right-4 z-40 sm:bottom-6 sm:right-6 group flex h-14 items-center justify-center border-2 border-white bg-orange-500 hover:bg-orange-600 text-white font-black px-3 rounded-full shadow-xl shadow-navy-900/30 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
+        className="fixed bottom-16 right-4 z-40 max-sm:[html[data-barra=oculta]_&]:bottom-4 sm:bottom-6 sm:right-6 group flex h-14 items-center justify-center border-2 border-white bg-orange-500 hover:bg-orange-600 text-white font-black px-3 rounded-full shadow-xl shadow-navy-900/30 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
       >
         <div className="relative flex h-7 w-7 items-center justify-center">
           <svg
@@ -137,9 +137,6 @@ export function FloatingSearchWidget() {
                   </svg>
                   Buscador de Neumáticos
                 </h2>
-                <p className="text-slate-300 text-sm mt-1 leading-snug">
-                  Buscá por las medidas de tu cubierta o por el modelo de tu auto
-                </p>
               </div>
               <button
                 type="button"

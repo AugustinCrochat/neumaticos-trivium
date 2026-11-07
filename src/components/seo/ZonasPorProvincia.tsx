@@ -2,12 +2,12 @@ import Link from "@/components/ui/Link";
 import { localidadesAgrupadas } from "@/lib/localidades";
 
 const GRUPOS = [
-  { titulo: "Córdoba", provincias: ["Córdoba"] },
   { titulo: "Buenos Aires", provincias: ["Buenos Aires", "Ciudad Autónoma de Buenos Aires"] },
+  { titulo: "Córdoba", provincias: ["Córdoba"] },
 ];
 
 /**
- * Zonas de la home: Córdoba y Buenos Aires como desplegables de primer nivel;
+ * Zonas de la home: Buenos Aires y Córdoba como desplegables de primer nivel;
  * adentro, cada ciudad con sus barrios en un segundo desplegable. Todo es
  * <details> nativo, así que los enlaces están en el HTML aunque estén cerrados.
  */

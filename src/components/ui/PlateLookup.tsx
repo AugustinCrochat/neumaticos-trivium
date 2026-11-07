@@ -60,7 +60,7 @@ function Chapa({
   return (
     // El tope de ancho es el de la Mercosur; la anterior mide el 73,5 % de ese ancho (si el tope
     // se pusiera en la propia chapa, las dos terminarían igual de anchas).
-    <div className={`mx-auto w-full ${pequena ? "max-w-full" : "max-w-sm"}`}>
+    <div className={`mx-auto w-full ${pequena ? "max-w-full" : "max-w-[16rem]"}`}>
     <div
       className="relative mx-auto w-full [container-type:inline-size]"
       style={{
@@ -112,13 +112,13 @@ function SelectorFormato({ estilo, onChange }: { estilo: EstiloPatente; onChange
         }`}
       >
         {/* Misma proporción real que cada chapa (400×130 y 294×129 mm), con sus letras de ejemplo. */}
-        <PlateIcon formato={valor} className="h-11 w-36" />
+        <PlateIcon formato={valor} className="h-8 w-24" />
         <span className="text-xs font-black leading-tight text-navy-900">{texto}</span>
       </button>
     );
   };
   return (
-    <div role="group" aria-label="Formato de la patente" className="mx-auto mt-3 flex w-full max-w-sm gap-4">
+    <div role="group" aria-label="Formato de la patente" className="mx-auto mt-3 flex w-full max-w-xs gap-2">
       {op("anterior", "Anterior a 2016")}
       {op("mercosur", "Nueva (Mercosur)")}
     </div>

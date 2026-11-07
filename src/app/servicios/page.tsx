@@ -57,7 +57,7 @@ export default function ServiciosPage() {
         <JsonLd key={service.id} data={serviceJsonLd(service)} />
       ))}
       <ServicesSection comoPagina />
-      <section className="mx-auto max-w-4xl px-4 pb-10">
+      <section className="mx-auto max-w-4xl px-4 pb-4">
         <h2 className="mb-3 text-xl font-black text-tire-950">Más servicios de gomería</h2>
         <ul className="grid gap-2 sm:grid-cols-2">
           {EXTRA_SERVICES.map((s) => (
@@ -79,8 +79,8 @@ export default function ServiciosPage() {
           </li>
         </ul>
       </section>
-      <div className="mx-auto max-w-4xl px-4 pb-16">
-        <HorarioBloque className="mt-10" />
+      <div className="mx-auto max-w-4xl px-4 pb-10">
+        <HorarioBloque className="mt-6" />
 
         <FaqSection faqs={FAQS} />
       </div>

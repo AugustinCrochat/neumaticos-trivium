@@ -9,15 +9,27 @@ import { useEffect, useState } from "react";
  * El tamaño que se pasa en `className` es la caja: cada chapa ocupa todo el
  * ancho y queda centrada en alto.
  */
-export function PlateIcon({ className, formato }: { className?: string; formato?: "mercosur" | "anterior" }) {
+export const EJEMPLOS_PATENTE = [
+  { placa: "MKP 417", formato: "anterior", auto: "Renault Logan 2013" },
+  { placa: "AF 218 KT", formato: "mercosur", auto: "Toyota Hilux 2021" },
+  { placa: "JXR 905", formato: "anterior", auto: "Ford Fiesta 2010" },
+  { placa: "AD 124 MX", formato: "mercosur", auto: "Fiat Cronos 2020" },
+  { placa: "OPT 336", formato: "anterior", auto: "VW Gol 2015" },
+  { placa: "AF 305 BN", formato: "mercosur", auto: "Chevrolet Onix 2022" },
+] as const;
+
+/** Chapa de ejemplo en `indice` (con vuelta). Son patentes inventadas, no de autos reales. */
+export const ejemploPatente = (indice: number) => EJEMPLOS_PATENTE[indice % EJEMPLOS_PATENTE.length];
+
+export function PlateIcon({ className, formato, ejemplo }: { className?: string; formato?: "mercosur" | "anterior"; /** Chapa de ejemplo que se muestra (la elige quien la use, para sincronizar el texto de al lado). */ ejemplo?: { placa: string; formato: "mercosur" | "anterior" } }) {
   const [alterna, setMercosur] = useState(true);
-  // Con `formato` fijo no alterna (selector de formato); sin él, cambia sola.
-  const mercosur = formato ? formato === "mercosur" : alterna;
+  // Con `formato` o `ejemplo` fijos no alterna sola; sin ellos, cambia sola.
+  const mercosur = ejemplo ? ejemplo.formato === "mercosur" : formato ? formato === "mercosur" : alterna;
   useEffect(() => {
-    if (formato) return;
+    if (formato || ejemplo) return;
     const t = setInterval(() => setMercosur((m) => !m), 3000);
     return () => clearInterval(t);
-  }, [formato]);
+  }, [formato, ejemplo]);
 
   return (
     <span aria-hidden="true" className={`inline-flex items-center justify-center ${className ?? ""}`}>
@@ -39,7 +51,7 @@ export function PlateIcon({ className, formato }: { className?: string; formato?
               : "inset-x-[5%] bottom-[15.5%] top-[22.3%] flex items-center justify-center text-[19.5cqw] font-semibold tracking-[0.06em] text-white"
           }`}
         >
-          {mercosur ? "AB 123 CD" : "ABC 123"}
+          {ejemplo ? ejemplo.placa : mercosur ? "AB 123 CD" : "ABC 123"}
         </span>
       </span>
     </span>
