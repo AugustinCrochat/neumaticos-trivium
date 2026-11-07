@@ -200,8 +200,8 @@ export default async function ServicioPage({ params }: Props) {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/neumaticos-en/cordoba" className="font-bold text-orange-700 underline underline-offset-4">
-                    Neumáticos en Córdoba
+                  <Link href="/neumaticos-en" className="font-bold text-orange-700 underline underline-offset-4">
+                    Neumáticos y gomería cerca tuyo
                   </Link>
                 </li>
               </ul>

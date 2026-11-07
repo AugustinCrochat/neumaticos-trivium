@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   // "alineación y balanceo"): el título usa la forma local.
   title: "Gomería: alineado, balanceado y colocación sin turno",
   description:
-    resumen("Gomería y taller propio en Córdoba (Argüello): alineado computarizado 3D, balanceado dinámico y arme y desarme de neumáticos con precios publicados. Colocación sin cargo comprando las cubiertas en el local. Sin turno."),
+    resumen("Gomería y taller propio: alineado computarizado 3D, balanceado dinámico y arme y desarme de neumáticos con precios publicados. Colocación sin cargo comprando las cubiertas en el local. Sin turno."),
   alternates: canonical("/servicios"),
 };
 

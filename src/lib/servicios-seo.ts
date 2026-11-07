@@ -30,7 +30,7 @@ export const ROTACION_SERVICE: Service = {
   id: "rotacion-de-ruedas",
   title: "Rotación de ruedas",
   description:
-    "Rotación de ruedas en nuestra gomería de Córdoba: cruzamos o pasamos las cubiertas de eje para que el desgaste sea parejo y el juego completo dure más.",
+    "Rotación de ruedas en nuestra gomería: cruzamos o pasamos las cubiertas de eje para que el desgaste sea parejo y el juego completo dure más.",
   icon: "rubber",
   features: [
     "Rotación según tracción (delantera, trasera o 4x4)",
@@ -45,7 +45,7 @@ export const PINCHADURAS_SERVICE: Service = {
   id: "reparacion-de-pinchaduras",
   title: "Reparación de pinchaduras",
   description:
-    "Reparación de pinchaduras en nuestra gomería de Córdoba: revisamos la cubierta por dentro y te decimos si se repara con parche o si conviene cambiarla.",
+    "Reparación de pinchaduras en nuestra gomería: revisamos la cubierta por dentro y te decimos si se repara con parche o si conviene cambiarla.",
   icon: "rubber",
   features: [
     "Cubierta desmontada y revisada por dentro",
@@ -60,7 +60,7 @@ export const TUERCAS_SERVICE: Service = {
   id: "tuercas-de-seguridad",
   title: "Tuercas de seguridad y espárragos",
   description:
-    "Colocación y extracción de tuercas antirrobo, y reparación de espárragos y roscas dañadas, en nuestra gomería de Córdoba.",
+    "Colocación y extracción de tuercas antirrobo, y reparación de espárragos y roscas dañadas, en nuestra gomería.",
   icon: "wrench",
   features: [
     "Colocación de tuercas y bulones antirrobo",
@@ -139,16 +139,16 @@ export const EXTRA_SERVICES: Service[] = [ROTACION_SERVICE, PINCHADURAS_SERVICE,
 
 export const SERVICIOS_SEO: Record<string, ServicioSeo> = {
   [COMBO_ID]: {
-    title: "Alineado y balanceado en Córdoba: precio y sin turno",
-    titleConPrecio: "Alineado y balanceado en Córdoba: {comboAuto} el auto, sin turno",
+    title: "Alineado y balanceado: precio y sin turno",
+    titleConPrecio: "Alineado y balanceado: {comboAuto} el auto, sin turno",
     metaDescription:
-      "Alineado 3D y balanceado de las cuatro ruedas con rotación incluida en Córdoba (Argüello): todo en una visita y a menor precio que por separado. Sin turno, por orden de llegada.",
+      "Alineado 3D y balanceado de las cuatro ruedas con rotación incluida: todo en una visita y a menor precio que por separado. Sin turno, por orden de llegada.",
     metaDescriptionConPrecio:
-      "Alineado 3D + balanceado de las 4 ruedas con rotación en Argüello, Córdoba: {comboAuto} el auto y {comboCamioneta} la camioneta. Sin turno, por orden de llegada, en unos 40 minutos.",
-    h1: "Alineado y balanceado en Córdoba",
+      "Alineado 3D + balanceado de las 4 ruedas con rotación: {comboAuto} el auto y {comboCamioneta} la camioneta. Sin turno, por orden de llegada, en unos 40 minutos.",
+    h1: "Alineado y balanceado",
     intro: [
       "El combo junta lo que casi siempre hace falta al mismo tiempo: alinear el auto y balancear las cuatro ruedas, con la rotación incluida. Es lo que más conviene hacer cuando se cambian las cubiertas o después de un golpe fuerte, y sale menos que contratar cada servicio por separado.",
-      "Lo hacemos en nuestra gomería de Argüello, Córdoba, con alineadora 3D y balanceadora computarizada. Atendemos por orden de llegada, sin turno.",
+      "Lo hacemos en nuestra gomería, con alineadora 3D y balanceadora computarizada. Atendemos por orden de llegada, sin turno.",
       `Entre ${DATOS_TALLER.periodo} alineamos ${DATOS_TALLER.alineados} vehículos en el taller de Argüello, y la mitad de los trabajos con alineado se terminó en menos de ${DATOS_TALLER.minutosMediana} minutos desde que el auto entró al elevador.`,
     ],
     secciones: [
@@ -178,7 +178,7 @@ export const SERVICIOS_SEO: Record<string, ServicioSeo> = {
           "Alineado computarizado 3D, balanceado de las cuatro ruedas y la rotación, en la misma visita. El precio publicado en esta página es el del combo completo, según sea auto o camioneta.",
       },
       {
-        question: "¿Cuánto sale el alineado y balanceado en Córdoba?",
+        question: "¿Cuánto sale el alineado y balanceado?",
         answer:
           "En nuestro taller de Argüello el combo de alineado 3D y balanceado de las cuatro ruedas, con rotación, cuesta {comboAuto} para auto y {comboCamioneta} para camioneta. Es el precio de lista del día, sin turno ni recargos.",
       },
@@ -204,16 +204,16 @@ export const SERVICIOS_SEO: Record<string, ServicioSeo> = {
     ],
   },
   alineacion: {
-    title: "Alineado 3D en Córdoba: precio y sin turno",
-    titleConPrecio: "Alineado 3D en Córdoba: {alineadoAuto} el auto, sin turno",
+    title: "Alineado 3D: precio y sin turno",
+    titleConPrecio: "Alineado 3D: {alineadoAuto} el auto, sin turno",
     metaDescription:
-      "Alineado computarizado 3D en Córdoba (Argüello): corregimos camber, caster y convergencia para que el auto no tire, el volante quede derecho y las cubiertas duren más. Sin turno, por orden de llegada.",
+      "Alineado computarizado 3D: corregimos camber, caster y convergencia para que el auto no tire, el volante quede derecho y las cubiertas duren más. Sin turno, por orden de llegada.",
     metaDescriptionConPrecio:
-      "Alineado computarizado 3D en Argüello, Córdoba: {alineadoAuto} el auto y {alineadoCamioneta} la camioneta. Para que no tire y las cubiertas no se coman un costado. Sin turno, por orden de llegada.",
-    h1: "Alineado computarizado 3D en Córdoba",
+      "Alineado computarizado 3D: {alineadoAuto} el auto y {alineadoCamioneta} la camioneta. Para que no tire y las cubiertas no se coman un costado. Sin turno, por orden de llegada.",
+    h1: "Alineado computarizado 3D",
     intro: [
       "La alineación deja las cuatro ruedas en el ángulo que indica el fabricante. Con los ángulos bien, el auto va derecho sin que corrijas el volante, frena más estable y los neumáticos se gastan parejo en lugar de comerse un costado.",
-      "Hacemos alineado computarizado 3D (la alineación, como se la llama en otras provincias) en nuestra gomería de Argüello, Córdoba. Medimos los ángulos, los corregimos y te dejamos el resultado antes y después. Atendemos por orden de llegada, sin turno.",
+      "Hacemos alineado computarizado 3D (la alineación, como se la llama en otras provincias) en nuestra gomería. Medimos los ángulos, los corregimos y te dejamos el resultado antes y después. Atendemos por orden de llegada, sin turno.",
       `Entre ${DATOS_TALLER.periodo} alineamos ${DATOS_TALLER.alineados} vehículos en Argüello: es el servicio que más hacemos después de la colocación de cubiertas.`,
     ],
     secciones: [
@@ -247,12 +247,12 @@ export const SERVICIOS_SEO: Record<string, ServicioSeo> = {
           "No. La alineación corrige los ángulos de las ruedas respecto del auto; el balanceo compensa el peso de cada conjunto rueda-neumático para que no vibre. Se hacen juntos al cambiar neumáticos, pero resuelven problemas distintos: la alineación, que el auto tire o se gaste mal la cubierta; el balanceo, la vibración en el volante.",
       },
       {
-        question: "¿Cuánto sale alinear el auto en Córdoba?",
+        question: "¿Cuánto sale alinear el auto?",
         answer:
           "En nuestro taller de Argüello el alineado 3D cuesta {alineadoAuto} para auto y {alineadoCamioneta} para camioneta. Si además balanceás las cuatro ruedas, el combo sale {comboAuto} en auto.",
       },
       {
-        question: "¿Necesito turno para alinear en Córdoba?",
+        question: "¿Necesito turno para alinear?",
         answer:
           "No. Atendemos por orden de llegada en el local de Argüello. Podés escribirnos por WhatsApp antes para confirmar el precio según tu vehículo.",
       },
@@ -268,16 +268,16 @@ export const SERVICIOS_SEO: Record<string, ServicioSeo> = {
     ],
   },
   balanceo: {
-    title: "Balanceado y rotación de ruedas en Córdoba: precio por rueda",
-    titleConPrecio: "Balanceado en Córdoba: {balanceoAuto} por rueda, sin turno",
+    title: "Balanceado y rotación de ruedas: precio por rueda",
+    titleConPrecio: "Balanceado: {balanceoAuto} por rueda, sin turno",
     metaDescription:
-      "Balanceado dinámico computarizado y rotación de ruedas en Córdoba (Argüello): eliminamos la vibración del volante y repartimos el desgaste de las cubiertas. Por orden de llegada, sin turno.",
+      "Balanceado dinámico computarizado y rotación de ruedas: eliminamos la vibración del volante y repartimos el desgaste de las cubiertas. Por orden de llegada, sin turno.",
     metaDescriptionConPrecio:
-      "Balanceado dinámico y rotación de ruedas en Argüello, Córdoba: {balanceoAuto} por rueda en auto y {balanceoCamioneta} en camioneta. Chau vibración en el volante. Sin turno, por orden de llegada.",
-    h1: "Balanceado y rotación de ruedas en Córdoba",
+      "Balanceado dinámico y rotación de ruedas: {balanceoAuto} por rueda en auto y {balanceoCamioneta} en camioneta. Chau vibración en el volante. Sin turno, por orden de llegada.",
+    h1: "Balanceado y rotación de ruedas",
     intro: [
       "Si el volante vibra a cierta velocidad, lo más probable es que alguna rueda esté desbalanceada. El balanceado dinámico compensa con contrapesos la diferencia de peso de cada conjunto llanta-neumático y elimina la vibración.",
-      "En nuestra gomería de Argüello, Córdoba, también hacemos la rotación de ruedas: pasamos las cubiertas de lugar según la tracción del auto para que el desgaste sea parejo y el juego completo dure más.",
+      "En nuestra gomería también hacemos la rotación de ruedas: pasamos las cubiertas de lugar según la tracción del auto para que el desgaste sea parejo y el juego completo dure más.",
     ],
     secciones: [
       {
@@ -321,13 +321,13 @@ export const SERVICIOS_SEO: Record<string, ServicioSeo> = {
     ],
   },
   montaje: {
-    title: "Colocación y montaje de neumáticos en Córdoba",
+    title: "Colocación y montaje de neumáticos",
     metaDescription:
-      "Colocación de neumáticos en Córdoba (Argüello): arme y desarme con desmontadora automática, sin cargo si comprás las cubiertas con nosotros. Gomería por orden de llegada.",
-    h1: "Colocación y montaje de neumáticos en Córdoba",
+      "Colocación de neumáticos: arme y desarme con desmontadora automática, sin cargo si comprás las cubiertas con nosotros. Gomería por orden de llegada.",
+    h1: "Colocación y montaje de neumáticos",
     intro: [
       "Montamos tus cubiertas con desmontadora automática, que cuida las llantas y los flancos del neumático. Si comprás las cubiertas en Neumáticos Trivium, la colocación y el cambio de válvulas no tienen cargo.",
-      "Si las trajiste de otro lugar, también te las colocamos: el arme y desarme se cobra por rueda. Atendemos en Argüello, Córdoba, por orden de llegada.",
+      "Si las trajiste de otro lugar, también te las colocamos: el arme y desarme se cobra por rueda. Atendemos por orden de llegada.",
     ],
     secciones: [
       {
@@ -361,13 +361,13 @@ export const SERVICIOS_SEO: Record<string, ServicioSeo> = {
     ],
   },
   "rotacion-de-ruedas": {
-    title: "Rotación de ruedas en Córdoba",
+    title: "Rotación de ruedas",
     metaDescription:
-      "Rotación de ruedas en Córdoba (Argüello): pasamos las cubiertas de lugar según tu tracción para repartir el desgaste y alargar la vida del juego. Por orden de llegada, sin turno.",
-    h1: "Rotación de ruedas en Córdoba",
+      "Rotación de ruedas: pasamos las cubiertas de lugar según tu tracción para repartir el desgaste y alargar la vida del juego. Por orden de llegada, sin turno.",
+    h1: "Rotación de ruedas",
     intro: [
       "Las ruedas de un mismo auto no se gastan igual: en un tracción delantera, las de adelante traccionan, dirigen y frenan, y se desgastan bastante más rápido que las de atrás. Rotar las ruedas reparte ese desgaste y alarga la vida del juego completo.",
-      "En nuestra gomería de Argüello, Córdoba, hacemos la rotación según el esquema que le corresponde a tu vehículo (tracción delantera, trasera o 4x4) y, ya que están desmontadas, revisamos presión y estado de las cubiertas.",
+      "En nuestra gomería hacemos la rotación según el esquema que le corresponde a tu vehículo (tracción delantera, trasera o 4x4) y, ya que están desmontadas, revisamos presión y estado de las cubiertas.",
     ],
     secciones: [
       {
@@ -409,13 +409,13 @@ export const SERVICIOS_SEO: Record<string, ServicioSeo> = {
     ],
   },
   "reparacion-de-pinchaduras": {
-    title: "Reparación de pinchaduras en Córdoba",
+    title: "Reparación de pinchaduras",
     metaDescription:
-      "Reparación de pinchaduras en Córdoba (Argüello): desmontamos la cubierta, la revisamos por dentro y reparamos con parche si se puede. Si no, te decimos por qué conviene cambiarla.",
-    h1: "Reparación de pinchaduras en Córdoba",
+      "Reparación de pinchaduras: desmontamos la cubierta, la revisamos por dentro y reparamos con parche si se puede. Si no, te decimos por qué conviene cambiarla.",
+    h1: "Reparación de pinchaduras",
     intro: [
       "Una pinchadura bien reparada deja la cubierta lista para seguir rodando; una mal reparada pierde aire de nuevo o falla en ruta. La diferencia está en revisar el neumático por dentro, no en tapar el agujero que se ve por fuera.",
-      "En nuestra gomería de Argüello, Córdoba, desmontamos la cubierta, la inspeccionamos y reparamos con parche común o minicombi las pinchaduras que son reparables. Cuando no lo son, te lo decimos y te mostramos el motivo.",
+      "En nuestra gomería desmontamos la cubierta, la inspeccionamos y reparamos con parche común o minicombi las pinchaduras que son reparables. Cuando no lo son, te lo decimos y te mostramos el motivo.",
     ],
     secciones: [
       {
@@ -456,13 +456,13 @@ export const SERVICIOS_SEO: Record<string, ServicioSeo> = {
     ],
   },
   "tuercas-de-seguridad": {
-    title: "Tuercas de seguridad y espárragos en Córdoba",
+    title: "Tuercas de seguridad y espárragos",
     metaDescription:
-      "Tuercas antirrobo en Córdoba: colocación, extracción sin llave y reparación de espárragos de maza rotos o roscas dañadas, en nuestra gomería de Argüello.",
-    h1: "Tuercas antirrobo, extracción y reparación de espárragos en Córdoba",
+      "Tuercas antirrobo: colocación, extracción sin llave y reparación de espárragos de maza rotos o roscas dañadas, en nuestra gomería.",
+    h1: "Tuercas antirrobo, extracción y reparación de espárragos",
     intro: [
       "Las tuercas de seguridad protegen las llantas de aleación, pero si la llave se pierde o se daña, la rueda queda trabada. También pasa que un espárrago se corta o una rosca se pasa por apretar de más.",
-      "En nuestra gomería de Argüello, Córdoba, colocamos tuercas y bulones antirrobo, extraemos las que quedaron sin llave y reparamos espárragos y roscas dañadas, cuidando de no arruinar la llanta ni la maza.",
+      "En nuestra gomería, colocamos tuercas y bulones antirrobo, extraemos las que quedaron sin llave y reparamos espárragos y roscas dañadas, cuidando de no arruinar la llanta ni la maza.",
     ],
     secciones: [
       {
