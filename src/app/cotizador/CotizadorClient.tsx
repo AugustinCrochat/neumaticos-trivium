@@ -392,14 +392,14 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
               </div>
             ))}
             {(!(tuercas.length > 0) || (canAddCombo && !includeCombo)) && (
-            <div className={`grid divide-x divide-slate-100 bg-white ${canAddCombo && !includeCombo && tuercas.length === 0 ? "grid-cols-2" : "grid-cols-1"}`}>
+            <div className={`grid divide-x divide-slate-100 bg-white ${canAddCombo && !includeCombo && tuercas.length === 0 ? "grid-cols-[3fr_2fr]" : "grid-cols-1"}`}>
               {canAddCombo && !includeCombo && (
                 <button
                   type="button"
                   onClick={() => setIncludeCombo(true)}
                   className="flex items-stretch bg-white text-left transition-colors hover:bg-slate-50"
                 >
-                  <span className="flex w-20 shrink-0 items-center justify-center self-stretch bg-white">
+                  <span className="flex w-16 shrink-0 items-center justify-center self-stretch bg-white">
                     <AlineacionBalanceoIcon size={36} />
                   </span>
                   <span className="flex min-w-0 flex-1 flex-col items-start justify-center gap-2 py-3 pl-1.5 pr-1">
@@ -419,15 +419,15 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
                 aria-expanded={buscandoTuerca}
                 className="flex items-stretch bg-white text-left transition-colors hover:bg-slate-50"
               >
-                <span className="relative flex w-20 shrink-0 items-center justify-center self-stretch bg-white">
+                <span className="relative flex w-12 shrink-0 items-center justify-center self-stretch bg-white">
                   {tuercaFoto?.imageUrl && (
                     <Image src={tuercaFoto.imageUrl} alt={tuercaFoto.nombre} fill sizes="96px" className="object-contain p-0.5" />
                   )}
                 </span>
                 <span className="flex min-w-0 flex-1 flex-col items-start justify-center gap-2 py-3 pl-1.5 pr-1">
-                  <span className="min-h-[2.5em] text-sm font-black leading-tight text-navy-900">Tuercas<br />antirrobo</span>
-                  {tuercaFoto && <span className="text-sm font-black leading-none text-orange-700">{formatPrice(tuercaFoto.price)}</span>}
-                  <span className="rounded-full bg-orange-500 px-3 py-1 text-xs font-black text-white">{buscandoTuerca ? "Cerrar" : "Buscar"}</span>
+                  <span className="min-h-[2.5em] text-xs font-black leading-tight text-navy-900">Tuercas<br />antirrobo</span>
+                  {tuercaFoto && <span className="text-xs font-black leading-none text-orange-700">{formatPrice(tuercaFoto.price)}</span>}
+                  <span className="rounded-full bg-orange-500 px-2.5 py-0.5 text-[11px] font-black text-white">{buscandoTuerca ? "Cerrar" : "Buscar"}</span>
                 </span>
               </button>
               )}
