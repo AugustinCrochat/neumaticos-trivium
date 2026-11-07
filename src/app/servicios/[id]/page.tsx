@@ -74,7 +74,8 @@ export default async function ServicioPage({ params }: Props) {
       <JsonLd data={serviceJsonLd(service)} />
       <ServicioFicha
         id={service.id}
-        title={seo?.h1 ?? service.title}
+        title={service.title}
+        h1Local={(seo?.h1 ?? service.title).replace(/ en Córdoba$/, " en Argüello, Córdoba")}
         description={service.description}
         icon={ICONS[service.icon]}
         fotos={fotos ? [fotos.principal, ...fotos.galeria] : []}

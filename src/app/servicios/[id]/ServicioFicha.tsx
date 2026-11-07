@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "@/components/ui/Link";
 import { useBranch } from "@/contexts/branch-context";
 import { SITE_URL } from "@/lib/config";
-import { formatPrecio, nombreServicio } from "@/lib/servicios";
+import { formatPrecio } from "@/lib/servicios";
 import { BranchStatusBadge } from "@/app/sucursales/[id]/BranchStatusBadge";
 import { PaymentMethodsSection } from "@/components/ui/PaymentMethodsSection";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
@@ -24,6 +24,7 @@ type Variante = { label: string; precio: number };
 export function ServicioFicha({
   id,
   title,
+  h1Local,
   description,
   icon,
   fotos,
@@ -35,6 +36,8 @@ export function ServicioFicha({
 }: {
   id: string;
   title: string;
+  /** H1 con la localidad (Argüello, Córdoba): es el que ve el buscador y quien tiene Argüello elegida. */
+  h1Local: string;
   description: string;
   icon: ReactNode;
   fotos: Foto[];
@@ -47,7 +50,7 @@ export function ServicioFicha({
 }) {
   const { selectedBranch } = useBranch();
   const arguello = selectedBranch.id === "arguello";
-  const nombre = nombreServicio(id, title, selectedBranch.id, true);
+  const nombre = arguello ? h1Local : title;
   const [fotoActiva, setFotoActiva] = useState(0);
   const [varianteActiva, setVarianteActiva] = useState(0);
   const variante = variantes[varianteActiva];
@@ -126,7 +129,7 @@ export function ServicioFicha({
                   // que todavía no abrió se aclaran como referencia, sin
                   // prometer atención por orden de llegada.
                   <p className="mt-1 text-xs font-bold text-slate-500">
-                    Precio del taller de Argüello (Córdoba).{" "}
+                    Precio del taller de Argüello, Córdoba.{" "}
                     {selectedBranch.apertura ? `${selectedBranch.shortName} abre ${selectedBranch.apertura}.` : ""}
                   </p>
                 ) : (
