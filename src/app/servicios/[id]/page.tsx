@@ -15,6 +15,7 @@ import { ServicioFicha } from "./ServicioFicha";
 import { EquipoHofmann } from "@/components/blog/EquipoHofmann";
 import { UpsellNeumaticos } from "@/components/servicios/UpsellNeumaticos";
 import { SERVICIOS_FOTOS } from "@/lib/servicios-fotos";
+import { BRANCHES } from "@/lib/config";
 import { breadcrumbJsonLd, canonical, serviceJsonLd } from "@/lib/seo";
 
 type Props = { params: Promise<{ id: string }> };
@@ -75,7 +76,7 @@ export default async function ServicioPage({ params }: Props) {
       <ServicioFicha
         id={service.id}
         title={service.title}
-        h1Local={(seo?.h1 ?? service.title).replace(/ en Córdoba$/, " en Argüello, Córdoba")}
+        h1Local={(seo?.h1 ?? service.title).replace(/ en Córdoba$/, "")}
         description={service.description}
         icon={ICONS[service.icon]}
         fotos={fotos ? [fotos.principal, ...fotos.galeria] : []}
@@ -117,6 +118,26 @@ export default async function ServicioPage({ params }: Props) {
             </span>
             <span className="shrink-0 rounded-xl bg-orange-500 px-5 py-2.5 text-sm font-black text-white">Ver tuercas antirrobo →</span>
           </Link>
+        )}
+        {seo && (
+          <section className="mt-12 rounded-2xl border border-slate-200 bg-slate-50 p-5">
+            <h2 className="text-xl font-black text-navy-900 mb-2">Dónde lo hacemos</h2>
+            <ul className="space-y-1 text-slate-700">
+              {BRANCHES.filter((b) => !b.apertura).map((b) => (
+                <li key={b.id}>
+                  <Link href={`/sucursales/${b.id}`} className="font-bold text-orange-700 underline underline-offset-4">
+                    {b.name}
+                  </Link>{" "}
+                  · {b.address}, {b.city}, {b.province}. {service.title} sin turno, por orden de llegada.
+                </li>
+              ))}
+            </ul>
+            {BRANCHES.some((b) => b.apertura) && (
+              <p className="mt-2 text-sm text-slate-500">
+                Próximas sucursales: {BRANCHES.filter((b) => b.apertura).map((b) => `${b.shortName} (${b.province})`).join(", ")}.
+              </p>
+            )}
+          </section>
         )}
         {seo && (
           <div className="mt-12 space-y-8">
