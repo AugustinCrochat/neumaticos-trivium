@@ -9,6 +9,9 @@ export type BranchStatus = {
   label: string;
   /** Detalle secundario, ej. "Cierra 18:30" o "Abre lunes 08:30" */
   detail: string;
+  /** Horario de hoy ("09:00"), solo cuando está abierto. */
+  open?: string;
+  close?: string;
 };
 
 function toMinutes(time: string): number {
@@ -70,7 +73,7 @@ export function getBranchStatus(branch: Branch, now: Date = new Date()): BranchS
       return { isOpen: false, label: "Cerrado", detail: `Abre hoy ${todayRule.open}` };
     }
     if (minutes < close) {
-      return { isOpen: true, label: "Abierto ahora", detail: `Cierra ${todayRule.close}` };
+      return { isOpen: true, label: "Abierto ahora", detail: `Cierra ${todayRule.close}`, open: todayRule.open, close: todayRule.close };
     }
   }
 
