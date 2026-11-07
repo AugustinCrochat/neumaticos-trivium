@@ -22,8 +22,8 @@ import { mensajeAvisameApertura, waHref } from "@/lib/whatsapp";
  * Solo las ciudades cabecera (una por sucursal), no cada barrio: servicio x
  * barrio sería una fábrica de doorway pages. El texto propio de cada ciudad
  * sale de localidades.ts. Mientras la sucursal no abrió la página se genera
- * pero con noindex y fuera del sitemap; al sacar `apertura` de config.ts se
- * indexa sola.
+ * indexable y con el aviso "abre en…", para que Google la conozca antes de la
+ * apertura; al sacar `apertura` de config.ts pasa a mostrar precio y horario.
  */
 export const dynamic = "force-static";
 
@@ -61,7 +61,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         : `${nombre} en ${ciudadCorta}: Neumáticos Trivium ${branch.shortName} (${branch.address}) abre ${branch.apertura}. ${service.description}`
     ),
     alternates: canonical(`/servicios/${id}/${ciudad}`),
-    robots: abierta ? undefined : { index: false, follow: true },
   };
 }
 

@@ -185,9 +185,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   };
   const servicios: Entry[] = [...SERVICES, COMBO_SERVICE, ...EXTRA_SERVICES].map((s) => url(`/servicios/${s.id}`, 0.7, "monthly", undefined, SERVICE_IMAGES[s.id]?.map(abs)));
 
-  // Servicio x ciudad: solo de sucursales ya abiertas (las otras van noindex).
+  // Servicio x ciudad: todas las cabeceras (las que no abrieron dicen "abre en…").
   const serviciosCiudad: Entry[] = [...SERVICES, COMBO_SERVICE, ...EXTRA_SERVICES].flatMap((s) =>
-    LOCALIDADES.filter((l) => l.esCabecera && !BRANCHES.find((b) => b.id === l.branchId)?.apertura).map((l) =>
+    LOCALIDADES.filter((l) => l.esCabecera).map((l) =>
       url(`/servicios/${s.id}/${l.slug}`, 0.7, "monthly")
     )
   );
