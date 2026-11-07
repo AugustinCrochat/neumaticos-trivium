@@ -153,7 +153,7 @@ export function Header() {
       {/* Main nav */}
       <nav className="bg-black shadow-lg">
         <div className="max-w-7xl 2xl:max-w-[96rem] mx-auto px-3 min-[380px]:px-4">
-          <div className={`flex items-center gap-2 min-[380px]:gap-6 transition-[height] duration-200 md:gap-4 lg:gap-12 xl:gap-16 ${compact ? "h-[3.25rem] md:h-14" : "h-14 md:h-[4.5rem]"}`}>
+          <div className={`flex items-center gap-2 min-[380px]:gap-6 transition-[height] duration-200 md:gap-4 lg:gap-12 xl:gap-16 ${compact ? "h-11 md:h-12" : "h-12 md:h-16"}`}>
             {/* Logo */}
             <Link href="/" className="flex-shrink-0">
               <Image
@@ -161,7 +161,7 @@ export function Header() {
                 alt="Neumáticos Trivium"
                 width={175}
                 height={60}
-                className={`w-auto transition-[height] duration-200 ${compact ? "h-9 md:h-9 lg:h-11" : "h-10 md:h-12 lg:h-16"}`}
+                className={`w-auto transition-[height] duration-200 ${compact ? "h-8 md:h-8 lg:h-9" : "h-9 md:h-10 lg:h-14"}`}
                 priority
               />
             </Link>

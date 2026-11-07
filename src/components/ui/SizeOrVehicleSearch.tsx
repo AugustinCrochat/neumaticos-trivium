@@ -153,32 +153,6 @@ export function SizeOrVehicleSearch({
         <h2 className={`mb-3 text-center font-display font-extrabold uppercase tracking-tight text-navy-900 ${compact ? "text-xl" : "text-2xl"}`}>
           Encontrá tus neumáticos
         </h2>
-        {/* Búsqueda libre: marca, modelo o medida escritos como cada uno quiera. */}
-        <form
-          role="search"
-          onSubmit={(e) => {
-            e.preventDefault();
-            const q = texto.trim();
-            if (q.length < 2) return;
-            onNavigate?.();
-            irA(`/busqueda?q=${encodeURIComponent(q)}`);
-          }}
-          className="mb-3 flex items-center gap-2 rounded-xl border border-slate-300 bg-white py-1 pl-3 pr-1 shadow-sm focus-within:border-orange-500 focus-within:ring-2 focus-within:ring-orange-500/30"
-        >
-          <Search className="h-5 w-5 shrink-0 text-slate-400" aria-hidden="true" />
-          <input
-            type="search"
-            value={texto}
-            onChange={(e) => setTexto(e.target.value)}
-            placeholder="Marca, modelo o medida"
-            aria-label="Buscar neumáticos"
-            enterKeyHint="search"
-            className="w-0 min-w-0 flex-1 bg-transparent py-2 text-base text-navy-900 placeholder:text-slate-400 focus:outline-none"
-          />
-          <button type="submit" className="shrink-0 rounded-lg bg-[#ff1e00] px-4 py-2 text-sm font-black text-white transition-colors hover:bg-[#d91a00]">
-            Buscar
-          </button>
-        </form>
         {escritorio ? (
           <div className={`grid gap-3 ${compact && !lado ? "grid-cols-1" : "grid-cols-2"}`}>
             <button
@@ -224,6 +198,32 @@ export function SizeOrVehicleSearch({
             </div>
           </>
         )}
+        {/* Búsqueda libre: marca, modelo o medida escritos como cada uno quiera. */}
+        <form
+          role="search"
+          onSubmit={(e) => {
+            e.preventDefault();
+            const q = texto.trim();
+            if (q.length < 2) return;
+            onNavigate?.();
+            irA(`/busqueda?q=${encodeURIComponent(q)}`);
+          }}
+          className="mt-3 flex items-center gap-2 rounded-xl border border-slate-300 bg-white py-1 pl-3 pr-1 shadow-sm focus-within:border-orange-500 focus-within:ring-2 focus-within:ring-orange-500/30"
+        >
+          <Search className="h-5 w-5 shrink-0 text-slate-400" aria-hidden="true" />
+          <input
+            type="search"
+            value={texto}
+            onChange={(e) => setTexto(e.target.value)}
+            placeholder="Marca, modelo o medida"
+            aria-label="Buscar neumáticos"
+            enterKeyHint="search"
+            className="w-0 min-w-0 flex-1 bg-transparent py-2 text-base text-navy-900 placeholder:text-slate-400 focus:outline-none"
+          />
+          <button type="submit" className="shrink-0 rounded-lg bg-[#ff1e00] px-4 py-2 text-sm font-black text-white transition-colors hover:bg-[#d91a00]">
+            Buscar
+          </button>
+        </form>
         {!hideLearnLink && (
           <div className="mt-3 flex justify-center">
             <MedidaHelpDialog compact />

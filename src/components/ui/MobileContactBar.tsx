@@ -12,7 +12,7 @@ import { DirectionsIcon } from "@/components/ui/DirectionsIcon";
  * Barra fija de contacto en celular. Un solo color de marca (rojo Trivium) sobre
  * fondo oscuro: WhatsApp ocupa más de la mitad, con un texto de acción según la
  * página y el estado del local abajo (abierto / cierra / abre); Cómo llegar y
- * Llamar son botones de ícono. Se esconde al bajar y vuelve al subir. En
+ * Llamar son botones de ícono. Siempre visible. En
  * escritorio no se muestra (ahí siguen los flotantes).
  *
  * Con una sucursal que todavía no abrió, WhatsApp pasa a "Avisame cuando abra"
@@ -35,36 +35,9 @@ function accionSegunRuta(ruta: string): string {
   return "Pedí tu precio";
 }
 
-/** Se esconde al bajar y reaparece al subir (o cerca del tope / del final). */
-function useBarraVisible() {
-  const [visible, setVisible] = useState(true);
-  useEffect(() => {
-    let ultimo = window.scrollY;
-    const alScroll = () => {
-      const y = window.scrollY;
-      const dy = y - ultimo;
-      const alFinal = y + window.innerHeight >= document.documentElement.scrollHeight - 80;
-      if (y < 80 || alFinal || dy < -8) setVisible(true);
-      else if (dy > 8) setVisible(false);
-      if (Math.abs(dy) > 8) ultimo = y;
-    };
-    window.addEventListener("scroll", alScroll, { passive: true });
-    return () => window.removeEventListener("scroll", alScroll);
-  }, []);
-  // Los flotantes (buscador) leen este atributo para bajar a la esquina cuando la barra se esconde.
-  useEffect(() => {
-    document.documentElement.dataset.barra = visible ? "visible" : "oculta";
-    return () => {
-      delete document.documentElement.dataset.barra;
-    };
-  }, [visible]);
-  return visible;
-}
-
 export function MobileContactBar() {
   const { selectedBranch: branch, hasConfirmedBranch, openModal } = useBranch();
   const ruta = usePathname() ?? "/";
-  const visible = useBarraVisible();
   // La hora real se calcula en el cliente: el sitio es estático.
   const [estado, setEstado] = useState<BranchStatus | null>(null);
   useEffect(() => {
@@ -81,9 +54,7 @@ export function MobileContactBar() {
     goToWhatsApp(waHref(branch.whatsapp, texto));
   }
 
-  const caja = `fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-zinc-950 shadow-[0_-4px_16px_rgba(0,0,0,0.25)] transition-transform duration-200 motion-reduce:transition-none sm:hidden ${
-    visible ? "translate-y-0" : "translate-y-full"
-  }`;
+  const caja = `fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-zinc-950 shadow-[0_-4px_16px_rgba(0,0,0,0.25)] sm:hidden`;
 
   if (!hasConfirmedBranch) {
     return (
