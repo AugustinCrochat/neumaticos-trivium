@@ -399,16 +399,18 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
                   onClick={() => setIncludeCombo(true)}
                   className="flex items-stretch bg-white text-left transition-colors hover:bg-slate-50"
                 >
-                  <span className="flex w-16 shrink-0 items-center justify-center self-stretch bg-white">
+                  <span className="flex shrink-0 items-center justify-center self-stretch bg-white pl-4 pr-2">
                     <AlineacionBalanceoIcon size={36} />
                   </span>
-                  <span className="flex min-w-0 flex-1 flex-col items-start justify-center gap-2 py-3 pl-1.5 pr-1">
+                  <span className="flex min-w-0 flex-1 flex-col items-start justify-center gap-2 py-3 pl-2 pr-3">
                     <span className="min-h-[2.5em] text-sm font-black leading-tight text-navy-900">
                       {selectedBranch.id === "arguello" ? "Alineado" : "Alineación"}
                       <br /><span className="whitespace-nowrap">+ 4 {selectedBranch.id === "arguello" ? "balanceado" : "balanceo"}</span>
                     </span>
-                    <span className="text-sm font-black leading-none text-orange-700">{formatPrice(combo!.precio)}</span>
-                    <span className="rounded-full bg-orange-500 px-3 py-1 text-xs font-black text-white">Agregar</span>
+                    <span className="flex w-full flex-wrap items-center justify-between gap-x-2 gap-y-1.5">
+                      <span className="text-sm font-black leading-none text-orange-700">{formatPrice(combo!.precio)}</span>
+                      <span className="rounded-full bg-orange-500 px-3 py-1 text-xs font-black text-white">Agregar</span>
+                    </span>
                   </span>
                 </button>
               )}
@@ -419,12 +421,12 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
                 aria-expanded={buscandoTuerca}
                 className="flex items-stretch bg-white text-left transition-colors hover:bg-slate-50"
               >
-                <span className="relative flex w-12 shrink-0 items-center justify-center self-stretch bg-white">
+                <span className="relative ml-2 flex w-12 shrink-0 items-center justify-center self-stretch bg-white">
                   {tuercaFoto?.imageUrl && (
                     <Image src={tuercaFoto.imageUrl} alt={tuercaFoto.nombre} fill sizes="96px" className="object-contain p-0.5" />
                   )}
                 </span>
-                <span className="flex min-w-0 flex-1 flex-col items-start justify-center gap-2 py-3 pl-1.5 pr-1">
+                <span className="flex min-w-0 flex-1 flex-col items-start justify-center gap-2 py-3 pl-2 pr-3">
                   <span className="min-h-[2.5em] text-xs font-black leading-tight text-navy-900">Tuercas<br />antirrobo</span>
                   {tuercaFoto && <span className="text-xs font-black leading-none text-orange-700">{formatPrice(tuercaFoto.price)}</span>}
                   <span className="rounded-full bg-orange-500 px-2.5 py-0.5 text-[11px] font-black text-white">{buscandoTuerca ? "Cerrar" : "Buscar"}</span>
