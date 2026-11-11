@@ -2,11 +2,11 @@ import { NextResponse } from "next/server";
 
 // Búsqueda de vehículo por patente para el buscador "Por mi auto".
 //
-// Cada consulta nueva gasta cupo pago de Clasificar (en el POS, que además
+// Cada consulta nueva gasta cupo pago de Clasificar (en el ERP, que además
 // guarda un caché: una patente repetida es gratis). Por eso acá se exige un
 // token de Turnstile y se limita por IP antes de molestar al POS. Si falta la
 // configuración, el endpoint queda apagado en vez de abierto.
-const POS_BASE = process.env.POS_API_BASE_URL ?? "https://pos-neumaticos.vercel.app/api/public";
+const POS_BASE = process.env.POS_API_BASE_URL ?? "https://trivium-erp.vercel.app/api/public";
 const PATENTE_RE = /^([A-Z]{3}\d{3}|[A-Z]{2}\d{3}[A-Z]{2})$/;
 
 // Límite por IP en memoria del isolate: es un freno de mano barato, no una
