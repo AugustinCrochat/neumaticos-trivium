@@ -16,7 +16,7 @@ const pageUrl = `${SITE_URL}/calculadora-equivalencia-neumaticos`;
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: "Calculadora de equivalencias de neumáticos: medidas compatibles ±3% | Trivium",
+    title: "Equivalencia de neumáticos: calculadora de medidas compatibles ±3%",
     description:
       resumen("Calculá en segundos si dos medidas de neumáticos son equivalentes: diferencia de diámetro, velocímetro y alternativas en stock. Tabla de equivalencias de 195/65 R15, 205/55 R16 y más."),
     keywords: [
