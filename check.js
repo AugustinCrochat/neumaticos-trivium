@@ -11,7 +11,7 @@ function slugify(text) {
 }
 
 async function run() {
-  const res = await fetch('https://pos-neumaticos.vercel.app/api/public/arguello/productos');
+  const res = await fetch('https://trivium-erp.vercel.app/api/public/arguello/productos');
   const data = await res.json();
   const productos = data.productos;
   

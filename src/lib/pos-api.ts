@@ -35,7 +35,7 @@ const CACHE_TTLS = {
 // con listas vacías y para evitarlo habría que volverlas dinámicas (demasiado
 // costoso para el límite de CPU del plan Free).
 const POS_API_BASE_URL =
-  process.env.POS_API_BASE_URL?.trim() || "https://pos-neumaticos.vercel.app/api/public";
+  process.env.POS_API_BASE_URL?.trim() || "https://trivium-erp.vercel.app/api/public";
 
 type PosProducto = {
   id: string;
