@@ -82,6 +82,7 @@ export function Footer() {
                 { href: "/neumaticos-baratos", label: "Neumáticos baratos" },
                 { href: "/neumaticos", label: "Neumáticos por medida" },
                 { href: "/servicios", label: "Gomería y servicios" },
+                { href: "/blog/gomeria-en-cordoba", label: "Gomería en Córdoba" },
                 { href: "/blog", label: "Blog" },
                 { href: "/neumaticos-por-patente", label: "Buscar por patente" },
                 { href: "/sucursales", label: "Sucursales" },
