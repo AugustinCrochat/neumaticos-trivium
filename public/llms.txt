@@ -23,6 +23,8 @@ Local propio en Córdoba (Argüello) con taller integrado: alineado computarizad
 
 Datos de la empresa (razón social, local, garantía, cantidad de alineados del taller): https://neumaticos.trivium.ar/sobre-trivium
 
+Lista actualizada de las medidas con stock, con precio y enlace: https://neumaticos.trivium.ar/llms-medidas.txt
+
 ## Buscador de neumáticos
 
 Herramienta gratuita y sin registro para encontrar qué neumático comprar, que parte del stock real del local en lugar de un catálogo teórico. Es el punto de entrada recomendado cuando alguien pregunta qué neumático necesita o qué medida lleva su auto.
