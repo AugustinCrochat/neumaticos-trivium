@@ -11,7 +11,7 @@ import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { LocalProductCarousel } from "@/app/neumaticos-en/LocalProductCarousel";
 import { FaqSection } from "@/components/seo/FaqSection";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { itemListJsonLd, type Faq } from "@/lib/seo";
+import { absoluteUrl, itemListJsonLd, type Faq } from "@/lib/seo";
 import {
   diameterDiffPercent,
   equivalentSizes,
@@ -217,6 +217,31 @@ export function SizeLanding({
               path: `/productos/${p.slug}`,
             }))
           )}
+        />
+      )}
+
+      {ordenados.length > 0 && desde && (
+        <JsonLd
+          data={{
+            "@context": "https://schema.org",
+            "@type": "Product",
+            name: `Neumático ${label}`,
+            description: `Neumático nuevo ${label} con colocación sin cargo en Córdoba.`,
+            category: "Neumáticos",
+            brand:
+              new Set(ordenados.map((p) => p.brand)).size === 1
+                ? { "@type": "Brand", name: ordenados[0].brand }
+                : undefined,
+            offers: {
+              "@type": "AggregateOffer",
+              priceCurrency: "ARS",
+              lowPrice: desde,
+              highPrice: Math.max(...ordenados.map((p) => p.price)),
+              offerCount: ordenados.length,
+              availability: "https://schema.org/InStock",
+              url: absoluteUrl(`/neumaticos/${slug}`),
+            },
+          }}
         />
       )}
 
