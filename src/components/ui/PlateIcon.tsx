@@ -10,15 +10,11 @@ import { useEffect, useState } from "react";
  * ancho y queda centrada en alto.
  */
 export const EJEMPLOS_PATENTE = [
-  { placa: "MKP 417", formato: "anterior", auto: "Renault Logan 2013" },
-  { placa: "AF 218 KT", formato: "mercosur", auto: "Toyota Hilux 2021" },
-  { placa: "JXR 905", formato: "anterior", auto: "Ford Fiesta 2010" },
-  { placa: "AD 124 MX", formato: "mercosur", auto: "Fiat Cronos 2020" },
-  { placa: "OPT 336", formato: "anterior", auto: "VW Gol 2015" },
-  { placa: "AF 305 BN", formato: "mercosur", auto: "Chevrolet Onix 2022" },
+  { placa: "AB 611 FT", formato: "mercosur", auto: "Renault Kangoo 2017" },
+  { placa: "NIJ 458", formato: "anterior", auto: "Renault Sandero Stepway 2013" },
 ] as const;
 
-/** Chapa de ejemplo en `indice` (con vuelta). Son patentes inventadas, no de autos reales. */
+/** Chapa de ejemplo en `indice` (con vuelta). Son patentes de autos reales (Kangoo Ph3 Confort 1.6 2017 y Sandero Stepway Privilege Nav 2013). */
 export const ejemploPatente = (indice: number) => EJEMPLOS_PATENTE[indice % EJEMPLOS_PATENTE.length];
 
 export function PlateIcon({ className, formato, ejemplo }: { className?: string; formato?: "mercosur" | "anterior"; /** Chapa de ejemplo que se muestra (la elige quien la use, para sincronizar el texto de al lado). */ ejemplo?: { placa: string; formato: "mercosur" | "anterior" } }) {
