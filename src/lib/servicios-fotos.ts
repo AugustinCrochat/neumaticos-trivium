@@ -25,6 +25,8 @@ const F = {
   cambioCamioneta: { src: `${L}/cambio-de-cubiertas-en-camioneta-pickup-con-balanceadora-hofmann-trivium-cordoba.webp`, alt: "Cambio de cubiertas de una camioneta en el taller de Neumáticos Trivium, con la balanceadora Hofmann al lado" },
   antirrobo: { src: `${L}/tuerca-antirrobo-de-seguridad-en-llanta-de-aleacion-trivium-cordoba.webp`, alt: "Llanta de aleación con una tuerca antirrobo entre las tuercas comunes" },
   antirroboFord: { src: `${L}/tuerca-antirrobo-en-llanta-de-ford-con-cubierta-grenlander-kingpro-trivium-cordoba.webp`, alt: "Tuerca antirrobo colocada en la llanta de un Ford, con una cubierta nueva Grenlander Kingpro One 175/65 R14" },
+  sacandoTuerca: { src: `${L}/tecnico-sacando-tuerca-de-seguridad-con-pistola-neumatica-trivium-cordoba.webp`, alt: "Técnico sacando una tuerca de seguridad de la rueda de un auto con pistola neumática, con el kit de extracción en el piso" },
+  kitExtraccion: { src: `${L}/kit-de-extraccion-de-tuercas-de-seguridad-en-el-taller-trivium-cordoba.webp`, alt: "Kit de extracción de tuercas de seguridad abierto en el piso del taller, junto a la rueda de un auto" },
   tallerCuatroAutos: { src: `${L}/taller-de-gomeria-con-cuatro-autos-neumaticos-trivium-arguello-cordoba.webp`, alt: "Taller de Neumáticos Trivium en Argüello con cuatro autos en servicio" },
   remis: { src: `${L}/remis-cambio-de-cuatro-neumaticos-con-alineacion-y-balanceo-trivium-cordoba.webp`, alt: "Remis en el elevador durante el cambio de las cuatro cubiertas, con la balanceadora al fondo" },
   taxi: { src: `${L}/taxi-en-el-taller-neumaticos-trivium-cordoba.webp`, alt: "Taxi en el taller de Neumáticos Trivium durante el cambio de cubiertas" },
@@ -56,7 +58,7 @@ export const SERVICIOS_FOTOS: Record<string, { principal: FotoServicio; galeria:
     galeria: [F.rotacion, F.remis, F.cambioCamioneta],
   },
   "tuercas-de-seguridad": {
-    principal: F.antirrobo,
-    galeria: [F.antirroboFord, F.perfilBajo, F.rotacion],
+    principal: F.kitExtraccion,
+    galeria: [F.sacandoTuerca, F.antirrobo, F.antirroboFord],
   },
 };

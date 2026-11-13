@@ -92,7 +92,7 @@ const SECTIONS: Section[] = [
       { href: "/servicios/rotacion-de-ruedas", label: "Rotación de ruedas", hint: "Desgaste parejo en el juego completo." },
       { href: "/servicios/montaje", label: "Arme y desarme", hint: "Montaje de cubiertas en la llanta." },
       { href: "/servicios/reparacion-de-pinchaduras", label: "Reparación de pinchaduras", hint: "Parche con la cubierta revisada por dentro." },
-      { href: "/servicios/tuercas-de-seguridad", label: "Tuercas de seguridad y espárragos", hint: "Extracción sin llave y rosca dañada." },
+      { href: "/servicios/tuercas-de-seguridad", label: "Tuercas de seguridad y roscas", hint: "Extracción sin llave y rosca dañada." },
       { href: "/tuercas-antirrobo", label: "Tuercas antirrobo", hint: "Seguridad para tus llantas." },
     ],
   },

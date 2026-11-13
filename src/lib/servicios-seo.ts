@@ -58,15 +58,14 @@ export const PINCHADURAS_SERVICE: Service = {
 /** Tuercas y bulones de seguridad, extracción y espárragos: también se consulta. */
 export const TUERCAS_SERVICE: Service = {
   id: "tuercas-de-seguridad",
-  title: "Tuercas de seguridad y espárragos",
+  title: "Tuercas de seguridad y roscas",
   description:
-    "Colocación y extracción de tuercas antirrobo, y reparación de espárragos y roscas dañadas, en nuestra gomería.",
+    "Colocación y extracción de tuercas antirrobo, y reparación de roscas dañadas, en nuestra gomería.",
   icon: "wrench",
   features: [
     "Colocación de tuercas y bulones antirrobo",
     "Extracción de tuercas de seguridad sin llave",
-    "Cambio de espárrago de maza roto",
-    "Reparación de rosca dañada",
+    "Reparación de rosca dañada (repaso de paso de rosca)",
   ],
 };
 
@@ -456,13 +455,13 @@ export const SERVICIOS_SEO: Record<string, ServicioSeo> = {
     ],
   },
   "tuercas-de-seguridad": {
-    title: "Tuercas de seguridad y espárragos",
+    title: "Tuercas de seguridad y roscas",
     metaDescription:
-      "Tuercas antirrobo: colocación, extracción sin llave y reparación de espárragos de maza rotos o roscas dañadas, en nuestra gomería.",
-    h1: "Tuercas antirrobo, extracción y reparación de espárragos",
+      "Tuercas antirrobo: colocación, extracción sin llave y reparación del paso de rosca dañado, en nuestra gomería.",
+    h1: "Tuercas antirrobo, extracción y reparación de roscas",
     intro: [
-      "Las tuercas de seguridad protegen las llantas de aleación, pero si la llave se pierde o se daña, la rueda queda trabada. También pasa que un espárrago se corta o una rosca se pasa por apretar de más.",
-      "En nuestra gomería, colocamos tuercas y bulones antirrobo, extraemos las que quedaron sin llave y reparamos espárragos y roscas dañadas, cuidando de no arruinar la llanta ni la maza.",
+      "Las tuercas de seguridad protegen las llantas de aleación, pero si la llave se pierde o se daña, la rueda queda trabada. También pasa que una rosca se pasa por apretar de más.",
+      "En nuestra gomería, colocamos tuercas y bulones antirrobo, extraemos las que quedaron sin llave y reparamos el paso de rosca dañado, cuidando de no arruinar la llanta ni la maza.",
     ],
     secciones: [
       {
@@ -470,15 +469,14 @@ export const SERVICIOS_SEO: Record<string, ServicioSeo> = {
         items: [
           "Colocación de juegos de tuercas y bulones antirrobo.",
           "Extracción de tuercas de seguridad cuando no hay llave.",
-          "Cambio de espárragos de maza rotos.",
-          "Reparación y repaso de roscas dañadas.",
+          "Reparación y repaso del paso de rosca dañado.",
         ],
       },
       {
         titulo: "Antes de venir",
         items: [
           "Si tenés el código del juego de tuercas, traelo: se puede pedir una llave nueva.",
-          "Si ya intentaron sacarla a golpes, avisá, así se revisa el espárrago.",
+          "Si ya intentaron sacarla a golpes, avisá, así se revisa la rosca.",
         ],
       },
     ],
@@ -489,9 +487,9 @@ export const SERVICIOS_SEO: Record<string, ServicioSeo> = {
           "Sí, con herramienta de extracción, sin dañar el espárrago ni la llanta. La tuerca queda inutilizable y se reemplaza.",
       },
       {
-        question: "¿Se puede reparar un espárrago roto?",
+        question: "¿Pueden reparar una rosca dañada?",
         answer:
-          "Se reemplaza por uno nuevo de la misma medida. Si la rosca está solo sucia o apenas dañada, se repasa.",
+          "Sí, si la rosca está sucia o apenas dañada, se repasa el paso de rosca.",
       },
       {
         question: "¿Venden tuercas antirrobo?",
