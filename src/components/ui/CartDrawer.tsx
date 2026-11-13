@@ -6,6 +6,7 @@ import { useBranch } from "@/contexts/branch-context";
 import { useVehicle } from "@/contexts/vehicle-context";
 import { useCart, itemKey } from "@/contexts/cart-context";
 import { useUpsellCombo } from "@/hooks/use-upsell-combo";
+import { esMedidaCamioneta } from "@/lib/servicios";
 import { useAccesorios } from "@/hooks/use-accesorios";
 import { useCheckout } from "@/hooks/use-checkout";
 import { getCompatibleAccessory } from "@/lib/tuercas-vehiculos";
@@ -22,12 +23,16 @@ export function CartDrawer() {
   const { selectedBranch } = useBranch();
   const { selectedVehicle } = useVehicle();
   const checkout = useCheckout();
-  const combo = useUpsellCombo();
+  // Medidas de camioneta/SUV (265/60 R18...) llevan el combo de camioneta.
+  const esCamioneta = items.some(
+    (item) => item.kind === "tire" && !!item.size && esMedidaCamioneta(`${item.size.width}/${item.size.profile} R${item.size.rim}`)
+  );
+  const combo = useUpsellCombo(esCamioneta);
   const accesorios = useAccesorios();
   const shippingIncomplete = deliveryMethod === "shipping" && !isShippingAddressComplete(shippingAddress);
 
   const hasTires = items.some((item) => item.kind === "tire");
-  const hasCombo = items.some((item) => item.kind === "service" && item.id === combo?.id);
+  const hasCombo = items.some((item) => item.kind === "service" && (item.id === combo?.id || /alineaci[oó]n.*balanceo/i.test(item.nombre)));
   const showCartUpsell = hasTires && !hasCombo && !!combo;
 
   const compatibleAccessory = selectedVehicle

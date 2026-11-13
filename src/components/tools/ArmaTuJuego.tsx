@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import Image from "next/image";
 import { BRANCHES, DEFAULT_BRANCH_ID } from "@/lib/config";
 import { useUpsellCombo } from "@/hooks/use-upsell-combo";
+import { esMedidaCamioneta } from "@/lib/servicios";
 import { matchScore } from "@/lib/fuzzy-search";
 import { getAllVehicleOptions, getSizesForVehicle } from "@/lib/vehicles";
 import { MedidaFields, Result, inputCls, labelCls, medidaCompleta, type Medida } from "./ui";
@@ -24,7 +25,6 @@ const peso = (n: number) => `$${Math.round(n).toLocaleString("es-AR")}`;
 export function ArmaTuJuego({ productos }: { productos: JuegoProducto[] }) {
   // Los precios del listado son los de la sucursal por defecto: el WhatsApp tiene que ser el mismo.
   const selectedBranch = BRANCHES.find((b) => b.id === DEFAULT_BRANCH_ID) ?? BRANCHES[0];
-  const combo = useUpsellCombo();
   const opciones = useMemo(() => getAllVehicleOptions(), []);
 
   const [query, setQuery] = useState("");
@@ -73,6 +73,8 @@ export function ArmaTuJuego({ productos }: { productos: JuegoProducto[] }) {
         .sort((a, b) => a.price - b.price)
     : [];
   const producto = lista.find((x) => x.id === elegido) ?? null;
+  // Medidas de camioneta/SUV llevan el combo de camioneta.
+  const combo = useUpsellCombo(!!producto && esMedidaCamioneta(producto.label));
 
   const subtotal = producto ? producto.price * cantidad : 0;
   const servicio = conServicio && combo ? combo.precio : 0;
