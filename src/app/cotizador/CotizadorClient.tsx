@@ -4,6 +4,7 @@ import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useSta
 import Image from "next/image";
 import { useBranch } from "@/contexts/branch-context";
 import { useUpsellCombo } from "@/hooks/use-upsell-combo";
+import { esMedidaCamioneta } from "@/lib/servicios";
 import { AlineacionBalanceoIcon } from "@/components/ui/AlineacionBalanceoIcon";
 import { TuercaPicker } from "@/components/ui/TuercaPicker";
 import { useVehicle } from "@/contexts/vehicle-context";
@@ -70,7 +71,6 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
   // el POS (combo.nombre) queda fijo con una sola forma, así que la variante
   // regional se resuelve acá según la sucursal elegida, no en el dato.
   const terminoAlineacion = selectedBranch.id === "arguello" ? "alineado + balanceado" : "alineación + balanceo";
-  const combo = useUpsellCombo();
   // Foto de la tuerca de la oferta: la del auto elegido si ya hay uno, sino la primera con foto.
   const { selectedVehicle } = useVehicle();
   const tuercaFoto =
@@ -88,6 +88,8 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
   const [items, setItems] = useState<QuoteItem[]>(
     initialProduct ? [{ product: initialProduct, quantity: initialQuantity }] : []
   );
+  // Medidas de camioneta/SUV (265/60 R18...) llevan el combo de camioneta.
+  const combo = useUpsellCombo(items.some((it) => esMedidaCamioneta(it.product.label)));
   const [includeCombo, setIncludeCombo] = useState(false);
   const [tuercas, setTuercas] = useState<Accessory[]>([]);
   const [buscandoTuerca, setBuscandoTuerca] = useState(false);

@@ -22,6 +22,20 @@ export function splitAutoCamioneta(precios: ServicioPrecio[]) {
 }
 
 /**
+ * ¿La medida del texto (ej. "ZMAX Terra Xplorer 265/60 R18 110T") es de
+ * camioneta/SUV para el taller? Sin un campo en el POS, se estima por forma:
+ * ancho 235+ con perfil 60+ y rodado 15+ (265/60 R18, 265/65 R17, 245/70 R16,
+ * 235/75 R15). Los autos deportivos (265/35 R19) quedan afuera por el perfil.
+ * Augustin 2026-11-13: Ranger, Hilux y similares se alinean como camioneta.
+ */
+export function esMedidaCamioneta(texto: string): boolean {
+  const m = texto.match(/(\d{3})\s*\/\s*(\d{2})\s*R\s*(\d{2})/i);
+  if (!m) return false;
+  const [ancho, perfil, rodado] = [Number(m[1]), Number(m[2]), Number(m[3])];
+  return ancho >= 235 && perfil >= 60 && rodado >= 15;
+}
+
+/**
  * En Córdoba (sucursal Argüello) el taller y la gente dicen "alineado" y
  * "balanceado" en vez de "alineación" y "balanceo", y así se busca en Google
  * desde Córdoba. Esto cambia el nombre que se muestra según la sucursal; los

@@ -319,6 +319,18 @@ export const BLOG_META: Record<string, BlogMeta> = {
     shopIntro: "Mirá la medida 265/65 R17 en stock:",
     shopLinks: [{ label: "Medida 265/65 R17", href: "/neumaticos/265-65-r17" }, L.at, L.ht],
   },
+  "neumaticos-265-60-r18-autos-que-la-usan": {
+    cover: { src: "/images/blog/medida-265-60-r18-portada.webp", alt: "Neumáticos 265/60 R18 con las camionetas que la usan: Toyota Hilux, Ford Ranger" },
+    figure: { src: "/images/blog/medida-265-60-r18-autos.webp", alt: "Camionetas y SUV que usan la medida 265/60 R18", caption: "Algunas de las camionetas que llevan la medida 265/60 R18 de fábrica." },
+    shopIntro: "Mirá la medida 265/60 R18 en stock:",
+    shopLinks: [{ label: "Medida 265/60 R18", href: "/neumaticos/265-60-r18" }, L.at, L.ht],
+  },
+  "265-60-r18-o-265-65-r17-cual-conviene-camioneta": {
+    cover: { src: "/images/blog/medida-265-60-r18-portada.webp", alt: "265/60 R18 o 265/65 R17: las dos medidas de las pickups medianas, Toyota Hilux y Ford Ranger" },
+    figure: { src: "/images/blog/medida-265-60-r18-autos.webp", alt: "Camionetas que usan 265/60 R18 o 265/65 R17", caption: "Hilux, Ranger y S10 llevan una u otra según la versión." },
+    shopIntro: "Mirá las dos medidas en stock:",
+    shopLinks: [{ label: "Medida 265/60 R18", href: "/neumaticos/265-60-r18" }, { label: "Medida 265/65 R17", href: "/neumaticos/265-65-r17" }, L.at],
+  },
   "como-elegir-neumaticos-guia-completa": {
     cover: cover("alineacion"),
     figure: figure("tallerCuatroAutos", "Con la medida, los índices y el uso claros, elegir es mucho más simple."),

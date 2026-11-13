@@ -117,7 +117,7 @@ def main():
         if pedidas and medida not in pedidas:
             continue
         autos, total = autos_de(medida)
-        pickups = medida == "265-65-r17"
+        pickups = medida in ("265-65-r17", "265-60-r18")
         print(medida, total, [s for s, _ in autos[:6]])
         portada(medida, autos, total, pickups).save(f"public/images/blog/medida-{medida}-portada.webp", quality=88)
         figura(medida, autos, pickups).save(f"public/images/blog/medida-{medida}-autos.webp", quality=88)

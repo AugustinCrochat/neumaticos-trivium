@@ -79,6 +79,7 @@ export const MEDIDAS: { slug: string; size: string }[] = [
   { slug: "neumaticos-195-65-r15-autos-que-la-usan", size: "195/65 R15" },
   { slug: "neumaticos-185-60-r15-autos-que-la-usan", size: "185/60 R15" },
   { slug: "neumaticos-265-65-r17-autos-que-la-usan", size: "265/65 R17" },
+  { slug: "neumaticos-265-60-r18-autos-que-la-usan", size: "265/60 R18" },
 ];
 
 /**

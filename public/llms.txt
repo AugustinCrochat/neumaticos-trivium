@@ -171,6 +171,8 @@ Cada página explica cómo llegar al local desde esa zona y muestra neumáticos 
 - Neumáticos 175/65 R14: autos que la usan y equivalencias: https://neumaticos.trivium.ar/blog/neumaticos-175-65-r14-autos-que-la-usan
 - Neumáticos 195/65 R15: autos que la usan y equivalencias: https://neumaticos.trivium.ar/blog/neumaticos-195-65-r15-autos-que-la-usan
 - Neumáticos 185/60 R15: autos que la usan y equivalencias: https://neumaticos.trivium.ar/blog/neumaticos-185-60-r15-autos-que-la-usan
+- Neumáticos 265/60 R18: qué camionetas la usan y equivalencias: https://neumaticos.trivium.ar/blog/neumaticos-265-60-r18-autos-que-la-usan
+- 265/60 R18 o 265/65 R17: cuál conviene para tu camioneta: https://neumaticos.trivium.ar/blog/265-60-r18-o-265-65-r17-cual-conviene-camioneta
 <!-- notas-programadas:inicio -->
 
 <!-- notas-programadas:fin -->
