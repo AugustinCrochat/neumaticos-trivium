@@ -3,6 +3,7 @@ import Link from "@/components/ui/Link";
 import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { CatalogWidget } from "@/components/blog/CatalogWidget";
 import { canonical, resumen } from "@/lib/seo";
+import { ServicioHoyCTA } from "@/components/servicios/ServicioHoyCTA";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "265-60-r18-o-265-65-r17-cual-conviene-camioneta";
@@ -77,8 +78,10 @@ export default function Page() {
       <li><strong>Que las llantas nuevas entren:</strong> ancho de la llanta, offset (ET) y que liberen los frenos. Una llanta mal elegida roza o carga mal los rodamientos.</li>
       <li><strong>Índice de carga:</strong> que el neumático nuevo tenga igual o mayor índice que el de la etiqueta de la puerta. Detalle en <Link href="/blog/indice-de-carga-y-velocidad">carga y velocidad</Link>.</li>
       <li><strong>Las cuatro ruedas iguales:</strong> en una 4x4 no mezcles diámetros. Más en <Link href="/blog/cambiar-un-solo-neumatico-o-de-a-pares">uno, dos o cuatro neumáticos</Link>.</li>
-      <li><strong>Alineado y balanceado al terminar:</strong> con ruedas nuevas conviene dejar la camioneta alineada y balanceada. Para camionetas hay <Link href="/servicios/combo-alineado-y-balanceado">precio propio</Link> (hoy $80.000 el combo con rotación) y explicamos el detalle en <Link href="/blog/alineado-y-balanceado-en-camionetas-y-4x4">alineado y balanceado en camionetas</Link>.</li>
+      <li><strong>Alineado y balanceado al terminar:</strong> con ruedas nuevas conviene dejar la camioneta alineada y balanceada. Para camionetas hay <Link href="/servicios/combo-alineado-y-balanceado">precio propio</Link> y explicamos el detalle en <Link href="/blog/alineado-y-balanceado-en-camionetas-y-4x4">alineado y balanceado en camionetas</Link>.</li>
       </ol>
+
+      <ServicioHoyCTA />
 
       <h2>Las dos medidas en stock</h2>
       <CatalogWidget size={{ width: 265, profile: 60, rim: 18 }} title="265/60 R18 en stock hoy" />

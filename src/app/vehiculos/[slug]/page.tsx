@@ -7,7 +7,10 @@ import { POPULAR_VEHICLES, vehicleSlug, vehicleTireProfile, type VehicleTireProf
 import { CatalogWidget } from "@/components/blog/CatalogWidget";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { canonical, breadcrumbJsonLd, faqJsonLd, type Faq } from "@/lib/seo";
-import { getProductosDesdePOS } from "@/lib/pos-api";
+import { getProductosDesdePOS, getServiciosPrecios } from "@/lib/pos-api";
+import { ServicioHoyCTA } from "@/components/servicios/ServicioHoyCTA";
+import { esVehiculoCamioneta, formatPrecio } from "@/lib/servicios";
+import { preciosTaller } from "@/lib/servicios-seo";
 import { DEFAULT_BRANCH_ID } from "@/lib/config";
 import { formatSize, sizeSlug, sizesEqual, diameterDiffPercent } from "@/lib/tire-sizes";
 import { SortedProductGrid } from "@/components/ui/SortedProductGrid";
@@ -132,6 +135,10 @@ export default async function VehiclePage({ params }: Props) {
   const precios = conStock.map((m) => m.desde as number);
   const desde = precios.length ? Math.min(...precios) : null;
 
+  // Camionetas y SUV de chasis: el alineado y balanceado tiene precio propio (el del POS, no un texto fijo).
+  const esCamioneta = esVehiculoCamioneta(vehicle);
+  const comboCamioneta = esCamioneta ? preciosTaller(await getServiciosPrecios(undefined, DEFAULT_BRANCH_ID)).comboCamioneta : undefined;
+
   // Otros modelos con landing: misma marca primero, así el enlazado interno
   // sale de la relación real entre fichas.
   const relacionados = POPULAR_VEHICLES.filter((v) => v !== vehicle)
@@ -212,6 +219,14 @@ export default async function VehiclePage({ params }: Props) {
         ? `Sí. Hoy hay stock en ${conStock.map((m) => formatSize(m.size)).join(", ")}, desde ${formatPrice(desde as number)} por neumático. Garantía de 1 año y colocación sin cargo en el local.`
         : `Por ahora no tenemos stock en las medidas originales del ${name}. Escribinos por WhatsApp y te avisamos cuándo entra o te proponemos una medida equivalente.`,
     },
+    ...(esCamioneta
+      ? [
+          {
+            question: `¿Cuánto sale alinear y balancear una ${name}?`,
+            answer: `En el taller de Argüello la ${name} se cobra como camioneta: el combo de alineado 3D, balanceado de las cuatro ruedas y rotación${comboCamioneta ? ` está hoy en ${formatPrecio(comboCamioneta)}` : " tiene precio propio, distinto al de un auto"}. Es sin turno, por orden de llegada. El valor vigente figura siempre en la página del servicio. Comprando las cubiertas en el local, la colocación y las válvulas van sin cargo.`,
+          },
+        ]
+      : []),
     {
       question: `¿Puedo usar otra medida en mi ${name}?`,
       answer:
@@ -399,6 +414,21 @@ export default async function VehiclePage({ params }: Props) {
               </div>
             ))}
           </div>
+
+          {esCamioneta && (
+            <section className="mt-12 border-t border-slate-100 pt-10">
+              <h2 className="mb-2 text-2xl font-bold text-navy-900">Alineado y balanceado para la {name}</h2>
+              <p className="text-slate-600">
+                Con cubiertas nuevas conviene dejar la camioneta alineada y balanceada. En el taller de Argüello la {name} tiene precio de
+                camioneta, distinto al de un auto, y se hace en la misma visita que la colocación. Más en{" "}
+                <Link href="/blog/alineado-y-balanceado-en-camionetas-y-4x4" className="font-bold text-navy-900 underline underline-offset-2">
+                  alineado y balanceado en camionetas y 4x4
+                </Link>
+                .
+              </p>
+              <ServicioHoyCTA />
+            </section>
+          )}
 
           <section className="mt-12 border-t border-slate-100 pt-10">
             <h2 className="mb-5 text-2xl font-bold text-navy-900">Preguntas frecuentes</h2>

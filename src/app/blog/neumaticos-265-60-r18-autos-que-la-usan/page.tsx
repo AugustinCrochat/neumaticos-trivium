@@ -4,6 +4,7 @@ import { ArticleLayout } from "@/components/blog/ArticleLayout";
 import { CatalogWidget } from "@/components/blog/CatalogWidget";
 import { MedidasLinks } from "@/components/blog/MedidasLinks";
 import { canonical, resumen } from "@/lib/seo";
+import { ServicioHoyCTA } from "@/components/servicios/ServicioHoyCTA";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "neumaticos-265-60-r18-autos-que-la-usan";
@@ -43,7 +44,7 @@ const FAQS = [
   {
     question: "¿Cuánto sale alinear y balancear una camioneta con 265/60 R18?",
     answer:
-      "Las camionetas y las SUV de chasis (Hilux, Ranger, S10, SW4, Amarok y similares) tienen precio propio de alineado y balanceado, distinto al de un auto. El combo de camioneta (alineado 3D, balanceado de las cuatro ruedas y rotación) está hoy en $80.000, sin turno, en el taller de Argüello. El valor vigente figura siempre en la página de servicios.",
+      "Las camionetas y las SUV de chasis (Hilux, Ranger, S10, SW4, Amarok y similares) tienen precio propio de alineado y balanceado, distinto al de un auto. El combo de camioneta (alineado 3D, balanceado de las cuatro ruedas y rotación) se hace sin turno en el taller de Argüello. El valor vigente figura siempre en la ficha del servicio.",
   },
   {
     question: "¿Dónde compro neumáticos 265/60 R18 en Córdoba?",
@@ -115,7 +116,8 @@ export default function Page() {
       </ol>
 
       <h2>Alineado y balanceado de una camioneta con rodado 18</h2>
-      <p>Una camioneta es más pesada y tiene ruedas más grandes que un auto, y por eso el alineado y el balanceado tienen precio propio: el combo de camioneta (alineado 3D, balanceado de las cuatro ruedas y rotación) está hoy en <strong>$80.000</strong>, sin turno, en el taller de Argüello. Para el taller, Hilux, Ranger, S10 y similares son camioneta aunque sean de cabina simple o doble. Más detalle en <Link href="/blog/alineado-y-balanceado-en-camionetas-y-4x4">alineado y balanceado en camionetas y 4x4</Link> y en la ficha del <Link href="/servicios/combo-alineado-y-balanceado">combo de alineado y balanceado</Link>, donde está siempre el valor vigente.</p>
+      <p>Una camioneta es más pesada y tiene ruedas más grandes que un auto, y por eso el alineado y el balanceado tienen precio propio: el combo de camioneta (alineado 3D, balanceado de las cuatro ruedas y rotación) se hace sin turno en el taller de Argüello, y el precio vigente está en el recuadro de abajo. Para el taller, Hilux, Ranger, S10 y similares son camioneta aunque sean de cabina simple o doble. Más detalle en <Link href="/blog/alineado-y-balanceado-en-camionetas-y-4x4">alineado y balanceado en camionetas y 4x4</Link> y en la ficha del <Link href="/servicios/combo-alineado-y-balanceado">combo de alineado y balanceado</Link>.</p>
+      <ServicioHoyCTA />
       <p>Mirá las <Link href="/neumaticos/265-60-r18">opciones en 265/60 R18 con stock y precio</Link> o todo el <Link href="/neumaticos/rodado-18">rodado 18</Link>. La colocación y las válvulas van sin cargo comprando en el local.</p>
       <MedidasLinks current={SLUG} />
     </ArticleLayout>

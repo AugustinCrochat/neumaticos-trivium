@@ -35,6 +35,18 @@ export function esMedidaCamioneta(texto: string): boolean {
   return ancho >= 235 && perfil >= 60 && rodado >= 15;
 }
 
+const MODELOS_CAMIONETA = new Set([
+  "Toyota Hilux", "Toyota Hilux SW4", "Toyota SW4", "Toyota Land Cruiser", "Ford Ranger", "Chevrolet S10",
+  "Chevrolet Trailblazer", "Volkswagen Amarok", "Nissan Frontier", "Fiat Titano", "Mitsubishi L200", "Mitsubishi Montero",
+  "Foton Tunland", "Jeep Grand Cherokee", "Dodge Durango", "RAM Dakota", "Maxus T60", "Maxus T90", "JAC T8",
+  "Great Wall Poer", "Kia Tasman", "BYD Shark",
+]);
+
+/** ¿El taller lo cobra como camioneta? Lista de modelos, o alguna de sus medidas es de camioneta. */
+export function esVehiculoCamioneta(v: { brand: string; model: string; sizes: { w: string; p: string; r: string }[] }): boolean {
+  return MODELOS_CAMIONETA.has(`${v.brand} ${v.model}`) || v.sizes.some((s) => esMedidaCamioneta(`${s.w}/${s.p} R${s.r}`));
+}
+
 /**
  * En Córdoba (sucursal Argüello) el taller y la gente dicen "alineado" y
  * "balanceado" en vez de "alineación" y "balanceo", y así se busca en Google
