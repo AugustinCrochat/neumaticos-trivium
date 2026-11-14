@@ -33,7 +33,7 @@ export function PopularSizesSection({ productos }: { productos: TireProduct[] })
     <section className="bg-slate-50 py-16">
       <div className="mx-auto max-w-7xl 2xl:max-w-[96rem] px-4">
         <div className="mb-8 max-w-3xl">
-          <h2 className="font-display text-4xl font-bold uppercase tracking-wide text-navy-900">Elegí tu medida</h2>
+          <h2 className="font-display text-4xl font-extrabold uppercase italic tracking-wide text-navy-900">Elegí tu medida</h2>
           <p className="mt-3 text-lg leading-relaxed text-slate-600">
             Estas son las medidas que más nos piden. Entrá a la tuya y vas a ver los modelos
             disponibles con precio y stock, los autos que la usan de fábrica y qué medidas
@@ -46,13 +46,15 @@ export function PopularSizesSection({ productos }: { productos: TireProduct[] })
             <Link
               key={sizeSlug(size)}
               href={`/neumaticos/${sizeSlug(size)}`}
-              className="rounded-xl border border-slate-200 bg-white p-4 text-center shadow-sm transition hover:-translate-y-0.5 hover:border-navy-400 hover:shadow-md"
+              // Etiqueta de góndola: la medida arriba y el precio en la franja
+              // amarilla. Borde duro y sombra roja al pasar, en vez de tarjeta suave.
+              className="overflow-hidden rounded-md border-2 border-black bg-white text-center transition hover:-translate-y-0.5 hover:shadow-[4px_4px_0_0_#ff1e00]"
             >
-              <span className="font-display block text-xl font-bold tracking-wide text-navy-900">{formatSize(size)}</span>
+              <span className="font-display block px-2 py-2 text-xl font-bold tracking-wide text-black">{formatSize(size)}</span>
               {precio(size) ? (
-                <span className="mt-1 block text-sm font-black text-red-600">{money(precio(size)!)}</span>
+                <span className="font-display block bg-precio-400 py-1 text-2xl font-extrabold italic leading-none text-black">{money(precio(size)!)}</span>
               ) : (
-                <span className="mt-1 block text-xs font-bold text-slate-500">Ver precios</span>
+                <span className="block bg-slate-100 py-1.5 text-xs font-bold leading-[1.15rem] text-slate-500">Ver precios</span>
               )}
             </Link>
           ))}

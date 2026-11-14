@@ -29,6 +29,13 @@
   --color-orange-100: #ffe5e0;
   --color-orange-50: #fff5f5;
 
+  /* Amarillo de etiqueta de precio: se usa sólo para precios (fondo amarillo,
+     texto negro). Es el código visual de "oferta" en góndola; no reemplaza al
+     rojo de marca ni se usa para botones o títulos. */
+  --color-precio-300: #ffe14d;
+  --color-precio-400: #ffd400;
+  --color-precio-500: #e6bd00;
+
   --color-slate-50: #f8fafc;
   --color-slate-100: #f1f5f9;
   --color-slate-200: #e2e8f0;
@@ -117,4 +124,20 @@ html {
 @media (prefers-reduced-motion: reduce) {
   .branch-pop { animation: none; }
   .branch-nearest { animation: branch-ring 1.5s ease-out 0.2s 4; }
+}
+
+/* Flecha de la franja de pasos (elegí → vení → salí): cada paso es un chevrón
+   que empuja al siguiente. La punta mide --punta. */
+.paso-flecha {
+  --punta: 14px;
+  clip-path: polygon(0 0, calc(100% - var(--punta)) 0, 100% 50%, calc(100% - var(--punta)) 100%, 0 100%, var(--punta) 50%);
+}
+.paso-flecha:first-child {
+  clip-path: polygon(0 0, calc(100% - var(--punta)) 0, 100% 50%, calc(100% - var(--punta)) 100%, 0 100%);
+}
+.paso-flecha:last-child {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, var(--punta) 50%);
+}
+@media (min-width: 768px) {
+  .paso-flecha { --punta: 26px; }
 }

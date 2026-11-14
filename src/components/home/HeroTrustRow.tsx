@@ -29,7 +29,8 @@ export function preciosAncla(productos: TireProduct[], max = 6) {
 export function HeroTrustRow({ productos }: { productos: TireProduct[] }) {
   const anclas = preciosAncla(productos).map((a) => ({
     href: `/neumaticos/${sizeSlug(a.size)}`,
-    texto: `${formatSize(a.size)} a ${money(a.precio)}`,
+    medida: formatSize(a.size),
+    precio: money(a.precio),
   }));
   return <HeroChips anclas={anclas} />;
 }

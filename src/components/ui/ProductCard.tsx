@@ -172,8 +172,12 @@ export function ProductCard({
             </span>
           )}
           <div className="flex flex-col items-start gap-0.5">
-            <span className="text-2xl font-black text-red-600 break-words">
-              {formatPrice(price)}
+            {/* Precio como etiqueta: amarillo de góndola, inclinado como el logo.
+                Es lo primero que se lee de la tarjeta. */}
+            <span className="-ml-0.5 inline-block -skew-x-6 bg-precio-400 px-2 py-1">
+              <span className="block skew-x-6 font-display text-[1.75rem] font-extrabold italic leading-none text-black break-words">
+                {formatPrice(price)}
+              </span>
             </span>
             {product.tags.find(t => t.toLowerCase().startsWith('pack')) && (() => {
               const packTag = product.tags.find(t => t.toLowerCase().startsWith('pack'));

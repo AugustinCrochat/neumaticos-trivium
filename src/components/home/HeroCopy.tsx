@@ -18,8 +18,11 @@ const lugar = (b: Branch) => (b.province === "Córdoba" ? b.city : b.shortName);
 export function HeroEtiqueta() {
   const { selectedBranch: b } = useBranch();
   return (
-    <span className="mb-4 inline-flex w-fit rounded-full bg-orange-500 px-3 py-1 text-xs font-bold uppercase tracking-widest text-white">
-      Neumáticos baratos en {lugar(b)} · {b.apertura ? `Abrimos ${b.apertura}` : "Importación directa"}
+    // Paralelogramo en vez de pastilla: la misma inclinación del logo.
+    <span className="mb-4 inline-flex w-fit -skew-x-12 bg-orange-500 px-3 py-1 text-xs font-bold uppercase tracking-widest text-white">
+      <span className="skew-x-12">
+        Neumáticos baratos en {lugar(b)} · {b.apertura ? `Abrimos ${b.apertura}` : "Importación directa"}
+      </span>
     </span>
   );
 }
@@ -27,7 +30,9 @@ export function HeroEtiqueta() {
 export function HeroTexto() {
   const { selectedBranch: b } = useBranch();
   return (
-    <p className="mt-4 max-w-md text-lg leading-snug text-slate-300">
+    // En celular, con el local abierto, el párrafo se oculta: lo mismo lo dicen
+    // la etiqueta de precio y los chips, y así el buscador sube a la primera pantalla.
+    <p className={`mt-4 max-w-md text-lg leading-snug text-slate-300 ${b.apertura ? "" : "hidden md:block"}`}>
       {b.apertura
         ? `Abrimos en ${b.shortName} ${b.apertura}. Mirá los precios y dejanos tu consulta.`
         : "Precio publicado, stock real y colocación sin cargo."}

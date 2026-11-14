@@ -29,6 +29,7 @@ export function LocalProductCarousel({
   titulo,
   autoplay = false,
   sinTitulo = false,
+  tituloPortada = false,
 }: {
   productos: TireProduct[];
   /** id -> medida del tag "Mejor precio" (Map no serializa entre server y client). */
@@ -37,6 +38,8 @@ export function LocalProductCarousel({
   autoplay?: boolean;
   /** El título queda sólo para lectores de pantalla y buscadores (la página ya tiene el suyo). */
   sinTitulo?: boolean;
+  /** Título con la tipografía de los títulos de la portada (condensada, inclinada, en mayúsculas). */
+  tituloPortada?: boolean;
 }) {
   const [rim, setRim] = useState<number | null>(null);
   const scroller = useRef<HTMLDivElement>(null);
@@ -173,7 +176,7 @@ export function LocalProductCarousel({
   return (
     <section className={sinTitulo ? "" : "mb-12"} aria-label={titulo}>
       <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
-        <h2 className={sinTitulo ? "sr-only" : "text-2xl font-black text-navy-900"}>{titulo}</h2>
+        <h2 className={sinTitulo ? "sr-only" : tituloPortada ? "font-display text-4xl font-extrabold uppercase italic tracking-wide text-navy-900" : "text-2xl font-black text-navy-900"}>{titulo}</h2>
         <div className="hidden gap-2 md:flex">
           <button
             type="button"

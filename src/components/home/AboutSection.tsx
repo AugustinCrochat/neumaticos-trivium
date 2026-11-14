@@ -13,7 +13,7 @@ export function AboutSection() {
   return (
     <section className="bg-white py-16">
       <div className="mx-auto max-w-4xl px-4">
-        <h2 className="font-display text-4xl font-bold uppercase tracking-wide text-navy-900">
+        <h2 className="font-display text-4xl font-extrabold uppercase italic tracking-wide text-navy-900">
           Comprar neumáticos sin pagar de más
         </h2>
 

@@ -17,7 +17,7 @@ export function HeroSection({ productos }: { productos: TireProduct[] }) {
   }
 
   return (
-    <section id="hero" className="relative overflow-hidden bg-navy-950">
+    <section id="hero" className="relative overflow-hidden bg-black">
       {/* Foto real del local de fondo, muy tenue: da contexto de negocio físico
           sin competir con el título ni con el buscador. */}
       {foto && (
@@ -32,7 +32,7 @@ export function HeroSection({ productos }: { productos: TireProduct[] }) {
             decoding="async"
             className="absolute inset-0 h-full w-full object-cover object-top opacity-60"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-navy-950/90 via-navy-950/55 to-navy-950/10" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/60 to-black/10" />
         </>
       )}
       <div className="relative max-w-7xl 2xl:max-w-[96rem] mx-auto px-4">
@@ -41,7 +41,7 @@ export function HeroSection({ productos }: { productos: TireProduct[] }) {
           {/* Left: copy */}
           <div className="flex flex-col justify-center pt-10 pb-5 md:py-20 pr-0 md:pr-12">
             <HeroEtiqueta />
-            <h1 className="font-display text-6xl font-extrabold uppercase leading-[0.95] tracking-tight text-white md:text-7xl lg:text-8xl">
+            <h1 className="font-display text-6xl font-extrabold uppercase italic leading-[0.95] tracking-tight text-white md:text-7xl lg:text-8xl">
               El outlet del{" "}
               <span className="text-orange-500">neumático</span>
             </h1>

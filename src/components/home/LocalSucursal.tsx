@@ -44,7 +44,7 @@ export function LocalSucursal({ zonas }: { zonas: ReactNode }) {
           )}
 
           <div className="md:order-1">
-            <h2 className="font-display text-3xl font-bold uppercase leading-tight tracking-wide md:text-4xl">
+            <h2 className="font-display text-3xl font-extrabold uppercase italic leading-tight tracking-wide md:text-4xl">
               {b.apertura ? `Nuevo local en ${lugar}` : `Local a la calle en ${lugar}`}
             </h2>
             <p className="mt-2 leading-relaxed text-slate-300">

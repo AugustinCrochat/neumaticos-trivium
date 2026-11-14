@@ -28,6 +28,9 @@ const display = Barlow_Condensed({
   variable: "--font-display-face",
   subsets: ["latin"],
   weight: ["600", "700", "800"],
+  // Itálica: la inclinación del logo (TRIVIUM) llevada a títulos y precios; el
+  // navegador sólo baja las variantes que la página usa.
+  style: ["normal", "italic"],
 });
 
 export const metadata: Metadata = {

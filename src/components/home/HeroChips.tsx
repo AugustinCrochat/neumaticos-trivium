@@ -16,7 +16,7 @@ const chip = "rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-s
  * abierto con servicios confirmados. Una sucursal por abrir muestra la fecha y
  * el "Avisame".
  */
-export function HeroChips({ anclas }: { anclas: { href: string; texto: string }[] }) {
+export function HeroChips({ anclas }: { anclas: { href: string; medida: string; precio: string }[] }) {
   const { selectedBranch: b } = useBranch();
   const [i, setI] = useState(0);
   const pastilla = useRef<HTMLAnchorElement>(null);
@@ -46,11 +46,12 @@ export function HeroChips({ anclas }: { anclas: { href: string; texto: string }[
   const abierta = !b.apertura && !b.provisorio;
 
   return (
-    <div className="mt-6 flex flex-wrap items-center gap-2">
-      {b.googleRating && <GoogleRatingBadge branchId={b.id} className={chip} />}
+    <div className="mt-6">
       {anclas.length > 0 && (
+        // Etiqueta de precio: el número más grande de la primera pantalla. Amarillo
+        // de góndola, inclinada como el logo y con sombra dura, como un sticker.
         // Todas las medidas apiladas en la misma celda (las que no tocan, invisibles):
-        // la píldora mide lo que la más larga y los chips vecinos no saltan.
+        // la etiqueta mide lo que la más larga y lo de alrededor no salta.
         <Link
           ref={pastilla}
           href={anclas[i].href}
@@ -59,21 +60,33 @@ export function HeroChips({ anclas }: { anclas: { href: string; texto: string }[
           onFocus={pausar(Infinity)}
           onBlur={pausar(600)}
           onTouchStart={pausar(3000)}
-          className="inline-grid rounded-full bg-orange-500 px-3 py-1.5 text-sm font-black !text-white !no-underline transition-colors hover:bg-orange-600"
+          className="group ml-1 inline-flex -skew-x-6 items-stretch bg-precio-400 !text-black !no-underline shadow-[5px_5px_0_0_#ff1e00] transition-transform hover:-translate-y-0.5 active:translate-y-0"
         >
-          {anclas.map((a, n) => (
-            <span
-              key={a.href}
-              aria-hidden={n !== i}
-              className={`col-start-1 row-start-1 text-center transition-opacity duration-500 motion-reduce:transition-none ${n === i ? "opacity-100" : "opacity-0"}`}
-            >
-              {a.texto}
-            </span>
-          ))}
+          <span className="inline-grid skew-x-6 py-2 pl-4 pr-3 md:pl-5 md:pr-4">
+            {anclas.map((a, n) => (
+              <span
+                key={a.href}
+                aria-hidden={n !== i}
+                className={`col-start-1 row-start-1 flex flex-col transition-opacity duration-500 motion-reduce:transition-none ${n === i ? "opacity-100" : "opacity-0"}`}
+              >
+                <span className="text-[11px] font-black uppercase leading-none tracking-widest md:text-xs">{a.medida} desde</span>
+                <span className="font-display text-5xl font-extrabold italic leading-[0.9] tracking-tight md:text-6xl lg:text-7xl">{a.precio}</span>
+              </span>
+            ))}
+          </span>
+          <span className="flex items-center bg-black px-3 text-precio-400 md:px-4">
+            <svg aria-hidden="true" className="h-7 w-7 skew-x-6 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+              <path strokeLinecap="square" d="M5 5l7 7-7 7M13 5l7 7-7 7" />
+            </svg>
+            <span className="sr-only">Ver precios</span>
+          </span>
         </Link>
       )}
+      <div className="mt-5 flex flex-wrap items-center gap-2">
+      {b.googleRating && <GoogleRatingBadge branchId={b.id} className={chip} />}
       {abierta ? (
         <>
+          <span className={chip}>Sin turno</span>
           <span className={chip}>Colocación <span className="underline decoration-orange-500 decoration-2 underline-offset-4">sin cargo</span> en el acto</span>
         </>
       ) : b.apertura ? (
@@ -84,6 +97,7 @@ export function HeroChips({ anclas }: { anclas: { href: string; texto: string }[
           </WhatsAppLink>
         </>
       ) : null}
+      </div>
     </div>
   );
 }
