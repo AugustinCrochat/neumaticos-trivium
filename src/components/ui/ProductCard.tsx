@@ -11,6 +11,7 @@ import { groupLabel, isBestPriceLive, type PricePeer } from "@/lib/best-price";
 import { productAlt, productThumb } from "@/lib/image-seo";
 import type { TireProduct } from "@/lib/types";
 import type { ReactNode } from "react";
+import { PrecioTag } from "@/components/ui/PrecioTag";
 import { useBranch } from "@/contexts/branch-context";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 import { mensajeAvisameApertura, mensajeAvisameStock, waHref } from "@/lib/whatsapp";
@@ -174,11 +175,7 @@ export function ProductCard({
           <div className="flex flex-col items-start gap-0.5">
             {/* Precio como etiqueta: amarillo de góndola, inclinado como el logo.
                 Es lo primero que se lee de la tarjeta. */}
-            <span className="-ml-0.5 inline-block -skew-x-6 bg-precio-400 px-2 py-1">
-              <span className="block skew-x-6 font-display text-[1.75rem] font-extrabold italic leading-none text-black break-words">
-                {formatPrice(price)}
-              </span>
-            </span>
+            <PrecioTag className="-ml-0.5">{formatPrice(price)}</PrecioTag>
             {product.tags.find(t => t.toLowerCase().startsWith('pack')) && (() => {
               const packTag = product.tags.find(t => t.toLowerCase().startsWith('pack'));
               const match = packTag?.match(/x(\d+)/i);

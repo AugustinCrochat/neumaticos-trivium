@@ -60,12 +60,32 @@
   --color-tire-400: #6a6a6a;
   --color-tire-100: #d8d8d8;
 
+  /* Esquinas más duras en todo el sitio: las tarjetas muy redondeadas daban
+     aspecto de aplicación, no de local. Se achican los radios grandes desde
+     acá en vez de tocar cada clase rounded-xl / 2xl / 3xl. */
+  --radius-xl: 0.5rem;
+  --radius-2xl: 0.625rem;
+  --radius-3xl: 0.75rem;
+
   --color-background: #f8fafc;
   --color-foreground: #0f172a;
 
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   /* Títulos de la home: condensada, en mayúsculas desde las clases. */
   --font-display: var(--font-display-face), var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Títulos de página y de sección con la tipografía de marca: condensada, en
+   mayúsculas e inclinada como el logo. Va en la capa base para que cualquier
+   clase de utilidad (font-sans, normal-case, not-italic) la pueda pisar donde
+   un título necesita ser texto corrido (por ejemplo, el de una tarjeta). */
+@layer base {
+  h1, h2 {
+    font-family: var(--font-display);
+    font-style: italic;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+  }
 }
 
 body {

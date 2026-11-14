@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { PrecioTag } from "@/components/ui/PrecioTag";
 import Link from "@/components/ui/Link";
 import type { Metadata } from "next";
 import { getAccesoriosDesdePOS } from "@/lib/pos-api";
@@ -128,7 +129,7 @@ export default async function AccessoryPage({ params }: Props) {
                 </span>
               </div>
             )}
-            <span className="text-4xl font-black text-red-600">{formatPrice(accessory.price)}</span>
+            <PrecioTag size="lg">{formatPrice(accessory.price)}</PrecioTag>
             <p className="text-xs text-slate-400 mt-1">
               Precio por juego, con 2 llaves · Precio sin impuestos nacionales: {formatPrice(accessory.price / 1.21)}
             </p>

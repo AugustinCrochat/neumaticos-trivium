@@ -371,8 +371,8 @@ export default async function ProductPage({ params }: Props) {
 
         {/* Info */}
         <div className="flex flex-col">
-          <h1 className="text-2xl md:text-4xl font-normal text-slate-900 mb-3 leading-tight">
-            <ProductNameWithHighlightedSize product={product} sizeClassName="font-bold" hideBrand />
+          <h1 className="text-4xl md:text-5xl font-semibold text-slate-900 mb-3 leading-none">
+            <ProductNameWithHighlightedSize product={product} sizeClassName="font-extrabold" hideBrand />
           </h1>
 
           <Link href={`/marcas/${product.brandId}`} className="mb-2 group/brand inline-block">

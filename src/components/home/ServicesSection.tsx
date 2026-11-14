@@ -4,6 +4,7 @@ import Image from "next/image";
 import { getServiciosPrecios } from "@/lib/pos-api";
 import { getSelectedBranchSlug } from "@/lib/branch-server";
 import { formatPrecio, splitAutoCamioneta } from "@/lib/servicios";
+import { PrecioTag } from "@/components/ui/PrecioTag";
 import { PorSucursal, ServicioNombre } from "@/components/ui/ServicioNombre";
 
 // Fotos del taller real, todas recortadas a la misma proporción (4:3) para
@@ -239,13 +240,13 @@ function PriceTag({
       {auto && (
         <div>
           <span className="block text-[10px] font-bold uppercase tracking-widest text-slate-400">Auto</span>
-          <span className="text-lg font-black text-orange-400">{formatPrecio(auto.precio)}</span>
+          <PrecioTag size="sm">{formatPrecio(auto.precio)}</PrecioTag>
         </div>
       )}
       {camioneta && (
         <div>
           <span className="block text-[10px] font-bold uppercase tracking-widest text-slate-400">Camioneta</span>
-          <span className="text-lg font-black text-orange-400">{formatPrecio(camioneta.precio)}</span>
+          <PrecioTag size="sm">{formatPrecio(camioneta.precio)}</PrecioTag>
         </div>
       )}
       {priceNote && <span className="text-xs text-slate-400 mb-0.5">{priceNote}</span>}
@@ -267,10 +268,10 @@ export async function ServicesSection({ comoPagina = false }: { /** En /servicio
           </span>
           {(() => {
             const Titulo = comoPagina ? "h1" : "h2";
-            return <Titulo className="text-3xl font-black text-navy-900 mb-3">Gomería y taller propio</Titulo>;
+            return <Titulo className="text-5xl font-extrabold leading-none text-navy-900 mb-3 md:text-6xl">Gomería y taller propio</Titulo>;
           })()}
           <p className="text-slate-500 text-lg max-w-xl mx-auto">
-            Equipos de última generación y colocación incluida al comprar. Atención por orden de llegada, sin esperas.
+            Alineadora 3D, balanceadora computarizada y colocación sin cargo si comprás acá. Venís sin turno: atendemos por orden de llegada.
           </p>
         </div>
 
@@ -358,13 +359,13 @@ export async function ServicesSection({ comoPagina = false }: { /** En /servicio
                 {combo.auto && (
                   <div>
                     <span className="block text-[10px] font-bold uppercase tracking-widest text-orange-500">Auto</span>
-                    <span className="text-2xl font-black text-navy-900">{formatPrecio(combo.auto.precio)}</span>
+                    <PrecioTag>{formatPrecio(combo.auto.precio)}</PrecioTag>
                   </div>
                 )}
                 {combo.camioneta && (
                   <div>
                     <span className="block text-[10px] font-bold uppercase tracking-widest text-orange-500">Camioneta</span>
-                    <span className="text-2xl font-black text-navy-900">{formatPrecio(combo.camioneta.precio)}</span>
+                    <PrecioTag>{formatPrecio(combo.camioneta.precio)}</PrecioTag>
                   </div>
                 )}
                 <Link

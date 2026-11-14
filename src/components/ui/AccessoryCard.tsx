@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { PrecioTag } from "@/components/ui/PrecioTag";
 import Link from "@/components/ui/Link";
 import type { Accessory } from "@/lib/types";
 import { isLowStock, stockLabel } from "@/lib/stock";
@@ -66,7 +67,7 @@ export function AccessoryCard({ accessory, priceOld = accessory.priceOld }: { ac
           {priceOld && (
             <span className="text-slate-400 line-through text-xs block break-words">{formatPrice(priceOld)}</span>
           )}
-          <span className="text-2xl font-black text-red-600 block mb-1.5 break-words">{formatPrice(accessory.price)}</span>
+          <span className="mb-1.5 block"><PrecioTag>{formatPrice(accessory.price)}</PrecioTag></span>
           {accessory.enStock ? (
             <p className={`mb-2 flex items-center gap-1.5 text-xs font-bold ${isLowStock(accessory.stock) ? "text-amber-600" : "text-emerald-600"}`}>
               <span className={`h-1.5 w-1.5 rounded-full ${isLowStock(accessory.stock) ? "bg-amber-500" : "bg-emerald-500"}`} />

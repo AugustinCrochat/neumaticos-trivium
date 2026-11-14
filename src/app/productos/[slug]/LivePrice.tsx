@@ -1,6 +1,7 @@
 "use client";
 
 import { useLiveStock, useLiveStockMap } from "@/contexts/live-stock-context";
+import { PrecioTag } from "@/components/ui/PrecioTag";
 import { BestPriceBadge } from "@/components/ui/BestPriceBadge";
 import { isBestPriceLive, type PricePeer } from "@/lib/best-price";
 
@@ -31,10 +32,10 @@ export function LivePrice({ id, price, priceOld, peers, groupLabel }: { id: stri
         </div>
       )}
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-        <span className="text-4xl font-black text-red-600">{formatPrice(current)}</span>
+        <PrecioTag size="lg">{formatPrice(current)}</PrecioTag>
         {best && <BestPriceBadge label={groupLabel} />}
       </div>
-      <p className="text-xs text-slate-400 mt-1">
+      <p className="text-xs text-slate-500 mt-2">
         Precio por unidad · Precio sin impuestos nacionales: {formatPrice(current / 1.21)}
       </p>
     </>

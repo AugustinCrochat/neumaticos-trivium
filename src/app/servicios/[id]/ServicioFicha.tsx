@@ -1,5 +1,6 @@
 "use client";
 
+import { PrecioTag } from "@/components/ui/PrecioTag";
 import { useState, type ReactNode } from "react";
 import Image from "next/image";
 import Link from "@/components/ui/Link";
@@ -121,7 +122,7 @@ export function ServicioFicha({
                   </div>
                 )}
                 <p className="flex flex-wrap items-baseline gap-x-2">
-                  <span className="text-4xl font-black text-navy-900">{formatPrecio(variante.precio)}</span>
+                  <PrecioTag size="lg">{formatPrecio(variante.precio)}</PrecioTag>
                   {priceNote && <span className="text-sm font-bold text-slate-500">{priceNote}</span>}
                 </p>
                 {selectedBranch.apertura || selectedBranch.provisorio ? (
@@ -199,8 +200,8 @@ export function ServicioFicha({
                   </Link>
                 </p>
                 <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
-                  <span className="text-2xl font-black text-navy-900">
-                    {formatPrecio(comboVariante.precio)}
+                  <span className="flex items-center">
+                    <PrecioTag>{formatPrecio(comboVariante.precio)}</PrecioTag>
                     <span className="ml-2 text-xs font-bold text-slate-500">{comboVariante.label.toLowerCase()}</span>
                   </span>
                   <WhatsAppLink
