@@ -12,6 +12,11 @@ const nextConfig: NextConfig = {
   experimental: {
     cpus: 1,
   },
+  // Solo afecta a `next dev`: descarta antes las páginas que no se están mirando.
+  onDemandEntries: {
+    maxInactiveAge: 30 * 1000,
+    pagesBufferLength: 2,
+  },
   async redirects() {
     return [
       // La nota de cubiertas de carga se renombró al corregir que ninguna es de nieve.

@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pantallas · Trivium</title>
+<style>
+  :root { color-scheme: dark; --bg:#0f1115; --panel:#181b22; --line:#2a2f3a; --txt:#e8eaf0; --mut:#8b93a3; --red:#ff1e00; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--txt); font:14px system-ui, sans-serif; }
+  header { position:sticky; top:0; z-index:5; display:flex; flex-wrap:wrap; gap:10px 14px; align-items:center; padding:10px 14px; background:var(--panel); border-bottom:1px solid var(--line); }
+  input[type=text], input[type=number] { background:#0f1115; color:var(--txt); border:1px solid var(--line); border-radius:8px; padding:7px 10px; font:inherit; }
+  #ruta { width:min(360px, 100%); }
+  button, label.chip { background:#0f1115; color:var(--txt); border:1px solid var(--line); border-radius:8px; padding:7px 11px; font:inherit; cursor:pointer; }
+  button:hover, label.chip:hover { border-color:var(--red); }
+  label.chip { display:inline-flex; gap:6px; align-items:center; user-select:none; }
+  label.chip input { accent-color:var(--red); }
+  .grupo { display:flex; flex-wrap:wrap; gap:6px; align-items:center; }
+  .mut { color:var(--mut); }
+  #panel { display:contents; }
+  header.compacto { padding:6px 10px; gap:6px; }
+  header.compacto #panel, header.compacto strong { display:none; }
+  .ico { display:inline-flex; align-items:center; padding:6px 8px; }
+  .ico.on { border-color:var(--red); background:#2a1512; }
+  #fila { display:flex; gap:18px; align-items:flex-start; padding:16px 14px 40px; overflow-x:auto; }
+  .marco { flex:none; }
+  .marco .tit { color:var(--mut); margin:0 0 6px; font-size:12px; }
+  .marco .caja { overflow:hidden; border:1px solid var(--line); border-radius:6px; background:#fff; }
+  iframe { display:block; border:0; transform-origin:0 0; background:#fff; }
+</style>
+</head>
+<body>
+<header>
+  <button id="menu" type="button" class="ico" title="Mostrar u ocultar las opciones" aria-label="Opciones"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d='M4 6h16M4 12h16M4 18h16'/></svg></button>
+  <div class="grupo" id="rapidos">
+    <button type="button" class="ico" data-w="390" title="Celular (390)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><rect x='7' y='2' width='10' height='20' rx='2'/><path d='M11 18h2'/></svg></button>
+    <button type="button" class="ico" data-w="768" title="Tablet (768)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><rect x='4' y='2' width='16' height='20' rx='2'/><path d='M11 18h2'/></svg></button>
+    <button type="button" class="ico" data-w="1280" title="Escritorio (1280)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><rect x='2' y='4' width='20' height='13' rx='2'/><path d='M8 21h8M12 17v4'/></svg></button>
+    <button type="button" class="ico" id="ajustarAlto" title="Ajustar el alto de las pantallas a la ventana"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d='M12 3v18M8 7l4-4 4 4M8 17l4 4 4-4'/></svg></button>
+  </div>
+  <strong>Pantallas</strong>
+  <div id="panel">
+  <form id="f" class="grupo"><input id="ruta" type="text" value="/" spellcheck="false" aria-label="Ruta"><button>Ir</button></form>
+  <button id="recargar" type="button">Recargar</button>
+  <button id="nueva" type="button">Abrir en pestaña</button>
+  <button id="sinSucursal" type="button" title="Borra la cookie de sucursal y la sugerencia de la sesión, y recarga todas las pantallas: así se ve un visitante nuevo">Sin sucursal</button>
+  <div class="grupo"><span class="mut">Sucursal</span>
+    <select id="conSucursal" style="background:#0f1115;color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:7px"><option value="">elegir…</option><option value="arguello">Argüello</option><option value="lomas-del-mirador">Lomas del Mirador</option><option value="san-justo">San Justo</option></select></div>
+  <div class="grupo" id="anchos"></div>
+  <div class="grupo"><input id="otro" type="number" min="280" max="3000" placeholder="otro ancho" style="width:110px"><button id="sumar" type="button">+</button></div>
+  <div class="grupo"><span class="mut">Alto</span><input id="alto" type="number" min="300" max="3000" value="800" style="width:80px"></div>
+  <label class="chip"><input type="checkbox" id="sync" checked>Sincronizar scroll y páginas</label>
+  <div class="grupo"><span class="mut">Escala</span>
+    <select id="escala" style="background:#0f1115;color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:7px"><option value="auto">Ajustar</option><option value="1">100%</option><option value="0.75">75%</option><option value="0.5">50%</option></select></div>
+  </div>
+</header>
+<main id="fila"></main>
+<script>
+// Mismo origen que el sitio (el servidor reenvía todo lo demás a next dev), así que se pueden sincronizar las ventanas.
+const PRESETS = [360, 390, 414, 768, 1024, 1280, 1536];
+const NOMBRES = { 360:"Celular chico", 390:"Celular", 414:"Celular grande", 768:"Tablet", 1024:"Tablet horizontal", 1280:"Notebook", 1536:"Escritorio" };
+const $ = (id) => document.getElementById(id);
+const leer = () => { try { return JSON.parse(localStorage.getItem("pantallas") || "{}"); } catch { return {}; } };
+const est = Object.assign({ ruta:"/", anchos:[390, 768, 1280], alto:800, escala:"auto", sync:true }, leer());
+const guardar = () => { try { localStorage.setItem("pantallas", JSON.stringify(est)); } catch {} };
+const hash = new URLSearchParams(location.hash.slice(1)); if (hash.get("ruta")) est.ruta = hash.get("ruta");
+const marcos = new Map(); // ancho -> { caja, tit, ifr, ultimaRuta }
+
+function chips() {
+  const todos = [...new Set([...PRESETS, ...est.anchos])].sort((a,b)=>a-b);
+  $("anchos").innerHTML = todos.map((w) =>
+    `<label class="chip"><input type="checkbox" data-w="${w}" ${est.anchos.includes(w)?"checked":""}>${w}</label>`).join("");
+  $("anchos").querySelectorAll("input").forEach((i) => i.onchange = () => {
+    const w = +i.dataset.w;
+    est.anchos = i.checked ? [...est.anchos, w].sort((a,b)=>a-b) : est.anchos.filter((x)=>x!==w);
+    guardar(); dibujar();
+  });
+}
+const ruta = () => (est.ruta.startsWith("/") ? est.ruta : "/" + est.ruta);
+const actual = () => { for (const m of marcos.values()) { try { const l = m.ifr.contentWindow.location; return l.pathname + l.search + l.hash; } catch {} } return ruta(); };
+
+// Las ventanas persisten: al cambiar tamaños solo se agregan, quitan o redimensionan (no se recargan).
+function dibujar() {
+  pintarRapidos();
+  const fila = $("fila");
+  const total = est.anchos.reduce((s,w)=>s+w,0) + 18 * Math.max(0, est.anchos.length - 1);
+  const k = est.escala === "auto" ? Math.min(1, (innerWidth - 28) / total) : +est.escala;
+  const aqui = actual();
+  for (const [w, m] of marcos) if (!est.anchos.includes(w)) { m.el.remove(); marcos.delete(w); }
+  est.anchos.forEach((w) => {
+    let m = marcos.get(w);
+    if (!m) {
+      const el = document.createElement("div"); el.className = "marco";
+      el.innerHTML = `<p class="tit"></p><div class="caja"><iframe title="${w}px"></iframe></div>`;
+      m = { el, tit: el.querySelector(".tit"), caja: el.querySelector(".caja"), ifr: el.querySelector("iframe") };
+      m.ifr.addEventListener("load", () => enlazar(w, m));
+      m.ifr.src = aqui;
+      marcos.set(w, m);
+    }
+    m.tit.textContent = `${NOMBRES[w] || "Personalizado"} · ${w}×${est.alto} · ${Math.round(k*100)}%`;
+    m.caja.style.cssText = `width:${w*k}px;height:${est.alto*k}px`;
+    m.ifr.style.cssText = `width:${w}px;height:${est.alto}px;transform:scale(${k})`;
+  });
+  // Respetar el orden de los anchos sin recrear los iframes (mover un iframe en el DOM lo recargaría).
+  let prev = null;
+  est.anchos.forEach((w) => { const el = marcos.get(w).el; if (el.parentNode !== fila) fila.insertBefore(el, prev ? prev.nextSibling : fila.firstChild); prev = el; });
+}
+
+// --- Sincronización ---
+let bloqueo = 0;
+const ratio = (win) => { const d = win.document.documentElement; const max = d.scrollHeight - win.innerHeight; return max > 0 ? win.scrollY / max : 0; };
+function enlazar(w, m) {
+  let win; try { win = m.ifr.contentWindow; win.document; } catch { return; }
+  // Celulares y tablets reales no ocupan ancho con una barra de scroll: se oculta (el scroll sigue andando) para ver el ancho real y que no tape contenido.
+  if (w < 1024 && !win.document.getElementById("__sin-barra")) {
+    const st = win.document.createElement("style");
+    st.id = "__sin-barra";
+    st.textContent = "html{scrollbar-width:none}::-webkit-scrollbar{display:none}";
+    win.document.head.appendChild(st);
+  }
+  win.addEventListener("scroll", () => {
+    if (!est.sync || Date.now() < bloqueo) return;
+    const r = ratio(win);
+    bloqueo = Date.now() + 120;
+    for (const [w2, o] of marcos) if (o !== m) { try { const ow = o.ifr.contentWindow; const max = ow.document.documentElement.scrollHeight - ow.innerHeight; ow.scrollTo(0, r * max); } catch {} }
+  }, { passive: true });
+}
+// La navegación del sitio (Next usa pushState, sin evento load) se detecta mirando la URL cada 250 ms.
+// Cada ventana recuerda su última ruta (vista); si cambia por su cuenta, las demás van a la misma.
+// Mientras una ventana carga su destino (objetivo) se ignora lo que lea: evita rebotes entre ventanas.
+setInterval(() => {
+  if (!est.sync) return;
+  const lista = [...marcos.values()];
+  for (const m of lista) {
+    let cur; try { const l = m.ifr.contentWindow.location; cur = l.pathname + l.search; } catch { continue; }
+    if (cur.startsWith("/blank")) continue;
+    if (m.objetivo !== undefined) {
+      if (cur === m.objetivo || Date.now() > m.hasta) { m.objetivo = undefined; m.vista = cur; }
+      continue;
+    }
+    if (m.vista === undefined) { m.vista = cur; continue; }
+    if (cur === m.vista) continue;
+    m.vista = cur;
+    for (const o of lista) if (o !== m) {
+      let oc; try { const l = o.ifr.contentWindow.location; oc = l.pathname + l.search; } catch { continue; }
+      if (oc !== cur) { o.objetivo = cur; o.hasta = Date.now() + 8000; o.ifr.contentWindow.location.replace(cur); }
+      else o.vista = cur;
+    }
+    if (document.activeElement !== $("ruta")) $("ruta").value = cur;
+    break;
+  }
+}, 250);
+
+pintarRapidos(); $("ruta").value = est.ruta; $("alto").value = est.alto; $("escala").value = est.escala; $("sync").checked = est.sync;
+$("f").onsubmit = (e) => { e.preventDefault(); est.ruta = $("ruta").value.trim() || "/"; guardar(); for (const m of marcos.values()) { m.objetivo = ruta(); m.hasta = Date.now() + 8000; m.ifr.src = ruta(); } };
+const recargarTodo = () => marcos.forEach((m) => { try { m.ifr.contentWindow.location.reload(); } catch { m.ifr.src = m.ifr.src; } });
+// La cookie es del host (no del puerto): vale para el sitio y para el visor. Las ventanas son del mismo origen, así que también se limpia su sessionStorage.
+$("sinSucursal").onclick = () => {
+  document.cookie = "trivium-branch=; path=/; max-age=0";
+  marcos.forEach((m) => { try { m.ifr.contentWindow.sessionStorage.clear(); } catch {} });
+  try { sessionStorage.clear(); } catch {}
+  recargarTodo();
+};
+$("conSucursal").onchange = (e) => {
+  if (!e.target.value) return;
+  document.cookie = `trivium-branch=${e.target.value}; path=/; max-age=31536000; SameSite=Lax`;
+  e.target.value = "";
+  recargarTodo();
+};
+// Barra compacta: solo el ☰ y los iconos de celular / tablet / escritorio; el resto de las opciones se despliega con el ☰.
+function pintarRapidos() {
+  document.querySelector("header").classList.toggle("compacto", !!est.colapsado);
+  document.querySelectorAll("#rapidos [data-w]").forEach((b) => b.classList.toggle("on", est.anchos.includes(+b.dataset.w)));
+}
+document.querySelectorAll("#rapidos [data-w]").forEach((b) => b.onclick = () => {
+  const w = +b.dataset.w;
+  est.anchos = est.anchos.includes(w) ? est.anchos.filter((x) => x !== w) : [...est.anchos, w].sort((a, c) => a - c);
+  guardar(); chips(); dibujar(); pintarRapidos();
+});
+$("menu").onclick = () => { est.colapsado = !est.colapsado; guardar(); pintarRapidos(); dibujar(); };
+// Alto para que las pantallas entren enteras en la ventana, sin scrollear el visor.
+$("ajustarAlto").onclick = () => {
+  const libre = innerHeight - document.querySelector("header").offsetHeight - 16 - 40 - 30; // paddings de la fila + título
+  const total = est.anchos.reduce((s, w) => s + w, 0) + 18 * Math.max(0, est.anchos.length - 1);
+  const k = est.escala === "auto" ? Math.min(1, (innerWidth - 28) / total) : +est.escala;
+  est.alto = Math.max(300, Math.floor(libre / k)); $("alto").value = est.alto; guardar(); dibujar();
+};
+$("recargar").onclick = () => marcos.forEach((m) => { try { m.ifr.contentWindow.location.reload(); } catch { m.ifr.src = m.ifr.src; } });
+$("nueva").onclick = () => open(actual(), "_blank");
+$("sumar").onclick = () => { const w = +$("otro").value; if (w >= 280 && !est.anchos.includes(w)) { est.anchos = [...est.anchos, w].sort((a,b)=>a-b); $("otro").value=""; guardar(); chips(); dibujar(); } };
+$("alto").onchange = () => { est.alto = +$("alto").value || 800; guardar(); dibujar(); };
+$("escala").onchange = () => { est.escala = $("escala").value; guardar(); dibujar(); };
+$("sync").onchange = () => { est.sync = $("sync").checked; guardar(); };
+addEventListener("resize", () => { clearTimeout(window.__t); window.__t = setTimeout(dibujar, 150); });
+chips(); dibujar();
+</script>
+</body>
+</html>
