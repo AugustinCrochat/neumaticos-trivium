@@ -2,18 +2,21 @@
 @import "maplibre-gl/dist/maplibre-gl.css";
 
 @theme {
-  /* Brand palette — navy */
-  --color-navy-950: #06111f;
-  --color-navy-900: #0a1a30;
-  --color-navy-800: #0f2444;
-  --color-navy-700: #163460;
-  --color-navy-600: #1e4a80;
-  --color-navy-500: #2a65a8;
-  --color-navy-400: #3d80c8;
-  --color-navy-300: #6ba0d8;
-  --color-navy-200: #a8c8ec;
-  --color-navy-100: #dceaf8;
-  --color-navy-50: #f0f6fc;
+  /* Escala "navy": conserva el nombre por las ~850 clases que la usan, pero ya
+     no es azul. El azul marino venía de un branding anterior; la marca es
+     negro, rojo y blanco, así que la escala es ahora un gris neutro que va del
+     negro del header al blanco. */
+  --color-navy-950: #0a0a0a;
+  --color-navy-900: #121212;
+  --color-navy-800: #1f1f1f;
+  --color-navy-700: #333333;
+  --color-navy-600: #4a4a4a;
+  --color-navy-500: #6b6b6b;
+  --color-navy-400: #8f8f8f;
+  --color-navy-300: #b5b5b5;
+  --color-navy-200: #d6d6d6;
+  --color-navy-100: #ebebeb;
+  --color-navy-50: #f6f6f6;
 
   /* Brand accent — rojo Trivium #ff1e00. Escala completa 50-900: antes
      faltaban 200/700/800/900, así que esos matices caían al naranja de
@@ -91,9 +94,9 @@ html {
   height: 20px;
   border: 4px solid white;
   border-radius: 999px;
-  background: var(--color-navy-600);
+  background: #1e6fd9; /* azul de "estás acá": convención de mapas, no color de marca */
   box-shadow:
-    0 0 0 12px rgb(42 101 168 / 0.2),
+    0 0 0 12px rgb(30 111 217 / 0.2),
     0 8px 20px rgb(15 23 42 / 0.28);
 }
 

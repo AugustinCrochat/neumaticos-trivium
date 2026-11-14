@@ -103,7 +103,7 @@ export function SizeOrVehicleSearch({
     }
   });
   const marcada = (id: "patente" | "medida" | "vehiculo") =>
-    activa === id ? "border-orange-500 bg-orange-50 ring-2 ring-orange-500" : "border-slate-300 bg-white hover:border-orange-400";
+    activa === id ? "border-orange-500 bg-orange-50 ring-2 ring-orange-500" : "border-slate-300 bg-slate-50 hover:border-black";
 
   useEffect(() => {
     if (!abierto) return;
@@ -135,11 +135,11 @@ export function SizeOrVehicleSearch({
         onMouseEnter={id === "vehiculo" ? loadVehiculos : undefined}
         onFocus={id === "vehiculo" ? loadVehiculos : undefined}
         aria-expanded={abierto === id}
-        className={`flex w-full items-center gap-3 rounded-xl border px-4 shadow-sm py-3 text-left transition-colors ${marcada(id)}`}
+        className={`flex w-full items-center gap-2 min-[380px]:gap-3 rounded-xl border px-3 min-[380px]:px-4 shadow-sm py-3 text-left transition-colors ${marcada(id)}`}
       >
         {/* Misma caja para todos los íconos: los textos de las barras arrancan en el mismo punto. */}
-        <span className="flex h-12 w-24 shrink-0 items-center justify-center">
-          <Icono className={`text-navy-900 ${Icono === PlateIcon ? "h-9 w-24" : Icono === HalfTireIcon ? "h-12 w-24" : "h-7 w-7"}`} aria-hidden="true" {...(Icono === HalfTireIcon ? { medidas: true } : {})} {...(Icono === PlateIcon ? (activa === "patente" ? { formato: estiloChapa } : { ejemplo }) : {})} />
+        <span className="flex h-12 w-20 min-[380px]:w-24 shrink-0 items-center justify-center">
+          <Icono className={`text-navy-900 ${Icono === PlateIcon ? "h-9 w-20 min-[380px]:w-24" : Icono === HalfTireIcon ? "h-12 w-20 min-[380px]:w-24" : "h-7 w-7"}`} aria-hidden="true" {...(Icono === HalfTireIcon ? { medidas: true } : {})} {...(Icono === PlateIcon ? (activa === "patente" ? { formato: estiloChapa } : { ejemplo }) : {})} />
         </span>
         <span className="w-0 min-w-0 flex-1">
           <span className="block text-sm font-black text-navy-900">{titulo}</span>
@@ -149,8 +149,9 @@ export function SizeOrVehicleSearch({
       </button>
     );
     return (
-      <div className="w-full rounded-2xl border border-slate-300 bg-slate-200 p-5">
-        <h2 className={`mb-3 text-center font-display font-extrabold uppercase tracking-tight text-navy-900 ${compact ? "text-xl" : "text-2xl"}`}>
+      // Mismo lenguaje que la etiqueta de precio: fondo blanco, borde negro duro y sombra roja.
+      <div className="w-full rounded-lg border-2 border-black bg-white p-5 shadow-[6px_6px_0_0_#ff1e00]">
+        <h2 className={`mb-3 text-center font-display font-extrabold uppercase italic tracking-tight text-navy-900 ${compact ? "text-xl" : "text-2xl"}`}>
           Encontrá tus neumáticos
         </h2>
         {escritorio ? (
@@ -208,7 +209,7 @@ export function SizeOrVehicleSearch({
             onNavigate?.();
             irA(`/busqueda?q=${encodeURIComponent(q)}`);
           }}
-          className="mt-3 flex items-center gap-2 rounded-xl border border-slate-300 bg-white py-1 pl-3 pr-1 shadow-sm focus-within:border-orange-500 focus-within:ring-2 focus-within:ring-orange-500/30"
+          className="mt-3 flex items-center gap-2 rounded-lg border-2 border-black bg-white py-1 pl-3 pr-1 focus-within:border-orange-500 focus-within:ring-2 focus-within:ring-orange-500/30"
         >
           <Search className="h-5 w-5 shrink-0 text-slate-400" aria-hidden="true" />
           <input

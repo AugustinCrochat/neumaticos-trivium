@@ -74,7 +74,7 @@ export function ProductCard({
   const best = peers ? isBestPriceLive(product.id, peers, liveMap) : !!isCheapest;
 
   return (
-    <article className={`group bg-white rounded-2xl border transition-all duration-300 overflow-hidden flex flex-col ${best ? "border-emerald-500 shadow-2xl shadow-emerald-500/20 scale-[1.02] relative z-20 ring-4 ring-emerald-500/10" : "border-slate-100 hover:border-navy-200 hover:shadow-xl"}`}>
+    <article className={`group bg-white rounded-2xl border transition-all duration-300 overflow-hidden flex flex-col border-slate-200 hover:border-black hover:shadow-xl`}>
       {/* Image */}
       <Link href={`/productos/${product.slug}`} className="relative bg-white pt-[108%] md:pt-[95%] overflow-hidden block">
         <div className="absolute top-3 left-3 z-10 flex flex-col gap-2 items-start">
