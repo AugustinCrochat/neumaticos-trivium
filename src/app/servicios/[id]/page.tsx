@@ -73,7 +73,7 @@ export default async function ServicioPage({ params }: Props) {
           { name: service.title, path: `/servicios/${service.id}` },
         ])}
       />
-      <JsonLd data={serviceJsonLd(service)} />
+      <JsonLd data={serviceJsonLd(service, { auto, camioneta })} />
       <ServicioFicha
         id={service.id}
         title={service.title}

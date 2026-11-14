@@ -177,7 +177,9 @@ export function siteGraphJsonLd() {
           postalCode: BRANCHES[0].postalCode,
           addressCountry: "AR",
         },
-        contactPoint: BRANCHES.map((branch) => ({
+        contactPoint: BRANCHES.filter(
+          (branch, i, all) => all.findIndex((b) => b.phone === branch.phone) === i,
+        ).map((branch) => ({
           "@type": "ContactPoint",
           contactType: "customer service",
           email: CONTACT_EMAIL,
@@ -237,12 +239,32 @@ export function breadcrumbJsonLd(crumbs: Crumb[]) {
     `Service` de schema.org, colgado del `TireShop` que lo presta. Sin esto,
     "gomería" y los servicios de taller no tenían ningún nodo propio en el
     grafo — sólo texto suelto en la página. */
-export function serviceJsonLd(service: {
-  id: string;
-  title: string;
-  description: string;
-}) {
+export function serviceJsonLd(
+  service: { id: string; title: string; description: string },
+  // Precios del POS (auto / camioneta). Con precio en el schema, buscadores y
+  // asistentes de IA pueden responder "cuánto sale" citando la ficha.
+  precios: { auto?: { precio: number }; camioneta?: { precio: number } } = {},
+) {
   const branch = BRANCHES[0];
+  const offers = (
+    [
+      ["Auto", precios.auto],
+      ["Camioneta, SUV grande o 4x4", precios.camioneta],
+    ] as const
+  ).flatMap(([name, p]) =>
+    p
+      ? [
+          {
+            "@type": "Offer",
+            name: `${service.title}: ${name.toLowerCase()}`,
+            price: p.precio,
+            priceCurrency: "ARS",
+            availability: "https://schema.org/InStock",
+            url: absoluteUrl(`/servicios/${service.id}`),
+          },
+        ]
+      : [],
+  );
   return {
     "@context": "https://schema.org",
     "@type": "Service",
@@ -253,6 +275,7 @@ export function serviceJsonLd(service: {
     serviceType: service.title,
     provider: { "@id": branchNodeId(branch) },
     areaServed: branch.areaServed.map((name) => ({ "@type": "City", name })),
+    ...(offers.length ? { offers } : {}),
   };
 }
 
