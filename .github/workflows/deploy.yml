@@ -100,3 +100,8 @@ jobs:
             echo "$code  $url"
             [ "$code" = "200" ] || exit 1
           done
+
+      # Avisa a Bing (y a los asistentes que usan su índice) de las notas nuevas.
+      - name: Avisar a IndexNow
+        continue-on-error: true
+        run: node scripts/indexnow.mjs
