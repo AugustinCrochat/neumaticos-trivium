@@ -6,7 +6,7 @@ import { ServicioHoyCTA } from "@/components/servicios/ServicioHoyCTA";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "gomeria-en-cordoba";
-const TITLE = "Gomería en Córdoba: alineado y balanceado, pinchaduras y cómo elegir una buena";
+const TITLE = "Gomería en Córdoba: qué servicios hace, pinchaduras, precios y cómo elegir una buena";
 const SUBTITLE =
   "Pinchadura, balanceo, alineación, rotación, válvulas: qué hace una gomería, qué conviene hacer junto y qué mirar antes de dejar el auto.";
 
@@ -63,6 +63,11 @@ export default function Page() {
         problema. Un neumático nuevo necesita balanceo, y un auto que tira hacia un lado necesita
         alineación antes de gastar un juego entero. Esta guía explica qué hace cada servicio, cuáles
         conviene combinar y qué mirar para elegir bien.
+      </p>
+      <p>
+        Si ya sabés lo que necesitás, los precios del día están en{" "}
+        <Link href="/servicios">servicios de gomería</Link> y en la ficha del{" "}
+        <Link href="/servicios/combo-alineado-y-balanceado">alineado y balanceado en Córdoba</Link>.
       </p>
       <ServicioHoyCTA />
 

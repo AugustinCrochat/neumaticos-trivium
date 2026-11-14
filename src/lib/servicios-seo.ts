@@ -138,8 +138,8 @@ export const EXTRA_SERVICES: Service[] = [ROTACION_SERVICE, PINCHADURAS_SERVICE,
 
 export const SERVICIOS_SEO: Record<string, ServicioSeo> = {
   [COMBO_ID]: {
-    title: "Alineado y balanceado: precio y sin turno",
-    titleConPrecio: "Alineado y balanceado: {comboAuto} el auto, sin turno",
+    title: "Alineado y balanceado en Córdoba: precio y sin turno",
+    titleConPrecio: "Alineado y balanceado en Córdoba: {comboAuto} el auto, sin turno",
     metaDescription:
       "Alineado 3D y balanceado de las cuatro ruedas con rotación incluida: todo en una visita y a menor precio que por separado. Sin turno, por orden de llegada.",
     metaDescriptionConPrecio:

@@ -10,7 +10,7 @@ import { canonical, resumen } from "@/lib/seo";
 import { blogShare } from "@/lib/blog-meta";
 
 const SLUG = "alineacion-y-balanceo";
-const TITLE = "Alineado y balanceado en Córdoba: alineación + balanceo de las 4 ruedas, qué incluye y cada cuánto";
+const TITLE = "Alineación y balanceo: qué es cada cosa, qué incluye y cada cuánto se hace";
 const SUBTITLE =
   "Se nombran juntos pero resuelven problemas distintos. Uno corrige hacia dónde apuntan las ruedas; el otro, cómo giran. Acá va la diferencia en criollo.";
 
@@ -68,6 +68,10 @@ export default function Page() {
         &quot;alineación y balanceado&quot;: es lo mismo. No es un solo trabajo. Son dos trabajos distintos, con equipos distintos, que resuelven dos problemas que ni
         siquiera se parecen. Entender cuál es cuál te sirve para dos cosas: describir bien el
         síntoma cuando llegás al taller, y no pagar por algo que no necesitás.
+      </p>
+      <p>
+        Si lo que buscás es hacerlo hoy y saber cuánto sale, el precio y lo que incluye están en la ficha del{" "}
+        <Link href="/servicios/combo-alineado-y-balanceado">alineado y balanceado en Córdoba</Link>.
       </p>
       <ServicioHoyCTA />
       <DesgasteFoto className="my-8" />
