@@ -490,7 +490,7 @@ export default async function ProductPage({ params }: Props) {
 
         <div>
           <h2 className="border-l-[6px] border-orange-500 pl-3 text-3xl font-extrabold leading-none text-navy-900 mb-4 uppercase tracking-wide">Características técnicas</h2>
-          <ul className="overflow-hidden rounded-lg border-2 border-black [&>li:nth-child(even)]:bg-slate-50">
+          <ul className="overflow-hidden rounded-lg border border-slate-300 [&>li:nth-child(even)]:bg-slate-50">
             {characteristics.map((c) => (
               <li key={c.label} className="flex items-center justify-between gap-4 bg-white px-4 py-3">
                 <span className="text-sm font-semibold text-slate-500">{c.label}</span>

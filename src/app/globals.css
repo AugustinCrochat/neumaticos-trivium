@@ -171,31 +171,28 @@ html {
   .paso-flecha { --punta: 26px; }
 }
 
-/* Botones principales (rojo de marca y WhatsApp): sombra dura negra, como un
-   sticker; al pasar el mouse se levantan y al apretar se hunden. Se aplica por
+/* Botones principales (rojo de marca y WhatsApp): planos; al pasar el mouse se
+   levantan un punto y al apretar se hunden. Se aplica por
    selector para no tocar cada botón del sitio. Los espacios en el selector
    evitan que entre "hover:bg-orange-500"; las pastillas redondas (chips,
    flotantes) quedan afuera. */
 :is(a, button):is([class^="bg-orange-500 "], [class*=" bg-orange-500 "], [class*=" bg-[#ff1e00] "], [class*=" bg-[#25D366] "], [class*=" bg-[#25d366] "]):not([class*="rounded-full"]):not([class*="fixed"]) {
-  box-shadow: 3px 3px 0 0 #000;
-  transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.15s ease;
+  transition: transform 0.12s ease, background-color 0.15s ease;
 }
 :is(a, button):is([class^="bg-orange-500 "], [class*=" bg-orange-500 "], [class*=" bg-[#ff1e00] "], [class*=" bg-[#25D366] "], [class*=" bg-[#25d366] "]):not([class*="rounded-full"]):not([class*="fixed"]):hover {
-  transform: translate(-1px, -1px);
-  box-shadow: 4px 4px 0 0 #000;
+  transform: translateY(-1px);
 }
 :is(a, button):is([class^="bg-orange-500 "], [class*=" bg-orange-500 "], [class*=" bg-[#ff1e00] "], [class*=" bg-[#25D366] "], [class*=" bg-[#25d366] "]):not([class*="rounded-full"]):not([class*="fixed"]):active {
-  transform: translate(2px, 2px);
-  box-shadow: 0 0 0 0 #000;
+  transform: translateY(1px);
 }
 
 /* Cinta que se mueve sola (precios de hoy en el blog): dos copias seguidas y
-   un desplazamiento de la mitad del ancho. Se frena al pasar el mouse; con
-   "reducir movimiento" queda quieta y se puede deslizar a mano. */
+   un desplazamiento de la mitad del ancho. Se frena al pasar el mouse. Con
+   "reducir movimiento" NO se apaga (en muchos celulares esa opción viene
+   activa por el ahorro de batería y la cinta quedaba quieta): va más lenta. */
 @keyframes cinta { to { transform: translateX(-50%); } }
 .cinta { animation: cinta 45s linear infinite; }
 .cinta:hover, .cinta:focus-within { animation-play-state: paused; }
 @media (prefers-reduced-motion: reduce) {
-  .cinta { animation: none; }
-  .cinta-caja { overflow-x: auto; }
+  .cinta { animation-duration: 120s; }
 }

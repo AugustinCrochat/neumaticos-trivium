@@ -40,6 +40,11 @@ export const FREE_SHIPPING_THRESHOLD = 120000;
     usar el nombre sin arrastrar el import de "next/headers" al bundle. */
 export const BRANCH_COOKIE = "trivium-branch";
 
+/** Cookie de sesión que marca que la sucursal de BRANCH_COOKIE fue sólo una
+    sugerencia por IP (en celulares la IP suele caer en otra ciudad), no una
+    elección de la persona. Mientras exista, los botones de WhatsApp preguntan. */
+export const BRANCH_AUTO_COOKIE = "trivium-branch-auto";
+
 export type ScheduleRule = {
   /** Dias de la semana segun Date.getDay(): 0=Domingo ... 6=Sabado */
   days: number[];

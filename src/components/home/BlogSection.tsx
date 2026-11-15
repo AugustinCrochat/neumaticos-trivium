@@ -1,6 +1,7 @@
 import Link from "@/components/ui/Link";
 import { BLOG_POSTS } from "@/lib/data";
 import { blogMeta } from "@/lib/blog-meta";
+import { estiloCategoria } from "@/lib/blog-categorias";
 import { BlogCover } from "@/components/blog/BlogCover";
 
 function formatDate(dateStr: string) {
@@ -47,7 +48,7 @@ export function BlogSection() {
 
               <div className="p-5">
                 <div className="flex items-center gap-2 mb-3">
-                  <span className="text-xs bg-orange-50 text-orange-600 font-semibold px-2.5 py-0.5 rounded-full">
+                  <span className={`text-xs ${estiloCategoria(post.category).fondo} text-white font-bold px-2.5 py-0.5 rounded-full`}>
                     {post.category}
                   </span>
                   <time className="text-xs text-slate-400" dateTime={post.date}>
@@ -66,7 +67,7 @@ export function BlogSection() {
                   href={`/blog/${post.slug}`}
                   className="inline-flex items-center gap-1.5 text-navy-600 hover:text-navy-800 text-sm font-semibold transition-colors after:absolute after:inset-0 after:content-['']"
                 >
-                  Leer artículo
+                  {estiloCategoria(post.category).cta}
                   <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>

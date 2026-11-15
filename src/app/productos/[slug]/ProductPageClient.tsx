@@ -87,7 +87,7 @@ export function ProductPageClient({ product, tuercasMuestra }: { product: TirePr
           // pedido para avisarle el día de la apertura.
           <WhatsAppLink
             href={waHref(selectedBranch.whatsapp, mensajeAvisameApertura(selectedBranch.shortName))}
-            className="flex-1 flex items-center justify-center gap-2 rounded-lg border-2 border-black bg-white py-3.5 text-base font-black text-black shadow-[3px_3px_0_0_#000] transition-transform hover:-translate-y-0.5 active:translate-y-0.5"
+            className="flex-1 flex items-center justify-center gap-2 rounded-lg border-2 border-black bg-white py-3.5 text-base font-black text-black transition-transform hover:-translate-y-0.5 active:translate-y-0.5"
           >
             Avisame cuando abra
           </WhatsAppLink>
@@ -96,7 +96,7 @@ export function ProductPageClient({ product, tuercasMuestra }: { product: TirePr
             href={selectedBranch.mapUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex-1 flex items-center justify-center gap-2 rounded-lg border-2 border-black bg-white py-3.5 text-base font-black text-black shadow-[3px_3px_0_0_#000] transition-transform hover:-translate-y-0.5 active:translate-y-0.5"
+            className="flex-1 flex items-center justify-center gap-2 rounded-lg border-2 border-black bg-white py-3.5 text-base font-black text-black transition-transform hover:-translate-y-0.5 active:translate-y-0.5"
           >
             <DirectionsIcon className="h-6 w-6 shrink-0" />
             Cómo llegar
@@ -124,7 +124,7 @@ export function ProductPageClient({ product, tuercasMuestra }: { product: TirePr
 
       {/* Lo que incluye la compra, con la identidad del local: recuadro de
           borde duro en vez del verde genérico. */}
-      <div className="overflow-hidden rounded-lg border-2 border-black bg-white shadow-[5px_5px_0_0_#ff1e00]">
+      <div className="overflow-hidden rounded-lg border border-slate-300 bg-white">
         <div className="p-4">
         <div className="flex items-start gap-3.5">
           <div className="flex h-12 w-12 shrink-0 -skew-x-6 items-center justify-center bg-orange-500 text-white">

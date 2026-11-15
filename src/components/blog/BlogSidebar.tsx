@@ -24,7 +24,7 @@ export async function BlogSidebar({ title, deTaller }: { title: string; deTaller
   if (todas.length === 0) return null;
 
   return (
-    <div className="rounded-lg bg-black p-5 text-white shadow-[6px_6px_0_0_#ff1e00]">
+    <div className="rounded-lg bg-black p-5 text-white ">
       <p className="font-display text-3xl font-extrabold uppercase italic leading-none">Precios de hoy</p>
       <p className="mt-1 text-sm text-slate-400">Con colocación y válvulas sin cargo.</p>
       <ul className="mt-4 divide-y divide-white/10">

@@ -2,7 +2,7 @@ import Link from "@/components/ui/Link";
 import { BlogCover } from "@/components/blog/BlogCover";
 import { PrecioTag } from "@/components/ui/PrecioTag";
 import { preciosAncla } from "@/components/home/HeroTrustRow";
-import { BLOG_CATEGORIAS, type BlogCategoria } from "@/lib/blog-categorias";
+import { BLOG_CATEGORIAS, estiloCategoria, type BlogCategoria } from "@/lib/blog-categorias";
 import { blogMeta } from "@/lib/blog-meta";
 import { BLOG_POSTS } from "@/lib/data";
 import { getProductosDesdePOS, getServiciosPrecios } from "@/lib/pos-api";
@@ -98,7 +98,7 @@ export async function BlogListado({ categoria }: { categoria?: BlogCategoria }) 
 
               <div className="p-5 flex flex-col flex-1">
                 <div className="flex items-center gap-2.5 mb-3">
-                  <span className="-skew-x-12 bg-black px-2 py-0.5 text-[11px] font-black uppercase tracking-wider text-white">
+                  <span className={`-skew-x-12 ${estiloCategoria(post.category).fondo} px-2 py-0.5 text-[11px] font-black uppercase tracking-wider text-white`}>
                     <span className="inline-block skew-x-12">{post.category}</span>
                   </span>
                   <time className="text-xs text-slate-500" dateTime={post.date}>
@@ -115,9 +115,9 @@ export async function BlogListado({ categoria }: { categoria?: BlogCategoria }) 
 
                 <Link
                   href={`/blog/${post.slug}`}
-                  className="inline-flex items-center gap-1.5 text-sm font-black text-orange-600 after:absolute after:inset-0 after:content-['']"
+                  className={`inline-flex items-center gap-1.5 text-sm font-black ${estiloCategoria(post.category).texto} after:absolute after:inset-0 after:content-['']`}
                 >
-                  Leer la guía
+                  {estiloCategoria(post.category).cta}
                   <Flechas />
                 </Link>
               </div>

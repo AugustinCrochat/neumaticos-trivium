@@ -29,16 +29,16 @@ export function FooterCTA() {
         </div>
         <div className="flex flex-wrap gap-3">
           {abierta ? (
-            <Link href={`/sucursales/${b.id}`} className={`${boton} bg-black !text-white shadow-[3px_3px_0_0_#fff]`}>
+            <Link href={`/sucursales/${b.id}`} className={`${boton} bg-black !text-white `}>
               <DirectionsIcon className="h-5 w-5" />
               Cómo llegar
             </Link>
           ) : (
-            <WhatsAppLink href={waHref(b.whatsapp, mensajeAvisameApertura(b.shortName))} className={`${boton} bg-black !text-white shadow-[3px_3px_0_0_#fff]`}>
+            <WhatsAppLink href={waHref(b.whatsapp, mensajeAvisameApertura(b.shortName))} className={`${boton} bg-black !text-white `}>
               Avisame cuando abra
             </WhatsAppLink>
           )}
-          <Link href="/neumaticos" className={`${boton} bg-white !text-black shadow-[3px_3px_0_0_#000]`}>
+          <Link href="/neumaticos" className={`${boton} bg-white !text-black `}>
             Buscar mi medida
           </Link>
           {abierta && (

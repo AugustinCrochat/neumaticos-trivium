@@ -224,7 +224,7 @@ export default async function BranchPage({ params }: Props) {
         />
 
         {/* Respuesta rápida: lo que contestaría un asistente a "dónde hago alineación y balanceo / compro neumáticos baratos en X" */}
-        <section className="overflow-hidden rounded-lg bg-black text-white shadow-[6px_6px_0_0_#ff1e00] lg:grid lg:grid-cols-[3fr_2fr]">
+        <section className="overflow-hidden rounded-lg bg-black text-white lg:grid lg:grid-cols-[3fr_2fr]">
           <div className="p-5 md:p-7">
             <h2 className="inline-block -skew-x-12 bg-orange-500 px-3 py-1 text-sm font-extrabold tracking-widest text-white">
               <span className="inline-block skew-x-12">Respuesta rápida</span>

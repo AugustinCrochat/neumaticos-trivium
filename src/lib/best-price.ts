@@ -1,4 +1,9 @@
 import type { TireProduct } from "@/lib/types";
+import { MARCAS_PREMIUM } from "@/lib/marcas-premium";
+
+/** Marcas premium/tradicionales: nunca llevan "Mejor precio" (el distintivo marca las económicas). Pirelli sí la vendemos. */
+const PREMIUM = new Set(["pirelli", ...MARCAS_PREMIUM.map((m) => m.slug)]);
+const esPremium = (p: TireProduct) => PREMIUM.has(p.brandId?.toLowerCase()) || PREMIUM.has(p.brand?.toLowerCase());
 
 export function sizeLabel(p: TireProduct) {
   return `${p.size.width}/${p.size.profile} R${p.size.rim}${p.isCarga ? "C" : ""}`;
@@ -11,7 +16,7 @@ export function sizeLabel(p: TireProduct) {
  * mezcladas puedan aclarar en el tag de qué medida es el mejor precio.
  */
 /** Datos mínimos de un producto para comparar precio dentro de su grupo. */
-export type PricePeer = { id: string; price: number; enStock?: boolean };
+export type PricePeer = { id: string; price: number; enStock?: boolean; premium?: boolean };
 
 const groupKey = (p: TireProduct) => `${sizeLabel(p)}|${p.isCarga ? "C" : ""}|${p.isAT ? "AT" : ""}`;
 
@@ -27,7 +32,7 @@ export function peersByGroup(products: TireProduct[]): Map<string, PricePeer[]> 
   for (const p of products) {
     const key = groupKey(p);
     const g = groups.get(key) ?? [];
-    g.push({ id: p.id, price: p.price, enStock: p.enStock });
+    g.push({ id: p.id, price: p.price, enStock: p.enStock, premium: esPremium(p) });
     groups.set(key, g);
   }
   const out = new Map<string, PricePeer[]>();
@@ -47,8 +52,8 @@ export function isBestPriceLive(
   peers: PricePeer[],
   live: Record<string, { enStock: boolean; price: number } | undefined>
 ): boolean {
-  const eff = peers.map((q) => ({ id: q.id, price: live[q.id]?.price ?? q.price, enStock: live[q.id]?.enStock ?? q.enStock }));
-  const conStock = eff.filter((q) => q.enStock);
+  const eff = peers.map((q) => ({ premium: q.premium, id: q.id, price: live[q.id]?.price ?? q.price, enStock: live[q.id]?.enStock ?? q.enStock }));
+  const conStock = eff.filter((q) => q.enStock && !q.premium);
   const me = conStock.find((q) => q.id === id);
   if (!me) return false;
   return me.price === Math.min(...conStock.map((q) => q.price));
@@ -65,7 +70,7 @@ export function bestPriceByGroup(products: TireProduct[]): Map<string, string> {
   const best = new Map<string, string>();
   for (const g of groups.values()) {
     // Todos los empatados en el mínimo llevan el tag.
-    const conStock = g.filter((p) => p.enStock);
+    const conStock = g.filter((p) => p.enStock && !esPremium(p));
     if (conStock.length === 0) continue;
     const min = Math.min(...conStock.map((p) => p.price));
     for (const p of conStock) {

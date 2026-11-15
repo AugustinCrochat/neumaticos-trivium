@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useBranch } from "@/contexts/branch-context";
-import { BRANCHES, BRANCH_COOKIE } from "@/lib/config";
+import { BRANCHES, BRANCH_COOKIE, BRANCH_AUTO_COOKIE } from "@/lib/config";
 
 /**
  * Deja elegida la sucursal que atiende esta zona (landings de /neumaticos-en)
@@ -18,7 +18,9 @@ export function PreselectBranch({ branchId, forzar }: { branchId: string; forzar
   const { setSelectedBranch } = useBranch();
 
   useEffect(() => {
-    const hasCookie = document.cookie.split("; ").some((c) => c.startsWith(`${BRANCH_COOKIE}=`));
+    const cookies = document.cookie.split("; ");
+    // Una sugerencia por IP no es una elección: la landing de la zona la pisa.
+    const hasCookie = cookies.some((c) => c.startsWith(`${BRANCH_COOKIE}=`)) && !cookies.some((c) => c.startsWith(`${BRANCH_AUTO_COOKIE}=1`));
     // `forzar`: la URL misma es la elección (portal de región), así que pisa la cookie.
     if (hasCookie && !forzar) return;
     const branch = BRANCHES.find((b) => b.id === branchId);

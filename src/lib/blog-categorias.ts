@@ -69,3 +69,20 @@ export const BLOG_CATEGORIAS: BlogCategoria[] = [
 ];
 
 export const categoriaPorNombre = (categoria: string) => BLOG_CATEGORIAS.find((c) => c.categoria === categoria);
+
+/**
+ * Color y texto del enlace de cada categoría, para distinguirlas de un vistazo
+ * en el listado, la portada y el encabezado de la nota. Las clases van
+ * completas (Tailwind no arma nombres por pedazos).
+ */
+const ESTILOS: Record<string, { fondo: string; texto: string; cta: string }> = {
+  "Guías": { fondo: "bg-[#ff1e00]", texto: "text-[#d11800]", cta: "Leer la guía" },
+  Mantenimiento: { fondo: "bg-[#15803d]", texto: "text-[#15803d]", cta: "Ver cómo cuidarlos" },
+  Servicios: { fondo: "bg-[#111111]", texto: "text-[#111111]", cta: "Leer la nota del taller" },
+  Medidas: { fondo: "bg-[#1e6fd9]", texto: "text-[#1e6fd9]", cta: "Ver la medida" },
+  Marcas: { fondo: "bg-[#7c3aed]", texto: "text-[#7c3aed]", cta: "Conocer la marca" },
+  "Opiniones y Comparativas": { fondo: "bg-[#c2410c]", texto: "text-[#c2410c]", cta: "Ver la comparativa" },
+};
+
+export const estiloCategoria = (categoria: string) =>
+  ESTILOS[categoria] ?? { fondo: "bg-black", texto: "text-black", cta: "Leer la nota" };

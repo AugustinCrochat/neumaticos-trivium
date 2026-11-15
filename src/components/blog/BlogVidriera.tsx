@@ -42,7 +42,7 @@ export async function BlogVidriera({ slug, sinProductos = false }: { slug: strin
     const taller = preciosTaller(await getServiciosPrecios());
     if (!taller.comboAuto) return null;
     return (
-      <section aria-label="Alineado y balanceado en nuestro taller" className="my-10 grid overflow-hidden rounded-lg border-2 border-black bg-black text-white shadow-[6px_6px_0_0_#ff1e00] sm:grid-cols-[2fr_3fr]">
+      <section aria-label="Alineado y balanceado en nuestro taller" className="my-10 grid overflow-hidden rounded-lg border-2 border-black bg-black text-white sm:grid-cols-[2fr_3fr]">
         <div className="relative min-h-44">
           <Image src="/images/local/alineadora-3d-hofmann-geoliner-630-con-target-en-la-rueda-trivium-cordoba.webp" alt="Alineadora 3D con el target colocado en la rueda, en el taller de Trivium" fill sizes="(min-width: 640px) 300px, 100vw" className="object-cover" />
         </div>
@@ -103,7 +103,7 @@ export async function BlogVidriera({ slug, sinProductos = false }: { slug: strin
   const peers = peersByGroup(catalogo);
 
   return (
-    <section aria-label={titulo} className="my-10 rounded-lg border-2 border-black bg-white p-4 shadow-[6px_6px_0_0_#ff1e00] sm:p-5 [&_a]:!no-underline">
+    <section aria-label={titulo} className="my-10 rounded-lg border-2 border-black bg-white p-4 sm:p-5 [&_a]:!no-underline">
       <div className="mb-4 flex flex-wrap items-end justify-between gap-x-4 gap-y-2">
         <div>
           <h2 className="font-display text-3xl font-extrabold uppercase italic leading-none text-black">{titulo}</h2>

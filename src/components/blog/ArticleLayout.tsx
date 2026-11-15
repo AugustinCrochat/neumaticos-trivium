@@ -6,7 +6,7 @@ import type { ReactNode } from "react";
 import Image from "next/image";
 import { BLOG_POSTS, fechaDeNota } from "@/lib/data";
 import { blogMeta } from "@/lib/blog-meta";
-import { categoriaPorNombre } from "@/lib/blog-categorias";
+import { categoriaPorNombre, estiloCategoria } from "@/lib/blog-categorias";
 import { BlogCover } from "@/components/blog/BlogCover";
 import { BlogSidebar } from "@/components/blog/BlogSidebar";
 import { BlogSearchCard, BlogShopLinks } from "@/components/blog/BlogShop";
@@ -160,7 +160,7 @@ export function ArticleLayout({
           {(() => {
             // La categoría enlaza a su página índice, cuando la tiene.
             const hub = categoriaPorNombre(category);
-            const cls = "mb-3 inline-block -skew-x-12 bg-orange-500 px-3 py-1 text-xs font-black uppercase tracking-widest !text-white !no-underline";
+            const cls = `mb-3 inline-block -skew-x-12 ${estiloCategoria(category).fondo} px-3 py-1 text-xs font-black uppercase tracking-widest !text-white !no-underline`;
             return hub ? (
               <Link href={`/blog/categoria/${hub.slug}`} className={cls}><span className="inline-block skew-x-12">{category}</span></Link>
             ) : (
@@ -221,7 +221,7 @@ export function ArticleLayout({
       <div className={`${COL} pb-12 ${TYPO}`}>
         {/* Cierre comercial: la nota atrae la visita informativa, este bloque
             la conecta con la página que vende. */}
-        <aside className="mt-14 rounded-lg bg-black p-6 text-white shadow-[6px_6px_0_0_#ff1e00] sm:p-7">
+        <aside className="mt-14 rounded-lg bg-black p-6 text-white sm:p-7">
           <h2 className="!mt-0 !border-0 !pl-0 !text-4xl !text-white">
             {deTaller ? "Traé el auto, sin turno" : "¿Te toca cambiar los neumáticos?"}
           </h2>

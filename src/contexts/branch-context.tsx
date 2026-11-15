@@ -7,7 +7,7 @@ import {
   useEffect,
   type ReactNode,
 } from "react";
-import { BRANCHES, DEFAULT_BRANCH_ID, BRANCH_COOKIE, type Branch } from "@/lib/config";
+import { BRANCHES, DEFAULT_BRANCH_ID, BRANCH_COOKIE, BRANCH_AUTO_COOKIE, type Branch } from "@/lib/config";
 import { EVENTO_ELEGIR_SUCURSAL, goToWhatsApp } from "@/lib/gtag";
 
 type BranchContextType = {
@@ -39,10 +39,12 @@ function readBranchCookie(): string | null {
 // quedar fija un año — la próxima visita se vuelve a estimar.
 function writeSessionBranchCookie(branchId: string) {
   document.cookie = `${BRANCH_COOKIE}=${branchId}; path=/; SameSite=Lax`;
+  document.cookie = `${BRANCH_AUTO_COOKIE}=1; path=/; SameSite=Lax`;
 }
 
 function writeBranchCookie(branchId: string) {
   document.cookie = `${BRANCH_COOKIE}=${branchId}; path=/; max-age=31536000; SameSite=Lax`;
+  document.cookie = `${BRANCH_AUTO_COOKIE}=; path=/; max-age=0; SameSite=Lax`;
 }
 
 export function BranchProvider({ children }: { children: ReactNode }) {

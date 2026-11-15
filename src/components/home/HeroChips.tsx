@@ -60,7 +60,7 @@ export function HeroChips({ anclas }: { anclas: { href: string; medida: string; 
           onFocus={pausar(Infinity)}
           onBlur={pausar(600)}
           onTouchStart={pausar(3000)}
-          className="group ml-1 inline-flex -skew-x-6 items-stretch bg-precio-400 !text-black !no-underline shadow-[5px_5px_0_0_#ff1e00] transition-transform hover:-translate-y-0.5 active:translate-y-0"
+          className="group ml-1 inline-flex -skew-x-6 items-stretch bg-precio-400 !text-black !no-underline transition-transform hover:-translate-y-0.5 active:translate-y-0"
         >
           <span className="inline-grid skew-x-6 py-2 pl-4 pr-3 md:pl-5 md:pr-4">
             {anclas.map((a, n) => (

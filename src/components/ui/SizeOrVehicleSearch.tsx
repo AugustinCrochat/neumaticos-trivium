@@ -150,7 +150,7 @@ export function SizeOrVehicleSearch({
     );
     return (
       // Mismo lenguaje que la etiqueta de precio: fondo blanco, borde negro duro y sombra roja.
-      <div className="w-full rounded-lg border-2 border-black bg-white p-5 shadow-[6px_6px_0_0_#ff1e00]">
+      <div className="w-full rounded-lg border-2 border-black bg-white p-5">
         <h2 className={`mb-3 text-center font-display font-extrabold uppercase italic tracking-tight text-navy-900 ${compact ? "text-xl" : "text-2xl"}`}>
           Encontrá tus neumáticos
         </h2>
