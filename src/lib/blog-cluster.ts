@@ -100,6 +100,7 @@ export const TALLER: { grupo: string; notas: { slug: string; title: string }[] }
       { slug: "pozo-o-golpe-que-revisar-en-el-neumatico", title: "Después de un pozo o un golpe" },
       { slug: "tren-delantero-con-juego-por-que-no-se-puede-alinear", title: "Tren delantero con juego" },
       { slug: "amortiguadores-gastados-como-afectan-a-los-neumaticos", title: "Amortiguadores gastados" },
+      { slug: "vibracion-al-frenar-discos-o-neumaticos", title: "Vibración al frenar" },
     ],
   },
   {

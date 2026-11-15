@@ -1,6 +1,7 @@
 "use client";
 
 import { useLiveStock, useLiveStockMap } from "@/contexts/live-stock-context";
+import { useBranch } from "@/contexts/branch-context";
 import { PrecioTag } from "@/components/ui/PrecioTag";
 import { BestPriceBadge } from "@/components/ui/BestPriceBadge";
 import { isBestPriceLive, type PricePeer } from "@/lib/best-price";
@@ -15,7 +16,10 @@ function formatPrice(price: number) {
 
 // El precio de la ficha viene horneado en el HTML del último build (hasta 2h
 // de atraso). Igual que ProductCard, se corrige con el catálogo vivo.
-export function LivePrice({ id, price, priceOld, peers, groupLabel }: { id: string; price: number; priceOld?: number; peers: PricePeer[]; groupLabel: string }) {
+export function LivePrice({ id, price, priceOld, peers, groupLabel, juego = true }: { id: string; price: number; priceOld?: number; peers: PricePeer[]; groupLabel: string; /** Mostrar el total del juego de 4 (no aplica a packs). */ juego?: boolean }) {
+  const { selectedBranch } = useBranch();
+  // Un local que todavía no abrió no promete la colocación.
+  const abierta = !selectedBranch.apertura && !selectedBranch.provisorio;
   const live = useLiveStock(id);
   const current = live?.price ?? price;
   const liveMap = useLiveStockMap();
@@ -32,9 +36,19 @@ export function LivePrice({ id, price, priceOld, peers, groupLabel }: { id: stri
         </div>
       )}
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-        <PrecioTag size="lg">{formatPrice(current)}</PrecioTag>
+        <span className="flex items-end gap-2">
+          <PrecioTag size="xl">{formatPrice(current)}</PrecioTag>
+          <span className="pb-1 text-sm font-black uppercase tracking-wide text-slate-500">c/u</span>
+        </span>
         {best && <BestPriceBadge label={groupLabel} />}
       </div>
+      {/* La cuenta que todos hacen: cuánto sale el juego completo, ya colocado. */}
+      {juego && (
+        <p className="mt-3 flex flex-wrap items-baseline gap-x-2 text-base font-black text-black">
+          <span className="font-display text-2xl font-extrabold italic leading-none">Los 4: {formatPrice(current * 4)}</span>
+          {abierta && live?.enStock !== false && <span className="text-xs font-bold text-slate-500">colocados, con válvulas nuevas</span>}
+        </p>
+      )}
       <p className="text-xs text-slate-500 mt-2">
         Precio por unidad · Precio sin impuestos nacionales: {formatPrice(current / 1.21)}
       </p>

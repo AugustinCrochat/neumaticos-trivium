@@ -364,8 +364,8 @@ export default async function ProductPage({ params }: Props) {
       </nav>
 
       <div className="grid grid-cols-[minmax(0,1fr)] md:grid-cols-2 gap-4 md:gap-12">
-        {/* Image */}
-        <div>
+        {/* Image: en escritorio queda fija mientras se recorre la columna de compra. */}
+        <div className="md:sticky md:top-24 md:self-start">
           <ProductImageGallery product={product} extraPhotos={extraPhotos} label={tireLabel} utqg={utqg} />
         </div>
 
@@ -403,8 +403,8 @@ export default async function ProductPage({ params }: Props) {
           )}
 
           {/* Price */}
-          <div className="border-t border-slate-100 pt-4 mt-2">
-            <LivePrice id={product.id} price={product.price} priceOld={product.priceOld} peers={peers} groupLabel={groupLabel(product)} />
+          <div className="border-t-2 border-black pt-4 mt-2">
+            <LivePrice id={product.id} price={product.price} priceOld={product.priceOld} peers={peers} groupLabel={groupLabel(product)} juego={!product.tags.some((t) => t.toLowerCase().includes("pack"))} />
 
             {/* Client component handles branch-specific WhatsApp link */}
             <ProductPageClient product={product} tuercasMuestra={tuercasMuestra} />
@@ -413,9 +413,9 @@ export default async function ProductPage({ params }: Props) {
       </div>
 
       {/* Descripción + Características técnicas */}
-      <div className="grid md:grid-cols-2 gap-10 mt-14 pt-10 border-t border-slate-100">
+      <div className="grid md:grid-cols-2 gap-10 mt-14 pt-10 border-t-2 border-slate-200">
         <div>
-          <h2 className="text-lg font-black text-navy-900 mb-4 uppercase tracking-wide">Descripción</h2>
+          <h2 className="border-l-[6px] border-orange-500 pl-3 text-3xl font-extrabold leading-none text-navy-900 mb-4 uppercase tracking-wide">Descripción</h2>
           <p className="text-slate-600 leading-relaxed">
             Neumático {product.brand} pensado para {vehicleLabel(product)}, en la medida {product.size.width}/{product.size.profile} R{product.size.rim}{product.isCarga ? "C" : ""}.{" "}
             {brand?.fullDescription || brand?.description || `${product.brand} ofrece una relación costo-beneficio competitiva, con buen agarre y durabilidad para uso diario.`}
@@ -489,12 +489,12 @@ export default async function ProductPage({ params }: Props) {
         </div>
 
         <div>
-          <h2 className="text-lg font-black text-navy-900 mb-4 uppercase tracking-wide">Características técnicas</h2>
-          <ul className="divide-y divide-slate-100 border border-slate-100 rounded-xl overflow-hidden">
+          <h2 className="border-l-[6px] border-orange-500 pl-3 text-3xl font-extrabold leading-none text-navy-900 mb-4 uppercase tracking-wide">Características técnicas</h2>
+          <ul className="overflow-hidden rounded-lg border-2 border-black [&>li:nth-child(even)]:bg-slate-50">
             {characteristics.map((c) => (
-              <li key={c.label} className="flex items-center justify-between px-4 py-3 bg-white">
+              <li key={c.label} className="flex items-center justify-between gap-4 bg-white px-4 py-3">
                 <span className="text-sm font-semibold text-slate-500">{c.label}</span>
-                <span className="text-sm font-black text-navy-900">{c.value}</span>
+                <span className="text-right text-sm font-black text-navy-900">{c.value}</span>
               </li>
             ))}
           </ul>
@@ -533,10 +533,10 @@ export default async function ProductPage({ params }: Props) {
 
       {/* Modelos de autos compatibles con esta medida */}
       {vehiculos.length > 0 && (
-        <div id="vehiculos-compatibles" className="mt-14 pt-10 border-t border-slate-100 scroll-mt-20">
+        <div id="vehiculos-compatibles" className="mt-14 pt-10 border-t-2 border-slate-200 scroll-mt-20">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
             <div>
-              <h2 className="text-lg font-black text-navy-900 uppercase tracking-wide flex items-center gap-2">
+              <h2 className="border-l-[6px] border-orange-500 pl-3 text-3xl font-extrabold leading-none text-navy-900 uppercase tracking-wide flex items-center gap-2">
                 <svg className="w-5 h-5 text-navy-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
                 </svg>
@@ -563,8 +563,8 @@ export default async function ProductPage({ params }: Props) {
 
       {/* Misma medida en otras marcas */}
       {otrasMarcasMismaMedida.length > 0 && (
-        <div className="mt-14 pt-10 border-t border-slate-100">
-          <h2 className="text-lg font-black text-navy-900 uppercase tracking-wide flex items-center gap-2 mb-1">
+        <div className="mt-14 pt-10 border-t-2 border-slate-200">
+          <h2 className="border-l-[6px] border-orange-500 pl-3 text-3xl font-extrabold leading-none text-navy-900 uppercase tracking-wide flex items-center gap-2 mb-1">
             <svg className="w-5 h-5 text-emerald-500" viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
             </svg>
@@ -582,8 +582,8 @@ export default async function ProductPage({ params }: Props) {
 
       {/* Mismo rodado, otras medidas */}
       {mismoRodado.length > 0 && (
-        <div className="mt-14 pt-10 border-t border-slate-100">
-          <h2 className="text-lg font-black text-navy-900 uppercase tracking-wide mb-1">
+        <div className="mt-14 pt-10 border-t-2 border-slate-200">
+          <h2 className="border-l-[6px] border-orange-500 pl-3 text-3xl font-extrabold leading-none text-navy-900 uppercase tracking-wide mb-1">
             Más neumáticos rodado {product.size.rim}
           </h2>
           <p className="text-sm text-slate-600 mb-6">

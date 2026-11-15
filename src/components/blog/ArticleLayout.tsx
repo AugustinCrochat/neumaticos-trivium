@@ -6,6 +6,7 @@ import type { ReactNode } from "react";
 import Image from "next/image";
 import { BLOG_POSTS, fechaDeNota } from "@/lib/data";
 import { blogMeta } from "@/lib/blog-meta";
+import { categoriaPorNombre } from "@/lib/blog-categorias";
 import { BlogCover } from "@/components/blog/BlogCover";
 import { BlogSidebar } from "@/components/blog/BlogSidebar";
 import { BlogSearchCard, BlogShopLinks } from "@/components/blog/BlogShop";
@@ -156,9 +157,16 @@ export function ArticleLayout({
               { name: title, path: `/blog/${slug}` },
             ]}
           />
-          <span className="mb-3 inline-block -skew-x-12 bg-orange-500 px-3 py-1 text-xs font-black uppercase tracking-widest text-white">
-            <span className="inline-block skew-x-12">{category}</span>
-          </span>
+          {(() => {
+            // La categoría enlaza a su página índice, cuando la tiene.
+            const hub = categoriaPorNombre(category);
+            const cls = "mb-3 inline-block -skew-x-12 bg-orange-500 px-3 py-1 text-xs font-black uppercase tracking-widest !text-white !no-underline";
+            return hub ? (
+              <Link href={`/blog/categoria/${hub.slug}`} className={cls}><span className="inline-block skew-x-12">{category}</span></Link>
+            ) : (
+              <span className={cls}><span className="inline-block skew-x-12">{category}</span></span>
+            );
+          })()}
           <h1 className="text-4xl font-extrabold leading-[0.95] text-white md:text-5xl">{title}</h1>
           <p className="mt-4 text-lg leading-relaxed text-slate-300">{subtitle}</p>
           <p className="mt-5 text-sm text-slate-400">

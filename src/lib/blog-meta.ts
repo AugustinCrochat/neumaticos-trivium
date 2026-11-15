@@ -157,6 +157,24 @@ const L = {
 } satisfies Record<string, ShopLink>;
 
 export const BLOG_META: Record<string, BlogMeta> = {
+  "mantenimiento-de-neumaticos-guia-completa": {
+    cover: cover("tallerCuatroAutos"),
+    figure: figure("rotacion"),
+    shopIntro: "Para cuidar tus neumáticos:",
+    shopLinks: [L.servicios, L.todos, L.ofertas],
+  },
+  "neumaticos-resecos-o-cristalizados-como-reconocerlos": {
+    cover: cover("taxiRueda"),
+    figure: figure("rotacion"),
+    shopIntro: "Si ya están resecos:",
+    shopLinks: [L.todos, L.ofertas, L.servicios],
+  },
+  "vibracion-al-frenar-discos-o-neumaticos": {
+    cover: cover("balanceandoCamioneta"),
+    figure: figure("target"),
+    shopIntro: "Si el auto vibra:",
+    shopLinks: [L.servicios, L.todos, L.ofertas],
+  },
   "balanceo-dinamico-vs-estatico-diferencias": {
     cover: cover("balanceando"),
     figure: figure("balanceandoCamioneta"),
