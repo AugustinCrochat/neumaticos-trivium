@@ -3,7 +3,7 @@ import { MARCAS_PREMIUM } from "@/lib/marcas-premium";
 
 /** Marcas premium/tradicionales: nunca llevan "Mejor precio" (el distintivo marca las económicas). Pirelli sí la vendemos. */
 const PREMIUM = new Set(["pirelli", ...MARCAS_PREMIUM.map((m) => m.slug)]);
-const esPremium = (p: TireProduct) => PREMIUM.has(p.brandId?.toLowerCase()) || PREMIUM.has(p.brand?.toLowerCase());
+export const esPremium = (p: TireProduct) => PREMIUM.has(p.brandId?.toLowerCase()) || PREMIUM.has(p.brand?.toLowerCase());
 
 export function sizeLabel(p: TireProduct) {
   return `${p.size.width}/${p.size.profile} R${p.size.rim}${p.isCarga ? "C" : ""}`;

@@ -1,3 +1,4 @@
+import { esPremium } from "@/lib/best-price";
 import { MEDIDAS_PRIORITARIAS, formatSize, sizeSlug, sizesEqual } from "@/lib/tire-sizes";
 import type { TireProduct } from "@/lib/types";
 import { HeroChips } from "@/components/home/HeroChips";
@@ -8,11 +9,12 @@ const money = (n: number) =>
 /** El neumático más barato con stock de cada una de las medidas más pedidas
     (hasta `max`): un precio real ("175/65 R14 a $71.000") convence más que un
     "desde", y la píldora de la portada los va rotando. */
+/** Sólo cuentan marcas no premium: una medida que sólo tiene Pirelli no se muestra como precio de entrada. */
 export function preciosAncla(productos: TireProduct[], max = 6) {
   const out: { size: TireProduct["size"]; precio: number }[] = [];
   for (const size of MEDIDAS_PRIORITARIAS) {
     const precios = productos
-      .filter((p) => p.enStock !== false && !p.isCarga && sizesEqual(p.size, size))
+      .filter((p) => p.enStock !== false && !p.isCarga && !esPremium(p) && sizesEqual(p.size, size))
       .map((p) => p.price);
     if (precios.length) out.push({ size, precio: Math.min(...precios) });
     if (out.length === max) break;
