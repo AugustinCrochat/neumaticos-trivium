@@ -3,7 +3,7 @@ import { PrecioTag } from "@/components/ui/PrecioTag";
 import { WhatsAppSucursal } from "@/components/ui/SucursalBits";
 import { preciosAncla } from "@/components/home/HeroTrustRow";
 import { getProductosDesdePOS, getServiciosPrecios } from "@/lib/pos-api";
-import { money } from "@/lib/precios-hoy";
+import { money, notaDeCamioneta } from "@/lib/precios-hoy";
 import { COMBO_ID, preciosTaller } from "@/lib/servicios-seo";
 import { formatSize, sizeSlug } from "@/lib/tire-sizes";
 
@@ -13,13 +13,16 @@ import { formatSize, sizeSlug } from "@/lib/tire-sizes";
  * bajar). Muestra precios de hoy con clic directo a cada página; en las notas
  * de taller el combo de alineado y balanceado va primero.
  */
-export async function BlogSidebar({ title, deTaller }: { title: string; deTaller: boolean }) {
+export async function BlogSidebar({ title, deTaller, slug }: { title: string; deTaller: boolean; slug: string }) {
   const [productos, servicios] = await Promise.all([getProductosDesdePOS(), getServiciosPrecios()]);
-  const combo = preciosTaller(servicios).comboAuto;
+  const taller = preciosTaller(servicios);
+  const combo = taller.comboAuto;
   const filas = [
     ...preciosAncla(productos, 5).map((a) => ({ href: `/neumaticos/${sizeSlug(a.size)}`, label: formatSize(a.size), precio: a.precio })),
   ];
-  const filaCombo = combo ? [{ href: `/servicios/${COMBO_ID}`, label: "Alineado + balanceado", precio: combo }] : [];
+  const fa = combo ? [{ href: `/servicios/${COMBO_ID}`, label: "Alineado + balanceado · auto", precio: combo }] : [];
+  const fc = taller.comboCamioneta ? [{ href: `/servicios/${COMBO_ID}`, label: "Alineado + balanceado · camioneta", precio: taller.comboCamioneta }] : [];
+  const filaCombo = notaDeCamioneta(slug) ? [...fc, ...fa] : [...fa, ...fc];
   const todas = deTaller ? [...filaCombo, ...filas] : [...filas, ...filaCombo];
   if (todas.length === 0) return null;
 

@@ -32,3 +32,7 @@ export function precioDesde(href: string, productos: TireProduct[], taller: Prec
   if (href === "/catalogo") return minimo(calle);
   return null;
 }
+
+/** ¿La nota habla de camionetas/SUV (por el slug)? Ahí el precio del combo que se muestra es el de camioneta. */
+export const notaDeCamioneta = (slug: string) =>
+  /camioneta|suv|pick-?up|4x4|awd|hilux|amarok|ranger|s10|frontier|toro|tracker|duster|ecosport|kicks|territory|corolla-cross|hr-v|crv|cr-v|rav4|tiguan|taos|t-cross|nivus/i.test(slug);

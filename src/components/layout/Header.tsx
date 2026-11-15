@@ -10,6 +10,8 @@ import { isVisaMasterPromoDay } from "@/lib/promo-day";
 import { PriceTagIcon } from "@/components/ui/PriceTagIcon";
 import { restoDelDia } from "@/lib/fin-del-dia";
 import { HeaderEstado } from "@/components/layout/HeaderEstado";
+import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
+import { MENSAJE_GENERICO, waHref } from "@/lib/whatsapp";
 
 const NAV_LINKS = [
   { href: "/ofertas", label: "Ofertas", match: ["/ofertas"] },
@@ -152,7 +154,7 @@ export function Header() {
       </div>
 
       {/* Main nav */}
-      <nav className="border-b-[3px] border-[#ff1e00] bg-black shadow-lg">
+      <nav className="border-b-[3px] border-[#ff1e00] bg-black">
         <div className="max-w-7xl 2xl:max-w-[96rem] mx-auto px-3 min-[380px]:px-4">
           <div className={`flex items-center gap-2 min-[380px]:gap-6 transition-[height] duration-200 md:gap-4 lg:gap-12 xl:gap-16 ${compact ? "h-11 md:h-12" : "h-12 md:h-16"}`}>
             {/* Logo */}
@@ -178,15 +180,15 @@ export function Header() {
                     aria-current={active ? "page" : undefined}
                     className={
                       link.href === "/ofertas"
-                        ? `flex shrink-0 items-center gap-2 rounded-lg px-2.5 py-1.5 text-sm font-black lg:px-3.5 uppercase tracking-wide text-white shadow-md transition-transform hover:scale-[1.04] ${
-                            active ? "bg-white !text-[#ff1e00]" : "bg-gradient-to-r from-[#ff1e00] to-[#ff5a2e]"
+                        ? `flex shrink-0 -skew-x-6 items-center gap-2 px-2.5 py-1.5 text-sm font-black lg:px-3.5 uppercase tracking-wide text-white transition-colors ${
+                            active ? "bg-white !text-[#ff1e00]" : "bg-[#ff1e00] hover:bg-[#e01a00]"
                           }`
                         : // Seleccionado: fondo tenue, texto blanco en negrita y barra roja
                           // debajo; al pasar el mouse la barra crece desde la izquierda.
-                          `flex min-w-[5.75rem] justify-center rounded-xl border px-3 lg:min-w-[6.75rem] lg:px-4 py-1 text-sm transition-colors ${
+                          `flex min-w-[5.5rem] justify-center border-b-[3px] px-3 lg:min-w-[6.5rem] lg:px-4 py-1.5 text-sm transition-colors ${
                             active
-                              ? "border-[#ff1e00] bg-white/15 font-bold text-white"
-                              : "border-white/20 bg-white/[0.06] font-semibold text-zinc-200 hover:border-white/40 hover:bg-white/15 hover:text-white"
+                              ? "border-[#ff1e00] font-bold text-white"
+                              : "border-transparent font-semibold text-zinc-300 hover:border-white/50 hover:text-white"
                           }`
                     }
                   >
@@ -213,7 +215,7 @@ export function Header() {
               <HeaderEstado />
               <button
                 onClick={openModal}
-                className="flex min-w-0 items-center gap-1 sm:gap-1.5 bg-white hover:bg-slate-100 text-navy-900 pl-2 sm:pl-2.5 pr-1.5 sm:pr-2 py-1 rounded-full text-xs font-bold transition-colors group shadow-sm"
+                className="flex min-w-0 items-center gap-1 sm:gap-1.5 bg-white hover:bg-slate-100 text-navy-900 pl-2 sm:pl-2.5 pr-1.5 sm:pr-2 py-1.5 rounded-md text-xs font-bold transition-colors group"
                 title="Cambiar sucursal"
               >
                 <svg className="w-3.5 h-3.5 text-[#ff1e00] flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -221,15 +223,23 @@ export function Header() {
                 </svg>
                 {/* "Lomas" solo se confunde con Lomas de Zamora: en pantallas muy angostas se abrevia a "Lomas del Mir."; desde 360 px va el nombre completo. */}
                 <span className="min-w-0 whitespace-nowrap text-[11px] leading-none min-[360px]:hidden">
-                  {hasConfirmedBranch ? selectedBranch.pillName ?? selectedBranch.shortName : "Sucursal"}
+                  {hasConfirmedBranch ? selectedBranch.pillName ?? selectedBranch.shortName : "Elegí sucursal"}
                 </span>
                 <span className="hidden min-w-0 whitespace-nowrap text-[11px] leading-none min-[360px]:inline min-[400px]:text-xs">
-                  {hasConfirmedBranch ? selectedBranch.shortName : "Sucursal"}
+                  {hasConfirmedBranch ? selectedBranch.shortName : "Elegí sucursal"}
                 </span>
                 <svg className="w-3 h-3 text-slate-400 group-hover:text-slate-600 transition-colors flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
+
+              <WhatsAppLink
+                href={waHref(selectedBranch.whatsapp, MENSAJE_GENERICO)}
+                className="hidden items-center gap-1.5 rounded-md bg-[#25d366] px-3 py-1.5 text-xs font-black !text-black !no-underline transition-colors hover:bg-[#1fb857] lg:flex"
+              >
+                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2Zm5.2 14c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.1 1 2 1.3 2.3 1.4.3.1.4.1.6-.1l.8-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.8-.1 1.4Z"/></svg>
+                Escribinos
+              </WhatsAppLink>
 
               <button
                 onClick={() => setSearchOpen(true)}

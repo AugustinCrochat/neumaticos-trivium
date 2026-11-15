@@ -6,7 +6,7 @@ import { TallerChips } from "@/components/blog/TallerChips";
 import { getProductosDesdePOS, getServiciosPrecios } from "@/lib/pos-api";
 import { peersByGroup } from "@/lib/best-price";
 import { BLOG_POSTS } from "@/lib/data";
-import { money } from "@/lib/precios-hoy";
+import { money, notaDeCamioneta } from "@/lib/precios-hoy";
 import { COMBO_ID, preciosTaller } from "@/lib/servicios-seo";
 import { MEDIDAS_PRIORITARIAS, formatSize, sizeSlug, sizesEqual } from "@/lib/tire-sizes";
 import type { TireProduct, TireSize } from "@/lib/types";
@@ -49,12 +49,26 @@ export async function BlogVidriera({ slug, sinProductos = false }: { slug: strin
         <div className="p-5">
           <p className="text-xs font-black uppercase tracking-widest text-orange-400">En nuestro taller</p>
           <p className="font-display mt-1 text-3xl font-extrabold uppercase italic leading-none">Alineado 3D + 4 balanceados</p>
-          <p className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-2">
-            <PrecioTag size="lg">{money(taller.comboAuto)}</PrecioTag>
-            <span className="text-sm font-bold text-slate-300">
-              auto{taller.comboCamioneta ? ` · camioneta ${money(taller.comboCamioneta)}` : ""}
-            </span>
-          </p>
+          {(() => {
+            // Notas de camionetas: el precio de camioneta va primero y solo; si no, auto y camioneta, cada uno con su rótulo.
+            const camioneta = notaDeCamioneta(slug) && taller.comboCamioneta;
+            const col = (rotulo: string, precio: number, principal = true) => (
+              <div>
+                <span className="mb-1 block text-[11px] font-black uppercase tracking-widest text-slate-400">{rotulo}</span>
+                <PrecioTag size={principal ? "lg" : "md"}>{money(precio)}</PrecioTag>
+              </div>
+            );
+            return (
+              <div className="mt-3 flex flex-wrap items-end gap-x-8 gap-y-3">
+                {camioneta ? col("Camioneta", taller.comboCamioneta!) : col("Auto", taller.comboAuto!)}
+                {camioneta
+                  ? col("Auto", taller.comboAuto!, false)
+                  : taller.comboCamioneta
+                    ? col("Camioneta", taller.comboCamioneta, false)
+                    : null}
+              </div>
+            );
+          })()}
           <div className="mt-4">
             <TallerChips />
           </div>

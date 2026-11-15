@@ -273,7 +273,7 @@ export function ArticleLayout({
       </div>
       <aside className="hidden lg:block">
         <div className="sticky top-24 pb-12 pt-8">
-          <BlogSidebar title={title} deTaller={deTaller} />
+          <BlogSidebar title={title} deTaller={deTaller} slug={slug} />
         </div>
       </aside>
       </div>
