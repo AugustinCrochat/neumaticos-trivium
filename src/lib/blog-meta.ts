@@ -157,6 +157,66 @@ const L = {
 } satisfies Record<string, ShopLink>;
 
 export const BLOG_META: Record<string, BlogMeta> = {
+  "balanceo-dinamico-vs-estatico-diferencias": {
+    cover: cover("balanceando"),
+    figure: figure("balanceandoCamioneta"),
+    shopIntro: "Si el auto vibra:",
+    shopLinks: [L.servicios, L.todos, L.ofertas],
+  },
+  "amortiguadores-gastados-como-afectan-a-los-neumaticos": {
+    cover: cover("camionetas"),
+    figure: figure("tallerCuatroAutos"),
+    shopIntro: "Si el desgaste ya está hecho:",
+    shopLinks: [L.todos, L.servicios, L.ofertas],
+  },
+  "sensor-de-presion-tpms-que-es-y-que-hacer-si-se-prende": {
+    cover: cover("valvula"),
+    figure: figure("placaPresion"),
+    shopIntro: "Para cuidar la presión:",
+    shopLinks: [L.servicios, L.todos, L.ofertas],
+  },
+  "neumaticos-gastados-cuanto-mas-tarda-en-frenar-el-auto": {
+    cover: cover("rotacion"),
+    figure: figure("taxiRueda"),
+    shopIntro: "Si ya están en el límite:",
+    shopLinks: [L.todos, L.ofertas, L.servicios],
+  },
+  "llantas-de-aleacion-o-de-chapa-diferencias": {
+    cover: cover("antirrobo"),
+    figure: figure("grenlanderPerfilBajo"),
+    shopIntro: "Para tus llantas:",
+    shopLinks: [L.tuercas, L.todos, L.servicios],
+  },
+  "neumaticos-y-consumo-de-combustible": {
+    cover: cover("placaPresion"),
+    figure: figure("descarga"),
+    shopIntro: "Para gastar menos:",
+    shopLinks: [L.servicios, L.todos, L.ofertas],
+  },
+  "tren-delantero-con-juego-por-que-no-se-puede-alinear": {
+    cover: cover("tecnicosAlineando"),
+    figure: figure("target"),
+    shopIntro: "Para alinear tu auto:",
+    shopLinks: [L.servicios, L.todos, L.ofertas],
+  },
+  "neumaticos-run-flat-que-son-y-como-reconocerlos": {
+    cover: cover("grenlanderPerfilBajo"),
+    figure: figure("montaje"),
+    shopIntro: "Para cambiar tus cubiertas:",
+    shopLinks: [L.todos, L.ofertas, L.servicios],
+  },
+  "neumaticos-en-verano-calor-presion-y-ruta": {
+    cover: cover("remisTaller"),
+    figure: figure("placaPresion"),
+    shopIntro: "Antes de salir a la ruta:",
+    shopLinks: [L.servicios, L.todos, L.ofertas],
+  },
+  "torque-de-las-tuercas-de-rueda-por-que-importa": {
+    cover: cover("antirroboFord"),
+    figure: figure("cambioCamioneta"),
+    shopIntro: "Para tus ruedas:",
+    shopLinks: [L.tuercas, L.servicios, L.todos],
+  },
   "como-ahorrar-en-neumaticos-guia-completa": {
     cover: cover("tallerCuatroAutos"),
     figure: figure("cambioCamioneta", "Un juego bien colocado, alineado y balanceado es la base para que rinda todos sus kilómetros."),

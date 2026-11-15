@@ -98,6 +98,8 @@ export const TALLER: { grupo: string; notas: { slug: string; title: string }[] }
       { slug: "sintomas-alineacion-balanceo-o-rotacion", title: "¿Alineación, balanceo o rotación?" },
       { slug: "desgaste-irregular-de-neumaticos", title: "Desgaste irregular" },
       { slug: "pozo-o-golpe-que-revisar-en-el-neumatico", title: "Después de un pozo o un golpe" },
+      { slug: "tren-delantero-con-juego-por-que-no-se-puede-alinear", title: "Tren delantero con juego" },
+      { slug: "amortiguadores-gastados-como-afectan-a-los-neumaticos", title: "Amortiguadores gastados" },
     ],
   },
   {
@@ -116,6 +118,8 @@ export const TALLER: { grupo: string; notas: { slug: string; title: string }[] }
       { slug: "que-mide-una-alineadora-convergencia-caida-avance", title: "Qué mide una alineadora" },
       { slug: "alineacion-3d-vs-alineacion-tradicional", title: "Alineación 3D vs. tradicional" },
       { slug: "pesas-de-balanceo-por-que-se-caen", title: "Pesas de balanceo" },
+      { slug: "balanceo-dinamico-vs-estatico-diferencias", title: "Balanceo dinámico vs. estático" },
+      { slug: "torque-de-las-tuercas-de-rueda-por-que-importa", title: "Torque de las tuercas de rueda" },
       { slug: "geoliner-630-geodyna-7800p-alineacion-balanceo", title: "Los equipos del taller" },
       { slug: "gomeria-en-cordoba", title: "Qué hace una gomería" },
     ],
