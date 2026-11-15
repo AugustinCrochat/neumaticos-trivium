@@ -97,7 +97,7 @@ export function OfertaRelampago({ items }: { items: Relampago[] }) {
                   <span className="text-sm text-slate-400 line-through">{fmt(p.priceOld)}</span>
                 </span>
                 <span className="mt-1 block text-xs font-black uppercase tracking-wide text-slate-600">
-                  {stock === 1 ? "Última unidad" : stock > 1 && stock <= 10 ? `Quedan ${stock}` : "Colocación sin cargo"}
+                  {stock === 1 ? "Última unidad" : stock > 1 && stock <= 10 ? `Quedan ${stock}` : "Colocación y válvulas sin cargo"}
                 </span>
               </span>
             </Link>

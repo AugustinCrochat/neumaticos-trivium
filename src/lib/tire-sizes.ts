@@ -264,7 +264,7 @@ export function buildTireDescription(product: {
     partes.push(`Medida original de ${nombres.join(", ")}${vehiculos.length > nombres.length ? " y otros" : ""}.`);
   }
 
-  partes.push("Outlet de neumáticos con garantía de 1 año y colocación sin cargo en el local.");
+  partes.push("Outlet de neumáticos con garantía de 1 año y colocación y válvulas sin cargo en el local.");
 
   return partes.join(" ");
 }

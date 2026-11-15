@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const share = poolShare(`marca-${marca.slug}`);
   return {
     title: `Neumáticos ${marca.name}: quién la fabrica, dónde se consigue y alternativas`,
-    description: resumen(`Qué se sabe de la marca ${marca.name} (${marca.empresa}), cómo comparar neumáticos chinos y las marcas chinas que tenemos en stock, con precio publicado, garantía y colocación sin cargo.`),
+    description: resumen(`Qué se sabe de la marca ${marca.name} (${marca.empresa}), cómo comparar neumáticos chinos y las marcas chinas que tenemos en stock, con precio publicado, garantía y colocación y válvulas sin cargo.`),
     alternates: canonical(path),
     openGraph: { title: `Neumáticos ${marca.name} y alternativas — ${SITE_NAME}`, url: path, ...share.openGraph },
     twitter: share.twitter,
@@ -58,8 +58,8 @@ export default async function OtraMarcaPage({ params }: Props) {
       question: `¿Venden neumáticos ${marca.name}?`,
       answer: `No, ${marca.name} no está en nuestro catálogo. ${
         mismaFabrica
-          ? `Sí tenemos ${mismaFabrica}, que es del mismo fabricante, y otras marcas chinas nuevas, con garantía y colocación sin cargo.`
-          : "Sí tenemos otras marcas chinas nuevas, con precio publicado, garantía por defecto de fabricación y colocación sin cargo."
+          ? `Sí tenemos ${mismaFabrica}, que es del mismo fabricante, y otras marcas chinas nuevas, con garantía y colocación y válvulas sin cargo.`
+          : "Sí tenemos otras marcas chinas nuevas, con precio publicado, garantía por defecto de fabricación y colocación y válvulas sin cargo."
       } Podés verlas más arriba, filtrando por medida.`,
     },
     {
@@ -94,11 +94,11 @@ export default async function OtraMarcaPage({ params }: Props) {
         accent: "Mirá estas opciones.",
         bajada: mismaFabrica
           ? `${marca.name} es del mismo fabricante que ${mismaFabrica}, que sí tenemos. Mirá las marcas chinas en stock, por medida y con precio publicado.`
-          : `${marca.name} no está en nuestro catálogo, pero tenemos neumáticos nuevos de otras marcas chinas, con precio publicado, garantía y colocación sin cargo.`,
+          : `${marca.name} no está en nuestro catálogo, pero tenemos neumáticos nuevos de otras marcas chinas, con precio publicado, garantía y colocación y válvulas sin cargo.`,
         highlights: [
           { titulo: "Precio publicado", detalle: "El de la web es el del mostrador, con IVA incluido y por unidad." },
           { titulo: "Garantía", detalle: "Un año por defecto de fabricación." },
-          { titulo: "Colocación sin cargo", detalle: "Colocación y válvulas sin cargo si comprás en nuestros locales." },
+          { titulo: "Colocación y válvulas sin cargo", detalle: "Colocación y válvulas sin cargo si comprás en nuestros locales." },
         ],
         idealPara: [
           "Quien ya compara marcas chinas de entrada y quiere ver precios en su medida",

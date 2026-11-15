@@ -67,7 +67,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description:
       `${desde ? `Neumáticos ${label} desde $${desde.toLocaleString("es-AR")} con stock.` : `Neumáticos ${label}.`} ` +
       `Cubiertas de carga (serie C) para furgones y utilitarios, de importación directa, con garantía de 1 año. ` +
-      `Colocación sin cargo en nuestros locales.`,
+      `Colocación y válvulas sin cargo en nuestros locales.`,
     alternates: canonical(path),
     openGraph: { title: `${title} — ${SITE_NAME}`, url: path, ...poolShare(medida).openGraph },
     twitter: poolShare(medida).twitter,
@@ -179,7 +179,7 @@ export default async function CargaMedidaPage({ params }: Props) {
           <span className="rounded-full border border-white/30 px-4 py-1.5 text-white">
             {enStock.length} {enStock.length === 1 ? "modelo" : "modelos"} con stock
           </span>
-          <span className="rounded-full border border-white/30 px-4 py-1.5 text-white">Colocación sin cargo</span>
+          <span className="rounded-full border border-white/30 px-4 py-1.5 text-white">Colocación y válvulas sin cargo</span>
         </div>
       </header>
 

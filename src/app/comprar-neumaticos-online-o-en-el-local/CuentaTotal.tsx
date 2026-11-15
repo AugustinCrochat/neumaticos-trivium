@@ -7,7 +7,7 @@ const money = (n: number) =>
 
 /**
  * Cuenta para comparar: lo que el visitante vio en otro lado más lo que suma
- * la colocación aparte, contra el precio publicado acá (colocación sin cargo).
+ * la colocación aparte, contra el precio publicado acá (colocación y válvulas sin cargo).
  * No trae ningún valor precargado: los números son los suyos.
  */
 export function CuentaTotal({ precioNuestro }: { precioNuestro: number | null }) {

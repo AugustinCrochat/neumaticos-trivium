@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const title = accessory.nombre;
   const description = accessory.descripcion
     ? `${accessory.nombre}. Compatible con: ${accessory.descripcion}. Incluye 2 llaves.`
-    : `Comprá ${accessory.nombre} al mejor precio, con 2 llaves y colocación sin cargo en nuestra sucursal.`;
+    : `Comprá ${accessory.nombre} al mejor precio, con 2 llaves y colocación y válvulas sin cargo en nuestra sucursal.`;
   const pageUrl = `${SITE_URL}/tuercas-antirrobo/${accessory.slug}`;
   const card = tuercaCardPath(accessory.codigoTango, accessory.slug);
   const images = [...(accessory.imageUrl ? [accessory.imageUrl] : []), ...(card ? [`${SITE_URL}${card}`] : [])];

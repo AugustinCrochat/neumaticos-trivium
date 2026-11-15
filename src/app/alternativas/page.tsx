@@ -47,7 +47,7 @@ export default function AlternativasPage() {
         </h1>
         <p className="mt-4 text-lg leading-relaxed text-slate-600">
           Si buscás una marca conocida, acá ves qué se sabe de cada una y qué opciones tenemos en tu medida, con
-          precio publicado, un año de garantía y colocación sin cargo.
+          precio publicado, un año de garantía y colocación y válvulas sin cargo.
         </p>
       </header>
 

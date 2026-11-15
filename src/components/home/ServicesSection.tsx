@@ -271,7 +271,7 @@ export async function ServicesSection({ comoPagina = false }: { /** En /servicio
             return <Titulo className="text-5xl font-extrabold leading-none text-navy-900 mb-3 md:text-6xl">Gomería y taller propio</Titulo>;
           })()}
           <p className="text-slate-500 text-lg max-w-xl mx-auto">
-            Alineadora 3D, balanceadora computarizada y colocación sin cargo si comprás acá. Venís sin turno: atendemos por orden de llegada.
+            Alineadora 3D, balanceadora computarizada y colocación y válvulas sin cargo si comprás acá. Venís sin turno: atendemos por orden de llegada.
           </p>
         </div>
 

@@ -68,7 +68,7 @@ export default function Page() {
 
       <h2>Qué tenemos nosotros</h2>
       <p>
-        Outlet de neumáticos de importación directa, con stock y precio publicados, colocación sin cargo si comprás las cubiertas con
+        Outlet de neumáticos de importación directa, con stock y precio publicados, colocación y válvulas sin cargo si comprás las cubiertas con
         nosotros y <Link href="/servicios">taller propio</Link>. Buscá tu medida en el <Link href="/catalogo">catálogo</Link>, mirá las{" "}
         <Link href="/alternativas/fate">alternativas a Fate</Link> o pasá por las <Link href="/sucursales">sucursales</Link>.
       </p>

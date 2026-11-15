@@ -139,8 +139,8 @@ function tireItem(p: TireProduct): string {
 function accessoryItem(a: Accessory & { imageUrl: string }): string {
   const link = `${SITE_URL}/tuercas-antirrobo/${a.slug}`;
   const description = a.descripcion
-    ? `Tuerca antirrobo para ruedas — compatible con ${a.descripcion}. Colocación sin cargo en nuestra sucursal.`
-    : "Tuerca antirrobo para ruedas. Colocación sin cargo en nuestra sucursal.";
+    ? `Tuerca antirrobo para ruedas — compatible con ${a.descripcion}. Colocación y válvulas sin cargo en nuestra sucursal.`
+    : "Tuerca antirrobo para ruedas. Colocación y válvulas sin cargo en nuestra sucursal.";
   const imageUrl = a.imageUrl.startsWith("/") ? `${SITE_URL}${a.imageUrl}` : a.imageUrl;
   return `
     <item>

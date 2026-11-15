@@ -86,7 +86,7 @@ const VENTAJAS = [
   },
   {
     titulo: "Taller propio",
-    texto: "Alineación 3D y balanceo computarizados, con colocación sin cargo si comprás las cubiertas.",
+    texto: "Alineación 3D y balanceo computarizados, con colocación y válvulas sin cargo si comprás las cubiertas.",
     icono: "M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z",
   },
   {
@@ -161,7 +161,7 @@ export async function RegionHub({ region }: { region: Region }) {
                   Combo {tallerTxt} {formatPrecio(comboAuto.precio)}
                 </li>
               )}
-              <li className="rounded-full bg-white/10 px-3 py-1.5 ring-1 ring-white/20">Colocación sin cargo</li>
+              <li className="rounded-full bg-white/10 px-3 py-1.5 ring-1 ring-white/20">Colocación y válvulas sin cargo</li>
               <li className="rounded-full bg-white/10 px-3 py-1.5 ring-1 ring-white/20">1 año de garantía</li>
               {!hayAbierta && (
                 <li className="rounded-full bg-white/10 px-3 py-1.5 ring-1 ring-white/20">
@@ -239,12 +239,12 @@ export async function RegionHub({ region }: { region: Region }) {
                 {comboAuto && (
                   <> (combo desde <strong>{formatPrecio(comboAuto.precio)}</strong>)</>
                 )}
-                . Abre {sp.hours.toLowerCase()}, por orden de llegada y sin turno; la colocación va sin cargo comprando las cubiertas y todos tienen un año de garantía.
+                . Abre {sp.hours.toLowerCase()}, por orden de llegada y sin turno; la colocación y las válvulas van sin cargo comprando las cubiertas y todos tienen un año de garantía.
               </>
             ) : (
               <>
                 Neumáticos Trivium abre {lista.map((l) => `${l.branch.shortName} ${l.branch.apertura}`).join(" y ")} en {region.nombre}: gomería con{" "}
-                <strong>neumáticos nuevos baratos</strong> de importación directa, <strong>{tallerTxt}</strong> con taller propio, colocación sin cargo y un año de garantía. Mientras tanto podés ver el catálogo y avisarnos por WhatsApp.
+                <strong>neumáticos nuevos baratos</strong> de importación directa, <strong>{tallerTxt}</strong> con taller propio, colocación y válvulas sin cargo y un año de garantía. Mientras tanto podés ver el catálogo y avisarnos por WhatsApp.
               </>
             )}
           </p>
@@ -358,7 +358,7 @@ export async function RegionHub({ region }: { region: Region }) {
           </h2>
           <p className="mt-2 max-w-2xl text-slate-300">
             {hayAbierta
-              ? "Mirá el precio publicado, reservá por WhatsApp y vení: se atiende por orden de llegada y la colocación va sin cargo."
+              ? "Mirá el precio publicado, reservá por WhatsApp y vení: se atiende por orden de llegada y la colocación y las válvulas van sin cargo."
               : "Escribinos por WhatsApp y te avisamos el día de la apertura. Mientras tanto, mirá el catálogo y las medidas."}
           </p>
           <div className="mt-5 flex flex-wrap gap-3">

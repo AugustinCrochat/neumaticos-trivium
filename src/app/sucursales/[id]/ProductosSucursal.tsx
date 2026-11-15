@@ -23,7 +23,7 @@ export function ProductosSucursal({ branch, datos }: { branch: Branch; datos: Da
             Desde <strong className="text-navy-900">{formatPrecio(datos.desde)}</strong> por unidad.{" "}
           </>
         )}
-        Importación directa, precio publicado igual al del local, un año de garantía y colocación sin cargo comprando las
+        Importación directa, precio publicado igual al del local, un año de garantía y colocación y válvulas sin cargo comprando las
         cubiertas en {branch.shortName}.
       </p>
 

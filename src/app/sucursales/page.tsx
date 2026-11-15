@@ -201,7 +201,7 @@ export default async function SucursalesPage() {
               )}
             </p>
             <ul className="mt-5 flex flex-wrap gap-2 text-xs font-bold text-white">
-              {["Sin turno", "Colocación sin cargo comprando acá", "1 año de garantía", "Precio de la web = precio del local"].map((t) => (
+              {["Sin turno", "Colocación y válvulas sin cargo comprando acá", "1 año de garantía", "Precio de la web = precio del local"].map((t) => (
                 <li key={t} className="rounded-full bg-white/10 px-3 py-1.5">
                   {t}
                 </li>

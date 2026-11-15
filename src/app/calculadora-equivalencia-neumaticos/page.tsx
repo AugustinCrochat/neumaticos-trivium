@@ -318,7 +318,7 @@ export default async function CalculadoraEquivalenciaNeumaticosPage() {
         <div className="mx-auto max-w-6xl px-4">
           <div className="flex flex-wrap items-end justify-between gap-5">
             <Head kicker="Catálogo" title="Neumáticos en stock, medida por medida" dark>
-              Lo más barato con stock de las medidas más pedidas, con colocación sin cargo en nuestros locales.
+              Lo más barato con stock de las medidas más pedidas, con colocación y válvulas sin cargo en nuestros locales.
             </Head>
             <Link href="/neumaticos" className="mb-10 rounded-xl bg-orange-500 px-5 py-3 text-sm font-black text-white transition-colors hover:bg-orange-600">Buscar neumáticos por medida →</Link>
           </div>

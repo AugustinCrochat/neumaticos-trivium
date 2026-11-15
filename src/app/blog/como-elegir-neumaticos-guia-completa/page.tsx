@@ -92,7 +92,7 @@ export default function Page() {
       </ul>
 
       <h2>Antes de pagar: qué tiene que incluir el presupuesto</h2>
-      <p>Comparar solo el precio de la cubierta engaña. Fijate si incluye colocación, válvulas, balanceo y alineado: <Link href="/blog/que-incluye-el-presupuesto-de-neumaticos">qué incluye un presupuesto de neumáticos</Link>. En Trivium la colocación es sin cargo; si querés repasar todo el gasto, mirá <Link href="/blog/como-ahorrar-en-neumaticos-guia-completa">cómo ahorrar en neumáticos</Link>.</p>
+      <p>Comparar solo el precio de la cubierta engaña. Fijate si incluye colocación, válvulas, balanceo y alineado: <Link href="/blog/que-incluye-el-presupuesto-de-neumaticos">qué incluye un presupuesto de neumáticos</Link>. En Trivium la colocación y el cambio de válvulas son sin cargo; si querés repasar todo el gasto, mirá <Link href="/blog/como-ahorrar-en-neumaticos-guia-completa">cómo ahorrar en neumáticos</Link>.</p>
       <p>Cuando tengas tu medida, <Link href="/neumaticos">buscala acá</Link> y ves el stock y el precio al instante.</p>
     </ArticleLayout>
   );

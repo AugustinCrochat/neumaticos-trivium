@@ -7,6 +7,7 @@ import Image from "next/image";
 import { BLOG_POSTS, fechaDeNota } from "@/lib/data";
 import { blogMeta } from "@/lib/blog-meta";
 import { BlogCover } from "@/components/blog/BlogCover";
+import { BlogSidebar } from "@/components/blog/BlogSidebar";
 import { BlogSearchCard, BlogShopLinks } from "@/components/blog/BlogShop";
 import { CatalogWidget } from "@/components/blog/CatalogWidget";
 import { SizesCatalog } from "@/components/blog/SizesCatalog";
@@ -35,6 +36,8 @@ const TYPO = `
   [&_th]:bg-black [&_th]:px-2 sm:[&_th]:px-3 [&_th]:py-2.5 [&_th]:font-black [&_th]:text-white
   [&_ul]:mb-5 [&_ul]:list-disc [&_ul]:space-y-2 [&_ul]:pl-6
 `;
+
+const COL = "mx-auto max-w-3xl px-4 lg:mx-0 lg:max-w-none lg:px-0";
 
 const isH2 = (node: ReactNode) => isValidElement(node) && node.type === "h2";
 
@@ -144,7 +147,7 @@ export function ArticleLayout({
       {/* Encabezado en negro, como el header y la portada: la nota es parte del
           mismo local, no un blog aparte. */}
       <header className="bg-black py-8 text-white md:py-12">
-        <div className="mx-auto max-w-3xl px-4">
+        <div className="mx-auto max-w-7xl px-4 [&>*]:max-w-4xl">
           <Breadcrumbs
             dark
             crumbs={[
@@ -174,9 +177,14 @@ export function ArticleLayout({
         </div>
       </header>
 
+      {/* Escritorio: texto a la izquierda y columna fija de precios a la derecha,
+          en vez de una columna angosta con márgenes vacíos. En celular la
+          columna no se muestra: los mismos atajos van intercalados en el texto. */}
+      <div className="mx-auto max-w-7xl lg:grid lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-12 lg:px-4 xl:grid-cols-[minmax(0,1fr)_22rem] xl:gap-16">
+      <div className="min-w-0">
       {/* Portada y atajos a los productos del tema: lo primero que ve quien
           llegó por una duda puntual. */}
-      <div className="mx-auto max-w-3xl px-4 pt-8">
+      <div className={`${COL} pt-8`}>
         <BlogCover
           image={meta.cover}
           priority
@@ -188,13 +196,13 @@ export function ArticleLayout({
         </div>
       </div>
 
-      <div className={`mx-auto max-w-3xl px-4 pt-4 ${TYPO}`}>{antes}</div>
+      <div className={`${COL} pt-4 ${TYPO}`}>{antes}</div>
 
-      <div className="mx-auto max-w-3xl px-4">
+      <div className={COL}>
         <BlogSearchCard slug={slug} sinProductos={traeVidriera} />
       </div>
 
-      <article className={`mx-auto max-w-3xl px-4 ${TYPO}`}>
+      <article className={`${COL} ${TYPO}`}>
         {despues}
 
         {faqs && faqs.length > 0 && <FaqSection faqs={faqs} />}
@@ -202,7 +210,7 @@ export function ArticleLayout({
 
       {extras && <div className="mx-auto max-w-3xl space-y-8 px-4 pb-4">{extras}</div>}
 
-      <div className={`mx-auto max-w-3xl px-4 pb-12 ${TYPO}`}>
+      <div className={`${COL} pb-12 ${TYPO}`}>
         {/* Cierre comercial: la nota atrae la visita informativa, este bloque
             la conecta con la página que vende. */}
         <aside className="mt-14 rounded-lg bg-black p-6 text-white shadow-[6px_6px_0_0_#ff1e00] sm:p-7">
@@ -253,6 +261,13 @@ export function ArticleLayout({
             </ul>
           </section>
         )}
+      </div>
+      </div>
+      <aside className="hidden lg:block">
+        <div className="sticky top-24 pb-12 pt-8">
+          <BlogSidebar title={title} deTaller={deTaller} />
+        </div>
+      </aside>
       </div>
     </div>
   );

@@ -32,7 +32,7 @@ const FAQS = [
       "Depende de qué incluya el precio. Un neumático suelto más barato puede terminar costando lo mismo o más si después hay que pagar el envío y la colocación en un taller, y esperar a que haya turno. Por eso conviene comparar el total: neumáticos, envío, colocación y válvulas.",
   },
   {
-    question: "¿Qué incluye la colocación sin cargo?",
+    question: "¿Qué incluye la colocación y válvulas sin cargo?",
     answer:
       "El armado y desarmado del neumático en la llanta y el cambio de válvulas, si comprás las cubiertas en el local. El balanceo y la alineación son servicios aparte y se cotizan por separado; conviene hacerlos al estrenar el juego para que el desgaste sea parejo.",
   },

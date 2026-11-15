@@ -32,7 +32,7 @@ import { itemListJsonLd } from "@/lib/seo";
 export const metadata: Metadata = {
   title: "Buscar neumáticos por medida: precio y stock al instante",
   description:
-    resumen("Buscá neumáticos por medida (185/65 R15, 205/55 R16, 175/70 R14 y más) o por tu auto y mirá precio y stock al instante, con las equivalencias de cada medida. Importación directa, colocación sin cargo y 1 año de garantía."),
+    resumen("Buscá neumáticos por medida (185/65 R15, 205/55 R16, 175/70 R14 y más) o por tu auto y mirá precio y stock al instante, con las equivalencias de cada medida. Importación directa, colocación y válvulas sin cargo y 1 año de garantía."),
   alternates: canonical("/neumaticos"),
   openGraph: {
     title: `Buscar neumáticos por medida — ${SITE_NAME}`,
@@ -89,7 +89,7 @@ const AUTOS_POPULARES: [string, string][] = [
 ];
 
 const CONFIANZA = [
-  "Colocación sin cargo",
+  "Colocación y válvulas sin cargo",
   "Retiro en el local",
   "1 año de garantía de fábrica",
   "Importación directa",

@@ -102,7 +102,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       ? `¿Qué medida de neumático lleva el ${name}? La original es ${lista}.`
       : `¿Qué medida de neumático lleva el ${name}? Según la versión: ${lista}${medidas.length > 3 ? " y más" : ""}.`,
     desde ? `Desde ${formatPrice(desde)}, con stock real.` : "Consultá stock y precio de tu medida.",
-    "Colocación sin cargo y 1 año de garantía.",
+    "Colocación y válvulas sin cargo y 1 año de garantía.",
   ];
   const description = partes.join(" ").length <= 160 ? partes.join(" ") : partes.slice(0, 2).join(" ");
 
@@ -210,13 +210,13 @@ export default async function VehiclePage({ params }: Props) {
         ? `Hoy, los más económicos en stock son ${masBaratos
             .slice(0, 3)
             .map(({ m, p }) => `${p.brand} ${p.modeloBase} en ${formatSize(m.size)} a ${formatPrice(p.price)}`)
-            .join("; ")}. Son precios por unidad, de outlet por importación directa, con garantía de 1 año y colocación sin cargo en el local.`
+            .join("; ")}. Son precios por unidad, de outlet por importación directa, con garantía de 1 año y colocación y válvulas sin cargo en el local.`
         : `Por ahora no tenemos stock en las medidas originales del ${name}. Escribinos por WhatsApp y te pasamos precio de la medida o de una equivalente.`,
     },
     {
       question: `¿Tienen neumáticos para ${name} en stock?`,
       answer: conStock.length
-        ? `Sí. Hoy hay stock en ${conStock.map((m) => formatSize(m.size)).join(", ")}, desde ${formatPrice(desde as number)} por neumático. Garantía de 1 año y colocación sin cargo en el local.`
+        ? `Sí. Hoy hay stock en ${conStock.map((m) => formatSize(m.size)).join(", ")}, desde ${formatPrice(desde as number)} por neumático. Garantía de 1 año y colocación y válvulas sin cargo en el local.`
         : `Por ahora no tenemos stock en las medidas originales del ${name}. Escribinos por WhatsApp y te avisamos cuándo entra o te proponemos una medida equivalente.`,
     },
     ...(esCamioneta

@@ -1,4 +1,5 @@
 import { HorarioBloque } from "@/components/tools/HorarioBloque";
+import { PrecioTag } from "@/components/ui/PrecioTag";
 import Link from "@/components/ui/Link";
 import Image from "next/image";
 import type { Metadata } from "next";
@@ -52,7 +53,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   ].filter(Boolean);
   const description = branch.apertura
     ? `${SITE_NAME} ${branch.shortName} abre ${branch.apertura} en ${branch.address}, ${branch.city}: neumáticos baratos con stock propio, ${serviciosTaller(branch).toLowerCase()} y gomería. Mirá precios y medidas en la web.`
-    : `Gomería en ${branch.address}, ${branch.city}: ${precios.length ? precios.join(" y ") + ". " : ""}${serviciosTaller(branch)} con taller propio, ${branch.hours}. Sin turno y colocación sin cargo comprando las cubiertas.`;
+    : `Gomería en ${branch.address}, ${branch.city}: ${precios.length ? precios.join(" y ") + ". " : ""}${serviciosTaller(branch)} con taller propio, ${branch.hours}. Sin turno y colocación y válvulas sin cargo comprando las cubiertas.`;
 
   return {
     title,
@@ -223,9 +224,12 @@ export default async function BranchPage({ params }: Props) {
         />
 
         {/* Respuesta rápida: lo que contestaría un asistente a "dónde hago alineación y balanceo / compro neumáticos baratos en X" */}
-        <section className="rounded-2xl border-l-4 border-[#ff1e00] bg-navy-50 p-5 md:p-6">
-          <h2 className="text-sm font-black uppercase tracking-widest text-navy-700">Respuesta rápida</h2>
-          <p data-speakable className="mt-2 text-base leading-relaxed text-slate-800 md:text-lg">
+        <section className="overflow-hidden rounded-lg bg-black text-white shadow-[6px_6px_0_0_#ff1e00] lg:grid lg:grid-cols-[3fr_2fr]">
+          <div className="p-5 md:p-7">
+            <h2 className="inline-block -skew-x-12 bg-orange-500 px-3 py-1 text-sm font-extrabold tracking-widest text-white">
+              <span className="inline-block skew-x-12">Respuesta rápida</span>
+            </h2>
+            <p data-speakable className="mt-3 text-base leading-relaxed text-slate-200 md:text-lg [&_strong]:text-white">
             {branch.apertura ? (
               <>
                 Neumáticos Trivium <strong>{branch.shortName}</strong> abre <strong>{branch.apertura}</strong> en {branch.address},{" "}
@@ -242,7 +246,7 @@ export default async function BranchPage({ params }: Props) {
                 {datos.desde !== null && (
                   <> desde <strong>{formatPrecio(datos.desde)}</strong></>
                 )}
-                . Abrimos {branch.hours.toLowerCase()}, por orden de llegada y sin turno; la colocación va sin cargo comprando las
+                . Abrimos {branch.hours.toLowerCase()}, por orden de llegada y sin turno; la colocación y las válvulas van sin cargo comprando las
                 cubiertas en el local.
                 {branch.id === "arguello" && (
                   <> La mitad de los alineados se termina en menos de {DATOS_TALLER.minutosMediana} minutos.</>
@@ -250,11 +254,40 @@ export default async function BranchPage({ params }: Props) {
               </>
             )}
           </p>
-          <ul className="mt-3 flex flex-wrap gap-2 text-xs font-bold text-navy-800">
-            {["Sin turno", "Colocación sin cargo", "1 año de garantía", "Precio igual al del local"].map((t) => (
-              <li key={t} className="rounded-full bg-white px-3 py-1.5 shadow-sm">{t}</li>
-            ))}
-          </ul>
+            <ul className="mt-4 flex flex-wrap gap-2 text-xs font-bold text-white">
+              {["Sin turno", "Colocación y válvulas sin cargo", "1 año de garantía", "Precio igual al del local"].map((t) => (
+                <li key={t} className="flex items-center gap-1.5 rounded-full border border-white/25 bg-white/10 px-3 py-1.5">
+                  <svg aria-hidden="true" className="h-3 w-3 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={4}>
+                    <path strokeLinecap="square" d="M4 12l5 5L20 6" />
+                  </svg>
+                  {t}
+                </li>
+              ))}
+            </ul>
+          </div>
+          {/* Los tres números que contestan la pregunta, grandes: cuánto sale y cuánto tarda. */}
+          {!branch.apertura && (datos.combo.auto || datos.desde !== null) && (
+            <dl className="grid grid-cols-2 gap-px bg-white/15 text-center lg:grid-cols-1">
+              {datos.desde !== null && (
+                <div className="flex flex-col items-center justify-center gap-1.5 bg-tire-800 p-4">
+                  <dt className="text-[11px] font-black uppercase tracking-widest text-slate-300">Neumáticos desde</dt>
+                  <dd><PrecioTag size="lg">{formatPrecio(datos.desde)}</PrecioTag></dd>
+                </div>
+              )}
+              {datos.combo.auto && (
+                <div className="flex flex-col items-center justify-center gap-1.5 bg-tire-800 p-4">
+                  <dt className="text-[11px] font-black uppercase tracking-widest text-slate-300">Alineado + balanceado</dt>
+                  <dd><PrecioTag size="lg">{formatPrecio(datos.combo.auto.precio)}</PrecioTag></dd>
+                </div>
+              )}
+              {branch.id === "arguello" && (
+                <div className="col-span-2 flex flex-col items-center justify-center bg-orange-500 p-4 lg:col-span-1">
+                  <dd className="font-display text-5xl font-extrabold italic leading-none">{DATOS_TALLER.minutosMediana} min</dd>
+                  <dt className="mt-1 text-[11px] font-black uppercase tracking-widest text-white/90">la mitad de los alineados tarda menos</dt>
+                </div>
+              )}
+            </dl>
+          )}
         </section>
 
         <div className="grid gap-6 lg:grid-cols-2 lg:items-start">

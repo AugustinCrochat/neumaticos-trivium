@@ -67,7 +67,7 @@ export default function Page() {
 
       <h2>Comprar directo: qué cambia</h2>
       <ul>
-        <li><strong>Colocación sin cargo y el mismo día</strong>: comprás y te las colocamos en el momento, sin esperar el envío.</li>
+        <li><strong>Colocación y válvulas sin cargo y el mismo día</strong>: comprás y te las colocamos en el momento, sin esperar el envío.</li>
         <li><strong>Cambio de válvulas sin cargo</strong>.</li>
         <li><strong>Stock y precio visibles</strong> en el <Link href="/catalogo">catálogo</Link>, con IVA, y garantía de 1 año por defecto de fábrica.</li>
         <li>El <Link href="/blog/alineado-y-balanceado-juntos-o-por-separado">alineado y balanceado</Link> se puede sumar aparte, con precio publicado.</li>

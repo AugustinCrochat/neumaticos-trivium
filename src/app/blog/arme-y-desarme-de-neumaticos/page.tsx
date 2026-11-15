@@ -36,7 +36,7 @@ const FAQS = [
   {
     question: "¿Se arman neumáticos que compré en otro lugar?",
     answer:
-      "Sí. El arme y desarme se cobra por rueda cuando la cubierta no es nuestra; si comprás en Neumáticos Trivium, la colocación va sin cargo.",
+      "Sí. El arme y desarme se cobra por rueda cuando la cubierta no es nuestra; si comprás en Neumáticos Trivium, la colocación y las válvulas van sin cargo.",
   },
 ];
 

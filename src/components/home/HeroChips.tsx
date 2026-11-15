@@ -12,7 +12,7 @@ const chip = "rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-s
 /**
  * Chips de la fila de confianza, según la sucursal elegida: las estrellas de
  * Google sólo si esa sucursal tiene puntaje propio (no se le presta el de
- * Argüello a otra), y "sin turno"/"colocación sin cargo" sólo en un local
+ * Argüello a otra), y "sin turno"/"colocación y válvulas sin cargo" sólo en un local
  * abierto con servicios confirmados. Una sucursal por abrir muestra la fecha y
  * el "Avisame".
  */

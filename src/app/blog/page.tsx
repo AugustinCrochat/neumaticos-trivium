@@ -36,7 +36,8 @@ export default async function BlogPage() {
   // Precios de hoy arriba de las notas: quien entra al blog a leer también ve,
   // sin buscarlo, cuánto sale su medida y el alineado.
   const [productos, servicios] = await Promise.all([getProductosDesdePOS(), getServiciosPrecios()]);
-  const medidas = preciosAncla(productos, 5);
+  const medidas = preciosAncla(productos, 8);
+  const etiqueta = "flex shrink-0 items-center gap-2 rounded-md border-2 border-black py-1 pl-2.5 pr-1 text-sm font-black text-black hover:bg-slate-100";
   const combo = preciosTaller(servicios).comboAuto;
 
   return (
@@ -56,25 +57,32 @@ export default async function BlogPage() {
       </div>
 
       {(medidas.length > 0 || combo) && (
-        <div className="border-b-2 border-black bg-white">
-          <div className="mx-auto flex max-w-5xl items-center gap-3 overflow-x-auto px-4 py-3">
-            <span className="font-display shrink-0 text-xl font-extrabold uppercase italic text-black">Precios de hoy</span>
-            {medidas.map((a) => (
-              <Link key={sizeSlug(a.size)} href={`/neumaticos/${sizeSlug(a.size)}`} className="flex shrink-0 items-center gap-2 rounded-md border-2 border-black py-1 pl-2.5 pr-1 text-sm font-black text-black transition hover:-translate-y-0.5 hover:shadow-[3px_3px_0_0_#ff1e00]">
-                {formatSize(a.size)} <PrecioTag size="sm">{money(a.precio)}</PrecioTag>
-              </Link>
-            ))}
-            {combo && (
-              <Link href={`/servicios/${COMBO_ID}`} className="flex shrink-0 items-center gap-2 rounded-md border-2 border-black py-1 pl-2.5 pr-1 text-sm font-black text-black transition hover:-translate-y-0.5 hover:shadow-[3px_3px_0_0_#ff1e00]">
-                Alineado + balanceado <PrecioTag size="sm">{money(combo)}</PrecioTag>
-              </Link>
-            )}
+        <div className="flex items-stretch border-b-2 border-black bg-white">
+          <span className="font-display z-10 flex shrink-0 items-center bg-black px-4 text-xl font-extrabold uppercase italic text-white">Precios de hoy</span>
+          {/* Cinta que avanza sola: dos copias iguales, la segunda oculta a lectores de pantalla. */}
+          <div className="cinta-caja min-w-0 flex-1 overflow-hidden py-3">
+            <div className="cinta flex w-max">
+              {[0, 1].map((copia) => (
+                <div key={copia} aria-hidden={copia === 1} className="flex gap-3 pr-3">
+                  {medidas.map((a) => (
+                    <Link key={sizeSlug(a.size)} tabIndex={copia === 1 ? -1 : undefined} href={`/neumaticos/${sizeSlug(a.size)}`} className={etiqueta}>
+                      {formatSize(a.size)} <PrecioTag size="sm">{money(a.precio)}</PrecioTag>
+                    </Link>
+                  ))}
+                  {combo && (
+                    <Link tabIndex={copia === 1 ? -1 : undefined} href={`/servicios/${COMBO_ID}`} className={etiqueta}>
+                      Alineado + balanceado <PrecioTag size="sm">{money(combo)}</PrecioTag>
+                    </Link>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       )}
 
       <div className="max-w-5xl mx-auto px-4 py-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {BLOG_POSTS.map((post) => (
             <article
               key={post.id}

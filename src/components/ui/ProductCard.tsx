@@ -75,7 +75,7 @@ export function ProductCard({
   const best = peers ? isBestPriceLive(product.id, peers, liveMap) : !!isCheapest;
 
   return (
-    <article className={`group bg-white rounded-2xl border transition-all duration-300 overflow-hidden flex flex-col border-slate-200 hover:border-black hover:shadow-xl`}>
+    <article className={`group bg-white rounded-2xl border transition-all duration-300 overflow-hidden flex flex-col border-2 border-slate-200 hover:border-black hover:shadow-[5px_5px_0_0_#ff1e00] hover:-translate-y-0.5`}>
       {/* Image */}
       <Link href={`/productos/${product.slug}`} className="relative bg-white pt-[108%] md:pt-[95%] overflow-hidden block">
         <div className="absolute top-3 left-3 z-10 flex flex-col gap-2 items-start">
@@ -151,9 +151,11 @@ export function ProductCard({
           )}
         </div>
 
-        <h3 className="font-semibold text-slate-800 text-sm mb-1 line-clamp-2" title={product.model}>
-          <Link href={`/productos/${product.slug}`} className="hover:text-navy-700 transition-colors">
-            <ProductNameWithHighlightedSize product={product} />
+        {/* La medida es lo que la gente busca en la grilla: va grande y en su
+            propia línea; el modelo, chico debajo. */}
+        <h3 className="mb-1.5 text-[13px] font-semibold leading-snug text-slate-600 line-clamp-3" title={product.model}>
+          <Link href={`/productos/${product.slug}`} className="hover:text-black transition-colors">
+            <ProductNameWithHighlightedSize product={product} sizeClassName="block font-display text-[1.6rem] font-extrabold italic leading-none tracking-tight text-black mb-1" />
           </Link>
         </h3>
 

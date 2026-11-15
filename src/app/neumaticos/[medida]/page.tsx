@@ -76,7 +76,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       : `Cubiertas rodado ${rim} — precios y medidas R${rim}`;
     return {
       title,
-      description: resumen(`Cubiertas y neumáticos rodado ${rim} (R${rim}) con stock y precio actualizado, para auto y camioneta. Importación directa, colocación sin cargo en el día y garantía de 1 año.`),
+      description: resumen(`Cubiertas y neumáticos rodado ${rim} (R${rim}) con stock y precio actualizado, para auto y camioneta. Importación directa, colocación y válvulas sin cargo en el día y garantía de 1 año.`),
       alternates: canonical(`/neumaticos/${rimSlug(rim)}`),
       openGraph: { title: `${title} — ${SITE_NAME}`, url: `/neumaticos/${rimSlug(rim)}`, ...poolShare(medida).openGraph },
       twitter: poolShare(medida).twitter,
@@ -99,7 +99,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const ruta = `/neumaticos/${eje === "ancho" ? widthSlug(valor) : profileSlug(valor)}`;
     return {
       title,
-      description: resumen(`Todas las medidas de neumáticos de ${nombre} con stock y precio actualizado, y los autos que las usan. Cubiertas de importación directa con colocación sin cargo en el día.`),
+      description: resumen(`Todas las medidas de neumáticos de ${nombre} con stock y precio actualizado, y los autos que las usan. Cubiertas de importación directa con colocación y válvulas sin cargo en el día.`),
       alternates: canonical(ruta),
       openGraph: { title: `${title} — ${SITE_NAME}`, url: ruta, ...poolShare(medida).openGraph },
       twitter: poolShare(medida).twitter,
@@ -122,7 +122,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     desde
       ? `Neumáticos y cubiertas ${label} desde $${desde.toLocaleString("es-AR")} con stock disponible.`
       : `Neumáticos ${label}: precios, equivalencias y disponibilidad.`,
-    "Colocación sin cargo en el día y garantía de 1 año.",
+    "Colocación y válvulas sin cargo en el día y garantía de 1 año.",
     vehiculos.length
       ? `Medida original de ${sortVehiclesByPopularity(vehiculos).slice(0, 3).map((v) => `${v.brand} ${v.model}`).join(", ")} y otros.`
       : "",
@@ -132,7 +132,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   // "Cubiertas" es como se busca la medida en Argentina ("cubiertas 185 65
   // r15"); "neumáticos" ya está en el H1 y en la marca que suma el layout.
   const title = desde
-    ? `Cubiertas ${label} desde $${desde.toLocaleString("es-AR")}, colocación sin cargo`
+    ? `Cubiertas ${label} desde $${desde.toLocaleString("es-AR")}, colocación y válvulas sin cargo`
     : `Cubiertas ${label}: precios, equivalencias y stock`;
 
   return {

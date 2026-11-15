@@ -19,7 +19,7 @@ export const dynamic = "force-static";
 export const metadata: Metadata = {
   title: "Marcas de neumáticos: cuál elegir, precios y stock",
   description:
-    resumen("Marcas de neumáticos que vendemos (Grenlander, Zmax, Arivo, Pirelli y más): origen, segmento, modelos, medidas, stock y precio desde. Comparativa y guía para elegir, con garantía de 1 año y colocación sin cargo."),
+    resumen("Marcas de neumáticos que vendemos (Grenlander, Zmax, Arivo, Pirelli y más): origen, segmento, modelos, medidas, stock y precio desde. Comparativa y guía para elegir, con garantía de 1 año y colocación y válvulas sin cargo."),
   alternates: canonical("/marcas"),
   openGraph: { title: `Marcas de neumáticos — ${SITE_NAME}`, url: "/marcas", ...poolShare("marcas").openGraph },
   twitter: poolShare("marcas").twitter,
@@ -419,7 +419,7 @@ export default async function MarcasPage() {
 
         <section className="mb-14 rounded-3xl bg-black p-6 text-white md:flex md:items-center md:justify-between md:gap-8 md:p-10">
           <div>
-            <h2 className="font-display text-3xl font-bold uppercase leading-tight md:text-4xl">Importación directa, colocación sin cargo</h2>
+            <h2 className="font-display text-3xl font-bold uppercase leading-tight md:text-4xl">Importación directa, colocación y válvulas sin cargo</h2>
             <p className="mt-2 max-w-xl text-slate-300">
               Comprás en el local con el precio de la web, te los colocamos y salís con las cubiertas puestas. Un año de garantía en todas las marcas.
             </p>

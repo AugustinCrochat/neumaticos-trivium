@@ -28,7 +28,7 @@ export function AlternativaExtra({ marca }: { marca: MarcaPremium }) {
         </ul>
         <p>
           <strong>No vendemos {marca.name}</strong> y no la probamos, así que no opinamos sobre su desempeño. Lo que
-          sí hacemos es mostrarte opciones nuevas, con precio publicado, un año de garantía y colocación sin cargo.
+          sí hacemos es mostrarte opciones nuevas, con precio publicado, un año de garantía y colocación y válvulas sin cargo.
         </p>
       </section>
 

@@ -8,7 +8,7 @@ import { poolShare } from "@/lib/share-image";
 export const metadata: Metadata = {
   title: "Neumáticos A/T: precios y medidas",
   description:
-    resumen("Neumáticos A/T (All Terrain) para camionetas, pick-ups y 4x4 al mejor precio, con stock y precio actualizado. Importación directa, garantía de 1 año, colocación sin cargo en nuestros locales."),
+    resumen("Neumáticos A/T (All Terrain) para camionetas, pick-ups y 4x4 al mejor precio, con stock y precio actualizado. Importación directa, garantía de 1 año, colocación y válvulas sin cargo en nuestros locales."),
   alternates: canonical("/neumaticos/at"),
   openGraph: {
     title: `Neumáticos A/T (All Terrain) — ${SITE_NAME}`,

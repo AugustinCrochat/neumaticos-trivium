@@ -24,7 +24,7 @@ export const REGIONES: Region[] = [
     branchIds: ["arguello"],
     titulo: "Neumáticos en Córdoba: local en Argüello, precios y stock",
     descripcion:
-      "Neumáticos nuevos con precio publicado y colocación sin cargo en nuestro local de Argüello, Córdoba. Mirá zonas que atendemos, horarios, cómo llegar y el catálogo.",
+      "Neumáticos nuevos con precio publicado y colocación y válvulas sin cargo en nuestro local de Argüello, Córdoba. Mirá zonas que atendemos, horarios, cómo llegar y el catálogo.",
     intro:
       "Nuestro local de Córdoba está en Argüello, sobre Av. Donato Álvarez. Atiende la capital y las Sierras Chicas con neumáticos de importación directa, precio publicado en la web y taller propio.",
     contexto:

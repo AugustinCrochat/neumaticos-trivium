@@ -8,7 +8,7 @@ import { poolShare } from "@/lib/share-image";
 export const metadata: Metadata = {
   title: "Neumáticos H/T: precios y medidas",
   description:
-    resumen("Neumáticos H/T de calle y ruta para camionetas, SUV y autos, al mejor precio y con stock actualizado. Importación directa, garantía de 1 año, colocación sin cargo en nuestros locales."),
+    resumen("Neumáticos H/T de calle y ruta para camionetas, SUV y autos, al mejor precio y con stock actualizado. Importación directa, garantía de 1 año, colocación y válvulas sin cargo en nuestros locales."),
   alternates: canonical("/neumaticos/ht"),
   openGraph: {
     title: `Neumáticos H/T (Highway Terrain) — ${SITE_NAME}`,

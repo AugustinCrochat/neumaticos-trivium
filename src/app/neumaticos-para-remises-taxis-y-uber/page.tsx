@@ -21,7 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
       ? `Neumáticos para taxi, remis y Uber desde $${desde.toLocaleString("es-AR")}`
       : "Neumáticos para taxi, remis y Uber: cubiertas económicas",
     description:
-      resumen("Cubiertas nuevas y económicas para taxis, remises y autos de Uber, DiDi y Cabify: medidas de los autos más usados, precio por unidad, un año de garantía, colocación sin cargo, alineación y balanceo en nuestros locales."),
+      resumen("Cubiertas nuevas y económicas para taxis, remises y autos de Uber, DiDi y Cabify: medidas de los autos más usados, precio por unidad, un año de garantía, colocación y válvulas sin cargo, alineación y balanceo en nuestros locales."),
     alternates: canonical("/neumaticos-para-remises-taxis-y-uber"),
     openGraph: { title: `Neumáticos para remises, taxis y Uber — ${SITE_NAME}`, url: "/neumaticos-para-remises-taxis-y-uber", ...(share?.openGraph ?? {}) },
     twitter: share?.twitter,
@@ -95,7 +95,7 @@ export default async function NeumaticosParaRemisesPage() {
             detalle: "El de la web es el del mostrador, con IVA incluido.",
           },
           {
-            titulo: "Colocación sin cargo",
+            titulo: "Colocación y válvulas sin cargo",
             detalle: "Si comprás las cubiertas en el local, la colocación y las válvulas no se cobran.",
           },
           {

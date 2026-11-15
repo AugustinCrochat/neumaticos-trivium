@@ -136,7 +136,7 @@ export function AccessoryGallery({
               </p>
               <p className="mt-0.5 text-base leading-snug text-slate-200">{current.hours}</p>
               <p className="mt-3 inline-block rounded-md bg-orange-500 px-3 py-1.5 text-xs font-black uppercase tracking-wide">
-                Colocación sin cargo
+                Colocación y válvulas sin cargo
               </p>
               <div className="mt-3">
                 <a

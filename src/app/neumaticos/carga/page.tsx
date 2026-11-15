@@ -19,7 +19,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title,
     description:
-      resumen("Neumáticos de carga (serie C) para furgones, utilitarios y camiones livianos: precios bajos por importación directa, stock real por medida, garantía de 1 año y colocación sin cargo en nuestros locales."),
+      resumen("Neumáticos de carga (serie C) para furgones, utilitarios y camiones livianos: precios bajos por importación directa, stock real por medida, garantía de 1 año y colocación y válvulas sin cargo en nuestros locales."),
     alternates: canonical("/neumaticos/carga"),
     openGraph: { title: `Neumáticos de carga — ${SITE_NAME}`, url: "/neumaticos/carga", ...poolShare("carga").openGraph },
     twitter: poolShare("carga").twitter,

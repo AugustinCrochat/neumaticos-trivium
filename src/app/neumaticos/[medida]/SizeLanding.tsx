@@ -226,7 +226,7 @@ export function SizeLanding({
             "@context": "https://schema.org",
             "@type": "Product",
             name: `Neumático ${label}`,
-            description: `Neumático nuevo ${label} con colocación sin cargo en Córdoba.`,
+            description: `Neumático nuevo ${label} con colocación y válvulas sin cargo en Córdoba.`,
             category: "Neumáticos",
             brand:
               new Set(ordenados.map((p) => p.brand)).size === 1

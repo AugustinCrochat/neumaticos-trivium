@@ -68,7 +68,7 @@ function tituloLocal(localidad: Localidad): string {
   // la búsqueda "neumáticos baratos en Córdoba" es de esta página, la dedicada
   // a la región. El resto de las localidades se diferencian por zona y minutos.
   return localidad.esCabecera
-    ? `Neumáticos baratos en ${localidad.name}: cubiertas con stock hoy y colocación sin cargo`
+    ? `Neumáticos baratos en ${localidad.name}: cubiertas con stock hoy y colocación y válvulas sin cargo`
     : `Neumáticos baratos en ${localidad.name} — precios de outlet a ${localidad.minutosHastaSucursal} min`;
 }
 
@@ -84,9 +84,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       `Mirá medidas y precios en la web y pasá por nuestro local de ${branch.address}, ${branch.city}.`
     : localidad.esCabecera && localidad.incluye?.length
       ? `Cubiertas con stock y precio publicado para ${localidad.name} y sus barrios (${localidad.incluye.slice(0, 4).join(", ")} y más). ` +
-        `Colocación sin cargo en el día en ${branch.address}, a ${localidad.minutosHastaSucursal} minutos del centro.`
+        `Colocación y válvulas sin cargo en el día en ${branch.address}, a ${localidad.minutosHastaSucursal} minutos del centro.`
     : `Comprá neumáticos baratos en ${localidad.name}, ${localidad.province}, a precio de importación directa. ` +
-      `Medidas y precios con stock real, colocación sin cargo en el día y taller de alineación y balanceo en ${branch.address}, a ` +
+      `Medidas y precios con stock real, colocación y válvulas sin cargo en el día y taller de alineación y balanceo en ${branch.address}, a ` +
       `${localidad.minutosHastaSucursal} minutos de ${localidad.name}.`;
 
   return {
@@ -283,7 +283,7 @@ export default async function LocalidadPage({ params }: Props) {
       {!branch.provisorio && (
         <ul className="mb-10 grid grid-cols-2 gap-3 md:grid-cols-4">
           {[
-            ["Colocación sin cargo", "Armado y válvulas incluidas", "/servicios"],
+            ["Colocación y válvulas sin cargo", "Armado y válvulas incluidas", "/servicios"],
             ["1 año de garantía", "Por defecto de fabricación", "/garantia-neumaticos"],
             ["Sin turno", "Por orden de llegada", "/servicios"],
             ["Precio publicado", "El mismo que en el local", "/catalogo"],

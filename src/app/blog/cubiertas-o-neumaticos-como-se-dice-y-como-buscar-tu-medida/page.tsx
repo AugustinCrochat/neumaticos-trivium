@@ -81,7 +81,7 @@ export default function Page() {
         <li>El stock real en tu medida.</li>
       </ol>
       <p>
-        En Neumáticos Trivium el stock y el precio están publicados, y la colocación es sin cargo si comprás las cubiertas con nosotros.
+        En Neumáticos Trivium el stock y el precio están publicados, y la colocación y el cambio de válvulas son sin cargo si comprás las cubiertas con nosotros.
         Pasá por las <Link href="/sucursales">sucursales</Link> o escribinos por WhatsApp.
       </p>
     </ArticleLayout>

@@ -22,7 +22,7 @@ export function CatalogoCrawlable({ productos, titulo = "Catálogo de neumático
     <div className="mx-auto max-w-7xl px-4 py-8">
       <h1 className="mb-2 text-3xl font-black text-navy-900">{titulo}</h1>
       <p className="mb-6 text-slate-600">
-        {productos.length} modelos con precio publicado y stock real. Retiro y colocación sin cargo en el local.
+        {productos.length} modelos con precio publicado y stock real. Retiro y colocación y válvulas sin cargo en el local.
       </p>
       {rodados.map((rim) => (
         <section key={rim} className="mb-6">

@@ -72,7 +72,7 @@ export default function Page() {
       <h2>Cadena grande o taller propio: qué cambia</h2>
       <p>
         Una cadena con decenas de locales ofrece cobertura y una marca conocida. Un local con taller propio, como el nuestro de Argüello,
-        ofrece otra cosa: stock y precio publicados por medida, colocación sin cargo y trato directo con quien hace el trabajo. Ninguna opción
+        ofrece otra cosa: stock y precio publicados por medida, colocación y válvulas sin cargo y trato directo con quien hace el trabajo. Ninguna opción
         es mejor en todo: depende de tu medida, tu zona y cuánto valorás cada cosa.
       </p>
 
@@ -88,7 +88,7 @@ export default function Page() {
 
       <h2>Qué tenemos nosotros</h2>
       <p>
-        Somos un outlet de neumáticos de importación directa, con stock y precio publicados en la web, colocación sin cargo si comprás tus
+        Somos un outlet de neumáticos de importación directa, con stock y precio publicados en la web, colocación y válvulas sin cargo si comprás tus
         cubiertas con nosotros y taller propio en Córdoba. También tenemos <Link href="/marcas/pirelli">Pirelli</Link>, y marcas importadas
         como Grenlander, Zmax y Arivo Premio. Buscá tu medida en el <Link href="/catalogo">catálogo</Link> o mirá las <Link href="/sucursales">sucursales</Link>.
       </p>

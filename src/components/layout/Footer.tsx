@@ -3,6 +3,7 @@ import Image from "next/image";
 import { BRANCHES, LEGAL_NAME, CUIT, CONTACT_EMAIL, INSTAGRAM_URL, FACEBOOK_URL, YOUTUBE_URL, AFIP_DATA_FISCAL_QR } from "@/lib/config";
 import { GoogleRatingBadge } from "@/components/ui/GoogleRatingBadge";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
+import { FooterCTA } from "@/components/layout/FooterCTA";
 import { ZonasAgrupadas } from "@/components/seo/ZonasAgrupadas";
 import { MEDIDAS_PRIORITARIAS, formatSize, sizeSlug } from "@/lib/tire-sizes";
 
@@ -16,6 +17,7 @@ export function Footer() {
 
   return (
     <footer id="contacto" className="bg-black text-zinc-300">
+      <FooterCTA />
       {/* Main content */}
       <div className="max-w-7xl 2xl:max-w-[96rem] mx-auto px-4 py-8 md:py-14">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-10">
@@ -73,7 +75,7 @@ export function Footer() {
 
           {/* Links */}
           <div>
-            <h4 className="text-white font-bold text-sm uppercase tracking-wide mb-4">
+            <h4 className="font-display text-white font-bold text-xl uppercase italic tracking-wide mb-4">
               Navegación
             </h4>
             <ul className="space-y-2">
@@ -106,14 +108,14 @@ export function Footer() {
 
           {/* Branches */}
           <div className="lg:col-span-2">
-            <h4 className="text-white font-bold text-sm uppercase tracking-wide mb-4">
+            <h4 className="font-display text-white font-bold text-xl uppercase italic tracking-wide mb-4">
               Nuestras sucursales
             </h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {BRANCHES.map((branch) => (
                 <div
                   key={branch.id}
-                  className="bg-black rounded-xl p-4 border border-zinc-900"
+                  className="rounded-lg border border-zinc-800 bg-zinc-950 p-4"
                 >
                   <p className="text-white font-semibold text-sm mb-1">
                     {branch.shortName}
@@ -172,7 +174,7 @@ export function Footer() {
             desde el hub y el crawler la visita mucho menos seguido. */}
         <div className="mt-8 md:mt-12 grid gap-6 md:gap-8 border-t border-zinc-900 pt-6 md:pt-10 md:grid-cols-2">
           <div>
-            <h4 className="mb-4 text-sm font-bold uppercase tracking-wide text-white">
+            <h4 className="font-display mb-4 text-xl font-bold uppercase italic tracking-wide text-white">
               Medidas más buscadas
             </h4>
             <ul className="flex flex-wrap gap-x-4 gap-y-2">
@@ -189,7 +191,7 @@ export function Footer() {
             </ul>
           </div>
           <div>
-            <h4 className="mb-4 text-sm font-bold uppercase tracking-wide text-white">
+            <h4 className="font-display mb-4 text-xl font-bold uppercase italic tracking-wide text-white">
               Zonas que atendemos
             </h4>
             <ZonasAgrupadas variant="dark" prefijo />

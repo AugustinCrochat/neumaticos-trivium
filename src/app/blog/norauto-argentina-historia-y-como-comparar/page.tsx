@@ -88,7 +88,7 @@ export default function Page() {
 
       <h2>Qué tenemos nosotros</h2>
       <p>
-        Outlet de neumáticos de importación directa, con stock y precio publicados en la web, colocación sin cargo si comprás tus cubiertas
+        Outlet de neumáticos de importación directa, con stock y precio publicados en la web, colocación y válvulas sin cargo si comprás tus cubiertas
         con nosotros y <Link href="/servicios">taller propio</Link> para alineado y balanceado. Buscá tu medida en el{" "}
         <Link href="/catalogo">catálogo</Link>, mirá <Link href="/marcas/pirelli">Pirelli</Link> si querés una marca de primera línea, o las{" "}
         <Link href="/sucursales">sucursales</Link> de Córdoba y Buenos Aires.

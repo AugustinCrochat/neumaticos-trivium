@@ -35,7 +35,7 @@ export function HeroTexto() {
     <p className={`mt-4 max-w-md text-lg leading-snug text-slate-300 ${b.apertura ? "" : "hidden md:block"}`}>
       {b.apertura
         ? `Abrimos en ${b.shortName} ${b.apertura}. Mirá los precios y dejanos tu consulta.`
-        : "Precio publicado, stock real y colocación sin cargo."}
+        : "Precio publicado, stock real y colocación y válvulas sin cargo."}
     </p>
   );
 }

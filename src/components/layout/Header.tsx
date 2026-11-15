@@ -9,6 +9,7 @@ import { SearchModal } from "@/components/ui/SearchModal";
 import { isVisaMasterPromoDay } from "@/lib/promo-day";
 import { PriceTagIcon } from "@/components/ui/PriceTagIcon";
 import { restoDelDia } from "@/lib/fin-del-dia";
+import { HeaderEstado } from "@/components/layout/HeaderEstado";
 
 const NAV_LINKS = [
   { href: "/ofertas", label: "Ofertas", match: ["/ofertas"] },
@@ -112,7 +113,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-40 w-full">
-      {/* Franja de colocación sin cargo: lo primero que se ve al entrar,
+      {/* Franja de colocación y válvulas sin cargo: lo primero que se ve al entrar,
           antes que el selector de sucursal, porque es un diferencial frente
           a comprar en otro lado sin taller propio. */}
       <div
@@ -151,7 +152,7 @@ export function Header() {
       </div>
 
       {/* Main nav */}
-      <nav className="bg-black shadow-lg">
+      <nav className="border-b-[3px] border-[#ff1e00] bg-black shadow-lg">
         <div className="max-w-7xl 2xl:max-w-[96rem] mx-auto px-3 min-[380px]:px-4">
           <div className={`flex items-center gap-2 min-[380px]:gap-6 transition-[height] duration-200 md:gap-4 lg:gap-12 xl:gap-16 ${compact ? "h-11 md:h-12" : "h-12 md:h-16"}`}>
             {/* Logo */}
@@ -208,7 +209,8 @@ export function Header() {
               })}
             </div>
 
-            <div className="flex shrink-0 items-center gap-1 min-[380px]:gap-2 lg:gap-3 ml-auto md:ml-0">
+            <div className="flex shrink-0 items-center gap-1 min-[380px]:gap-2 lg:gap-4 ml-auto md:ml-0">
+              <HeaderEstado />
               <button
                 onClick={openModal}
                 className="flex min-w-0 items-center gap-1 sm:gap-1.5 bg-white hover:bg-slate-100 text-navy-900 pl-2 sm:pl-2.5 pr-1.5 sm:pr-2 py-1 rounded-full text-xs font-bold transition-colors group shadow-sm"

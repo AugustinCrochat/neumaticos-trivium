@@ -10,7 +10,7 @@ import { poolShare } from "@/lib/share-image";
 
 const TITLE = "Sobre Neumáticos Trivium: quiénes somos y cómo trabajamos";
 const DESCRIPTION =
-  "Neumáticos Trivium es el outlet de neumáticos de TRIVIUM CENTER S.A.: importación directa, precios y stock publicados, local con gomería propia en Argüello (Córdoba), colocación sin cargo y garantía de 1 año.";
+  "Neumáticos Trivium es el outlet de neumáticos de TRIVIUM CENTER S.A.: importación directa, precios y stock publicados, local con gomería propia en Argüello (Córdoba), colocación y válvulas sin cargo y garantía de 1 año.";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -86,7 +86,7 @@ export default function SobreTriviumPage() {
         <h1 className="text-3xl font-black leading-tight text-navy-900 md:text-5xl">Sobre Neumáticos Trivium</h1>
         <p className="mt-4 text-lg leading-relaxed text-slate-600">
           Somos un outlet de neumáticos: importamos directo de fábrica y vendemos al público desde nuestro propio local, con
-          gomería y taller integrados. Publicamos el precio y el stock real de cada cubierta, y la colocación es sin cargo
+          gomería y taller integrados. Publicamos el precio y el stock real de cada cubierta, y la colocación y el cambio de válvulas son sin cargo
           cuando la comprás con nosotros.
         </p>
 

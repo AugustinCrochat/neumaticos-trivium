@@ -86,7 +86,7 @@ export async function BlogVidriera({ slug, sinProductos = false }: { slug: strin
     const size: TireSize = { width: Number(m[1]), profile: Number(m[2]), rim: Number(m[3]) };
     elegidos = conStock.filter((p) => sizesEqual(p.size, size)).sort(porStockYPrecio).slice(0, 4);
     titulo = `${formatSize(size)} con stock hoy`;
-    detalle = "Precio por unidad, con colocación sin cargo en el local.";
+    detalle = "Precio por unidad, con colocación y válvulas sin cargo en el local.";
     verTodo = { href: `/neumaticos/${sizeSlug(size)}`, texto: `Ver todos los ${formatSize(size)}` };
   } else if (marca) {
     elegidos = conStock.filter((p) => p.brandId === marca).sort(porStockYPrecio).slice(0, 4);

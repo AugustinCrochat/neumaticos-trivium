@@ -19,7 +19,7 @@ export async function generateMetadata(): Promise<Metadata> {
       ? `Neumáticos baratos desde $${desde.toLocaleString("es-AR")}`
       : "Neumáticos baratos: cubiertas al mejor precio",
     description:
-      resumen("Cubiertas nuevas al mejor precio: importación directa, precio publicado igual al del local, un año de garantía y colocación sin cargo en nuestros locales. Mirá el neumático más barato de cada rodado y comprá con envío a todo el país."),
+      resumen("Cubiertas nuevas al mejor precio: importación directa, precio publicado igual al del local, un año de garantía y colocación y válvulas sin cargo en nuestros locales. Mirá el neumático más barato de cada rodado y comprá con envío a todo el país."),
     alternates: canonical("/neumaticos-baratos"),
     openGraph: { title: `Neumáticos baratos — ${SITE_NAME}`, url: "/neumaticos-baratos", ...poolShare("baratos").openGraph },
     twitter: poolShare("baratos").twitter,
@@ -30,7 +30,7 @@ const FAQS = [
   {
     question: "¿Dónde comprar neumáticos baratos en Córdoba?",
     answer:
-      "En Neumáticos Trivium, en Argüello, Córdoba: importamos de forma directa y vendemos al público desde nuestro local, sin importador ni distribuidor en el medio. Los precios están publicados en la web y son los mismos que en el mostrador, y la colocación va sin cargo si comprás las cubiertas ahí.",
+      "En Neumáticos Trivium, en Argüello, Córdoba: importamos de forma directa y vendemos al público desde nuestro local, sin importador ni distribuidor en el medio. Los precios están publicados en la web y son los mismos que en el mostrador, y la colocación y las válvulas van sin cargo si comprás las cubiertas ahí.",
   },
   {
     question: "¿Un neumático barato es de mala calidad?",
@@ -76,7 +76,7 @@ export default async function NeumaticosBaratosPage() {
         headline: "Cubiertas nuevas",
         accent: "al mejor precio.",
         bajada:
-          "Importamos directo y vendemos desde nuestros locales: precio publicado, stock real y colocación sin cargo.",
+          "Importamos directo y vendemos desde nuestros locales: precio publicado, stock real y colocación y válvulas sin cargo.",
         highlights: [
           {
             titulo: "Importación directa",
@@ -88,7 +88,7 @@ export default async function NeumaticosBaratosPage() {
           },
           {
             titulo: "Garantía y colocación",
-            detalle: "Un año por defecto de fabricación y colocación sin cargo si comprás acá.",
+            detalle: "Un año por defecto de fabricación y colocación y válvulas sin cargo si comprás acá.",
           },
         ],
         idealPara: [

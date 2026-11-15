@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   ...blogShare(SLUG),
   title: TITLE,
   description:
-    resumen("Qué es Double King (Doubleking): empresa que la fabrica, marcas del grupo, cómo comparar sus neumáticos antes de comprar y alternativas nuevas con garantía y colocación sin cargo en Córdoba."),
+    resumen("Qué es Double King (Doubleking): empresa que la fabrica, marcas del grupo, cómo comparar sus neumáticos antes de comprar y alternativas nuevas con garantía y colocación y válvulas sin cargo en Córdoba."),
   alternates: canonical(`/blog/${SLUG}`),
 };
 
@@ -41,7 +41,7 @@ const FAQS = [
   {
     question: "¿Tienen Double King en stock?",
     answer:
-      "No, Double King no está en nuestro catálogo. Tenemos neumáticos nuevos de Grenlander, Zmax, Firemax, Arivo y otras marcas, con precio publicado, un año de garantía por defecto de fabricación y colocación sin cargo si comprás en el local.",
+      "No, Double King no está en nuestro catálogo. Tenemos neumáticos nuevos de Grenlander, Zmax, Firemax, Arivo y otras marcas, con precio publicado, un año de garantía por defecto de fabricación y colocación y válvulas sin cargo si comprás en el local.",
   },
   {
     question: "¿Qué alternativa a Double King recomiendan?",
@@ -112,7 +112,7 @@ export default function Page() {
       <h2>Alternativas que tenemos en stock</h2>
       <p>
         Si estás comparando Double King por precio, estas son las opciones nuevas que vendemos, todas con precio publicado, un año de
-        garantía por defecto de fabricación y colocación sin cargo en el local:
+        garantía por defecto de fabricación y colocación y válvulas sin cargo en el local:
       </p>
       <ul>
         <li>

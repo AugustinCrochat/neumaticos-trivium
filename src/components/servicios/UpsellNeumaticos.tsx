@@ -5,7 +5,7 @@ import { MEDIDAS_PRIORITARIAS, formatSize, sizeSlug } from "@/lib/tire-sizes";
 /**
  * Cierre de las fichas de alineado y balanceado: quien viene a alinear suele
  * estar por cambiar cubiertas. Buscador por medida o auto, atajos a las
- * medidas más pedidas y el recordatorio de que la colocación va sin cargo.
+ * medidas más pedidas y el recordatorio de que la colocación y las válvulas van sin cargo.
  */
 export function UpsellNeumaticos() {
   return (

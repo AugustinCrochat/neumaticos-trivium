@@ -63,10 +63,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   // El precio y la disponibilidad reales en el título y la descripción son lo que
   // decide el clic frente a los resultados que solo repiten el nombre del modelo.
   const precio = product.price > 0 ? `$${product.price.toLocaleString("es-AR")}` : null;
-  const fullTitle = precio ? `Cubierta ${product.model} a ${precio}, colocación sin cargo` : `Neumático ${product.model}`;
+  const fullTitle = precio ? `Cubierta ${product.model} a ${precio}, colocación y válvulas sin cargo` : `Neumático ${product.model}`;
   const description = [
     `Neumático ${product.model}${precio ? ` a ${precio} con IVA` : ""}${product.enStock ? ", con stock en el local" : ""}.`,
-    "Importación directa, garantía de 1 año por defecto de fábrica y colocación sin cargo en el día.",
+    "Importación directa, garantía de 1 año por defecto de fábrica y colocación y válvulas sin cargo en el día.",
     "Retiro en el local o envío a todo el país.",
   ].join(" ");
   const pageUrl = `${SITE_URL}/productos/${product.slug}`;

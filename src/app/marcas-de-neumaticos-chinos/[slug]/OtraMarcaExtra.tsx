@@ -102,7 +102,7 @@ export function OtraMarcaExtra({ marca, productos }: { marca: OtraMarca; product
         <p>
           <strong>No vendemos {marca.name}</strong> y no la probamos, así que no podemos opinar sobre su desempeño.
           Lo que sí podemos es mostrarte cómo comparar cualquier neumático, y ofrecerte marcas chinas que tenemos en
-          stock, con garantía y colocación sin cargo.
+          stock, con garantía y colocación y válvulas sin cargo.
         </p>
       </section>
 

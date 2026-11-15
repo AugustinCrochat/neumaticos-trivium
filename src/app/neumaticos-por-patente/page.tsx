@@ -216,7 +216,7 @@ export default function Page() {
           {[
             ["/vehiculos", "Medida por marca y modelo", "Más de 150 modelos con la medida original de cada versión."],
             ["/catalogo", "Todo el catálogo", "Todas las marcas y medidas con precio y stock."],
-            ["/servicios", "Colocación y alineado", "Taller propio: colocación sin cargo y combo de alineado y balanceo."],
+            ["/servicios", "Colocación y alineado", "Taller propio: colocación y válvulas sin cargo y combo de alineado y balanceo."],
           ].map(([href, t, d]) => (
             <Link key={href} href={href} className="rounded-2xl border border-slate-200 bg-white p-5 transition-colors hover:border-orange-400">
               <span className="block font-black text-navy-900">{t}</span>

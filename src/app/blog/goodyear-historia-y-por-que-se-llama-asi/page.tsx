@@ -69,7 +69,7 @@ export default function Page() {
       <h2>Qué tenemos nosotros</h2>
       <p>
         Outlet de importación directa con stock y precio publicados. Mirá las <Link href="/alternativas/goodyear">alternativas a Goodyear</Link>,
-        el <Link href="/catalogo">catálogo</Link> o la <Link href="/marcas">lista de marcas</Link>. Con compra de cubiertas, la colocación es sin cargo, y
+        el <Link href="/catalogo">catálogo</Link> o la <Link href="/marcas">lista de marcas</Link>. Con compra de cubiertas, la colocación y el cambio de válvulas son sin cargo, y
         en el <Link href="/servicios">taller</Link> hacemos el alineado y balanceado.
       </p>
 

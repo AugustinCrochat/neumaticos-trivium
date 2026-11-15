@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const share = poolShare(`alternativa-${marca.slug}`);
   return {
     title: `Alternativas a ${marca.name}: neumáticos más económicos`,
-    description: resumen(`Qué se sabe de ${marca.name} (${marca.origen}), cuándo conviene una marca premium y cuándo una alternativa, y los neumáticos nuevos que tenemos con precio publicado, garantía y colocación sin cargo.`),
+    description: resumen(`Qué se sabe de ${marca.name} (${marca.origen}), cuándo conviene una marca premium y cuándo una alternativa, y los neumáticos nuevos que tenemos con precio publicado, garantía y colocación y válvulas sin cargo.`),
     alternates: canonical(path),
     openGraph: { title: `Alternativas a ${marca.name} — ${SITE_NAME}`, url: path, ...share.openGraph },
     twitter: share.twitter,
@@ -45,7 +45,7 @@ export default async function AlternativaPage({ params }: Props) {
   const faqs = [
     {
       question: `¿Venden neumáticos ${marca.name}?`,
-      answer: `No, ${marca.name} no está en nuestro catálogo. Tenemos Pirelli como marca de primera línea y marcas importadas nuevas como Grenlander, Zmax, Firemax y Arivo Premio, con precio publicado, un año de garantía y colocación sin cargo.`,
+      answer: `No, ${marca.name} no está en nuestro catálogo. Tenemos Pirelli como marca de primera línea y marcas importadas nuevas como Grenlander, Zmax, Firemax y Arivo Premio, con precio publicado, un año de garantía y colocación y válvulas sin cargo.`,
     },
     {
       question: `¿Qué alternativas hay a ${marca.name}?`,
@@ -108,7 +108,7 @@ export default async function AlternativaPage({ params }: Props) {
         highlights: [
           { titulo: "Precio publicado", detalle: "El de la web es el del mostrador, con IVA incluido y por unidad." },
           { titulo: "Garantía", detalle: "Un año por defecto de fabricación." },
-          { titulo: "Colocación sin cargo", detalle: "Colocación y válvulas sin cargo si comprás en nuestros locales." },
+          { titulo: "Colocación y válvulas sin cargo", detalle: "Colocación y válvulas sin cargo si comprás en nuestros locales." },
         ],
         idealPara: [
           "Quien busca una marca conocida y quiere ver qué otras opciones hay en su medida",

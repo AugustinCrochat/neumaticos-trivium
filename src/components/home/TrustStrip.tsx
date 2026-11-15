@@ -21,7 +21,7 @@ export function TrustStrip() {
     ? [
         { titulo: "Elegí tu medida", detalle: "Precio y stock publicados" },
         { titulo: "Vení sin turno", detalle: "Por orden de llegada" },
-        { titulo: "Salí andando", detalle: "Colocación sin cargo en el acto" },
+        { titulo: "Salí andando", detalle: "Colocación y válvulas sin cargo en el acto" },
       ]
     : [
         { titulo: "Elegí tu medida", detalle: "Precios ya publicados" },

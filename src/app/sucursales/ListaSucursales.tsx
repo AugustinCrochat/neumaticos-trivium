@@ -163,7 +163,7 @@ function Tarjeta({
 
         {abierta && (
           <ul className="mt-4 flex flex-wrap gap-1.5 text-xs font-bold text-navy-800">
-            {["Sin turno", "Colocación sin cargo", "1 año de garantía"].map((t) => (
+            {["Sin turno", "Colocación y válvulas sin cargo", "1 año de garantía"].map((t) => (
               <li key={t} className="rounded-full bg-slate-100 px-2.5 py-1">
                 {t}
               </li>

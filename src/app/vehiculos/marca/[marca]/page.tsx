@@ -54,7 +54,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const description = `¿Qué medida de neumático lleva tu ${brand}? Medida original de los modelos más comunes (${vehiculos
     .slice(0, 4)
     .map((v) => v.model)
-    .join(", ")}${vehiculos.length > 4 ? " y más" : ""}), con stock y precio reales. Garantía de 1 año y colocación sin cargo en nuestros locales.`;
+    .join(", ")}${vehiculos.length > 4 ? " y más" : ""}), con stock y precio reales. Garantía de 1 año y colocación y válvulas sin cargo en nuestros locales.`;
   // Con modelos con foto, se comparte la tarjeta de la marca; si no, una foto del local.
   const card = tieneTarjeta(brand) ? marcaCardUrl(marca) : null;
   const share = card
@@ -89,7 +89,7 @@ export default async function MarcaPage({ params }: Props) {
     },
     {
       question: `¿Tienen neumáticos para ${brand}?`,
-      answer: `Sí. Elegí tu modelo, mirá la medida y te mostramos lo que hay en stock con precio. Tienen garantía de 1 año y la colocación es sin cargo en nuestra sucursal de Argüello.`,
+      answer: `Sí. Elegí tu modelo, mirá la medida y te mostramos lo que hay en stock con precio. Tienen garantía de 1 año y la colocación y el cambio de válvulas son sin cargo en nuestra sucursal de Argüello.`,
     },
   ];
 
