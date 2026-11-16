@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Barlow_Condensed } from "next/font/google";
+import { Geist, Barlow_Semi_Condensed } from "next/font/google";
 import "./globals.css";
 import { SITE_URL } from "@/lib/config";
 import { SITE_NAME, siteGraphJsonLd } from "@/lib/seo";
@@ -24,7 +24,7 @@ const geist = Geist({
   subsets: ["latin"],
 });
 
-const display = Barlow_Condensed({
+const display = Barlow_Semi_Condensed({
   variable: "--font-display-face",
   subsets: ["latin"],
   weight: ["600", "700", "800"],

@@ -27,7 +27,7 @@ export function Footer() {
               <Image
                 src="/logo-neumaticos-trivium.svg"
                 alt="Neumáticos Trivium"
-                width={132}
+                width={120}
                 height={45}
                 className="h-14 w-auto"
               />
