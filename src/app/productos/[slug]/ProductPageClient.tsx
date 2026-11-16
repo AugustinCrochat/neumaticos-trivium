@@ -134,15 +134,14 @@ export function ProductPageClient({ product, tuercasMuestra }: { product: TirePr
             </svg>
           </div>
           <div className="min-w-0 flex-1">
-            <p className="font-display text-2xl font-extrabold uppercase italic leading-none text-black">Colocación y válvulas sin cargo</p>
-            <p className="mt-1 text-xs font-black uppercase tracking-wide text-slate-500">en {selectedBranch.shortName}</p>
+            <p className="font-display text-2xl font-extrabold uppercase italic leading-none text-black">Retirá en {selectedBranch.shortName}</p>
             {enStock ? (
               <p
                 className={`text-sm font-bold mt-0.5 ${
                   pickup && !pickup.sameDay ? "text-amber-600" : "text-emerald-700"
                 }`}
               >
-                {pickup?.label ?? "Retiro el mismo día"} · <span className="font-semibold">atendemos por orden de llegada</span>
+                {pickup?.label ?? "Retiro el mismo día"}
               </p>
             ) : selectedBranch.apertura ? (
               <p className="text-sm font-bold text-navy-700 mt-0.5">Abrimos {selectedBranch.apertura}</p>

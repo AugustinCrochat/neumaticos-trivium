@@ -79,12 +79,15 @@ function ordenGrupo(grupo: string): number {
 export function InstallmentCalculator({
   basePrice,
   notaPrecio,
+  resumen,
   onShare,
   onPago,
   totalRef,
 }: {
   basePrice: number;
   notaPrecio?: string;
+  /** Desglose del total ("4 neumáticos × $220.000 c/u"), para que se lea que el monto grande es la suma. */
+  resumen?: string;
   onShare?: (pago: PagoElegido) => void;
   /** Avisa el total con el medio elegido cada vez que cambia (para mostrarlo en una barra fija). */
   onPago?: (pago: PagoElegido) => void;
@@ -247,12 +250,13 @@ export function InstallmentCalculator({
       <div ref={totalRef} className="mt-4 scroll-mt-24 overflow-hidden rounded-2xl ring-1 ring-slate-200" aria-live="polite">
         <div className="bg-slate-100 px-4 pb-4 pt-3.5">
           <div className="flex items-center justify-between gap-3">
-            <p className="text-sm font-black text-slate-700">Total a pagar</p>
+            <p className="text-sm font-black text-slate-700">{resumen ? "Total a pagar por todo" : "Total a pagar"}</p>
             <span className="max-w-[55%] truncate rounded-full bg-white px-3 py-1 text-xs font-black text-slate-700 ring-1 ring-slate-200">
               {grupoActual ? nombreMedio : "Precio de lista"}
             </span>
           </div>
           <p className="mt-1 text-5xl font-black leading-none tracking-tight text-slate-900">{formatPrice(total)}</p>
+          {resumen && <p className="mt-1.5 text-sm font-bold text-slate-600">{resumen}</p>}
           <div className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1.5 text-sm font-semibold text-slate-700">
             {grupoActual && planActual ? (
               <>

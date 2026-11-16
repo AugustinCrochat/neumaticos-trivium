@@ -191,6 +191,18 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
   const hasItems = items.length > 0;
   const canAddCombo = hasItems && !!combo;
 
+  // Desglose bajo el total: sin esto, con 4 unidades preseleccionadas el monto
+  // grande parece el precio de una sola cubierta.
+  const cantidadTotal = items.reduce((n, it) => n + it.quantity, 0);
+  const preciosUnit = Array.from(new Set(items.map((it) => it.product.price)));
+  const extras = (includeCombo && combo ? 1 : 0) + tuercas.length > 0;
+  const resumen =
+    hasItems && (cantidadTotal > 1 || extras)
+      ? `${cantidadTotal} ${cantidadTotal === 1 ? "neumático" : "neumáticos"}${
+          preciosUnit.length === 1 ? ` × ${formatPrice(preciosUnit[0])} c/u` : ""
+        }${extras ? " + servicios y accesorios" : ""}`
+      : undefined;
+
   function shareByWhatsApp(pago?: PagoElegido) {
     const lineas = items.map(
       (it) => `• ${it.quantity} x ${it.product.label} — ${formatPrice(it.product.price * it.quantity)}`
@@ -454,6 +466,7 @@ export const CotizadorClient = forwardRef<CotizadorHandle, { initialProduct?: Qu
       {hasItems && (
         <InstallmentCalculator
           basePrice={total}
+          resumen={resumen}
           notaPrecio={`Precio con IVA incluido, retirando en ${selectedBranch.shortName}. No incluye envío.`}
           onShare={shareByWhatsApp}
           onPago={onPago}
