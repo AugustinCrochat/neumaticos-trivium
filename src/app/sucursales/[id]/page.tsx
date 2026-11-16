@@ -185,7 +185,7 @@ export default async function BranchPage({ params }: Props) {
             Todas las sucursales
           </Link>
 
-          <p className="mb-2 text-sm font-bold uppercase tracking-wide text-orange-400">
+          <p className="mb-2 text-sm font-bold uppercase tracking-wide text-[#ff4a2e]">
             Sucursal {branch.shortName}
           </p>
           <h1 className="text-3xl font-black leading-tight text-white md:text-4xl">
@@ -198,7 +198,7 @@ export default async function BranchPage({ params }: Props) {
             <GoogleRatingBadge branchId={branch.id} className="mt-2 text-slate-200" />
           )}
           <p className="mt-3 flex items-start gap-2 text-base leading-relaxed text-slate-300">
-            <svg className="mt-0.5 h-5 w-5 flex-shrink-0 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="mt-0.5 h-5 w-5 flex-shrink-0 text-[#ff4a2e]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
@@ -227,7 +227,7 @@ export default async function BranchPage({ params }: Props) {
         <section className="overflow-hidden rounded-lg bg-black text-white lg:grid lg:grid-cols-[3fr_2fr]">
           <div className="p-5 md:p-7">
             <h2 className="inline-block -skew-x-12 bg-orange-500 px-3 py-1 text-sm font-extrabold tracking-widest text-white">
-              <span className="inline-block skew-x-12">Respuesta rápida</span>
+              <span className="inline-block skew-x-12">{branch.apertura ? `Muy pronto en ${lugar}` : `El outlet del neumático en ${lugar}`}</span>
             </h2>
             <p data-speakable className="mt-3 text-base leading-relaxed text-slate-200 md:text-lg [&_strong]:text-white">
             {branch.apertura ? (
@@ -249,7 +249,7 @@ export default async function BranchPage({ params }: Props) {
                 . Abrimos {branch.hours.toLowerCase()}, por orden de llegada y sin turno; la colocación y las válvulas van sin cargo comprando las
                 cubiertas en el local.
                 {branch.id === "arguello" && (
-                  <> La mitad de los alineados se termina en menos de {DATOS_TALLER.minutosMediana} minutos.</>
+                  <> Un alineado lleva típicamente {DATOS_TALLER.minutosMediana} minutos.</>
                 )}
               </>
             )}
@@ -257,7 +257,7 @@ export default async function BranchPage({ params }: Props) {
             <ul className="mt-4 flex flex-wrap gap-2 text-xs font-bold text-white">
               {["Sin turno", "Colocación y válvulas sin cargo", "1 año de garantía", "Precio igual al del local"].map((t) => (
                 <li key={t} className="flex items-center gap-1.5 rounded-full border border-white/25 bg-white/10 px-3 py-1.5">
-                  <svg aria-hidden="true" className="h-3 w-3 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={4}>
+                  <svg aria-hidden="true" className="h-3 w-3 text-[#ff4a2e]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={4}>
                     <path strokeLinecap="square" d="M4 12l5 5L20 6" />
                   </svg>
                   {t}
@@ -283,7 +283,7 @@ export default async function BranchPage({ params }: Props) {
               {branch.id === "arguello" && (
                 <div className="col-span-2 flex flex-col items-center justify-center bg-orange-500 p-4 lg:col-span-1">
                   <dd className="font-display text-5xl font-extrabold italic leading-none">{DATOS_TALLER.minutosMediana} min</dd>
-                  <dt className="mt-1 text-[11px] font-black uppercase tracking-widest text-white/90">la mitad de los alineados tarda menos</dt>
+                  <dt className="mt-1 text-[11px] font-black uppercase tracking-widest text-white/90">tiempo típico de un alineado</dt>
                 </div>
               )}
             </dl>
@@ -295,7 +295,7 @@ export default async function BranchPage({ params }: Props) {
           // aspect-[4/3] en todos los tamaños: es la proporción real de la
           // foto — a partir de sm pasaba a aspect-video (16:9) y se comía
           // buena parte de la imagen.
-          <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl">
+          <div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg">
             <Image
               src={branch.facadePhoto}
               alt={`Fachada del local de Neumáticos Trivium ${branch.shortName}`}
@@ -312,7 +312,7 @@ export default async function BranchPage({ params }: Props) {
         <section className="grid grid-cols-2 gap-3">
           <WhatsAppLink
             href={waLink}
-            className="col-span-2 inline-flex min-h-14 items-center justify-center gap-2.5 rounded-2xl bg-[#25d366] px-4 text-base font-black text-white shadow-sm shadow-[#25d366]/20 transition-transform active:scale-[0.98]"
+            className="col-span-2 inline-flex min-h-14 items-center justify-center gap-2.5 rounded-lg bg-[#25d366] px-4 text-base font-black text-white transition-transform active:scale-[0.98]"
           >
             <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
               <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
@@ -321,7 +321,7 @@ export default async function BranchPage({ params }: Props) {
           </WhatsAppLink>
           <a
             href={telLink}
-            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-black text-navy-900 shadow-sm transition-colors hover:border-navy-300"
+            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 text-sm font-black text-navy-900 transition-colors hover:border-navy-300"
           >
             <svg className="h-5 w-5 text-navy-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
@@ -332,7 +332,7 @@ export default async function BranchPage({ params }: Props) {
             lat={branch.coordinates.lat}
             lng={branch.coordinates.lng}
             label={`Neumáticos Trivium ${branch.shortName}`}
-            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-black text-navy-900 shadow-sm transition-colors hover:border-orange-400 hover:text-orange-600"
+            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 text-sm font-black text-navy-900 transition-colors hover:border-orange-400 hover:text-orange-600"
           >
             <DirectionsIcon className="h-6 w-6 text-orange-500" />
             Cómo llegar
@@ -340,9 +340,9 @@ export default async function BranchPage({ params }: Props) {
         </section>
 
         {/* Horarios */}
-        <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="rounded-lg border border-slate-300 bg-white p-5">
           <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-            <h2 className="text-lg font-black text-navy-900">Horarios de atención</h2>
+            <h2 className="border-l-4 border-[#ff1e00] pl-3 text-xl font-black text-navy-900">Horarios de atención</h2>
             <BranchStatusBadge branch={branch} />
           </div>
           <dl className="divide-y divide-slate-100 text-sm">
@@ -355,7 +355,7 @@ export default async function BranchPage({ params }: Props) {
               </div>
             ))}
           </dl>
-          <p className="mt-3 rounded-xl bg-emerald-50 px-3 py-2 text-xs font-medium text-emerald-700">
+          <p className="mt-3 rounded-md border-l-4 border-emerald-600 bg-emerald-50 px-3 py-2 text-xs font-semibold text-emerald-800">
             Atención por orden de llegada, sin turnos. Consultá tiempos de espera por WhatsApp.
           </p>
         </section>
@@ -366,8 +366,8 @@ export default async function BranchPage({ params }: Props) {
         </div>
 
         {/* Ubicacion + mapa */}
-        <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-          <h2 className="mb-3 text-lg font-black text-navy-900">Ubicación y cómo llegar</h2>
+        <section className="rounded-lg border border-slate-300 bg-white p-5">
+          <h2 className="mb-3 border-l-4 border-[#ff1e00] pl-3 text-xl font-black text-navy-900">Ubicación y cómo llegar</h2>
           <p className="mb-4 text-sm text-slate-600">
             {branch.address}, {branch.city}
           </p>
@@ -376,7 +376,7 @@ export default async function BranchPage({ params }: Props) {
             lat={branch.coordinates.lat}
             lng={branch.coordinates.lng}
             label={`Neumáticos Trivium ${branch.shortName}`}
-            className="mt-4 inline-flex w-full min-h-12 items-center justify-center gap-2 rounded-xl bg-black px-4 text-sm font-black text-white transition-transform active:scale-[0.98]"
+            className="mt-4 inline-flex w-full min-h-12 items-center justify-center gap-2 rounded-md bg-black px-4 text-sm font-black text-white transition-transform active:scale-[0.98]"
           >
             <DirectionsIcon className="h-6 w-6" />
             Cómo llegar
@@ -391,15 +391,15 @@ export default async function BranchPage({ params }: Props) {
 
         {/* Resena en Google */}
         {branch.reviewUrl && (
-          <section className="rounded-2xl border border-orange-100 bg-orange-50 p-5 text-center shadow-sm">
+          <section className="rounded-lg border-2 border-black bg-white p-5 text-center">
             <div className="mb-2 flex items-center justify-center gap-1" aria-hidden>
               {Array.from({ length: 5 }).map((_, i) => (
-                <svg key={i} className="h-7 w-7 text-orange-500" fill="currentColor" viewBox="0 0 24 24">
+                <svg key={i} className="h-7 w-7 text-[#ff1e00]" fill="currentColor" viewBox="0 0 24 24">
                   <path fillRule="evenodd" clipRule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" />
                 </svg>
               ))}
             </div>
-            <h2 className="text-lg font-black text-navy-900">¿Nos visitaste?</h2>
+            <h2 className="border-l-4 border-[#ff1e00] pl-3 text-xl font-black text-navy-900">¿Nos visitaste?</h2>
             <p className="mx-auto mt-1 max-w-md text-sm text-slate-600">
               Tu reseña nos ayuda muchísimo. Contanos cómo te fue en la sucursal {branch.shortName}.
             </p>
@@ -407,7 +407,7 @@ export default async function BranchPage({ params }: Props) {
               href={branch.reviewUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-4 inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-orange-500 px-6 text-sm font-black text-white transition-transform active:scale-[0.98] hover:bg-orange-600"
+              className="mt-4 inline-flex min-h-12 items-center justify-center gap-2 rounded-md bg-orange-500 px-6 text-sm font-black text-white transition-transform active:scale-[0.98] hover:bg-orange-600"
             >
               <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
                 <path fillRule="evenodd" clipRule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" />
@@ -426,7 +426,7 @@ export default async function BranchPage({ params }: Props) {
         )}
 
         {/* Catalogo */}
-        <section className="overflow-hidden rounded-2xl bg-gradient-to-br from-navy-950 to-black p-6 text-white shadow-sm">
+        <section className="overflow-hidden rounded-lg bg-black p-6 text-white">
           <h2 className="text-xl font-black">Catálogo de neumáticos</h2>
           <p className="mt-2 text-sm leading-relaxed text-slate-300">
             Mirá todas las marcas y medidas disponibles a precio outlet. Consultá stock y precio
@@ -435,13 +435,13 @@ export default async function BranchPage({ params }: Props) {
           <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
             <Link
               href="/catalogo"
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-orange-500 px-4 text-sm font-black text-white transition-transform active:scale-[0.98] hover:bg-orange-600"
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md bg-orange-500 px-4 text-sm font-black text-white transition-transform active:scale-[0.98] hover:bg-orange-600"
             >
               Ver catálogo y precios
             </Link>
             <Link
               href="/neumaticos"
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/5 px-4 text-sm font-black text-white transition-colors hover:bg-white/10"
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md border border-white/20 bg-white/5 px-4 text-sm font-black text-white transition-colors hover:bg-white/10"
             >
               Buscar por medida
             </Link>

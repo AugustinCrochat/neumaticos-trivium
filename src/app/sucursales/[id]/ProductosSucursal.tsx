@@ -14,8 +14,8 @@ export function ProductosSucursal({ branch, datos }: { branch: Branch; datos: Da
   if (!datos.abierta || datos.conStock.length === 0) return null;
   const lugar = branch.neighborhood ?? branch.city;
   return (
-    <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm md:p-6">
-      <p className="text-xs font-black uppercase tracking-widest text-orange-500">Neumáticos nuevos con stock</p>
+    <section className="rounded-lg border border-slate-300 bg-white p-5 md:p-6">
+      <p className="text-xs font-black uppercase tracking-widest text-[#d11800]">Neumáticos nuevos con stock</p>
       <h2 className="mt-1 text-xl font-black text-navy-900 md:text-2xl">Neumáticos baratos en {lugar}</h2>
       <p className="mt-1 max-w-3xl text-sm leading-relaxed text-slate-600">
         {datos.desde !== null && (

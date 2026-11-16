@@ -35,5 +35,5 @@ export function LazyBranchMiniMap({ branch }: { branch: Branch }) {
 
   if (visible) return <BranchMiniMap branch={branch} />;
   // Mismo tamaño que el mapa, para que la página no salte al cargarlo.
-  return <div ref={ref} className="h-[420px] w-full rounded-2xl border border-slate-200 bg-slate-200 shadow-sm md:h-[560px] lg:h-[640px]" />;
+  return <div ref={ref} className="h-[420px] w-full rounded-lg border border-slate-200 bg-slate-200 md:h-[560px] lg:h-[640px]" />;
 }

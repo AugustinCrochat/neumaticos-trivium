@@ -25,8 +25,8 @@ export async function ServiciosSucursal({ branch }: { branch: Branch }) {
   const combo = splitAutoCamioneta(precios.filter((p) => p.grupo === "combo"));
 
   return (
-    <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-      <h2 className="mb-1 text-lg font-black text-navy-900">Servicios en esta sucursal</h2>
+    <section className="rounded-lg border border-slate-300 bg-white p-5">
+      <h2 className="mb-1 border-l-4 border-[#ff1e00] pl-3 text-xl font-black text-navy-900">Servicios en esta sucursal</h2>
       <p className="mb-5 text-sm text-slate-500">
         {abierta
           ? "Taller propio con equipos de última generación, por orden de llegada y sin turno."
@@ -39,7 +39,7 @@ export async function ServiciosSucursal({ branch }: { branch: Branch }) {
           const { auto, camioneta } = splitAutoCamioneta(precios.filter((p) => p.grupo === service.id));
           const nombre = nombreServicio(service.id, service.title, branch.id);
           return (
-            <article key={service.id} className="flex flex-col overflow-hidden rounded-xl border border-slate-100 bg-slate-50">
+            <article key={service.id} className="flex flex-col overflow-hidden rounded-md border border-slate-100 bg-slate-50">
               {foto && (
                 <Link href={`/servicios/${service.id}`} className="relative block aspect-[16/10] w-full" tabIndex={-1}>
                   <Image src={foto.src} alt={foto.alt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 33vw" />
@@ -82,7 +82,7 @@ export async function ServiciosSucursal({ branch }: { branch: Branch }) {
       {(combo.auto || combo.camioneta) && (
         <Link
           href="/servicios/combo-alineado-y-balanceado"
-          className="mt-4 flex flex-col gap-2 rounded-xl border border-orange-200 bg-orange-50 p-4 transition-colors hover:border-orange-300 sm:flex-row sm:items-center sm:justify-between"
+          className="mt-4 flex flex-col gap-2 rounded-md border-2 border-black bg-slate-50 p-4 transition-colors hover:bg-white sm:flex-row sm:items-center sm:justify-between"
         >
           <span>
             <span className="block font-black text-navy-900">
