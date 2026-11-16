@@ -73,7 +73,9 @@ export function BranchProvider({ children }: { children: ReactNode }) {
       const branch = BRANCHES.find((b) => b.id === stored);
       if (branch) {
         setSelectedBranchState(branch);
-        setHasConfirmedBranch(true);
+        // Una sugerencia por IP (cookie de sesión con marca "auto") no es una elección:
+        // el contenido la sigue, pero los contactos piden confirmar.
+        setHasConfirmedBranch(!/(?:^|; )trivium-branch-auto=1/.test(document.cookie));
       }
       return;
     }
@@ -102,7 +104,8 @@ export function BranchProvider({ children }: { children: ReactNode }) {
         if (!branch || cancelado || readBranchCookie()) return;
         setSelectedBranchState(branch);
         writeSessionBranchCookie(branch.id);
-        setHasConfirmedBranch(true);
+        // Sugerida, no confirmada: en celular la IP suele ubicar en otra ciudad.
+        setHasConfirmedBranch(false);
       })
       .catch(() => {});
     return () => {
@@ -127,6 +130,29 @@ export function BranchProvider({ children }: { children: ReactNode }) {
     }
     window.addEventListener(EVENTO_ELEGIR_SUCURSAL, alElegir);
     return () => window.removeEventListener(EVENTO_ELEGIR_SUCURSAL, alElegir);
+  }, []);
+
+  // "Llamar" (tel:) sin sucursal elegida a mano: se pide elegir antes de marcar,
+  // igual que con WhatsApp (la sugerida por IP puede ser de otra ciudad).
+  useEffect(() => {
+    function alTocar(e: MouseEvent) {
+      const a = (e.target as Element | null)?.closest?.("a[href^='tel:']") as HTMLAnchorElement | null;
+      if (!a) return;
+      const num = (a.getAttribute("href") ?? "").replace(/[^\d]/g, "");
+      const origen = BRANCHES.find((b) => b.phone.replace(/[^\d]/g, "") === num);
+      if (!origen) return;
+      const c = document.cookie.split("; ");
+      const elegida = c.some((x) => x.startsWith(`${BRANCH_COOKIE}=`)) && !c.some((x) => x.startsWith(`${BRANCH_AUTO_COOKIE}=1`));
+      if (elegida) return;
+      e.preventDefault();
+      e.stopPropagation();
+      setPendingAction(() => (branch: Branch) => {
+        window.location.href = `tel:${branch.phone.replace(/[^\d+]/g, "")}`;
+      });
+      setIsModalOpen(true);
+    }
+    document.addEventListener("click", alTocar, true);
+    return () => document.removeEventListener("click", alTocar, true);
   }, []);
 
   const setSelectedBranch = (branch: Branch) => {

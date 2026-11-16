@@ -12,10 +12,10 @@ const HEADERS = { "Content-Type": "application/json", "Cache-Control": "private,
 
 export async function GET() {
   try {
-    const cf = getCloudflareContext().cf as { latitude?: string; longitude?: string } | undefined;
+    const cf = getCloudflareContext().cf as { latitude?: string; longitude?: string; country?: string } | undefined;
     const lat = Number(cf?.latitude);
     const lng = Number(cf?.longitude);
-    if (cf?.latitude && cf?.longitude && Number.isFinite(lat) && Number.isFinite(lng)) {
+    if (cf?.country === "AR" && cf?.latitude && cf?.longitude && Number.isFinite(lat) && Number.isFinite(lng)) {
       return new Response(JSON.stringify({ branchId: getNearestBranch(lat, lng).id }), { headers: HEADERS });
     }
   } catch {
