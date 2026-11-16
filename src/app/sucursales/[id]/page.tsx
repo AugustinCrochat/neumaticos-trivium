@@ -249,7 +249,7 @@ export default async function BranchPage({ params }: Props) {
                 . Abrimos {branch.hours.toLowerCase()}, por orden de llegada y sin turno; la colocación y las válvulas van sin cargo comprando las
                 cubiertas en el local.
                 {branch.id === "arguello" && (
-                  <> Un alineado lleva típicamente {DATOS_TALLER.minutosMediana} minutos.</>
+                  <> Alineado y balanceado en menos de una hora.</>
                 )}
               </>
             )}
@@ -282,8 +282,8 @@ export default async function BranchPage({ params }: Props) {
               )}
               {branch.id === "arguello" && (
                 <div className="col-span-2 flex flex-col items-center justify-center bg-orange-500 p-4 lg:col-span-1">
-                  <dd className="font-display text-5xl font-extrabold italic leading-none">{DATOS_TALLER.minutosMediana} min</dd>
-                  <dt className="mt-1 text-[11px] font-black uppercase tracking-widest text-white/90">tiempo típico de un alineado</dt>
+                  <dd className="font-display text-5xl font-extrabold italic leading-none">&lt; 1 hora</dd>
+                  <dt className="mt-1 text-[11px] font-black uppercase tracking-widest text-white/90">alineado y balanceado</dt>
                 </div>
               )}
             </dl>
