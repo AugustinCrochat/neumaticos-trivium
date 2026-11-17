@@ -257,6 +257,8 @@ export function ListaSucursales({ items }: { items: SucursalItem[] }) {
   return (
     <section id="lista-sucursales" className="scroll-mt-20">
       <div className="mb-5 flex flex-wrap items-center gap-x-4 gap-y-2">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/icons/local-trivium-negro.svg" alt="" aria-hidden="true" className="h-12 w-auto shrink-0" />
         <button
           type="button"
           onClick={ubicar}
