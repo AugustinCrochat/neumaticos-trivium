@@ -199,7 +199,7 @@ export function SizeLanding({
   const equivalentesRestantes = equivalentes.filter((e) => e.stock === 0).slice(0, 8);
 
   return (
-    <div className="mx-auto max-w-7xl 2xl:max-w-[96rem] px-4 py-8">
+    <div className="mx-auto max-w-7xl xl:max-w-[112.5rem] xl:px-8 2xl:px-10 px-4 py-8">
       <Breadcrumbs
         crumbs={[
           { name: "Inicio", path: "/" },

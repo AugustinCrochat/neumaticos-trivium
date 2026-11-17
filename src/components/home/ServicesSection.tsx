@@ -260,7 +260,7 @@ export async function ServicesSection({ comoPagina = false }: { /** En /servicio
 
   return (
     <section id="servicios" className={`bg-white ${comoPagina ? "pt-10 pb-6" : "py-16"}`}>
-      <div className="max-w-7xl 2xl:max-w-[96rem] mx-auto px-4">
+      <div className="max-w-7xl xl:max-w-[112.5rem] xl:px-8 2xl:px-10 mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-12">
           <span className="inline-block text-orange-500 text-sm font-bold uppercase tracking-widest mb-3">

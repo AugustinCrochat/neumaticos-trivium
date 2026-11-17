@@ -20,7 +20,7 @@ export default async function TuercasAntirroboPage() {
   );
 
   return (
-    <div className="max-w-7xl 2xl:max-w-[96rem] mx-auto px-4 py-8">
+    <div className="max-w-7xl xl:max-w-[112.5rem] xl:px-8 2xl:px-10 mx-auto px-4 py-8">
       <h1 className="text-2xl md:text-3xl font-black text-navy-900 mb-1">Tuercas Antirrobo</h1>
       <p className="text-slate-500 mb-6">Protegé tus llantas. Colocación y válvulas sin cargo en nuestra sucursal.</p>
 

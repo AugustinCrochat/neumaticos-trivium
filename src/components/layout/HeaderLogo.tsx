@@ -16,8 +16,8 @@ const px = (n: number) => `calc(var(--u) * ${n})`;
 
 export function HeaderLogo({ compact }: { compact: boolean }) {
   const medidas = compact
-    ? "[--u:1.78px] [--B:44px] [--I:49px] md:[--B:48px] md:[--I:53px] lg:[--u:2px] lg:[--I:54px]"
-    : "[--u:2px] [--B:48px] [--I:53px] md:[--u:2.23px] md:[--B:64px] md:[--I:69px] lg:[--u:3.1px] lg:[--I:71px]";
+    ? "[--u:2.4px] [--B:44px] [--I:53px] md:[--B:48px] md:[--I:58px] lg:[--u:2.6px] lg:[--I:59px]"
+    : "[--u:2.8px] [--B:48px] [--I:57px] md:[--u:2.9px] md:[--B:64px] md:[--I:74px] lg:[--u:3.6px] lg:[--I:75px]";
   return (
     <span
       className={`relative block shrink-0 transition-[width,height] duration-200 ${medidas}`}
@@ -32,7 +32,13 @@ export function HeaderLogo({ compact }: { compact: boolean }) {
         alt=""
         aria-hidden="true"
         className="absolute left-0 max-w-none select-none transition-[width,height] duration-200"
-        style={{ top: "2px", height: "var(--I)", width: `calc(var(--I) * ${ICON_RATIO.toFixed(4)})` }}
+        style={{
+          top: "2px",
+          height: "var(--I)",
+          width: `calc(var(--I) * ${ICON_RATIO.toFixed(4)})`,
+          // Sombra suave: se nota en lo que cuelga sobre el contenido claro.
+          filter: "drop-shadow(0 2px 3px rgba(0,0,0,0.45))",
+        }}
         fetchPriority="high"
       />
       <img

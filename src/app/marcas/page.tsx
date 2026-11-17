@@ -204,7 +204,7 @@ export default async function MarcasPage() {
           sizes="100vw"
         />
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1 bg-[#ff1e00]" />
-        <div className="relative mx-auto max-w-7xl 2xl:max-w-[96rem] px-4 py-12 md:py-16">
+        <div className="relative mx-auto max-w-7xl xl:max-w-[112.5rem] xl:px-8 2xl:px-10 px-4 py-12 md:py-16">
           <Breadcrumbs
             dark
             crumbs={[
@@ -236,7 +236,7 @@ export default async function MarcasPage() {
         </div>
       </header>
 
-      <div className="mx-auto max-w-7xl 2xl:max-w-[96rem] px-4 py-10 md:py-14">
+      <div className="mx-auto max-w-7xl xl:max-w-[112.5rem] xl:px-8 2xl:px-10 px-4 py-10 md:py-14">
         <section className="mb-12 rounded-2xl bg-white p-5 shadow-sm md:p-6">
           <h2 className="mb-3 text-xl font-black text-navy-900">Encontrá tu medida y compará marcas</h2>
           <SizeOrVehicleSearch compact lado hideLearnLink />

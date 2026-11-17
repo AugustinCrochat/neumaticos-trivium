@@ -17,7 +17,7 @@ export function FooterCTA() {
   const boton = "inline-flex min-h-12 items-center justify-center gap-2 rounded-md px-5 text-sm font-black !no-underline transition-transform hover:-translate-y-0.5 active:translate-y-0.5";
   return (
     <div className="bg-orange-500 text-white">
-      <div className="mx-auto flex max-w-7xl flex-col gap-5 px-4 py-8 md:flex-row md:items-center md:justify-between md:py-10 2xl:max-w-[96rem]">
+      <div className="mx-auto flex max-w-7xl flex-col gap-5 px-4 py-8 md:flex-row md:items-center md:justify-between md:py-10 xl:max-w-[112.5rem] xl:px-8 2xl:px-10">
         <div>
           <p className="font-display text-4xl font-extrabold uppercase italic leading-[0.95] md:text-5xl">
             {abierta ? "Vení sin turno. Salí andando." : `${b.shortName} abre ${b.apertura ?? "pronto"}`}

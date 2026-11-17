@@ -15,7 +15,7 @@ function formatDate(dateStr: string) {
 export function BlogSection() {
   return (
     <section id="blog" className="py-16 bg-slate-50">
-      <div className="max-w-7xl 2xl:max-w-[96rem] mx-auto px-4">
+      <div className="max-w-7xl xl:max-w-[112.5rem] xl:px-8 2xl:px-10 mx-auto px-4">
         <div className="flex items-end justify-between mb-10">
           <div>
             <span className="inline-block text-orange-500 text-sm font-bold uppercase tracking-widest mb-2">

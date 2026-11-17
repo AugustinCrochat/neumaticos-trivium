@@ -162,7 +162,7 @@ export default async function SucursalesPage() {
           className="-z-10 object-cover object-[center_35%] opacity-60"
         />
         <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-r from-black via-black/75 to-transparent md:via-black/60" />
-        <div className="mx-auto max-w-7xl px-4 2xl:max-w-[96rem]">
+        <div className="mx-auto max-w-7xl px-4 xl:max-w-[112.5rem] xl:px-8 2xl:px-10">
           <Breadcrumbs
             dark
             crumbs={[
@@ -212,7 +212,7 @@ export default async function SucursalesPage() {
       </header>
 
       <main>
-        <div className="mx-auto max-w-7xl px-4 py-8 md:py-10 2xl:max-w-[96rem]">
+        <div className="mx-auto max-w-7xl px-4 py-8 md:py-10 xl:max-w-[112.5rem] xl:px-8 2xl:px-10">
           <ListaSucursales items={items} />
 
           {/* Qué hay en cada una y a quién atiende: contenido propio y rastreable, no sólo el mapa. */}

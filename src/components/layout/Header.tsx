@@ -156,7 +156,7 @@ export function Header() {
 
       {/* Main nav */}
       <nav className="border-b-[3px] border-[#ff1e00] bg-black">
-        <div className="max-w-7xl 2xl:max-w-[96rem] mx-auto px-3 min-[380px]:px-4">
+        <div className="w-full px-3 min-[380px]:px-4 lg:px-6 2xl:px-10">
           <div className={`flex items-center gap-2 min-[380px]:gap-6 transition-[height] duration-200 md:gap-4 lg:gap-12 xl:gap-16 ${compact ? "h-11 md:h-12" : "h-12 md:h-16"}`}>
             {/* Logo */}
             <Link href="/" aria-label="Neumáticos Trivium, inicio" className="flex-shrink-0">

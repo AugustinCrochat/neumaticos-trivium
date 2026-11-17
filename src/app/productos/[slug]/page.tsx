@@ -60,14 +60,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!product) return {};
   // product.model ya trae el índice de carga/velocidad pegado a la medida
   // (ver toTireProduct en pos-api.ts) — no hace falta insertarlo acá.
-  // El precio y la disponibilidad reales en el título y la descripción son lo que
-  // decide el clic frente a los resultados que solo repiten el nombre del modelo.
+  // Título corto (el sufijo "| Trivium" lo suma el layout): con el anterior, de
+  // ~90 caracteres con precio y servicio, Google lo descartaba y armaba el suyo
+  // con el H1 en minúsculas y sin la marca ("205/45 r17 88w firoza t5"). El
+  // precio y el stock ya salen en el resultado por los datos estructurados.
   const precio = product.price > 0 ? `$${product.price.toLocaleString("es-AR")}` : null;
-  const fullTitle = precio ? `Cubierta ${product.model} a ${precio}, colocación y válvulas sin cargo` : `Neumático ${product.model}`;
+  const fullTitle = `Neumático ${product.model}`;
   const description = [
-    `Neumático ${product.model}${precio ? ` a ${precio} con IVA` : ""}${product.enStock ? ", con stock en el local" : ""}.`,
-    "Importación directa, garantía de 1 año por defecto de fábrica y colocación y válvulas sin cargo en el día.",
-    "Retiro en el local o envío a todo el país.",
+    `Cubierta ${product.model}${precio ? ` a ${precio} con IVA` : ""}. ${product.enStock ? "Con stock en el local de Córdoba" : "Consultá disponibilidad en Córdoba"}.`,
+    "Colocación y válvulas sin cargo, pagá en cuotas.",
+    "Importación directa y garantía de 1 año por defecto de fábrica. Retiro en el local o envío a todo el país.",
   ].join(" ");
   const pageUrl = `${SITE_URL}/productos/${product.slug}`;
   // Al compartir se ve la foto del neumático tal cual (JPEG liviano que arma el
@@ -372,6 +374,7 @@ export default async function ProductPage({ params }: Props) {
         {/* Info */}
         <div className="flex flex-col">
           <h1 className="text-4xl md:text-5xl font-semibold text-slate-900 mb-3 leading-none">
+            <span className="sr-only">Neumático {product.brand} </span>
             <ProductNameWithHighlightedSize product={product} sizeClassName="font-extrabold" hideBrand />
           </h1>
 

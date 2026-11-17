@@ -32,7 +32,7 @@ export function TrustStrip() {
 
   return (
     <section className="bg-black">
-      <ol className="mx-auto flex max-w-7xl 2xl:max-w-[96rem] md:px-4">
+      <ol className="flex w-full">
         {pasos.map((p, n) => (
           <li
             key={p.titulo}

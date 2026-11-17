@@ -21,7 +21,7 @@ export function FeaturedProductsSection({ productos }: { productos: TireProduct[
 
   return (
     <section className="bg-white py-16">
-      <div className="mx-auto max-w-7xl 2xl:max-w-[96rem] px-4">
+      <div className="mx-auto max-w-7xl xl:max-w-[112.5rem] xl:px-8 2xl:px-10 px-4">
         <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
           <div className="max-w-2xl">
             <h2 className="font-display text-4xl font-extrabold uppercase italic tracking-wide text-navy-900">Precios de hoy</h2>

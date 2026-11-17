@@ -130,6 +130,33 @@ function fixModelName(modelo: string): string {
     .trim();
 }
 
+// Siglas que se dejan en mayúsculas al pasar un nombre a "Caso Título".
+const SIGLAS = new Set(["XL", "HP", "UHP", "SUV", "ZP", "RBL", "LT", "AT", "HT", "MT", "AS", "EV", "ATR", "RT", "RF", "TL", "PCR", "UHP"]);
+
+/**
+ * "TOLEDO FIROZA T5" -> "Toledo Firoza T5". Deja en mayúsculas las siglas
+ * conocidas, las letras sueltas y todo lo que lleva dígitos o barra (T5, H02,
+ * A/T, 6R): son códigos de modelo y se leen peor en minúscula. Un nombre que ya
+ * viene con minúsculas (Grenlander, Pirelli) se respeta tal cual.
+ */
+function aCasoTitulo(texto: string): string {
+  if (!texto || texto !== texto.toUpperCase()) return texto;
+  return texto
+    .split(/(\s+)/)
+    .map((palabra) =>
+      palabra
+        .split(/(-)/)
+        .map((parte) => {
+          if (!parte || parte === "-" || /^\s+$/.test(parte)) return parte;
+          if (/^[A-Z]{4,}\d+$/.test(parte)) return parte.charAt(0) + parte.slice(1).toLowerCase(); // ZEAL56 -> Zeal56
+          if (parte.length === 1 || /[\d/]/.test(parte) || SIGLAS.has(parte)) return parte;
+          return parte.charAt(0) + parte.slice(1).toLowerCase();
+        })
+        .join(""),
+    )
+    .join("");
+}
+
 // Correcciones de marca/modelo mal cargados en el POS. Solo afectan lo que se
 // muestra y el slug de la URL: localImageFallback sigue usando marca+modelo
 // crudos del POS, porque las fotos ya están guardadas con esos nombres de archivo.
@@ -223,7 +250,12 @@ function toTireProduct(p: PosProducto): TireProduct | null {
     // No es un neumático con medida completa — no se puede mostrar en el catálogo de la web
     return null;
   }
-  const { marca, modelo } = fixBrandAndModel(p.marca || "", p.modelo || "");
+  const corregidos = fixBrandAndModel(p.marca || "", p.modelo || "");
+  // El POS guarda marca y modelo en mayúsculas ("TOLEDO FIROZA T5"); en pantalla,
+  // título y descripción se muestran como se escribe una marca ("Toledo Firoza
+  // T5"). El slug y el brandId no cambian: salen de slugify, que ignora la caja.
+  const marca = aCasoTitulo(corregidos.marca);
+  const modelo = aCasoTitulo(corregidos.modelo);
   const { loadIndex, loadIndexDual, speedRating } = parseLoadSpeed(p.nombre || "");
   const brandId = slugify(marca) || "otras-marcas";
   const medida = formatMedida(p.neumatico_ancho, p.neumatico_perfil, p.neumatico_diametro, p.es_carga);

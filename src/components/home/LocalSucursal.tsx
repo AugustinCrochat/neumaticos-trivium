@@ -25,7 +25,7 @@ export function LocalSucursal({ zonas }: { zonas: ReactNode }) {
 
   return (
     <section className="bg-navy-950 py-10 text-white md:py-16">
-      <div className="mx-auto max-w-7xl 2xl:max-w-[96rem] px-4">
+      <div className="mx-auto max-w-7xl xl:max-w-[112.5rem] xl:px-8 2xl:px-10 px-4">
         <div className="grid gap-6 md:grid-cols-2 md:gap-10">
           {/* Foto primero en celular: el local a la vista antes que el texto. */}
           {b.facadePhoto && (

@@ -14,6 +14,7 @@ import { LazyOverlays } from "@/components/layout/LazyOverlays";
 import { CartProvider } from "@/contexts/cart-context";
 import { FloatingSearchWidget } from "@/components/ui/FloatingSearchWidget";
 import { FloatingWhatsAppButton } from "@/components/ui/FloatingWhatsAppButton";
+import { SalidaPagina } from "@/components/ui/SalidaPagina";
 import { MobileContactBar } from "@/components/ui/MobileContactBar";
 import { GoogleReviewsBadge } from "@/components/ui/GoogleReviewsBadge";
 import { GoogleAdsTag } from "@/components/ui/GoogleAdsTag";
@@ -146,6 +147,7 @@ export default function RootLayout({
                 <LazyOverlays />
                 <FloatingSearchWidget />
                 <FloatingWhatsAppButton />
+                <SalidaPagina />
                 <GoogleReviewsBadge />
                 <main className="flex-1">{children}</main>
                 <Footer />

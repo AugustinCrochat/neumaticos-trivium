@@ -126,7 +126,7 @@ export default function Page() {
           sizes="100vw"
         />
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1 bg-[#ff1e00]" />
-        <div className="relative mx-auto max-w-7xl 2xl:max-w-[96rem] px-4 py-10 md:py-14">
+        <div className="relative mx-auto max-w-7xl xl:max-w-[112.5rem] xl:px-8 2xl:px-10 px-4 py-10 md:py-14">
           <Breadcrumbs
             dark
             crumbs={[
@@ -156,7 +156,7 @@ export default function Page() {
         </div>
       </header>
 
-      <div className="mx-auto max-w-7xl 2xl:max-w-[96rem] px-4 py-10 md:py-14">
+      <div className="mx-auto max-w-7xl xl:max-w-[112.5rem] xl:px-8 2xl:px-10 px-4 py-10 md:py-14">
         <section className="mb-14">
           <h2 className="text-2xl font-black text-navy-900 md:text-3xl">Cómo funciona</h2>
           <ol className="mt-6 grid gap-4 md:grid-cols-3">

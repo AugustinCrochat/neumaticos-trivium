@@ -17,7 +17,7 @@ export function HomeProductCarousel({ productos }: { productos: TireProduct[] })
   const mejores = [...bestPriceByGroup(productos.filter((p) => p.enStock))];
 
   return (
-    <div className="mx-auto max-w-7xl px-4 pt-10 2xl:max-w-[96rem]">
+    <div className="mx-auto max-w-7xl px-4 pt-10 xl:max-w-[112.5rem] xl:px-8 2xl:px-10">
       <LocalProductCarousel autoplay tituloPortada productos={conStock} mejores={mejores} titulo="Neumáticos con stock y precio" />
     </div>
   );

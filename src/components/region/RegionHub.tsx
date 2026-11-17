@@ -136,7 +136,7 @@ export async function RegionHub({ region }: { region: Region }) {
 
       {/* Hero */}
       <header className="bg-black pb-10 pt-8 md:pb-14 md:pt-12">
-        <div className="mx-auto grid max-w-7xl gap-8 px-4 lg:grid-cols-[1.15fr_1fr] lg:items-center 2xl:max-w-[96rem]">
+        <div className="mx-auto grid max-w-7xl gap-8 px-4 lg:grid-cols-[1.15fr_1fr] lg:items-center xl:max-w-[112.5rem] xl:px-8 2xl:px-10">
           <div>
             <Breadcrumbs
               dark
@@ -223,7 +223,7 @@ export async function RegionHub({ region }: { region: Region }) {
         </div>
       </header>
 
-      <div className="mx-auto max-w-7xl space-y-8 px-4 py-8 2xl:max-w-[96rem]">
+      <div className="mx-auto max-w-7xl space-y-8 px-4 py-8 xl:max-w-[112.5rem] xl:px-8 2xl:px-10">
         {/* Respuesta rápida: lo que contestaría un asistente a "neumáticos / alineado en {región}" */}
         <section className="rounded-2xl border-l-4 border-[#ff1e00] bg-navy-50 p-5 md:p-6">
           <h2 className="text-sm font-black uppercase tracking-widest text-navy-700">Respuesta rápida</h2>

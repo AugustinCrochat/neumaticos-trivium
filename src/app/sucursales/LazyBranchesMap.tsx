@@ -34,7 +34,7 @@ export function LazyBranchesMap({ branches }: { branches: Branch[] }) {
 
   if (visible) return <BranchesMap branches={branches} conLista={false} />;
   return (
-    <div ref={ref} className="mx-auto max-w-7xl px-4 py-8 2xl:max-w-[96rem]">
+    <div ref={ref} className="mx-auto max-w-7xl px-4 py-8 xl:max-w-[112.5rem] xl:px-8 2xl:px-10">
       <div className="h-[54vh] min-h-[360px] w-full rounded-2xl border border-slate-200 bg-slate-200 md:h-[720px]" />
     </div>
   );

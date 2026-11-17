@@ -35,7 +35,7 @@ export function HeroSection({ productos }: { productos: TireProduct[] }) {
           <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/60 to-black/10" />
         </>
       )}
-      <div className="relative max-w-7xl 2xl:max-w-[96rem] mx-auto px-4">
+      <div className="relative max-w-7xl xl:max-w-[112.5rem] xl:px-8 2xl:px-10 mx-auto px-4">
         <div className="grid md:grid-cols-2 gap-0 min-h-[480px]">
 
           {/* Left: copy */}

@@ -195,7 +195,7 @@ export default async function OfertasPage() {
           sizes="100vw"
         />
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1 bg-[#ff1e00]" />
-        <div className="relative mx-auto max-w-7xl 2xl:max-w-[96rem] px-4 py-12 md:py-20">
+        <div className="relative mx-auto max-w-7xl xl:max-w-[112.5rem] xl:px-8 2xl:px-10 px-4 py-12 md:py-20">
           <span className="inline-block rounded-md bg-[#ff1e00] px-3 py-1 text-xs font-bold uppercase tracking-widest text-white">
             Ofertas
           </span>
@@ -225,7 +225,7 @@ export default async function OfertasPage() {
       </header>
 
       <section className="border-b border-slate-200 bg-white">
-        <ul className="mx-auto grid max-w-7xl 2xl:max-w-[96rem] grid-cols-1 gap-px bg-slate-200 sm:grid-cols-3">
+        <ul className="mx-auto grid max-w-7xl xl:max-w-[112.5rem] xl:px-8 2xl:px-10 grid-cols-1 gap-px bg-slate-200 sm:grid-cols-3">
           {BENEFICIOS.map((b) => (
             <li key={b.titulo} className="flex items-center gap-4 bg-white px-4 py-5">
               <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#ff1e00] text-white">
@@ -244,7 +244,7 @@ export default async function OfertasPage() {
 
       {/* Atajos a cada sección: la página es larga, esto evita scrollear de más. */}
       <nav aria-label="Secciones de ofertas" className="border-b border-slate-200 bg-white">
-        <ul className="mx-auto flex max-w-7xl 2xl:max-w-[96rem] gap-2 overflow-x-auto px-4 py-2.5">
+        <ul className="mx-auto flex max-w-7xl xl:max-w-[112.5rem] xl:px-8 2xl:px-10 gap-2 overflow-x-auto px-4 py-2.5">
           {secciones.map((x) => (
             <li key={x.id} className="shrink-0">
               <a href={`#${x.id}`} className="inline-flex items-center gap-1.5 rounded-full border border-slate-300 bg-white px-4 py-1.5 text-sm font-bold text-slate-800 transition-colors hover:border-[#ff1e00] hover:text-[#ff1e00]">
@@ -256,7 +256,7 @@ export default async function OfertasPage() {
         </ul>
       </nav>
 
-      <main className="mx-auto max-w-7xl 2xl:max-w-[96rem] px-4 py-10 md:py-14">
+      <main className="mx-auto max-w-7xl xl:max-w-[112.5rem] xl:px-8 2xl:px-10 px-4 py-10 md:py-14">
         <Breadcrumbs crumbs={[{ name: "Inicio", path: "/" }, { name: "Ofertas", path: "/ofertas" }]} />
 
         {ofertas.length === 0 && tuercas.length === 0 ? (
