@@ -46,9 +46,9 @@ Solo Argüello está abierta. Lomas del Mirador y San Justo se cargan recién al
 | Google Business | activo, 57 reseñas | — | https://maps.app.goo.gl/tQrXVQCQ5VviAYY46 |
 | Bing Places | importado de Google, publicación pendiente (~10–14 días) | 2026-11-17 | bing.com/forbusiness |
 | Bing Webmaster | sitio agregado, sitemap enviado (procesando), IndexNow activo | 2026-11-17 | bing.com/webmasters |
-| Apple Business Connect | pendiente | | |
+| Apple Business Connect | ahora es business.apple.com; pide Apple Account empresarial (la crea el dueño) | | |
 | Facebook / Instagram | activos, revisar NAP | | |
-| Foursquare | pendiente | | |
+| Foursquare | pide ingresar con email/teléfono y código (lo hace el dueño); luego foursquare.com/add-place | | |
 | Páginas Amarillas | no hay alta gratuita: "Anunciate" es un formulario de ventas de gurú Soluciones (asesor, anuncio pago). Negocio no figura en la búsqueda (2026-11-17). Decisión: no cargar por ahora | 2026-11-17 | |
 | Argentino.com | publicado (Argüello), con 3 fotos, horarios y redes | 2026-11-17 | https://www.argentino.com.ar/neumaticos-trivium-F110AC6031CD745 |
 
