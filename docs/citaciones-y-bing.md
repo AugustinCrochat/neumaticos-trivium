@@ -44,10 +44,12 @@ Solo Argüello está abierta. Lomas del Mirador y San Justo se cargan recién al
 | Sitio | Estado | Fecha | URL del perfil |
 |---|---|---|---|
 | Google Business | activo, 57 reseñas | — | https://maps.app.goo.gl/tQrXVQCQ5VviAYY46 |
-| Bing Places | pendiente | | |
-| Bing Webmaster | pendiente | | |
+| Bing Places | importado de Google, publicación pendiente (~10–14 días) | 2026-11-17 | bing.com/forbusiness |
+| Bing Webmaster | sitio agregado, sitemap enviado (procesando), IndexNow activo | 2026-11-17 | bing.com/webmasters |
 | Apple Business Connect | pendiente | | |
 | Facebook / Instagram | activos, revisar NAP | | |
 | Foursquare | pendiente | | |
 | Páginas Amarillas | pendiente | | |
 | Argentino.com | pendiente | | |
+
+Nota 2026-11-17: Google/Bing Places muestran el CP de Argüello como **X5022IFB** (Bing lo importó así). Nuestro config.ts tiene X5147. Confirmar con una factura y unificar en todos los sitios.
