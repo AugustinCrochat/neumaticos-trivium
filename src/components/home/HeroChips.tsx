@@ -86,7 +86,7 @@ export function HeroChips({ anclas }: { anclas: { href: string; medida: string; 
       {b.googleRating && <GoogleRatingBadge branchId={b.id} className={chip} />}
       {abierta ? (
         <>
-          <span className={chip}>Sin turno</span>
+          <span className={chip}>Llegás y te atendemos</span>
           <span className={chip}>Colocación <span className="underline decoration-orange-500 decoration-2 underline-offset-4">sin cargo</span> en el acto</span>
         </>
       ) : b.apertura ? (
