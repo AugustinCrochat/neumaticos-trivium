@@ -13,6 +13,7 @@ import { LivePrice } from "./LivePrice";
 import { JsonLd } from "@/components/seo/JsonLd";
 import {
   buildTireDescription,
+  describirFicha,
   formatSize,
   LOAD_INDEX_KG,
   rimSlug,
@@ -66,10 +67,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   // precio y el stock ya salen en el resultado por los datos estructurados.
   const precio = product.price > 0 ? `$${product.price.toLocaleString("es-AR")}` : null;
   const fullTitle = `Neumático ${product.model}`;
+  // La segunda frase es propia de cada modelo (qué es y para quién), así dos
+  // fichas de la misma marca no repiten la descripción en los resultados.
+  const { gancho } = describirFicha(product);
   const description = [
-    `Cubierta ${product.model}${precio ? ` a ${precio} con IVA` : ""}. ${product.enStock ? "Con stock en el local de Córdoba" : "Consultá disponibilidad en Córdoba"}.`,
+    `Cubierta ${product.model}${precio ? ` a ${precio} con IVA` : ""}.${gancho ? ` ${gancho}.` : ""} ${product.enStock ? "Con stock en el local de Córdoba" : "Consultá disponibilidad en Córdoba"}.`,
     "Colocación y válvulas sin cargo, pagá en cuotas.",
-    "Importación directa y garantía de 1 año por defecto de fábrica. Retiro en el local o envío a todo el país.",
+    "Garantía de 1 año. Retiro en el local o envío a todo el país.",
   ].join(" ");
   const pageUrl = `${SITE_URL}/productos/${product.slug}`;
   // Al compartir se ve la foto del neumático tal cual (JPEG liviano que arma el
@@ -96,17 +100,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-function vehicleLabel(product: { vehicleType: string[]; size?: { rim: number } }) {
-  if (product.size && esRodadoCamion(product.size.rim)) return "camiones medianos y vehículos de carga";
-  const hasAuto = product.vehicleType.includes("auto");
-  const hasCamioneta = product.vehicleType.includes("camioneta");
-  if (hasAuto && hasCamioneta) return "autos y camionetas";
-  if (hasCamioneta) return "camionetas";
-  return "autos";
-}
-
 function buildProductJsonLd(product: {
   id: string; slug: string; brand: string; brandId: string; model: string; modeloBase: string; imageUrl: string; price: number; enStock?: boolean;
+  isAT?: boolean; isCarga?: boolean;
   size: { width: number; profile: number; rim: number }; loadIndex?: string; loadIndexDual?: string; speedRating?: string;
   vehicleType: string[];
 }, label: TireLabel | null) {
@@ -228,6 +224,7 @@ export default async function ProductPage({ params }: Props) {
 
   const tireLabel = getTireLabel(product.slug);
   const utqg = getUtqg(product.brandId, product.modeloBase, product.slug);
+  const fichaTexto = describirFicha(product);
   const treadCloseup = getTreadCloseup(product.imageUrl);
   const extraPhotos = [...(treadCloseup ? [treadCloseup] : []), ...getExtraPhotos(product.brandId, product.modeloBase, product.size)];
   const brandLogo = getBrandLogo(product.brandId);
@@ -419,8 +416,13 @@ export default async function ProductPage({ params }: Props) {
       <div className="grid md:grid-cols-2 gap-10 mt-14 pt-10 border-t-2 border-slate-200">
         <div>
           <h2 className="border-l-[6px] border-orange-500 pl-3 text-3xl font-extrabold leading-none text-navy-900 mb-4 uppercase tracking-wide">Descripción</h2>
-          <p className="text-slate-600 leading-relaxed">
-            Neumático {product.brand} pensado para {vehicleLabel(product)}, en la medida {product.size.width}/{product.size.profile} R{product.size.rim}{product.isCarga ? "C" : ""}.{" "}
+          {fichaTexto.parrafos.map((texto, i) => (
+            <p key={i} className={`text-slate-600 leading-relaxed ${i > 0 ? "mt-3" : ""}`}>
+              {texto}
+            </p>
+          ))}
+          <p className="mt-3 text-slate-600 leading-relaxed">
+            <strong className="text-slate-800">Sobre {product.brand}:</strong>{" "}
             {brand?.fullDescription || brand?.description || `${product.brand} ofrece una relación costo-beneficio competitiva, con buen agarre y durabilidad para uso diario.`}
           </p>
           <p className="mt-3 text-sm text-slate-500">

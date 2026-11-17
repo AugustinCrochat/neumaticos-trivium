@@ -1,5 +1,7 @@
 import type { TireSize, TireProduct } from "./types";
 import { VEHICLE_DB, sortVehiclesByPopularity } from "./vehicles";
+import { perfilDeModelo } from "./model-profiles";
+import { getTireLabel } from "./tire-labels";
 
 // Tabla de referencia de índices de velocidad habituales en neumáticos de auto/camioneta.
 export const SPEED_RATING_KMH: Record<string, number> = {
@@ -206,67 +208,115 @@ export function vehiclesUsingSize(size: TireSize): VehicleUsingSize[] {
   return sortVehiclesByPopularity(result);
 }
 
-/**
- * Descripción larga de un neumático para el feed de Merchant Center y el
- * JSON-LD de producto — un único generador para que las dos no diverjan (y
- * Diagnostics no marque inconsistencia entre lo que dice la página y lo que
- * dice el feed).
- *
- * Google marcó las descripciones anteriores ("Neumático X — importación
- * directa, outlet de neumáticos. Garantía de 1 año.") como demasiado
- * genéricas: no decían nada que no estuviera ya en el título. Ésta agrega
- * sólo datos reales del producto — nada inventado ni copy de venta —, que es
- * justo lo que alguien busca al elegir un neumático: para qué tipo de
- * vehículo es, cuánto peso y velocidad soporta, y si es la medida de fábrica
- * de algún auto conocido.
- */
-export function buildTireDescription(product: {
+type FichaInput = {
   model: string;
   size: TireSize;
   vehicleType: string[];
   loadIndex?: string;
   loadIndexDual?: string;
   speedRating?: string;
-}): string {
-  // Rodado 17.5 o más: neumático de camión chico/mediano (ver esRodadoCamion en
-  // pos-api.ts), no de auto ni camioneta — el POS igual lo carga con
-  // vehicleType ["auto","camioneta"], así que se decide por el rodado.
-  const tipo = product.size.rim >= 17.5 ? "camiones chicos y medianos" : vehicleTypeLabel(product.vehicleType);
+  brand?: string;
+  brandId?: string;
+  modeloBase?: string;
+  slug?: string;
+  isAT?: boolean;
+  isCarga?: boolean;
+};
+
+/** Qué dice el perfil (la altura del flanco) sobre cómo se maneja la cubierta. */
+function frasePerfil({ profile, rim }: TireSize): string {
+  if (profile <= 45)
+    return `El perfil ${profile} es bajo: flancos cortos que dan una respuesta precisa en curva, a cambio de filtrar menos los baches; va en llantas de ${rim} pulgadas.`;
+  if (profile <= 55)
+    return `El perfil ${profile} es medio-bajo: un equilibrio entre apoyo en curva y confort, típico del rodado ${rim}.`;
+  if (profile <= 70)
+    return `El perfil ${profile} deja flancos de altura media, que filtran bien los baches y dan un andar confortable en ciudad y ruta.`;
+  return `El perfil ${profile} es alto: flancos que absorben las irregularidades del camino y toleran mejor la carga.`;
+}
+
+/** El rodado, traducido a qué tipo de vehículo suele llevarlo. */
+function fraseRodado(rim: number): string {
+  if (rim >= 17.5) return "";
+  if (rim <= 14) return `El rodado ${rim} es el de los autos chicos y compactos.`;
+  if (rim <= 16) return `El rodado ${rim} es el de los autos medianos, hatchbacks y sedanes.`;
+  return `El rodado ${rim} es el de sedanes grandes, SUV y camionetas.`;
+}
+
+/**
+ * Texto de una ficha, en párrafos: primero qué es el modelo (perfil propio de
+ * model-profiles.ts, o un texto por tipo si todavía no lo tiene), después lo
+ * que cambia de una medida a otra (perfil, rodado, carga, velocidad, autos que
+ * la llevan de fábrica) y los datos de la etiqueta europea si la tiene. Lo usa
+ * la ficha, el JSON-LD y el feed (buildTireDescription). La etiqueta va aparte
+ * porque la ficha ya la muestra en su propio bloque.
+ */
+export function describirFicha(product: FichaInput): { gancho: string | null; parrafos: string[]; etiqueta: string | null; cierre: string } {
+  const { size } = product;
+  const perfil = product.brandId && product.modeloBase ? perfilDeModelo(product.brandId, product.modeloBase) : null;
+  const camion = size.rim >= 17.5;
+  const tipo = camion ? "camiones chicos y medianos" : vehicleTypeLabel(product.vehicleType);
   const loadKg = product.loadIndex ? LOAD_INDEX_KG[product.loadIndex] : undefined;
   const loadDualKg = product.loadIndexDual ? LOAD_INDEX_KG[product.loadIndexDual] : undefined;
   const speedKmh = product.speedRating ? SPEED_RATING_KMH[product.speedRating] : undefined;
 
-  const partes = [`Neumático ${product.model} para ${tipo}, de importación directa.`];
+  // 1. Qué es.
+  let quees: string;
+  if (perfil) quees = `${perfil.resumen} ${perfil.ideal}`;
+  else if (product.isCarga || camion)
+    quees = "Es un neumático de carga: carcasa reforzada para soportar más peso por rueda en utilitarios, camionetas de trabajo y camiones livianos.";
+  else if (product.isAT)
+    quees = "Es un neumático todo terreno (A/T): bloques de banda más abiertos que dan tracción en tierra, ripio y barro, y siguen siendo usables en ruta.";
+  else quees = `Es un neumático de calle${product.brand ? ` de ${product.brand}` : ""} para el uso diario, en ciudad y ruta.`;
+  const intro = `Neumático ${product.model} para ${tipo}, de importación directa. ${quees}`;
 
-  // Merchant Center pide el tamaño explícito en la descripción: el ancho, el
-  // perfil y el rodado en palabras, y el diámetro exterior aproximado.
-  const { width, profile, rim } = product.size;
+  // 2. La medida. Merchant Center pide el tamaño explícito en la descripción:
+  // ancho, perfil y rodado en palabras, y el diámetro exterior aproximado.
+  const medida: string[] = [];
+  const { width, profile, rim } = size;
   if (width && profile && rim) {
     const diametroMm = Math.round(rim * 25.4 + 2 * ((width * profile) / 100));
-    partes.push(
-      `Tamaño: ancho ${width} mm, perfil ${profile} % y rodado ${rim} pulgadas (diámetro exterior aproximado ${diametroMm} mm).`
-    );
+    medida.push(`Tamaño: ancho ${width} mm, perfil ${profile} % y rodado ${rim} pulgadas (diámetro exterior aproximado ${diametroMm} mm).`);
+    if (!camion) medida.push(frasePerfil(size), fraseRodado(rim));
   }
-
   if (loadKg && loadDualKg && speedKmh) {
-    partes.push(
+    medida.push(
       `Índice de carga ${product.loadIndex}/${product.loadIndexDual} (hasta ${loadKg} kg en montaje simple, ${loadDualKg} kg en rodado dual) y velocidad ${product.speedRating} (hasta ${speedKmh} km/h).`
     );
   } else if (loadKg && speedKmh) {
-    partes.push(
-      `Índice de carga ${product.loadIndex} (hasta ${loadKg} kg por rueda) y velocidad ${product.speedRating} (hasta ${speedKmh} km/h).`
-    );
+    medida.push(`Índice de carga ${product.loadIndex} (hasta ${loadKg} kg por rueda) y velocidad ${product.speedRating} (hasta ${speedKmh} km/h).`);
   }
-
-  const vehiculos = sortVehiclesByPopularity(vehiclesUsingSize(product.size));
+  const vehiculos = vehiclesUsingSize(size);
   if (vehiculos.length > 0) {
     const nombres = Array.from(new Set(vehiculos.map((v) => `${v.brand} ${v.model}`))).slice(0, 3);
-    partes.push(`Medida original de ${nombres.join(", ")}${vehiculos.length > nombres.length ? " y otros" : ""}.`);
+    medida.push(`Medida original de ${nombres.join(", ")}${vehiculos.length > nombres.length ? " y otros" : ""}.`);
   }
 
-  partes.push("Outlet de neumáticos con garantía de 1 año y colocación y válvulas sin cargo en el local.");
+  const parrafos = [intro, medida.filter(Boolean).join(" ")];
 
-  return partes.join(" ");
+  // 3. Etiqueta europea, si está declarada en EPREL.
+  const label = product.slug ? getTireLabel(product.slug) : null;
+  let etiqueta: string | null = null;
+  if (label) {
+    etiqueta =
+      `Etiqueta europea de eficiencia (EPREL): consumo clase ${label.energyClass}, agarre en mojado clase ${label.wetGripClass} y ruido externo de ${label.noiseDb} dB (clase ${label.noiseClass}).`;
+  }
+
+  return {
+    gancho: perfil?.gancho ?? null,
+    parrafos,
+    etiqueta,
+    cierre: "Outlet de neumáticos con garantía de 1 año y colocación y válvulas sin cargo en el local.",
+  };
+}
+
+/**
+ * Descripción larga de un neumático para el feed de Merchant Center y el
+ * JSON-LD de producto (mismo texto en los dos, para que Diagnostics no marque
+ * inconsistencia). Todo sale de describirFicha.
+ */
+export function buildTireDescription(product: FichaInput): string {
+  const { parrafos, etiqueta, cierre } = describirFicha(product);
+  return [...parrafos, ...(etiqueta ? [etiqueta] : []), cierre].join(" ");
 }
 
 /**
