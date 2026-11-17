@@ -30,6 +30,12 @@ export const FOTOS_CARGA = [
     caption: "La Ducato lista, con las cubiertas de carga nuevas.",
     position: "center 70%",
   },
+  {
+    src: "/images/local/mercedes-sprinter-antes-de-colocar-cubiertas-de-carga-trivium.webp",
+    alt: "Mercedes-Benz Sprinter en el taller de Trivium, antes de colocar cubiertas de carga nuevas",
+    caption: "Una Sprinter en el taller, con las cubiertas de carga nuevas listas para colocar.",
+    position: "center 45%",
+  },
 ] as const;
 
 /** Una foto por pantalla de medida, rotando para no repetir siempre la misma. */
