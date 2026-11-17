@@ -162,7 +162,7 @@ export function Header() {
               <Image
                 src="/logo-neumaticos-trivium.svg"
                 alt="Neumáticos Trivium"
-                width={168}
+                width={170}
                 height={60}
                 className={`w-auto transition-[height] duration-200 ${compact ? "h-8 md:h-8 lg:h-9" : "h-9 md:h-10 lg:h-14"}`}
                 priority
