@@ -7,6 +7,7 @@ import Image from "next/image";
 import { useBranch } from "@/contexts/branch-context";
 import { SearchModal } from "@/components/ui/SearchModal";
 import { isVisaMasterPromoDay } from "@/lib/promo-day";
+import { HeaderLogo } from "./HeaderLogo";
 import { PriceTagIcon } from "@/components/ui/PriceTagIcon";
 import { restoDelDia } from "@/lib/fin-del-dia";
 import { HeaderEstado } from "@/components/layout/HeaderEstado";
@@ -158,15 +159,8 @@ export function Header() {
         <div className="max-w-7xl 2xl:max-w-[96rem] mx-auto px-3 min-[380px]:px-4">
           <div className={`flex items-center gap-2 min-[380px]:gap-6 transition-[height] duration-200 md:gap-4 lg:gap-12 xl:gap-16 ${compact ? "h-11 md:h-12" : "h-12 md:h-16"}`}>
             {/* Logo */}
-            <Link href="/" className="flex-shrink-0">
-              <Image
-                src="/logo-neumaticos-trivium.svg"
-                alt="Neumáticos Trivium"
-                width={170}
-                height={60}
-                className={`w-auto transition-[height] duration-200 ${compact ? "h-8 md:h-8 lg:h-9" : "h-9 md:h-10 lg:h-14"}`}
-                priority
-              />
+            <Link href="/" aria-label="Neumáticos Trivium, inicio" className="flex-shrink-0">
+              <HeaderLogo compact={compact} />
             </Link>
 
             {/* Desktop nav links */}
