@@ -167,6 +167,8 @@ const IMAGE_NAME_ALIASES: Record<string, string> = {
   "yokohama-g018": "yokohama-geolandar-at-g018",
   // "ARIVO PREMIO 195/55 R15 85V" está cargado en el POS sin modelo; es el ECO 6.
   "arivo-premio-": "arivo-premio-eco-6",
+  // "ARIVO TERRAMAX" / "A/T" está cargado como marca+modelo; es el Terramax ARV A/T.
+  "arivo-terramax-a-t": "arivo-terramax-arv-a-t",
 };
 
 // Mientras el POS no tenga imagen_url cargada, usamos la foto que ya subimos

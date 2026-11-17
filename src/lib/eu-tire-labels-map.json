@@ -710,5 +710,21 @@
     "noiseDb": 68,
     "noiseClass": "A",
     "tyreDesignation": "195/55R15 85 V"
+  },
+  "toledo-firoza-t5-205-45-r17-88w": {
+    "eprelId": "2608383",
+    "energyClass": "D",
+    "wetGripClass": "C",
+    "noiseDb": 67,
+    "noiseClass": "B",
+    "tyreDesignation": "205/45ZR17 88 W XL"
+  },
+  "arivo-premio-arzero-185-60-r15-88h": {
+    "eprelId": "2632161",
+    "energyClass": "C",
+    "wetGripClass": "C",
+    "noiseDb": 67,
+    "noiseClass": "A",
+    "tyreDesignation": "185/60R15 88 H XL"
   }
 }

@@ -25,6 +25,24 @@ export const BRANDS: TireBrand[] = [
       "Arivo es una marca de origen chino cuya línea Premio apunta al uso urbano y de ruta liviana. Sus modelos combinan un dibujo asimétrico con canales de evacuación amplios, que es lo que más se nota en piso mojado dentro de esta franja de precio. Trabaja bien en autos chicos y medianos con uso mixto de ciudad y ruta, y es una alternativa intermedia entre la gama de entrada y las marcas premium tradicionales.",
   },
   {
+    id: "toledo",
+    name: "Toledo",
+    origin: "Importada",
+    logoUrl: "/brands/toledo-neumaticos-logo.webp",
+    description: "Línea Firoza para autos de calle: del uso diario al perfil bajo.",
+    fullDescription:
+      "Toledo es la marca de la línea Firoza, con versiones para el uso diario (T3 y T5), deportivas (Sport) y eléctricas (EV). El Firoza T5 que tenemos en 205/45 R17 es un neumático de perfil bajo para autos de calle, con etiqueta europea de eficiencia energética declarada en EPREL. Pasá por el local y te mostramos la cubierta antes de comprarla.",
+  },
+  {
+    id: "nipon",
+    name: "Nipon",
+    origin: "China",
+    logoUrl: "/brands/nipon-neumaticos-logo.webp",
+    description: "RP68: neumático económico para autos chicos y medianos de uso diario.",
+    fullDescription:
+      "Nipon es la marca del RP68, un neumático radial de entrada para autos chicos y medianos que se usan en ciudad y ruta liviana. Lo tenemos en 165/70 R13, 185/60 R15 y 185/65 R15, con colocación y válvulas sin cargo en el local.",
+  },
+  {
     id: "michelin",
     name: "Michelin",
     origin: "Francia",
