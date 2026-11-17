@@ -36,3 +36,22 @@ export function precioDesde(href: string, productos: TireProduct[], taller: Prec
 /** ¿La nota habla de camionetas/SUV (por el slug)? Ahí el precio del combo que se muestra es el de camioneta. */
 export const notaDeCamioneta = (slug: string) =>
   /camioneta|suv|pick-?up|4x4|awd|hilux|amarok|ranger|s10|frontier|toro|tracker|duster|ecosport|kicks|territory|corolla-cross|hr-v|crv|cr-v|rav4|tiguan|taos|t-cross|nivus/i.test(slug);
+
+/**
+ * ¿La nota habla de utilitarios, furgones o neumáticos C (por el slug)? Ahí la
+ * vidriera y la columna de precios muestran cubiertas de carga en vez de las de
+ * auto, que no le sirven a quien tiene un furgón.
+ */
+export const notaDeCarga = (slug: string) => /utilitario|furgon|reparto|neumaticos?-c(-|$)|cubiertas-de-carga|carga-simple/i.test(slug);
+
+/** Precio más bajo con stock de cada medida de carga, de menor a mayor rodado y ancho. */
+export function preciosAnclaCarga(productos: TireProduct[], max = 5) {
+  const porMedida = new Map<string, { size: TireProduct["size"]; precio: number }>();
+  for (const p of productos) {
+    if (!p.isCarga || p.enStock === false) continue;
+    const k = `${p.size.width}-${p.size.profile}-${p.size.rim}`;
+    const prev = porMedida.get(k);
+    if (!prev || p.price < prev.precio) porMedida.set(k, { size: p.size, precio: p.price });
+  }
+  return [...porMedida.values()].sort((a, b) => a.size.rim - b.size.rim || a.size.width - b.size.width).slice(0, max);
+}

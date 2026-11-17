@@ -6,7 +6,7 @@ import { TallerChips } from "@/components/blog/TallerChips";
 import { getProductosDesdePOS, getServiciosPrecios } from "@/lib/pos-api";
 import { peersByGroup } from "@/lib/best-price";
 import { BLOG_POSTS } from "@/lib/data";
-import { money, notaDeCamioneta } from "@/lib/precios-hoy";
+import { money, notaDeCamioneta, notaDeCarga } from "@/lib/precios-hoy";
 import { COMBO_ID, preciosTaller } from "@/lib/servicios-seo";
 import { MEDIDAS_PRIORITARIAS, formatSize, sizeSlug, sizesEqual } from "@/lib/tire-sizes";
 import type { TireProduct, TireSize } from "@/lib/types";
@@ -87,15 +87,26 @@ export async function BlogVidriera({ slug, sinProductos = false }: { slug: strin
 
   if (sinProductos) return null;
   const catalogo = await getProductosDesdePOS();
-  const conStock = catalogo.filter((p) => p.enStock && !p.isCarga);
+  const deCarga = notaDeCarga(slug);
+  const conStock = catalogo.filter((p) => p.enStock && (deCarga ? p.isCarga : !p.isCarga));
 
   let titulo = "Precios de hoy";
   let detalle = "El más barato con stock de las medidas más pedidas.";
   let verTodo = { href: "/neumaticos", texto: "Buscar mi medida" };
   let elegidos: TireProduct[] = [];
 
-  const m = slug.match(/(\d{3})-(\d{2})-r(\d{2})/);
-  const marca = [...new Set(conStock.map((p) => p.brandId))].find((id) => id.length > 3 && slug.includes(id));
+  if (deCarga) {
+    // Una por medida (la más barata con colchón de stock) y, si sobra lugar, las siguientes.
+    const medidas = [...new Map(conStock.map((p) => [`${p.size.width}-${p.size.profile}-${p.size.rim}`, p.size])).values()].sort((a, b) => a.rim - b.rim || a.width - b.width);
+    const primeras = medidas.flatMap((size) => conStock.filter((p) => sizesEqual(p.size, size)).sort(porStockYPrecio).slice(0, 1));
+    const resto = conStock.filter((p) => !primeras.includes(p)).sort(porStockYPrecio);
+    elegidos = [...primeras, ...resto].slice(0, 4);
+    titulo = "Neumáticos de carga con stock hoy";
+    detalle = "Cubiertas C para furgones y utilitarios, precio por unidad con colocación y válvulas sin cargo en el local.";
+    verTodo = { href: "/neumaticos/carga", texto: "Ver todos los de carga" };
+  }
+  const m = deCarga ? null : slug.match(/(\d{3})-(\d{2})-r(\d{2})/);
+  const marca = deCarga ? undefined : [...new Set(conStock.map((p) => p.brandId))].find((id) => id.length > 3 && slug.includes(id));
   if (m) {
     const size: TireSize = { width: Number(m[1]), profile: Number(m[2]), rim: Number(m[3]) };
     elegidos = conStock.filter((p) => sizesEqual(p.size, size)).sort(porStockYPrecio).slice(0, 4);
@@ -109,7 +120,7 @@ export async function BlogVidriera({ slug, sinProductos = false }: { slug: strin
     detalle = "Los modelos más económicos de la marca, con precio por unidad.";
     verTodo = { href: `/marcas/${marca}`, texto: `Ver todo ${nombre}` };
   }
-  if (elegidos.length === 0) {
+  if (elegidos.length === 0 && !deCarga) {
     // Sin medida ni marca en la nota (o sin stock de ellas): las medidas más pedidas.
     elegidos = MEDIDAS_PRIORITARIAS.flatMap((size) => conStock.filter((p) => sizesEqual(p.size, size)).sort(porStockYPrecio).slice(0, 1)).slice(0, 4);
   }

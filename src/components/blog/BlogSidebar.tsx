@@ -3,7 +3,8 @@ import { PrecioTag } from "@/components/ui/PrecioTag";
 import { WhatsAppSucursal } from "@/components/ui/SucursalBits";
 import { preciosAncla } from "@/components/home/HeroTrustRow";
 import { getProductosDesdePOS, getServiciosPrecios } from "@/lib/pos-api";
-import { money, notaDeCamioneta } from "@/lib/precios-hoy";
+import { cargaSlug, formatCargaSize } from "@/lib/carga";
+import { money, notaDeCamioneta, notaDeCarga, preciosAnclaCarga } from "@/lib/precios-hoy";
 import { COMBO_ID, preciosTaller } from "@/lib/servicios-seo";
 import { formatSize, sizeSlug } from "@/lib/tire-sizes";
 
@@ -17,9 +18,10 @@ export async function BlogSidebar({ title, deTaller, slug }: { title: string; de
   const [productos, servicios] = await Promise.all([getProductosDesdePOS(), getServiciosPrecios()]);
   const taller = preciosTaller(servicios);
   const combo = taller.comboAuto;
-  const filas = [
-    ...preciosAncla(productos, 5).map((a) => ({ href: `/neumaticos/${sizeSlug(a.size)}`, label: formatSize(a.size), precio: a.precio })),
-  ];
+  const deCarga = notaDeCarga(slug);
+  const filas = deCarga
+    ? preciosAnclaCarga(productos, 5).map((a) => ({ href: `/neumaticos/carga/${cargaSlug(a.size)}`, label: formatCargaSize(a.size), precio: a.precio }))
+    : preciosAncla(productos, 5).map((a) => ({ href: `/neumaticos/${sizeSlug(a.size)}`, label: formatSize(a.size), precio: a.precio }));
   const fa = combo ? [{ href: `/servicios/${COMBO_ID}`, label: "Alineado + balanceado · auto", precio: combo }] : [];
   const fc = taller.comboCamioneta ? [{ href: `/servicios/${COMBO_ID}`, label: "Alineado + balanceado · camioneta", precio: taller.comboCamioneta }] : [];
   const filaCombo = notaDeCamioneta(slug) ? [...fc, ...fa] : [...fa, ...fc];
@@ -41,10 +43,10 @@ export async function BlogSidebar({ title, deTaller, slug }: { title: string; de
         ))}
       </ul>
       <Link
-        href={deTaller ? `/servicios/${COMBO_ID}` : "/neumaticos"}
+        href={deTaller ? `/servicios/${COMBO_ID}` : deCarga ? "/neumaticos/carga" : "/neumaticos"}
         className="mt-4 flex min-h-12 items-center justify-center rounded-md bg-orange-500 px-4 text-sm font-black !text-white !no-underline transition-colors hover:bg-orange-600"
       >
-        {deTaller ? "Ver qué incluye el combo" : "Buscar mi medida"}
+        {deTaller ? "Ver qué incluye el combo" : deCarga ? "Ver neumáticos de carga" : "Buscar mi medida"}
       </Link>
       <WhatsAppSucursal
         texto={`Hola! Leí la nota "${title}" y quiero consultar.`}
