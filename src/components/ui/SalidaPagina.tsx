@@ -32,12 +32,10 @@ function mensajes(h1: string | undefined): string[] {
   const medida = h1?.replace(/\s+/g, " ").match(MEDIDA)?.[0]?.toUpperCase();
   const descripcion = document.querySelector('meta[name="description"]')?.getAttribute("content") ?? "";
   const precio = descripcion.match(PRECIO)?.[0];
-  return [
-    medida ? (precio ? `${medida} a ${precio}` : `Tu ${medida} sigue acá`) : "Precios y stock publicados",
-    "Colocación y válvulas sin cargo",
-    "El outlet del neumático",
-    "Neumáticos Trivium",
-  ];
+  const pagina = medida ? (precio ? `${medida} a ${precio}` : `Tu ${medida} sigue acá`) : "Precios y stock publicados";
+  // Lo de la página va una de cada dos; entre medio rotan servicio, outlet y nombre.
+  const resto = ["Colocación y válvulas sin cargo", "El outlet del neumático", "Neumáticos Trivium"];
+  return resto.flatMap((m) => [pagina, m]);
 }
 
 const CADA_MS = 2000;
