@@ -5,6 +5,7 @@ import {
   CONTACT_EMAIL,
   INSTAGRAM_URL,
   FACEBOOK_URL,
+  ARGENTINO_URL,
   BRANCHES,
   type Branch,
 } from "./config";
@@ -167,7 +168,7 @@ export function siteGraphJsonLd() {
         },
         image: DEFAULT_SHARE_URL,
         email: CONTACT_EMAIL,
-        sameAs: [INSTAGRAM_URL, FACEBOOK_URL],
+        sameAs: [INSTAGRAM_URL, FACEBOOK_URL, ARGENTINO_URL],
         areaServed: { "@type": "Country", name: "Argentina" },
         address: {
           "@type": "PostalAddress",

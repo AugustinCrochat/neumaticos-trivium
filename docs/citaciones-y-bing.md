@@ -50,6 +50,20 @@ Solo Argüello está abierta. Lomas del Mirador y San Justo se cargan recién al
 | Facebook / Instagram | activos, revisar NAP | | |
 | Foursquare | pendiente | | |
 | Páginas Amarillas | pendiente | | |
-| Argentino.com | pendiente | | |
+| Argentino.com | publicado (Argüello), con 3 fotos, horarios y redes | 2026-11-17 | https://www.argentino.com.ar/neumaticos-trivium-F110AC6031CD745 |
 
 Nota 2026-11-17: Google/Bing Places muestran el CP de Argüello como **X5022IFB** (Bing lo importó así). Nuestro config.ts tiene X5147. Confirmar con una factura y unificar en todos los sitios.
+
+## Otras sucursales (anticipar)
+
+Regla: **no publicar una ficha antes de que el local abra y tenga teléfono propio.** Hoy Lomas del Mirador (diciembre) y San Justo (enero) usan el número provisorio +54 9 11 4037-0322; una ficha pública con ese número sería un dato que después hay que corregir en cada directorio.
+
+Antes de abrir, tener listo por sucursal (todo sale de `src/lib/config.ts`):
+- Teléfono propio y WhatsApp definitivo.
+- Dirección y CP confirmados (Lomas: Av. Gral. Enrique Mosconi 248, B1752CXP; San Justo: Pres. Juan Domingo Perón 2847, B1754AZW).
+- Foto de la fachada real y 2 del interior (hoy solo existe la de Argüello).
+- Ficha de Google Business creada primero (en San Justo, reclamar la de "Ruedas Bojanich", no duplicar).
+
+Día de apertura, en este orden: Google Business, Bing Places (importar), Argentino.com (una ficha por local, nombre "Neumáticos Trivium Lomas del Mirador" / "San Justo"), Apple, Foursquare, Páginas Amarillas. Luego sumar cada URL a `sameAs` del nodo de esa sucursal en `src/lib/seo.ts` y avisar con `node scripts/indexnow.mjs --all`.
+
+Pendiente en Argentino.com: la ficha de Argüello figura como "Neumáticos Trivium" (sin sucursal en el nombre); al abrir las otras conviene renombrarla "Neumáticos Trivium Argüello" en todos los directorios a la vez.

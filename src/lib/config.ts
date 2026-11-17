@@ -18,6 +18,7 @@ export const GA4_MEASUREMENT_ID = "G-82XSN6MC9C";
     gtag_report_conversion en GoogleAdsTag. */
 export const GOOGLE_ADS_WHATSAPP_CONVERSION_LABEL = "AW-969578983/MmToCLy20JsdEOezqs4D";
 export const INSTAGRAM_URL = "https://www.instagram.com/neumaticos.trivium/";
+export const ARGENTINO_URL = "https://www.argentino.com.ar/neumaticos-trivium-F110AC6031CD745";
 export const FACEBOOK_URL = "https://www.facebook.com/profile.php?id=61589579136727";
 export const YOUTUBE_URL = "https://www.youtube.com/@neumaticos-trivium";
 /** Link de Data Fiscal AFIP (RG 4291) — badge de verificación fiscal
