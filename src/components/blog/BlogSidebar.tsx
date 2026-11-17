@@ -1,5 +1,6 @@
 import Link from "@/components/ui/Link";
 import { PrecioTag } from "@/components/ui/PrecioTag";
+import { PriceTagIcon } from "@/components/ui/PriceTagIcon";
 import { WhatsAppSucursal } from "@/components/ui/SucursalBits";
 import { preciosAncla } from "@/components/home/HeroTrustRow";
 import { getProductosDesdePOS, getServiciosPrecios } from "@/lib/pos-api";
@@ -30,7 +31,10 @@ export async function BlogSidebar({ title, deTaller, slug }: { title: string; de
 
   return (
     <div className="rounded-lg bg-black p-5 text-white ">
-      <p className="font-display text-3xl font-extrabold uppercase italic leading-none">Precios de hoy</p>
+      <div className="flex items-center gap-2.5">
+        <PriceTagIcon className="h-9 w-auto shrink-0 drop-shadow" />
+        <p className="font-display text-3xl font-extrabold uppercase italic leading-none">Precios de hoy</p>
+      </div>
       <p className="mt-1 text-sm text-slate-400">Con colocación y válvulas sin cargo.</p>
       <ul className="mt-4 divide-y divide-white/10">
         {todas.map((f) => (

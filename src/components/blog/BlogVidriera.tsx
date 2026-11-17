@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "@/components/ui/Link";
 import { PrecioTag } from "@/components/ui/PrecioTag";
+import { PriceTagIcon } from "@/components/ui/PriceTagIcon";
 import { SortedProductGrid } from "@/components/ui/SortedProductGrid";
 import { TallerChips } from "@/components/blog/TallerChips";
 import { getProductosDesdePOS, getServiciosPrecios } from "@/lib/pos-api";
@@ -48,7 +49,10 @@ export async function BlogVidriera({ slug, sinProductos = false }: { slug: strin
         </div>
         <div className="p-5">
           <p className="text-xs font-black uppercase tracking-widest text-orange-400">En nuestro taller</p>
-          <p className="font-display mt-1 text-3xl font-extrabold uppercase italic leading-none">Alineado 3D + 4 balanceados</p>
+          <div className="mt-1 flex items-center gap-3">
+            <PriceTagIcon className="h-11 w-auto shrink-0 drop-shadow" />
+            <p className="font-display text-3xl font-extrabold uppercase italic leading-none">Alineado 3D + 4 balanceados</p>
+          </div>
           {(() => {
             // Notas de camionetas: el precio de camioneta va primero y solo; si no, auto y camioneta, cada uno con su rótulo.
             const camioneta = notaDeCamioneta(slug) && taller.comboCamioneta;

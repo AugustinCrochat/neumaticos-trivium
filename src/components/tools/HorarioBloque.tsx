@@ -73,7 +73,19 @@ export function HorarioBloque({ className = "", titulo = "¿A qué hora conviene
         )}
       </p>
 
-      <div className="mt-4 flex items-end gap-1" role="img" aria-label={`Movimiento por hora ${hoyAbre ? "hoy" : `el ${DIAS_NOMBRES[dia]}`}`}>
+      <p className="font-display !mb-0 mt-4 !text-4xl font-extrabold uppercase italic leading-none !text-navy-900 sm:!text-5xl">
+        {hoyAbre ? (
+          <>
+            Hoy <span className="not-italic text-slate-400">·</span> <span className="!text-orange-600">{DIAS_NOMBRES[dia]}</span>
+          </>
+        ) : (
+          <>
+            El <span className="!text-orange-600">{DIAS_NOMBRES[dia]}</span>
+          </>
+        )}
+      </p>
+
+      <div className="mt-3 flex items-end gap-1" role="img" aria-label={`Movimiento por hora ${hoyAbre ? "hoy" : `el ${DIAS_NOMBRES[dia]}`}`}>
         {niveles.map((n, i) => {
           const h = AFLUENCIA_HORA_INICIO + i;
           const actual = hoyAbre && reloj.hora === h;
