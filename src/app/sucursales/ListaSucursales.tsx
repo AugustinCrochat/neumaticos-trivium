@@ -256,10 +256,7 @@ export function ListaSucursales({ items }: { items: SucursalItem[] }) {
 
   return (
     <section id="lista-sucursales" className="scroll-mt-20">
-      <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-        <p className="text-sm text-slate-600">
-          {ubicacion ? "Ordenadas por distancia desde tu ubicación." : "Elegí la que te queda más cómoda."}
-        </p>
+      <div className="mb-5 flex flex-wrap items-center gap-x-4 gap-y-2">
         <button
           type="button"
           onClick={ubicar}
@@ -271,6 +268,9 @@ export function ListaSucursales({ items }: { items: SucursalItem[] }) {
           </svg>
           {estado === "buscando" ? "Buscando…" : "Usar mi ubicación"}
         </button>
+        <p className="text-sm font-semibold text-slate-700">
+          {ubicacion ? "Ordenadas por distancia desde tu ubicación." : "Elegí la que te queda más cómoda."}
+        </p>
       </div>
       {estado === "error" && (
         <p role="status" className="mb-4 rounded-xl border border-orange-200 bg-orange-50 px-4 py-3 text-sm font-semibold text-orange-700">

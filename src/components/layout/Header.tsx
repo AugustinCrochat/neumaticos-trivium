@@ -32,7 +32,7 @@ function NavIcon({ href, compact = false }: { href: string; compact?: boolean })
   if (href === "/sucursales") {
     // Frente del local: portón y el cartel con el logo.
     // eslint-disable-next-line @next/next/no-img-element
-    return <img src="/icons/local-trivium.svg?v=10" alt="" aria-hidden="true" className={`w-auto shrink-0 ${compact ? "h-[18px]" : "h-[22px]"}`} />;
+    return <img src="/icons/local-trivium.svg?v=12" alt="" aria-hidden="true" className={`w-auto shrink-0 ${compact ? "h-[24px]" : "h-[30px]"}`} />;
   }
   if (href === "/servicios") {
     // La alineadora del taller, simplificada y pintada con el color del texto.
