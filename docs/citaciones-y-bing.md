@@ -47,7 +47,8 @@ Solo Argüello está abierta. Lomas del Mirador y San Justo se cargan recién al
 | Bing Places | importado de Google, publicación pendiente (~10–14 días) | 2026-11-17 | bing.com/forbusiness |
 | Bing Webmaster | sitio agregado, sitemap enviado (procesando), IndexNow activo | 2026-11-17 | bing.com/webmasters |
 | Apple Business Connect | ahora es business.apple.com; pide Apple Account empresarial (la crea el dueño) | | |
-| Facebook / Instagram | activos, revisar NAP | | |
+| Facebook (página Neumáticos Trivium, 322 seguidores) | completada 2026-11-17: dirección (CP X5022IFB, igual que Google), horario lun–sáb 9–19, web, teléfono +54 9 351 757-0422, mail info@trivium.ar, Instagram. Pendiente: nombre de usuario @neumaticos.trivium y renombrar "…Argüello" | 2026-11-17 | https://www.facebook.com/profile.php?id=61589579136727 |
+| Instagram | cuenta única de marca (1,3 mil seguidores) | | https://www.instagram.com/neumaticos.trivium/ |
 | Foursquare | pide ingresar con email/teléfono y código (lo hace el dueño); luego foursquare.com/add-place | | |
 | Páginas Amarillas | no hay alta gratuita: "Anunciate" es un formulario de ventas de gurú Soluciones (asesor, anuncio pago). Negocio no figura en la búsqueda (2026-11-17). Decisión: no cargar por ahora | 2026-11-17 | |
 | Argentino.com | publicado (Argüello), con 3 fotos, horarios y redes | 2026-11-17 | https://www.argentino.com.ar/neumaticos-trivium-F110AC6031CD745 |
@@ -67,3 +68,7 @@ Antes de abrir, tener listo por sucursal (todo sale de `src/lib/config.ts`):
 Día de apertura, en este orden: Google Business, Bing Places (importar), Argentino.com (una ficha por local, nombre "Neumáticos Trivium Lomas del Mirador" / "San Justo"), Apple, Foursquare, Páginas Amarillas. Luego sumar cada URL a `sameAs` del nodo de esa sucursal en `src/lib/seo.ts` y avisar con `node scripts/indexnow.mjs --all`.
 
 Pendiente en Argentino.com: la ficha de Argüello figura como "Neumáticos Trivium" (sin sucursal en el nombre); al abrir las otras conviene renombrarla "Neumáticos Trivium Argüello" en todos los directorios a la vez.
+
+## Facebook con varias sucursales
+
+Meta Business Suite > Ubicaciones del negocio no está disponible para esta página ("Store Locations are only available to clients with dedicated Meta support"). Alternativa: una página de Facebook por sucursal dentro del portfolio Trivium Center, cada una con su dirección y teléfono, y una sola cuenta de Instagram de marca. Crear cada página recién al abrir el local.
