@@ -49,7 +49,7 @@ Solo Argüello está abierta. Lomas del Mirador y San Justo se cargan recién al
 | Apple Business Connect | pendiente | | |
 | Facebook / Instagram | activos, revisar NAP | | |
 | Foursquare | pendiente | | |
-| Páginas Amarillas | pendiente | | |
+| Páginas Amarillas | no hay alta gratuita: "Anunciate" es un formulario de ventas de gurú Soluciones (asesor, anuncio pago). Negocio no figura en la búsqueda (2026-11-17). Decisión: no cargar por ahora | 2026-11-17 | |
 | Argentino.com | publicado (Argüello), con 3 fotos, horarios y redes | 2026-11-17 | https://www.argentino.com.ar/neumaticos-trivium-F110AC6031CD745 |
 
 Nota 2026-11-17: Google/Bing Places muestran el CP de Argüello como **X5022IFB** (Bing lo importó así). Nuestro config.ts tiene X5147. Confirmar con una factura y unificar en todos los sitios.
