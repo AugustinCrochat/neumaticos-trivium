@@ -753,7 +753,7 @@ export function ShopPage({
                         </Link>
                       </div>
                     </div>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                       {recommendedProducts.map((product) => (
                         <ProductCard key={product.id} product={product} />
                       ))}
@@ -793,7 +793,7 @@ export function ShopPage({
                   </div>
                 ) : (
                   <>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                       {allProducts.slice(0, visibleCount).map(product => (
                         <ProductCard key={product.id} product={product} isCheapest={mejoresCatalogo.has(product.id)} cheapestLabel={mejoresCatalogo.get(product.id)} peers={peersCatalogo.get(product.id)} />
                       ))}
@@ -947,7 +947,7 @@ export function ShopPage({
                         </div>
                       )}
                       {separados && !g.titulo && <h3 className="sr-only">De ruta</h3>}
-                      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                         {g.lista.map((product) => (
                           <ProductCard key={product.id} product={product} priority={n++ < 2} isCheapest={mejoresExactos.has(product.id)} cheapestLabel={mejoresExactos.get(product.id)} peers={peersCatalogo.get(product.id)} />
                         ))}
@@ -1007,7 +1007,7 @@ export function ShopPage({
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-8">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8">
                   {compatibleResults.slice(0, 5).map(product => {
                     const diff = searchedSize ? diameterDifferencePercent(product.size, searchedSize) : null;
                     const benefit = searchedSize ? compatibilityBenefit(searchedSize, product.size) : null;
