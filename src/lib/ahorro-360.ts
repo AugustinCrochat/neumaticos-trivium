@@ -11,7 +11,7 @@ export const AHORRO_360 = {
   description: "Videos cortos y notas para cuidar los neumáticos y ahorrar: cada cuánto rotarlos, cómo saber si son direccionales o asimétricos y más. Un video y una guía por pregunta.",
   bajada: "Una pregunta, un video corto y una guía: cómo cuidar tus neumáticos para que duren más y te cuesten menos.",
   notas: {
-    "rotacion-de-neumaticos": { youtube: null as string | null },
+    "rotacion-de-neumaticos": { youtube: "yZPBtPf89jA" as string | null },
     "neumaticos-direccionales-y-asimetricos-como-se-montan": { youtube: null as string | null },
   } as Record<string, { youtube: string | null }>,
 };
