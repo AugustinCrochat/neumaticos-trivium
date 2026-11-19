@@ -14,6 +14,8 @@ import { CatalogWidget } from "@/components/blog/CatalogWidget";
 import { SizesCatalog } from "@/components/blog/SizesCatalog";
 import { BRANCHES } from "@/lib/config";
 import { COMBO_ID } from "@/lib/servicios-seo";
+import { AHORRO_360, esAhorro360, videoDeNota } from "@/lib/ahorro-360";
+import { VideoShort } from "@/components/blog/VideoShort";
 import { absoluteUrl, ORGANIZATION_ID, SITE_NAME } from "@/lib/seo";
 import { WhatsAppSucursal } from "@/components/ui/SucursalBits";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
@@ -123,6 +125,10 @@ export function ArticleLayout({
     );
   }
 
+  // El video va antes del primer h2 (después de la foto, que se inserta antes: índices mayores primero).
+  const videoId = videoDeNota(slug);
+  if (videoId && h2At.length > 0) antes.splice(h2At[0], 0, <VideoShort key="video-short" id={videoId} titulo={title} />);
+
   const articleJsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
@@ -167,6 +173,9 @@ export function ArticleLayout({
               <span className={cls}><span className="inline-block skew-x-12">{category}</span></span>
             );
           })()}
+          {esAhorro360(slug) && (
+            <Link href={`/blog/${AHORRO_360.slug}`} className="mb-3 ml-2 inline-block -skew-x-12 bg-[#ff1e00] px-3 py-1 text-xs font-black uppercase tracking-widest !text-white !no-underline"><span className="inline-block skew-x-12">Ahorro 360</span></Link>
+          )}
           <h1 className="text-4xl font-extrabold leading-[0.95] text-white md:text-5xl">{title}</h1>
           <p className="mt-4 text-lg leading-relaxed text-slate-300">{subtitle}</p>
           <p className="mt-5 text-sm text-slate-400">

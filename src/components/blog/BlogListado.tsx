@@ -5,6 +5,7 @@ import { preciosAncla } from "@/components/home/HeroTrustRow";
 import { BLOG_CATEGORIAS, estiloCategoria, type BlogCategoria } from "@/lib/blog-categorias";
 import { blogMeta } from "@/lib/blog-meta";
 import { BLOG_POSTS } from "@/lib/data";
+import { AHORRO_360, esAhorro360 } from "@/lib/ahorro-360";
 import { getProductosDesdePOS, getServiciosPrecios } from "@/lib/pos-api";
 import { money } from "@/lib/precios-hoy";
 import { COMBO_ID, preciosTaller } from "@/lib/servicios-seo";
@@ -24,14 +25,14 @@ const Flechas = () => (
  * Listado del blog: el índice general y cada página de categoría usan el mismo
  * armado (encabezado, cinta de precios, chips de categoría y grilla).
  */
-export async function BlogListado({ categoria }: { categoria?: BlogCategoria }) {
+export async function BlogListado({ categoria, sello }: { categoria?: BlogCategoria; sello?: boolean }) {
   // Precios de hoy arriba de las notas: quien entra al blog a leer también ve,
   // sin buscarlo, cuánto sale su medida y el alineado.
   const [productos, servicios] = await Promise.all([getProductosDesdePOS(), getServiciosPrecios()]);
   const medidas = preciosAncla(productos, 8);
   const combo = preciosTaller(servicios).comboAuto;
   const etiqueta = "flex shrink-0 items-center gap-2 rounded-md border-2 border-black py-1 pl-2.5 pr-1 text-sm font-black text-black hover:bg-slate-100";
-  const posts = categoria ? BLOG_POSTS.filter((p) => p.category === categoria.categoria) : BLOG_POSTS;
+  const posts = sello ? BLOG_POSTS.filter((p) => esAhorro360(p.slug)) : categoria ? BLOG_POSTS.filter((p) => p.category === categoria.categoria) : BLOG_POSTS;
   const chip = (activo: boolean) =>
     `shrink-0 rounded-md border-2 px-3 py-1.5 text-sm font-black !no-underline transition-colors ${activo ? "border-black bg-black !text-white" : "border-slate-300 bg-white !text-black hover:border-black"}`;
 
@@ -43,10 +44,10 @@ export async function BlogListado({ categoria }: { categoria?: BlogCategoria }) 
             <span className="inline-block skew-x-12">Blog de la gomería</span>
           </span>
           <h1 className="text-5xl font-extrabold leading-[0.95] text-white md:text-6xl">
-            {categoria ? categoria.h1 : "Guías de neumáticos y taller"}
+            {sello ? AHORRO_360.h1 : categoria ? categoria.h1 : "Guías de neumáticos y taller"}
           </h1>
           <p className="mt-3 max-w-2xl text-lg leading-snug text-slate-300">
-            {categoria ? categoria.bajada : "Escritas por quienes venden, colocan y alinean neumáticos todos los días."}
+            {sello ? AHORRO_360.bajada : categoria ? categoria.bajada : "Escritas por quienes venden, colocan y alinean neumáticos todos los días."}
           </p>
         </div>
       </div>
@@ -79,7 +80,8 @@ export async function BlogListado({ categoria }: { categoria?: BlogCategoria }) 
       <div className="max-w-5xl mx-auto px-4 py-8">
         {/* Temas: cada chip es una página propia, no un filtro. */}
         <nav aria-label="Temas del blog" className="mb-8 flex gap-2 overflow-x-auto pb-1">
-          <Link href="/blog" aria-current={categoria ? undefined : "page"} className={chip(!categoria)}>Todas</Link>
+          <Link href="/blog" aria-current={categoria || sello ? undefined : "page"} className={chip(!categoria && !sello)}>Todas</Link>
+          <Link href={`/blog/${AHORRO_360.slug}`} aria-current={sello ? "page" : undefined} className={chip(!!sello)}>Ahorro 360</Link>
           {BLOG_CATEGORIAS.map((c) => (
             <Link key={c.slug} href={`/blog/categoria/${c.slug}`} aria-current={categoria?.slug === c.slug ? "page" : undefined} className={chip(categoria?.slug === c.slug)}>
               {c.chip}

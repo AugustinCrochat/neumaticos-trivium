@@ -114,6 +114,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url("/tuercas-antirrobo", 0.7, "weekly"),
     url("/contacto", 0.5, "yearly"),
     url("/blog", 0.6, "weekly"),
+    url("/blog/ahorro-360", 0.5, "weekly"),
     ...BLOG_CATEGORIAS.map((c) => url(`/blog/categoria/${c.slug}`, 0.5, "weekly")),
     ...LOAD_SPEED_CODES.map((code) =>
       url(`/indice-carga-velocidad/${code.toLowerCase()}`, 0.6, "monthly")
