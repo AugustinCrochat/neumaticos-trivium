@@ -173,7 +173,7 @@ export function ProductPageClient({ product, tuercasMuestra }: { product: TirePr
       </div>
         {enStock && !selectedBranch.apertura && !selectedBranch.provisorio && (
           <ul className="grid grid-cols-3 divide-x divide-white/20 bg-black text-center text-white">
-            {[["En el acto", "por orden de llegada"], ["Gratis", "colocación y válvulas"], ["1 año", "de garantía"]].map(([a, b]) => (
+            {[["Gratis", "colocación y válvulas"], ["En el acto", "por orden de llegada"], ["1 año", "de garantía"]].map(([a, b]) => (
               <li key={a} className="px-1.5 py-2.5">
                 <span className="font-display block text-xl font-extrabold uppercase italic leading-none text-precio-400">{a}</span>
                 <span className="mt-0.5 block text-[10px] font-bold uppercase leading-tight tracking-wide text-slate-300">{b}</span>
