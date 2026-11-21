@@ -32,7 +32,7 @@ export function VideoShort({ id, titulo }: { id: string; titulo: string }) {
           </button>
         )}
       </div>
-      <figcaption className="mt-2 text-center text-sm text-slate-500">Video de 1 minuto · Ahorro 360</figcaption>
+      <figcaption className="mt-2 text-center text-sm text-slate-500">Video corto · Ahorro 360</figcaption>
     </figure>
   );
 }

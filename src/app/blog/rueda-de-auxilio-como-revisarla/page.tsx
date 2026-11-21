@@ -55,14 +55,17 @@ export default function Page() {
       <ul>
         <li>
           <strong>Presión.</strong> Con el manómetro, en frío, como las otras. Un auxilio con poca presión
-          no sirve cuando lo necesitás.
+          no sirve cuando lo necesitás. Su presión está en la etiqueta del marco de la puerta o de la tapa
+          del tanque y puede ser distinta a la de los otros neumáticos.
         </li>
         <li>
-          <strong>Estado del caucho.</strong> Grietas en el flanco, abultamientos o cortes son motivo de
+          <strong>Estado del caucho.</strong> Unas fisuras finas pueden ser normales. Si se abren, se unen o
+          se ve la tela, o si hay abultamientos o cortes, que lo revise un profesional: es motivo de
           reemplazo.
         </li>
         <li>
-          <strong>Edad.</strong> Mirá el código DOT:{" "}
+          <strong>Edad.</strong> El auxilio es un neumático más y tiene la misma recomendación de edad: 10
+          años desde la fabricación. Mirá el código DOT:{" "}
           <Link href="/blog/antiguedad-del-neumatico-codigo-dot">te explicamos cómo leerlo</Link>.
         </li>
         <li>

@@ -91,21 +91,27 @@ export default function Page() {
             <td>Uso normal, con revisión periódica de presión y estado</td>
           </tr>
           <tr>
-            <td>De 5 a 6 años</td>
-            <td>Hacerlo revisar en el taller aunque tenga dibujo</td>
+            <td>Desde los 5 años</td>
+            <td>Hacerlo revisar una vez por año en el taller, aunque tenga dibujo</td>
           </tr>
           <tr>
-            <td>Más de 10 años</td>
-            <td>Reemplazarlo, sin importar cómo se vea</td>
+            <td>6 años</td>
+            <td>Varias automotrices recomiendan cambiarlos a esta edad: si tu manual dice otra cosa, vale el manual</td>
+          </tr>
+          <tr>
+            <td>10 años</td>
+            <td>Los fabricantes recomiendan reemplazarlo, sin importar cómo se vea</td>
           </tr>
         </tbody>
       </table>
 
       <Callout title="Qué mirar además de la fecha" tone="warn">
         <p>
-          Grietas finas en el flanco o entre los tacos, deformaciones o abultamientos son motivo de
-          reemplazo inmediato, sin importar la edad. El sol, el calor y los años sin uso aceleran el
-          deterioro.
+          Mirá el costado y entre los tacos. Unas fisuras finas y superficiales pueden ser normales. Si se
+          abren, se unen o se ve la tela, o si hay deformaciones o abultamientos, que lo revise un
+          profesional: es motivo de reemplazo sin importar la edad. El sol, el calor y los años sin uso
+          aceleran el deterioro, y un auto parado se cuartea más rápido. En cada rotación, mirá cómo está
+          la goma, no solo cuántos años tiene.
         </p>
       </Callout>
 
@@ -113,7 +119,8 @@ export default function Page() {
       <ol>
         <li>
           <strong>Pedí ver el código DOT</strong> del neumático antes de pagar. Es un derecho tuyo y lo
-          mostramos sin problema.
+          mostramos sin problema. Para nosotros, hasta dos años de fabricación se considera nuevo (es un
+          criterio de Trivium, no una norma).
         </li>
         <li>
           <strong>Que los cuatro tengan fechas cercanas.</strong> Un juego con diferencias de años entre

@@ -14,7 +14,7 @@ import { CatalogWidget } from "@/components/blog/CatalogWidget";
 import { SizesCatalog } from "@/components/blog/SizesCatalog";
 import { BRANCHES } from "@/lib/config";
 import { COMBO_ID } from "@/lib/servicios-seo";
-import { AHORRO_360, esAhorro360, videoDeNota } from "@/lib/ahorro-360";
+import { AHORRO_360, esAhorro360, videosDeNota } from "@/lib/ahorro-360";
 import { VideoShort } from "@/components/blog/VideoShort";
 import { absoluteUrl, ORGANIZATION_ID, SITE_NAME } from "@/lib/seo";
 import { WhatsAppSucursal } from "@/components/ui/SucursalBits";
@@ -126,8 +126,14 @@ export function ArticleLayout({
   }
 
   // El video va antes del primer h2 (después de la foto, que se inserta antes: índices mayores primero).
-  const videoId = videoDeNota(slug);
-  if (videoId && h2At.length > 0) antes.splice(h2At[0], 0, <VideoShort key="video-short" id={videoId} titulo={title} />);
+  const videoIds = videosDeNota(slug);
+  if (videoIds.length > 0 && h2At.length > 0) {
+    antes.splice(h2At[0], 0, (
+      <div key="video-short" className="flex flex-wrap justify-center gap-x-6">
+        {videoIds.map((id) => <VideoShort key={id} id={id} titulo={title} />)}
+      </div>
+    ));
+  }
 
   const articleJsonLd = {
     "@context": "https://schema.org",

@@ -11,10 +11,17 @@ export const AHORRO_360 = {
   description: "Videos cortos y notas para cuidar los neumáticos y ahorrar: cada cuánto rotarlos, cómo saber si son direccionales o asimétricos y más. Un video y una guía por pregunta.",
   bajada: "Una pregunta, un video corto y una guía: cómo cuidar tus neumáticos para que duren más y te cuesten menos.",
   notas: {
-    "rotacion-de-neumaticos": { youtube: "yZPBtPf89jA" as string | null },
-    "neumaticos-direccionales-y-asimetricos-como-se-montan": { youtube: null as string | null },
-  } as Record<string, { youtube: string | null }>,
+    "rotacion-de-neumaticos": { youtube: "yZPBtPf89jA" as string | string[] | null },
+    "neumaticos-direccionales-y-asimetricos-como-se-montan": { youtube: null as string | string[] | null },
+    // Semana 2: los cortos de la edad del neumático. El DOT lleva tres (leer la fecha, cuántos años, mito del dibujo) y el auxilio uno.
+    // Poner los IDs en el orden de publicación a medida que se suben.
+    "antiguedad-del-neumatico-codigo-dot": { youtube: null as string | string[] | null },
+    "rueda-de-auxilio-como-revisarla": { youtube: null as string | string[] | null },
+  } as Record<string, { youtube: string | string[] | null }>,
 };
 
 export const esAhorro360 = (slug: string) => slug in AHORRO_360.notas;
-export const videoDeNota = (slug: string) => AHORRO_360.notas[slug]?.youtube ?? null;
+export const videosDeNota = (slug: string): string[] => {
+  const y = AHORRO_360.notas[slug]?.youtube;
+  return y == null ? [] : Array.isArray(y) ? y : [y];
+};
